@@ -1,8 +1,8 @@
 
 from PIL import Image, ImageFilter, ImageDraw
 
-def apply_gaussian_blur_with_center_image(input_path, output_path):
-    image = Image.open(input_path)
+def jaquette(input, output):
+    image = Image.open(input)
     
     # Redimensionner l'image à 1920 de large tout en conservant les proportions
     base_width = 1920
@@ -34,9 +34,30 @@ def apply_gaussian_blur_with_center_image(input_path, output_path):
     top_left_y = center_y - 400
     final_blurred_image.paste(center_image, (top_left_x, top_left_y))
 
-    final_blurred_image.save(output_path)
+    final_blurred_image.save(output)
 
-input_path = "Artwork/10000x10000bb.png"
-output_path = "Artwork/ProcessedArtwork.png"
+def miniature(background, logo, output):
+    background = Image.open(background)
+    overlay_file = f"Artwork/Miniatures/minia_{logo}.png"
+    overlay = Image.open(overlay_file)
 
-apply_gaussian_blur_with_center_image(input_path, output_path)
+    background_width, background_height = background.size
+    overlay_width, overlay_height = overlay.size
+    position = ((background_width - overlay_width) // 2, (background_height - overlay_height) // 2)
+
+    new_background = Image.new('RGBA', background.size)
+    new_background.paste(background, (0, 0))
+    new_background.paste(overlay, position, overlay)
+
+    final_image = new_background.convert('RGB')
+    final_image.save(output)
+
+input = "Artwork/10000x10000bb.png"
+output_bg = "Artwork/ProcessedArtwork.png"
+
+background = "Artwork/ProcessedArtwork.png"
+logo = "center"
+output_minia = "Artwork/minia.png"
+
+jaquette(input, output_bg)
+miniature(background, logo, output_minia)
