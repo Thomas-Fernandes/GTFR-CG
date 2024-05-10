@@ -41,13 +41,9 @@ def miniature(background, logo, output):
     overlay_file = f"Artwork/Miniatures/minia_{logo}.png"
     overlay = Image.open(overlay_file)
 
-    background_width, background_height = background.size
-    overlay_width, overlay_height = overlay.size
-    position = ((background_width - overlay_width) // 2, (background_height - overlay_height) // 2)
-
     new_background = Image.new('RGBA', background.size)
     new_background.paste(background, (0, 0))
-    new_background.paste(overlay, position, overlay)
+    new_background.paste(overlay, mask=overlay)
 
     final_image = new_background.convert('RGB')
     final_image.save(output)

@@ -1,11 +1,60 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
+    <meta charset="UTF-8">
     <title>Download Files</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        .image-container {
+            width: 45%;
+            background: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        a:hover {
+            background-color: #0056b3;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            width: 100%;
+            position: absolute;
+            top: 10px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Download Processed Images</h1>
-    <a href="{{ url_for('download', filename='ProcessedArtwork.png') }}">Download Background Image</a><br>
-    <a href="{{ url_for('download', filename='minia.png') }}">Download Miniature Image</a>
+    <h1></h1>
+    <div class="image-container">
+        <img src="{{ url_for('download', filename='ProcessedArtwork.png') }}" alt="Processed Background Image">
+        <a href="{{ url_for('download', filename='ProcessedArtwork.png') }}">Download</a>
+    </div>
+    <div class="image-container">
+        <img src="{{ url_for('download', filename='minia.png') }}" alt="Processed Miniature Image">
+        <a href="{{ url_for('download', filename='minia.png') }}">Download</a>
+    </div>
 </body>
 </html>

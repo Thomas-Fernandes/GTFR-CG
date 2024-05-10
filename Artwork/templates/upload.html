@@ -5,9 +5,15 @@
 </head>
 <body>
     <h1>Upload your image</h1>
-    <form method=post enctype=multipart/form-data>
-        <input type=file name=file>
-        <input type=submit value=Upload>
+    <form method="post" enctype="multipart/form-data">
+        <input type="file" name="file">
+        <label for="logo-position">Position du logo sur la miniature :</label>
+        <select name="logo-position" id="logo-position">
+            <option value="center">Center</option>
+            <option value="right">Right</option>
+            <option value="left">Left</option>
+        </select>
+        <input type="submit" value="Upload">
     </form>
 </body>
 </html>

@@ -23,6 +23,7 @@ os.makedirs(app.config['PROCESSED_FOLDER'], exist_ok=True)
 def upload_file():
     if request.method == 'POST':
         file = request.files['file']
+        logo_position = request.form.get('logo-position', 'center')  # Valeur par défaut à 'center'
         if file:
             if 'user_folder' not in session:
                 session['user_folder'] = str(uuid.uuid4())
@@ -39,10 +40,11 @@ def upload_file():
             output_minia = os.path.join(user_processed_path, 'minia.png')
 
             jaquette(filepath, output_bg)
-            miniature(output_bg, 'center', output_minia)
+            miniature(output_bg, logo_position, output_minia)  # Utilisation de la position choisie
 
             return render_template('download.html', user_folder=user_folder, bg='ProcessedArtwork.png', minia='minia.png')
     return render_template('upload.html')
+
 
 @app.route('/download/<filename>')
 def download(filename):
