@@ -1,3 +1,4 @@
+
 from PIL import Image, ImageFilter, ImageDraw
 
 def jaquette(input, output):
@@ -50,13 +51,3 @@ def miniature(background, logo, output):
 
     final_image = new_background.convert('RGB')
     final_image.save(output)
-
-input = "Artwork/10000x10000bb.png"
-output_bg = "Artwork/ProcessedArtwork.png"
-
-background = "Artwork/ProcessedArtwork.png"
-logo = "center"
-output_minia = "Artwork/minia.png"
-
-jaquette(input, output_bg)
-miniature(background, logo, output_minia)
