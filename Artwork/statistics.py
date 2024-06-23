@@ -22,12 +22,14 @@ def get_stats(path: str) -> dict[str, str | int]:
     except JSONDecodeError:
         return {}
 
-ONE_WEEK = 600_000
-ONE_DAY = 86_400
-ONE_HOUR = 3_600
+WEEK = 600_000
+DAY = 86_400
+HOUR = 3_600
+MINUTE = 60
+DEFAULT_EXPIRATION = 2
 
 class Statistics:
-    def isCacheExpired(self) -> bool:
+    def isCacheExpired(self, days_before_expiration: int = DEFAULT_EXPIRATION) -> bool:
         if ('dateLastGeneration' not in self.stats):
             self.generateStats()
             return False # no cache, so not expired
@@ -44,18 +46,24 @@ class Statistics:
             "month": int(now[5:7]),
             "day": int(now[8:10])
         }
-        if (cache_date['year'] != now_date['year'] and \
-            cache_date['month'] != now_date['month'] and \
-            cache_date['day'] + 1 < now_date['day'] \
-        ): return True # cache is sure to be older than one day-time: expired
+        cache_day_is_before_today: bool = \
+            cache_date['year'] <= now_date['year'] and \
+            cache_date['month'] <= now_date['month'] and \
+            cache_date['day'] <= now_date['day']
+
+        if (cache_day_is_before_today and \
+            cache_date['day'] + days_before_expiration < now_date['day'] \
+        ): return True # cache is sure to be older than expiration time: expired
 
         def get_timestamp(date: str) -> int:
-            return int(date[17:]) + int(date[14:16]) * 60 + int(date[11:13]) * 3_600
+            return int(date[17:]) + int(date[14:16]) * MINUTE + int(date[11:13]) * HOUR
 
         cache_time: int = get_timestamp(self.stats['dateLastGeneration'])
         now_time:   int = get_timestamp(now)
-        # cache expired if dateLastGeneration is older than one day-time
-        return now_date['day'] > cache_date['day'] and now_time > cache_time
+
+        return cache_day_is_before_today and \
+            (cache_date['day'] + days_before_expiration - 1) < now_date['day'] \
+            and cache_time < now_time
 
     def generateStats(self) -> None:
         with open(self.stats_file_path, 'w') as file:
