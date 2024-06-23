@@ -4,10 +4,14 @@ from json import loads, dumps, JSONDecodeError
 STATS_FILE_PATH = 'stats.json'
 DATE_FORMAT_FULL = "%Y-%m-%d %H:%M:%S"
 
+def getNowEpoch() -> str:
+    result = strftime(DATE_FORMAT_FULL, gmtime())
+    return result[:11] + str(int(result[11:13]) + 2) + result[13:] # add two hours because Paris is GMT+2
+
 def updateStats(path: str = STATS_FILE_PATH) -> None:
     stats = get_stats(path)
 
-    stats['dateLastGeneration'] = strftime(DATE_FORMAT_FULL, gmtime())
+    stats['dateLastGeneration'] = getNowEpoch()
     stats['totalGenerated'] = stats.get('totalGenerated', 0) + 1
 
     with open(path, 'w') as file:
@@ -39,8 +43,7 @@ class Statistics:
             "month": int(self.stats['dateLastGeneration'][5:7]),
             "day": int(self.stats['dateLastGeneration'][8:10])
         }
-        now = strftime(DATE_FORMAT_FULL, gmtime())
-        now = now[:11] + str(int(now[11:13]) + 2) + now[13:] # add two hours because Paris is GMT+2
+        now = getNowEpoch()
         now_date = {
             "year": int(now[:4]),
             "month": int(now[5:7]),
@@ -67,8 +70,7 @@ class Statistics:
 
     def generateStats(self) -> None:
         with open(self.stats_file_path, 'w') as file:
-            now = strftime(DATE_FORMAT_FULL, gmtime())
-            now = now[:11] + str(int(now[11:13]) + 2) + now[13:] # add two hours because Paris is GMT+2
+            now = getNowEpoch()
             file.write('{ "dateLastGeneration": "' + now + '" }')
 
     def __init__(self) -> None:

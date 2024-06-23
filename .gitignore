@@ -19,7 +19,7 @@
 *.webp
 *.WEBP
 
-# Statics file
+# Statistics file
 *.json
 
 # Python cache
