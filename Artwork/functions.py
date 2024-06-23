@@ -3,7 +3,7 @@ from flask import session
 from PIL import Image, ImageFilter, ImageDraw
 from os import path, name as osName
 
-MINIA_FOLDER = 'Artwork$Miniatures'
+MINIA_FOLDER = 'Artwork' + ('/' if (osName != 'nt') else '\\') + 'Miniatures'
 
 def generateCoverArt(input_path: str, output_path: str) -> None:
     image: Image.Image = Image.open(input_path)
@@ -48,8 +48,7 @@ def generateMinia(bg_path: str, logo_path: str, output_path: str) -> None:
         user_folder = '/'.join(user_folder.split('/')[:-2]) # Remove the last folder and PID
     else: # Unix path type
         user_folder = '\\'.join(user_folder.split('\\')[:-2])
-    minia_folder = MINIA_FOLDER.replace('$', "/" if (osName != 'nt') else '\\')
-    overlay_file = f"{user_folder}/{minia_folder}/minia_{logo_path}.png"
+    overlay_file = f"{user_folder}/{MINIA_FOLDER}/minia_{logo_path}.png"
     overlay: Image.Image = Image.open(overlay_file)
 
     new_background: Image.Image = Image.new('RGBA', background.size)

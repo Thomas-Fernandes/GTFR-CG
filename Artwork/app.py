@@ -3,17 +3,17 @@ from flask_session import Session
 from waitress import serve
 
 from uuid import uuid4
-from os import makedirs, path
+from os import makedirs, path, name as osName
 
 from functions import generateCoverArt, generateMinia
 
-UPLOAD_FOLDER = 'uploads/'
-PROCESSED_FOLDER = 'processed/'
+UPLOAD_FOLDER = 'uploads' + ('/' if (osName != 'nt') else '\\')
+PROCESSED_FOLDER = 'processed' + ('/' if (osName != 'nt') else '\\')
 
 app = Flask(__name__)
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
-app.config["SESSION_FILE_DIR"] = 'flask_session/'
+app.config["SESSION_FILE_DIR"] = 'flask_session' + ('/' if (osName != 'nt') else '\\')
 Session(app)
 
 @app.route('/', methods=['GET', 'POST'])
