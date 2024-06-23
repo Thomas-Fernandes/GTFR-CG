@@ -19,6 +19,8 @@
 *.webp
 *.WEBP
 
+# Statics file
+*.json
 
 # Python cache
 */__pycache__/
