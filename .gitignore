@@ -2,6 +2,6 @@
 */flask_session/*
 
 # img cache
-*/Arwork/*.(png|PNG|jpg|JPG|jpeg|JPEG|gif|GIF|bmp|BMP|ico|ICO|svg|SVG|webp|WEBP)
+*/Artwork/*.(png|PNG|jpg|JPG|jpeg|JPEG|gif|GIF|bmp|BMP|ico|ICO|svg|SVG|webp|WEBP)
 
 */__pycache__/
