@@ -48,7 +48,7 @@ def generateMinia(bg_path: str, logo_path: str, output_path: str) -> None:
         user_folder = '/'.join(user_folder.split('/')[:-2]) # Remove the last folder and PID
     else: # Unix path type
         user_folder = '\\'.join(user_folder.split('\\')[:-2])
-    minia_folder = MINIA_FOLDER.replace('$', "/" if osName != 'nt' else '\\')
+    minia_folder = MINIA_FOLDER.replace('$', "/" if (osName != 'nt') else '\\')
     overlay_file = f"{user_folder}/{minia_folder}/minia_{logo_path}.png"
     overlay: Image.Image = Image.open(overlay_file)
 

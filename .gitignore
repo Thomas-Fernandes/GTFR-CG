@@ -1,5 +1,5 @@
 # Flask bytecode cache
-*/flask_session/*
+*/flask_session
 
 # img cache
 *.png
