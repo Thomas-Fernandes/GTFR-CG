@@ -2,13 +2,15 @@ from flask import Flask, render_template, request, send_from_directory, session,
 from flask_session import Session
 from waitress import serve
 
+from shutil import rmtree
 from uuid import uuid4
-from os import makedirs, path, name as osName
+from os import path, name as osName, makedirs
 
+from statistics import Statistics as Stats, updateStats
 from functions import generateCoverArt, generateMinia
 
 SLASH = '/' if (osName != 'nt') else '\\'
-UPLOAD_FOLDER = 'uploads' + SLASH
+UPLOADS_FOLDER = 'uploads' + SLASH
 PROCESSED_FOLDER = 'processed' + SLASH
 
 app = Flask(__name__)
@@ -27,7 +29,7 @@ def upload_file() -> str:
                 session['user_folder'] = str(uuid4())
 
             user_folder = str(session['user_folder'])
-            user_upload_path: str = path.join(UPLOAD_FOLDER, user_folder)
+            user_upload_path: str = path.join(UPLOADS_FOLDER, user_folder)
             user_processed_path: str = path.join(PROCESSED_FOLDER, user_folder)
             makedirs(user_upload_path, exist_ok=True)
             makedirs(user_processed_path, exist_ok=True)
@@ -39,10 +41,10 @@ def upload_file() -> str:
 
             generateCoverArt(filepath, output_bg)
             generateMinia(output_bg, logo_position, output_minia)
+            updateStats()
 
             return render_template('download.html', user_folder=user_folder, bg='ProcessedArtwork.png', minia='minia.png')
     return render_template('upload.html')
-
 
 @app.route('/download/<filename>', methods=['GET'])
 def download(filename: str) -> Response | tuple[str, int]:
@@ -57,8 +59,22 @@ HOME = "0.0.0.0"
 PORT = 8000
 
 def main() -> None:
-    makedirs(UPLOAD_FOLDER, exist_ok=True)
+    makedirs(UPLOADS_FOLDER, exist_ok=True)
     makedirs(PROCESSED_FOLDER, exist_ok=True)
+
+    def cache_cleanup(stats: Stats) -> None:
+        if (not path.exists(stats.stats_file_path)):
+            stats.generateStats()
+        else:
+            if (stats.isCacheExpired()):
+                print("Cache expired, emptying it...")
+                rmtree(UPLOADS_FOLDER)
+                rmtree(PROCESSED_FOLDER)
+            else:
+                print("Cache still fresh. Loading...")
+
+    stats = Stats()
+    cache_cleanup(stats)
     serve(app, host=HOME, port=PORT)
 
 if __name__ == '__main__':
