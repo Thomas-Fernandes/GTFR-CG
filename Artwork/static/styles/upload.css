@@ -9,6 +9,10 @@
     letter-spacing: 0.08rem;
 }
 
+title {
+    display: none;
+}
+
 h1 {
     font-family: Helvetica, sans-serif;
     font-size: 64px;
@@ -30,7 +34,6 @@ body {
     align-items: center;
     justify-content: center;
 }
-
 .flex-horiz {
     flex-direction: row;
 }
@@ -42,7 +45,6 @@ input {
     border: 2px solid #ddd;
     border-radius: 0.2rem;
 }
-
 .file {
     width: 75%;
 }
@@ -50,7 +52,6 @@ input {
     margin-left: 100px; /* Adjust space between the button and file name */
     color: #333;
 }
-
 input[type=file]::file-selector-button {
     margin-right: 5%;
     border: none;
