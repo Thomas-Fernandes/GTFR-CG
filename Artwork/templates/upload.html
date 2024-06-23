@@ -5,11 +5,11 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/upload.css') }}" />
 </head>
 <body>
-    <span class="margin10"> </span>
     <h1>Upload your image</h1>
     <form method="post" enctype="multipart/form-data">
         <div class="flexbox">
-            <input type="file" name="file" />
+            <input type="file" name="file" class="file" />
+            <p class="error">{{ error }}</p>
             <div class="flex-horiz">
                 <label for="logo-position">Position of the logo over the artwork:</label>
                 <select name="logo-position" id="logo-position">
@@ -18,7 +18,7 @@
                     <option value="left">Left</option>
                 </select>
             </div>
-            <input type="submit" value="Upload" class="button" />
+            <input type="submit" value="UPLOAD" class="button" />
         </div>
     </form>
 </body>

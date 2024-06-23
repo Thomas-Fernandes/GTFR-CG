@@ -1,42 +1,27 @@
 * {
     box-sizing: border-box;
-    margin: 0;
+    margin: 1% 0;
     padding: 0;
-    font-family: 'Roboto', sans-serif;
 
+    font-family: Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif;
     text-align: center;
+    font-size: 20px;
+    letter-spacing: 0.08rem;
 }
 
 h1 {
-    margin-top: 10%;
+    font-family: Helvetica, sans-serif;
+    font-size: 64px;
+    margin: 10% 0 5% 0;
+    font-style: italic;
+    letter-spacing: 0;
 }
 
 body {
-    background: #eaafc8;
-    background: -webkit-linear-gradient(to right, #eaafc8, #654ea3);
-    background: linear-gradient(to right, #eaafc8, #654ea3);
+    background: #ffff64;
+    background: -webkit-linear-gradient(to right, #ffff64, #ffff64);
+    background: linear-gradient(to right, #ffff64, #002654);
     height: 100%;
-}
-
-input {
-    width: 33%;
-    padding: 1.5rem;
-    margin: 1.5rem 0;
-    border: 2px solid #ddd;
-    border-radius: 0.2rem;
-}
-
-.button {
-    width: 20%;
-
-    padding: 0.5rem 1rem;
-    border: none;
-    background: #745eb1;
-    color: #fff;
-    border-radius: 0.2rem;
-    cursor: pointer;
-
-    margin-bottom: 20%;
 }
 
 .flexbox {
@@ -48,4 +33,69 @@ input {
 
 .flex-horiz {
     flex-direction: row;
+}
+
+input {
+    width: 50%;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    border: 2px solid #ddd;
+    border-radius: 0.2rem;
+}
+
+.file {
+    width: 75%;
+}
+.file-name {
+    margin-left: 100px; /* Adjust space between the button and file name */
+    color: #333;
+}
+
+input[type=file]::file-selector-button {
+    margin-right: 5%;
+    border: none;
+    border-radius: 0.2rem;
+    background: #2a67ec;
+    padding: 8px 24px;
+    color: #ffffff;
+    cursor: pointer;
+}
+
+.error:not(:empty) {
+    color: #ff0000;
+    font-size: 14px;
+    margin-top: 0;
+    letter-spacing: 0.05rem;
+    font-weight: bold;
+    background: #a52a2a;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+}
+
+.button {
+    width: 33%;
+    background: #ffff64;
+    border: none;
+    border-radius: 0.2rem;
+
+    cursor: pointer;
+
+    color: #000;
+    letter-spacing: 0.3rem;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+select {
+    cursor: pointer;
+    background: #ffff64;
+
+    padding: 8px 32px;
+    margin-left: 16px;
+    border: none;
+    border-radius: 0.2rem;
+
+    text-align: left;
+    letter-spacing: normal;
 }
