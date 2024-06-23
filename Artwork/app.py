@@ -7,13 +7,14 @@ from os import makedirs, path, name as osName
 
 from functions import generateCoverArt, generateMinia
 
-UPLOAD_FOLDER = 'uploads' + ('/' if (osName != 'nt') else '\\')
-PROCESSED_FOLDER = 'processed' + ('/' if (osName != 'nt') else '\\')
+SLASH = '/' if (osName != 'nt') else '\\'
+UPLOAD_FOLDER = 'uploads' + SLASH
+PROCESSED_FOLDER = 'processed' + SLASH
 
 app = Flask(__name__)
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
-app.config["SESSION_FILE_DIR"] = 'flask_session' + ('/' if (osName != 'nt') else '\\')
+app.config["SESSION_FILE_DIR"] = 'flask_session' + SLASH
 Session(app)
 
 @app.route('/', methods=['GET', 'POST'])
