@@ -1,0 +1,24 @@
+# Flask bytecode cache
+*/flask_session
+
+# img cache
+*.png
+*.PNG
+*.jpg
+*.JPG
+*.jpeg
+*.JPEG
+*.gif
+*.GIF
+*.bmp
+*.BMP
+*.ico
+*.ICO
+*.svg
+*.SVG
+*.webp
+*.WEBP
+
+
+# Python cache
+*/__pycache__/
