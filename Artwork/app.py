@@ -19,10 +19,25 @@ app.config["SESSION_TYPE"] = "filesystem"
 app.config["SESSION_FILE_DIR"] = 'flask_session' + SLASH
 Session(app)
 
+def checkFilenameValid(filename: str) -> str:
+    ERR_INVALID_FILE_TYPE = 'Invalid file type. Only PNG and JPG files are allowed.'
+    ERR_NO_FILE = 'Invalid file: No file selected.'
+
+    if (filename == None or filename == ''):
+        return ERR_NO_FILE
+    if (not('.' in filename and filename.rsplit('.', 1)[1].lower() in ['png', 'jpg', 'jpeg'])):
+        return ERR_INVALID_FILE_TYPE
+    return ""
+
 @app.route('/', methods=['GET', 'POST'])
 def upload_file() -> str:
     if (request.method == 'POST'):
         file = request.files['file']
+
+        rv = checkFilenameValid(file.filename)
+        if (rv != ""):
+            return render_template('upload.html', error=rv)
+
         logo_position = request.form.get('logo-position', 'center')
         if (file.filename != None):
             if ('user_folder' not in session):
