@@ -1,6 +1,7 @@
-from flask import Flask, render_template, request, send_from_directory, session, Response
+from flask import Flask, render_template, request, send_from_directory, session, Response, jsonify
 from flask_session import Session
 from waitress import serve
+import requests
 
 from shutil import rmtree
 from uuid import uuid4
@@ -68,6 +69,50 @@ def download(filename: str) -> Response | tuple[str, int]:
         directory: str = path.abspath(path.join(PROCESSED_FOLDER, user_folder))
         return send_from_directory(directory, filename, as_attachment=True)
     return ("Session Expired or Invalid", 404)
+
+@app.route('/use_itunes_image', methods=['POST'])
+def use_itunes_image():
+    image_url = request.form.get('url')
+    logo_position = request.form.get('position', 'center')
+    if not image_url:
+        return jsonify({'status': 'error', 'message': 'No image URL provided'}), 400
+
+    if 'user_folder' not in session:
+        session['user_folder'] = str(uuid4())
+
+    user_folder = str(session['user_folder'])
+    user_processed_path = path.join(PROCESSED_FOLDER, user_folder)
+    makedirs(user_processed_path, exist_ok=True)
+
+    image_response = requests.get(image_url)
+    if image_response.status_code == 200:
+        image_path = path.join(user_processed_path, 'itunes_image.png')
+        with open(image_path, 'wb') as file:
+            file.write(image_response.content)
+
+        session['itunes_image_path'] = image_path
+        session['logo_position'] = logo_position
+        return jsonify({'status': 'success'}), 200
+    else:
+        return jsonify({'status': 'error', 'message': 'Failed to download image'}), 500
+
+@app.route('/process_itunes_image', methods=['GET'])
+def process_itunes_image():
+    if 'itunes_image_path' in session:
+        user_folder = str(session['user_folder'])
+        user_processed_path = path.join(PROCESSED_FOLDER, user_folder)
+        itunes_image_path = session['itunes_image_path']
+        logo_position = session.get('logo_position', 'center')
+        output_bg = path.join(user_processed_path, 'ProcessedArtwork.png')
+        output_minia = path.join(user_processed_path, 'minia.png')
+
+        generateCoverArt(itunes_image_path, output_bg)
+        generateMinia(output_bg, logo_position, output_minia)  # Use the selected logo position
+        updateStats()
+
+        return render_template('download.html', user_folder=user_folder, bg='ProcessedArtwork.png', minia='minia.png')
+    return "No iTunes image selected", 400
+
 
 # Server config
 HOME = "0.0.0.0"
