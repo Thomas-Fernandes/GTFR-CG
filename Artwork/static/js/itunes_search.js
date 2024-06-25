@@ -27,7 +27,6 @@ $(document).ready(function() {
                         var btn = $('<button>').text('Use this image').on('click', function() {
                             $.post('/use_itunes_image', { url: highResImageUrl, position: logoPosition }, function(response) {
                                 if (response.status === 'success') {
-                                    alert('Image selected for processing');
                                     window.location.href = '/process_itunes_image';
                                 } else {
                                     alert('Error: ' + response.message);
