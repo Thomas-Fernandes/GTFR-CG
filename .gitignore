@@ -1,3 +1,7 @@
+# Hidden files and directories
+.*
+.*/
+
 # Flask bytecode cache
 */flask_session
 
