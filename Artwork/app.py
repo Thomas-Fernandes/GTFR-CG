@@ -71,13 +71,13 @@ def download(filename: str) -> Response | tuple[str, int]:
     return ("Session Expired or Invalid", 404)
 
 @app.route('/use_itunes_image', methods=['POST'])
-def use_itunes_image():
+def use_itunes_image() -> tuple[str, int] | Response:
     image_url = request.form.get('url')
     logo_position = request.form.get('position', 'center')
-    if not image_url:
+    if (not image_url):
         return jsonify({'status': 'error', 'message': 'No image URL provided'}), 400
 
-    if 'user_folder' not in session:
+    if ('user_folder' not in session):
         session['user_folder'] = str(uuid4())
 
     user_folder = str(session['user_folder'])
@@ -85,7 +85,7 @@ def use_itunes_image():
     makedirs(user_processed_path, exist_ok=True)
 
     image_response = requests.get(image_url)
-    if image_response.status_code == 200:
+    if (image_response.status_code == 200):
         image_path = path.join(user_processed_path, 'itunes_image.png')
         with open(image_path, 'wb') as file:
             file.write(image_response.content)
@@ -97,8 +97,8 @@ def use_itunes_image():
         return jsonify({'status': 'error', 'message': 'Failed to download image'}), 500
 
 @app.route('/process_itunes_image', methods=['GET'])
-def process_itunes_image():
-    if 'itunes_image_path' in session:
+def process_itunes_image() -> Response | tuple[str, int]:
+    if ('itunes_image_path' in session):
         user_folder = str(session['user_folder'])
         user_processed_path = path.join(PROCESSED_FOLDER, user_folder)
         itunes_image_path = session['itunes_image_path']
