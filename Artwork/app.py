@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, send_from_directory, session, Response, jsonify
 from flask_session import Session
 from waitress import serve
-import requests
+from requests import get as restGet
 
 from shutil import rmtree
 from uuid import uuid4
@@ -86,7 +86,7 @@ def use_itunes_image() -> tuple[str, int] | Response:
     user_processed_path = path.join(PROCESSED_FOLDER, user_folder)
     makedirs(user_processed_path, exist_ok=True)
 
-    image_response = requests.get(image_url)
+    image_response = restGet(image_url)
     if (image_response.status_code == HttpStatus.OK.value):
         image_path = path.join(user_processed_path, 'itunes_image.png')
         with open(image_path, 'wb') as file:

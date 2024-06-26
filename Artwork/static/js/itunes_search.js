@@ -1,3 +1,9 @@
+const ResponseStatus = Object.freeze({
+    SUCCESS: 'success',
+    ERROR: 'error'
+});
+
+
 $(document).ready(function() {
     $('#iTunesSearchForm').on('submit', function(event) {
         event.preventDefault();
@@ -26,7 +32,7 @@ $(document).ready(function() {
                         const img = $('<img>').attr('src', highResImageUrl).attr('alt', result.collectionName || result.trackName).addClass('result-image');
                         const btn = $('<button>').text('Use this image').on('click', function() {
                             $.post('/use_itunes_image', { url: highResImageUrl, position: logoPosition }, function(response) {
-                                if (response.status === 'success') {
+                                if (response.status === ResponseStatus.SUCCESS) {
                                     window.location.href = '/process_itunes_image';
                                 } else {
                                     alert('Error: ' + response.message);
