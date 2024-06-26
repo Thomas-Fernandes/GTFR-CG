@@ -10,6 +10,7 @@ from os import path, name as osName, makedirs
 from statistics import Statistics as Stats, updateStats
 from functions import generateCoverArt, generateMinia
 from constants import HttpStatus
+from web_utils import createJsonResponse
 
 SLASH = '/' if (osName != 'nt') else '\\'
 UPLOADS_FOLDER = 'uploads' + SLASH
@@ -69,14 +70,14 @@ def download(filename: str) -> Response | tuple[str, int]:
         user_folder = str(session['user_folder'])
         directory: str = path.abspath(path.join(PROCESSED_FOLDER, user_folder))
         return send_from_directory(directory, filename, as_attachment=True)
-    return ("Session Expired or Invalid", HttpStatus.NOT_FOUND.value)
+    return createJsonResponse(HttpStatus.NOT_FOUND.value, 'error', 'Session Expired or Invalid')
 
 @app.route('/use_itunes_image', methods=['POST'])
 def use_itunes_image() -> tuple[str, int] | Response:
     image_url = request.form.get('url')
     logo_position = request.form.get('position', 'center')
     if (not image_url):
-        return jsonify({'status': 'error', 'message': 'No image URL provided'}), HttpStatus.BAD_REQUEST.value
+        return createJsonResponse(HttpStatus.BAD_REQUEST.value, 'error', 'No image URL provided')
 
     if ('user_folder' not in session):
         session['user_folder'] = str(uuid4())
@@ -93,9 +94,9 @@ def use_itunes_image() -> tuple[str, int] | Response:
 
         session['itunes_image_path'] = image_path
         session['logo_position'] = logo_position
-        return jsonify({'status': 'success'}), HttpStatus.OK.value
+        return createJsonResponse(HttpStatus.OK.value, 'success')
     else:
-        return jsonify({'status': 'error', 'message': 'Failed to download image'}), HttpStatus.INTERNAL_SERVER_ERROR.value
+        return createJsonResponse(HttpStatus.INTERNAL_SERVER_ERROR.value, 'error', 'Failed to download image')
 
 @app.route('/process_itunes_image', methods=['GET'])
 def process_itunes_image() -> Response | tuple[str, int]:
@@ -112,8 +113,7 @@ def process_itunes_image() -> Response | tuple[str, int]:
         updateStats()
 
         return render_template('download.html', user_folder=user_folder, bg='ProcessedArtwork.png', minia='minia.png')
-    return "No iTunes image selected", HttpStatus.BAD_REQUEST.value
-
+    return createJsonResponse(HttpStatus.BAD_REQUEST.value, 'error', 'No iTunes image selected')
 
 # Server config
 HOME = "0.0.0.0"
