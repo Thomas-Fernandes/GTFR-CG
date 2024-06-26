@@ -70,14 +70,14 @@ def download(filename: str) -> Response | tuple[str, int]:
         user_folder = str(session['user_folder'])
         directory: str = path.abspath(path.join(PROCESSED_FOLDER, user_folder))
         return send_from_directory(directory, filename, as_attachment=True)
-    return createJsonResponse(HttpStatus.NOT_FOUND.value, 'error', 'Session Expired or Invalid')
+    return createJsonResponse(HttpStatus.NOT_FOUND.value, 'Session Expired or Invalid')
 
 @app.route('/use_itunes_image', methods=['POST'])
 def use_itunes_image() -> tuple[str, int] | Response:
     image_url = request.form.get('url')
     logo_position = request.form.get('position', 'center')
     if (not image_url):
-        return createJsonResponse(HttpStatus.BAD_REQUEST.value, 'error', 'No image URL provided')
+        return createJsonResponse(HttpStatus.BAD_REQUEST.value, 'No image URL provided')
 
     if ('user_folder' not in session):
         session['user_folder'] = str(uuid4())
@@ -86,6 +86,7 @@ def use_itunes_image() -> tuple[str, int] | Response:
     user_processed_path = path.join(PROCESSED_FOLDER, user_folder)
     makedirs(user_processed_path, exist_ok=True)
 
+    # Mise à jour ici pour utiliser restGet au lieu de requests.get
     image_response = restGet(image_url)
     if (image_response.status_code == HttpStatus.OK.value):
         image_path = path.join(user_processed_path, 'itunes_image.png')
@@ -94,9 +95,9 @@ def use_itunes_image() -> tuple[str, int] | Response:
 
         session['itunes_image_path'] = image_path
         session['logo_position'] = logo_position
-        return createJsonResponse(HttpStatus.OK.value, 'success')
+        return createJsonResponse(HttpStatus.OK.value)
     else:
-        return createJsonResponse(HttpStatus.INTERNAL_SERVER_ERROR.value, 'error', 'Failed to download image')
+        return createJsonResponse(HttpStatus.INTERNAL_SERVER_ERROR.value, 'Failed to download image')
 
 @app.route('/process_itunes_image', methods=['GET'])
 def process_itunes_image() -> Response | tuple[str, int]:
@@ -113,7 +114,7 @@ def process_itunes_image() -> Response | tuple[str, int]:
         updateStats()
 
         return render_template('download.html', user_folder=user_folder, bg='ProcessedArtwork.png', minia='minia.png')
-    return createJsonResponse(HttpStatus.BAD_REQUEST.value, 'error', 'No iTunes image selected')
+    return createJsonResponse(HttpStatus.BAD_REQUEST.value, 'No iTunes image selected')
 
 # Server config
 HOME = "0.0.0.0"
