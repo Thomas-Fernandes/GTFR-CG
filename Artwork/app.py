@@ -60,7 +60,7 @@ def upload_file() -> str:
 
             generateCoverArt(filepath, output_bg)
             generateMinia(output_bg, logo_position, output_minia)
-            updateStats()
+            updateStats(constants.STATS_FILE_PATH)
 
             return render_template('download.html', user_folder=user_folder, bg='ProcessedArtwork.png', minia='minia.png')
     return render_template('upload.html')
