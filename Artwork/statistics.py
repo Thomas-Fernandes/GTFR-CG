@@ -110,6 +110,9 @@ def updateStats(path: str = constants.STATS_FILE_PATH) -> None:
     stats['dateLastGeneration'] = getNowEpoch()
     stats['totalGenerated'] = stats.get('totalGenerated', 0) + 1
 
+    # nullifying deprecated fields
+    stats['totalGenerations'] = None
+
     try:
         with open(path, 'w') as file:
             file.write(dumps(stats))
