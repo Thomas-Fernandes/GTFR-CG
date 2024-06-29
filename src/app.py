@@ -26,22 +26,21 @@ app.config["SESSION_TYPE"] = "filesystem"
 app.config["SESSION_FILE_DIR"] = 'flask_session' + constants.SLASH
 Session(app)
 
-def checkFilenameValid(filename: str | None) -> str:
+def checkFilenameValid(filename: str | None) -> str | None:
     if (filename == None or filename.strip() == ''):
         return constants.ERR_NO_FILE
     if (not('.' in filename and filename.rsplit('.', 1)[1].lower() in ['png', 'jpg', 'jpeg'])):
         return constants.ERR_INVALID_FILE_TYPE
-    return ""
+    return None
 
 @app.route('/', methods=['GET', 'POST'])
 def upload_file() -> str:
     if (request.method == 'POST'):
         file = request.files['file']
-
-        rv = checkFilenameValid(file.filename)
-        if (rv != ""):
-            log.error(f"Invalid file: {rv}")
-            return render_template('upload.html', error=rv)
+        error = checkFilenameValid(file.filename)
+        if (error):
+            log.error(error)
+            return render_template('upload.html', error=error)
 
         if (file.filename != None):
             if ('user_folder' not in session):
@@ -53,7 +52,7 @@ def upload_file() -> str:
             makedirs(user_upload_path, exist_ok=True)
             makedirs(user_processed_path, exist_ok=True)
 
-            filepath: str = path.join(user_upload_path, str(file.filename))
+            filepath: str = path.join(user_upload_path, file.filename)
             file.save(filepath)
             output_bg = path.join(user_processed_path, constants.PROCESSED_ARTWORK_FILENAME)
             generateCoverArt(filepath, output_bg)
@@ -112,6 +111,9 @@ def process_itunes_image() -> str | tuple[Response, int]:
     return render_template('download.html', user_folder=user_folder, bg=constants.PROCESSED_ARTWORK_FILENAME)
 
 def main(host: str = constants.HOST_HOME, port: int = constants.DEFAULT_PORT) -> None:
+    host_display_name = "localhost" if host == constants.HOST_HOME else host
+    log.log(f"Starting server @ http://{host_display_name}:{port}...\n")
+
     uploads_folder = constants.UPLOADS_DIR
     processed_folder = constants.PROCESSED_DIR
     makedirs(uploads_folder, exist_ok=True)
