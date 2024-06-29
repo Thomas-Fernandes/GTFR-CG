@@ -68,9 +68,6 @@ def updateStats(path: str = constants.STATS_FILE_PATH) -> None:
     stats['dateLastGeneration'] = getNowEpoch()
     stats['totalGenerations'] = newTotalGenerations + getJsonStatsFromFile(path).get('totalGenerated', 0)
 
-    # nullify deprecated totalGenerated key
-    stats['totalGenerated'] = None
-
     try:
         with open(path, 'w') as file:
             file.write(dumps(stats))
