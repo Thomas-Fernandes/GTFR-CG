@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Optional, TypeAlias
 
-import constants
+import src.constants as constants
 
 JsonDict: TypeAlias = dict[str, str | int]
 

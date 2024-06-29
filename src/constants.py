@@ -19,16 +19,23 @@ class TimeInSeconds(Enum):
 
 ########### ANY TYPES ###########
 
+# Server config
+HOST_HOME = "0.0.0.0"
+DEFAULT_PORT = 8000
+
+# Statistics
 DATE_FORMAT_FULL = "%Y-%m-%d %H:%M:%S"
 STATS_FILE_PATH = 'stats.json'
 DEFAULT_EXPIRATION = 2 # in days (integer)
 
+# Paths
+PREFIX = '../'
 SLASH = '/' if (osName != 'nt') else '\\'
-UPLOADS_FOLDER = 'uploads' + SLASH
-PROCESSED_FOLDER = 'processed' + SLASH
+UPLOADS_DIR = 'uploads' + SLASH
+PROCESSED_DIR = 'processed' + SLASH
 PROCESSED_ARTWORK_FILENAME = 'ProcessedArtwork.png'
 THUMBNAIL_FILENAME = 'minia.png'
-THUMBNAIL_FOLDER = 'assets/thumbnails' + SLASH
+THUMBNAIL_DIR = 'assets/thumbnails' + SLASH
 
 LOGO_POSITIONS = [
     'top-left',    'top-center',    'top-right',
