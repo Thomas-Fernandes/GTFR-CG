@@ -1,5 +1,6 @@
 from enum import Enum
 from os import name as osName
+from time import time
 
 class HttpStatus(Enum):
     OK = 200
@@ -28,3 +29,6 @@ LOGO_POSITIONS = [
     'center-left', 'center-center', 'center-right',
     'bottom-left', 'bottom-center', 'bottom-right'
 ]
+
+def getDefaultExpiredTime() -> int:
+    return int(time() - DEFAULT_EXPIRATION * TimeInSeconds.DAY.value)
