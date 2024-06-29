@@ -131,7 +131,7 @@ def main() -> None:
 
     stats = Stats()
     cache_cleanup(stats)
-    serve(app, host=HOME, port=PORT)
+    serve(app, host=HOME, port=PORT, threads=8)
 
 if __name__ == '__main__':
     main()
