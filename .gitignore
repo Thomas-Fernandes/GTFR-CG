@@ -1,9 +1,8 @@
 # Hidden files and directories
 .*
-.*/
+.*/*
 
 # Flask bytecode cache
-*/flask_session
 flask_session/
 
 # environment file
@@ -31,4 +30,4 @@ flask_session/
 *.json
 
 # Python cache
-*/__pycache__/
+__pycache__/

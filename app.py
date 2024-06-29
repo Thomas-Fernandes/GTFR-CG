@@ -1,14 +1,14 @@
 from flask import Flask, render_template, request, send_from_directory, session, Response
 from flask_session import Session
-from waitress import serve
 from requests import get as restGet
+from waitress import serve
 
+from os import path, makedirs, remove, listdir
 from shutil import rmtree
 from uuid import uuid4
-from os import path, name as osName, makedirs, remove, listdir, getcwd
 
 from statistics import Statistics, updateStats
-from functions import generateCoverArt, generateMinia
+from functions import generateCoverArt, generateThumbnail
 from web_utils import createJsonResponse
 
 import constants
@@ -52,7 +52,7 @@ def upload_file() -> str:
             file.save(filepath)
             output_bg = path.join(user_processed_path, constants.PROCESSED_ARTWORK_FILENAME)
             generateCoverArt(filepath, output_bg)
-            generateMinia(output_bg, user_processed_path)
+            generateThumbnail(output_bg, user_processed_path)
             updateStats()
 
             return render_template('download.html', user_folder=user_folder)
@@ -101,10 +101,10 @@ def process_itunes_image() -> str | tuple[str, int]:
         itunes_image_path = session['itunes_image_path']
         output_bg = path.join(user_processed_path, constants.PROCESSED_ARTWORK_FILENAME)
         generateCoverArt(itunes_image_path, output_bg)
-        generateMinia(output_bg, user_processed_path)
+        generateThumbnail(output_bg, user_processed_path)
         updateStats()
 
-        return render_template('download.html', user_folder=user_folder, bg=constants.PROCESSED_ARTWORK_FILENAME, minia=constants.MINIA_FILENAME)
+        return render_template('download.html', user_folder=user_folder, bg=constants.PROCESSED_ARTWORK_FILENAME, minia=constants.THUMBNAIL_FILENAME)
     return createJsonResponse(constants.HttpStatus.BAD_REQUEST.value, 'No iTunes image selected')
 
 # Server config
@@ -112,8 +112,10 @@ HOME = "0.0.0.0"
 PORT = 8000
 
 def main() -> None:
-    makedirs(constants.UPLOADS_FOLDER, exist_ok=True)
-    makedirs(constants.PROCESSED_FOLDER, exist_ok=True)
+    uploads_folder = constants.UPLOADS_FOLDER
+    processed_folder = constants.PROCESSED_FOLDER
+    makedirs(uploads_folder, exist_ok=True)
+    makedirs(processed_folder, exist_ok=True)
 
     def removeExpiredCache(folder: str) -> int:
         eliminatedEntries = 0
@@ -128,7 +130,7 @@ def main() -> None:
         if (eliminatedEntries != 0):
             pluralMarks = ["s", "were"] if eliminatedEntries != 1 else ["", "was"]
             print(f"{eliminatedEntries} cached file{pluralMarks[0]} {pluralMarks[1]} " \
-                + f"removed in {folder.split(SLASH)[0]}.")
+                + f"removed in {folder.split(constants.SLASH)[0]}.")
         return eliminatedEntries
 
     def cache_cleanup(stats: Statistics) -> None:
@@ -137,8 +139,7 @@ def main() -> None:
         if (not path.exists(stats.getStatsFilePath())):
             stats.generateStats()
         else:
-            eliminatedEntries += removeExpiredCache(UPLOADS_FOLDER + listdir(UPLOADS_FOLDER)[0])
-            eliminatedEntries += removeExpiredCache(PROCESSED_FOLDER + listdir(PROCESSED_FOLDER)[0])
+            eliminatedEntries += removeExpiredCache(uploads_folder + listdir(uploads_folder)[0])
             if (eliminatedEntries == 0):
                 print("Cache still fresh. Loading...")
 

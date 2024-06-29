@@ -10,13 +10,13 @@ JsonDict: TypeAlias = dict[str, str | int]
 @dataclass(slots=True, kw_only=True)
 class Stats:
     dateLastGeneration: str | None
-    totalGenerated: int
+    totalGenerations: int
 
     def dict(self) -> JsonDict:
-        return { 'dateLastGeneration': self.dateLastGeneration, 'totalGenerated': self.totalGenerated }
+        return { 'dateLastGeneration': self.dateLastGeneration, 'totalGenerations': self.totalGenerations }
 
     def __str__(self) -> str:
-        return f"{{ 'dateLastGeneration': '{self.dateLastGeneration}', 'totalGenerated': {self.totalGenerated} }}"
+        return f"{{ 'dateLastGeneration': '{self.dateLastGeneration}', 'totalGenerations': {self.totalGenerations} }}"
 
 class Statistics:
     def generateStats(self) -> None:
@@ -37,7 +37,7 @@ class Statistics:
         stats_from_file = getJsonStatsFromFile(self.__stats_file_path)
         self.__stats: Stats = Stats(
             dateLastGeneration=stats_from_file.get('dateLastGeneration', ''),
-            totalGenerated=stats_from_file.get('totalGenerated', 0)
+            totalGenerations=stats_from_file.get('totalGenerations', 0)
         )
         print(f"Initializing project with statistics:\n\t{self.__stats}")
 
@@ -62,11 +62,14 @@ def getJsonStatsFromFile(path: str) -> JsonDict:
         return {}
 
 def updateStats(path: str = constants.STATS_FILE_PATH) -> None:
-    newTotalGenerated = getJsonStatsFromFile(path).get('totalGenerated', 0) + 1
+    newTotalGenerations = getJsonStatsFromFile(path).get('totalGenerations', 0) + 1
 
     stats: JsonDict = {}
     stats['dateLastGeneration'] = getNowEpoch()
-    stats['totalGenerated'] = newTotalGenerated
+    stats['totalGenerations'] = newTotalGenerations + getJsonStatsFromFile(path).get('totalGenerated', 0)
+
+    # nullify deprecated totalGenerated key
+    stats['totalGenerated'] = None
 
     try:
         with open(path, 'w') as file:
