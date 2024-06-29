@@ -104,7 +104,7 @@ def process_itunes_image() -> str | tuple[str, int]:
         generateMinia(output_bg, user_processed_path)
         updateStats()
 
-        return render_template('download.html', user_folder=user_folder, bg=constants.PROCESSED_ARTWORK_FILENAME, minia='minia.png')
+        return render_template('download.html', user_folder=user_folder, bg=constants.PROCESSED_ARTWORK_FILENAME, minia=constants.MINIA_FILENAME)
     return createJsonResponse(constants.HttpStatus.BAD_REQUEST.value, 'No iTunes image selected')
 
 # Server config

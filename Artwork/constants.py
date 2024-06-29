@@ -22,6 +22,7 @@ SLASH = '/' if (osName != 'nt') else '\\'
 UPLOADS_FOLDER = 'uploads' + SLASH
 PROCESSED_FOLDER = 'processed' + SLASH
 PROCESSED_ARTWORK_FILENAME = 'ProcessedArtwork.png'
+MINIA_FILENAME = 'minia.png'
 
 LOGO_POSITIONS = [
     'top-left', 'top-center', 'top-right',
