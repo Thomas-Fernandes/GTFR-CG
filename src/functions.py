@@ -2,7 +2,11 @@ from flask import session
 from PIL import Image, ImageFilter, ImageDraw
 from os import path
 
+from src.logger import Logger
+
 import src.constants as constants
+
+log = Logger()
 
 def generateCoverArt(input_path: str, output_path: str) -> None:
     image: Image.Image = Image.open(input_path)
@@ -53,7 +57,7 @@ def generateThumbnail(bg_path: str, output_folder: str) -> None:
         user_folder = constants.SLASH.join(user_folder.split(constants.SLASH)[:-1])
         overlay_file = f"{user_folder}{constants.SLASH}{constants.THUMBNAIL_DIR}{logo_path}"
         if (not path.exists(overlay_file)):
-            print(f"Overlay file not found: {overlay_file}")
+            log.warn(f"Overlay file not found: {overlay_file}")
             continue
         overlay = Image.open(overlay_file)
 

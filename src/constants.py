@@ -1,6 +1,5 @@
 from enum import Enum
 from os import name as osName
-from time import time
 
 ############# ENUMS #############
 
@@ -44,8 +43,3 @@ LOGO_POSITIONS = [
 # Error messages
 ERR_INVALID_FILE_TYPE = 'Invalid file type. Only PNG and JPG files are allowed.'
 ERR_NO_FILE = 'Invalid file: No file selected.'
-
-############ METHODS ############
-
-def getDefaultExpirationTime() -> int:
-    return int(time() - DEFAULT_EXPIRATION * TimeInSeconds.DAY.value)
