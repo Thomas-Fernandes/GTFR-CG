@@ -60,7 +60,7 @@ def upload_file() -> str:
 
             generateCoverArt(filepath, output_bg)
             generateMinia(output_bg, logo_position, output_minia)
-            updateStats(constants.STATS_FILE_PATH)
+            updateStats()
 
             return render_template('download.html', user_folder=user_folder, bg='ProcessedArtwork.png', minia='minia.png')
     return render_template('upload.html')
@@ -112,7 +112,7 @@ def process_itunes_image() -> Response | tuple[str, int]:
 
         generateCoverArt(itunes_image_path, output_bg)
         generateMinia(output_bg, logo_position, output_minia)  # Use the selected logo position
-        updateStats(constants.STATS_FILE_PATH)
+        updateStats()
 
         return render_template('download.html', user_folder=user_folder, bg='ProcessedArtwork.png', minia='minia.png')
     return createJsonResponse(constants.HttpStatus.BAD_REQUEST.value, 'No iTunes image selected')

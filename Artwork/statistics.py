@@ -104,7 +104,7 @@ def getJsonStatsFromFile(path: str) -> JsonDict:
         print(f"Error decoding stats file. ({path})")
         return {}
 
-def updateStats(path: str) -> None:
+def updateStats(path: str = constants.STATS_FILE_PATH) -> None:
     stats = getJsonStatsFromFile(path)
 
     stats['dateLastGeneration'] = getNowEpoch()
