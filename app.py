@@ -117,35 +117,35 @@ def main() -> None:
     makedirs(uploads_folder, exist_ok=True)
     makedirs(processed_folder, exist_ok=True)
 
-    def removeExpiredCache(folder: str) -> int:
-        eliminatedEntries = 0
+    def removeOldUploads(folder: str) -> int:
+        eliminated_files_count = 0
         filepaths: list[str] = [path.join(folder, f) for f in listdir(folder)]
         for file in filepaths:
-            if (path.isfile(file) and path.getmtime(file) < constants.getDefaultExpiredTime()):
-                print(f"Removing {file} ({path.getmtime(file)})...")
+            if (path.isfile(file) and int(path.getmtime(file)) < constants.getDefaultExpirationTime()):
                 remove(file)
-                eliminatedEntries += 1
+                eliminated_files_count += 1
         if (not listdir(folder)): # if folder is empty, remove it
             rmtree(folder)
-        if (eliminatedEntries != 0):
-            pluralMarks = ["s", "were"] if eliminatedEntries != 1 else ["", "was"]
-            print(f"{eliminatedEntries} cached file{pluralMarks[0]} {pluralMarks[1]} " \
+        if (eliminated_files_count != 0):
+            pluralMarks = ["s", "were"] if eliminated_files_count != 1 else ["", "was"]
+            print(f"{eliminated_files_count} cached file{pluralMarks[0]} {pluralMarks[1]} " \
                 + f"removed in {folder.split(constants.SLASH)[0]}.")
-        return eliminatedEntries
+        return eliminated_files_count
 
-    def cache_cleanup(stats: Statistics) -> None:
-        eliminatedEntries = 0
+    def cacheCleanup(stats: Statistics) -> None:
+        eliminated_files_count = 0
 
         if (not path.exists(stats.getStatsFilePath())):
             stats.generateStats()
         else:
-            if (len(listdir(uploads_folder)) > 0):
-                eliminatedEntries += removeExpiredCache(uploads_folder + listdir(uploads_folder)[0])
-            if (eliminatedEntries == 0):
+            session_dirname_list = listdir(uploads_folder)
+            for sdn in session_dirname_list:
+                eliminated_files_count += removeOldUploads(uploads_folder + sdn)
+            if (eliminated_files_count == 0):
                 print("Cache still fresh. Loading...")
 
     stats = Statistics()
-    cache_cleanup(stats)
+    cacheCleanup(stats)
     serve(app, host=HOME, port=PORT, threads=8)
 
 if __name__ == '__main__':

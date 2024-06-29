@@ -4,8 +4,6 @@ from os import path
 
 import constants
 
-THUMBNAIL_FOLDER = 'Miniatures'
-
 def generateCoverArt(input_path: str, output_path: str) -> None:
     image: Image.Image = Image.open(input_path)
 
@@ -36,8 +34,7 @@ def generateCoverArt(input_path: str, output_path: str) -> None:
     final_blurred_image = Image.composite(cropped_image, blurred_image, mask)
 
     center_image: Image.Image = image.resize((800, 800), Image.Resampling.LANCZOS)
-    top_left_x = center_x - 400
-    top_left_y = center_y - 400
+    (top_left_x, top_left_y) = (center_x - 400, center_y - 400)
     final_blurred_image.paste(center_image, (top_left_x, top_left_y))
 
     final_blurred_image.save(output_path)
@@ -48,7 +45,7 @@ def generateThumbnail(bg_path: str, output_folder: str) -> None:
         background = Image.open(bg_path)
         user_folder = path.abspath(str(session['user_folder']))
         user_folder = constants.SLASH.join(user_folder.split(constants.SLASH)[:-1])
-        overlay_file = f"{user_folder}{constants.SLASH}{THUMBNAIL_FOLDER}{constants.SLASH}{logo_path}"
+        overlay_file = f"{user_folder}{constants.SLASH}{constants.THUMBNAIL_FOLDER}{logo_path}"
         if (not path.exists(overlay_file)):
             print(f"Overlay file not found: {overlay_file}")
             continue
