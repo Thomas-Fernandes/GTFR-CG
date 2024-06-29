@@ -46,12 +46,13 @@ h1 {
     grid-template-columns: repeat(3, 1fr);
     gap: 10px;
     width: 45%;
+    background: white;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
 .miniature-item {
-    background: white;
     padding: 10px;
-    box-shadow: 0 0 5px rgba(0,0,0,0.1);
 }
 
 img {
