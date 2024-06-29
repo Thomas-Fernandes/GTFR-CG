@@ -50,7 +50,7 @@ def upload_file() -> str:
 
             filepath: str = path.join(user_upload_path, str(file.filename))
             file.save(filepath)
-            output_bg = path.join(user_processed_path, 'ProcessedArtwork.png')
+            output_bg = path.join(user_processed_path, constants.PROCESSED_ARTWORK_FILENAME)
             generateCoverArt(filepath, output_bg)
             generateMinia(output_bg, user_processed_path)
             updateStats()
@@ -99,12 +99,12 @@ def process_itunes_image() -> str | tuple[str, int]:
         user_folder = str(session['user_folder'])
         user_processed_path = path.join(constants.PROCESSED_FOLDER, user_folder)
         itunes_image_path = session['itunes_image_path']
-        output_bg = path.join(user_processed_path, 'ProcessedArtwork.png')
+        output_bg = path.join(user_processed_path, constants.PROCESSED_ARTWORK_FILENAME)
         generateCoverArt(itunes_image_path, output_bg)
         generateMinia(output_bg, user_processed_path)
         updateStats()
 
-        return render_template('download.html', user_folder=user_folder, bg='ProcessedArtwork.png', minia='minia.png')
+        return render_template('download.html', user_folder=user_folder, bg=constants.PROCESSED_ARTWORK_FILENAME, minia='minia.png')
     return createJsonResponse(constants.HttpStatus.BAD_REQUEST.value, 'No iTunes image selected')
 
 # Server config
