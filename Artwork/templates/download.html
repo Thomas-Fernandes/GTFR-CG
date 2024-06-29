@@ -8,13 +8,50 @@
 <body>
     <h1>Processed Artworks</h1>
     <div class="image-panels">
+        <!-- Cadre de gauche pour l'Artwork -->
         <div class="image-container">
             <img src="{{ url_for('download', filename='ProcessedArtwork.png') }}" alt="background miniature">
             <a href="{{ url_for('download', filename='ProcessedArtwork.png') }}">Download</a>
         </div>
-        <div class="image-container">
-            <img src="{{ url_for('download', filename='minia.png') }}" alt="miniature with icon">
-            <a href="{{ url_for('download', filename='minia.png') }}">Download</a>
+
+        <!-- grille de 3*3 -->
+        <div class="miniature-grid">
+            <div class="miniature-item">
+                <img src="{{ url_for('download', filename='minia_top-left.png') }}" alt="top left logo">
+                <a href="{{ url_for('download', filename='minia_top-left.png') }}">Download</a>
+            </div>
+            <div class="miniature-item">
+                <img src="{{ url_for('download', filename='minia_top-center.png') }}" alt="top center logo">
+                <a href="{{ url_for('download', filename='minia_top-center.png') }}">Download</a>
+            </div>
+            <div class="miniature-item">
+                <img src="{{ url_for('download', filename='minia_top-right.png') }}" alt="top right logo">
+                <a href="{{ url_for('download', filename='minia_top-right.png') }}">Download</a>
+            </div>
+            <div class="miniature-item">
+                <img src="{{ url_for('download', filename='minia_center-left.png') }}" alt="center left logo">
+                <a href="{{ url_for('download', filename='minia_center-left.png') }}">Download</a>
+            </div>
+            <div class="miniature-item">
+                <img src="{{ url_for('download', filename='minia_center-center.png') }}" alt="center logo">
+                <a href="{{ url_for('download', filename='minia_center-center.png') }}">Download</a>
+            </div>
+            <div class="miniature-item">
+                <img src="{{ url_for('download', filename='minia_center-right.png') }}" alt="center right logo">
+                <a href="{{ url_for('download', filename='minia_center-right.png') }}">Download</a>
+            </div>
+            <div class="miniature-item">
+                <img src="{{ url_for('download', filename='minia_bottom-left.png') }}" alt="bottom left logo">
+                <a href="{{ url_for('download', filename='minia_bottom-left.png') }}">Download</a>
+            </div>
+            <div class="miniature-item">
+                <img src="{{ url_for('download', filename='minia_bottom-center.png') }}" alt="bottom center logo">
+                <a href="{{ url_for('download', filename='minia_bottom-center.png') }}">Download</a>
+            </div>
+            <div class="miniature-item">
+                <img src="{{ url_for('download', filename='minia_bottom-right.png') }}" alt="bottom right logo">
+                <a href="{{ url_for('download', filename='minia_bottom-right.png') }}">Download</a>
+            </div>
         </div>
     </div>
 </body>

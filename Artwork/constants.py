@@ -1,4 +1,5 @@
 from enum import Enum
+from os import name as osName
 from time import time
 
 class HttpStatus(Enum):
@@ -17,6 +18,18 @@ class TimeInSeconds(Enum):
 DATE_FORMAT_FULL = "%Y-%m-%d %H:%M:%S"
 STATS_FILE_PATH = 'stats.json'
 DEFAULT_EXPIRATION = 2 # in days (integer)
+
+SLASH = '/' if (osName != 'nt') else '\\'
+UPLOADS_FOLDER = 'uploads' + SLASH
+PROCESSED_FOLDER = 'processed' + SLASH
+PROCESSED_ARTWORK_FILENAME = 'ProcessedArtwork.png'
+MINIA_FILENAME = 'minia.png'
+
+LOGO_POSITIONS = [
+    'top-left', 'top-center', 'top-right',
+    'center-left', 'center-center', 'center-right',
+    'bottom-left', 'bottom-center', 'bottom-right'
+]
 
 def getDefaultExpiredTime() -> int:
     return int(time() - DEFAULT_EXPIRATION * TimeInSeconds.DAY.value)

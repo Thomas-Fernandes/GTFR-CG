@@ -6,24 +6,7 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/upload.css') }}" />
 </head>
 <body>
-    <h1>Upload your image</h1>
-    <form method="post" enctype="multipart/form-data">
-        <div class="flexbox">
-            <input type="file" name="file" class="file" />
-            <p class="error">{{ error }}</p>
-            <div class="flex-horiz">
-                <label for="logo-position">Position of the logo over the artwork:</label>
-                <select name="logo-position" id="logo-position">
-                    <option value="center">Center</option>
-                    <option value="right">Right</option>
-                    <option value="left">Left</option>
-                </select>
-            </div>
-            <input type="submit" value="UPLOAD" class="button" />
-        </div>
-    </form>
-
-    <h1>Or search for cover art on iTunes</h1>
+    <h1>Search for cover art on iTunes</h1>
     <form id="iTunesSearchForm" method="post">
         <div class="flexbox">
             <input type="text" name="query" id="query" placeholder="Search on iTunes" />
@@ -32,18 +15,19 @@
                 <option value="us">United States</option>
                 <option value="nz">New Zealand</option>
             </select>
-            <div class="flex-horiz">
-                <label for="logo-position-itunes">Position of the logo over the artwork:</label>
-                <select name="logo-position-itunes" id="logo-position-itunes">
-                    <option value="center">Center</option>
-                    <option value="right">Right</option>
-                    <option value="left">Left</option>
-                </select>
-            </div>
             <input type="submit" value="SEARCH" class="button" />
         </div>
     </form>
     <div id="results" class="result-container"></div>
+
+    <h1>Or upload your image</h1>
+    <form method="post" enctype="multipart/form-data">
+        <div class="flexbox">
+            <input type="file" name="file" class="file" />
+            <p class="error">{{ error }}</p>
+            <input type="submit" value="UPLOAD" class="button" />
+        </div>
+    </form>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="{{ url_for('static', filename='js/itunes_search.js') }}"></script>
