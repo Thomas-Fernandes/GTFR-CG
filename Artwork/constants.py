@@ -1,4 +1,5 @@
 from enum import Enum
+from time import time
 
 class HttpStatus(Enum):
     OK = 200
@@ -16,3 +17,6 @@ class TimeInSeconds(Enum):
 DATE_FORMAT_FULL = "%Y-%m-%d %H:%M:%S"
 STATS_FILE_PATH = 'stats.json'
 DEFAULT_EXPIRATION = 2 # in days (integer)
+
+def getDefaultExpiredTime() -> int:
+    return int(time() - DEFAULT_EXPIRATION * TimeInSeconds.DAY.value)
