@@ -17,7 +17,7 @@ class TimeInSeconds(Enum):
     MINUTE = 60
     SECOND = 1
 
-########### ANY TYPES ###########
+######### REGULAR TYPES #########
 
 # Server config
 HOST_HOME = "0.0.0.0"
@@ -42,6 +42,10 @@ LOGO_POSITIONS = [
     'center-left', 'center-center', 'center-right',
     'bottom-left', 'bottom-center', 'bottom-right'
 ]
+
+# Error messages
+ERR_INVALID_FILE_TYPE = 'Invalid file type. Only PNG and JPG files are allowed.'
+ERR_NO_FILE = 'Invalid file: No file selected.'
 
 ############ METHODS ############
 

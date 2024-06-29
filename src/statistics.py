@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Optional, TypeAlias
+from typing import TypeAlias
 
 import src.constants as constants
 
@@ -9,7 +9,7 @@ JsonDict: TypeAlias = dict[str, str | int]
 
 @dataclass(slots=True, kw_only=True)
 class Stats:
-    dateLastGeneration: str | None
+    dateLastGeneration: str
     totalGenerations: int
 
     def dict(self) -> JsonDict:
@@ -36,8 +36,8 @@ class Statistics:
         self.__stats_file_path: str = constants.STATS_FILE_PATH
         stats_from_file = getJsonStatsFromFile(self.__stats_file_path)
         self.__stats: Stats = Stats(
-            dateLastGeneration=stats_from_file.get('dateLastGeneration', ''),
-            totalGenerations=stats_from_file.get('totalGenerations', 0)
+            dateLastGeneration=str(stats_from_file.get('dateLastGeneration', '')),
+            totalGenerations=int(stats_from_file.get('totalGenerations', 0))
         )
         print(f"Initializing project with statistics:\n\t{self.__stats}")
 
@@ -66,7 +66,7 @@ def updateStats(path: str = constants.STATS_FILE_PATH) -> None:
 
     stats: JsonDict = {}
     stats['dateLastGeneration'] = getNowEpoch()
-    stats['totalGenerations'] = jsonStatsFromFile.get('totalGenerations', 0) + 1
+    stats['totalGenerations'] = int(jsonStatsFromFile.get('totalGenerations', 0)) + 1
 
     try:
         with open(path, 'w') as file:

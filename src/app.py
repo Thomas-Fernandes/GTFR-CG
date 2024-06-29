@@ -22,14 +22,11 @@ app.config["SESSION_TYPE"] = "filesystem"
 app.config["SESSION_FILE_DIR"] = 'flask_session' + constants.SLASH
 Session(app)
 
-def checkFilenameValid(filename: str) -> str:
-    ERR_INVALID_FILE_TYPE = 'Invalid file type. Only PNG and JPG files are allowed.'
-    ERR_NO_FILE = 'Invalid file: No file selected.'
-
-    if (filename == None or filename == ''):
-        return ERR_NO_FILE
+def checkFilenameValid(filename: str | None) -> str:
+    if (filename == None or filename.strip() == ''):
+        return constants.ERR_NO_FILE
     if (not('.' in filename and filename.rsplit('.', 1)[1].lower() in ['png', 'jpg', 'jpeg'])):
-        return ERR_INVALID_FILE_TYPE
+        return constants.ERR_INVALID_FILE_TYPE
     return ""
 
 @app.route('/', methods=['GET', 'POST'])
@@ -98,17 +95,16 @@ def use_itunes_image() -> tuple[str, int] | Response:
 
 @app.route('/process_itunes_image', methods=['GET'])
 def process_itunes_image() -> str | tuple[str, int]:
-    if ('itunes_image_path' in session):
-        user_folder = str(session['user_folder'])
-        user_processed_path = path.join(constants.PROCESSED_DIR, user_folder)
-        itunes_image_path = session['itunes_image_path']
-        output_bg = path.join(user_processed_path, constants.PROCESSED_ARTWORK_FILENAME)
-        generateCoverArt(itunes_image_path, output_bg)
-        generateThumbnail(output_bg, user_processed_path)
-        updateStats()
-
-        return render_template('download.html', user_folder=user_folder, bg=constants.PROCESSED_ARTWORK_FILENAME, minia=constants.THUMBNAIL_FILENAME)
-    return createJsonResponse(constants.HttpStatus.BAD_REQUEST.value, 'No iTunes image selected')
+    if ('itunes_image_path' not in session):
+        return createJsonResponse(constants.HttpStatus.BAD_REQUEST.value, 'No iTunes image selected')
+    user_folder = str(session['user_folder'])
+    user_processed_path = path.join(constants.PROCESSED_DIR, user_folder)
+    itunes_image_path = str(session['itunes_image_path'])
+    output_bg = path.join(user_processed_path, constants.PROCESSED_ARTWORK_FILENAME)
+    generateCoverArt(itunes_image_path, output_bg)
+    generateThumbnail(output_bg, user_processed_path)
+    updateStats()
+    return render_template('download.html', user_folder=user_folder, bg=constants.PROCESSED_ARTWORK_FILENAME, minia=constants.THUMBNAIL_FILENAME)
 
 def main(host: str = constants.HOST_HOME, port: int = constants.DEFAULT_PORT) -> None:
     uploads_folder = constants.UPLOADS_DIR
@@ -117,7 +113,7 @@ def main(host: str = constants.HOST_HOME, port: int = constants.DEFAULT_PORT) ->
     makedirs(processed_folder, exist_ok=True)
 
     def removeOldUploads(folder: str) -> int:
-        eliminated_files_count = 0
+        eliminated_files_count: int = 0
         filepaths: list[str] = [path.join(folder, f) for f in listdir(folder)]
         for file in filepaths:
             if (path.isfile(file) and int(path.getmtime(file)) < constants.getDefaultExpirationTime()):
@@ -132,7 +128,7 @@ def main(host: str = constants.HOST_HOME, port: int = constants.DEFAULT_PORT) ->
         return eliminated_files_count
 
     def cacheCleanup(stats: Statistics) -> None:
-        eliminated_files_count = 0
+        eliminated_files_count: int = 0
 
         if (not path.exists(stats.getStatsFilePath())):
             stats.generateStats()
