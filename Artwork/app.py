@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, send_from_directory, session, Response, jsonify
+from flask import Flask, render_template, request, send_from_directory, session, Response
 from flask_session import Session
 from waitress import serve
 from requests import get as restGet
@@ -7,10 +7,11 @@ from shutil import rmtree
 from uuid import uuid4
 from os import path, name as osName, makedirs
 
-from statistics import Statistics as Stats, updateStats
+from statistics import Statistics, updateStats
 from functions import generateCoverArt, generateMinia
-from constants import HttpStatus
 from web_utils import createJsonResponse
+
+import constants
 
 SLASH = '/' if (osName != 'nt') else '\\'
 UPLOADS_FOLDER = 'uploads' + SLASH
@@ -67,14 +68,14 @@ def download(filename: str) -> Response | tuple[str, int]:
         user_folder = str(session['user_folder'])
         directory: str = path.abspath(path.join(PROCESSED_FOLDER, user_folder))
         return send_from_directory(directory, filename, as_attachment=True)
-    return createJsonResponse(HttpStatus.NOT_FOUND.value, 'Session Expired or Invalid')
+    return createJsonResponse(constants.HttpStatus.NOT_FOUND.value, 'Session Expired or Invalid')
 
 @app.route('/use_itunes_image', methods=['POST'])
 def use_itunes_image() -> tuple[str, int] | Response:
     image_url = request.form.get('url')
     logo_position = request.form.get('position', 'center')
     if (not image_url):
-        return createJsonResponse(HttpStatus.BAD_REQUEST.value, 'No image URL provided')
+        return createJsonResponse(constants.HttpStatus.BAD_REQUEST.value, 'No image URL provided')
 
     if ('user_folder' not in session):
         session['user_folder'] = str(uuid4())
@@ -85,16 +86,16 @@ def use_itunes_image() -> tuple[str, int] | Response:
 
     # Mise à jour ici pour utiliser restGet au lieu de requests.get
     image_response = restGet(image_url)
-    if (image_response.status_code == HttpStatus.OK.value):
+    if (image_response.status_code == constants.HttpStatus.OK.value):
         image_path = path.join(user_processed_path, 'itunes_image.png')
         with open(image_path, 'wb') as file:
             file.write(image_response.content)
 
         session['itunes_image_path'] = image_path
         session['logo_position'] = logo_position
-        return createJsonResponse(HttpStatus.OK.value)
+        return createJsonResponse(constants.HttpStatus.OK.value)
     else:
-        return createJsonResponse(HttpStatus.INTERNAL_SERVER_ERROR.value, 'Failed to download image')
+        return createJsonResponse(constants.HttpStatus.INTERNAL_SERVER_ERROR.value, 'Failed to download image')
 
 @app.route('/process_itunes_image', methods=['GET'])
 def process_itunes_image() -> Response | tuple[str, int]:
@@ -107,8 +108,8 @@ def process_itunes_image() -> Response | tuple[str, int]:
         generateMinia(output_bg, user_processed_path)
         updateStats()
 
-        return render_template('download.html', user_folder=user_folder)
-    return createJsonResponse(HttpStatus.BAD_REQUEST.value, 'No iTunes image selected')
+        return render_template('download.html', user_folder=user_folder, bg='ProcessedArtwork.png', minia='minia.png')
+    return createJsonResponse(constants.HttpStatus.BAD_REQUEST.value, 'No iTunes image selected')
 
 # Server config
 HOME = "0.0.0.0"
@@ -118,8 +119,8 @@ def main() -> None:
     makedirs(UPLOADS_FOLDER, exist_ok=True)
     makedirs(PROCESSED_FOLDER, exist_ok=True)
 
-    def cache_cleanup(stats: Stats) -> None:
-        if (not path.exists(stats.stats_file_path)):
+    def cache_cleanup(stats: Statistics) -> None:
+        if (not path.exists(stats.getStatsFilePath())):
             stats.generateStats()
         else:
             if (stats.isCacheExpired()):
@@ -129,7 +130,7 @@ def main() -> None:
             else:
                 print("Cache still fresh. Loading...")
 
-    stats = Stats()
+    stats = Statistics()
     cache_cleanup(stats)
     serve(app, host=HOME, port=PORT, threads=8)
 
