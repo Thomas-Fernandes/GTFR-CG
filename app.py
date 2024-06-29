@@ -139,7 +139,8 @@ def main() -> None:
         if (not path.exists(stats.getStatsFilePath())):
             stats.generateStats()
         else:
-            eliminatedEntries += removeExpiredCache(uploads_folder + listdir(uploads_folder)[0])
+            if (len(listdir(uploads_folder)) > 0):
+                eliminatedEntries += removeExpiredCache(uploads_folder + listdir(uploads_folder)[0])
             if (eliminatedEntries == 0):
                 print("Cache still fresh. Loading...")
 
