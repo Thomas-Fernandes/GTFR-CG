@@ -2,6 +2,8 @@ from flask import session
 from PIL import Image, ImageFilter, ImageDraw
 from os import path, name as osName
 
+from constants import LOGO_POSITIONS
+
 SLASH = '/' if (osName != 'nt') else '\\'
 MINIA_FOLDER = 'Artwork' + SLASH + 'Miniatures'
 
@@ -42,14 +44,13 @@ def generateCoverArt(input_path: str, output_path: str) -> None:
     final_blurred_image.save(output_path)
 
 def generateMinia(bg_path: str, output_folder: str) -> None:
-    positions = ['top-left', 'top-center', 'top-right', 'center-left', 'center-center', 'center-right', 'bottom-left', 'bottom-center', 'bottom-right']
-    for position in positions:
+    for position in LOGO_POSITIONS:
         logo_path = f'{position}.png'
         background = Image.open(bg_path)
         user_folder = path.abspath(str(session['user_folder']))
         user_folder = SLASH.join(user_folder.split(SLASH)[:-2]) # Remove the last folder and PID
         overlay_file = f"{user_folder}{SLASH}{MINIA_FOLDER}{SLASH}{logo_path}"
-        if not path.exists(overlay_file):
+        if (not path.exists(overlay_file)):
             print(f"Overlay file not found: {overlay_file}")
             continue
         overlay = Image.open(overlay_file)

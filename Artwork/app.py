@@ -5,7 +5,7 @@ from requests import get as restGet
 
 from shutil import rmtree
 from uuid import uuid4
-from os import path, name as osName, makedirs
+from os import path, makedirs
 
 from statistics import Statistics, updateStats
 from functions import generateCoverArt, generateMinia
@@ -13,14 +13,10 @@ from web_utils import createJsonResponse
 
 import constants
 
-SLASH = '/' if (osName != 'nt') else '\\'
-UPLOADS_FOLDER = 'uploads' + SLASH
-PROCESSED_FOLDER = 'processed' + SLASH
-
 app = Flask(__name__)
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
-app.config["SESSION_FILE_DIR"] = 'flask_session' + SLASH
+app.config["SESSION_FILE_DIR"] = 'flask_session' + constants.SLASH
 Session(app)
 
 def checkFilenameValid(filename: str) -> str:
@@ -47,8 +43,8 @@ def upload_file() -> str:
                 session['user_folder'] = str(uuid4())
 
             user_folder = str(session['user_folder'])
-            user_upload_path: str = path.join(UPLOADS_FOLDER, user_folder)
-            user_processed_path: str = path.join(PROCESSED_FOLDER, user_folder)
+            user_upload_path: str = path.join(constants.UPLOADS_FOLDER, user_folder)
+            user_processed_path: str = path.join(constants.PROCESSED_FOLDER, user_folder)
             makedirs(user_upload_path, exist_ok=True)
             makedirs(user_processed_path, exist_ok=True)
 
@@ -66,7 +62,7 @@ def upload_file() -> str:
 def download(filename: str) -> Response | tuple[str, int]:
     if ('user_folder' in session):
         user_folder = str(session['user_folder'])
-        directory: str = path.abspath(path.join(PROCESSED_FOLDER, user_folder))
+        directory: str = path.abspath(path.join(constants.PROCESSED_FOLDER, user_folder))
         return send_from_directory(directory, filename, as_attachment=True)
     return createJsonResponse(constants.HttpStatus.NOT_FOUND.value, 'Session Expired or Invalid')
 
@@ -81,7 +77,7 @@ def use_itunes_image() -> tuple[str, int] | Response:
         session['user_folder'] = str(uuid4())
 
     user_folder = str(session['user_folder'])
-    user_processed_path = path.join(PROCESSED_FOLDER, user_folder)
+    user_processed_path = path.join(constants.PROCESSED_FOLDER, user_folder)
     makedirs(user_processed_path, exist_ok=True)
 
     # Mise à jour ici pour utiliser restGet au lieu de requests.get
@@ -98,10 +94,10 @@ def use_itunes_image() -> tuple[str, int] | Response:
         return createJsonResponse(constants.HttpStatus.INTERNAL_SERVER_ERROR.value, 'Failed to download image')
 
 @app.route('/process_itunes_image', methods=['GET'])
-def process_itunes_image() -> Response | tuple[str, int]:
+def process_itunes_image() -> str | tuple[str, int]:
     if ('itunes_image_path' in session):
         user_folder = str(session['user_folder'])
-        user_processed_path = path.join(PROCESSED_FOLDER, user_folder)
+        user_processed_path = path.join(constants.PROCESSED_FOLDER, user_folder)
         itunes_image_path = session['itunes_image_path']
         output_bg = path.join(user_processed_path, 'ProcessedArtwork.png')
         generateCoverArt(itunes_image_path, output_bg)
@@ -116,8 +112,8 @@ HOME = "0.0.0.0"
 PORT = 8000
 
 def main() -> None:
-    makedirs(UPLOADS_FOLDER, exist_ok=True)
-    makedirs(PROCESSED_FOLDER, exist_ok=True)
+    makedirs(constants.UPLOADS_FOLDER, exist_ok=True)
+    makedirs(constants.PROCESSED_FOLDER, exist_ok=True)
 
     def cache_cleanup(stats: Statistics) -> None:
         if (not path.exists(stats.getStatsFilePath())):
@@ -125,8 +121,8 @@ def main() -> None:
         else:
             if (stats.isCacheExpired()):
                 print("Cache expired, emptying it...")
-                rmtree(UPLOADS_FOLDER)
-                rmtree(PROCESSED_FOLDER)
+                rmtree(constants.UPLOADS_FOLDER)
+                rmtree(constants.PROCESSED_FOLDER)
             else:
                 print("Cache still fresh. Loading...")
 
