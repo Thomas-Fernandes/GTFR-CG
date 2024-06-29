@@ -29,13 +29,11 @@ STATS_FILE_PATH = 'stats.json'
 DEFAULT_EXPIRATION = 2 # in days (integer)
 
 # Paths
-PREFIX = '../'
 SLASH = '/' if (osName != 'nt') else '\\'
 UPLOADS_DIR = 'uploads' + SLASH
 PROCESSED_DIR = 'processed' + SLASH
 PROCESSED_ARTWORK_FILENAME = 'ProcessedArtwork.png'
-THUMBNAIL_FILENAME = 'minia.png'
-THUMBNAIL_DIR = 'assets/thumbnails' + SLASH
+THUMBNAIL_DIR = 'assets' + SLASH + 'thumbnails' + SLASH
 
 LOGO_POSITIONS = [
     'top-left',    'top-center',    'top-right',

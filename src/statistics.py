@@ -5,7 +5,7 @@ import src.constants as constants
 
 JsonDict: TypeAlias = dict[str, str | int]
 
-######################## CLASSES ########################
+############ CLASSES ############
 
 @dataclass(slots=True, kw_only=True)
 class Stats:
@@ -22,8 +22,7 @@ class Statistics:
     def generateStats(self) -> None:
         try:
             with open(self.__stats_file_path, 'w') as file:
-                now = getNowEpoch()
-                file.write('{ "dateLastGeneration": "' + now + '" }')
+                file.write('{"dateLastGeneration": "' + getNowEpoch() + '"}')
         except FileNotFoundError:
             print(f"Error writing stats file. ({self.__stats_file_path})")
 
@@ -36,12 +35,12 @@ class Statistics:
         self.__stats_file_path: str = constants.STATS_FILE_PATH
         stats_from_file = getJsonStatsFromFile(self.__stats_file_path)
         self.__stats: Stats = Stats(
-            dateLastGeneration=str(stats_from_file.get('dateLastGeneration', '')),
+            dateLastGeneration=str(stats_from_file.get('dateLastGeneration', getNowEpoch())),
             totalGenerations=int(stats_from_file.get('totalGenerations', 0))
         )
         print(f"Initializing project with statistics:\n\t{self.__stats}")
 
-######################## METHODS ########################
+############ METHODS ############
 
 from time import gmtime, strftime
 from json import loads, dumps, JSONDecodeError

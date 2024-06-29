@@ -29,7 +29,13 @@ def generateCoverArt(input_path: str, output_path: str) -> None:
 
     for i in range(int(max_dim)):
         opacity = 255 - int((255 * i) / max_dim)
-        draw.ellipse([center_x - i, center_y - i, center_x + i, center_y + i], fill=opacity)
+        coords = [
+            center_x - i,
+            center_y - i,
+            center_x + i,
+            center_y + i
+        ]
+        draw.ellipse(coords, fill=opacity)
 
     final_blurred_image = Image.composite(cropped_image, blurred_image, mask)
 

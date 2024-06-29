@@ -104,7 +104,7 @@ def process_itunes_image() -> str | tuple[str, int]:
     generateCoverArt(itunes_image_path, output_bg)
     generateThumbnail(output_bg, user_processed_path)
     updateStats()
-    return render_template('download.html', user_folder=user_folder, bg=constants.PROCESSED_ARTWORK_FILENAME, minia=constants.THUMBNAIL_FILENAME)
+    return render_template('download.html', user_folder=user_folder, bg=constants.PROCESSED_ARTWORK_FILENAME)
 
 def main(host: str = constants.HOST_HOME, port: int = constants.DEFAULT_PORT) -> None:
     uploads_folder = constants.UPLOADS_DIR
