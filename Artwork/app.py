@@ -41,7 +41,6 @@ def upload_file() -> str:
         if (rv != ""):
             return render_template('upload.html', error=rv)
 
-        logo_position = request.form.get('logo-position', 'center')
         if (file.filename != None):
             if ('user_folder' not in session):
                 session['user_folder'] = str(uuid4())
@@ -55,13 +54,11 @@ def upload_file() -> str:
             filepath: str = path.join(user_upload_path, str(file.filename))
             file.save(filepath)
             output_bg = path.join(user_processed_path, 'ProcessedArtwork.png')
-            output_minia = path.join(user_processed_path, 'minia.png')
-
             generateCoverArt(filepath, output_bg)
-            generateMinia(output_bg, logo_position, output_minia)
+            generateMinia(output_bg, user_processed_path)
             updateStats()
 
-            return render_template('download.html', user_folder=user_folder, bg='ProcessedArtwork.png', minia='minia.png')
+            return render_template('download.html', user_folder=user_folder)
     return render_template('upload.html')
 
 @app.route('/download/<filename>', methods=['GET'])
@@ -105,15 +102,12 @@ def process_itunes_image() -> Response | tuple[str, int]:
         user_folder = str(session['user_folder'])
         user_processed_path = path.join(PROCESSED_FOLDER, user_folder)
         itunes_image_path = session['itunes_image_path']
-        logo_position = session.get('logo_position', 'center')
         output_bg = path.join(user_processed_path, 'ProcessedArtwork.png')
-        output_minia = path.join(user_processed_path, 'minia.png')
-
         generateCoverArt(itunes_image_path, output_bg)
-        generateMinia(output_bg, logo_position, output_minia)  # Use the selected logo position
+        generateMinia(output_bg, user_processed_path)
         updateStats()
 
-        return render_template('download.html', user_folder=user_folder, bg='ProcessedArtwork.png', minia='minia.png')
+        return render_template('download.html', user_folder=user_folder)
     return createJsonResponse(HttpStatus.BAD_REQUEST.value, 'No iTunes image selected')
 
 # Server config

@@ -42,16 +42,20 @@ def generateCoverArt(input_path: str, output_path: str) -> None:
 
     final_blurred_image.save(output_path)
 
-def generateMinia(bg_path: str, logo_path: str, output_path: str) -> None:
-    background: Image.Image = Image.open(bg_path)
-    user_folder: str = path.abspath(str(session['user_folder']))
-    user_folder = SLASH.join(user_folder.split(SLASH)[:-2]) # Remove the last folder and PID
-    overlay_file = f"{user_folder}{SLASH}{MINIA_FOLDER}{SLASH}minia_{logo_path}.png"
-    overlay: Image.Image = Image.open(overlay_file)
+def generateMinia(bg_path: str, output_folder: str) -> None:
+    positions = ['left', 'center', 'right']
+    for position in positions:
+        logo_path = f'minia_{position}.png'
+        background = Image.open(bg_path)
+        user_folder = path.abspath(str(session['user_folder']))
+        user_folder = SLASH.join(user_folder.split(SLASH)[:-2]) # Remove the last folder and PID
+        overlay_file = f"{user_folder}{SLASH}{MINIA_FOLDER}{SLASH}{logo_path}"
+        overlay = Image.open(overlay_file)
 
-    new_background: Image.Image = Image.new('RGBA', background.size)
-    new_background.paste(background, (0, 0))
-    new_background.paste(overlay, mask=overlay)
+        new_background = Image.new('RGBA', background.size)
+        new_background.paste(background, (0, 0))
+        new_background.paste(overlay, mask=overlay)
 
-    final_image = new_background.convert('RGB')
-    final_image.save(output_path)
+        final_image = new_background.convert('RGB')
+        output_path = path.join(output_folder, f'minia_{position}.png')
+        final_image.save(output_path)
