@@ -105,13 +105,11 @@ def getJsonStatsFromFile(path: str) -> JsonDict:
         return {}
 
 def updateStats(path: str = constants.STATS_FILE_PATH) -> None:
-    stats = getJsonStatsFromFile(path)
+    newTotalGenerated = getJsonStatsFromFile(path).get('totalGenerated', 0) + 1
 
+    stats: JsonDict = {}
     stats['dateLastGeneration'] = getNowEpoch()
-    stats['totalGenerated'] = stats.get('totalGenerated', 0) + 1
-
-    # nullifying deprecated fields
-    stats['totalGenerations'] = None
+    stats['totalGenerated'] = newTotalGenerated
 
     try:
         with open(path, 'w') as file:
