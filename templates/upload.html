@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload or Search for Cover Art</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/upload.css') }}" />
+</head>
+<body>
+    <h1>Search for cover art on iTunes</h1>
+    <form id="iTunesSearchForm" method="post">
+        <div class="flexbox">
+            <input type="text" name="query" id="query" placeholder="Search on iTunes" />
+            <select name="country" id="country">
+                <option value="fr" selected>France</option>
+                <option value="us">United States</option>
+                <option value="nz">New Zealand</option>
+            </select>
+            <input type="submit" value="SEARCH" class="button" />
+        </div>
+    </form>
+    <div id="results" class="result-container"></div>
+
+    <h1>Or upload your image</h1>
+    <form method="post" enctype="multipart/form-data">
+        <div class="flexbox">
+            <input type="file" name="file" class="file" />
+            <p class="error">{{ error }}</p>
+            <input type="submit" value="UPLOAD" class="button" />
+        </div>
+    </form>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="{{ url_for('static', filename='js/itunes_search.js') }}"></script>
+</body>
+</html>
