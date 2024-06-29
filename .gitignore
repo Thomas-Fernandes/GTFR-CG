@@ -6,6 +6,9 @@
 */flask_session
 flask_session/
 
+# environment file
+.env
+
 # img cache
 *.png
 *.PNG
