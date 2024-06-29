@@ -1,6 +1,6 @@
-from flask import jsonify
+from flask import jsonify, Response
 
-def createJsonResponse(status_code: int, message: str = "") -> tuple[str, int]:
+def createJsonResponse(status_code: int, message: str = "") -> tuple[Response, int]:
     if (status_code == 200):
         status = 'success'
     elif (status_code in [400, 404, 500]):

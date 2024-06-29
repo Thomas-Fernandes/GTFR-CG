@@ -1,32 +1,32 @@
+# Installed libraries
 from flask import Flask, render_template, request, send_from_directory, session, Response
 from flask_session import Session
 from requests import get as restGet
 from waitress import serve
 
+# Python standard libraries
 from os import path, makedirs, remove, listdir
 from shutil import rmtree
 from uuid import uuid4
 
-from statistics import Statistics, updateStats
-from functions import generateCoverArt, generateThumbnail
-from web_utils import createJsonResponse
+# Local modules
+from src.statistics import Statistics, updateStats
+from src.functions import generateCoverArt, generateThumbnail
+from src.web_utils import createJsonResponse
 
-import constants
+import src.constants as constants
 
-app = Flask(__name__)
+app = Flask(__name__.split('.')[-1])
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 app.config["SESSION_FILE_DIR"] = 'flask_session' + constants.SLASH
 Session(app)
 
-def checkFilenameValid(filename: str) -> str:
-    ERR_INVALID_FILE_TYPE = 'Invalid file type. Only PNG and JPG files are allowed.'
-    ERR_NO_FILE = 'Invalid file: No file selected.'
-
-    if (filename == None or filename == ''):
-        return ERR_NO_FILE
+def checkFilenameValid(filename: str | None) -> str:
+    if (filename == None or filename.strip() == ''):
+        return constants.ERR_NO_FILE
     if (not('.' in filename and filename.rsplit('.', 1)[1].lower() in ['png', 'jpg', 'jpeg'])):
-        return ERR_INVALID_FILE_TYPE
+        return constants.ERR_INVALID_FILE_TYPE
     return ""
 
 @app.route('/', methods=['GET', 'POST'])
@@ -43,8 +43,8 @@ def upload_file() -> str:
                 session['user_folder'] = str(uuid4())
 
             user_folder = str(session['user_folder'])
-            user_upload_path: str = path.join(constants.UPLOADS_FOLDER, user_folder)
-            user_processed_path: str = path.join(constants.PROCESSED_FOLDER, user_folder)
+            user_upload_path: str = path.join(constants.UPLOADS_DIR, user_folder)
+            user_processed_path: str = path.join(constants.PROCESSED_DIR, user_folder)
             makedirs(user_upload_path, exist_ok=True)
             makedirs(user_processed_path, exist_ok=True)
 
@@ -62,7 +62,7 @@ def upload_file() -> str:
 def download(filename: str) -> Response | tuple[str, int]:
     if ('user_folder' in session):
         user_folder = str(session['user_folder'])
-        directory: str = path.abspath(path.join(constants.PROCESSED_FOLDER, user_folder))
+        directory: str = path.abspath(path.join(constants.PROCESSED_DIR, user_folder))
         return send_from_directory(directory, filename, as_attachment=True)
     return createJsonResponse(constants.HttpStatus.NOT_FOUND.value, 'Session Expired or Invalid')
 
@@ -77,7 +77,7 @@ def use_itunes_image() -> tuple[str, int] | Response:
         session['user_folder'] = str(uuid4())
 
     user_folder = str(session['user_folder'])
-    user_processed_path = path.join(constants.PROCESSED_FOLDER, user_folder)
+    user_processed_path = path.join(constants.PROCESSED_DIR, user_folder)
     makedirs(user_processed_path, exist_ok=True)
 
     # Mise à jour ici pour utiliser restGet au lieu de requests.get
@@ -95,58 +95,50 @@ def use_itunes_image() -> tuple[str, int] | Response:
 
 @app.route('/process_itunes_image', methods=['GET'])
 def process_itunes_image() -> str | tuple[str, int]:
-    if ('itunes_image_path' in session):
-        user_folder = str(session['user_folder'])
-        user_processed_path = path.join(constants.PROCESSED_FOLDER, user_folder)
-        itunes_image_path = session['itunes_image_path']
-        output_bg = path.join(user_processed_path, constants.PROCESSED_ARTWORK_FILENAME)
-        generateCoverArt(itunes_image_path, output_bg)
-        generateThumbnail(output_bg, user_processed_path)
-        updateStats()
+    if ('itunes_image_path' not in session):
+        return createJsonResponse(constants.HttpStatus.BAD_REQUEST.value, 'No iTunes image selected')
+    user_folder = str(session['user_folder'])
+    user_processed_path = path.join(constants.PROCESSED_DIR, user_folder)
+    itunes_image_path = str(session['itunes_image_path'])
+    output_bg = path.join(user_processed_path, constants.PROCESSED_ARTWORK_FILENAME)
+    generateCoverArt(itunes_image_path, output_bg)
+    generateThumbnail(output_bg, user_processed_path)
+    updateStats()
+    return render_template('download.html', user_folder=user_folder, bg=constants.PROCESSED_ARTWORK_FILENAME)
 
-        return render_template('download.html', user_folder=user_folder, bg=constants.PROCESSED_ARTWORK_FILENAME, minia=constants.THUMBNAIL_FILENAME)
-    return createJsonResponse(constants.HttpStatus.BAD_REQUEST.value, 'No iTunes image selected')
-
-# Server config
-HOME = "0.0.0.0"
-PORT = 8000
-
-def main() -> None:
-    uploads_folder = constants.UPLOADS_FOLDER
-    processed_folder = constants.PROCESSED_FOLDER
+def main(host: str = constants.HOST_HOME, port: int = constants.DEFAULT_PORT) -> None:
+    uploads_folder = constants.UPLOADS_DIR
+    processed_folder = constants.PROCESSED_DIR
     makedirs(uploads_folder, exist_ok=True)
     makedirs(processed_folder, exist_ok=True)
 
-    def removeExpiredCache(folder: str) -> int:
-        eliminatedEntries = 0
+    def removeOldUploads(folder: str) -> int:
+        eliminated_files_count: int = 0
         filepaths: list[str] = [path.join(folder, f) for f in listdir(folder)]
         for file in filepaths:
-            if (path.isfile(file) and path.getmtime(file) < constants.getDefaultExpiredTime()):
-                print(f"Removing {file} ({path.getmtime(file)})...")
+            if (path.isfile(file) and int(path.getmtime(file)) < constants.getDefaultExpirationTime()):
                 remove(file)
-                eliminatedEntries += 1
+                eliminated_files_count += 1
         if (not listdir(folder)): # if folder is empty, remove it
             rmtree(folder)
-        if (eliminatedEntries != 0):
-            pluralMarks = ["s", "were"] if eliminatedEntries != 1 else ["", "was"]
-            print(f"{eliminatedEntries} cached file{pluralMarks[0]} {pluralMarks[1]} " \
+        if (eliminated_files_count != 0):
+            pluralMarks = ["s", "were"] if eliminated_files_count != 1 else ["", "was"]
+            print(f"{eliminated_files_count} cached file{pluralMarks[0]} {pluralMarks[1]} " \
                 + f"removed in {folder.split(constants.SLASH)[0]}.")
-        return eliminatedEntries
+        return eliminated_files_count
 
-    def cache_cleanup(stats: Statistics) -> None:
-        eliminatedEntries = 0
+    def cacheCleanup(stats: Statistics) -> None:
+        eliminated_files_count: int = 0
 
         if (not path.exists(stats.getStatsFilePath())):
             stats.generateStats()
         else:
-            if (len(listdir(uploads_folder)) > 0):
-                eliminatedEntries += removeExpiredCache(uploads_folder + listdir(uploads_folder)[0])
-            if (eliminatedEntries == 0):
+            session_dirname_list = listdir(uploads_folder)
+            for sdn in session_dirname_list:
+                eliminated_files_count += removeOldUploads(uploads_folder + sdn)
+            if (eliminated_files_count == 0):
                 print("Cache still fresh. Loading...")
 
     stats = Statistics()
-    cache_cleanup(stats)
-    serve(app, host=HOME, port=PORT, threads=8)
-
-if __name__ == '__main__':
-    main()
+    cacheCleanup(stats)
+    serve(app, host=host, port=port, threads=8)
