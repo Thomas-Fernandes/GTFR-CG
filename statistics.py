@@ -62,11 +62,11 @@ def getJsonStatsFromFile(path: str) -> JsonDict:
         return {}
 
 def updateStats(path: str = constants.STATS_FILE_PATH) -> None:
-    newTotalGenerations = getJsonStatsFromFile(path).get('totalGenerations', 0) + 1
+    jsonStatsFromFile: JsonDict = getJsonStatsFromFile(path)
 
     stats: JsonDict = {}
     stats['dateLastGeneration'] = getNowEpoch()
-    stats['totalGenerations'] = newTotalGenerations + getJsonStatsFromFile(path).get('totalGenerated', 0)
+    stats['totalGenerations'] = jsonStatsFromFile.get('totalGenerations', 0) + 1
 
     try:
         with open(path, 'w') as file:
