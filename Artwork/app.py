@@ -5,7 +5,7 @@ from requests import get as restGet
 
 from shutil import rmtree
 from uuid import uuid4
-from os import path, name as osName, makedirs
+from os import path, name as osName, makedirs, remove, listdir, getcwd
 
 from statistics import Statistics, updateStats
 from functions import generateCoverArt, generateMinia
@@ -122,18 +122,34 @@ HOME = "0.0.0.0"
 PORT = 8000
 
 def main() -> None:
-    makedirs(UPLOADS_FOLDER, exist_ok=True)
+    makedirs(UPLOADS_FOLDER,   exist_ok=True)
     makedirs(PROCESSED_FOLDER, exist_ok=True)
 
+    def removeExpiredCache(folder: str) -> int:
+        eliminatedEntries = 0
+        filepaths: list[str] = [path.join(folder, f) for f in listdir(folder)]
+        for file in filepaths:
+            if (path.isfile(file) and path.getmtime(file) < constants.getDefaultExpiredTime()):
+                print(f"Removing {file} ({path.getmtime(file)})...")
+                remove(file)
+                eliminatedEntries += 1
+        if (not listdir(folder)): # if folder is empty, remove it
+            rmtree(folder)
+        if (eliminatedEntries != 0):
+            pluralMarks = ["s", "were"] if eliminatedEntries != 1 else ["", "was"]
+            print(f"{eliminatedEntries} cached file{pluralMarks[0]} {pluralMarks[1]} " \
+                + f"removed in {folder.split(SLASH)[0]}.")
+        return eliminatedEntries
+
     def cache_cleanup(stats: Statistics) -> None:
+        eliminatedEntries = 0
+
         if (not path.exists(stats.getStatsFilePath())):
             stats.generateStats()
         else:
-            if (stats.isCacheExpired()):
-                print("Cache expired, emptying it...")
-                rmtree(UPLOADS_FOLDER)
-                rmtree(PROCESSED_FOLDER)
-            else:
+            eliminatedEntries += removeExpiredCache(UPLOADS_FOLDER + listdir(UPLOADS_FOLDER)[0])
+            eliminatedEntries += removeExpiredCache(PROCESSED_FOLDER + listdir(PROCESSED_FOLDER)[0])
+            if (eliminatedEntries == 0):
                 print("Cache still fresh. Loading...")
 
     stats = Statistics()
