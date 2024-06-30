@@ -34,7 +34,7 @@ def checkFilenameValid(filename: str | None) -> str | None:
     return None
 
 @app.route('/', methods=['GET', 'POST'])
-def upload_file() -> str:
+def uploadFile() -> str:
     if (request.method == 'POST'):
         file = request.files['file']
         error = checkFilenameValid(file.filename)
@@ -64,11 +64,21 @@ def upload_file() -> str:
 
 @app.route('/download/<filename>', methods=['GET'])
 def download(filename: str) -> Response | tuple[Response, int]:
-    if ('user_folder' in session):
-        user_folder = str(session['user_folder'])
-        directory: str = path.abspath(path.join(constants.PROCESSED_DIR, user_folder))
-        return send_from_directory(directory, filename, as_attachment=True)
-    return createJsonResponse(constants.HttpStatus.NOT_FOUND.value, 'Session Expired or Invalid')
+    if ('user_folder' not in session):
+        return createJsonResponse(constants.HttpStatus.NOT_FOUND.value, constants.ERR_INVALID_SESSION)
+    user_folder = str(session['user_folder'])
+    directory: str = path.abspath(path.join(constants.PROCESSED_DIR, user_folder))
+    return send_from_directory(directory, filename, as_attachment=True)
+
+@app.route('/processed_images', methods=['POST'])
+def downloadThumbnail() -> Response | tuple[Response, int]:
+    if ('user_folder' not in session):
+        return createJsonResponse(constants.HttpStatus.NOT_FOUND.value, constants.ERR_INVALID_SESSION)
+    user_folder = str(session['user_folder'])
+    directory: str = path.abspath(path.join(constants.PROCESSED_DIR, user_folder))
+    selected_thumbnail_idx = int(request.form.get('selected_thumbnail_idx')) - 1
+    filename: str = f"{constants.THUMBNAIL_PREFIX}{constants.LOGO_POSITIONS[selected_thumbnail_idx]}{constants.THUMBNAIL_EXT}"
+    return send_from_directory(directory, filename, as_attachment=True)
 
 @app.route('/use_itunes_image', methods=['POST'])
 def use_itunes_image() -> Response | tuple[Response, int]:
@@ -97,7 +107,7 @@ def use_itunes_image() -> Response | tuple[Response, int]:
     else:
         return createJsonResponse(constants.HttpStatus.INTERNAL_SERVER_ERROR.value, 'Failed to download image')
 
-@app.route('/process_itunes_image', methods=['GET'])
+@app.route('/processed_images', methods=['GET'])
 def process_itunes_image() -> str | tuple[Response, int]:
     if ('itunes_image_path' not in session):
         return createJsonResponse(constants.HttpStatus.BAD_REQUEST.value, 'No iTunes image selected')

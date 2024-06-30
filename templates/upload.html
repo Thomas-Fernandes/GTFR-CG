@@ -21,7 +21,7 @@
     <div id="results" class="result-container"></div>
 
     <h1>Or upload your image</h1>
-    <form method="post" enctype="multipart/form-data">
+    <form id="fileUpload" method="post" enctype="multipart/form-data">
         <div class="flexbox">
             <input type="file" name="file" class="file" />
             <p class="error">{{ error }}</p>
@@ -30,6 +30,6 @@
     </form>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="{{ url_for('static', filename='js/itunes_search.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/upload.js') }}"></script>
 </body>
 </html>

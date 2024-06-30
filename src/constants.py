@@ -33,6 +33,8 @@ UPLOADS_DIR = 'uploads' + SLASH
 PROCESSED_DIR = 'processed' + SLASH
 PROCESSED_ARTWORK_FILENAME = 'ProcessedArtwork.png'
 THUMBNAIL_DIR = 'assets' + SLASH + 'thumbnails' + SLASH
+THUMBNAIL_PREFIX = 'thumbnail_'
+THUMBNAIL_EXT = '.png'
 
 LOGO_POSITIONS = [
     'top-left',    'top-center',    'top-right',
@@ -43,3 +45,4 @@ LOGO_POSITIONS = [
 # Error messages
 ERR_INVALID_FILE_TYPE = 'Invalid file type. Only PNG and JPG files are allowed.'
 ERR_NO_FILE = 'Invalid file: No file selected.'
+ERR_INVALID_SESSION = 'Session Expired or Invalid'

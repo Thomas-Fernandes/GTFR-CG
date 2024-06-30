@@ -3,7 +3,6 @@ const ResponseStatus = Object.freeze({
     ERROR: 'error'
 });
 
-
 $(document).ready(function() {
     $('#iTunesSearchForm').on('submit', function(event) {
         event.preventDefault();
@@ -25,7 +24,7 @@ $(document).ready(function() {
                 const resultsDiv = $('#results');
                 resultsDiv.empty();
                 if (data.results.length > 0) {
-                    // first 5 results
+                    // only get first 5 results
                     data.results.slice(0, 5).forEach(function(result) {
                         // itunes max image size is 3000x3000
                         const highResImageUrl = result.artworkUrl100.replace('100x100', '3000x3000');
@@ -33,7 +32,7 @@ $(document).ready(function() {
                         const btn = $('<button>').text('Use this image').on('click', function() {
                             $.post('/use_itunes_image', { url: highResImageUrl, position: logoPosition }, function(response) {
                                 if (response.status === ResponseStatus.SUCCESS) {
-                                    window.location.href = '/process_itunes_image';
+                                    window.location.href = '/processed_images';
                                 } else {
                                     alert('Error: ' + response.message);
                                 }
@@ -47,5 +46,9 @@ $(document).ready(function() {
                 }
             }
         });
+    });
+    $('#fileUpload').on('submit', function(event) {
+        event.preventDefault();
+        window.location.href = '/processed_images';
     });
 });
