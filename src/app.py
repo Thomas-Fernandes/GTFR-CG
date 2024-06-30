@@ -33,34 +33,33 @@ def checkFilenameValid(filename: str | None) -> str | None:
         return constants.ERR_INVALID_FILE_TYPE
     return None
 
-@app.route('/', methods=['GET', 'POST'])
-def uploadFile() -> str:
-    if (request.method == 'POST'):
-        file = request.files['file']
-        error = checkFilenameValid(file.filename)
-        if (error):
-            log.error(error)
-            return render_template('upload.html', error=error)
+@app.route('/upload_image', methods=['POST'])
+def uploadFile() -> tuple[Response, int]:
+    if ('user_folder' not in session):
+        session['user_folder'] = str(uuid4())
+    user_folder = str(session['user_folder'])
 
-        if (file.filename != None):
-            if ('user_folder' not in session):
-                session['user_folder'] = str(uuid4())
+    file = request.files['file']
+    error = checkFilenameValid(file.filename)
+    if (error):
+        log.error(error)
+        return createJsonResponse(constants.HttpStatus.BAD_REQUEST.value, error)
 
-            user_folder = str(session['user_folder'])
-            user_upload_path: str = path.join(constants.UPLOADS_DIR, user_folder)
-            user_processed_path: str = path.join(constants.PROCESSED_DIR, user_folder)
-            makedirs(user_upload_path, exist_ok=True)
-            makedirs(user_processed_path, exist_ok=True)
+    if (file.filename is None):
+        return createJsonResponse(constants.HttpStatus.BAD_REQUEST.value, constants.ERR_NO_FILE)
+    user_upload_path: str = path.join(constants.UPLOADS_DIR, user_folder)
+    user_processed_path: str = path.join(constants.PROCESSED_DIR, user_folder)
+    makedirs(user_upload_path, exist_ok=True)
+    makedirs(user_processed_path, exist_ok=True)
 
-            filepath: str = path.join(user_upload_path, file.filename)
-            file.save(filepath)
-            output_bg = path.join(user_processed_path, constants.PROCESSED_ARTWORK_FILENAME)
-            generateCoverArt(filepath, output_bg)
-            generateThumbnail(output_bg, user_processed_path)
-            updateStats()
-
-            return render_template('download.html', user_folder=user_folder)
-    return render_template('upload.html')
+    filepath: str = path.join(user_processed_path, "uploaded_image.png")
+    file.save(filepath)
+    session['generated_artwork_path'] = filepath
+    output_bg = path.join(user_processed_path, constants.PROCESSED_ARTWORK_FILENAME)
+    generateCoverArt(filepath, output_bg)
+    generateThumbnail(output_bg, user_processed_path)
+    updateStats()
+    return createJsonResponse(constants.HttpStatus.OK.value)
 
 @app.route('/download/<filename>', methods=['GET'])
 def download(filename: str) -> Response | tuple[Response, int]:
@@ -70,13 +69,13 @@ def download(filename: str) -> Response | tuple[Response, int]:
     directory: str = path.abspath(path.join(constants.PROCESSED_DIR, user_folder))
     return send_from_directory(directory, filename, as_attachment=True)
 
-@app.route('/processed_images', methods=['POST'])
+@app.route('/process_images', methods=['POST'])
 def downloadThumbnail() -> Response | tuple[Response, int]:
     if ('user_folder' not in session):
         return createJsonResponse(constants.HttpStatus.NOT_FOUND.value, constants.ERR_INVALID_SESSION)
     user_folder = str(session['user_folder'])
     directory: str = path.abspath(path.join(constants.PROCESSED_DIR, user_folder))
-    selected_thumbnail_idx = int(request.form.get('selected_thumbnail_idx')) - 1
+    selected_thumbnail_idx = int(request.form.get('selected_thumbnail_idx', 5)) - 1
     filename: str = f"{constants.THUMBNAIL_PREFIX}{constants.LOGO_POSITIONS[selected_thumbnail_idx]}{constants.THUMBNAIL_EXT}"
     return send_from_directory(directory, filename, as_attachment=True)
 
@@ -96,29 +95,32 @@ def use_itunes_image() -> Response | tuple[Response, int]:
 
     # Mise à jour ici pour utiliser restGet au lieu de requests.get
     image_response = restGet(image_url)
-    if (image_response.status_code == constants.HttpStatus.OK.value):
-        image_path = path.join(user_processed_path, 'itunes_image.png')
-        with open(image_path, 'wb') as file:
-            file.write(image_response.content)
-
-        session['itunes_image_path'] = image_path
-        session['logo_position'] = logo_position
-        return createJsonResponse(constants.HttpStatus.OK.value)
-    else:
+    if (image_response.status_code != constants.HttpStatus.OK.value):
         return createJsonResponse(constants.HttpStatus.INTERNAL_SERVER_ERROR.value, 'Failed to download image')
+    image_path = path.join(user_processed_path, 'itunes_image.png')
+    with open(image_path, 'wb') as file:
+        file.write(image_response.content)
 
-@app.route('/processed_images', methods=['GET'])
-def process_itunes_image() -> str | tuple[Response, int]:
-    if ('itunes_image_path' not in session):
-        return createJsonResponse(constants.HttpStatus.BAD_REQUEST.value, 'No iTunes image selected')
+    session['generated_artwork_path'] = image_path
+    session['logo_position'] = logo_position
+    return createJsonResponse(constants.HttpStatus.OK.value)
+
+@app.route('/process_images', methods=['GET'])
+def process_images() -> str | tuple[Response, int]:
+    if ('generated_artwork_path' not in session):
+        return createJsonResponse(constants.HttpStatus.BAD_REQUEST.value, 'No image was selected or uploaded')
     user_folder = str(session['user_folder'])
     user_processed_path = path.join(constants.PROCESSED_DIR, user_folder)
-    itunes_image_path = str(session['itunes_image_path'])
+    generated_artwork_path = str(session['generated_artwork_path'])
     output_bg = path.join(user_processed_path, constants.PROCESSED_ARTWORK_FILENAME)
-    generateCoverArt(itunes_image_path, output_bg)
+    generateCoverArt(generated_artwork_path, output_bg)
     generateThumbnail(output_bg, user_processed_path)
     updateStats()
     return render_template('download.html', user_folder=user_folder, bg=constants.PROCESSED_ARTWORK_FILENAME)
+
+@app.route('/', methods=['GET'])
+def home() -> str:
+    return render_template('upload.html')
 
 def main(host: str = constants.HOST_HOME, port: int = constants.DEFAULT_PORT) -> None:
     host_display_name = "localhost" if host == constants.HOST_HOME else host
