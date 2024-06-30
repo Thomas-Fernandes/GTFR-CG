@@ -11,7 +11,7 @@ from uuid import uuid4
 from dotenv import load_dotenv
 
 # Local modules
-from src.functions import generateCoverArt, generateThumbnail, search_song, get_lyrics
+from src.functions import generateCoverArt, generateThumbnail, get_lyrics
 from src.logger import Logger
 from src.soft_utils import getDefaultExpirationTimestamp
 from src.statistics import Statistics, updateStats
@@ -119,12 +119,7 @@ def lyrics():
         lyrics_text = request.form.get('lyrics')
 
         if (artist and song):
-            search_result = search_song(song, artist)
-            if (search_result['response']['hits']):
-                song_id = search_result['response']['hits'][0]['result']['id']
-                lyrics_text = get_lyrics(song_id)
-            else:
-                lyrics_text = "Error: No hits found for the given artist and song."
+            lyrics_text = get_lyrics(song, artist)
 
         return render_template('lyrics.html', lyrics=lyrics_text)
     return render_template('lyrics.html', lyrics="")

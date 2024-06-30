@@ -1,17 +1,18 @@
 # Installed libraries
 from flask import session
 from PIL import Image, ImageFilter, ImageDraw
-from requests import get as restGet
-from bs4 import BeautifulSoup
+from lyricsgenius import Genius
 
 # Python standard libraries
 from os import path
+import re
 
 # Local modules
 from src.logger import Logger
 import src.constants as constants
 
 log = Logger()
+genius = Genius(constants.GENIUS_API_TOKEN)
 
 def generateCoverArt(input_path: str, output_path: str) -> None:
     image: Image.Image = Image.open(input_path)
@@ -74,43 +75,30 @@ def generateThumbnail(bg_path: str, output_folder: str) -> None:
         output_path = path.join(output_folder, f'thumbnail_{position}.png')
         final_image.save(output_path)
 
-def search_song(song_title, artist_name):
-    search_url = constants.BASE_URL + '/search'
-    data = {'q': f'{song_title} {artist_name}'}
-    response = restGet(search_url, headers=constants.HEADERS, params=data)
-    return response.json()
+def get_lyrics(song_title, artist_name):
+    song = genius.search_song(song_title, artist_name)
+    if song:
+        lyrics = song.lyrics
 
-def get_lyrics(song_id):
-    song_url = constants.BASE_URL + f'/songs/{song_id}'
-    response = restGet(song_url, headers=constants.HEADERS)
-    song_info = response.json()
-    path = song_info['response']['song']['path']
+        # Removing charabia at the beginning and end of the lyrics
+        lyrics = re.sub(r'^.*Lyrics\[', '[', lyrics).strip()
+        lyrics = re.sub(r'\d+Embed$', '', lyrics).strip()
 
-    page_url = 'https://genius.com' + path
-    page = restGet(page_url)
-    soup = BeautifulSoup(page.text, 'html.parser')
+        # Ensure double newline before song parts
+        def add_newline_before_parts(lyrics):
+            parts = re.split(r'(\[.*?\])', lyrics)
+            new_lyrics = []
+            for i, part in enumerate(parts):
+                if re.match(r'\[.*?\]', part):
+                    if i == 0 or parts[i-1].endswith('\n\n') or parts[i-1].strip() == "":
+                        new_lyrics.append(part)
+                    else:
+                        new_lyrics.append('\n\n' + part)
+                else:
+                    new_lyrics.append(part)
+            return ''.join(new_lyrics)
 
-    lyrics_div = soup.find('div', class_='lyrics')
-    if (not lyrics_div):
-        lyrics_div = soup.find('div', {'data-lyrics-container': 'true'})
+        lyrics = add_newline_before_parts(lyrics)
 
-    if (lyrics_div):
-        lyrics = lyrics_div.get_text(separator="\n")
-    else:
-        lyrics_divs = soup.find_all('div', class_='Lyrics__Container-sc-1ynbvzw-6')
-        if (lyrics_divs):
-            lyrics = "\n".join([div.get_text(separator="\n") for div in lyrics_divs])
-        else:
-            return 'Paroles non trouvées.'
-
-    formatted_lyrics = format_lyrics(lyrics)
-    return formatted_lyrics
-
-def format_lyrics(lyrics):
-    lines = lyrics.split('\n')
-    formatted_lines = []
-    for i, line in enumerate(lines):
-        if (line.startswith('[') and line.endswith(']') and i != 0):
-            formatted_lines.append('')
-        formatted_lines.append(line)
-    return '\n'.join(formatted_lines)
+        return lyrics
+    return 'Lyrics not found.'
