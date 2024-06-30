@@ -29,7 +29,6 @@ DEFAULT_EXPIRATION = 2 # in days (integer)
 
 # Paths
 SLASH = '/' if (osName != 'nt') else '\\'
-UPLOADS_DIR = 'uploads' + SLASH
 PROCESSED_DIR = 'processed' + SLASH
 PROCESSED_ARTWORK_FILENAME = 'ProcessedArtwork.png'
 THUMBNAIL_DIR = 'assets' + SLASH + 'thumbnails' + SLASH

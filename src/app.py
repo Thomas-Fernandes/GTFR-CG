@@ -1,7 +1,7 @@
 # Installed libraries
 from flask import Flask, render_template, request, send_from_directory, session, Response
 from flask_session import Session
-from requests import get as restGet
+from requests import get as requestsGet
 from waitress import serve
 
 # Python standard libraries
@@ -14,7 +14,7 @@ from src.functions import generateCoverArt, generateThumbnail
 from src.logger import Logger
 from src.soft_utils import getDefaultExpirationTimestamp
 from src.statistics import Statistics, updateStats
-from src.web_utils import createJsonResponse
+from src.web_utils import checkFilenameValid, createJsonResponse, JsonResponse
 
 import src.constants as constants
 
@@ -26,15 +26,8 @@ app.config["SESSION_TYPE"] = "filesystem"
 app.config["SESSION_FILE_DIR"] = 'flask_session' + constants.SLASH
 Session(app)
 
-def checkFilenameValid(filename: str | None) -> str | None:
-    if (filename == None or filename.strip() == ''):
-        return constants.ERR_NO_FILE
-    if (not('.' in filename and filename.rsplit('.', 1)[1].lower() in ['png', 'jpg', 'jpeg'])):
-        return constants.ERR_INVALID_FILE_TYPE
-    return None
-
 @app.route('/upload_image', methods=['POST'])
-def uploadFile() -> tuple[Response, int]:
+def uploadFile() -> JsonResponse:
     if ('user_folder' not in session):
         session['user_folder'] = str(uuid4())
     user_folder = str(session['user_folder'])
@@ -47,30 +40,24 @@ def uploadFile() -> tuple[Response, int]:
 
     if (file.filename is None):
         return createJsonResponse(constants.HttpStatus.BAD_REQUEST.value, constants.ERR_NO_FILE)
-    user_upload_path: str = path.join(constants.UPLOADS_DIR, user_folder)
     user_processed_path: str = path.join(constants.PROCESSED_DIR, user_folder)
-    makedirs(user_upload_path, exist_ok=True)
     makedirs(user_processed_path, exist_ok=True)
 
     filepath: str = path.join(user_processed_path, "uploaded_image.png")
     file.save(filepath)
     session['generated_artwork_path'] = filepath
-    output_bg = path.join(user_processed_path, constants.PROCESSED_ARTWORK_FILENAME)
-    generateCoverArt(filepath, output_bg)
-    generateThumbnail(output_bg, user_processed_path)
-    updateStats()
     return createJsonResponse(constants.HttpStatus.OK.value)
 
-@app.route('/download/<filename>', methods=['GET'])
-def download(filename: str) -> Response | tuple[Response, int]:
+@app.route('/downloadArtwork/<filename>', methods=['GET'])
+def downloadArtwork(filename: str) -> Response | JsonResponse:
     if ('user_folder' not in session):
         return createJsonResponse(constants.HttpStatus.NOT_FOUND.value, constants.ERR_INVALID_SESSION)
     user_folder = str(session['user_folder'])
     directory: str = path.abspath(path.join(constants.PROCESSED_DIR, user_folder))
     return send_from_directory(directory, filename, as_attachment=True)
 
-@app.route('/process_images', methods=['POST'])
-def downloadThumbnail() -> Response | tuple[Response, int]:
+@app.route('/processed_images', methods=['POST'])
+def downloadThumbnail() -> Response | JsonResponse:
     if ('user_folder' not in session):
         return createJsonResponse(constants.HttpStatus.NOT_FOUND.value, constants.ERR_INVALID_SESSION)
     user_folder = str(session['user_folder'])
@@ -80,9 +67,8 @@ def downloadThumbnail() -> Response | tuple[Response, int]:
     return send_from_directory(directory, filename, as_attachment=True)
 
 @app.route('/use_itunes_image', methods=['POST'])
-def use_itunes_image() -> Response | tuple[Response, int]:
+def use_itunes_image() -> Response | JsonResponse:
     image_url = request.form.get('url')
-    logo_position = request.form.get('position', 'center')
     if (not image_url):
         return createJsonResponse(constants.HttpStatus.BAD_REQUEST.value, 'No image URL provided')
 
@@ -93,8 +79,7 @@ def use_itunes_image() -> Response | tuple[Response, int]:
     user_processed_path = path.join(constants.PROCESSED_DIR, user_folder)
     makedirs(user_processed_path, exist_ok=True)
 
-    # Mise à jour ici pour utiliser restGet au lieu de requests.get
-    image_response = restGet(image_url)
+    image_response = requestsGet(image_url) # fetch iTunes image from deducted URL
     if (image_response.status_code != constants.HttpStatus.OK.value):
         return createJsonResponse(constants.HttpStatus.INTERNAL_SERVER_ERROR.value, 'Failed to download image')
     image_path = path.join(user_processed_path, 'itunes_image.png')
@@ -102,13 +87,13 @@ def use_itunes_image() -> Response | tuple[Response, int]:
         file.write(image_response.content)
 
     session['generated_artwork_path'] = image_path
-    session['logo_position'] = logo_position
     return createJsonResponse(constants.HttpStatus.OK.value)
 
-@app.route('/process_images', methods=['GET'])
-def process_images() -> str | tuple[Response, int]:
+@app.route('/processed_images', methods=['GET'])
+def processed_images() -> str | JsonResponse:
     if ('generated_artwork_path' not in session):
         return createJsonResponse(constants.HttpStatus.BAD_REQUEST.value, 'No image was selected or uploaded')
+
     user_folder = str(session['user_folder'])
     user_processed_path = path.join(constants.PROCESSED_DIR, user_folder)
     generated_artwork_path = str(session['generated_artwork_path'])
@@ -116,6 +101,7 @@ def process_images() -> str | tuple[Response, int]:
     generateCoverArt(generated_artwork_path, output_bg)
     generateThumbnail(output_bg, user_processed_path)
     updateStats()
+
     return render_template('download.html', user_folder=user_folder, bg=constants.PROCESSED_ARTWORK_FILENAME)
 
 @app.route('/', methods=['GET'])
@@ -124,13 +110,12 @@ def home() -> str:
 
 def main(host: str = constants.HOST_HOME, port: int = constants.DEFAULT_PORT) -> None:
     host_display_name = "localhost" if host == constants.HOST_HOME else host
-    log.log(f"Starting server @ http://{host_display_name}:{port}...\n")
+    log.log(f"Starting server @ http://{host_display_name}:{port}")
 
-    uploads_folder = constants.UPLOADS_DIR
     processed_folder = constants.PROCESSED_DIR
-    makedirs(uploads_folder, exist_ok=True)
     makedirs(processed_folder, exist_ok=True)
 
+    @DeprecationWarning
     def removeOldUploads(folder: str) -> int:
         eliminated_files_count: int = 0
         filepaths: list[str] = [path.join(folder, f) for f in listdir(folder)]
@@ -151,14 +136,15 @@ def main(host: str = constants.HOST_HOME, port: int = constants.DEFAULT_PORT) ->
         return eliminated_files_count
 
     def cacheCleanup(stats: Statistics) -> None:
+        to_clean = ["DEPRECATED_FUNCTION" + constants.SLASH]
         eliminated_files_count: int = 0
 
-        if (not path.exists(stats.getStatsFilePath())):
-            stats.generateStats()
-        else:
-            session_dirname_list = listdir(uploads_folder)
+        for folder in to_clean:
+            if (not path.isdir(folder)):
+                return
+            session_dirname_list = listdir(folder)
             for sdn in session_dirname_list:
-                eliminated_files_count += removeOldUploads(uploads_folder + sdn)
+                eliminated_files_count += removeOldUploads(folder + sdn)
             if (eliminated_files_count == 0):
                 log.info("Cache still fresh. Loading...")
 

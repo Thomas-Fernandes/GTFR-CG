@@ -65,14 +65,18 @@ img {
 
 .button {
     display: inline-block;
+
     margin-top: 20px;
     padding: 10px 0;
+    border: none;
+    border-radius: 5px;
+
     background-color: #007BFF;
     color: white;
     text-decoration: none;
-    border-radius: 5px;
 }
 .button:hover {
     background-color: #0056b3;
     transition: 0.3s;
+    cursor: pointer;
 }

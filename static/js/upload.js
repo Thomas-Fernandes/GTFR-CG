@@ -9,7 +9,6 @@ $(document).ready(function() {
 
         const query = $('#query').val();
         const country = $('#country').val();
-        const logoPosition = $('#logo-position-itunes').val();
 
         $.ajax({
             url: 'https://itunes.apple.com/search',
@@ -30,10 +29,11 @@ $(document).ready(function() {
                         const highResImageUrl = result.artworkUrl100.replace('100x100', '3000x3000');
                         const img = $('<img>').attr('src', highResImageUrl).attr('alt', result.collectionName || result.trackName).addClass('result-image');
                         const btn = $('<button>').text('Use this image').on('click', function() {
-                            $.post('/use_itunes_image', { url: highResImageUrl, position: logoPosition }, function(response) {
+                            $.post('/use_itunes_image', { url: highResImageUrl }, function(response) {
                                 if (response.status === ResponseStatus.SUCCESS) {
-                                    window.location.href = '/process_images';
+                                    window.location.href = '/processed_images';
                                 } else {
+                                    console.error(response.message);
                                     alert('Error: ' + response.message);
                                 }
                             });
@@ -68,8 +68,9 @@ $(document).ready(function() {
             contentType: false,
             success: function(response) {
                 if (response.status === ResponseStatus.SUCCESS) {
-                    window.location.href = '/process_images';
+                    window.location.href = '/processed_images';
                 } else {
+                    console.error(response.message);
                     alert('Error: ' + response.message);
                 }
             },
