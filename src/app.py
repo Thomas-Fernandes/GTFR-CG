@@ -86,16 +86,15 @@ def use_itunes_image() -> Response | tuple[Response, int]:
 
     # Mise à jour ici pour utiliser restGet au lieu de requests.get
     image_response = restGet(image_url)
-    if (image_response.status_code == constants.HttpStatus.OK.value):
-        image_path = path.join(user_processed_path, 'itunes_image.png')
-        with open(image_path, 'wb') as file:
-            file.write(image_response.content)
-
-        session['itunes_image_path'] = image_path
-        session['logo_position'] = logo_position
-        return createJsonResponse(constants.HttpStatus.OK.value)
-    else:
+    if (image_response.status_code != constants.HttpStatus.OK.value):
         return createJsonResponse(constants.HttpStatus.INTERNAL_SERVER_ERROR.value, 'Failed to download image')
+
+    image_path = path.join(user_processed_path, 'itunes_image.png')
+    with open(image_path, 'wb') as file:
+        file.write(image_response.content)
+    session['itunes_image_path'] = image_path
+    session['logo_position'] = logo_position
+    return createJsonResponse(constants.HttpStatus.OK.value)
 
 @app.route('/process_itunes_image', methods=['GET'])
 def process_itunes_image() -> str | tuple[Response, int]:
