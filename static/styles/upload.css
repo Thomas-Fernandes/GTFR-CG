@@ -24,9 +24,12 @@ title {
 h1 {
     font-family: Helvetica, sans-serif;
     font-size: 64px;
-    margin: 2% 0 2% 0;
+    margin: 2% 0;
     font-style: italic;
     letter-spacing: 0;
+}
+h1#second {
+    margin: 4% 0 2% 0;
 }
 
 body {
@@ -91,10 +94,19 @@ input[type=file]::file-selector-button {
 
     cursor: pointer;
 
-    color: #000;
-    letter-spacing: 0.3rem;
+	border: 2px solid #00000010;
+    box-shadow: 0 0 10px #0000007f;
+	border-radius: 8px;
+
     font-size: 24px;
     font-weight: bold;
+    letter-spacing: 0.3rem;
+
+    transition: all 0.3s;
+}
+.button:hover {
+    background: #002654;
+    color: #ffffff;
 }
 
 select {
@@ -103,11 +115,14 @@ select {
 
     padding: 8px 32px;
     margin-left: 16px;
-    border: none;
-    border-radius: 0.2rem;
+
+	border: 2px solid #00000010;
+    box-shadow: 0 0 10px #0000007f;
+	border-radius: 8px;
 
     text-align: left;
     letter-spacing: normal;
+    transition: all .3s ease!important;
 }
 
 .result-image {
