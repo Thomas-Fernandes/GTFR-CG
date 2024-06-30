@@ -136,12 +136,12 @@ def main(host: str = constants.HOST_HOME, port: int = constants.DEFAULT_PORT) ->
         return eliminated_files_count
 
     def cacheCleanup(stats: Statistics) -> None:
-        to_clean = ["DEPRECATED_FUNCTION" + constants.SLASH]
+        to_clean = ["DIRECTORY_NAME" + constants.SLASH]
         eliminated_files_count: int = 0
 
         for folder in to_clean:
             if (not path.isdir(folder)):
-                return
+                continue
             session_dirname_list = listdir(folder)
             for sdn in session_dirname_list:
                 eliminated_files_count += removeOldUploads(folder + sdn)
