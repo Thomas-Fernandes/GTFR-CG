@@ -10,33 +10,37 @@ from shutil import rmtree
 from uuid import uuid4
 
 # Local modules
-from src.statistics import Statistics, updateStats
 from src.functions import generateCoverArt, generateThumbnail
+from src.logger import Logger
+from src.soft_utils import getDefaultExpirationTimestamp
+from src.statistics import Statistics, updateStats
 from src.web_utils import createJsonResponse
 
 import src.constants as constants
 
-app = Flask(__name__.split('.')[-1])
+log = Logger()
+
+app = Flask(__name__.split('.')[-1]) # so that the app name is app, not {dirpath}.app
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 app.config["SESSION_FILE_DIR"] = 'flask_session' + constants.SLASH
 Session(app)
 
-def checkFilenameValid(filename: str | None) -> str:
+def checkFilenameValid(filename: str | None) -> str | None:
     if (filename == None or filename.strip() == ''):
         return constants.ERR_NO_FILE
     if (not('.' in filename and filename.rsplit('.', 1)[1].lower() in ['png', 'jpg', 'jpeg'])):
         return constants.ERR_INVALID_FILE_TYPE
-    return ""
+    return None
 
 @app.route('/', methods=['GET', 'POST'])
 def upload_file() -> str:
     if (request.method == 'POST'):
         file = request.files['file']
-
-        rv = checkFilenameValid(file.filename)
-        if (rv != ""):
-            return render_template('upload.html', error=rv)
+        error = checkFilenameValid(file.filename)
+        if (error):
+            log.error(error)
+            return render_template('upload.html', error=error)
 
         if (file.filename != None):
             if ('user_folder' not in session):
@@ -48,7 +52,7 @@ def upload_file() -> str:
             makedirs(user_upload_path, exist_ok=True)
             makedirs(user_processed_path, exist_ok=True)
 
-            filepath: str = path.join(user_upload_path, str(file.filename))
+            filepath: str = path.join(user_upload_path, file.filename)
             file.save(filepath)
             output_bg = path.join(user_processed_path, constants.PROCESSED_ARTWORK_FILENAME)
             generateCoverArt(filepath, output_bg)
@@ -59,7 +63,7 @@ def upload_file() -> str:
     return render_template('upload.html')
 
 @app.route('/download/<filename>', methods=['GET'])
-def download(filename: str) -> Response | tuple[str, int]:
+def download(filename: str) -> Response | tuple[Response, int]:
     if ('user_folder' in session):
         user_folder = str(session['user_folder'])
         directory: str = path.abspath(path.join(constants.PROCESSED_DIR, user_folder))
@@ -67,7 +71,7 @@ def download(filename: str) -> Response | tuple[str, int]:
     return createJsonResponse(constants.HttpStatus.NOT_FOUND.value, 'Session Expired or Invalid')
 
 @app.route('/use_itunes_image', methods=['POST'])
-def use_itunes_image() -> tuple[str, int] | Response:
+def use_itunes_image() -> Response | tuple[Response, int]:
     image_url = request.form.get('url')
     logo_position = request.form.get('position', 'center')
     if (not image_url):
@@ -94,7 +98,7 @@ def use_itunes_image() -> tuple[str, int] | Response:
         return createJsonResponse(constants.HttpStatus.INTERNAL_SERVER_ERROR.value, 'Failed to download image')
 
 @app.route('/process_itunes_image', methods=['GET'])
-def process_itunes_image() -> str | tuple[str, int]:
+def process_itunes_image() -> str | tuple[Response, int]:
     if ('itunes_image_path' not in session):
         return createJsonResponse(constants.HttpStatus.BAD_REQUEST.value, 'No iTunes image selected')
     user_folder = str(session['user_folder'])
@@ -107,6 +111,9 @@ def process_itunes_image() -> str | tuple[str, int]:
     return render_template('download.html', user_folder=user_folder, bg=constants.PROCESSED_ARTWORK_FILENAME)
 
 def main(host: str = constants.HOST_HOME, port: int = constants.DEFAULT_PORT) -> None:
+    host_display_name = "localhost" if host == constants.HOST_HOME else host
+    log.log(f"Starting server @ http://{host_display_name}:{port}...\n")
+
     uploads_folder = constants.UPLOADS_DIR
     processed_folder = constants.PROCESSED_DIR
     makedirs(uploads_folder, exist_ok=True)
@@ -115,15 +122,19 @@ def main(host: str = constants.HOST_HOME, port: int = constants.DEFAULT_PORT) ->
     def removeOldUploads(folder: str) -> int:
         eliminated_files_count: int = 0
         filepaths: list[str] = [path.join(folder, f) for f in listdir(folder)]
+
+        def isFileExpired(file: str) -> bool:
+            return path.isfile(file) and int(path.getmtime(file)) < getDefaultExpirationTimestamp()
+
         for file in filepaths:
-            if (path.isfile(file) and int(path.getmtime(file)) < constants.getDefaultExpirationTime()):
+            if (isFileExpired(file)):
                 remove(file)
                 eliminated_files_count += 1
         if (not listdir(folder)): # if folder is empty, remove it
             rmtree(folder)
         if (eliminated_files_count != 0):
             pluralMarks = ["s", "were"] if eliminated_files_count != 1 else ["", "was"]
-            print(f"{eliminated_files_count} cached file{pluralMarks[0]} {pluralMarks[1]} " \
+            log.info(f"{eliminated_files_count} cached file{pluralMarks[0]} {pluralMarks[1]} " \
                 + f"removed in {folder.split(constants.SLASH)[0]}.")
         return eliminated_files_count
 
@@ -137,7 +148,7 @@ def main(host: str = constants.HOST_HOME, port: int = constants.DEFAULT_PORT) ->
             for sdn in session_dirname_list:
                 eliminated_files_count += removeOldUploads(uploads_folder + sdn)
             if (eliminated_files_count == 0):
-                print("Cache still fresh. Loading...")
+                log.info("Cache still fresh. Loading...")
 
     stats = Statistics()
     cacheCleanup(stats)
