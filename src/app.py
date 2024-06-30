@@ -5,12 +5,13 @@ from requests import get as restGet
 from waitress import serve
 
 # Python standard libraries
-from os import path, makedirs, remove, listdir
+from os import path, makedirs, remove, listdir, getenv
 from shutil import rmtree
 from uuid import uuid4
+from dotenv import load_dotenv
 
 # Local modules
-from src.functions import generateCoverArt, generateThumbnail
+from src.functions import generateCoverArt, generateThumbnail, search_song, get_lyrics
 from src.logger import Logger
 from src.soft_utils import getDefaultExpirationTimestamp
 from src.statistics import Statistics, updateStats
@@ -109,6 +110,24 @@ def process_itunes_image() -> str | tuple[Response, int]:
     generateThumbnail(output_bg, user_processed_path)
     updateStats()
     return render_template('download.html', user_folder=user_folder, bg=constants.PROCESSED_ARTWORK_FILENAME)
+
+@app.route('/lyrics', methods=['GET', 'POST'])
+def lyrics():
+    if (request.method == 'POST'):
+        artist = request.form.get('artist')
+        song = request.form.get('song')
+        lyrics_text = request.form.get('lyrics')
+
+        if (artist and song):
+            search_result = search_song(song, artist)
+            if (search_result['response']['hits']):
+                song_id = search_result['response']['hits'][0]['result']['id']
+                lyrics_text = get_lyrics(song_id)
+            else:
+                lyrics_text = "Error: No hits found for the given artist and song."
+
+        return render_template('lyrics.html', lyrics=lyrics_text)
+    return render_template('lyrics.html', lyrics="")
 
 def main(host: str = constants.HOST_HOME, port: int = constants.DEFAULT_PORT) -> None:
     host_display_name = "localhost" if host == constants.HOST_HOME else host

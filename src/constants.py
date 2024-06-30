@@ -1,5 +1,5 @@
 from enum import Enum
-from os import name as osName
+from os import getenv, name as osName
 
 ############# ENUMS #############
 
@@ -43,3 +43,8 @@ LOGO_POSITIONS = [
 # Error messages
 ERR_INVALID_FILE_TYPE = 'Invalid file type. Only PNG and JPG files are allowed.'
 ERR_NO_FILE = 'Invalid file: No file selected.'
+
+######### API CONSTANTS #########
+GENIUS_API_KEY = getenv('GENIUS_API_KEY')
+BASE_URL = 'https://api.genius.com'
+HEADERS = {'Authorization': f'Bearer {GENIUS_API_KEY}'}

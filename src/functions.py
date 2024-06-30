@@ -1,9 +1,14 @@
+# Installed libraries
 from flask import session
 from PIL import Image, ImageFilter, ImageDraw
+from requests import get as restGet
+from bs4 import BeautifulSoup
+
+# Python standard libraries
 from os import path
 
+# Local modules
 from src.logger import Logger
-
 import src.constants as constants
 
 log = Logger()
@@ -68,3 +73,44 @@ def generateThumbnail(bg_path: str, output_folder: str) -> None:
         final_image = new_background.convert('RGB')
         output_path = path.join(output_folder, f'thumbnail_{position}.png')
         final_image.save(output_path)
+
+def search_song(song_title, artist_name):
+    search_url = constants.BASE_URL + '/search'
+    data = {'q': f'{song_title} {artist_name}'}
+    response = restGet(search_url, headers=constants.HEADERS, params=data)
+    return response.json()
+
+def get_lyrics(song_id):
+    song_url = constants.BASE_URL + f'/songs/{song_id}'
+    response = restGet(song_url, headers=constants.HEADERS)
+    song_info = response.json()
+    path = song_info['response']['song']['path']
+
+    page_url = 'https://genius.com' + path
+    page = restGet(page_url)
+    soup = BeautifulSoup(page.text, 'html.parser')
+
+    lyrics_div = soup.find('div', class_='lyrics')
+    if (not lyrics_div):
+        lyrics_div = soup.find('div', {'data-lyrics-container': 'true'})
+
+    if (lyrics_div):
+        lyrics = lyrics_div.get_text(separator="\n")
+    else:
+        lyrics_divs = soup.find_all('div', class_='Lyrics__Container-sc-1ynbvzw-6')
+        if (lyrics_divs):
+            lyrics = "\n".join([div.get_text(separator="\n") for div in lyrics_divs])
+        else:
+            return 'Paroles non trouvées.'
+
+    formatted_lyrics = format_lyrics(lyrics)
+    return formatted_lyrics
+
+def format_lyrics(lyrics):
+    lines = lyrics.split('\n')
+    formatted_lines = []
+    for i, line in enumerate(lines):
+        if (line.startswith('[') and line.endswith(']') and i != 0):
+            formatted_lines.append('')
+        formatted_lines.append(line)
+    return '\n'.join(formatted_lines)

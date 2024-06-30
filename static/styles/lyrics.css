@@ -1,0 +1,92 @@
+* {
+    display: flex;
+    flex-direction: column;
+    font-family: Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif;
+    font-size: 20px;
+    letter-spacing: 0.08rem;
+}
+
+title {
+    display: none;
+}
+
+body {
+    background-color: #f4f4f4;
+    background: #ffff64;
+    background: -webkit-linear-gradient(to right, #ffff64, #ffff64);
+    background: linear-gradient(to right, #ffff64, #002654);
+    height: 100%;
+    text-align: center;
+}
+
+h1 {
+    font-family: Helvetica, sans-serif;
+    font-size: 64px;
+    margin: 5% 0 2% 0;
+    font-style: italic;
+    letter-spacing: 0;
+}
+
+.search-form, .lyrics-form {
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.search-bars {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-direction: row;
+}
+
+input[type="text"], textarea {
+    width: 50%;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    border: 2px solid #ddd;
+    border-radius: 0.2rem;
+    font-size: 20px;
+    text-align: left; /* Align text to the left */
+}
+
+textarea {
+    height: 300px;
+}
+
+.button {
+    width: 33%;
+    background: #ffff64;
+    border: none;
+    border-radius: 0.2rem;
+    cursor: pointer;
+    color: #000;
+    letter-spacing: 0.3rem;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.button:hover {
+    background-color: #0056b3;
+}
+
+.search-button {
+    padding: 1.5rem; /* same height as search bars */
+}
+
+.save-button {
+    width: 33%;
+    background: #ffff64;
+    border: none;
+    border-radius: 0.2rem;
+    cursor: pointer;
+    color: #000;
+    letter-spacing: 0.3rem;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.save-button:hover {
+    background-color: #0056b3;
+}
