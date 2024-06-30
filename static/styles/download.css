@@ -19,10 +19,22 @@ body {
     height: 100%;
 }
 
+#navbar {
+	width: 20%;
+	margin: auto;
+	flex-direction: row;
+
+	justify-content: space-between;
+}
+
+#top-bot-spacer {
+    padding: 0.5em 0;
+}
+
 h1 {
     font-family: Helvetica, sans-serif;
     font-size: 64px;
-    margin: 5% 0 2% 0;
+    margin: 2% 0 2% 0;
     font-style: italic;
     letter-spacing: 0;
 }
@@ -63,11 +75,75 @@ a {
     display: inline-block;
     margin-top: 20px;
     padding: 10px 0;
-    background-color: #007BFF;
+    background-color: #007Bff;
     color: white;
     text-decoration: none;
     border-radius: 5px;
 }
 a:hover {
     background-color: #0056b3;
+}
+
+button {
+	padding: 10px 20px;
+	display: inline-block;
+	cursor: pointer;
+
+	background-color: #007bff;
+	border: 2px solid #00000010;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+	border-radius: 8px;
+	color: #ffffff;
+
+	text-align: center;
+	font-size: 28px;
+
+	transition: all 0.3s;
+}
+button:hover {
+	background-color: #008cff;
+}
+
+button span {
+	position: relative;
+	cursor: pointer;
+
+	vertical-align: middle;
+
+	transition: 0.3s;
+}
+
+button span:before {
+	top: 0;
+	position: absolute;
+
+	opacity: 0;
+	transition: 0.3s;
+}
+button span.left:before {
+	left: -20px;
+
+	content: '\00ab'; /* double left arrow character */
+}
+button span.right:before {
+	right: -20px;
+
+	content: '\00bb'; /* double right arrow character */
+}
+
+button:hover span.left {
+	padding-left: 15px;
+}
+button:hover span.right {
+	padding-right: 15px;
+}
+
+button:hover span:before {
+	opacity: 1;
+}
+button:hover span.left:before {
+	left: 0;
+}
+button:hover span.right:before {
+	right: 0;
 }
