@@ -19,6 +19,18 @@ body {
     height: 100%;
 }
 
+#navbar {
+	width: 20%;
+	margin: auto;
+	flex-direction: row;
+
+	justify-content: space-between;
+}
+
+#top-bot-spacer {
+    padding: 0.5em 0;
+}
+
 h1 {
     font-family: Helvetica, sans-serif;
     font-size: 64px;
@@ -37,7 +49,7 @@ h1 {
     width: 45%;
     background: white;
     padding: 20px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    box-shadow: 0 0 10px #0000001a;
 }
 
 .thumbnails {
@@ -52,6 +64,10 @@ h1 {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 10px;
+    width: 45%;
+    background: white;
+    padding: 20px;
+    box-shadow: 0 0 10px #0000001a;
 }
 
 .thumbnail-item {
@@ -68,8 +84,6 @@ img {
 
     margin-top: 20px;
     padding: 10px 0;
-    border: none;
-    border-radius: 5px;
 
     background-color: #007BFF;
     color: white;
@@ -79,4 +93,68 @@ img {
     background-color: #0056b3;
     transition: 0.3s;
     cursor: pointer;
+}
+
+button {
+	padding: 10px 20px;
+	display: inline-block;
+	cursor: pointer;
+
+	color: #ffffff;
+	background-color: #007bff;
+	border: 2px solid #00000010;
+    box-shadow: 0 0 10px #0000007f;
+	border-radius: 8px;
+
+	text-align: center;
+	font-size: 28px;
+
+	transition: all 0.3s;
+}
+button:hover {
+	background-color: #008cff;
+}
+
+button span {
+	position: relative;
+	cursor: pointer;
+
+	vertical-align: middle;
+
+	transition: 0.3s;
+}
+
+button span:before {
+	top: 0;
+	position: absolute;
+
+	opacity: 0;
+	transition: 0.3s;
+}
+button span.left:before {
+	left: -20px;
+
+	content: '\00ab'; /* double left arrow character */
+}
+button span.right:before {
+	right: -20px;
+
+	content: '\00bb'; /* double right arrow character */
+}
+
+button:hover span.left {
+	padding-left: 15px;
+}
+button:hover span.right {
+	padding-right: 15px;
+}
+
+button:hover span:before {
+	opacity: 1;
+}
+button:hover span.left:before {
+	left: 0;
+}
+button:hover span.right:before {
+	right: 0;
 }

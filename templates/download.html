@@ -6,6 +6,11 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/download.css') }}" />
 </head>
 <body>
+    <span id="top-bot-spacer"></span>
+    <div id="navbar">
+        <button onclick="window.location.href='{{ url_for('upload_file') }}'"><span class="left"> Home</span></button>
+        <button onclick="window.location.href='{{ url_for('upload_file') }}'"><span class="right">Lyrics </span></button> <!-- TODO url to lyrics, not upload_file -->
+    </div>
     <h1>Processed Artworks</h1>
     <div class="image-panels">
         <!-- Cadre de gauche pour l'Artwork -->
@@ -60,8 +65,7 @@
             </form>
         </div>
     </div>
+    <span id="top-bot-spacer"></span>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="{{ url_for('static', filename='js/download.js') }}"></script>
 </body>
 </html>
