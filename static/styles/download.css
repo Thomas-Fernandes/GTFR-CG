@@ -52,7 +52,15 @@ h1 {
     box-shadow: 0 0 10px #0000001a;
 }
 
-.miniature-grid {
+.thumbnails {
+    background: white;
+    width: 45%;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    padding: 20px;
+}
+
+.thumbnail-grid {
+    height: 80%;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 10px;
@@ -62,7 +70,7 @@ h1 {
     box-shadow: 0 0 10px #0000001a;
 }
 
-.miniature-item {
+.thumbnail-item {
     padding: 10px;
 }
 
@@ -71,17 +79,22 @@ img {
     height: auto;
 }
 
-a {
+.button {
     display: inline-block;
+
     margin-top: 20px;
     padding: 10px 0;
-    background-color: #007Bff;
+    border: none;
+    border-radius: 5px;
+
+    background-color: #007BFF;
     color: white;
     text-decoration: none;
-    border-radius: 5px;
 }
-a:hover {
+.button:hover {
     background-color: #0056b3;
+    transition: 0.3s;
+    cursor: pointer;
 }
 
 button {
