@@ -22,7 +22,7 @@ body {
 h1 {
     font-family: Helvetica, sans-serif;
     font-size: 64px;
-    margin: 5% 0 2% 0;
+    margin: 2% 0 2% 0;
     font-style: italic;
     letter-spacing: 0;
 }
@@ -40,17 +40,21 @@ h1 {
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
-.miniature-grid {
+.thumbnails {
+    background: white;
+    width: 45%;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    padding: 20px;
+}
+
+.thumbnail-grid {
+    height: 80%;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 10px;
-    width: 45%;
-    background: white;
-    padding: 20px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
-.miniature-item {
+.thumbnail-item {
     padding: 10px;
 }
 
@@ -59,15 +63,20 @@ img {
     height: auto;
 }
 
-a {
+.button {
     display: inline-block;
+
     margin-top: 20px;
     padding: 10px 0;
+    border: none;
+    border-radius: 5px;
+
     background-color: #007BFF;
     color: white;
     text-decoration: none;
-    border-radius: 5px;
 }
-a:hover {
+.button:hover {
     background-color: #0056b3;
+    transition: 0.3s;
+    cursor: pointer;
 }

@@ -41,6 +41,8 @@ class Logger:
         self.send(message, LoggingLevel.LOG)
     def info(self, message: str) -> None:
         self.send(message, LoggingLevel.INFO)
+    def debug(self, message: str) -> None:
+        self.send(message, LoggingLevel.DEBUG)
 
     def send(self, message: str, level: LoggingLevel | None = None) -> None:
         message_to_log = self.getFormattedMessage(message, level)
