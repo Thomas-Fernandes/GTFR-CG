@@ -1,3 +1,9 @@
+from os import system
+
+system('pip install -qr requirements.txt')
+
+#################################
+
 from src.app import main
 
 import src.constants as constants
