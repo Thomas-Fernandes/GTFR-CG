@@ -1,6 +1,6 @@
 ---
 name: Fix | Bug report
-about: Create a report to help me improve
+about: Report a problem to help us fix the app
 title: "[BUGZ \U0001F41B] "
 labels: bug
 assignee:
