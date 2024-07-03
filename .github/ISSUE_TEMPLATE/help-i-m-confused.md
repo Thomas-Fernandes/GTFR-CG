@@ -1,5 +1,5 @@
 ---
-name: He | HELP I'M CONFUSED
+name: [Help] HELP I'M CONFUSED
 about: You're a few steps in and don't know what to do
 title: "[HELP \U0001F914] "
 labels: help wanted

@@ -1,5 +1,5 @@
 ---
-name: Develop | Feature request
+name: [Develop] Feature request
 about: Suggest an idea for this project
 title: "[FEAT 🚀] "
 labels: NEW! feature

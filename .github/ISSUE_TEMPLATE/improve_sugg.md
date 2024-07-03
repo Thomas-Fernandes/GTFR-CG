@@ -1,5 +1,5 @@
 ---
-name: Develop | Improvement suggestion
+name: [Develop] Improvement suggestion
 about: Suggest an improvement to an existing feature
 title: "[IMPR ↗️] "
 labels: enhancement
