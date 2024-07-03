@@ -1,9 +1,9 @@
 ---
-name: Feature request
+name: Develop | Feature request
 about: Suggest an idea for this project
 title: "[FEAT 🚀] "
-labels: ''
-assignees: QuentindiMeo
+labels: NEW! feature
+assignees:
 
 ---
 
