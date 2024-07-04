@@ -113,7 +113,7 @@ def lyrics():
     song:   str = request.form.get('song')
     lyrics_text: str = request.form.get('lyrics')
 
-    if artist is not None and song is not None:
+    if (artist is not None and song is not None):
         lyrics_text = getLyrics(song, artist)
 
     return render_template('lyrics.html', lyrics=lyrics_text)
