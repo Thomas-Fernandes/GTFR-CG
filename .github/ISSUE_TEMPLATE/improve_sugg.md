@@ -1,9 +1,9 @@
 ---
-name: Improvement suggestion
+name: [Develop] Improvement suggestion
 about: Suggest an improvement to an existing feature
 title: "[IMPR ↗️] "
-labels: ''
-assignees: QuentindiMeo
+labels: enhancement
+assignees:
 
 ---
 

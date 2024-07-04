@@ -1,9 +1,9 @@
 ---
-name: Documentation request
+name: [Help] Documentation request
 about: Request for a feature or chunk of code to be commented
 title: "[DOCS \U0001F4D1] "
-labels: ''
-assignees: QuentindiMeo
+labels: docs
+assignees:
 
 ---
 
