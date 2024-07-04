@@ -93,10 +93,10 @@ def getLyrics(song_title: str, artist_name: str) -> str:
 
     # Ensure double newline before song parts
     def add_newline_before_song_parts(lyrics: str) -> str:
-        song_parts = split(r'(\[.*?\])', lyrics)
+        song_parts = split(r'<[^>]+>', lyrics)
         new_lyrics = []
         for (i, part) in enumerate(song_parts):
-            if (match(r'\[.*?\]', part)):
+            if (match(r'"[^"]*"', part)):
                 if (i == 0 or song_parts[i-1].endswith('\n\n') or song_parts[i-1].strip() == ""):
                     new_lyrics.append(part)
                 else:
