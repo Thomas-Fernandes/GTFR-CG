@@ -80,9 +80,9 @@ def generateThumbnail(bg_path: str, output_folder: str) -> None:
         output_path = path.join(output_folder, f'thumbnail_{position}.png')
         final_image.save(output_path)
 
-def getLyrics(song_title, artist_name):
+def getLyrics(song_title: str, artist_name: str) -> str:
     song = genius.search_song(song_title, artist_name)
-    if song is None:
+    if (song is None):
         return 'Lyrics not found.'
 
     lyrics = song.lyrics
@@ -92,12 +92,12 @@ def getLyrics(song_title, artist_name):
     lyrics = sub(r'\d+Embed$', '', lyrics).strip()
 
     # Ensure double newline before song parts
-    def add_newline_before_parts(lyrics):
-        parts = split(r'(\[.*?\])', lyrics)
+    def add_newline_before_song_parts(lyrics: str) -> str:
+        song_parts = split(r'(\[.*?\])', lyrics)
         new_lyrics = []
-        for (i, part) in enumerate(parts):
+        for (i, part) in enumerate(song_parts):
             if (match(r'\[.*?\]', part)):
-                if (i == 0 or parts[i-1].endswith('\n\n') or parts[i-1].strip() == ""):
+                if (i == 0 or song_parts[i-1].endswith('\n\n') or song_parts[i-1].strip() == ""):
                     new_lyrics.append(part)
                 else:
                     new_lyrics.append('\n\n' + part)
@@ -105,6 +105,6 @@ def getLyrics(song_title, artist_name):
                 new_lyrics.append(part)
         return ''.join(new_lyrics)
 
-    lyrics = add_newline_before_parts(lyrics)
+    lyrics = add_newline_before_song_parts(lyrics)
 
     return lyrics
