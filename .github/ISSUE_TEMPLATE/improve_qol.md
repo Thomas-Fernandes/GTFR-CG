@@ -1,5 +1,5 @@
 ---
-name: [Fix] Improve the quality of the code
+name: FIX - Improve the quality of the code
 about: Setup or apply a principle of cleaner code
 title: "[QCLN \U0001F9FC] "
 labels: QoL/cleaning
