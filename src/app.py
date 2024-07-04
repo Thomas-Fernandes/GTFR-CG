@@ -26,7 +26,7 @@ app.config["SESSION_TYPE"] = "filesystem"
 app.config["SESSION_FILE_DIR"] = 'flask_session' + constants.SLASH
 Session(app)
 
-@app.route('/artwork_generation', methods=['GET', 'POST'])
+@app.route('/artwork-generation', methods=['GET', 'POST'])
 def artworkGeneration() -> str | JsonResponse:
     if (request.method == 'GET'):
         return render_template('upload.html')
@@ -107,12 +107,21 @@ def processed_images() -> str | JsonResponse:
 
     return render_template('download.html', user_folder=user_folder, bg=constants.PROCESSED_ARTWORK_FILENAME)
 
+@app.route('/statistics')
+def statistics() -> str:
+    return render_template('statistics.html')
+
+@app.route('/home')
+def home() -> str:
+    return render_template('home.html')
+
 @app.errorhandler(404)
-def page_not_found(e: Exception) -> str:
+def page_not_found(_e: Exception) -> str:
+    log.warn(f"Page not found: {request.url}. Redirecting to home page ({'/home'}).")
     return render_template('home.html')
 
 @app.route('/')
-def home() -> str:
+def root() -> str:
     return render_template('home.html')
 
 def main(host: str = constants.HOST_HOME, port: int = constants.DEFAULT_PORT) -> None:
@@ -122,7 +131,6 @@ def main(host: str = constants.HOST_HOME, port: int = constants.DEFAULT_PORT) ->
     processed_folder = constants.PROCESSED_DIR
     makedirs(processed_folder, exist_ok=True)
 
-    @DeprecationWarning
     def removeOldUploads(folder: str) -> int:
         eliminated_files_count: int = 0
         filepaths: list[str] = [path.join(folder, f) for f in listdir(folder)]
@@ -142,7 +150,8 @@ def main(host: str = constants.HOST_HOME, port: int = constants.DEFAULT_PORT) ->
                 + f"removed in {folder.split(constants.SLASH)[0]}.")
         return eliminated_files_count
 
-    def cacheCleanup(stats: Statistics) -> None:
+    @DeprecationWarning
+    def cacheCleanup() -> None:
         to_clean = ["DIRECTORY_NAME" + constants.SLASH]
         eliminated_files_count: int = 0
 
@@ -155,6 +164,5 @@ def main(host: str = constants.HOST_HOME, port: int = constants.DEFAULT_PORT) ->
             if (eliminated_files_count == 0):
                 log.info("Cache still fresh. Loading...")
 
-    stats = Statistics()
-    cacheCleanup(stats)
+    cacheCleanup()
     serve(app, host=host, port=port, threads=8)

@@ -7,3 +7,4 @@ button {
 	width: calc(50% - 20px);
     padding: 25% 0;
 }
+/* FIXME arrows on the sides of the buttons aren't well calibrated */

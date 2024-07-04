@@ -11,9 +11,11 @@
     <h1>Home</h1>
     <div id="navbar">
         <button onclick="window.location.href='{{ url_for('artworkGeneration') }}'"><span class="left"> Artwork generation</span></button>
-        <button onclick="window.location.href='{{ url_for('artworkGeneration') }}'"><span class="right">Statistics </span></button>
+        <button onclick="window.location.href='{{ url_for('statistics') }}'"><span class="right">Statistics </span></button>
     </div>
     <span id="top-bot-spacer"></span>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="{{ url_for('static', filename='js/home.js') }}"></script>
 </body>
 </html>

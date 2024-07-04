@@ -31,6 +31,16 @@ body {
     padding: 0.5em 0;
 }
 
+hr {
+    border: 0;
+    height: 0; /* Firefox... */
+    width: 80%;
+    box-shadow: 0 0 2px 0.1px #000000;
+}
+hr:after {  /* Not really supposed to work, but does */
+    content: "\00a0";  /* Prevent margin collapse */
+}
+
 h1 {
     font-family: Helvetica, sans-serif;
     font-size: 64px;
