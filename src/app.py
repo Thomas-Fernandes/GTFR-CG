@@ -108,7 +108,7 @@ def processed_images() -> str | JsonResponse:
     return render_template('download.html', user_folder=user_folder, bg=constants.PROCESSED_ARTWORK_FILENAME)
 
 @app.route('/lyrics', methods=['GET', 'POST'])
-def lyrics():
+def lyrics() -> str:
     if (request.method != 'POST'):
         return render_template('lyrics.html', lyrics="")
 
@@ -145,6 +145,7 @@ def main(host: str = constants.HOST_HOME, port: int = constants.DEFAULT_PORT) ->
     processed_folder = constants.PROCESSED_DIR
     makedirs(processed_folder, exist_ok=True)
 
+    @DeprecationWarning # cache cleanup process is to be redefined
     def removeOldUploads(folder: str) -> int:
         eliminated_files_count: int = 0
         filepaths: list[str] = [path.join(folder, f) for f in listdir(folder)]
@@ -164,7 +165,6 @@ def main(host: str = constants.HOST_HOME, port: int = constants.DEFAULT_PORT) ->
                 + f"removed in {folder.split(constants.SLASH)[0]}.")
         return eliminated_files_count
 
-    @DeprecationWarning # cache cleanup process is to be redefined
     def cacheCleanup() -> None:
         to_clean = ["DIRECTORY_NAME" + constants.SLASH]
         eliminated_files_count: int = 0
@@ -179,5 +179,5 @@ def main(host: str = constants.HOST_HOME, port: int = constants.DEFAULT_PORT) ->
                 log.info("Cache still fresh. Loading...")
 
     printInitStatistics()
-    # cacheCleanup()
+    cacheCleanup()
     serve(app, host=host, port=port, threads=8)
