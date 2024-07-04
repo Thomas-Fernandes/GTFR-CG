@@ -1,12 +1,19 @@
+# Installed libraries
 from flask import session
+from lyricsgenius import Genius
 from PIL import Image, ImageFilter, ImageDraw
+
+# Python standard libraries
 from os import path
+from re import sub, split, match
 
+# Local modules
 from src.logger import Logger
-
 import src.constants as constants
 
 log = Logger()
+
+genius = Genius(constants.GENIUS_API_TOKEN)
 
 def generateCoverArt(input_path: str, output_path: str) -> None:
     log.info(f"Generating cover art... (session {input_path.split(constants.SLASH)[-2].split('-')[0]}-...)")
@@ -72,3 +79,32 @@ def generateThumbnail(bg_path: str, output_folder: str) -> None:
         final_image = new_background.convert('RGB')
         output_path = path.join(output_folder, f'thumbnail_{position}.png')
         final_image.save(output_path)
+
+def getLyrics(song_title: str, artist_name: str) -> str:
+    song = genius.search_song(song_title, artist_name)
+    if (song is None):
+        return 'Lyrics not found.'
+
+    lyrics = song.lyrics
+
+    # Removing charabia at the beginning and end of the lyrics
+    lyrics = sub(r'^.*Lyrics\[', '[', lyrics).strip()
+    lyrics = sub(r'\d+Embed$', '', lyrics).strip()
+
+    # Ensure double newline before song parts
+    def add_newline_before_song_parts(lyrics: str) -> str:
+        song_parts = split(r'(\[.*?\])', lyrics)
+        new_lyrics = []
+        for (i, part) in enumerate(song_parts):
+            if (match(r'\[.*?\]', part)):
+                if (i == 0 or song_parts[i-1].endswith('\n\n') or song_parts[i-1].strip() == ""):
+                    new_lyrics.append(part)
+                else:
+                    new_lyrics.append('\n\n' + part)
+            else:
+                new_lyrics.append(part)
+        return ''.join(new_lyrics)
+
+    lyrics = add_newline_before_song_parts(lyrics)
+
+    return lyrics

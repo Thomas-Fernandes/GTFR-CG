@@ -10,7 +10,7 @@ from shutil import rmtree
 from uuid import uuid4
 
 # Local modules
-from src.functions import generateCoverArt, generateThumbnail
+from src.functions import generateCoverArt, generateThumbnail, getLyrics
 from src.logger import Logger
 from src.soft_utils import getDefaultExpirationTimestamp
 from src.statistics import Statistics, updateStats
@@ -103,6 +103,20 @@ def processed_images() -> str | JsonResponse:
     updateStats()
 
     return render_template('download.html', user_folder=user_folder, bg=constants.PROCESSED_ARTWORK_FILENAME)
+
+@app.route('/lyrics', methods=['GET', 'POST'])
+def lyrics():
+    if (request.method != 'POST'):
+        return render_template('lyrics.html', lyrics="")
+        
+    artist: str = request.form.get('artist')
+    song:   str = request.form.get('song')
+    lyrics_text: str = request.form.get('lyrics')
+
+    if (artist is not None and song is not None):
+        lyrics_text = getLyrics(song, artist)
+
+    return render_template('lyrics.html', lyrics=lyrics_text)
 
 @app.route('/', methods=['GET'])
 def home() -> str:
