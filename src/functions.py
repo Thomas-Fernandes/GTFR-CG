@@ -9,6 +9,7 @@ from re import sub, split, match
 
 # Local modules
 from src.logger import Logger
+from src.statistics import updateStats
 import src.constants as constants
 
 log = Logger()
@@ -106,5 +107,6 @@ def getLyrics(song_title: str, artist_name: str) -> str:
         return ''.join(new_lyrics)
 
     lyrics = add_newline_before_song_parts(lyrics)
+    updateStats(to_increment='lyricsFetches')
 
     return lyrics
