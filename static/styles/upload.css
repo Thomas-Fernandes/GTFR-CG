@@ -17,6 +17,10 @@ title {
     display: none;
 }
 
+#navbar {
+    width: auto;
+}
+
 #top-bot-spacer {
     padding: 0.5em 0;
 }
@@ -102,6 +106,7 @@ input[type=file]::file-selector-button {
     font-weight: bold;
     letter-spacing: 0.3rem;
 
+    color: #000000;
     transition: all 0.3s;
 }
 .button:hover {

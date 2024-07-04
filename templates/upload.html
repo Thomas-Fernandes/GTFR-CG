@@ -3,10 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Upload or Search for Cover Art</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/download.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/upload.css') }}" />
 </head>
 <body id="head">
     <span id="top-bot-spacer"></span>
+    <div id="navbar">
+        <button onclick="window.location.href='{{ url_for('home') }}'"><span class="left"> Home</span></button>
+    </div>
     <h1>Search for cover art on iTunes</h1>
     <form id="iTunesSearchForm" method="post">
         <div class="flexbox">

@@ -26,10 +26,11 @@ app.config["SESSION_TYPE"] = "filesystem"
 app.config["SESSION_FILE_DIR"] = 'flask_session' + constants.SLASH
 Session(app)
 
-@app.route('/uploadFile', methods=['GET', 'POST'])
-def uploadFile() -> str | JsonResponse:
+@app.route('/artwork_generation', methods=['GET', 'POST'])
+def artworkGeneration() -> str | JsonResponse:
     if (request.method == 'GET'):
         return render_template('upload.html')
+
     if ('user_folder' not in session):
         session['user_folder'] = str(uuid4())
     user_folder = str(session['user_folder'])
@@ -91,7 +92,7 @@ def use_itunes_image() -> Response | JsonResponse:
     session['generated_artwork_path'] = image_path
     return createJsonResponse(constants.HttpStatus.OK.value)
 
-@app.route('/processed_images', methods=['GET'])
+@app.route('/processed_images', methods=['GET']) # FIXME GET and POST functions are discordant in use
 def processed_images() -> str | JsonResponse:
     if ('generated_artwork_path' not in session):
         return createJsonResponse(constants.HttpStatus.BAD_REQUEST.value, 'No image was selected or uploaded')
