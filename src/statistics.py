@@ -1,15 +1,19 @@
 from dataclasses import dataclass
-from typing import Optional, TypeAlias
+from typing import TypeAlias
 
-import constants
+from src.logger import Logger
+
+import src.constants as constants
 
 JsonDict: TypeAlias = dict[str, str | int]
 
-######################## CLASSES ########################
+log = Logger()
+
+############ CLASSES ############
 
 @dataclass(slots=True, kw_only=True)
 class Stats:
-    dateLastGeneration: str | None
+    dateLastGeneration: str
     totalGenerations: int
 
     def dict(self) -> JsonDict:
@@ -22,10 +26,9 @@ class Statistics:
     def generateStats(self) -> None:
         try:
             with open(self.__stats_file_path, 'w') as file:
-                now = getNowEpoch()
-                file.write('{ "dateLastGeneration": "' + now + '" }')
+                file.write('{"dateLastGeneration": "' + getNowEpoch() + '"}')
         except FileNotFoundError:
-            print(f"Error writing stats file. ({self.__stats_file_path})")
+            log.warn(f"Error when writing to stats file. ({self.__stats_file_path})")
 
     def getStats(self) -> Stats:
         return self.__stats
@@ -36,29 +39,26 @@ class Statistics:
         self.__stats_file_path: str = constants.STATS_FILE_PATH
         stats_from_file = getJsonStatsFromFile(self.__stats_file_path)
         self.__stats: Stats = Stats(
-            dateLastGeneration=stats_from_file.get('dateLastGeneration', ''),
-            totalGenerations=stats_from_file.get('totalGenerations', 0)
+            dateLastGeneration=str(stats_from_file.get('dateLastGeneration', getNowEpoch())),
+            totalGenerations=int(stats_from_file.get('totalGenerations', 0))
         )
-        print(f"Initializing project with statistics:\n\t{self.__stats}")
+        log.info(f"Initializing project with statistics: {self.__stats}")
 
-######################## METHODS ########################
+############ METHODS ############
 
-from time import gmtime, strftime
 from json import loads, dumps, JSONDecodeError
 
-def getNowEpoch() -> str:
-    result = strftime(constants.DATE_FORMAT_FULL, gmtime())
-    return result[:11] + str(int(result[11:13]) + 2) + result[13:] # add two hours because Paris is GMT+2
+from src.soft_utils import getNowEpoch
 
 def getJsonStatsFromFile(path: str) -> JsonDict:
     try:
         with open(path, 'r') as file:
-            return loads(file.read())
+            return loads(file.read()) # <- read stats from stats file
     except FileNotFoundError:
-        print(f"No stats file. ({path})")
+        log.warn(f"No stats file. ({path})")
         return {}
     except JSONDecodeError:
-        print(f"Error decoding stats file. ({path})")
+        log.warn(f"Error decoding stats file. ({path})")
         return {}
 
 def updateStats(path: str = constants.STATS_FILE_PATH) -> None:
@@ -66,11 +66,11 @@ def updateStats(path: str = constants.STATS_FILE_PATH) -> None:
 
     stats: JsonDict = {}
     stats['dateLastGeneration'] = getNowEpoch()
-    stats['totalGenerations'] = jsonStatsFromFile.get('totalGenerations', 0) + 1
+    stats['totalGenerations'] = int(jsonStatsFromFile.get('totalGenerations', 0)) + 1
 
     try:
         with open(path, 'w') as file:
-            file.write(dumps(stats))
+            file.write(dumps(stats)) # <- write new stats to stats file
     except FileNotFoundError:
-        print(f"Error writing stats file. ({path})")
-    print(f"Stats updated:\n\t{stats}")
+        log.warn(f"Error when writing to stats file. ({path})")
+    log.info(f"Stats updated: {stats}")

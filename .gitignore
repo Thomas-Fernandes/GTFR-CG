@@ -1,12 +1,22 @@
-# Hidden files and directories
+# Hidden files and directories, residual editfiles
 .*
 .*/*
+*~
+
+# environment file
+.env
 
 # Flask bytecode cache
 flask_session/
 
-# environment file
-.env
+# Python cache
+__pycache__/
+
+# Statistics file
+*.json
+
+# Log files
+*.log
 
 # img cache
 *.png
@@ -25,9 +35,3 @@ flask_session/
 *.SVG
 *.webp
 *.WEBP
-
-# Statistics file
-*.json
-
-# Python cache
-__pycache__/

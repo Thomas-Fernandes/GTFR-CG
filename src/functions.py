@@ -2,11 +2,15 @@ from flask import session
 from PIL import Image, ImageFilter, ImageDraw
 from os import path
 
-import constants
+from src.logger import Logger
 
-THUMBNAIL_FOLDER = 'Miniatures'
+import src.constants as constants
+
+log = Logger()
 
 def generateCoverArt(input_path: str, output_path: str) -> None:
+    log.info(f"Generating cover art... (session {input_path.split(constants.SLASH)[-2].split('-')[0]}-...)")
+
     image: Image.Image = Image.open(input_path)
 
     # Redimensionner l'image à 1920 de large tout en conservant les proportions
@@ -31,26 +35,33 @@ def generateCoverArt(input_path: str, output_path: str) -> None:
 
     for i in range(int(max_dim)):
         opacity = 255 - int((255 * i) / max_dim)
-        draw.ellipse([center_x - i, center_y - i, center_x + i, center_y + i], fill=opacity)
+        coords = [
+            center_x - i,
+            center_y - i,
+            center_x + i,
+            center_y + i
+        ]
+        draw.ellipse(coords, fill=opacity)
 
     final_blurred_image = Image.composite(cropped_image, blurred_image, mask)
 
     center_image: Image.Image = image.resize((800, 800), Image.Resampling.LANCZOS)
-    top_left_x = center_x - 400
-    top_left_y = center_y - 400
+    (top_left_x, top_left_y) = (center_x - 400, center_y - 400)
     final_blurred_image.paste(center_image, (top_left_x, top_left_y))
 
     final_blurred_image.save(output_path)
 
 def generateThumbnail(bg_path: str, output_folder: str) -> None:
+    log.info(f"Generating thumbnails... (session {bg_path.split(constants.SLASH)[-2].split('-')[0]}-...)")
+
     for position in constants.LOGO_POSITIONS:
         logo_path = f'{position}.png'
         background = Image.open(bg_path)
         user_folder = path.abspath(str(session['user_folder']))
         user_folder = constants.SLASH.join(user_folder.split(constants.SLASH)[:-1])
-        overlay_file = f"{user_folder}{constants.SLASH}{THUMBNAIL_FOLDER}{constants.SLASH}{logo_path}"
+        overlay_file = f"{user_folder}{constants.SLASH}{constants.THUMBNAIL_DIR}{logo_path}"
         if (not path.exists(overlay_file)):
-            print(f"Overlay file not found: {overlay_file}")
+            log.warn(f"Overlay file not found: {overlay_file}")
             continue
         overlay = Image.open(overlay_file)
 
