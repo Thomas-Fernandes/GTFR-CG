@@ -15,6 +15,8 @@ log = Logger()
 genius = Genius(constants.GENIUS_API_TOKEN)
 
 def generateCoverArt(input_path: str, output_path: str) -> None:
+    log.info(f"Generating cover art... (session {input_path.split(constants.SLASH)[-2].split('-')[0]}-...)")
+
     image: Image.Image = Image.open(input_path)
 
     # Redimensionner l'image à 1920 de large tout en conservant les proportions
@@ -56,6 +58,8 @@ def generateCoverArt(input_path: str, output_path: str) -> None:
     final_blurred_image.save(output_path)
 
 def generateThumbnail(bg_path: str, output_folder: str) -> None:
+    log.info(f"Generating thumbnails... (session {bg_path.split(constants.SLASH)[-2].split('-')[0]}-...)")
+
     for position in constants.LOGO_POSITIONS:
         logo_path = f'{position}.png'
         background = Image.open(bg_path)
