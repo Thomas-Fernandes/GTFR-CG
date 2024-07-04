@@ -5,10 +5,9 @@ from requests import get as requestsGet
 from waitress import serve
 
 # Python standard libraries
-from os import path, makedirs, remove, listdir, getenv
+from os import path, makedirs, remove, listdir
 from shutil import rmtree
 from uuid import uuid4
-from dotenv import load_dotenv
 
 # Local modules
 from src.functions import generateCoverArt, generateThumbnail, getLyrics
