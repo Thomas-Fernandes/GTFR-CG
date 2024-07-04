@@ -13,7 +13,7 @@ from uuid import uuid4
 from src.functions import generateCoverArt, generateThumbnail
 from src.logger import Logger
 from src.soft_utils import getDefaultExpirationTimestamp
-from src.statistics import Statistics, updateStats
+from src.statistics import onLaunch as printInitStatistics, updateStats
 from src.web_utils import checkFilenameValid, createJsonResponse, JsonResponse
 
 import src.constants as constants
@@ -150,7 +150,7 @@ def main(host: str = constants.HOST_HOME, port: int = constants.DEFAULT_PORT) ->
                 + f"removed in {folder.split(constants.SLASH)[0]}.")
         return eliminated_files_count
 
-    @DeprecationWarning
+    @DeprecationWarning # cache cleanup process is to be redefined
     def cacheCleanup() -> None:
         to_clean = ["DIRECTORY_NAME" + constants.SLASH]
         eliminated_files_count: int = 0
@@ -164,5 +164,6 @@ def main(host: str = constants.HOST_HOME, port: int = constants.DEFAULT_PORT) ->
             if (eliminated_files_count == 0):
                 log.info("Cache still fresh. Loading...")
 
-    cacheCleanup()
+    printInitStatistics()
+    # cacheCleanup()
     serve(app, host=host, port=port, threads=8)

@@ -9,40 +9,33 @@ JsonDict: TypeAlias = dict[str, str | int]
 
 log = Logger()
 
-############ CLASSES ############
+############# CLASS #############
 
 @dataclass(slots=True, kw_only=True)
 class Stats:
-    dateLastGeneration: str
-    totalGenerations: int
+    date_first_generation: str | None
+    date_last_generation: str | None
+    total_generations: int
 
     def dict(self) -> JsonDict:
-        return { 'dateLastGeneration': self.dateLastGeneration, 'totalGenerations': self.totalGenerations }
+        return {
+            'dateFirstGeneration': self.date_first_generation,
+            'dateLastGeneration': self.date_last_generation,
+            'totalGenerations': self.total_generations,
+        }
 
-    def __str__(self) -> str:
-        return f"{{ 'dateLastGeneration': '{self.dateLastGeneration}', 'totalGenerations': {self.totalGenerations} }}"
-
-class Statistics:
-    def generateStats(self) -> None:
-        try:
-            with open(self.__stats_file_path, 'w') as file:
-                file.write('{"dateLastGeneration": "' + getNowEpoch() + '"}')
-        except FileNotFoundError:
-            log.warn(f"Error when writing to stats file. ({self.__stats_file_path})")
-
-    def getStats(self) -> Stats:
-        return self.__stats
-    def getStatsFilePath(self) -> str:
-        return self.__stats_file_path
-
-    def __init__(self) -> None:
-        self.__stats_file_path: str = constants.STATS_FILE_PATH
-        stats_from_file = getJsonStatsFromFile(self.__stats_file_path)
-        self.__stats: Stats = Stats(
-            dateLastGeneration=str(stats_from_file.get('dateLastGeneration', getNowEpoch())),
-            totalGenerations=int(stats_from_file.get('totalGenerations', 0))
-        )
-        log.info(f"Initializing project with statistics: {self.__stats}")
+    def __repr__(self) -> str:
+        dict_size = len(self.dict()) - 1
+        sep = ', '
+        representation: str = "{"
+        nth = 0
+        for key, value in self.dict().items():
+            if (value is not None):
+                representation += \
+                    f"'{key}': {value}" + (sep if nth < dict_size else "")
+            nth += 1
+        representation += "}"
+        return representation
 
 ############ METHODS ############
 
@@ -50,27 +43,54 @@ from json import loads, dumps, JSONDecodeError
 
 from src.soft_utils import getNowEpoch
 
-def getJsonStatsFromFile(path: str) -> JsonDict:
+def getJsonStatsFromFile(path: str, init: bool = False) -> JsonDict:
     try:
         with open(path, 'r') as file:
             return loads(file.read()) # <- read stats from stats file
     except FileNotFoundError:
-        log.warn(f"No stats file. ({path})")
-        return {}
+        log.warn(f"No stats file ({path}). Initializing new stats file...")
+        return initStats(from_error=init)
     except JSONDecodeError:
-        log.warn(f"Error decoding stats file. ({path})")
-        return {}
+        log.warn(f"Error decoding stats file ({path}). Initializing new stats file...")
+        return initStats(from_error=True)
 
 def updateStats(path: str = constants.STATS_FILE_PATH) -> None:
-    jsonStatsFromFile: JsonDict = getJsonStatsFromFile(path)
+    json_stats: JsonDict = getJsonStatsFromFile(path)
 
-    stats: JsonDict = {}
-    stats['dateLastGeneration'] = getNowEpoch()
-    stats['totalGenerations'] = int(jsonStatsFromFile.get('totalGenerations', 0)) + 1
+    new_stats: JsonDict = {}
+    new_stats['dateFirstGeneration'] = json_stats.get('dateFirstGeneration', getNowEpoch())
+    new_stats['dateLastGeneration'] = getNowEpoch()
+    new_stats['totalGenerations'] = int(json_stats.get('totalGenerations', 0)) + 1
 
     try:
         with open(path, 'w') as file:
-            file.write(dumps(stats)) # <- write new stats to stats file
+            file.write(dumps(new_stats)) # <- write new stats to stats file
     except FileNotFoundError:
-        log.warn(f"Error when writing to stats file. ({path})")
-    log.info(f"Stats updated: {stats}")
+        log.warn(f"Error when writing to stats file ({path}). Initializing new stats file...")
+        initStats()
+    except JSONDecodeError:
+        log.warn(f"Error decoding stats file ({path})")
+
+    log.info(f"Stats updated: {new_stats}")
+
+def initStats(from_error: bool = False) -> JsonDict:
+    stats = { 'totalGenerations': 0 }
+    if (from_error):
+        stats['dateFirstGeneration'] = 'unknown'
+
+    with open(constants.STATS_FILE_PATH, 'w') as file:
+        file.write(dumps(stats))
+
+    log.info("Statistics initialization complete.")
+    return loads(str(stats).replace("'", '"'))
+
+def onLaunch() -> None:
+    json_stats = getJsonStatsFromFile(constants.STATS_FILE_PATH)
+
+    stats = Stats(
+        date_first_generation=json_stats.get('dateFirstGeneration'),
+        date_last_generation=json_stats.get('dateLastGeneration'),
+        total_generations=json_stats.get('totalGenerations', 0),
+    )
+
+    log.info(f"Initializing project with statistics: {stats}")
