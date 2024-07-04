@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lyrics</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/lyrics.css') }}" />
+</head>
+<body>
+    <h1>Lyrics</h1>
+    <form method="post" class="search-form">
+        <div class="search-bars">
+            <input type="text" name="artist" placeholder="Enter artist name" required>
+            <input type="text" name="song" placeholder="Enter song name" required>
+            <input type="submit" value="Search Lyrics" class="button search-button">
+        </div>
+    </form>
+    <form method="post" class="lyrics-form">
+        <textarea name="lyrics" rows="20" cols="80" placeholder="Lyrics will appear here...">{{ lyrics }}</textarea>
+        <!-- TODO: replace the 80 with a calculated value -->
+        <br>
+        <input type="submit" value="Save Lyrics" class="button save-button">
+    </form>
+</body>
+</html>

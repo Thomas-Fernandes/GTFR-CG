@@ -109,7 +109,7 @@ button {
 	display: inline-block;
 	cursor: pointer;
 
-	color: #ffffff;
+	color: white;
 	background-color: #007bff;
 	border: 2px solid #00000010;
     box-shadow: 0 0 10px #0000007f;

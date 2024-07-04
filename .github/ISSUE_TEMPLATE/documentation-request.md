@@ -1,5 +1,5 @@
 ---
-name: [Help] Documentation request
+name: HELP - Documentation request
 about: Request for a feature or chunk of code to be commented
 title: "[DOCS \U0001F4D1] "
 labels: docs
