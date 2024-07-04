@@ -11,7 +11,7 @@ from uuid import uuid4
 from dotenv import load_dotenv
 
 # Local modules
-from src.functions import generateCoverArt, generateThumbnail, get_lyrics
+from src.functions import generateCoverArt, generateThumbnail, getLyrics
 from src.logger import Logger
 from src.soft_utils import getDefaultExpirationTimestamp
 from src.statistics import Statistics, updateStats
@@ -107,16 +107,17 @@ def processed_images() -> str | JsonResponse:
 
 @app.route('/lyrics', methods=['GET', 'POST'])
 def lyrics():
-    if (request.method == 'POST'):
-        artist = request.form.get('artist')
-        song = request.form.get('song')
-        lyrics_text = request.form.get('lyrics')
+    if (request.method != 'POST'):
+        return render_template('lyrics.html', lyrics="")
+        
+    artist: str = request.form.get('artist')
+    song:   str = request.form.get('song')
+    lyrics_text: str = request.form.get('lyrics')
 
-        if (artist and song):
-            lyrics_text = get_lyrics(song, artist)
+    if artist is not None and song is not None:
+        lyrics_text = getLyrics(song, artist)
 
-        return render_template('lyrics.html', lyrics=lyrics_text)
-    return render_template('lyrics.html', lyrics="")
+    return render_template('lyrics.html', lyrics=lyrics_text)
 
 @app.route('/', methods=['GET'])
 def home() -> str:

@@ -1,5 +1,11 @@
+# Installed libraries
+from dotenv import load_dotenv
+
+# Python standard libraries
 from enum import Enum
 from os import getenv, name as osName
+
+load_dotenv()
 
 ############# ENUMS #############
 
@@ -47,4 +53,4 @@ ERR_NO_FILE = 'Invalid file: No file selected.'
 ERR_INVALID_SESSION = 'Session Expired or Invalid'
 
 # Genius API
-GENIUS_API_TOKEN = getenv('GENIUS_API_KEY')
+GENIUS_API_TOKEN = getenv('GENIUS_API_TOKEN')

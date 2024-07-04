@@ -1,17 +1,18 @@
 # Installed libraries
 from flask import session
-from PIL import Image, ImageFilter, ImageDraw
 from lyricsgenius import Genius
+from PIL import Image, ImageFilter, ImageDraw
 
 # Python standard libraries
 from os import path
-import re
+from re import sub, split, match
 
 # Local modules
 from src.logger import Logger
 import src.constants as constants
 
 log = Logger()
+
 genius = Genius(constants.GENIUS_API_TOKEN)
 
 def generateCoverArt(input_path: str, output_path: str) -> None:
@@ -79,30 +80,31 @@ def generateThumbnail(bg_path: str, output_folder: str) -> None:
         output_path = path.join(output_folder, f'thumbnail_{position}.png')
         final_image.save(output_path)
 
-def get_lyrics(song_title, artist_name):
+def getLyrics(song_title, artist_name):
     song = genius.search_song(song_title, artist_name)
-    if song:
-        lyrics = song.lyrics
+    if song is None:
+        return 'Lyrics not found.'
 
-        # Removing charabia at the beginning and end of the lyrics
-        lyrics = re.sub(r'^.*Lyrics\[', '[', lyrics).strip()
-        lyrics = re.sub(r'\d+Embed$', '', lyrics).strip()
+    lyrics = song.lyrics
 
-        # Ensure double newline before song parts
-        def add_newline_before_parts(lyrics):
-            parts = re.split(r'(\[.*?\])', lyrics)
-            new_lyrics = []
-            for i, part in enumerate(parts):
-                if re.match(r'\[.*?\]', part):
-                    if i == 0 or parts[i-1].endswith('\n\n') or parts[i-1].strip() == "":
-                        new_lyrics.append(part)
-                    else:
-                        new_lyrics.append('\n\n' + part)
-                else:
+    # Removing charabia at the beginning and end of the lyrics
+    lyrics = sub(r'^.*Lyrics\[', '[', lyrics).strip()
+    lyrics = sub(r'\d+Embed$', '', lyrics).strip()
+
+    # Ensure double newline before song parts
+    def add_newline_before_parts(lyrics):
+        parts = split(r'(\[.*?\])', lyrics)
+        new_lyrics = []
+        for (i, part) in enumerate(parts):
+            if (match(r'\[.*?\]', part)):
+                if (i == 0 or parts[i-1].endswith('\n\n') or parts[i-1].strip() == ""):
                     new_lyrics.append(part)
-            return ''.join(new_lyrics)
+                else:
+                    new_lyrics.append('\n\n' + part)
+            else:
+                new_lyrics.append(part)
+        return ''.join(new_lyrics)
 
-        lyrics = add_newline_before_parts(lyrics)
+    lyrics = add_newline_before_parts(lyrics)
 
-        return lyrics
-    return 'Lyrics not found.'
+    return lyrics
