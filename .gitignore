@@ -1,6 +1,7 @@
-# Hidden files and directories
+# Hidden files and directories, residual editfiles
 .*
 .*/*
+*~
 
 # environment file
 .env

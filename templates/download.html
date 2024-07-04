@@ -6,7 +6,7 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/download.css') }}" />
 </head>
 <body>
-    <span id="top-bot-spacer"></span>
+    <span class="top-bot-spacer"></span>
     <div id="navbar">
         <button onclick="window.location.href='{{ url_for('uploadFile') }}'"><span class="left"> Home</span></button>
         <button onclick="window.location.href='{{ url_for('uploadFile') }}'"><span class="right">Lyrics </span></button> <!-- TODO url to lyrics, not upload_file -->
@@ -65,7 +65,7 @@
             </form>
         </div>
     </div>
-    <span id="top-bot-spacer"></span>
+    <span class="top-bot-spacer"></span>
 
 </body>
 </html>
