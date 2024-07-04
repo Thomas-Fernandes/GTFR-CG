@@ -26,8 +26,10 @@ app.config["SESSION_TYPE"] = "filesystem"
 app.config["SESSION_FILE_DIR"] = 'flask_session' + constants.SLASH
 Session(app)
 
-@app.route('/upload_image', methods=['POST'])
-def uploadFile() -> JsonResponse:
+@app.route('/uploadFile', methods=['GET', 'POST'])
+def uploadFile() -> str | JsonResponse:
+    if (request.method == 'GET'):
+        return render_template('upload.html')
     if ('user_folder' not in session):
         session['user_folder'] = str(uuid4())
     user_folder = str(session['user_folder'])
@@ -104,9 +106,13 @@ def processed_images() -> str | JsonResponse:
 
     return render_template('download.html', user_folder=user_folder, bg=constants.PROCESSED_ARTWORK_FILENAME)
 
-@app.route('/', methods=['GET'])
+@app.errorhandler(404)
+def page_not_found(e: Exception) -> str:
+    return render_template('home.html')
+
+@app.route('/')
 def home() -> str:
-    return render_template('upload.html')
+    return render_template('home.html')
 
 def main(host: str = constants.HOST_HOME, port: int = constants.DEFAULT_PORT) -> None:
     host_display_name = "localhost" if host == constants.HOST_HOME else host

@@ -78,7 +78,7 @@ $(document).ready(function() {
         }
 
         $.ajax({
-            url: '/upload_image',
+            url: '/uploadFile',
             type: 'POST',
             data: new FormData($('#fileUpload')[0]),
             processData: false,

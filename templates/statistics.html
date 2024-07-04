@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Download Files</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/download.css') }}" />
+</head>
+<body>
+    <span id="top-bot-spacer"></span>
+    <h1>Home</h1>
+    <div id="navbar">
+        <button onclick="window.location.href='{{ url_for('uploadFile') }}'"><span class="left"> Yipee</span></button>
+        <button onclick="window.location.href='{{ url_for('uploadFile') }}'"><span class="right">Yo </span></button>
+    </div>
+    <span id="top-bot-spacer"></span>
+
+</body>
+</html>
