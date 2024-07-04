@@ -5,7 +5,7 @@ from src.logger import Logger
 
 import src.constants as constants
 
-JsonDict: TypeAlias = dict[str, str | int]
+JsonDict: TypeAlias = dict[str, str | int | None]
 
 log = Logger()
 
@@ -74,9 +74,9 @@ def updateStats(path: str = constants.STATS_FILE_PATH) -> None:
     log.info(f"Stats updated: {new_stats}")
 
 def initStats(from_error: bool = False) -> JsonDict:
-    stats = { 'totalGenerations': 0 }
+    stats: JsonDict = { 'totalGenerations': 0 }
     if (from_error):
-        stats['dateFirstGeneration'] = 'unknown'
+        stats['dateFirstGeneration'] = "unknown"
 
     with open(constants.STATS_FILE_PATH, 'w') as file:
         file.write(dumps(stats))
@@ -85,7 +85,7 @@ def initStats(from_error: bool = False) -> JsonDict:
     return loads(str(stats).replace("'", '"'))
 
 def onLaunch() -> None:
-    json_stats = getJsonStatsFromFile(constants.STATS_FILE_PATH)
+    json_stats: JsonDict = getJsonStatsFromFile(constants.STATS_FILE_PATH)
 
     stats = Stats(
         date_first_generation=json_stats.get('dateFirstGeneration'),
