@@ -97,8 +97,9 @@ def processed_images() -> str | JsonResponse:
     user_folder = str(session['user_folder'])
     user_processed_path = path.join(constants.PROCESSED_DIR, user_folder)
     generated_artwork_path = str(session['generated_artwork_path'])
+    include_center_artwork = session.get('include_center_artwork', True)
     output_bg = path.join(user_processed_path, constants.PROCESSED_ARTWORK_FILENAME)
-    generateCoverArt(generated_artwork_path, output_bg)
+    generateCoverArt(generated_artwork_path, output_bg, include_center_artwork)
     generateThumbnail(output_bg, user_processed_path)
     updateStats()
 
