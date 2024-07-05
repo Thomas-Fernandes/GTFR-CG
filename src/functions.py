@@ -82,7 +82,7 @@ def generateThumbnail(bg_path: str, output_folder: str) -> None:
 
 def getLyrics(song_title: str, artist_name: str) -> str:
     with log.redirect_stdout_stderr() as (stdout, stderr):
-        song = genius.search_song(song_title, artist_name)
+        song: Genius.Song | None = genius.search_song(song_title, artist_name)
 
     if (song is None):
         return 'Lyrics not found.'

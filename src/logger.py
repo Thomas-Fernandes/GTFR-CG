@@ -1,8 +1,9 @@
 from contextlib import contextmanager
 from enum import Enum
 from io import StringIO
-import sys # For redirect_stdout_stderr
+import sys # On doit importer tout le module sinon ça ne marche pas
 from typing import Iterator
+from re import compile
 
 from src.soft_utils import getNowEpoch
 
@@ -61,12 +62,32 @@ class Logger:
             new_stderr.seek(0)
             stdout_content = new_stdout.read().strip()
             stderr_content = new_stderr.read().strip()
-            if (stdout_content is not None):
+
+            def process_message(line):
+                patterns = [
+                    (compile(r'Searching for "(.*)" by (.*)...'),                         lambda m: f'Lyrics for "{m.group(1)}" by {m.group(2)} are being searched...'),
+                    (compile(r'Searching for "(.*)"...'),                                 lambda m: f'Lyrics for "{m.group(1)}" are being searched...'),
+                    (compile(r"No results found for: '(.*)'"),                            lambda m: f'No results found for "{m.group(1)}".'),
+                    (compile(r'Specified song does not contain lyrics. Rejecting.'),      lambda m: 'The specified song does not contain lyrics and was rejected.'),
+                    (compile(r'Specified song does not have a valid lyrics. Rejecting.'), lambda m: 'The specified song does not have valid lyrics and was rejected.'),
+                    (compile(r'Done.'),                                                   lambda m: 'Lyrics were successfully found and populated.')
+                ]
+
+                for pattern, action in patterns:
+                    match = pattern.match(line)
+                    if (match):
+                        return action(match)
+                return line
+
+            if (stdout_content):
                 for line in stdout_content.splitlines():
-                    self.info(line)
-            if (stderr_content is not None):
+                    processed_line = process_message(line)
+                    self.info(processed_line)
+
+            if (stderr_content):
                 for line in stderr_content.splitlines():
-                    self.error(line)
+                    processed_line = process_message(line)
+                    self.error(processed_line)
 
     def send(self, message: str, level: LoggingLevel | None = None) -> None:
         message_to_log = self.getFormattedMessage(message, level)
