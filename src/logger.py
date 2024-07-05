@@ -65,7 +65,7 @@ class Logger:
             stderr_content = new_stderr.read()
 
             def process_message(line):
-                for pattern, action in constants.PATTERNS:
+                for (pattern, action) in constants.PATTERNS:
                     match = pattern.match(line)
                     if (match):
                         return action(match)
@@ -82,7 +82,6 @@ class Logger:
                 for line in stderr_content.splitlines():
                     processed_line = process_message(line)
                     self.error(processed_line)
-
 
     def send(self, message: str, level: LoggingLevel | None = None) -> None:
         message_to_log = self.getFormattedMessage(message, level)
