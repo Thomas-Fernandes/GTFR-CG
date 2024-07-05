@@ -6,6 +6,7 @@ from PIL import Image, ImageFilter, ImageDraw
 # Python standard libraries
 from os import path
 from re import sub, split, match
+from typing import Optional
 
 # Local modules
 from src.logger import Logger
@@ -81,7 +82,10 @@ def generateThumbnail(bg_path: str, output_folder: str) -> None:
         final_image.save(output_path)
 
 def getLyrics(song_title: str, artist_name: str) -> str:
-    song = genius.search_song(song_title, artist_name)
+    song: Optional[Genius.Song] = None
+    with log.redirect_stdout_stderr() as (stdout, stderr):
+        song = genius.search_song(song_title, artist_name)
+
     if (song is None):
         return 'Lyrics not found.'
 
