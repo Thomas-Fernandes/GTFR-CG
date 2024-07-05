@@ -167,3 +167,12 @@ select {
     background-color: #0056b3;
     transition: 0.3s;
 }
+
+.label-container {
+    display: flex;
+    align-items: center;
+}
+
+.label-container input[type="checkbox"] {
+    margin-right: 10px;
+}
