@@ -32,7 +32,7 @@ def generateCoverArt(input_path: str, output_path: str, include_center_artwork: 
     cropBox = (0, top, 1920, bottom)
     cropped_image = resized_image.crop(cropBox)
 
-    if (include_center_artwork is False):
+    if (include_center_artwork == False):
         final_blurred_image = cropped_image
     else:
         # flou gaussien sur l'image recadrée avec masque radial
