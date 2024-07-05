@@ -40,12 +40,15 @@ def uploadFile() -> JsonResponse:
 
     if (file.filename is None):
         return createJsonResponse(constants.HttpStatus.BAD_REQUEST.value, constants.ERR_NO_FILE)
-    user_processed_path: str = path.join(constants.PROCESSED_DIR, user_folder)
+
+    include_center_artwork = 'include_center_artwork' in request.form and request.form['include_center_artwork'] == 'on'
+    user_processed_path = path.join(constants.PROCESSED_DIR, user_folder)
     makedirs(user_processed_path, exist_ok=True)
 
-    filepath: str = path.join(user_processed_path, "uploaded_image.png")
+    filepath = path.join(user_processed_path, "uploaded_image.png")
     file.save(filepath)
     session['generated_artwork_path'] = filepath
+    session['include_center_artwork'] = include_center_artwork
     return createJsonResponse(constants.HttpStatus.OK.value)
 
 @app.route('/downloadArtwork/<filename>', methods=['GET'])
