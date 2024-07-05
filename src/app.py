@@ -103,7 +103,7 @@ def processed_images() -> str | JsonResponse:
     output_bg = path.join(user_processed_path, constants.PROCESSED_ARTWORK_FILENAME)
     generateCoverArt(generated_artwork_path, output_bg)
     generateThumbnail(output_bg, user_processed_path)
-    updateStats(to_increment='artworkGeneration')
+    updateStats(to_increment='artworkGenerations')
 
     return render_template('download.html', user_folder=user_folder, bg=constants.PROCESSED_ARTWORK_FILENAME)
 

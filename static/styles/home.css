@@ -25,3 +25,21 @@ button:hover span.right:before {
     border-radius: 1rem;
     background-color: #ffffff;
 }
+
+.stat-title {
+    text-align: center;
+}
+
+.stat-text {
+    margin: 0 0 2% 0%;
+
+    flex-direction: row;
+
+    justify-content: center;
+
+    font-style: italic;
+}
+.stat-text span {
+    font-weight: bold;
+    font-style: normal;
+}
