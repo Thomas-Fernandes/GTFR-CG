@@ -1,8 +1,7 @@
 from contextlib import contextmanager
 from enum import Enum
 from io import StringIO
-from typing import Iterator
-from re import compile
+from typing import Iterator, Optional
 import sys # On doit importer tout le module sinon ça ne marche pas
 
 from src.soft_utils import getNowEpoch
@@ -64,10 +63,10 @@ class Logger:
             stdout_content = new_stdout.read()
             stderr_content = new_stderr.read()
 
-            def process_message(line):
+            def process_message(line: str) -> str:
                 for (pattern, action) in constants.PATTERNS:
-                    match = pattern.match(line)
-                    if (match):
+                    match: Optional[str] = pattern.match(line)
+                    if (match is not None):
                         return action(match)
                 return line
 
@@ -83,7 +82,7 @@ class Logger:
                     processed_line = process_message(line)
                     self.error(processed_line)
 
-    def send(self, message: str, level: LoggingLevel | None = None) -> None:
+    def send(self, message: str, level: Optional[LoggingLevel] = None) -> None:
         message_to_log = self.getFormattedMessage(message, level)
         if (self.__log_file):
             with open(self.__log_file, 'a') as file:
@@ -91,6 +90,6 @@ class Logger:
         else:
             print(message_to_log)
 
-    def __init__(self, log_file: str | None = None) -> None:
+    def __init__(self, log_file: Optional[str] = None) -> None:
         # Logger objects will print to console if log_file is None
         self.__log_file = log_file
