@@ -1,13 +1,27 @@
 #navbar {
+    width: 67%;
+}
+
+button { /* FIXME arrows on the sides of the buttons aren't well calibrated */
+	width: calc(50% - 32px);
+    padding: 6% 0;
+}
+button span.right:before {
+	right: 0;
+
+	content: '\00bb'; /* double right arrow character */
+}
+button:hover span.right:before {
+	right: 5%;
+}
+
+.stats-board {
     width: 50%;
-    margin: 0 auto;
 
-    flex-wrap: wrap;
-    gap: 10px;
-}
+    margin: 2% auto 0 auto;
+    padding: 1em;
 
-button {
-	width: calc(50% - 20px);
-    padding: 20% 0;
+    border: 2px solid #ddd;
+    border-radius: 1rem;
+    background-color: #ffffff;
 }
-/* FIXME arrows on the sides of the buttons aren't well calibrated */

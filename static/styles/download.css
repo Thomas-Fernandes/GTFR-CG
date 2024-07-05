@@ -141,12 +141,12 @@ button span:before {
 	transition: 0.3s;
 }
 button span.left:before {
-	left: -20px;
+	left: -32%;
 
 	content: '\00ab'; /* double left arrow character */
 }
 button span.right:before {
-	right: -20px;
+	right: -32%;
 
 	content: '\00bb'; /* double right arrow character */
 }
@@ -162,8 +162,8 @@ button:hover span:before {
 	opacity: 1;
 }
 button:hover span.left:before {
-	left: 0;
+	left: -2%;
 }
 button:hover span.right:before {
-	right: 0;
+	right: -2%;
 }
