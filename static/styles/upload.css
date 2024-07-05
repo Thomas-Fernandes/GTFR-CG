@@ -131,11 +131,13 @@ select {
     margin: 10px;
 }
 .result-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 20px;
+    width: 50%;
+    margin: auto;
 }
+
 .result-container:not(:empty) {
     margin-bottom: 32px;
 }
@@ -146,12 +148,26 @@ select {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 10px;
+    margin: 1px;
+    padding: 10px;
+    border-radius: 4px;
+    min-height: 300px;
+    justify-content: space-between;
 }
 .result-item img {
+    max-width: 200px;
+    max-height: 200px;
     border: 1px solid #ddd;
     border-radius: 4px;
     padding: 5px;
+}
+.result-item-name {
+    margin-top: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    padding: 0 10px;
+    flex-grow: 1;
 }
 .result-item button {
     display: block;
@@ -175,4 +191,8 @@ select {
 
 .label-container input[type="checkbox"] {
     margin-right: 10px;
+}
+
+.bold-italic {
+    font-weight: bold;
 }

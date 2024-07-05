@@ -34,18 +34,18 @@ $(document).ready(function() {
                 term: query,
                 entity: 'album', // album by default, but can be 'song', 'movie', 'tv-show'...
                 country: country,
-                limit: 10
+                limit: 6
             },
             dataType: 'jsonp',
             success: function(data) {
                 const resultsDiv = $('#results');
                 resultsDiv.empty();
                 if (data.results.length > 0) {
-                    // get first 5 results out of the 10 pulled
-                    data.results.slice(0, 5).forEach(function(result) {
+                    data.results.forEach(function(result) {
                         // itunes max image size is 3000x3000
                         const highResImageUrl = result.artworkUrl100.replace('100x100', '3000x3000');
                         const img = $('<img>').attr('src', highResImageUrl).attr('alt', result.collectionName || result.trackName).addClass('result-image');
+                        const imgName = $('<p>').addClass('bold-italic').text(`${result.artistName} - ${result.collectionName.replace(' - Single', '')}`);
                         const btn = $('<button>').text('Use this image').on('click', function() {
                             $.post('/use_itunes_image', { url: highResImageUrl }, function(response) {
                                 if (response.status === ResponseStatus.SUCCESS) {
@@ -56,6 +56,7 @@ $(document).ready(function() {
                             });
                         });
                         const resultItem = $('<div>').addClass('result-item').append(img).append(btn);
+                        resultItem.append(img).append(imgName).append(btn);
                         resultsDiv.append(resultItem);
                     });
                 } else {
