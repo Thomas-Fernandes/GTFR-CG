@@ -2,6 +2,7 @@ from contextlib import contextmanager
 from enum import Enum
 from io import StringIO
 from typing import Iterator, Optional
+from re import Match
 import sys # On doit importer tout le module sinon ça ne marche pas
 
 from src.soft_utils import getNowEpoch
@@ -65,7 +66,7 @@ class Logger:
 
             def process_message(line: str) -> str:
                 for (pattern, action) in constants.PATTERNS:
-                    match: Optional[str] = pattern.match(line)
+                    match: Optional[Match[str]] = pattern.match(line)
                     if (match is not None):
                         return action(match)
                 return line
