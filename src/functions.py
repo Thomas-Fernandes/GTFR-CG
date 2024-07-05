@@ -15,7 +15,7 @@ log = Logger()
 
 genius = Genius(constants.GENIUS_API_TOKEN)
 
-def generateCoverArt(input_path: str, output_path: str, include_center_artwork: bool) -> None:
+def generateCoverArt(input_path: str, output_path: str, include_center_artwork: bool = True) -> None:
     log.info(f"Generating cover art... (session {input_path.split(constants.SLASH)[-2].split('-')[0]}-...)")
 
     image: Image.Image = Image.open(input_path)
@@ -32,7 +32,9 @@ def generateCoverArt(input_path: str, output_path: str, include_center_artwork: 
     cropBox = (0, top, 1920, bottom)
     cropped_image = resized_image.crop(cropBox)
 
-    if (include_center_artwork):
+    if (include_center_artwork is False):
+        final_blurred_image = cropped_image
+    else:
         # flou gaussien sur l'image recadrée avec masque radial
         blurred_image: Image.Image = cropped_image.filter(ImageFilter.GaussianBlur(radius=25))
 
@@ -56,8 +58,6 @@ def generateCoverArt(input_path: str, output_path: str, include_center_artwork: 
         center_image: Image.Image = image.resize((800, 800), Image.Resampling.LANCZOS)
         (top_left_x, top_left_y) = (center_x - 400, center_y - 400)
         final_blurred_image.paste(center_image, (top_left_x, top_left_y))
-    else:
-        final_blurred_image = cropped_image
 
     final_blurred_image.save(output_path)
 

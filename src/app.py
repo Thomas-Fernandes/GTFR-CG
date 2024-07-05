@@ -41,7 +41,8 @@ def uploadFile() -> JsonResponse:
     if (file.filename is None):
         return createJsonResponse(constants.HttpStatus.BAD_REQUEST.value, constants.ERR_NO_FILE)
 
-    include_center_artwork = 'include_center_artwork' in request.form and request.form['include_center_artwork'] == 'on'
+    include_center_artwork = 'include_center_artwork' in request.form and\
+                             request.form['include_center_artwork'] == 'on'
     user_processed_path = path.join(constants.PROCESSED_DIR, user_folder)
     makedirs(user_processed_path, exist_ok=True)
 
