@@ -1,9 +1,9 @@
 from contextlib import contextmanager
 from enum import Enum
 from io import StringIO
-import sys # On doit importer tout le module sinon ça ne marche pas
 from typing import Iterator
 from re import compile
+import sys # On doit importer tout le module sinon ça ne marche pas
 
 from src.soft_utils import getNowEpoch
 
