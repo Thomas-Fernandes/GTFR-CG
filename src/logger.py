@@ -1,4 +1,8 @@
+from contextlib import contextmanager
 from enum import Enum
+from io import StringIO
+import sys # For redirect_stdout_stderr
+from typing import Iterator
 
 from src.soft_utils import getNowEpoch
 
@@ -43,6 +47,26 @@ class Logger:
         self.send(message, LoggingLevel.INFO)
     def debug(self, message: str) -> None:
         self.send(message, LoggingLevel.DEBUG)
+
+    @contextmanager
+    def redirect_stdout_stderr(self) -> Iterator[tuple[StringIO, StringIO]]:
+        new_stdout, new_stderr = StringIO(), StringIO()
+        old_stdout, old_stderr = sys.stdout, sys.stderr
+        sys.stdout, sys.stderr = new_stdout, new_stderr
+        try:
+            yield new_stdout, new_stderr
+        finally:
+            sys.stdout, sys.stderr = old_stdout, old_stderr
+            new_stdout.seek(0)
+            new_stderr.seek(0)
+            stdout_content = new_stdout.read().strip()
+            stderr_content = new_stderr.read().strip()
+            if (stdout_content is not None):
+                for line in stdout_content.splitlines():
+                    self.info(line)
+            if (stderr_content is not None):
+                for line in stderr_content.splitlines():
+                    self.error(line)
 
     def send(self, message: str, level: LoggingLevel | None = None) -> None:
         message_to_log = self.getFormattedMessage(message, level)
