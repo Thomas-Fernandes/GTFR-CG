@@ -6,6 +6,7 @@ from re import compile
 import sys # On doit importer tout le module sinon ça ne marche pas
 
 from src.soft_utils import getNowEpoch
+import src.constants as constants
 
 class LoggingLevel(Enum):
     DEBUG    = 0x100
@@ -60,34 +61,28 @@ class Logger:
             sys.stdout, sys.stderr = old_stdout, old_stderr
             new_stdout.seek(0)
             new_stderr.seek(0)
-            stdout_content = new_stdout.read().strip()
-            stderr_content = new_stderr.read().strip()
+            stdout_content = new_stdout.read()
+            stderr_content = new_stderr.read()
 
             def process_message(line):
-                patterns = [
-                    (compile(r'Searching for "(.*)" by (.*)...'),                         lambda m: f'Lyrics for "{m.group(1)}" by {m.group(2)} are being searched...'),
-                    (compile(r'Searching for "(.*)"...'),                                 lambda m: f'Lyrics for "{m.group(1)}" are being searched...'),
-                    (compile(r"No results found for: '(.*)'"),                            lambda m: f'No results found for "{m.group(1)}".'),
-                    (compile(r'Specified song does not contain lyrics. Rejecting.'),      lambda m: 'The specified song does not contain lyrics and was rejected.'),
-                    (compile(r'Specified song does not have a valid lyrics. Rejecting.'), lambda m: 'The specified song does not have valid lyrics and was rejected.'),
-                    (compile(r'Done.'),                                                   lambda m: 'Lyrics were successfully found and populated.')
-                ]
-
-                for pattern, action in patterns:
+                for pattern, action in constants.PATTERNS:
                     match = pattern.match(line)
                     if (match):
                         return action(match)
                 return line
 
-            if (stdout_content):
+            if (stdout_content is not None):
+                stdout_content = stdout_content.strip()
                 for line in stdout_content.splitlines():
                     processed_line = process_message(line)
                     self.info(processed_line)
 
-            if (stderr_content):
+            if (stderr_content is not None):
+                stderr_content = stderr_content.strip()
                 for line in stderr_content.splitlines():
                     processed_line = process_message(line)
                     self.error(processed_line)
+
 
     def send(self, message: str, level: LoggingLevel | None = None) -> None:
         message_to_log = self.getFormattedMessage(message, level)
