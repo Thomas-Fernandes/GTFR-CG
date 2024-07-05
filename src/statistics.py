@@ -49,7 +49,7 @@ from json import loads, dumps, JSONDecodeError
 
 from src.soft_utils import getNowEpoch
 
-def getJsonStatsFromFile(path: str, init: bool = False) -> JsonDict:
+def getJsonStatsFromFile(path: str = constants.STATS_FILE_PATH, init: bool = False) -> JsonDict:
     try:
         with open(path, 'r') as file:
             return loads(file.read()) # <- read stats from stats file

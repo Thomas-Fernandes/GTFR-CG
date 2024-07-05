@@ -12,8 +12,8 @@ from uuid import uuid4
 # Local modules
 from src.functions import generateCoverArt, generateThumbnail, getLyrics
 from src.logger import Logger
-from src.soft_utils import getDefaultExpirationTimestamp
-from src.statistics import onLaunch as printInitStatistics, updateStats
+from src.soft_utils import getDefaultExpirationTimestamp, getPluralMarks
+from src.statistics import onLaunch as printInitStatistics, JsonDict, getJsonStatsFromFile, updateStats
 from src.web_utils import checkFilenameValid, createJsonResponse, JsonResponse
 
 import src.constants as constants
@@ -127,7 +127,9 @@ def statistics() -> str:
 
 @app.route('/home')
 def home() -> str:
-    return render_template('home.html')
+    stats: JsonDict = getJsonStatsFromFile()
+    plurals: dict[str, str] = getPluralMarks(stats)
+    return render_template('home.html', stats=stats, pluralMarks=plurals)
 
 @app.errorhandler(404)
 def page_not_found(_e: Exception) -> str:

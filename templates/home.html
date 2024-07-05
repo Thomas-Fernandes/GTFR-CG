@@ -16,21 +16,22 @@
     </div>
     <div class="stats-board">
         <h3 class="stat-title">Date Of First Operation</h3>
-        <p class="stat-text">oui <span>val</span></p>
+        <p class="stat-text">The first recorded operation was done at timestamp <span>&nbsp;{{ stats.dateFirstOperation }}</span>.</p>
+
         <hr />
 
         <h3 class="stat-title">Date Of Last Operation</h3>
-        <p class="stat-text">oui</p>
+        <p class="stat-text">The last recorded operation was done at timestamp <span>&nbsp;{{ stats.dateLastOperation }}</span>.</p>
 
         <hr />
 
         <h3 class="stat-title">Artwork Generation</h3>
-        <p class="stat-text">oui</p>
+        <p class="stat-text">You generated artworks <span>&nbsp;{{ stats.artworkGenerations }}&nbsp;</span> time{{ pluralMarks.artworkGenerations }}.</p>
 
         <hr />
 
         <h3 class="stat-title">Lyrics Fetches</h3>
-        <p class="stat-text">oui</p>
+        <p class="stat-text">You fetched lyrics from Genius <span>&nbsp;{{ stats.lyricsFetches }}&nbsp;</span> time{{ pluralMarks.lyricsFetches }}.</p>
     </div>
     <span class="top-bot-spacer"></span>
 
