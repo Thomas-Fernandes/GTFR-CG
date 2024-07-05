@@ -16,7 +16,7 @@ log = Logger()
 
 genius = Genius(constants.GENIUS_API_TOKEN)
 
-def generateCoverArt(input_path: str, output_path: str) -> None:
+def generateCoverArt(input_path: str, output_path: str, include_center_artwork: bool = True) -> None:
     log.info(f"Generating cover art... (session {input_path.split(constants.SLASH)[-2].split('-')[0]}-...)")
 
     image: Image.Image = Image.open(input_path)
@@ -33,29 +33,32 @@ def generateCoverArt(input_path: str, output_path: str) -> None:
     cropBox = (0, top, 1920, bottom)
     cropped_image = resized_image.crop(cropBox)
 
-    # flou gaussien sur l'image recadrée avec masque radial
-    blurred_image: Image.Image = cropped_image.filter(ImageFilter.GaussianBlur(radius=25))
+    if (include_center_artwork == False):
+        final_blurred_image = cropped_image
+    else:
+        # flou gaussien sur l'image recadrée avec masque radial
+        blurred_image: Image.Image = cropped_image.filter(ImageFilter.GaussianBlur(radius=25))
 
-    mask = Image.new("L", cropped_image.size, "black")
-    draw: ImageDraw.ImageDraw = ImageDraw.Draw(mask)
-    max_dim = min(cropped_image.size) / 2
-    center_x, center_y = cropped_image.size[0] // 2, cropped_image.size[1] // 2
+        mask = Image.new("L", cropped_image.size, "black")
+        draw: ImageDraw.ImageDraw = ImageDraw.Draw(mask)
+        max_dim = min(cropped_image.size) / 2
+        center_x, center_y = cropped_image.size[0] // 2, cropped_image.size[1] // 2
 
-    for i in range(int(max_dim)):
-        opacity = 255 - int((255 * i) / max_dim)
-        coords = [
-            center_x - i,
-            center_y - i,
-            center_x + i,
-            center_y + i
-        ]
-        draw.ellipse(coords, fill=opacity)
+        for i in range(int(max_dim)):
+            opacity = 255 - int((255 * i) / max_dim)
+            coords = [
+                center_x - i,
+                center_y - i,
+                center_x + i,
+                center_y + i
+            ]
+            draw.ellipse(coords, fill=opacity)
 
-    final_blurred_image = Image.composite(cropped_image, blurred_image, mask)
+        final_blurred_image = Image.composite(cropped_image, blurred_image, mask)
 
-    center_image: Image.Image = image.resize((800, 800), Image.Resampling.LANCZOS)
-    (top_left_x, top_left_y) = (center_x - 400, center_y - 400)
-    final_blurred_image.paste(center_image, (top_left_x, top_left_y))
+        center_image: Image.Image = image.resize((800, 800), Image.Resampling.LANCZOS)
+        (top_left_x, top_left_y) = (center_x - 400, center_y - 400)
+        final_blurred_image.paste(center_image, (top_left_x, top_left_y))
 
     final_blurred_image.save(output_path)
 
