@@ -1,94 +1,58 @@
+form {
+    input {
+        padding: 1.5rem;
+        margin: 1.5rem 0;
+        border: 2px solid #ddd;
 
-input {
-    padding: 1.5rem;
-    margin: 1.5rem 0;
-    border: 2px solid #ddd;
-}
-.file {
-    width: 75%;
-}
-.file-name {
-    margin-left: 100px; /* Adjust space between the button and file name */
-    color: #333;
-}
-
-.result-image {
-    max-width: 200px;
-    max-height: 200px;
-    margin: 10px;
-}
-.result-container {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 20px;
-    width: 50%;
-    margin: auto;
-}
-
-.result-container:not(:empty) {
-    margin-bottom: 32px;
-}
-.result-container:empty {
-    display: none;
-}
-.result-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 1px;
-    padding: 10px;
-    border-radius: 4px;
-    min-height: 300px;
-    justify-content: space-between;
-
-    img {
-        max-width: 200px;
-        max-height: 200px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        padding: 5px;
-    }
-
-    button {
-        display: block;
-        margin-top: 10px;
-        padding: 10px 20px;
-        background-color: #007BFF;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: initial;
-    }
-    button:hover {
-        background-color: #0056b3;
-        transition: 0.3s;
+        &.file {
+            width: 75%;
+        }
     }
 }
 
-.result-item-name {
-    margin-top: 10px;
-    font-size: 16px;
-    font-weight: bold;
-    text-align: center;
-    padding: 0 10px;
-    flex-grow: 1;
-}
+#results.result-container {
+    &:empty {
+        display: none;
+    }
+    &:not(:empty) {
+        width: 60%;
+        margin: auto;
 
-.label-container {
-    display: flex;
-    align-items: center;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 32px 5%;
+        margin-bottom: 32px;
+    }
 
-    input[type="checkbox"] {
-        margin-right: 10px;
+    .result-item {
+        align-items: center;
+        min-height: 300px;
+        justify-content: space-between;
+
+        .result-image {
+            max-width: 200px;
+            max-height: 200px;
+
+            border: 1px solid #ddd;
+            border-radius: 4px;
+
+            padding: 5px;
+        }
+
+        button {
+            margin-top: 10px;
+            font-size: initial;
+        }
     }
 }
 
-.bold-italic {
-    font-weight: bold;
-}
 .checkbox {
     flex-direction: row;
+
+    &:hover {
+        cursor: pointer;
+        font-weight: bold;
+    }
 
     input[type="checkbox"] {
         margin: 0 10px 0 0;
@@ -103,13 +67,7 @@ input {
     }
 
     p.checkbox-label {
-        font-style: italic;
         font-size: 14px;
         margin: 0;
-    }
-
-    &:hover {
-        cursor: pointer;
-        font-weight: bold;
     }
 }
