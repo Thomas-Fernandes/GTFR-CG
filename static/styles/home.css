@@ -1,0 +1,48 @@
+#navbar {
+    width: 67%;
+}
+
+button {
+	width: calc(50% - 32px);
+    padding: 6% 0;
+}
+button span {
+    font-size: 24px;
+}
+button span.right:before {
+	right: 0;
+
+	content: '\00bb'; /* double right arrow character */
+}
+button:hover span.right:before {
+	right: 5%;
+}
+
+.stats-board {
+    width: 50%;
+
+    margin: 2% auto 0 auto;
+    padding: 0.75em;
+
+    border: 2px solid #ddd;
+    border-radius: 1rem;
+    background-color: #ffffff;
+
+    .stats-entry {
+        flex-direction: row;
+
+        .stat-title {
+            width: 60%;
+
+            text-align: center;
+            font-size: xx-large;
+        }
+
+        .stat-text {
+            margin: auto;
+
+            font-size: 1em;
+            font-style: italic;
+        }
+    }
+}

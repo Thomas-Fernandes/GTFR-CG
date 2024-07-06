@@ -3,7 +3,7 @@ const ResponseStatus = Object.freeze({
     ERROR: 'error'
 });
 const AcceptedFileExtensions = Object.freeze(
-    ['.jpg', '.jpeg', '.png']
+    ['jpg', 'jpeg', 'png']
 );
 
 const sendToast = (message, type = undefined) => {
@@ -71,15 +71,15 @@ $(document).ready(function() {
     $('#fileUpload').on('submit', function(event) {
         event.preventDefault();
 
-        if ($('#file')[0].files.length === 0 // no file selected
-            || !AcceptedFileExtensions.includes($('#file')[0].files[0].name.slice(-4).toLowerCase()) // file extension not accepted
-        ) {
+        const fileHasAcceptedExtension = $('#file')[0].files.length !== 0 &&
+            AcceptedFileExtensions.includes($('#file')[0].files[0].name.split(".").slice(-1)[0].toLowerCase());
+        if (!fileHasAcceptedExtension) {
             alert('Please select a valid image file');
             return;
         }
 
         $.ajax({
-            url: '/upload_image',
+            url: '/artwork-generation',
             type: 'POST',
             data: new FormData($('#fileUpload')[0]),
             processData: false,

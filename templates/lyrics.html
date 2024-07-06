@@ -3,9 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <title>Lyrics</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/download.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/lyrics.css') }}" />
 </head>
 <body>
+    <span class="top-bot-spacer"></span>
+    <div id="navbar">
+        <button onclick="window.location.href='{{ url_for('home') }}'"><span class="left"> Home</span></button>
+        <button onclick="window.location.href='{{ url_for('artworkGeneration') }}'"><span class="left"> ArtGen</span></button>
+    </div>
     <h1>Lyrics</h1>
     <form method="post" class="search-form">
         <div class="search-bars">

@@ -12,8 +12,8 @@ from uuid import uuid4
 # Local modules
 from src.functions import generateCoverArt, generateThumbnail, getLyrics
 from src.logger import Logger
-from src.soft_utils import getDefaultExpirationTimestamp
-from src.statistics import Statistics, updateStats
+from src.soft_utils import getDefaultExpirationTimestamp, getPluralMarks
+from src.statistics import onLaunch as printInitStatistics, JsonDict, getJsonStatsFromFile, updateStats
 from src.web_utils import checkFilenameValid, createJsonResponse, JsonResponse
 
 import src.constants as constants
@@ -26,8 +26,11 @@ app.config["SESSION_TYPE"] = "filesystem"
 app.config["SESSION_FILE_DIR"] = 'flask_session' + constants.SLASH
 Session(app)
 
-@app.route('/upload_image', methods=['POST'])
-def uploadFile() -> JsonResponse:
+@app.route('/artwork-generation', methods=['GET', 'POST'])
+def artworkGeneration() -> str | JsonResponse:
+    if (request.method == 'GET'):
+        return render_template('upload.html')
+
     if ('user_folder' not in session):
         session['user_folder'] = str(uuid4())
     user_folder = str(session['user_folder'])
@@ -93,7 +96,7 @@ def use_itunes_image() -> Response | JsonResponse:
     session['generated_artwork_path'] = image_path
     return createJsonResponse(constants.HttpStatus.OK.value)
 
-@app.route('/processed_images', methods=['GET'])
+@app.route('/processed_images', methods=['GET']) # FIXME GET and POST functions are discordant in use
 def processed_images() -> str | JsonResponse:
     if ('generated_artwork_path' not in session):
         return createJsonResponse(constants.HttpStatus.BAD_REQUEST.value, 'No image was selected or uploaded')
@@ -105,27 +108,45 @@ def processed_images() -> str | JsonResponse:
     output_bg = path.join(user_processed_path, constants.PROCESSED_ARTWORK_FILENAME)
     generateCoverArt(generated_artwork_path, output_bg, include_center_artwork)
     generateThumbnail(output_bg, user_processed_path)
-    updateStats()
+    updateStats(to_increment='artworkGenerations')
 
     return render_template('download.html', user_folder=user_folder, bg=constants.PROCESSED_ARTWORK_FILENAME)
 
 @app.route('/lyrics', methods=['GET', 'POST'])
-def lyrics():
+def lyrics() -> str:
     if (request.method != 'POST'):
         return render_template('lyrics.html', lyrics="")
-        
-    artist: str = request.form.get('artist')
-    song:   str = request.form.get('song')
-    lyrics_text: str = request.form.get('lyrics')
+
+    artist = request.form.get('artist', None)
+    song = request.form.get('song', None)
+    lyrics_text = request.form.get('lyrics')
 
     if (artist is not None and song is not None):
         lyrics_text = getLyrics(song, artist)
 
     return render_template('lyrics.html', lyrics=lyrics_text)
 
-@app.route('/', methods=['GET'])
+@app.route('/statistics')
+def statistics() -> str:
+    return render_template('statistics.html')
+
+@app.route('/home')
 def home() -> str:
-    return render_template('upload.html')
+    stats: JsonDict = getJsonStatsFromFile()
+    plurals: dict[str, str] = getPluralMarks(stats)
+    for key in constants.AVAILABLE_STATS:
+        if (key not in stats):
+            stats[key] = constants.EMPTY_STATS[key]
+    return render_template('home.html', stats=stats, pluralMarks=plurals)
+
+@app.errorhandler(404)
+def page_not_found(_e: Exception) -> str:
+    log.warn(f"Page not found: {request.url}. Redirecting to home page ({'/home'}).")
+    return render_template('home.html', stats={}, pluralMarks={})
+
+@app.route('/')
+def root() -> str:
+    return render_template('home.html', stats={}, pluralMarks={})
 
 def main(host: str = constants.HOST_HOME, port: int = constants.DEFAULT_PORT) -> None:
     host_display_name = "localhost" if host == constants.HOST_HOME else host
@@ -134,7 +155,7 @@ def main(host: str = constants.HOST_HOME, port: int = constants.DEFAULT_PORT) ->
     processed_folder = constants.PROCESSED_DIR
     makedirs(processed_folder, exist_ok=True)
 
-    @DeprecationWarning
+    @DeprecationWarning # cache cleanup process is to be redefined
     def removeOldUploads(folder: str) -> int:
         eliminated_files_count: int = 0
         filepaths: list[str] = [path.join(folder, f) for f in listdir(folder)]
@@ -154,7 +175,7 @@ def main(host: str = constants.HOST_HOME, port: int = constants.DEFAULT_PORT) ->
                 + f"removed in {folder.split(constants.SLASH)[0]}.")
         return eliminated_files_count
 
-    def cacheCleanup(stats: Statistics) -> None:
+    def cacheCleanup() -> None:
         to_clean = ["DIRECTORY_NAME" + constants.SLASH]
         eliminated_files_count: int = 0
 
@@ -167,6 +188,6 @@ def main(host: str = constants.HOST_HOME, port: int = constants.DEFAULT_PORT) ->
             if (eliminated_files_count == 0):
                 log.info("Cache still fresh. Loading...")
 
-    stats = Statistics()
-    cacheCleanup(stats)
+    printInitStatistics()
+    cacheCleanup()
     serve(app, host=host, port=port, threads=8)
