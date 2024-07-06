@@ -1,10 +1,18 @@
+# Installed libraries
+from dotenv import load_dotenv
+from re import compile
+
+# Python standard libraries
 from enum import Enum
-from os import name as osName
+from os import getenv, name as osName
+
+load_dotenv()
 
 ############# ENUMS #############
 
 class HttpStatus(Enum):
     OK = 200
+    REDIRECT = 302
     BAD_REQUEST = 400
     NOT_FOUND = 404
     INTERNAL_SERVER_ERROR = 500
@@ -26,6 +34,8 @@ DEFAULT_PORT = 8000
 DATE_FORMAT_FULL = "%Y-%m-%d %H:%M:%S"
 STATS_FILE_PATH = 'stats.json'
 DEFAULT_EXPIRATION = 2 # in days (integer)
+AVAILABLE_STATS = ['dateFirstOperation', 'dateLastOperation', 'artworkGenerations', 'lyricsFetches']
+EMPTY_STATS = { 'dateFirstOperation': 'unknown', 'dateLastOperation': 'none', 'artworkGenerations': 0, 'lyricsFetches': 0 }
 
 # Paths
 SLASH = '/' if (osName != 'nt') else '\\'
@@ -45,3 +55,16 @@ LOGO_POSITIONS = [
 ERR_INVALID_FILE_TYPE = 'Invalid file type. Only PNG and JPG files are allowed.'
 ERR_NO_FILE = 'Invalid file: No file selected.'
 ERR_INVALID_SESSION = 'Session Expired or Invalid'
+
+# Genius
+GENIUS_API_TOKEN = getenv('GENIUS_API_TOKEN')
+
+# Patterns for lyricsGenius prints
+PATTERNS = [
+    (compile(r'Searching for "(.*)" by (.*)...'),                         lambda m: f'Lyrics for "{m.group(1)}" by {m.group(2)} are being searched...'),
+    (compile(r'Searching for "(.*)"...'),                                 lambda m: f'Lyrics for "{m.group(1)}" are being searched...'),
+    (compile(r"No results found for: '(.*)'"),                            lambda m: f'No results found for "{m.group(1)}".'),
+    (compile(r'Specified song does not contain lyrics. Rejecting.'),      lambda m: 'The specified song does not contain lyrics and was rejected.'),
+    (compile(r'Specified song does not have a valid lyrics. Rejecting.'), lambda m: 'The specified song does not have valid lyrics and was rejected.'),
+    (compile(r'Done.'),                                                   lambda m: 'Lyrics were successfully found and populated.')
+]

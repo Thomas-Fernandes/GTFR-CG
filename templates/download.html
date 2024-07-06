@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Download Files</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/download.css') }}" />
 </head>
 <body>
     <span class="top-bot-spacer"></span>
     <div id="navbar">
-        <button onclick="window.location.href='{{ url_for('uploadFile') }}'"><span class="left"> Home</span></button>
-        <button onclick="window.location.href='{{ url_for('uploadFile') }}'"><span class="right">Lyrics </span></button> <!-- TODO url to lyrics, not upload_file -->
+        <button onclick="window.location.href='{{ url_for('artworkGeneration') }}'"><span class="left"> Upload</span></button>
+        <button onclick="window.location.href='{{ url_for('lyrics') }}'"><span class="right">Lyrics </span></button>
     </div>
     <h1>Processed Artworks</h1>
     <div class="image-panels">
@@ -67,5 +68,7 @@
     </div>
     <span class="top-bot-spacer"></span>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="{{ url_for('static', filename='js/download.js') }}"></script>
 </body>
 </html>

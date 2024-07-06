@@ -13,8 +13,6 @@ title {
 
 body {
     background-color: #f4f4f4;
-    background: #ffff64;
-    background: -webkit-linear-gradient(to right, #ffff64, #ffff64);
     background: linear-gradient(to right, #ffff64, #002654);
     height: 100%;
 }
@@ -29,6 +27,21 @@ body {
 
 .top-bot-spacer {
     padding: 0.5em 0;
+}
+
+hr {
+    border: 0;
+    height: 0;
+    width: 80%;
+    box-shadow: 0 0 2px 0.1px #000000;
+}
+@-moz-document url-prefix() { /* Firefox only supports half-pixels */
+    hr {
+        box-shadow: 0 0 2px 0.5px #000000; /* significantly thicker */
+    }
+}
+hr:after {  /* Not really supposed to work, but does */
+    content: "\00a0";  /* Prevent margin collapse */
 }
 
 h1 {
@@ -99,7 +112,7 @@ button {
 	display: inline-block;
 	cursor: pointer;
 
-	color: #ffffff;
+	color: white;
 	background-color: #007bff;
 	border: 2px solid #00000010;
     box-shadow: 0 0 10px #0000007f;
@@ -131,12 +144,12 @@ button span:before {
 	transition: 0.3s;
 }
 button span.left:before {
-	left: -20px;
+	left: -32%;
 
 	content: '\00ab'; /* double left arrow character */
 }
 button span.right:before {
-	right: -20px;
+	right: -32%;
 
 	content: '\00bb'; /* double right arrow character */
 }
@@ -152,8 +165,8 @@ button:hover span:before {
 	opacity: 1;
 }
 button:hover span.left:before {
-	left: 0;
+	left: -2%;
 }
 button:hover span.right:before {
-	right: 0;
+	right: -2%;
 }
