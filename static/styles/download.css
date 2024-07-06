@@ -13,8 +13,6 @@ title {
 
 body {
     background-color: #f4f4f4;
-    background: #ffff64;
-    background: -webkit-linear-gradient(to right, #ffff64, #ffff64);
     background: linear-gradient(to right, #ffff64, #002654);
     height: 100%;
 }
