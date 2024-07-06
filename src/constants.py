@@ -1,5 +1,6 @@
 # Installed libraries
 from dotenv import load_dotenv
+from re import compile
 
 # Python standard libraries
 from enum import Enum
@@ -53,5 +54,15 @@ ERR_INVALID_FILE_TYPE = 'Invalid file type. Only PNG and JPG files are allowed.'
 ERR_NO_FILE = 'Invalid file: No file selected.'
 ERR_INVALID_SESSION = 'Session Expired or Invalid'
 
-# Genius API
+# Genius
 GENIUS_API_TOKEN = getenv('GENIUS_API_TOKEN')
+
+# Patterns for lyricsGenius prints
+PATTERNS = [
+    (compile(r'Searching for "(.*)" by (.*)...'),                         lambda m: f'Lyrics for "{m.group(1)}" by {m.group(2)} are being searched...'),
+    (compile(r'Searching for "(.*)"...'),                                 lambda m: f'Lyrics for "{m.group(1)}" are being searched...'),
+    (compile(r"No results found for: '(.*)'"),                            lambda m: f'No results found for "{m.group(1)}".'),
+    (compile(r'Specified song does not contain lyrics. Rejecting.'),      lambda m: 'The specified song does not contain lyrics and was rejected.'),
+    (compile(r'Specified song does not have a valid lyrics. Rejecting.'), lambda m: 'The specified song does not have valid lyrics and was rejected.'),
+    (compile(r'Done.'),                                                   lambda m: 'Lyrics were successfully found and populated.')
+]
