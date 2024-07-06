@@ -1,7 +1,7 @@
 ---
 name: FIX - Bug report
 about: Report a problem to help us fix the app
-title: "[BUGZ \U0001F41B] "
+title: "\U0001F41B "
 labels: bug
 assignee:
 

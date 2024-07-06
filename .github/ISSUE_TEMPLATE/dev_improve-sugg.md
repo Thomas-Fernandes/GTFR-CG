@@ -1,16 +1,16 @@
 ---
-name: DEV - Feature request
-about: Suggest an idea for this project
-title: "[FEAT 🚀] "
-labels: NEW! feature
+name: DEV - Improvement suggestion
+about: Suggest an improvement to an existing feature
+title: "\U0001F914 "
+labels: enhancement
 assignees:
 
 ---
 
-**Is your feature request related to a problem? Please describe.**
+**Is your improvement request related to a problem? Please describe.**
 A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
 
-**Describe the solution you'd like**
+**Describe the feature to improve, and improvement you'd like**
 A clear and concise description of what you want to happen.
 
 **Describe alternatives you've considered**
