@@ -1,18 +1,13 @@
-.search-form, .lyrics-form {
+form {
     justify-content: center;
-    width: 100%;
-}
 
-.search-bars {
-    gap: 10px;
-    flex-direction: row;
-}
+    .search-bars {
+        gap: 10px;
+        flex-direction: row;
+    }
 
-textarea {
-    padding: 1rem;
-    height: 300px;
-}
-
-.save-button:hover {
-    background-color: #0056b3;
+    textarea {
+        padding: 1rem;
+        height: 300px;
+    }
 }

@@ -5,7 +5,7 @@
     <title>Upload or Search for Cover Art</title>
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/_generic.css') }}" />
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/upload.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/artwork-generation.css') }}" />
 </head>
 <body id="head">
     <span class="top-bot-spacer"></span>
@@ -31,9 +31,9 @@
         <div class="flexbox">
             <input type="file" name="file" id="file" class="file" />
             <p class="error">{{ error }}</p>
-            <label for="include_center_artwork">
+            <label class="checkbox" for="include_center_artwork">
                 <input type="checkbox" name="include_center_artwork" id="include_center_artwork" checked>
-                Include center artwork
+                <p class="checkbox-label">Include center artwork</p>
             </label>
             <input type="submit" value="UPLOAD" class="action-button" />
         </div>
@@ -41,6 +41,6 @@
     <span class="top-bot-spacer"></span>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="{{ url_for('static', filename='js/upload.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/artwork-generation.js') }}"></script>
 </body>
 </html>

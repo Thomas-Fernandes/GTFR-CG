@@ -29,7 +29,7 @@ Session(app)
 @app.route('/artwork-generation', methods=['GET', 'POST'])
 def artworkGeneration() -> str | JsonResponse:
     if (request.method == 'GET'):
-        return render_template('upload.html')
+        return render_template('artwork-generation.html')
 
     if ('user_folder' not in session):
         session['user_folder'] = str(uuid4())

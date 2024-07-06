@@ -11,16 +11,6 @@ input {
     margin-left: 100px; /* Adjust space between the button and file name */
     color: #333;
 }
-input[type=file]::file-selector-button {
-    margin-right: 5%;
-    border: none;
-    border-radius: 0.2rem;
-    background: #2a67ec;
-    padding: 8px 24px;
-    color: #ffffff;
-    cursor: pointer;
-    transition: 0.3s;
-}
 
 .result-image {
     max-width: 200px;
@@ -96,4 +86,30 @@ input[type=file]::file-selector-button {
 
 .bold-italic {
     font-weight: bold;
+}
+.checkbox {
+    flex-direction: row;
+
+    input[type="checkbox"] {
+        margin: 0 10px 0 0;
+        transform: scale(1.5);
+        accent-color: #007BFF;
+        transition: 0.5s;
+
+        &:hover {
+            accent-color: #0056b3;
+            cursor: pointer;
+        }
+    }
+
+    p.checkbox-label {
+        font-style: italic;
+        font-size: 14px;
+        margin: 0;
+    }
+
+    &:hover {
+        cursor: pointer;
+        font-weight: bold;
+    }
 }
