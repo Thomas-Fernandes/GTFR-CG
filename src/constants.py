@@ -34,6 +34,8 @@ DEFAULT_PORT = 8000
 DATE_FORMAT_FULL = "%Y-%m-%d %H:%M:%S"
 STATS_FILE_PATH = 'stats.json'
 DEFAULT_EXPIRATION = 2 # in days (integer)
+AVAILABLE_STATS = ['dateFirstOperation', 'dateLastOperation', 'artworkGenerations', 'lyricsFetches']
+EMPTY_STATS = { 'dateFirstOperation': 'unknown', 'dateLastOperation': 'none', 'artworkGenerations': 0, 'lyricsFetches': 0 }
 
 # Paths
 SLASH = '/' if (osName != 'nt') else '\\'

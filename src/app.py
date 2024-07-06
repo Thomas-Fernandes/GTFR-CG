@@ -134,16 +134,19 @@ def statistics() -> str:
 def home() -> str:
     stats: JsonDict = getJsonStatsFromFile()
     plurals: dict[str, str] = getPluralMarks(stats)
+    for key in constants.AVAILABLE_STATS:
+        if (key not in stats):
+            stats[key] = constants.EMPTY_STATS[key]
     return render_template('home.html', stats=stats, pluralMarks=plurals)
 
 @app.errorhandler(404)
 def page_not_found(_e: Exception) -> str:
     log.warn(f"Page not found: {request.url}. Redirecting to home page ({'/home'}).")
-    return render_template('home.html')
+    return render_template('home.html', stats={}, pluralMarks={})
 
 @app.route('/')
 def root() -> str:
-    return render_template('home.html')
+    return render_template('home.html', stats={}, pluralMarks={})
 
 def main(host: str = constants.HOST_HOME, port: int = constants.DEFAULT_PORT) -> None:
     host_display_name = "localhost" if host == constants.HOST_HOME else host
