@@ -33,9 +33,14 @@ body {
 
 hr {
     border: 0;
-    height: 0; /* Firefox... */
+    height: 0;
     width: 80%;
     box-shadow: 0 0 2px 0.1px #000000;
+}
+@-moz-document url-prefix() { /* Firefox only supports half-pixels */
+    hr {
+        box-shadow: 0 0 2px 0.5px #000000; /* significantly thicker */
+    }
 }
 hr:after {  /* Not really supposed to work, but does */
     content: "\00a0";  /* Prevent margin collapse */

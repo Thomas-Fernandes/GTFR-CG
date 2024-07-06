@@ -2,7 +2,7 @@
     width: 67%;
 }
 
-button { /* FIXME arrows on the sides of the buttons aren't well calibrated */
+button {
 	width: calc(50% - 32px);
     padding: 6% 0;
 }
