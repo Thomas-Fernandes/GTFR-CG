@@ -10,13 +10,13 @@
 <body id="head">
     <span class="top-bot-spacer"></span>
     <div class="navbar">
-        <button onclick="window.location.href='{{ url_for('home') }}'"><span class="left"> Home</span></button>
+        <button type="button" onclick="window.location.href='{{ url_for('home') }}'"><span class="left">Home</span></button>
     </div>
     <h1>Search for cover art on iTunes</h1>
     <form id="iTunesSearchForm" method="post">
         <div class="flexbox">
             <input type="text" name="query" id="query" placeholder="Search on iTunes" />
-            <select name="country" id="country">
+            <select name="country" id="country" aria-label="Country">
                 <option value="fr" selected>France</option>
                 <option value="us">United States</option>
                 <option value="nz">New Zealand</option>
