@@ -1,0 +1,222 @@
+* {
+    padding: 0;
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+
+    font-family: Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif;
+    text-align: left;
+    font-size: 20px;
+    letter-spacing: 0.08rem;
+}
+h1, h2, h3, h4, h5, h6, .centered, input[type="text"], button, .button, .action-button {
+    text-align: center;
+}
+
+title {
+    display: none;
+}
+
+body {
+    background-color: #f4f4f4;
+    background: linear-gradient(to right, #ffff64, #002654);
+    height: 100%;
+}
+
+#navbar {
+	width: auto;
+    gap: 32px;
+
+    margin: auto;
+	flex-direction: row;
+
+	justify-content: space-between;
+}
+
+p.error:not(:empty) {
+    color: #ff0000;
+    font-size: 14px;
+    margin-top: 0;
+    letter-spacing: 0.05rem;
+    font-weight: bold;
+    background: #a52a2a;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+}
+p.error:empty {
+    display: none;
+}
+
+.top-bot-spacer {
+    padding: 0.5em 0;
+}
+
+hr {
+    border: 0;
+    height: 0;
+    width: 80%;
+    box-shadow: 0 0 2px 0.1px #000000;
+}
+@-moz-document url-prefix() { /* Firefox only supports half-pixels */
+    hr {
+        box-shadow: 0 0 2px 0.5px #000000; /* significantly thicker */
+    }
+}
+hr:after {  /* Not really supposed to work, but does */
+    content: "\00a0";  /* Prevent margin collapse */
+}
+
+h1 {
+    font-family: Helvetica, sans-serif;
+    font-size: 64px;
+    margin: 2% 0 2% 0;
+    font-style: italic;
+    letter-spacing: 0;
+}
+
+.flexbox {
+    align-items: center;
+    align-content: center;
+    flex-wrap: wrap;
+}
+.flex-col {
+    flex-direction: column;
+}
+.flex-row {
+    flex-direction: row;
+}
+
+.action-button {
+    height: -webkit-fill-available;
+    width: 33%;
+    align-self: center;
+    padding: 1rem;
+
+    cursor: pointer;
+
+    background: #ffff64;
+	border: 2px solid #00000010;
+    box-shadow: 0 0 10px #0000007f;
+	border-radius: 8px;
+
+    font-size: 24px;
+    font-weight: bold;
+    letter-spacing: 0.3rem;
+
+    color: #000000;
+    transition: all 0.3s;
+}
+.action-button:hover {
+    background: #002654;
+    color: #ffffff;
+}
+
+.button {
+    display: inline-block;
+
+    margin-top: 20px;
+    padding: 10px 0;
+
+    background-color: #007BFF;
+    color: white;
+    border: none;
+
+    text-decoration: none; /* remove underline */
+}
+.button:hover {
+    background-color: #0056b3;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+button {
+	padding: 10px 20px;
+	display: inline-block;
+	cursor: pointer;
+
+	color: white;
+	background-color: #007bff;
+	border: 2px solid #00000010;
+    box-shadow: 0 0 10px #0000007f;
+	border-radius: 8px;
+
+	font-size: 28px;
+
+	transition: all 0.3s;
+
+    span {
+        position: relative;
+        cursor: pointer;
+
+        align-items: center;
+        vertical-align: middle;
+
+        transition: 0.3s;
+    }
+
+    span:before {
+        top: 0;
+        position: absolute;
+
+        opacity: 0;
+        transition: 0.3s;
+    }
+    span.left:before {
+        left: -32%;
+
+        content: '\00ab'; /* double left arrow character */
+    }
+    span.right:before {
+        right: -32%;
+
+        content: '\00bb'; /* double right arrow character */
+    }
+}
+button:hover {
+	background-color: #008cff;
+
+    span.left {
+        padding-left: 15px;
+    }
+    span.right {
+        padding-right: 15px;
+    }
+
+    span:before {
+        opacity: 1;
+    }
+    span.left:before {
+        left: -2%;
+    }
+    span.right:before {
+        right: -2%;
+    }
+}
+
+select {
+    cursor: pointer;
+    background: #ffff64;
+
+    padding: 8px 32px;
+
+	border: 2px solid #00000010;
+    box-shadow: 0 0 10px #0000007f;
+	border-radius: 8px;
+
+    text-align: left;
+    letter-spacing: normal;
+
+    option {
+        text-align: justify;
+    }
+}
+
+input[type="text"], textarea {
+    width: 50%;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    border: 2px solid #ddd;
+    border-radius: 0.2rem;
+}

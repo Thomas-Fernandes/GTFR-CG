@@ -45,7 +45,7 @@ $(document).ready(function() {
                         // itunes max image size is 3000x3000
                         const highResImageUrl = result.artworkUrl100.replace('100x100', '3000x3000');
                         const img = $('<img>').attr('src', highResImageUrl).attr('alt', result.collectionName || result.trackName).addClass('result-image');
-                        const imgName = $('<p>').addClass('bold-italic').text(`${result.artistName} - ${result.collectionName.replace(' - Single', '')}`);
+                        const imgName = $('<p>').addClass('centered bold-italic').text(`${result.artistName} - ${result.collectionName.replace(' - Single', '')}`);
                         const btn = $('<button>').text('Use this image').on('click', function() {
                             $.post('/use_itunes_image', { url: highResImageUrl }, function(response) {
                                 if (response.status === ResponseStatus.SUCCESS) {
