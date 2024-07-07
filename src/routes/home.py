@@ -1,7 +1,6 @@
 from flask import Blueprint, render_template, request
 
 from src.logger import log
-from src.soft_utils import getPluralMarks
 from src.statistics import JsonDict, getJsonStatsFromFile
 import src.constants as constants
 
@@ -9,10 +8,17 @@ from src.app import app
 bp_home = Blueprint('home', __name__.split('.')[-1])
 session = app.config
 
+@staticmethod
+def getPluralMarks(stats: JsonDict) -> JsonDict:
+    plurals = {}
+    for (key, value) in stats.items():
+        plurals[key] = "s" if (value != 1 and value != 0) else ""
+    return plurals
+
 @bp_home.route('/home')
 def renderHome() -> str:
     stats: JsonDict = getJsonStatsFromFile()
-    plurals: dict[str, str] = getPluralMarks(stats)
+    plurals: JsonDict = getPluralMarks(stats)
     for key in constants.AVAILABLE_STATS:
         if (key not in stats):
             stats[key] = constants.EMPTY_STATS[key]

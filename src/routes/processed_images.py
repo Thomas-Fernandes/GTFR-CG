@@ -9,7 +9,7 @@ from src.web_utils import createJsonResponse, JsonResponse
 import src.constants as constants
 
 from src.app import app
-bp_download = Blueprint('download', __name__.split('.')[-1])
+bp_processed_images = Blueprint('processed-images', __name__.split('.')[-1])
 session = app.config
 
 @staticmethod
@@ -82,7 +82,7 @@ def generateThumbnails(bg_path: str, output_folder: str) -> None:
         output_path = path.join(output_folder, f'thumbnail_{position}.png')
         final_image.save(output_path)
 
-@bp_download.route('/download-image/<filename>', methods=['GET'])
+@bp_processed_images.route('/download-image/<filename>', methods=['GET'])
 def downloadImage(filename: str) -> Response | JsonResponse:
     if ('user_folder' not in session):
         return createJsonResponse(constants.HttpStatus.NOT_FOUND.value, constants.ERR_INVALID_SESSION)
@@ -90,7 +90,7 @@ def downloadImage(filename: str) -> Response | JsonResponse:
     directory: str = path.abspath(path.join(constants.PROCESSED_DIR, user_folder))
     return send_from_directory(directory, filename, as_attachment=True)
 
-@bp_download.route('/download-thumbnail/<idx>', methods=['GET'])
+@bp_processed_images.route('/download-thumbnail/<idx>', methods=['GET'])
 def downloadThumbnail(idx: str) -> Response | JsonResponse:
     filename: str = \
         f"{constants.THUMBNAIL_PREFIX}" \
@@ -98,7 +98,7 @@ def downloadThumbnail(idx: str) -> Response | JsonResponse:
         f"{constants.THUMBNAIL_EXT}"
     return downloadImage(filename)
 
-@bp_download.route('/processed-images', methods=['GET'])
+@bp_processed_images.route('/processed-images', methods=['GET'])
 def renderProcessedImages() -> str | JsonResponse:
     if ('generated_artwork_path' not in session):
         return createJsonResponse(constants.HttpStatus.BAD_REQUEST.value, 'No image was selected or uploaded')
@@ -112,4 +112,4 @@ def renderProcessedImages() -> str | JsonResponse:
     generateThumbnails(output_bg, user_processed_path)
     updateStats(to_increment='artworkGenerations')
 
-    return render_template('download.html', user_folder=user_folder, bg=constants.PROCESSED_ARTWORK_FILENAME)
+    return render_template('processed-images.html', user_folder=user_folder, bg=constants.PROCESSED_ARTWORK_FILENAME)

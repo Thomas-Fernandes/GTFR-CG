@@ -23,12 +23,12 @@ def initApp() -> None:
 
     def initBlueprints() -> None:
         from src.routes.artwork_generation import bp_artwork_generation
-        from src.routes.download import bp_download
+        from src.routes.processed_images import bp_processed_images
         from src.routes.home import bp_home
         from src.routes.lyrics import bp_lyrics
         blueprints = [
             bp_artwork_generation,
-            bp_download,
+            bp_processed_images,
             bp_home,
             bp_lyrics
         ]
@@ -61,7 +61,7 @@ def main(host: str = constants.HOST_HOME, port: int = constants.DEFAULT_PORT) ->
         if (eliminated_files_count != 0):
             pluralMarks = ["s", "were"] if eliminated_files_count != 1 else ["", "was"]
             log.info(f"{eliminated_files_count} cached file{pluralMarks[0]} {pluralMarks[1]} " \
-                + f"removed in {folder.split(constants.SLASH)[0]}.")
+                f"removed in {folder.split(constants.SLASH)[0]}.")
         return eliminated_files_count
 
     def cacheCleanup() -> None:
