@@ -78,7 +78,7 @@ $(document).ready(function() {
         }
 
         $.ajax({
-            url: `/artwork-generation`,
+            url: `/artwork-generation/use-local-image`,
             type: 'POST',
             data: new FormData($('#fileUpload')[0]),
             processData: false,

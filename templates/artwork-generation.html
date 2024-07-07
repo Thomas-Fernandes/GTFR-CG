@@ -27,7 +27,7 @@
     <div id="results" class="result-container"></div>
 
     <h1>...or upload your image</h1>
-    <form id="fileUpload" method="POST" enctype="multipart/form-data">
+    <form id="fileUpload" method="POST" action="/artwork-generation/use-local-image" enctype="multipart/form-data">
         <div class="flexbox">
             <input type="file" name="file" id="file" class="file" />
             <p class="error">{{ error }}</p>

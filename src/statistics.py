@@ -1,13 +1,10 @@
 from dataclasses import dataclass
-from typing import TypeAlias, Optional
+from typing import Optional
 
-from src.logger import Logger
+from src.logger import log
+from src.typing import JsonDict
 
 import src.constants as constants
-
-JsonDict: TypeAlias = dict[str, Optional[str | int]]
-
-log = Logger()
 
 ############# CLASS #############
 

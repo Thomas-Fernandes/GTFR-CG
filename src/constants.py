@@ -1,12 +1,11 @@
-# Installed libraries
 from dotenv import load_dotenv
-from re import compile
 
-# Python standard libraries
 from enum import Enum
 from os import getenv, name as osName
+from re import compile
+from typing import Optional
 
-load_dotenv()
+from src.typing import Context, DictKeys, JsonDict
 
 ############# ENUMS #############
 
@@ -30,21 +29,26 @@ class TimeInSeconds(Enum):
 HOST_HOME = "0.0.0.0"
 DEFAULT_PORT = 8000
 
+DEFAULT_CONTEXT_HOME: Context = {
+    "stats": {},
+    "pluralMarks": {},
+}
+
 # Statistics
 DATE_FORMAT_FULL = "%Y-%m-%d %H:%M:%S"
 STATS_FILE_PATH = 'stats.json'
 DEFAULT_EXPIRATION = 2 # in days (integer)
-AVAILABLE_STATS = [
-    'dateFirstOperation',
-    'dateLastOperation',
-    'artworkGenerations',
-    'lyricsFetches',
+AVAILABLE_STATS: DictKeys = [
+    "dateFirstOperation",
+    "dateLastOperation",
+    "artworkGenerations",
+    "lyricsFetches",
 ]
-EMPTY_STATS = {
-    'dateFirstOperation': "N/A",
-    'dateLastOperation': "N/A",
-    'artworkGenerations': 0,
-    'lyricsFetches': 0,
+EMPTY_STATS: JsonDict = {
+    "dateFirstOperation": "N/A",
+    "dateLastOperation": "N/A",
+    "artworkGenerations": 0,
+    "lyricsFetches": 0,
 }
 
 # Paths
@@ -66,7 +70,8 @@ ERR_NO_FILE = 'Invalid file: No file selected.'
 ERR_INVALID_SESSION = 'Session Expired or Invalid'
 
 # Genius
-GENIUS_API_TOKEN = getenv('GENIUS_API_TOKEN')
+load_dotenv()
+GENIUS_API_TOKEN: Optional[str] = getenv('GENIUS_API_TOKEN')
 
 # Patterns for lyricsGenius prints
 PATTERNS = [
