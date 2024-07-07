@@ -39,11 +39,11 @@ EMPTY_STATS = { 'dateFirstOperation': 'unknown', 'dateLastOperation': 'none', 'a
 
 # Paths
 SLASH = '/' if (osName != 'nt') else '\\'
+SESSION_DIR = 'flask_session' + SLASH
 PROCESSED_DIR = 'processed' + SLASH
 PROCESSED_ARTWORK_FILENAME = 'ProcessedArtwork.png'
 THUMBNAIL_DIR = 'assets' + SLASH + 'thumbnails' + SLASH
-THUMBNAIL_PREFIX = 'thumbnail_'
-THUMBNAIL_EXT = '.png'
+THUMBNAIL_PREFIX = 'thumbnail_'; THUMBNAIL_EXT = '.png'
 
 LOGO_POSITIONS = [
     'top-left',    'top-center',    'top-right',

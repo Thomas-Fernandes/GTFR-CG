@@ -19,13 +19,13 @@ app = Flask(__name__.split('.')[-1]) # so that the app name is app, not {dirpath
 def initApp() -> None:
     app.config["SESSION_PERMANENT"] = False
     app.config["SESSION_TYPE"] = "filesystem"
-    app.config["SESSION_FILE_DIR"] = "flask_session" + constants.SLASH
+    app.config["SESSION_FILE_DIR"] = constants.SESSION_DIR
 
     def initBlueprints() -> None:
-        from src.artwork_generation import bp_artwork_generation
-        from src.download import bp_download
-        from src.home import bp_home
-        from src.lyrics import bp_lyrics
+        from src.routes.artwork_generation import bp_artwork_generation
+        from src.routes.download import bp_download
+        from src.routes.home import bp_home
+        from src.routes.lyrics import bp_lyrics
         blueprints = [
             bp_artwork_generation,
             bp_download,
