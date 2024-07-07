@@ -10,15 +10,15 @@
 <body id="head">
     <span class="top-bot-spacer"></span>
     <div class="navbar">
-        <button type="button" onclick="window.location.href='{{ url_for('artworkGeneration') }}'"><span class="left">Artwork Generation</span></button>
+        <button type="button" onclick="window.location.href='{{ url_for('artwork-generation.artworkGeneration') }}'"><span class="left">Artwork Generation</span></button>
         <button type="button" onclick="window.location.href='{{ url_for('lyrics') }}'"><span class="right">Lyrics</span></button>
     </div>
     <h1>Processed Artworks</h1>
     <div class="image-panels">
         <!-- Cadre de gauche pour l'Artwork -->
         <div class="image-container">
-            <img src="{{ url_for('downloadArtwork', filename='ProcessedArtwork.png') }}" alt="background thumbnail">
-            <a href="{{ url_for('downloadArtwork', filename='ProcessedArtwork.png') }}" class="button">Download</a>
+            <img src="{{ url_for('download.downloadArtwork', filename='ProcessedArtwork.png') }}" alt="background thumbnail">
+            <a href="{{ url_for('download.downloadArtwork', filename='ProcessedArtwork.png') }}" class="button">Download</a>
         </div>
 
         <!-- grille de 3*3 -->
@@ -26,40 +26,40 @@
             <form method="post" enctype="multipart/form-data">
                 <div class="thumbnail-grid">
                     <div class="thumbnail-item">
-                        <a><img src="{{ url_for('downloadArtwork', filename='thumbnail_top-left.png') }}" alt="top left logo"></a>
+                        <a><img src="{{ url_for('download.downloadArtwork', filename='thumbnail_top-left.png') }}" alt="top left logo"></a>
                         <input type="radio" id="radio_01" name="selected_thumbnail_idx" value="1">
                     </div>
                     <div class="thumbnail-item">
-                        <a><img src="{{ url_for('downloadArtwork', filename='thumbnail_top-center.png') }}" alt="top center logo"></a>
+                        <a><img src="{{ url_for('download.downloadArtwork', filename='thumbnail_top-center.png') }}" alt="top center logo"></a>
                         <input type="radio" id="radio_02" name="selected_thumbnail_idx" value="2">
                     </div>
                     <div class="thumbnail-item">
-                        <a><img src="{{ url_for('downloadArtwork', filename='thumbnail_top-right.png') }}" alt="top right logo"></a>
+                        <a><img src="{{ url_for('download.downloadArtwork', filename='thumbnail_top-right.png') }}" alt="top right logo"></a>
                         <input type="radio" id="radio_03" name="selected_thumbnail_idx" value="3">
                     </div>
                     <div class="thumbnail-item">
-                        <a><img src="{{ url_for('downloadArtwork', filename='thumbnail_center-left.png') }}" alt="center left logo"></a>
+                        <a><img src="{{ url_for('download.downloadArtwork', filename='thumbnail_center-left.png') }}" alt="center left logo"></a>
                         <input type="radio" id="radio_04" name="selected_thumbnail_idx" value="4" checked>
                         <!-- By default, the checked radio button is the center-left; because it is the most common chosen one -->
                     </div>
                     <div class="thumbnail-item">
-                        <a><img src="{{ url_for('downloadArtwork', filename='thumbnail_center-center.png') }}" alt="center logo"></a>
+                        <a><img src="{{ url_for('download.downloadArtwork', filename='thumbnail_center-center.png') }}" alt="center logo"></a>
                         <input type="radio" id="radio_05" name="selected_thumbnail_idx" value="5">
                     </div>
                     <div class="thumbnail-item">
-                        <a><img src="{{ url_for('downloadArtwork', filename='thumbnail_center-right.png') }}" alt="center right logo"></a>
+                        <a><img src="{{ url_for('download.downloadArtwork', filename='thumbnail_center-right.png') }}" alt="center right logo"></a>
                         <input type="radio" id="radio_06" name="selected_thumbnail_idx" value="6">
                     </div>
                     <div class="thumbnail-item">
-                        <a><img src="{{ url_for('downloadArtwork', filename='thumbnail_bottom-left.png') }}" alt="bottom left logo"></a>
+                        <a><img src="{{ url_for('download.downloadArtwork', filename='thumbnail_bottom-left.png') }}" alt="bottom left logo"></a>
                         <input type="radio" id="radio_07" name="selected_thumbnail_idx" value="7">
                     </div>
                     <div class="thumbnail-item">
-                        <a><img src="{{ url_for('downloadArtwork', filename='thumbnail_bottom-center.png') }}" alt="bottom center logo"></a>
+                        <a><img src="{{ url_for('download.downloadArtwork', filename='thumbnail_bottom-center.png') }}" alt="bottom center logo"></a>
                         <input type="radio" id="radio_08" name="selected_thumbnail_idx" value="8">
                     </div>
                     <div class="thumbnail-item">
-                        <a><img src="{{ url_for('downloadArtwork', filename='thumbnail_bottom-right.png') }}" alt="bottom right logo"></a>
+                        <a><img src="{{ url_for('download.downloadArtwork', filename='thumbnail_bottom-right.png') }}" alt="bottom right logo"></a>
                         <input type="radio" id="radio_09" name="selected_thumbnail_idx" value="9">
                     </div>
                 </div>

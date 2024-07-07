@@ -4,7 +4,7 @@ from typing import TypeAlias
 
 import src.constants as constants
 
-def checkFilenameValid(filename: str | None) -> str | None:
+def checkImageFilenameValid(filename: str | None) -> str | None:
     if (filename == None or filename.strip() == ''):
         return constants.ERR_NO_FILE
     if (not('.' in filename and filename.rsplit('.', 1)[1].lower() in ['png', 'jpg', 'jpeg'])):
@@ -14,14 +14,16 @@ def checkFilenameValid(filename: str | None) -> str | None:
 JsonResponse: TypeAlias = tuple[Response, int]
 
 def createJsonResponse(status_code: int, message: str = "") -> JsonResponse:
-    if (status_code == 200):
-        status = 'success'
-    elif (status_code in [400, 404, 500]):
-        status = 'error'
-    else:
-        status = 'unknown'
+    match status_code:
+        case 200:
+            status = 'success'
+        case 400, 404, 500:
+            status = 'error'
+        case _:
+            status = 'unknown'
 
     response = {'status': status}
-    if (message):
+    message = message.strip()
+    if (len(message) > 1):
         response['message'] = message
     return (jsonify(response), status_code)

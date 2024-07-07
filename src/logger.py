@@ -1,8 +1,8 @@
 from contextlib import contextmanager
 from enum import Enum
 from io import StringIO
-from typing import Iterator, Optional
 from re import Match
+from typing import Iterator, Optional
 import sys # On doit importer tout le module sinon ça ne marche pas
 
 from src.soft_utils import getNowEpoch
@@ -21,7 +21,7 @@ def getDefaultFormattedMessage(message: str) -> str:
 
 class Logger:
     @staticmethod
-    def getFormattedMessage(message: str, level: LoggingLevel | None = None) -> str:
+    def getFormattedMessage(message: str, level: Optional[LoggingLevel] = None) -> str:
         match level:
             case LoggingLevel.DEBUG:
                 return f"[DEBUG | {getDefaultFormattedMessage(message)}"
@@ -39,16 +39,11 @@ class Logger:
                 return f"[{getDefaultFormattedMessage(message)}"
         raise ValueError(f"Invalid logging level ({level})")
 
-    def error(self, message: str) -> None:
-        self.send(message, LoggingLevel.ERROR)
-    def warn(self, message: str) -> None:
-        self.send(message, LoggingLevel.WARN)
-    def log(self, message: str) -> None:
-        self.send(message, LoggingLevel.LOG)
-    def info(self, message: str) -> None:
-        self.send(message, LoggingLevel.INFO)
-    def debug(self, message: str) -> None:
-        self.send(message, LoggingLevel.DEBUG)
+    def error(self, message: str) -> None: self.send(message, LoggingLevel.ERROR)
+    def warn(self,  message: str) -> None: self.send(message, LoggingLevel.WARN)
+    def log(self,   message: str) -> None: self.send(message, LoggingLevel.LOG)
+    def info(self,  message: str) -> None: self.send(message, LoggingLevel.INFO)
+    def debug(self, message: str) -> None: self.send(message, LoggingLevel.DEBUG)
 
     @contextmanager
     def redirect_stdout_stderr(self) -> Iterator[tuple[StringIO, StringIO]]:
@@ -94,3 +89,6 @@ class Logger:
     def __init__(self, log_file: Optional[str] = None) -> None:
         # Logger objects will print to console if log_file is None
         self.__log_file = log_file
+
+global log
+log = Logger()

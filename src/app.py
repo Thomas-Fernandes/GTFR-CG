@@ -1,116 +1,31 @@
 # Installed libraries
-from flask import Flask, render_template, request, send_from_directory, session, Response
+from flask import Flask, render_template, request
 from flask_session import Session
-from requests import get as requestsGet
 from waitress import serve
 
 # Python standard libraries
 from os import path, makedirs, remove, listdir
 from shutil import rmtree
-from uuid import uuid4
 
 # Local modules
-from src.functions import generateCoverArt, generateThumbnail, getLyrics
-from src.logger import Logger
+from src.functions import getLyrics
+from src.logger import log
 from src.soft_utils import getDefaultExpirationTimestamp, getPluralMarks
-from src.statistics import onLaunch as printInitStatistics, JsonDict, getJsonStatsFromFile, updateStats
-from src.web_utils import checkFilenameValid, createJsonResponse, JsonResponse
-
+from src.statistics import onLaunch as printInitStatistics, JsonDict, getJsonStatsFromFile
 import src.constants as constants
 
-log = Logger()
-
+# Application initialization
+global app
 app = Flask(__name__.split('.')[-1]) # so that the app name is app, not {dirpath}.app
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 app.config["SESSION_FILE_DIR"] = 'flask_session' + constants.SLASH
+
+from src.artwork_generation import artwork_generation
+from src.download import download
+app.register_blueprint(artwork_generation)
+app.register_blueprint(download)
 Session(app)
-
-@app.route('/artwork-generation', methods=['GET', 'POST'])
-def artworkGeneration() -> str | JsonResponse:
-    if (request.method == 'GET'):
-        return render_template('artwork-generation.html')
-
-    if ('user_folder' not in session):
-        session['user_folder'] = str(uuid4())
-    user_folder = str(session['user_folder'])
-
-    file = request.files['file']
-    error = checkFilenameValid(file.filename)
-    if (error):
-        log.error(error)
-        return createJsonResponse(constants.HttpStatus.BAD_REQUEST.value, error)
-
-    if (file.filename is None):
-        return createJsonResponse(constants.HttpStatus.BAD_REQUEST.value, constants.ERR_NO_FILE)
-
-    include_center_artwork = 'include_center_artwork' in request.form and\
-                             request.form['include_center_artwork'] == 'on'
-    user_processed_path = path.join(constants.PROCESSED_DIR, user_folder)
-    makedirs(user_processed_path, exist_ok=True)
-
-    filepath = path.join(user_processed_path, "uploaded_image.png")
-    file.save(filepath)
-    session['generated_artwork_path'] = filepath
-    session['include_center_artwork'] = include_center_artwork
-    return createJsonResponse(constants.HttpStatus.OK.value)
-
-@app.route('/downloadArtwork/<filename>', methods=['GET'])
-def downloadArtwork(filename: str) -> Response | JsonResponse:
-    if ('user_folder' not in session):
-        return createJsonResponse(constants.HttpStatus.NOT_FOUND.value, constants.ERR_INVALID_SESSION)
-    user_folder = str(session['user_folder'])
-    directory: str = path.abspath(path.join(constants.PROCESSED_DIR, user_folder))
-    return send_from_directory(directory, filename, as_attachment=True)
-
-@app.route('/processed_images', methods=['POST'])
-def downloadThumbnail() -> Response | JsonResponse:
-    if ('user_folder' not in session):
-        return createJsonResponse(constants.HttpStatus.NOT_FOUND.value, constants.ERR_INVALID_SESSION)
-    user_folder = str(session['user_folder'])
-    directory: str = path.abspath(path.join(constants.PROCESSED_DIR, user_folder))
-    selected_thumbnail_idx = int(request.form.get('selected_thumbnail_idx', 5)) - 1
-    filename: str = f"{constants.THUMBNAIL_PREFIX}{constants.LOGO_POSITIONS[selected_thumbnail_idx]}{constants.THUMBNAIL_EXT}"
-    return send_from_directory(directory, filename, as_attachment=True)
-
-@app.route('/use_itunes_image', methods=['POST'])
-def use_itunes_image() -> Response | JsonResponse:
-    image_url = request.form.get('url')
-    if (not image_url):
-        return createJsonResponse(constants.HttpStatus.BAD_REQUEST.value, 'No image URL provided')
-
-    if ('user_folder' not in session):
-        session['user_folder'] = str(uuid4())
-
-    user_folder = str(session['user_folder'])
-    user_processed_path = path.join(constants.PROCESSED_DIR, user_folder)
-    makedirs(user_processed_path, exist_ok=True)
-
-    image_response = requestsGet(image_url) # fetch iTunes image from deducted URL
-    if (image_response.status_code != constants.HttpStatus.OK.value):
-        return createJsonResponse(constants.HttpStatus.INTERNAL_SERVER_ERROR.value, 'Failed to download image')
-    image_path = path.join(user_processed_path, 'itunes_image.png')
-    with open(image_path, 'wb') as file:
-        file.write(image_response.content)
-
-    session['generated_artwork_path'] = image_path
-    return createJsonResponse(constants.HttpStatus.OK.value)
-
-@app.route('/processed_images', methods=['GET']) # FIXME GET and POST functions are discordant in use
-def processed_images() -> str | JsonResponse:
-    if ('generated_artwork_path' not in session):
-        return createJsonResponse(constants.HttpStatus.BAD_REQUEST.value, 'No image was selected or uploaded')
-
-    user_folder = str(session['user_folder'])
-    user_processed_path = path.join(constants.PROCESSED_DIR, user_folder)
-    generated_artwork_path = str(session['generated_artwork_path'])
-    include_center_artwork = session.get('include_center_artwork', True)
-    output_bg = path.join(user_processed_path, constants.PROCESSED_ARTWORK_FILENAME)
-    generateCoverArt(generated_artwork_path, output_bg, include_center_artwork)
-    generateThumbnail(output_bg, user_processed_path)
-    updateStats(to_increment='artworkGenerations')
-
-    return render_template('download.html', user_folder=user_folder, bg=constants.PROCESSED_ARTWORK_FILENAME)
 
 @app.route('/lyrics', methods=['GET', 'POST'])
 def lyrics() -> str:
