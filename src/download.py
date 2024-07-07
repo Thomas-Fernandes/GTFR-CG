@@ -8,10 +8,10 @@ from src.web_utils import createJsonResponse, JsonResponse
 import src.constants as constants
 
 from src.app import app
-download = Blueprint('download', __name__.split('.')[-1])
+bp_download = Blueprint('download', __name__.split('.')[-1])
 session = app.config
 
-@download.route('/downloadArtwork/<filename>', methods=['GET'])
+@bp_download.route('/downloadArtwork/<filename>', methods=['GET'])
 def downloadArtwork(filename: str) -> Response | JsonResponse:
     if ('user_folder' not in session):
         return createJsonResponse(constants.HttpStatus.NOT_FOUND.value, constants.ERR_INVALID_SESSION)
@@ -19,7 +19,7 @@ def downloadArtwork(filename: str) -> Response | JsonResponse:
     directory: str = path.abspath(path.join(constants.PROCESSED_DIR, user_folder))
     return send_from_directory(directory, filename, as_attachment=True)
 
-@download.route('/processed_images', methods=['POST'])
+@bp_download.route('/processed_images', methods=['POST'])
 def downloadThumbnail() -> Response | JsonResponse:
     if ('user_folder' not in session):
         return createJsonResponse(constants.HttpStatus.NOT_FOUND.value, constants.ERR_INVALID_SESSION)
@@ -29,7 +29,7 @@ def downloadThumbnail() -> Response | JsonResponse:
     filename: str = f"{constants.THUMBNAIL_PREFIX}{constants.LOGO_POSITIONS[selected_thumbnail_idx]}{constants.THUMBNAIL_EXT}"
     return send_from_directory(directory, filename, as_attachment=True)
 
-@download.route('/processed_images', methods=['GET']) # FIXME GET and POST functions are discordant in use
+@bp_download.route('/processed_images', methods=['GET'])
 def processed_images() -> str | JsonResponse:
     if ('generated_artwork_path' not in session):
         return createJsonResponse(constants.HttpStatus.BAD_REQUEST.value, 'No image was selected or uploaded')

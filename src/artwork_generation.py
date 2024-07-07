@@ -9,10 +9,10 @@ from src.web_utils import checkImageFilenameValid, createJsonResponse, JsonRespo
 import src.constants as constants
 
 from src.app import app
-artwork_generation = Blueprint('artwork-generation', __name__.split('.')[-1])
+bp_artwork_generation = Blueprint('artwork_generation', __name__.split('.')[-1])
 session = app.config
 
-@artwork_generation.route('/use_itunes_image', methods=['POST'])
+@bp_artwork_generation.route('/use_itunes_image', methods=['POST'])
 def use_itunes_image() -> Response | JsonResponse:
     image_url = request.form.get('url')
     if (not image_url):
@@ -35,7 +35,7 @@ def use_itunes_image() -> Response | JsonResponse:
     session['generated_artwork_path'] = image_path
     return createJsonResponse(constants.HttpStatus.OK.value)
 
-@artwork_generation.route('/artwork-generation', methods=['GET', 'POST'])
+@bp_artwork_generation.route('/artwork-generation', methods=['GET', 'POST'])
 def artworkGeneration() -> str | JsonResponse:
     if (request.method == 'GET'):
         return render_template('artwork-generation.html')

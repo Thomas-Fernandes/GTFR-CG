@@ -1,5 +1,5 @@
 # Installed libraries
-from flask import Flask, render_template, request
+from flask import Flask, render_template
 from flask_session import Session
 from waitress import serve
 
@@ -8,10 +8,9 @@ from os import path, makedirs, remove, listdir
 from shutil import rmtree
 
 # Local modules
-from src.functions import getLyrics
 from src.logger import log
-from src.soft_utils import getDefaultExpirationTimestamp, getPluralMarks
-from src.statistics import onLaunch as printInitStatistics, JsonDict, getJsonStatsFromFile
+from src.soft_utils import getDefaultExpirationTimestamp
+from src.statistics import onLaunch as printInitStatistics
 import src.constants as constants
 
 # Application initialization
@@ -21,43 +20,21 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 app.config["SESSION_FILE_DIR"] = 'flask_session' + constants.SLASH
 
-from src.artwork_generation import artwork_generation
-from src.download import download
-app.register_blueprint(artwork_generation)
-app.register_blueprint(download)
+def initializeBlueprints() -> None:
+    from src.artwork_generation import bp_artwork_generation
+    from src.download import bp_download
+    from src.home import bp_home
+    from src.lyrics import bp_lyrics
+    blueprints = [
+        bp_artwork_generation,
+        bp_download,
+        bp_home,
+        bp_lyrics
+    ]
+    for blueprint in blueprints:
+        app.register_blueprint(blueprint)
+initializeBlueprints()
 Session(app)
-
-@app.route('/lyrics', methods=['GET', 'POST'])
-def lyrics() -> str:
-    if (request.method != 'POST'):
-        return render_template('lyrics.html', lyrics="")
-
-    artist = request.form.get('artist', None)
-    song = request.form.get('song', None)
-    lyrics_text = request.form.get('lyrics')
-
-    if (artist is not None and song is not None):
-        lyrics_text = getLyrics(song, artist)
-
-    return render_template('lyrics.html', lyrics=lyrics_text)
-
-@app.route('/statistics')
-def statistics() -> str:
-    return render_template('statistics.html')
-
-@app.route('/home')
-def home() -> str:
-    stats: JsonDict = getJsonStatsFromFile()
-    plurals: dict[str, str] = getPluralMarks(stats)
-    for key in constants.AVAILABLE_STATS:
-        if (key not in stats):
-            stats[key] = constants.EMPTY_STATS[key]
-    return render_template('home.html', stats=stats, pluralMarks=plurals)
-
-@app.errorhandler(404)
-def page_not_found(_e: Exception) -> str:
-    log.warn(f"Page not found: {request.url}. Redirecting to home page ({'/home'}).")
-    return render_template('home.html', stats={}, pluralMarks={})
 
 @app.route('/')
 def root() -> str:
