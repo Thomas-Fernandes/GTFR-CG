@@ -79,7 +79,7 @@ $(document).ready(function() {
         }
 
         $.ajax({
-            url: '/artwork-generation.artworkGeneration',
+            url: `/artwork-generation.artworkGeneration`,
             type: 'POST',
             data: new FormData($('#fileUpload')[0]),
             processData: false,
