@@ -42,14 +42,13 @@ $(document).ready(function() {
                 resultsDiv.empty();
                 if (data.results.length > 0) {
                     data.results.forEach(function(result) {
-                        // itunes max image size is 3000x3000
-                        const highResImageUrl = result.artworkUrl100.replace('100x100', '3000x3000');
+                        const highResImageUrl = result.artworkUrl100.replace('100x100', '3000x3000'); // itunes max image size is 3000x3000
                         const img = $('<img>').attr('src', highResImageUrl).addClass('result-image').attr('alt', result.collectionName || result.trackName);
                         const imgName = $('<p>').addClass('centered bold italic').text(`${result.artistName} - ${result.collectionName.replace(' - Single', '')}`);
                         const btn = $('<button>').text('Use this image').on('click', function() {
-                            $.post('/use_itunes_image', { url: highResImageUrl }, function(response) {
+                            $.post('/artwork-generation/use-itunes-image', { url: highResImageUrl }, function(response) {
                                 if (response.status === ResponseStatus.SUCCESS) {
-                                    window.location.href = '/processed_images';
+                                    window.location.href = '/processed-images';
                                 } else {
                                     sendToast(response.message, 'Error');
                                 }
@@ -79,14 +78,14 @@ $(document).ready(function() {
         }
 
         $.ajax({
-            url: `/artwork-generation.artworkGeneration`,
+            url: `/artwork-generation`,
             type: 'POST',
             data: new FormData($('#fileUpload')[0]),
             processData: false,
             contentType: false,
             success: function(response) {
                 if (response.status === ResponseStatus.SUCCESS) {
-                    window.location.href = '/processed_images';
+                    window.location.href = '/processed-images';
                 } else {
                     sendToast(response.message, 'Error');
                 }

@@ -87,7 +87,7 @@ def updateStats(path: str = constants.STATS_FILE_PATH, to_increment: Optional[st
 def initStats(from_error: bool = False) -> JsonDict:
     stats: JsonDict = {}
     if (from_error):
-        stats['dateFirstOperation'] = "unknown"
+        stats['dateFirstOperation'] = "N/A"
 
     with open(constants.STATS_FILE_PATH, 'w') as file:
         file.write(dumps(stats))

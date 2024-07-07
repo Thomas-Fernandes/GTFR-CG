@@ -10,18 +10,18 @@
 <body id="head">
     <span class="top-bot-spacer"></span>
     <div class="navbar">
-        <button type="button" onclick="window.location.href='{{ url_for('home.home') }}'"><span class="left">Home</span></button>
-        <button type="button" onclick="window.location.href='{{ url_for('artwork_generation.artworkGeneration') }}'"><span class="left">Artwork Generation</span></button>
+        <button type="button" onclick="window.location.href='{{ url_for('home.renderHome') }}'"><span class="left">Home</span></button>
+        <button type="button" onclick="window.location.href='{{ url_for('artwork_generation.renderArtworkGeneration') }}'"><span class="left">Artwork Generation</span></button>
     </div>
     <h1>Lyrics</h1>
-    <form method="post" class="search-form flexbox flex-row">
+    <form method="POST" class="search-form flexbox flex-row">
         <div class="search-bars">
             <input type="text" name="artist" placeholder="Enter artist name" required>
             <input type="text" name="song" placeholder="Enter song name" required>
             <input type="submit" value="Search Lyrics" class="action-button search-button">
         </div>
     </form>
-    <form method="post" class="lyrics-form flexbox">
+    <form method="POST" class="lyrics-form flexbox">
         <textarea name="lyrics" rows="20" cols="80" placeholder="Lyrics will appear here...">{{ lyrics }}</textarea>
         <br>
         <input type="submit" value="Save Lyrics" class="action-button save-button">

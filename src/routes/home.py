@@ -10,7 +10,7 @@ bp_home = Blueprint('home', __name__.split('.')[-1])
 session = app.config
 
 @bp_home.route('/home')
-def home() -> str:
+def renderHome() -> str:
     stats: JsonDict = getJsonStatsFromFile()
     plurals: dict[str, str] = getPluralMarks(stats)
     for key in constants.AVAILABLE_STATS:
@@ -19,7 +19,7 @@ def home() -> str:
     return render_template('home.html', stats=stats, pluralMarks=plurals)
 
 @bp_home.errorhandler(404)
-def page_not_found(_e: Exception) -> str:
+def pageNotFound(_e: Exception) -> str:
     log.warn(f"Page not found: {request.url}. Redirecting to home page ({'/home'}).")
     return render_template('home.html', stats={}, pluralMarks={})
 

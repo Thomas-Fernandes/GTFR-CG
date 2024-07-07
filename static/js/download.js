@@ -2,3 +2,9 @@
 $("a").click(function() {
     $(this).next("input[type=radio]").prop("checked", true);
 });
+
+function updateActionAndSubmit(form) {
+    const selectedOption = document.querySelector('input[name="selected_thumbnail_idx"]:checked').value;
+    form.action = '/download-thumbnail/' + encodeURIComponent(selectedOption);
+    form.submit();
+}
