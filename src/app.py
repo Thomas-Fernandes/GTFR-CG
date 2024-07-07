@@ -1,5 +1,5 @@
 # Installed libraries
-from flask import Flask, render_template
+from flask import Flask
 from flask_session import Session
 from waitress import serve
 
@@ -16,29 +16,26 @@ import src.constants as constants
 # Application initialization
 global app
 app = Flask(__name__.split('.')[-1]) # so that the app name is app, not {dirpath}.app
-app.config["SESSION_PERMANENT"] = False
-app.config["SESSION_TYPE"] = "filesystem"
-app.config["SESSION_FILE_DIR"] = 'flask_session' + constants.SLASH
+def initApp() -> None:
+    app.config["SESSION_PERMANENT"] = False
+    app.config["SESSION_TYPE"] = "filesystem"
+    app.config["SESSION_FILE_DIR"] = "flask_session" + constants.SLASH
 
-def initializeBlueprints() -> None:
-    from src.artwork_generation import bp_artwork_generation
-    from src.download import bp_download
-    from src.home import bp_home
-    from src.lyrics import bp_lyrics
-    blueprints = [
-        bp_artwork_generation,
-        bp_download,
-        bp_home,
-        bp_lyrics
-    ]
-    for blueprint in blueprints:
-        app.register_blueprint(blueprint)
-initializeBlueprints()
-Session(app)
-
-@app.route('/')
-def root() -> str:
-    return render_template('home.html', stats={}, pluralMarks={})
+    def initBlueprints() -> None:
+        from src.artwork_generation import bp_artwork_generation
+        from src.download import bp_download
+        from src.home import bp_home
+        from src.lyrics import bp_lyrics
+        blueprints = [
+            bp_artwork_generation,
+            bp_download,
+            bp_home,
+            bp_lyrics
+        ]
+        for blueprint in blueprints:
+            app.register_blueprint(blueprint)
+    initBlueprints()
+    Session(app)
 
 def main(host: str = constants.HOST_HOME, port: int = constants.DEFAULT_PORT) -> None:
     host_display_name = "localhost" if host == constants.HOST_HOME else host
@@ -82,4 +79,5 @@ def main(host: str = constants.HOST_HOME, port: int = constants.DEFAULT_PORT) ->
 
     printInitStatistics()
     cacheCleanup()
+    initApp()
     serve(app, host=host, port=port, threads=8)

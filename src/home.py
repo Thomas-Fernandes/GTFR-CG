@@ -18,7 +18,11 @@ def home() -> str:
             stats[key] = constants.EMPTY_STATS[key]
     return render_template('home.html', stats=stats, pluralMarks=plurals)
 
-@app.errorhandler(404)
+@bp_home.errorhandler(404)
 def page_not_found(_e: Exception) -> str:
     log.warn(f"Page not found: {request.url}. Redirecting to home page ({'/home'}).")
+    return render_template('home.html', stats={}, pluralMarks={})
+
+@bp_home.route('/')
+def root() -> str:
     return render_template('home.html', stats={}, pluralMarks={})

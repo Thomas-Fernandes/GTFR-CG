@@ -9,11 +9,9 @@ from re import sub, split, match
 from typing import Optional
 
 # Local modules
-from src.logger import Logger
+from src.logger import log
 from src.statistics import updateStats
 import src.constants as constants
-
-log = Logger()
 
 genius = Genius(constants.GENIUS_API_TOKEN)
 
@@ -87,7 +85,7 @@ def generateThumbnail(bg_path: str, output_folder: str) -> None:
 
 def getLyrics(song_title: str, artist_name: str) -> str:
     song: Optional[Genius.Song] = None
-    with log.redirect_stdout_stderr() as (stdout, stderr):
+    with log.redirect_stdout_stderr() as (stdout, stderr): # type: ignore
         song = genius.search_song(song_title, artist_name)
 
     if (song is None):
