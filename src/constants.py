@@ -5,7 +5,7 @@ from os import getenv, name as osName
 from re import compile
 from typing import Optional
 
-from src.typing import Context, DictKeys, JsonDict
+from src.typing import Context, DictKeys, JsonDict, Route, Routes
 
 ############# ENUMS #############
 
@@ -29,6 +29,32 @@ class TimeInSeconds(Enum):
 HOST_HOME = "0.0.0.0"
 DEFAULT_PORT = 8000
 
+ROUTES = Routes(
+    root = Route(
+        path="/",
+        view_filename="home.html",
+    ),
+    home = Route(
+        path="/home",
+        view_filename="home.html",
+        blueprint_name="home",
+    ),
+    art_gen = Route(
+        path="/artwork-generation",
+        view_filename="artwork_generation.html",
+        blueprint_name="artwork-generation",
+    ),
+    proc_img = Route(
+        path="/processed-images",
+        view_filename="processed_images.html",
+        blueprint_name="processed-images",
+    ),
+    lyrics = Route(
+        path="/lyrics",
+        view_filename="lyrics.html",
+        blueprint_name="lyrics",
+    ),
+)
 DEFAULT_CONTEXT_HOME: Context = {
     "stats": {},
     "pluralMarks": {},

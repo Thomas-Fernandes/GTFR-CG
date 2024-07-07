@@ -5,8 +5,8 @@ from os import path
 
 from src.logger import log
 from src.statistics import updateStats
-from src.typing import Context
-from src.web_utils import createJsonResponse, JsonResponse
+from src.typing import Context, JsonResponse
+from src.web_utils import createJsonResponse
 import src.constants as constants
 
 from src.app import app

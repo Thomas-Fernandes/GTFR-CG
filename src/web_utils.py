@@ -1,7 +1,6 @@
-from flask import jsonify, Response
+from flask import jsonify
 
-from typing import TypeAlias
-
+from src.typing import JsonResponse
 import src.constants as constants
 
 def checkImageFilenameValid(filename: str | None) -> str | None:
@@ -10,8 +9,6 @@ def checkImageFilenameValid(filename: str | None) -> str | None:
     if (not('.' in filename and filename.rsplit('.', 1)[1].lower() in ['png', 'jpg', 'jpeg'])):
         return constants.ERR_INVALID_FILE_TYPE
     return None
-
-JsonResponse: TypeAlias = tuple[Response, int]
 
 def createJsonResponse(status_code: int, message: str = "") -> JsonResponse:
     match status_code:

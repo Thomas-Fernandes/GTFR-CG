@@ -5,7 +5,8 @@ from os import path, makedirs
 from uuid import uuid4
 
 from src.logger import log
-from src.web_utils import checkImageFilenameValid, createJsonResponse, JsonResponse
+from src.typing import JsonResponse
+from src.web_utils import checkImageFilenameValid, createJsonResponse
 import src.constants as constants
 
 from src.app import app
