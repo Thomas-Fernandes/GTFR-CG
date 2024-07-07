@@ -5,7 +5,7 @@ from src.statistics import JsonDict, getJsonStatsFromFile
 import src.constants as constants
 
 from src.app import app
-bp_home = Blueprint(constants.ROUTES.home.blueprint_name, __name__.split('.')[-1])
+bp_home = Blueprint(constants.ROUTES.home.bp_name, __name__.split('.')[-1])
 session = app.config
 
 @staticmethod
@@ -25,7 +25,7 @@ def renderHome() -> str:
             context["stats"][key] = constants.EMPTY_STATS[key]
     return render_template(constants.ROUTES.home.view_filename, **context)
 
-@app.errorhandler(404) # needs to be applied to app, not blueprint
+@app.errorhandler(constants.HttpStatus.NOT_FOUND.value) # needs to be applied to app, not blueprint
 def pageNotFound(_e: Exception) -> str:
     def extractSearchedPath(url: str) -> str:
         return "/" + '/'.join(url.split(constants.SLASH)[3:])

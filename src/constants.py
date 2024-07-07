@@ -37,27 +37,30 @@ ROUTES = Routes(
     home = Route(
         path="/home",
         view_filename="home.html",
-        blueprint_name="home",
+        bp_name="home",
     ),
     art_gen = Route(
         path="/artwork-generation",
-        view_filename="artwork_generation.html",
-        blueprint_name="artwork-generation",
+        view_filename="artwork-generation.html",
+        bp_name="art-gen",
     ),
     proc_img = Route(
         path="/processed-images",
-        view_filename="processed_images.html",
-        blueprint_name="processed-images",
+        view_filename="processed-images.html",
+        bp_name="processed-images",
     ),
     lyrics = Route(
         path="/lyrics",
         view_filename="lyrics.html",
-        blueprint_name="lyrics",
+        bp_name="lyrics",
     ),
 )
 DEFAULT_CONTEXT_HOME: Context = {
     "stats": {},
     "pluralMarks": {},
+}
+DEFAULT_CONTEXT_LYRICS: Context = {
+    "lyrics": "",
 }
 
 # Statistics

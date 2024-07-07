@@ -10,7 +10,7 @@ from src.web_utils import createJsonResponse
 import src.constants as constants
 
 from src.app import app
-bp_processed_images = Blueprint("processed-images", __name__.split('.')[-1])
+bp_processed_images = Blueprint(constants.ROUTES.proc_img.bp_name, __name__.split('.')[-1])
 session = app.config
 
 @staticmethod
@@ -101,7 +101,7 @@ def downloadThumbnail(idx: str) -> Response | JsonResponse:
         f"{constants.THUMBNAIL_EXT}"
     return downloadImage(filename)
 
-@bp_processed_images.route("/processed-images", methods=["GET"])
+@bp_processed_images.route(constants.ROUTES.proc_img.path, methods=["GET"])
 def renderProcessedImages() -> str | JsonResponse:
     if ("generated_artwork_path" not in session):
         return createJsonResponse(constants.HttpStatus.BAD_REQUEST.value, "No image was selected or uploaded")
@@ -117,6 +117,5 @@ def renderProcessedImages() -> str | JsonResponse:
 
     context: Context = {
         "user_folder": user_folder,
-        "bg": constants.PROCESSED_ARTWORK_FILENAME,
     }
-    return render_template("processed-images.html", **context)
+    return render_template(constants.ROUTES.proc_img.view_filename, **context)

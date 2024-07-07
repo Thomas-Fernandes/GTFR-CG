@@ -11,7 +11,7 @@ Context: TypeAlias = dict[str, Any]
 class Route:
     path: str
     view_filename: Optional[str] = None
-    blueprint_name: Optional[str] = None
+    bp_name: Optional[str] = None
 
     def __repr__(self) -> str:
         content: str = ""

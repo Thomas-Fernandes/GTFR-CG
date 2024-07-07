@@ -10,7 +10,7 @@ from src.typing import Context
 import src.constants as constants
 
 from src.app import app
-bp_lyrics = Blueprint('lyrics', __name__.split('.')[-1])
+bp_lyrics = Blueprint(constants.ROUTES.lyrics.bp_name, __name__.split('.')[-1])
 session = app.config
 
 genius = Genius(constants.GENIUS_API_TOKEN)
@@ -48,7 +48,7 @@ def fetchLyricsFromGenius(song_title: str, artist_name: str) -> str:
 
     return lyrics
 
-@bp_lyrics.route("/lyrics", methods=["POST"])
+@bp_lyrics.route(constants.ROUTES.lyrics.path, methods=["POST"])
 def updateTextarea() -> str:
     artist = request.form.get("artist", None)
     song = request.form.get("song", None)
@@ -60,8 +60,8 @@ def updateTextarea() -> str:
     context: Context = {
         "lyrics": lyrics_text,
     }
-    return render_template("lyrics.html", **context)
+    return render_template(constants.ROUTES.lyrics.view_filename, **context)
 
-@bp_lyrics.route("/lyrics", methods=["GET"])
+@bp_lyrics.route(constants.ROUTES.lyrics.path, methods=["GET"])
 def renderLyrics() -> str:
-    return render_template("lyrics.html", lyrics="")
+    return render_template(constants.ROUTES.lyrics.view_filename, **constants.DEFAULT_CONTEXT_LYRICS)

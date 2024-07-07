@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, Response
+from flask import Blueprint, render_template, request
 from requests import get as requestsGet
 
 from os import path, makedirs
@@ -10,11 +10,11 @@ from src.web_utils import checkImageFilenameValid, createJsonResponse
 import src.constants as constants
 
 from src.app import app
-bp_artwork_generation = Blueprint("artwork_generation", __name__.split('.')[-1])
+bp_artwork_generation = Blueprint(constants.ROUTES.art_gen.bp_name, __name__.split('.')[-1])
 session = app.config
 
-@bp_artwork_generation.route("/artwork-generation/use-itunes-image", methods=["POST"])
-def useItunesImage() -> Response | JsonResponse:
+@bp_artwork_generation.route(constants.ROUTES.art_gen.path + "/use-itunes-image", methods=["POST"])
+def useItunesImage() -> JsonResponse:
     image_url = request.form.get("url")
     if (not image_url):
         return createJsonResponse(constants.HttpStatus.BAD_REQUEST.value, "No image URL provided")
@@ -36,8 +36,8 @@ def useItunesImage() -> Response | JsonResponse:
     session["generated_artwork_path"] = image_path
     return createJsonResponse(constants.HttpStatus.OK.value)
 
-@bp_artwork_generation.route("/artwork-generation/use-local-image", methods=["POST"])
-def useLocalImage() -> str | JsonResponse:
+@bp_artwork_generation.route(constants.ROUTES.art_gen.path + "/use-local-image", methods=["POST"])
+def useLocalImage() -> JsonResponse:
     if ("user_folder" not in session):
         session["user_folder"] = str(uuid4())
     user_folder = str(session["user_folder"])
@@ -62,6 +62,6 @@ def useLocalImage() -> str | JsonResponse:
     session["include_center_artwork"] = include_center_artwork
     return createJsonResponse(constants.HttpStatus.OK.value)
 
-@bp_artwork_generation.route("/artwork-generation", methods=["GET"])
+@bp_artwork_generation.route(constants.ROUTES.art_gen.path, methods=["GET"])
 def renderArtworkGeneration() -> str | JsonResponse:
-    return render_template("artwork-generation.html")
+    return render_template(constants.ROUTES.art_gen.view_filename)

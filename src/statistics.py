@@ -32,7 +32,7 @@ class Stats:
         nth = 0
 
         representation: str = "{"
-        for key, value in stats_dict.items():
+        for (key, value) in stats_dict.items():
             representation += \
                 f"'{key}': {value}" + (sep if nth < dict_size else "")
             nth += 1
