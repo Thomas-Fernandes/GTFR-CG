@@ -16,10 +16,10 @@ session = app.config
 @bp_artwork_generation.route(constants.ROUTES.art_gen.path + "/use-itunes-image", methods=["POST"])
 def useItunesImage() -> JsonResponse:
     image_url = request.form.get("url")
-    if (not image_url):
+    if not image_url:
         return createJsonResponse(constants.HttpStatus.BAD_REQUEST.value, "No image URL provided")
 
-    if ("user_folder" not in session):
+    if "user_folder" not in session:
         session["user_folder"] = str(uuid4())
 
     user_folder = str(session["user_folder"])
@@ -27,7 +27,7 @@ def useItunesImage() -> JsonResponse:
     makedirs(user_processed_path, exist_ok=True)
 
     image_response = requestsGet(image_url) # fetch iTunes image from deducted URL
-    if (image_response.status_code != constants.HttpStatus.OK.value):
+    if image_response.status_code != constants.HttpStatus.OK.value:
         return createJsonResponse(constants.HttpStatus.INTERNAL_SERVER_ERROR.value, "Failed to download image")
     image_path = path.join(user_processed_path, "itunes_image.png")
     with open(image_path, "wb") as file:
@@ -38,17 +38,17 @@ def useItunesImage() -> JsonResponse:
 
 @bp_artwork_generation.route(constants.ROUTES.art_gen.path + "/use-local-image", methods=["POST"])
 def useLocalImage() -> JsonResponse:
-    if ("user_folder" not in session):
+    if "user_folder" not in session:
         session["user_folder"] = str(uuid4())
     user_folder = str(session["user_folder"])
 
     file = request.files["file"]
     error = checkImageFilenameValid(file.filename)
-    if (error):
+    if error is not None:
         log.error(error)
         return createJsonResponse(constants.HttpStatus.BAD_REQUEST.value, error)
 
-    if (file.filename is None):
+    if file.filename is None:
         return createJsonResponse(constants.HttpStatus.BAD_REQUEST.value, constants.ERR_NO_FILE)
 
     include_center_artwork: bool = \

@@ -17,11 +17,12 @@ class HttpStatus(Enum):
     INTERNAL_SERVER_ERROR = 500
 
 class TimeInSeconds(Enum):
-    WEEK   = 600_000
-    DAY    = 86_400
-    HOUR   = 3_600
-    MINUTE = 60
     SECOND = 1
+    MINUTE = 60 * SECOND
+    HOUR   = 60 * MINUTE
+    DAY    = 24 * HOUR
+    WEEK   = 7 * DAY
+    YEAR   = int(365.256 * DAY)
 
 ######### REGULAR TYPES #########
 

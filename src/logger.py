@@ -10,11 +10,11 @@ import src.constants as constants
 
 class LoggingLevel(Enum):
     DEBUG    = 0x100
-    INFO     = 0x101
-    LOG      = 0x200
-    WARN     = 0x301
-    ERROR    = 0x302
-    CRITICAL = 0x303
+    INFO     = 0x200
+    LOG      = 0x201
+    WARN     = 0x300
+    ERROR    = 0x400
+    CRITICAL = 0x500
 
 def getDefaultFormattedMessage(message: str) -> str:
     return f"{getNowEpoch()}] {message}"
@@ -62,17 +62,17 @@ class Logger:
             def process_message(line: str) -> str:
                 for (pattern, action) in constants.PATTERNS:
                     match: Optional[Match[str]] = pattern.match(line)
-                    if (match is not None):
+                    if match is not None:
                         return action(match)
                 return line
 
-            if (stdout_content is not None):
+            if stdout_content is not None:
                 stdout_content = stdout_content.strip()
                 for line in stdout_content.splitlines():
                     processed_line = process_message(line)
                     self.info(processed_line)
 
-            if (stderr_content is not None):
+            if stderr_content is not None:
                 stderr_content = stderr_content.strip()
                 for line in stderr_content.splitlines():
                     processed_line = process_message(line)
@@ -80,7 +80,7 @@ class Logger:
 
     def send(self, message: str, level: Optional[LoggingLevel] = None) -> None:
         message_to_log = self.getFormattedMessage(message, level)
-        if (self.__log_file):
+        if self.__log_file is not None:
             with open(self.__log_file, 'a') as file:
                 file.write(message_to_log + '\n')
         else:

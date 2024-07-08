@@ -87,7 +87,7 @@ def generateThumbnails(bg_path: str, output_folder: str) -> None:
 
 @bp_processed_images.route("/download-image/<filename>", methods=["GET"])
 def downloadImage(filename: str) -> Response | JsonResponse:
-    if ("user_folder" not in session):
+    if "user_folder" not in session:
         return createJsonResponse(constants.HttpStatus.NOT_FOUND.value, constants.ERR_INVALID_SESSION)
 
     user_folder = str(session["user_folder"])
@@ -104,7 +104,7 @@ def downloadThumbnail(idx: str) -> Response | JsonResponse:
 
 @bp_processed_images.route(constants.ROUTES.proc_img.path, methods=["GET"])
 def renderProcessedImages() -> RenderView | JsonResponse:
-    if ("generated_artwork_path" not in session):
+    if "generated_artwork_path" not in session:
         return createJsonResponse(constants.HttpStatus.BAD_REQUEST.value, "No image was selected or uploaded")
 
     user_folder = str(session["user_folder"])

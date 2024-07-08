@@ -22,7 +22,7 @@ def renderHome() -> RenderView:
     context["stats"] = getJsonStatsFromFile()
     context["plurals"] = getPluralMarks(context["stats"])
     for key in constants.AVAILABLE_STATS:
-        if (key not in context["stats"]):
+        if key not in context["stats"]:
             context["stats"][key] = constants.EMPTY_STATS[key]
     return render_template(constants.ROUTES.home.view_filename, **context)
 

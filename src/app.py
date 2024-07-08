@@ -53,12 +53,12 @@ def main(host: str = constants.HOST_HOME, port: int = constants.DEFAULT_PORT) ->
             return path.isfile(file) and int(path.getmtime(file)) < getDefaultExpirationTimestamp()
 
         for file in filepaths:
-            if (isFileExpired(file)):
+            if isFileExpired(file):
                 remove(file)
                 eliminated_files_count += 1
-        if (not listdir(folder)): # if folder is empty, remove it
+        if not listdir(folder): # if folder is empty, remove it
             rmtree(folder)
-        if (eliminated_files_count != 0):
+        if eliminated_files_count != 0:
             pluralMarks = ["s", "were"] if eliminated_files_count != 1 else ["", "was"]
             log.info(f"{eliminated_files_count} cached file{pluralMarks[0]} {pluralMarks[1]} " \
                 f"removed in {folder.split(constants.SLASH)[0]}.")
@@ -69,12 +69,12 @@ def main(host: str = constants.HOST_HOME, port: int = constants.DEFAULT_PORT) ->
         eliminated_files_count: int = 0
 
         for folder in to_clean:
-            if (not path.isdir(folder)):
+            if not path.isdir(folder):
                 continue
             session_dirname_list = listdir(folder)
             for sdn in session_dirname_list:
                 eliminated_files_count += removeOldUploads(folder + sdn)
-            if (eliminated_files_count == 0):
+            if eliminated_files_count == 0:
                 log.info("Cache still fresh. Loading...")
 
     printInitStatistics()

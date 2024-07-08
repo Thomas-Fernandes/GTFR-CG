@@ -16,7 +16,7 @@ class Route:
     def __repr__(self) -> str:
         content: str = ""
         for (key, value) in self.__dict__.items():
-            if (value is not None):
+            if value is not None:
                 content += f"{key}={value}, "
         return f"Route({content[:-2]})"
 

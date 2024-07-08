@@ -67,7 +67,7 @@ def updateStats(path: str = constants.STATS_FILE_PATH, to_increment: Optional[st
     new_stats['lyricsFetches'] = int(json_stats.get('lyricsFetches', 0))
 
     incrementable_stats: list[str] = ['artworkGenerations', 'lyricsFetches']
-    if (to_increment in incrementable_stats):
+    if to_increment in incrementable_stats:
         new_stats[to_increment] += 1
 
     try:
@@ -83,7 +83,7 @@ def updateStats(path: str = constants.STATS_FILE_PATH, to_increment: Optional[st
 
 def initStats(from_error: bool = False) -> JsonDict:
     stats: JsonDict = {}
-    if (from_error):
+    if from_error:
         stats['dateFirstOperation'] = "N/A"
 
     with open(constants.STATS_FILE_PATH, 'w') as file:

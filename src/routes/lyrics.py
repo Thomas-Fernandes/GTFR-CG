@@ -21,7 +21,7 @@ def fetchLyricsFromGenius(song_title: str, artist_name: str) -> str:
     with log.redirect_stdout_stderr() as (stdout, stderr): # type: ignore
         song = genius.search_song(song_title, artist_name)
 
-    if (song is None):
+    if song is None:
         return "Lyrics not found."
 
     lyrics = song.lyrics
@@ -34,8 +34,8 @@ def fetchLyricsFromGenius(song_title: str, artist_name: str) -> str:
         song_parts = split(r"<[^>]+>", lyrics)
         new_lyrics = []
         for (i, part) in enumerate(song_parts):
-            if (match(r'"[^"]*"', part)):
-                if (i == 0 or song_parts[i-1].endswith("\n\n") or song_parts[i-1].strip() == ""):
+            if match(r'"[^"]*"', part):
+                if i == 0 or song_parts[i-1].endswith("\n\n") or song_parts[i-1].strip() == "":
                     new_lyrics.append(part)
                 else:
                     new_lyrics.append("\n\n" + part)
@@ -54,7 +54,7 @@ def updateTextarea() -> RenderView:
     song = request.form.get("song", None)
     lyrics_text = request.form.get("lyrics")
 
-    if (artist is not None and song is not None):
+    if artist is not None and song is not None:
         lyrics_text = fetchLyricsFromGenius(song, artist)
 
     context: Context = {
