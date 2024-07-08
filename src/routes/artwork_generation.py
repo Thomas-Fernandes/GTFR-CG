@@ -5,7 +5,7 @@ from os import path, makedirs
 from uuid import uuid4
 
 from src.logger import log
-from src.typing import JsonResponse
+from src.typing import JsonResponse, RenderView
 from src.web_utils import checkImageFilenameValid, createJsonResponse
 import src.constants as constants
 
@@ -63,5 +63,5 @@ def useLocalImage() -> JsonResponse:
     return createJsonResponse(constants.HttpStatus.OK.value)
 
 @bp_artwork_generation.route(constants.ROUTES.art_gen.path, methods=["GET"])
-def renderArtworkGeneration() -> str | JsonResponse:
+def renderArtworkGeneration() -> RenderView:
     return render_template(constants.ROUTES.art_gen.view_filename)

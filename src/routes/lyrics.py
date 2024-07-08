@@ -6,7 +6,7 @@ from typing import Optional
 
 from src.logger import log
 from src.statistics import updateStats
-from src.typing import Context
+from src.typing import Context, RenderView
 import src.constants as constants
 
 from src.app import app
@@ -49,7 +49,7 @@ def fetchLyricsFromGenius(song_title: str, artist_name: str) -> str:
     return lyrics
 
 @bp_lyrics.route(constants.ROUTES.lyrics.path, methods=["POST"])
-def updateTextarea() -> str:
+def updateTextarea() -> RenderView:
     artist = request.form.get("artist", None)
     song = request.form.get("song", None)
     lyrics_text = request.form.get("lyrics")
@@ -63,5 +63,5 @@ def updateTextarea() -> str:
     return render_template(constants.ROUTES.lyrics.view_filename, **context)
 
 @bp_lyrics.route(constants.ROUTES.lyrics.path, methods=["GET"])
-def renderLyrics() -> str:
-    return render_template(constants.ROUTES.lyrics.view_filename, **constants.DEFAULT_CONTEXT_LYRICS)
+def renderLyrics() -> RenderView:
+    return render_template(constants.ROUTES.lyrics.view_filename, **constants.DEFAULT_CONTEXT)

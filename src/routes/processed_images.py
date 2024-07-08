@@ -5,7 +5,7 @@ from os import path
 
 from src.logger import log
 from src.statistics import updateStats
-from src.typing import Context, JsonResponse
+from src.typing import Context, JsonResponse, RenderView
 from src.web_utils import createJsonResponse
 import src.constants as constants
 
@@ -89,6 +89,7 @@ def generateThumbnails(bg_path: str, output_folder: str) -> None:
 def downloadImage(filename: str) -> Response | JsonResponse:
     if ("user_folder" not in session):
         return createJsonResponse(constants.HttpStatus.NOT_FOUND.value, constants.ERR_INVALID_SESSION)
+
     user_folder = str(session["user_folder"])
     directory: str = path.abspath(path.join(constants.PROCESSED_DIR, user_folder))
     return send_from_directory(directory, filename, as_attachment=True)
@@ -102,7 +103,7 @@ def downloadThumbnail(idx: str) -> Response | JsonResponse:
     return downloadImage(filename)
 
 @bp_processed_images.route(constants.ROUTES.proc_img.path, methods=["GET"])
-def renderProcessedImages() -> str | JsonResponse:
+def renderProcessedImages() -> RenderView | JsonResponse:
     if ("generated_artwork_path" not in session):
         return createJsonResponse(constants.HttpStatus.BAD_REQUEST.value, "No image was selected or uploaded")
 

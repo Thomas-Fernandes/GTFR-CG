@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request
 
 from src.logger import log
 from src.statistics import JsonDict, getJsonStatsFromFile
+from src.typing import RenderView
 import src.constants as constants
 
 from src.app import app
@@ -16,23 +17,23 @@ def getPluralMarks(stats: JsonDict) -> JsonDict:
     return plurals
 
 @bp_home.route(constants.ROUTES.home.path)
-def renderHome() -> str:
-    context = constants.DEFAULT_CONTEXT_HOME
-    context["stats"]: JsonDict = getJsonStatsFromFile()
-    context["plurals"]: JsonDict = getPluralMarks(context["stats"])
+def renderHome() -> RenderView:
+    context = constants.DEFAULT_CONTEXT
+    context["stats"] = getJsonStatsFromFile()
+    context["plurals"] = getPluralMarks(context["stats"])
     for key in constants.AVAILABLE_STATS:
         if (key not in context["stats"]):
             context["stats"][key] = constants.EMPTY_STATS[key]
     return render_template(constants.ROUTES.home.view_filename, **context)
 
 @app.errorhandler(constants.HttpStatus.NOT_FOUND.value) # needs to be applied to app, not blueprint
-def pageNotFound(_e: Exception) -> str:
+def pageNotFound(_e: Exception) -> RenderView:
     def extractSearchedPath(url: str) -> str:
         return "/" + '/'.join(url.split(constants.SLASH)[3:])
     log.warn(f"Page not found: {extractSearchedPath(request.url)}. "
              f"Redirecting to home page ({constants.ROUTES.home.path}).")
-    return render_template(constants.ROUTES.home.view_filename, **constants.DEFAULT_CONTEXT_HOME)
+    return render_template(constants.ROUTES.home.view_filename, **constants.DEFAULT_CONTEXT)
 
 @bp_home.route("/")
-def root() -> str:
-    return render_template(constants.ROUTES.home.view_filename, **constants.DEFAULT_CONTEXT_HOME)
+def root() -> RenderView:
+    return render_template(constants.ROUTES.home.view_filename, **constants.DEFAULT_CONTEXT)

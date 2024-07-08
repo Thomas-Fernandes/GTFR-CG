@@ -5,8 +5,7 @@ import src.constants as constants
 
 def getNowEpoch() -> str: # in MM-DD 24-hour format
     current_time = datetime.now()
-    new_time = current_time
-    formatted_time = new_time.strftime(constants.DATE_FORMAT_FULL)
+    formatted_time = current_time.strftime(constants.DATE_FORMAT_FULL)
     return formatted_time
 
 def getDefaultExpirationTimestamp() -> int:

@@ -1,7 +1,3 @@
-const ResponseStatus = Object.freeze({
-    SUCCESS: "success",
-    ERROR: "error"
-});
 const AcceptedFileExtensions = Object.freeze([
     "jpg",
     "jpeg",
@@ -22,3 +18,8 @@ const sendToast = (message, type = undefined) => {
     }
     alert(message);
 };
+
+const ResponseStatus = Object.freeze({
+    SUCCESS: "success",
+    ERROR: "error"
+});

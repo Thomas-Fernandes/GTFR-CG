@@ -35,8 +35,9 @@ class Routes:
         return f"Routes({content[:-2]})"
 
 JsonResponse: TypeAlias = tuple[Response, int]
+RenderView: TypeAlias = str
 
-############## SOFT ##############
+############ SOFTWARE ############
 
 DictKeys: TypeAlias = list[str]
 JsonDict: TypeAlias = dict[str, Optional[str | int]]
