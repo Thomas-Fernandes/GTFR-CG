@@ -69,7 +69,7 @@ def generateThumbnails(bg_path: str, output_folder: str) -> None:
     for position in constants.LOGO_POSITIONS:
         logo_path = f"{position}.png"
         background = Image.open(bg_path)
-        user_folder = path.abspath(str(session["user_folder"]))
+        user_folder = path.abspath(str(session[constants.SessionFields.user_folder.value]))
         user_folder = constants.SLASH.join(user_folder.split(constants.SLASH)[:-1])
         overlay_file = f"{user_folder}{constants.SLASH}{constants.THUMBNAIL_DIR}{logo_path}"
         if (not path.exists(overlay_file)):
@@ -87,10 +87,10 @@ def generateThumbnails(bg_path: str, output_folder: str) -> None:
 
 @bp_processed_images.route("/download-image/<filename>", methods=["GET"])
 def downloadImage(filename: str) -> Response | JsonResponse:
-    if "user_folder" not in session:
+    if constants.SessionFields.user_folder.value not in session:
         return createJsonResponse(constants.HttpStatus.NOT_FOUND.value, constants.ERR_INVALID_SESSION)
 
-    user_folder = str(session["user_folder"])
+    user_folder = str(session[constants.SessionFields.user_folder.value])
     directory: str = path.abspath(path.join(constants.PROCESSED_DIR, user_folder))
     return send_from_directory(directory, filename, as_attachment=True)
 
@@ -104,19 +104,19 @@ def downloadThumbnail(idx: str) -> Response | JsonResponse:
 
 @bp_processed_images.route(constants.ROUTES.proc_img.path, methods=["GET"])
 def renderProcessedImages() -> RenderView | JsonResponse:
-    if "generated_artwork_path" not in session:
+    if constants.SessionFields.generated_artwork_path.value not in session:
         return createJsonResponse(constants.HttpStatus.BAD_REQUEST.value, "No image was selected or uploaded")
 
-    user_folder = str(session["user_folder"])
+    user_folder = str(session[constants.SessionFields.user_folder.value])
     user_processed_path = path.join(constants.PROCESSED_DIR, user_folder)
-    generated_artwork_path = str(session["generated_artwork_path"])
-    include_center_artwork = session.get("include_center_artwork", True)
+    generated_artwork_path = str(session[constants.SessionFields.generated_artwork_path.value])
+    include_center_artwork = session.get(constants.SessionFields.include_center_artwork.value, True)
     output_bg = path.join(user_processed_path, constants.PROCESSED_ARTWORK_FILENAME)
     generateCoverArt(generated_artwork_path, output_bg, include_center_artwork)
     generateThumbnails(output_bg, user_processed_path)
     updateStats(to_increment="artworkGenerations")
 
     context: Context = {
-        "user_folder": user_folder,
+        constants.SessionFields.user_folder.value: user_folder,
     }
     return render_template(constants.ROUTES.proc_img.view_filename, **context)

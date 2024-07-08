@@ -30,6 +30,12 @@ class TimeInSeconds(Enum):
 HOST_HOME = "0.0.0.0"
 DEFAULT_PORT = 8000
 
+class SessionFields(Enum):
+    user_folder = "user_folder"
+    generated_artwork_path = "generated_artwork_path"
+    include_center_artwork = "include_center_artwork"
+
+# Routes and views
 ROUTES = Routes(
     root = Route(
         path="/",
@@ -67,7 +73,7 @@ DEFAULT_CONTEXT: Context = {
 
 # Statistics
 DATE_FORMAT_FULL = "%Y-%m-%d %H:%M:%S"
-STATS_FILE_PATH = 'stats.json'
+STATS_FILE_PATH = "stats.json"
 DEFAULT_EXPIRATION = 2 # in days (integer)
 AVAILABLE_STATS: DictKeys = [
     "dateFirstOperation",
@@ -84,15 +90,15 @@ EMPTY_STATS: JsonDict = {
 
 # Paths
 SLASH = '/' if (osName != 'nt') else '\\'
-SESSION_DIR = 'flask_session' + SLASH
-PROCESSED_DIR = 'processed' + SLASH
-PROCESSED_ARTWORK_FILENAME = 'ProcessedArtwork.png'
-THUMBNAIL_DIR = 'assets' + SLASH + 'thumbnails' + SLASH
-THUMBNAIL_PREFIX = 'thumbnail_'; THUMBNAIL_EXT = '.png'
+SESSION_DIR = "flask_session" + SLASH
+PROCESSED_DIR = "processed" + SLASH
+PROCESSED_ARTWORK_FILENAME = "ProcessedArtwork.png"
+THUMBNAIL_DIR = "assets" + SLASH + "thumbnails" + SLASH
+THUMBNAIL_PREFIX = "thumbnail_"; THUMBNAIL_EXT = ".png"
 LOGO_POSITIONS = [
-    'top-left',    'top-center',    'top-right',
-    'center-left', 'center-center', 'center-right',
-    'bottom-left', 'bottom-center', 'bottom-right'
+    "top-left",    "top-center",    "top-right",
+    "center-left", "center-center", "center-right",
+    "bottom-left", "bottom-center", "bottom-right"
 ]
 
 # Error messages

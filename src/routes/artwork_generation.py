@@ -19,10 +19,10 @@ def useItunesImage() -> JsonResponse:
     if not image_url:
         return createJsonResponse(constants.HttpStatus.BAD_REQUEST.value, "No image URL provided")
 
-    if "user_folder" not in session:
-        session["user_folder"] = str(uuid4())
+    if constants.SessionFields.user_folder.value not in session:
+        session[constants.SessionFields.user_folder.value] = str(uuid4())
 
-    user_folder = str(session["user_folder"])
+    user_folder = str(session[constants.SessionFields.user_folder.value])
     user_processed_path = path.join(constants.PROCESSED_DIR, user_folder)
     makedirs(user_processed_path, exist_ok=True)
 
@@ -33,14 +33,14 @@ def useItunesImage() -> JsonResponse:
     with open(image_path, "wb") as file:
         file.write(image_response.content)
 
-    session["generated_artwork_path"] = image_path
+    session[constants.SessionFields.generated_artwork_path.value] = image_path
     return createJsonResponse(constants.HttpStatus.OK.value)
 
 @bp_artwork_generation.route(constants.ROUTES.art_gen.path + "/use-local-image", methods=["POST"])
 def useLocalImage() -> JsonResponse:
-    if "user_folder" not in session:
-        session["user_folder"] = str(uuid4())
-    user_folder = str(session["user_folder"])
+    if constants.SessionFields.user_folder.value not in session:
+        session[constants.SessionFields.user_folder.value] = str(uuid4())
+    user_folder = str(session[constants.SessionFields.user_folder.value])
 
     file = request.files["file"]
     error = checkImageFilenameValid(file.filename)
@@ -52,14 +52,14 @@ def useLocalImage() -> JsonResponse:
         return createJsonResponse(constants.HttpStatus.BAD_REQUEST.value, constants.ERR_NO_FILE)
 
     include_center_artwork: bool = \
-        "include_center_artwork" in request.form and request.form["include_center_artwork"] == "on"
+        constants.SessionFields.include_center_artwork.value in request.form and request.form[constants.SessionFields.include_center_artwork.value] == "on"
     user_processed_path = path.join(constants.PROCESSED_DIR, user_folder)
     makedirs(user_processed_path, exist_ok=True)
 
     filepath = path.join(user_processed_path, "uploaded_image.png")
     file.save(filepath)
-    session["generated_artwork_path"] = filepath
-    session["include_center_artwork"] = include_center_artwork
+    session[constants.SessionFields.generated_artwork_path.value] = filepath
+    session[constants.SessionFields.include_center_artwork.value] = include_center_artwork
     return createJsonResponse(constants.HttpStatus.OK.value)
 
 @bp_artwork_generation.route(constants.ROUTES.art_gen.path, methods=["GET"])
