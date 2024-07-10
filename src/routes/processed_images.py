@@ -3,7 +3,7 @@ from PIL import Image, ImageFilter, ImageDraw
 
 from os import path
 
-from src.routes.redirect import renderProcessedImagesNoImg
+from src.routes.redirect import renderRedirection
 from src.logger import log
 from src.statistics import updateStats
 from src.typing import Context, JsonResponse, RenderView
@@ -103,13 +103,10 @@ def downloadThumbnail(idx: str) -> Response | JsonResponse:
         f"{const.THUMBNAIL_EXT}"
     return downloadImage(filename)
 
-val = 0
 @bp_processed_images.route(const.ROUTES.proc_img.path, methods=["GET"])
 def renderProcessedImages() -> RenderView:
-    global val
-    val += 1
-    if val > 1 or const.SessionFields.generated_artwork_path.value not in session:
-        return renderProcessedImagesNoImg(const.ERR_NO_IMG)
+    if const.SessionFields.generated_artwork_path.value not in session:
+        return renderRedirection(const.ROUTES.art_gen.path, const.ERR_NO_IMG)
 
     user_folder = str(session[const.SessionFields.user_folder.value])
     user_processed_path = path.join(const.PROCESSED_DIR, user_folder)
