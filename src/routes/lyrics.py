@@ -7,13 +7,13 @@ from typing import Optional
 from src.logger import log
 from src.statistics import updateStats
 from src.typing import Context, RenderView
-import src.constants as constants
+import src.constants as const
 
 from src.app import app
-bp_lyrics = Blueprint(constants.ROUTES.lyrics.bp_name, __name__.split('.')[-1])
+bp_lyrics = Blueprint(const.ROUTES.lyrics.bp_name, __name__.split('.')[-1])
 session = app.config
 
-genius = Genius(constants.GENIUS_API_TOKEN)
+genius = Genius(const.GENIUS_API_TOKEN)
 
 @staticmethod
 def fetchLyricsFromGenius(song_title: str, artist_name: str) -> str:
@@ -47,7 +47,7 @@ def fetchLyricsFromGenius(song_title: str, artist_name: str) -> str:
 
     return lyrics
 
-@bp_lyrics.route(constants.ROUTES.lyrics.path, methods=["POST"])
+@bp_lyrics.route(const.ROUTES.lyrics.path, methods=["POST"])
 def updateTextarea() -> RenderView:
     artist: Optional[str] = request.form.get("artist", None)
     song: Optional[str] = request.form.get("song", None)
@@ -59,8 +59,8 @@ def updateTextarea() -> RenderView:
     context: Context = {
         "lyrics": lyrics_text,
     }
-    return render_template(constants.ROUTES.lyrics.view_filename, **context)
+    return render_template(const.ROUTES.lyrics.view_filename, **context)
 
-@bp_lyrics.route(constants.ROUTES.lyrics.path, methods=["GET"])
+@bp_lyrics.route(const.ROUTES.lyrics.path, methods=["GET"])
 def renderLyrics() -> RenderView:
-    return render_template(constants.ROUTES.lyrics.view_filename, **constants.DEFAULT_CONTEXT)
+    return render_template(const.ROUTES.lyrics.view_filename, **const.DEFAULT_CONTEXT)

@@ -11,7 +11,7 @@ from shutil import rmtree
 from src.logger import log
 from src.soft_utils import getDefaultExpirationTimestamp
 from src.statistics import onLaunch as printInitStatistics
-import src.constants as constants
+import src.constants as const
 
 # Application initialization
 global app
@@ -19,7 +19,7 @@ app = Flask(__name__.split('.')[-1]) # so that the app name is app, not {dirpath
 def initApp() -> None:
     app.config["SESSION_PERMANENT"] = False
     app.config["SESSION_TYPE"] = "filesystem"
-    app.config["SESSION_FILE_DIR"] = constants.SESSION_DIR
+    app.config["SESSION_FILE_DIR"] = const.SESSION_DIR
 
     def initBlueprints() -> None:
         from src.routes.artwork_generation import bp_artwork_generation
@@ -37,11 +37,11 @@ def initApp() -> None:
     initBlueprints()
     Session(app)
 
-def main(host: str = constants.HOST_HOME, port: int = constants.DEFAULT_PORT) -> None:
-    host_display_name = "localhost" if host == constants.HOST_HOME else host
+def main(host: str = const.HOST_HOME, port: int = const.DEFAULT_PORT) -> None:
+    host_display_name = "localhost" if host == const.HOST_HOME else host
     log.log(f"Starting server @ http://{host_display_name}:{port}")
 
-    processed_folder = constants.PROCESSED_DIR
+    processed_folder = const.PROCESSED_DIR
     makedirs(processed_folder, exist_ok=True)
 
     @DeprecationWarning # cache cleanup process is to be redefined
@@ -61,11 +61,11 @@ def main(host: str = constants.HOST_HOME, port: int = constants.DEFAULT_PORT) ->
         if eliminated_files_count != 0:
             pluralMarks = ["s", "were"] if eliminated_files_count != 1 else ["", "was"]
             log.info(f"{eliminated_files_count} cached file{pluralMarks[0]} {pluralMarks[1]} " \
-                f"removed in {folder.split(constants.SLASH)[0]}.")
+                f"removed in {folder.split(const.SLASH)[0]}.")
         return eliminated_files_count
 
     def cacheCleanup() -> None:
-        to_clean = ["DIRECTORY_NAME" + constants.SLASH]
+        to_clean = ["DIRECTORY_NAME" + const.SLASH]
         eliminated_files_count: int = 0
 
         for folder in to_clean:

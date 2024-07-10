@@ -6,7 +6,7 @@ system('pip install -qr requirements.txt')
 
 from src.app import main
 
-import src.constants as constants
+import src.constants as const
 
 if __name__ == '__main__':
-    main(constants.HOST_HOME, constants.DEFAULT_PORT)
+    main(const.HOST_HOME, const.DEFAULT_PORT)

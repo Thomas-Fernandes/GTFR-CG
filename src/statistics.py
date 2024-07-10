@@ -4,7 +4,7 @@ from typing import Optional
 from src.logger import log
 from src.typing import JsonDict
 
-import src.constants as constants
+import src.constants as const
 
 ############# CLASS #############
 
@@ -46,7 +46,7 @@ from json import loads, dumps, JSONDecodeError
 
 from src.soft_utils import getNowEpoch
 
-def getJsonStatsFromFile(path: str = constants.STATS_FILE_PATH, init: bool = False) -> JsonDict:
+def getJsonStatsFromFile(path: str = const.STATS_FILE_PATH, init: bool = False) -> JsonDict:
     try:
         with open(path, "r") as file:
             return loads(file.read()) # <- read stats from stats file
@@ -57,7 +57,7 @@ def getJsonStatsFromFile(path: str = constants.STATS_FILE_PATH, init: bool = Fal
         log.warn(f"Error decoding stats file ({path}). Initializing new stats file...")
         return initStats(from_error=True)
 
-def updateStats(path: str = constants.STATS_FILE_PATH, to_increment: Optional[str] = None) -> None:
+def updateStats(path: str = const.STATS_FILE_PATH, to_increment: Optional[str] = None) -> None:
     json_stats: JsonDict = getJsonStatsFromFile(path)
 
     new_stats: JsonDict = {}
@@ -86,14 +86,14 @@ def initStats(from_error: bool = False) -> JsonDict:
     if from_error:
         stats["dateFirstOperation"] = "N/A"
 
-    with open(constants.STATS_FILE_PATH, "w") as file:
+    with open(const.STATS_FILE_PATH, "w") as file:
         file.write(dumps(stats))
 
     log.info("Statistics initialization complete.")
     return loads(str(stats).replace("'", '"'))
 
 def onLaunch() -> None:
-    json_stats: JsonDict = getJsonStatsFromFile(constants.STATS_FILE_PATH)
+    json_stats: JsonDict = getJsonStatsFromFile(const.STATS_FILE_PATH)
 
     stats = Stats(
         date_first_operation=json_stats.get("dateFirstOperation"),

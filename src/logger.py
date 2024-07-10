@@ -6,7 +6,7 @@ from typing import Iterator, Optional
 import sys # On doit importer tout le module sinon ça ne marche pas
 
 from src.soft_utils import getNowEpoch
-import src.constants as constants
+import src.constants as const
 
 class LoggingLevel(Enum):
     DEBUG    = 0x100
@@ -60,7 +60,7 @@ class Logger:
             stderr_content = new_stderr.read()
 
             def process_message(line: str) -> str:
-                for (pattern, action) in constants.PATTERNS:
+                for (pattern, action) in const.PATTERNS:
                     match: Optional[Match[str]] = pattern.match(line)
                     if match is not None:
                         return action(match)

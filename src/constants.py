@@ -97,9 +97,12 @@ LOGO_POSITIONS = [
 ]
 
 # Error messages
-ERR_INVALID_FILE_TYPE = "Invalid file type. Only PNG and JPG files are allowed."
+ERR_INVALID_SESSION = "Session expired or invalid."
 ERR_NO_FILE = "Invalid file: No file selected."
-ERR_INVALID_SESSION = "Session Expired or Invalid"
+ERR_NO_IMG = "No image was selected or uploaded."
+ERR_INVALID_FILE_TYPE = "Invalid file type. Only PNG and JPG files are allowed."
+ERR_NO_IMG_URL = "No image URL provided"
+ERR_FAIL_DOWNLOAD = "Failed to download image."
 
 # Genius
 load_dotenv()
