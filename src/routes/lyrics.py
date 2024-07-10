@@ -20,7 +20,6 @@ def fetchLyricsFromGenius(song_title: str, artist_name: str) -> str:
     song: Optional[Genius.Song] = None
     with log.redirect_stdout_stderr() as (stdout, stderr): # type: ignore
         song = genius.search_song(song_title, artist_name)
-
     if song is None:
         return "Lyrics not found."
 
@@ -50,9 +49,9 @@ def fetchLyricsFromGenius(song_title: str, artist_name: str) -> str:
 
 @bp_lyrics.route(constants.ROUTES.lyrics.path, methods=["POST"])
 def updateTextarea() -> RenderView:
-    artist = request.form.get("artist", None)
-    song = request.form.get("song", None)
-    lyrics_text = request.form.get("lyrics")
+    artist: Optional[str] = request.form.get("artist", None)
+    song: Optional[str] = request.form.get("song", None)
+    lyrics_text: Optional[str] = request.form.get("lyrics")
 
     if artist is not None and song is not None:
         lyrics_text = fetchLyricsFromGenius(song, artist)

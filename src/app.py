@@ -56,7 +56,7 @@ def main(host: str = constants.HOST_HOME, port: int = constants.DEFAULT_PORT) ->
             if isFileExpired(file):
                 remove(file)
                 eliminated_files_count += 1
-        if not listdir(folder): # if folder is empty, remove it
+        if listdir(folder) == []: # if folder is empty, remove it
             rmtree(folder)
         if eliminated_files_count != 0:
             pluralMarks = ["s", "were"] if eliminated_files_count != 1 else ["", "was"]

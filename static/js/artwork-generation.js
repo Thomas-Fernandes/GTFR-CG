@@ -1,3 +1,9 @@
+const AcceptedFileExtensions = Object.freeze([
+    "jpg",
+    "jpeg",
+    "png"
+]);
+
 $(document).ready(function() {
     $("#iTunesSearchForm").on("submit", function(event) {
         event.preventDefault();

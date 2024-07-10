@@ -75,18 +75,13 @@ DEFAULT_CONTEXT: Context = {
 DATE_FORMAT_FULL = "%Y-%m-%d %H:%M:%S"
 STATS_FILE_PATH = "stats.json"
 DEFAULT_EXPIRATION = 2 # in days (integer)
-AVAILABLE_STATS: DictKeys = [
-    "dateFirstOperation",
-    "dateLastOperation",
-    "artworkGenerations",
-    "lyricsFetches",
-]
 EMPTY_STATS: JsonDict = {
     "dateFirstOperation": "N/A",
     "dateLastOperation": "N/A",
     "artworkGenerations": 0,
     "lyricsFetches": 0,
 }
+AVAILABLE_STATS: DictKeys = list(EMPTY_STATS.keys())
 
 # Paths
 SLASH = '/' if (osName != 'nt') else '\\'

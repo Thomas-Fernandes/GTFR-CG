@@ -17,10 +17,10 @@ class Stats:
 
     def dict(self) -> JsonDict:
         return {
-            'dateFirstOperation': self.date_first_operation,
-            'dateLastOperation': self.date_last_operation,
-            'artworkGenerations': self.artwork_generations,
-            'lyricsFetches': self.lyrics_fetches,
+            "dateFirstOperation": self.date_first_operation,
+            "dateLastOperation": self.date_last_operation,
+            "artworkGenerations": self.artwork_generations,
+            "lyricsFetches": self.lyrics_fetches,
         }
 
     def __repr__(self) -> str:
@@ -28,7 +28,7 @@ class Stats:
         stats_dict = {k: v for k, v in stats_dict.items() if v is not None} # remove None values
 
         dict_size = len(stats_dict) - 1
-        sep = ', '
+        sep = ", "
         nth = 0
 
         representation: str = "{"
@@ -48,7 +48,7 @@ from src.soft_utils import getNowEpoch
 
 def getJsonStatsFromFile(path: str = constants.STATS_FILE_PATH, init: bool = False) -> JsonDict:
     try:
-        with open(path, 'r') as file:
+        with open(path, "r") as file:
             return loads(file.read()) # <- read stats from stats file
     except FileNotFoundError:
         log.warn(f"No stats file ({path}). Initializing new stats file...")
@@ -61,17 +61,17 @@ def updateStats(path: str = constants.STATS_FILE_PATH, to_increment: Optional[st
     json_stats: JsonDict = getJsonStatsFromFile(path)
 
     new_stats: JsonDict = {}
-    new_stats['dateFirstOperation'] = json_stats.get('dateFirstOperation', getNowEpoch())
-    new_stats['dateLastOperation'] = getNowEpoch()
-    new_stats['artworkGenerations'] = int(json_stats.get('artworkGenerations', 0))
-    new_stats['lyricsFetches'] = int(json_stats.get('lyricsFetches', 0))
+    new_stats["dateFirstOperation"] = json_stats.get("dateFirstOperation", getNowEpoch())
+    new_stats["dateLastOperation"] = getNowEpoch()
+    new_stats["artworkGenerations"] = int(json_stats.get("artworkGenerations", 0))
+    new_stats["lyricsFetches"] = int(json_stats.get("lyricsFetches", 0))
 
-    incrementable_stats: list[str] = ['artworkGenerations', 'lyricsFetches']
+    incrementable_stats: list[str] = ["artworkGenerations", "lyricsFetches"]
     if to_increment in incrementable_stats:
         new_stats[to_increment] += 1
 
     try:
-        with open(path, 'w') as file:
+        with open(path, "w") as file:
             file.write(dumps(new_stats)) # <- write new stats to stats file
     except FileNotFoundError:
         log.warn(f"Error when writing to stats file ({path}). Initializing new stats file...")
@@ -84,9 +84,9 @@ def updateStats(path: str = constants.STATS_FILE_PATH, to_increment: Optional[st
 def initStats(from_error: bool = False) -> JsonDict:
     stats: JsonDict = {}
     if from_error:
-        stats['dateFirstOperation'] = "N/A"
+        stats["dateFirstOperation"] = "N/A"
 
-    with open(constants.STATS_FILE_PATH, 'w') as file:
+    with open(constants.STATS_FILE_PATH, "w") as file:
         file.write(dumps(stats))
 
     log.info("Statistics initialization complete.")
@@ -96,10 +96,10 @@ def onLaunch() -> None:
     json_stats: JsonDict = getJsonStatsFromFile(constants.STATS_FILE_PATH)
 
     stats = Stats(
-        date_first_operation=json_stats.get('dateFirstOperation'),
-        date_last_operation=json_stats.get('dateLastOperation'),
-        artwork_generations=json_stats.get('artworkGenerations'),
-        lyrics_fetches=json_stats.get('lyricsFetches'),
+        date_first_operation=json_stats.get("dateFirstOperation"),
+        date_last_operation=json_stats.get("dateLastOperation"),
+        artwork_generations=json_stats.get("artworkGenerations"),
+        lyrics_fetches=json_stats.get("lyricsFetches"),
     )
 
     log.info(f"Initializing project with statistics: {stats}")

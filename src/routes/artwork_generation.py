@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request
 from requests import get as requestsGet
 
 from os import path, makedirs
+from typing import Optional
 from uuid import uuid4
 
 from src.logger import log
@@ -15,8 +16,8 @@ session = app.config
 
 @bp_artwork_generation.route(constants.ROUTES.art_gen.path + "/use-itunes-image", methods=["POST"])
 def useItunesImage() -> JsonResponse:
-    image_url = request.form.get("url")
-    if not image_url:
+    image_url: Optional[str] = request.form.get("url")
+    if image_url is None:
         return createJsonResponse(constants.HttpStatus.BAD_REQUEST.value, "No image URL provided")
 
     if constants.SessionFields.user_folder.value not in session:

@@ -19,7 +19,7 @@ def createJsonResponse(status_code: int, message: str = "") -> JsonResponse:
         case _:
             status = "unknown"
 
-    response = {"status": status}
+    response = { "status": status }
     message = message.strip()
     if len(message) > 1:
         response["message"] = message

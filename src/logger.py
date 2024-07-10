@@ -80,7 +80,7 @@ class Logger:
 
     def send(self, message: str, level: Optional[LoggingLevel] = None) -> None:
         message_to_log = self.getFormattedMessage(message, level)
-        if self.__log_file is not None:
+        if self.__log_file is not None and self.__log_file.strip() != "":
             with open(self.__log_file, 'a') as file:
                 file.write(message_to_log + '\n')
         else:

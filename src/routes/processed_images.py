@@ -91,7 +91,7 @@ def downloadImage(filename: str) -> Response | JsonResponse:
         return createJsonResponse(constants.HttpStatus.NOT_FOUND.value, constants.ERR_INVALID_SESSION)
 
     user_folder = str(session[constants.SessionFields.user_folder.value])
-    directory: str = path.abspath(path.join(constants.PROCESSED_DIR, user_folder))
+    directory = path.abspath(path.join(constants.PROCESSED_DIR, user_folder))
     return send_from_directory(directory, filename, as_attachment=True)
 
 @bp_processed_images.route("/download-thumbnail/<idx>", methods=["GET"])

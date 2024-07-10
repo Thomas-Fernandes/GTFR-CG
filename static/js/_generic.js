@@ -1,9 +1,3 @@
-const AcceptedFileExtensions = Object.freeze([
-    "jpg",
-    "jpeg",
-    "png"
-]);
-
 const sendToast = (message, type = undefined) => {
     if (type)
         type = type.charAt(0).toUpperCase() + type.slice(1).toLowerCase();

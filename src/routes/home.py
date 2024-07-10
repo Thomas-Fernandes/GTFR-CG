@@ -21,7 +21,7 @@ def renderHome() -> RenderView:
     context = constants.DEFAULT_CONTEXT
     context["stats"] = getJsonStatsFromFile()
     context["plurals"] = getPluralMarks(context["stats"])
-    for key in constants.AVAILABLE_STATS:
+    for key in constants.AVAILABLE_STATS: # fill missing stats with default values
         if key not in context["stats"]:
             context["stats"][key] = constants.EMPTY_STATS[key]
     return render_template(constants.ROUTES.home.view_filename, **context)
