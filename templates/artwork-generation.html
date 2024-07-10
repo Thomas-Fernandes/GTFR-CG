@@ -10,10 +10,10 @@
 <body id="head">
     <span class="top-bot-spacer"></span>
     <div class="navbar">
-        <button type="button" onclick="window.location.href='{{ url_for('home') }}'"><span class="left">Home</span></button>
+        <button type="button" onclick="window.location.href='{{ url_for('home.renderHome') }}'"><span class="left">Home</span></button>
     </div>
     <h1>Search for cover art on iTunes</h1>
-    <form id="iTunesSearchForm" method="post">
+    <form id="iTunesSearchForm" method="POST">
         <div class="flexbox">
             <input type="text" name="query" id="query" placeholder="Search on iTunes" />
             <select name="country" id="country" aria-label="Country">
@@ -27,7 +27,7 @@
     <div id="results" class="result-container"></div>
 
     <h1>...or upload your image</h1>
-    <form id="fileUpload" method="post" enctype="multipart/form-data">
+    <form id="fileUpload" method="POST" action="/artwork-generation/use-local-image" enctype="multipart/form-data">
         <div class="flexbox">
             <input type="file" name="file" id="file" class="file" />
             <p class="error">{{ error }}</p>
@@ -41,6 +41,7 @@
     <span class="top-bot-spacer"></span>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="{{ url_for('static', filename='js/_generic.js') }}"></script>
     <script src="{{ url_for('static', filename='js/artwork-generation.js') }}"></script>
 </body>
 </html>

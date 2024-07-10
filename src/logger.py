@@ -1,27 +1,27 @@
 from contextlib import contextmanager
 from enum import Enum
 from io import StringIO
-from typing import Iterator, Optional
 from re import Match
+from typing import Iterator, Optional
 import sys # On doit importer tout le module sinon ça ne marche pas
 
 from src.soft_utils import getNowEpoch
-import src.constants as constants
+import src.constants as const
 
 class LoggingLevel(Enum):
     DEBUG    = 0x100
-    INFO     = 0x101
-    LOG      = 0x200
-    WARN     = 0x301
-    ERROR    = 0x302
-    CRITICAL = 0x303
+    INFO     = 0x200
+    LOG      = 0x201
+    WARN     = 0x300
+    ERROR    = 0x400
+    CRITICAL = 0x500
 
 def getDefaultFormattedMessage(message: str) -> str:
     return f"{getNowEpoch()}] {message}"
 
 class Logger:
     @staticmethod
-    def getFormattedMessage(message: str, level: LoggingLevel | None = None) -> str:
+    def getFormattedMessage(message: str, level: Optional[LoggingLevel] = None) -> str:
         match level:
             case LoggingLevel.DEBUG:
                 return f"[DEBUG | {getDefaultFormattedMessage(message)}"
@@ -39,16 +39,11 @@ class Logger:
                 return f"[{getDefaultFormattedMessage(message)}"
         raise ValueError(f"Invalid logging level ({level})")
 
-    def error(self, message: str) -> None:
-        self.send(message, LoggingLevel.ERROR)
-    def warn(self, message: str) -> None:
-        self.send(message, LoggingLevel.WARN)
-    def log(self, message: str) -> None:
-        self.send(message, LoggingLevel.LOG)
-    def info(self, message: str) -> None:
-        self.send(message, LoggingLevel.INFO)
-    def debug(self, message: str) -> None:
-        self.send(message, LoggingLevel.DEBUG)
+    def error(self, message: str) -> None: self.send(message, LoggingLevel.ERROR)
+    def warn(self,  message: str) -> None: self.send(message, LoggingLevel.WARN)
+    def log(self,   message: str) -> None: self.send(message, LoggingLevel.LOG)
+    def info(self,  message: str) -> None: self.send(message, LoggingLevel.INFO)
+    def debug(self, message: str) -> None: self.send(message, LoggingLevel.DEBUG)
 
     @contextmanager
     def redirect_stdout_stderr(self) -> Iterator[tuple[StringIO, StringIO]]:
@@ -65,19 +60,19 @@ class Logger:
             stderr_content = new_stderr.read()
 
             def process_message(line: str) -> str:
-                for (pattern, action) in constants.PATTERNS:
+                for (pattern, action) in const.PATTERNS:
                     match: Optional[Match[str]] = pattern.match(line)
-                    if (match is not None):
+                    if match is not None:
                         return action(match)
                 return line
 
-            if (stdout_content is not None):
+            if stdout_content is not None:
                 stdout_content = stdout_content.strip()
                 for line in stdout_content.splitlines():
                     processed_line = process_message(line)
                     self.info(processed_line)
 
-            if (stderr_content is not None):
+            if stderr_content is not None:
                 stderr_content = stderr_content.strip()
                 for line in stderr_content.splitlines():
                     processed_line = process_message(line)
@@ -85,7 +80,7 @@ class Logger:
 
     def send(self, message: str, level: Optional[LoggingLevel] = None) -> None:
         message_to_log = self.getFormattedMessage(message, level)
-        if (self.__log_file):
+        if self.__log_file is not None and self.__log_file.strip() != "":
             with open(self.__log_file, 'a') as file:
                 file.write(message_to_log + '\n')
         else:
@@ -94,3 +89,6 @@ class Logger:
     def __init__(self, log_file: Optional[str] = None) -> None:
         # Logger objects will print to console if log_file is None
         self.__log_file = log_file
+
+global log
+log = Logger()

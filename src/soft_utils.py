@@ -1,18 +1,12 @@
-from time import time, gmtime, strftime
+from time import time
+from datetime import datetime
 
-import src.constants as constants
-
-# vvv can't use JsonDict because of circular import
-def getPluralMarks(stats: dict) -> dict[str, str]:
-    plurals = {}
-    for (key, value) in stats.items():
-        plurals[key] = "s" if (value != 1 and value != 0) else ""
-    return plurals
+import src.constants as const
 
 def getNowEpoch() -> str: # in MM-DD 24-hour format
-    now = strftime(constants.DATE_FORMAT_FULL, gmtime())
-    hour = (int(now[11:13]) + 2) % 24 # adding two hours because Paris is GMT+2
-    return now[:11] + ("0" if hour < 10 else "") + str(hour) + now[13:]
+    current_time = datetime.now()
+    formatted_time = current_time.strftime(const.DATE_FORMAT_FULL)
+    return formatted_time
 
 def getDefaultExpirationTimestamp() -> int:
-    return int(time() - constants.DEFAULT_EXPIRATION * constants.TimeInSeconds.DAY.value)
+    return int(time() - const.DEFAULT_EXPIRATION * const.TimeInSeconds.DAY.value)
