@@ -21,7 +21,7 @@ $(document).ready(function() {
             },
             dataType: "jsonp",
             success: function(data) {
-                hideSpinner("search-form");
+                hideSpinner("artwork-generation_search-form");
                 const resultsDiv = $("#results");
                 resultsDiv.empty();
                 if (data.results.length > 0) {
@@ -57,7 +57,7 @@ $(document).ready(function() {
         const fileHasAcceptedExtension = $("#file")[0].files.length !== 0 &&
             AcceptedFileExtensions.includes($("#file")[0].files[0].name.split(".").slice(-1)[0].toLowerCase());
         if (!fileHasAcceptedExtension) {
-            hideSpinner("file-upload");
+            hideSpinner("artwork-generation_file-upload");
             alert("Please select a valid image file");
             return;
         }
@@ -76,7 +76,7 @@ $(document).ready(function() {
                 }
             },
             error: function(err) {
-                hideSpinner("file-upload");
+                hideSpinner("artwork-generation_file-upload");
                 sendToast(err, "Error");
             }
         });

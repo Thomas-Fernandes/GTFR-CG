@@ -114,6 +114,7 @@ def renderProcessedImages() -> RenderView | JsonResponse:
     output_bg = path.join(user_processed_path, const.PROCESSED_ARTWORK_FILENAME)
     generateCoverArt(generated_artwork_path, output_bg, include_center_artwork)
     generateThumbnails(output_bg, user_processed_path)
+    log.log("Image generation completed successfully.")
     updateStats(to_increment="artworkGenerations")
 
     context: Context = {

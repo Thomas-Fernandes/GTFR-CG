@@ -19,6 +19,18 @@ const ResponseStatus = Object.freeze({
 });
 
 const showSpinner = (name) => {
+    if (!name) {
+        sendToast("HTML Spinner id is required", "Error");
+        return;
+    }
+    if (name === "lyrics_search") {
+        const hasInvalidField =
+            !document.getElementById("artist")?.value
+            || !document.getElementById("song")?.value;
+        if (hasInvalidField)
+            return; // Do not show spinner if the form is not fully filled
+    }
+
     const button = document.getElementById(name);
 
     // Create spinner container if it doesn't exist

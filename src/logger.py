@@ -70,7 +70,10 @@ class Logger:
                 stdout_content = stdout_content.strip()
                 for line in stdout_content.splitlines():
                     processed_line = process_message(line)
-                    self.info(processed_line)
+                    if processed_line == "Done.":
+                        self.log("Lyrics were successfully found and populated.")
+                    else:
+                        self.info(processed_line)
 
             if stderr_content is not None:
                 stderr_content = stderr_content.strip()
