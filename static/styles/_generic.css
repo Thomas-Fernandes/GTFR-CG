@@ -38,6 +38,56 @@ span.top-bot-spacer {
     padding: 0.5em 0;
 }
 
+div.spinner-container {
+    position: relative;
+    display: inline-block;
+    margin: 0 -5% 0 auto;
+    width: 48px;
+    height: 48px;
+
+    span.spinner {
+        width: 48px;
+        height: 48px;
+
+        display: inline-block;
+
+        border-radius: 50%;
+        border-top: 4px solid #ffff64;
+        border-right: 4px solid transparent;
+        box-sizing: border-box;
+
+        animation: spin 0.67s linear infinite;
+
+        &:after {
+            content: "";
+            box-sizing: border-box;
+            position: absolute;
+            left: 0;
+            top: 0;
+
+            width: 48px;
+            height: 48px;
+
+            border-radius: 50%;
+            border-bottom: 4px solid #002654;
+            border-left: 4px solid transparent;
+        }
+
+        img {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 50%; /* Adjust size as needed */
+            height: 50%; /* Adjust size as needed */
+            transform: translate(-50%, -50%);
+        }
+    }
+}
+@keyframes spin {
+    0%   {transform: rotate(0deg)}
+    100% {transform: rotate(360deg)}
+}
+
 p.error {
     &:empty {
         display: none;
@@ -175,9 +225,15 @@ a.button, input.button {
         cursor: pointer;
     }
 }
+div.action-button {
+    flex-direction: row;
+    min-width: 33%;
+}
 input.action-button {
+    position: relative;
+    display: inline-block;
+    width: 100%;
     height: -webkit-fill-available;
-    width: 33%;
     padding: 1rem;
     align-self: center;
 

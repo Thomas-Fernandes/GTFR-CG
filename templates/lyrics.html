@@ -18,13 +18,17 @@
         <div class="search-bars">
             <input type="text" name="artist" placeholder="Enter artist name" required>
             <input type="text" name="song" placeholder="Enter song name" required>
-            <input type="submit" value="Search Lyrics" class="action-button search-button">
+            <div class="action-button" id="search">
+                <input type="submit" value="Search Lyrics" class="action-button search-button" onclick="showSpinner('search')">
+            </div>
         </div>
     </form>
     <form method="POST" class="lyrics-form flexbox">
         <textarea name="lyrics" rows="20" cols="80" placeholder="Lyrics will appear here...">{{ lyrics }}</textarea>
         <br>
-        <input type="submit" value="Save Lyrics" class="action-button save-button">
+        <div class="action-button" id="save">
+            <input type="submit" value="Save Lyrics" class="action-button save-button" onclick="showSpinner('save')">
+        </div>
     </form>
 
     <script src="{{ url_for('static', filename='js/_generic.js') }}"></script>
