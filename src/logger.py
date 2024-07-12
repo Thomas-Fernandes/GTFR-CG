@@ -2,11 +2,11 @@ from contextlib import contextmanager
 from enum import Enum
 from io import StringIO
 from re import Match
-from typing import Iterator, Optional
 import sys # On doit importer tout le module sinon ça ne marche pas
+from typing import Iterator, Optional
 
-from src.soft_utils import getNowEpoch
 import src.constants as const
+from src.soft_utils import getNowEpoch
 
 class LoggingLevel(Enum):
     DEBUG    = 0x100
@@ -70,7 +70,10 @@ class Logger:
                 stdout_content = stdout_content.strip()
                 for line in stdout_content.splitlines():
                     processed_line = process_message(line)
-                    self.info(processed_line)
+                    if processed_line == "Done.":
+                        self.log("Lyrics were successfully found and populated.")
+                    else:
+                        self.info(processed_line)
 
             if stderr_content is not None:
                 stderr_content = stderr_content.strip()

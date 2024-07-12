@@ -8,10 +8,10 @@ from os import path, makedirs, remove, listdir
 from shutil import rmtree
 
 # Local modules
+import src.constants as const
 from src.logger import log
 from src.soft_utils import getDefaultExpirationTimestamp
 from src.statistics import onLaunch as printInitStatistics
-import src.constants as const
 
 # Application initialization
 global app
