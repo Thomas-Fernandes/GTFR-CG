@@ -1,4 +1,4 @@
-const AcceptedFileExtensions = Object.freeze([
+const ACCEPTED_FILE_EXTENSIONS = Object.freeze([
     "jpg",
     "jpeg",
     "png"
@@ -33,7 +33,7 @@ $(document).ready(function() {
                                 if (response.status === ResponseStatus.SUCCESS) {
                                     window.location.href = "/processed-images";
                                 } else {
-                                    sendToast(response.message, "Error");
+                                    sendToast(response.message, ResponseStatus.ERROR);
                                 }
                             });
                         });
@@ -42,21 +42,21 @@ $(document).ready(function() {
                         resultsDiv.append(resultItem);
                     });
                 } else {
-                    resultsDiv.text("No results found");
+                    sendToast("No results found", ResponseStatus.WARN);
                 }
             },
             error: function(err) {
-                sendToast(err, "Error");
+                sendToast("Service unreachable. Try again.", ResponseStatus.ERROR);
             }
-        });
+        })
     });
     $("#fileUpload").on("submit", function(event) {
         event.preventDefault();
 
         const fileHasAcceptedExtension = $("#file")[0].files.length !== 0 &&
-            AcceptedFileExtensions.includes($("#file")[0].files[0].name.split(".").slice(-1)[0].toLowerCase());
+            ACCEPTED_FILE_EXTENSIONS.includes($("#file")[0].files[0].name.split(".").slice(-1)[0].toLowerCase());
         if (!fileHasAcceptedExtension) {
-            alert("Please select a valid image file");
+            sendToast("Please select a valid image file", ResponseStatus.ERROR);
             return;
         }
 
@@ -70,11 +70,11 @@ $(document).ready(function() {
                 if (response.status === ResponseStatus.SUCCESS) {
                     window.location.href = "/processed-images";
                 } else {
-                    sendToast(response.message, "Error");
+                    sendToast(response.message, ResponseStatus.ERROR);
                 }
             },
             error: function(err) {
-                sendToast(err, "Error");
+                sendToast(err, ResponseStatus.ERROR);
             }
         });
     });
