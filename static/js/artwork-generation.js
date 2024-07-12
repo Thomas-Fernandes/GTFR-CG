@@ -53,10 +53,18 @@ $(document).ready(function() {
     $("#fileUpload").on("submit", function(event) {
         event.preventDefault();
 
-        const fileHasAcceptedExtension = $("#file")[0].files.length !== 0 &&
+        if ($("#file")[0].files.length === 0) {
+            sendToast("Please select an image file.", ResponseStatus.WARN);
+        }
+
+        const fileHasAcceptedExtension =
             ACCEPTED_FILE_EXTENSIONS.includes($("#file")[0].files[0].name.split(".").slice(-1)[0].toLowerCase());
         if (!fileHasAcceptedExtension) {
-            sendToast("Please select a valid image file", ResponseStatus.ERROR);
+            sendToast(
+                "Please select a valid image file.\n" +
+                    "Accepted file extensions: " + ACCEPTED_FILE_EXTENSIONS.join(", "),
+                ResponseStatus.ERROR
+            );
             return;
         }
 

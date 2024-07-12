@@ -1,4 +1,7 @@
-
+const EventDuration = Object.freeze({
+    SECONDS_TOAST: 5,
+    MS_FADE_OUT: 500,
+});
 
 const ResponseStatus = Object.freeze({
     SUCCESS: "success",
@@ -6,13 +9,18 @@ const ResponseStatus = Object.freeze({
     ERROR: "error",
 });
 
-SECONDS_TOAST = 3;
-MS_FADE_OUT = 500;
+const getHTMLMessage = (message) => {
+    return message.trim()
+        .replace(/\n/g, "<br>")
+        .replace(/  /g, "&nbsp;&nbsp;")
+        .replace(/\t/g, "&nbsp;&nbsp;&nbsp;&nbsp;")
+    ;
+};
 
-const sendToast = (message, type = ResponseStatus.ERROR, duration = SECONDS_TOAST) => {
+const sendToast = (message, type = ResponseStatus.ERROR, duration = EventDuration.SECONDS_TOAST) => {
     const toast = document.createElement("div");
     toast.className = "toast " + type.trim().toLowerCase();
-    toast.textContent = message;
+    toast.innerHTML = getHTMLMessage(message);
 
     const progressBar = document.createElement("div");
     progressBar.className = "toast-progress " + type.trim().toLowerCase();
@@ -43,7 +51,7 @@ const sendToast = (message, type = ResponseStatus.ERROR, duration = SECONDS_TOAS
     }, duration * 1000);
 }
 
-const dismissToast = (toast, duration = MS_FADE_OUT) => {
+const dismissToast = (toast, duration = EventDuration.MS_FADE_OUT) => {
     toast.classList.remove("show");
     toast.classList.add("hide");
     setTimeout(() => {

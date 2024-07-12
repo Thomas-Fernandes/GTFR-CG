@@ -67,8 +67,8 @@ hr {
 
 #toast-container {
     position: fixed;
-    bottom: 30px;
-    right: 30px;
+    top: 2%;
+    right: 2%;
     z-index: 1000;
 
     .toast {
@@ -76,11 +76,12 @@ hr {
         min-width: 250px;
         background-color: #007f00;
         color: #fff;
-        text-align: center;
+        text-align: left;
         border-radius: 4px;
         padding: 16px;
         margin-top: 10px;
         opacity: 0;
+        font-size: 14px;
         transform: translateX(100%);
         transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
         cursor: pointer;
