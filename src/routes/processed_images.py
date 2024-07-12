@@ -3,11 +3,11 @@ from PIL import Image, ImageFilter, ImageDraw
 
 from os import path
 
+import src.constants as const
 from src.logger import log
 from src.statistics import updateStats
 from src.typing import Context, JsonResponse, RenderView
 from src.web_utils import createJsonResponse
-import src.constants as const
 
 from src.app import app
 bp_processed_images = Blueprint(const.ROUTES.proc_img.bp_name, __name__.split('.')[-1])

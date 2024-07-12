@@ -6,11 +6,11 @@ from re import sub, split, match
 from typing import Optional
 
 import src.constants as const
-from src.app import app
 from src.logger import log
 from src.statistics import updateStats
 from src.typing import Context, RenderView
 
+from src.app import app
 bp_lyrics = Blueprint(const.ROUTES.lyrics.bp_name, __name__.split('.')[-1])
 session = app.config
 

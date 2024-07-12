@@ -2,11 +2,11 @@ from contextlib import contextmanager
 from enum import Enum
 from io import StringIO
 from re import Match
-from typing import Iterator, Optional
 import sys # On doit importer tout le module sinon ça ne marche pas
+from typing import Iterator, Optional
 
-from src.soft_utils import getNowEpoch
 import src.constants as const
+from src.soft_utils import getNowEpoch
 
 class LoggingLevel(Enum):
     DEBUG    = 0x100
