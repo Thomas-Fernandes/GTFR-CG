@@ -14,19 +14,15 @@
 <div align="center">
   <sup><b>The technical stack at play:</b></sup>
 
-  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/1028px-Python-logo-notext.svg.png" width="28px" alt="Python" />
-  <img src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files//flask.svg" width="28px" alt="Flask" />
-  <img src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/html/html.png" width="28px" alt="HTML" />
-  <img src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/css/css.png" width="28px" alt="CSS" />
-  <img src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files//react.svg" width="28px" alt="React" />
-  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Typescript_logo_2020.svg/2048px-Typescript_logo_2020.svg.png" width="28px" alt="TScript" />
-  <img src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files//vite.svg" width="28px" alt="Vite" />
-  <img src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files//git.svg" width="28px" alt="Git" />
-  <img src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files//vscode.svg" width="28px" alt="VSCode" />
-  <img src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/terminal/terminal.png" width="28px" alt="script" />
-  <img src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files//regex.svg" width="28px" alt="regex" />
-  <img src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files//gimp.svg" width="28px" alt="GIMP" />
-  <img src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files//premiere.svg" width="28px" alt="Premiere" />
+  <img title="Python" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/1028px-Python-logo-notext.svg.png" width="28px" alt="Python" />
+  <img title="Flask" src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files//flask.svg" width="28px" alt="Flask" />
+  <img title="HTML" src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/html/html.png" width="28px" alt="HTML" />
+  <img title="CSS" src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/css/css.png" width="28px" alt="CSS" />
+  <img title="JavaScript" src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files//js.svg" width="28px" alt="JS" />
+  <!-- <img title="React" src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files//react.svg" width="28px" alt="React" /> -->
+  <!-- <img title="TypeScript" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Typescript_logo_2020.svg/2048px-Typescript_logo_2020.svg.png" width="28px" alt="TScript" /> -->
+  <img title="GIMP" src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files//gimp.svg" width="28px" alt="GIMP" />
+  <img title="Premiere" src="https://upload.wikimedia.org/wikipedia/commons/4/40/Adobe_Premiere_Pro_CC_icon.svg" width="28px" alt="Premiere" />
 
 </div>
 
