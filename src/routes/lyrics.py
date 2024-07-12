@@ -1,16 +1,16 @@
-from flask import Blueprint, render_template, request
-
 from requests.exceptions import ReadTimeout as ReadTimeoutException
+from flask import Blueprint, render_template, request
 from lyricsgenius import Genius
+
 from re import sub, split, match
 from typing import Optional
 
+import src.constants as const
+from src.app import app
 from src.logger import log
 from src.statistics import updateStats
 from src.typing import Context, RenderView
-import src.constants as const
 
-from src.app import app
 bp_lyrics = Blueprint(const.ROUTES.lyrics.bp_name, __name__.split('.')[-1])
 session = app.config
 
