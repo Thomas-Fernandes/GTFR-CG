@@ -8,7 +8,30 @@
     <a href="#gear-requirements">Requirements</a> &#xa0; | &#xa0;
     <a href="#card_file_box-changelog">Changelog</a>
 </div>
+
 &#xa0;
+
+<div align="center">
+  <b>Technical stack at play:</b>
+
+  [<img src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files//react.svg" width="28px" alt="React" />](https://github.com/QuentindiMeo/Dashboard)
+  [<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Typescript_logo_2020.svg/2048px-Typescript_logo_2020.svg.png" width="28px" alt="TScript" />](https://www.live-crew.com)
+  [<img src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files//vite.svg" width="28px" alt="Vite" />](https://www.steamulo.com)
+  [<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/1028px-Python-logo-notext.svg.png" width="28px" alt="Python" />](https://github.com/QuentindiMeo/goodnight.py)
+  [<img src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/html/html.png" width="28px" alt="HTML" />](https://github.com/QuentindiMeo/IllaVita)
+  [<img src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/css/css.png" width="28px" alt="CSS" />](https://github.com/QuentindiMeo/IllaVita)
+  [<img src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files//git.svg" width="28px" alt="Git" />](https://github.com/QuentindiMeo)
+  [<img src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files//regex.svg" width="28px" alt="regex" />](https://github.com/QuentindiMeo)
+  [<img src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files//gimp.svg" width="28px" alt="GIMP" />](https://github.com/QuentindiMeo)
+  [<img src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files//premiere.svg" width="28px" alt="Premiere" />](https://github.com/QuentindiMeo)
+  [<img src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files//flask.svg" width="28px" alt="Flask" />](https://github.com/QuentindiMeo)
+  [<img src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files//vscode.svg" width="28px" alt="VSCode" />](https://github.com/QuentindiMeo)
+  [<img src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/terminal/terminal.png" width="28px" alt="script" />](https://github.com/QuentindiMeo/Solitarium)
+
+</div>
+
+&#xa0;
+
 <div align="center">
     <a href="#top"><img alt="Python version" src="https://img.shields.io/badge/Python-3.10+-blue?logo=python" /></a>
     <a href="#card_file_box-changelog"><img alt="Last version released" src="https://img.shields.io/badge/release-v1.2.4-blue?logo=windows-terminal" /></a>
@@ -20,6 +43,7 @@
     <a href="https://github.com/Thomas-Fernandes/GTFR/graphs/contributors"><img alt="GitHub contributors" src="https://img.shields.io/github/contributors/Thomas-Fernandes/GTFR?color=red&logo=stackedit" /></a>
     <a href="#top"><img alt="GitHub repository size" src="https://img.shields.io/github/languages/code-size/Thomas-Fernandes/GTFR?color=blue&logo=frontify" /></a>
 </div>
+
 &#xa0;
 
 ## :memo: Description
@@ -37,6 +61,7 @@ The authors do not claim any rights on the Genius brand. All rights belong to th
 &nbsp;&nbsp; :rocket:&nbsp; **Build & Launch**
 
 ``` bash
+pip install -r requirements.txt && # OPTIONAL
 python launcher.py
 ```
 
@@ -44,7 +69,18 @@ python launcher.py
 
 &nbsp;&nbsp; :bookmark_tabs:&nbsp; **General Information**
 
-- Fear not having to copy the result of the program, it will be automatically **copied to your clipboard**! :wink: (unless [`--no-copy`](#movie_camera-usage) is present)
+- By default, the application runs locally on port 8000: access it @ [**http://localhost:8000**](http://localhost:8000).
+- The application features 4 main pages:
+  - **Home**: the main page, where your statistics are displayed and you can navigate to **Artwork Generation** and **Lyrics**.
+  - **Artwork Generation**: the page where you can generate artwork from a local file or an iTunes search.
+    - **Processed Images**: the page where you can download a background image and a YouTube thumbnail.
+  - **Lyrics**: the page where you can fetch lyrics from Genius and convert them to lyrics blocks.
+- You can navigate between pages using the navigation bar at the top of the page.
+- The application features a [toast notification system](https://web.dev/articles/building/a-toast-component) that will give you feedback on your actions.
+- Most of the application's actions and reactions will be logged in the terminal, *via* Python.
+- Your user statistics are stored at the root of the repository in a file named `stats.json`.
+- If you encounter external module issues, try running `pip install -r requirements.txt --force-reinstall` to reinstall all the required modules.
+- If you encounter any significant issue, again, please [**open an issue**](https://github.com/Thomas-Fernandes/GTFR/issues)!
 
 &#xa0;
 
