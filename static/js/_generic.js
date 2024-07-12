@@ -1,6 +1,7 @@
 const EventDuration = Object.freeze({
     SECONDS_TOAST: 5,
     MS_FADE_OUT: 500,
+    MS_VERTICAL_SLIDE: 200,
 });
 
 const ResponseStatus = Object.freeze({
@@ -9,8 +10,9 @@ const ResponseStatus = Object.freeze({
     ERROR: "error",
 });
 
-const getHTMLMessage = (message) => {
+const convertToHtmlMessage = (message) => {
     return message.trim()
+        .replace(/\r/g, "")
         .replace(/\n/g, "<br>")
         .replace(/  /g, "&nbsp;&nbsp;")
         .replace(/\t/g, "&nbsp;&nbsp;&nbsp;&nbsp;")
@@ -20,7 +22,7 @@ const getHTMLMessage = (message) => {
 const sendToast = (message, type = ResponseStatus.ERROR, duration = EventDuration.SECONDS_TOAST) => {
     const toast = document.createElement("div");
     toast.className = "toast " + type.trim().toLowerCase();
-    toast.innerHTML = getHTMLMessage(message);
+    toast.innerHTML = convertToHtmlMessage(message);
 
     const progressBar = document.createElement("div");
     progressBar.className = "toast-progress " + type.trim().toLowerCase();
@@ -32,8 +34,7 @@ const sendToast = (message, type = ResponseStatus.ERROR, duration = EventDuratio
 
     document.getElementById("toast-container").appendChild(toast);
 
-    // Use setTimeout to ensure the initial styles are applied before transitioning
-    setTimeout(() => {
+    setTimeout(() => { // Use setTimeout to ensure the initial styles are applied before transitioning
         toast.classList.add("show");
         progressFill.style.width = "100%";
         progressFill.style.transitionDuration = `${duration}s`;
@@ -52,9 +53,13 @@ const sendToast = (message, type = ResponseStatus.ERROR, duration = EventDuratio
 }
 
 const dismissToast = (toast, duration = EventDuration.MS_FADE_OUT) => {
-    toast.classList.remove("show");
-    toast.classList.add("hide");
+    toast.style.animation = `fade-out ${EventDuration.MS_FADE_OUT.toString()}ms forwards`;
     setTimeout(() => {
-        toast.remove();
-    }, duration);
+        toast.style.marginTop = `-${toast.offsetHeight}px`;
+        toast.style.opacity = "0";
+        setTimeout(() => {
+            toast.remove();
+            document.getElementById("toast-container").offsetHeight; // Reflow to ensure the transition applies correctly
+        }, duration);
+    }, EventDuration.MS_VERTICAL_SLIDE);
 }

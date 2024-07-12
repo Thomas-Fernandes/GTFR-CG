@@ -6,6 +6,7 @@ form {
 
         &.file {
             width: 75%;
+            margin-bottom: 1%;
         }
     }
 }
