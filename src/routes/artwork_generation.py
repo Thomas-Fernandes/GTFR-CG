@@ -5,10 +5,10 @@ from os import path, makedirs
 from typing import Optional
 from uuid import uuid4
 
+import src.constants as const
 from src.logger import log
 from src.typing import JsonResponse, RenderView
 from src.web_utils import checkImageFilenameValid, createJsonResponse
-import src.constants as const
 
 from src.app import app
 bp_artwork_generation = Blueprint(const.ROUTES.art_gen.bp_name, __name__.split('.')[-1])

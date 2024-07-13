@@ -4,6 +4,20 @@ const ACCEPTED_FILE_EXTENSIONS = Object.freeze([
     "png"
 ]);
 
+const maxTitleLength = 42;
+const maxCropLength = 12;
+
+const getTitleWithAdjustedLength = (title) => {
+    title = title.slice(0, maxTitleLength - 3);
+
+    // find the first space before the max length to cut the string there
+    let end = title[title.length - 1] === " " ? title.length - 1 : title.lastIndexOf(" ", maxTitleLength);
+
+    // if the space-determined crop is too intense, just cut the string at the max length
+    end = maxTitleLength - end > maxCropLength ? title.length : end;
+    return title.slice(0, end) + "...";
+};
+
 $(document).ready(function() {
     $("#iTunesSearchForm").on("submit", (event) => {
         event.preventDefault();
@@ -20,11 +34,18 @@ $(document).ready(function() {
                 limit: 6
             },
             dataType: "jsonp",
+          
             success: (data) => {
+                hideSpinner("artwork-generation_search-form");
                 const resultsDiv = $("#results");
                 resultsDiv.empty();
                 if (data.results.length > 0) {
                     data.results.forEach((result) => {
+                        if (result.artistName?.length > maxTitleLength)
+                            result.artistName = getTitleWithAdjustedLength(result.artistName);
+                        if (result.collectionName?.length > maxTitleLength)
+                            result.collectionName = getTitleWithAdjustedLength(result.collectionName);
+                      
                         const highResImageUrl = result.artworkUrl100.replace("100x100", "3000x3000"); // itunes max image size is 3000x3000
                         const img = $("<img>").attr("src", highResImageUrl).addClass("result-image").attr("alt", result.collectionName || result.trackName);
                         const imgName = $("<p>").addClass("centered bold italic").text(`${result.artistName} - ${result.collectionName.replace(" - Single", "")}`);
@@ -66,6 +87,8 @@ $(document).ready(function() {
                     "Accepted file extensions: " + ACCEPTED_FILE_EXTENSIONS.join(", ") + ".",
                 ResponseStatus.ERROR
             );
+            hideSpinner("artwork-generation_file-upload");
+            alert("Please select a valid image file");
             return;
         }
 
@@ -82,7 +105,8 @@ $(document).ready(function() {
                     sendToast(response.message, ResponseStatus.ERROR);
                 }
             },
-            error: (err) => {
+            error: function(err) {
+                hideSpinner("artwork-generation_file-upload");
                 sendToast(err, ResponseStatus.ERROR);
             }
         });
