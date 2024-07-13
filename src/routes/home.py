@@ -1,9 +1,9 @@
 from flask import Blueprint, render_template, request
 
-import src.constants as const
 from src.logger import log
 from src.statistics import JsonDict, getJsonStatsFromFile
 from src.typing import RenderView
+import src.constants as const
 
 from src.app import app
 bp_home = Blueprint(const.ROUTES.home.bp_name, __name__.split('.')[-1])

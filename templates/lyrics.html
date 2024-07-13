@@ -17,19 +17,15 @@
     <h1>Lyrics</h1>
     <form method="POST" class="search-form flexbox flex-row">
         <div class="search-bars">
-            <input type="text" id="artist" name="artist" placeholder="Enter artist name" required>
-            <input type="text" id="song"   name="song"   placeholder="Enter song name"   required>
-            <div class="action-button" id="lyrics_search">
-                <input type="submit" value="Search Lyrics" class="action-button search-button" onclick="showSpinner('lyrics_search')">
-            </div>
+            <input type="text" name="artist" placeholder="Enter artist name" required>
+            <input type="text" name="song" placeholder="Enter song name" required>
+            <input type="submit" value="Search Lyrics" class="action-button search-button">
         </div>
     </form>
     <form method="POST" class="lyrics-form flexbox">
         <textarea name="lyrics" rows="20" cols="80" placeholder="Lyrics will appear here...">{{ lyrics }}</textarea>
         <br>
-        <div class="action-button" id="lyrics_save">
-            <input type="submit" value="Save Lyrics" class="action-button save-button" onclick="showSpinner('lyrics_save')">
-        </div>
+        <input type="submit" value="Save Lyrics" class="action-button save-button">
     </form>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
