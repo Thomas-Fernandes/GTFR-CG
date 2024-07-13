@@ -1,13 +1,14 @@
+from requests.exceptions import ReadTimeout as ReadTimeoutException
 from flask import Blueprint, render_template, request
-
 from lyricsgenius import Genius
+
 from re import sub, split, match
 from typing import Optional
 
+import src.constants as const
 from src.logger import log
 from src.statistics import updateStats
 from src.typing import Context, RenderView
-import src.constants as const
 
 from src.app import app
 bp_lyrics = Blueprint(const.ROUTES.lyrics.bp_name, __name__.split('.')[-1])
@@ -18,8 +19,11 @@ genius = Genius(const.GENIUS_API_TOKEN)
 @staticmethod
 def fetchLyricsFromGenius(song_title: str, artist_name: str) -> str:
     song: Optional[Genius.Song] = None
-    with log.redirect_stdout_stderr() as (stdout, stderr): # type: ignore
-        song = genius.search_song(song_title, artist_name)
+    try:
+        with log.redirect_stdout_stderr() as (stdout, stderr): # type: ignore
+            song = genius.search_song(song_title, artist_name)
+    except ReadTimeoutException as e:
+        log.error(f"Lyrics fetch failed: {e}")
     if song is None:
         return "Lyrics not found."
 
