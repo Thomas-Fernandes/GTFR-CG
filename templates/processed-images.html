@@ -25,7 +25,7 @@
 
         <!-- grille de 3*3 -->
         <div class="thumbnails">
-            <form method="GET" onsubmit="submitDownloadThumbnail(this); return false;">
+            <form method="GET" onsubmit="updateActionAndSubmit(this); return false;">
                 <div class="thumbnail-grid">
                     <div class="thumbnail-item">
                         <a><img src="{{ url_for('processed-images.downloadImage', filename='thumbnail_top-left.png') }}" alt="top left logo"></a>
