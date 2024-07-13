@@ -20,5 +20,5 @@ def install_requirements() -> None:
 
     for line in result.stderr.splitlines():
         # Filter warning and message
-        if line.startswith("WARNING: The script") and line.startswith("Consider adding this directory to PATH"):
+        if "WARNING: The script" not in line and "Consider adding this directory to PATH" not in line:
             log.error(line)
