@@ -5,6 +5,7 @@ from os import path
 
 import src.constants as const
 from src.logger import log
+from src.routes.redirect import renderRedirection
 from src.statistics import updateStats
 from src.typing import Context, JsonResponse, RenderView
 from src.web_utils import createJsonResponse
@@ -103,9 +104,9 @@ def downloadThumbnail(idx: str) -> Response | JsonResponse:
     return downloadImage(filename)
 
 @bp_processed_images.route(const.ROUTES.proc_img.path, methods=["GET"])
-def renderProcessedImages() -> RenderView | JsonResponse:
+def renderProcessedImages() -> RenderView:
     if const.SessionFields.generated_artwork_path.value not in session:
-        return createJsonResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_NO_IMG)
+        return renderRedirection(const.ROUTES.art_gen.path, const.ERR_NO_IMG)
 
     user_folder = str(session[const.SessionFields.user_folder.value])
     user_processed_path = path.join(const.PROCESSED_DIR, user_folder)
