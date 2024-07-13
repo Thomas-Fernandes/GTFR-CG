@@ -1,6 +1,6 @@
-from os import system
+from src.installer import install_requirements
 
-system('pip install -qr requirements.txt')
+install_requirements()
 
 #################################
 
