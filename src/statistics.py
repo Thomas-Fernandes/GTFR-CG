@@ -1,10 +1,10 @@
 from dataclasses import dataclass
 from typing import Optional
 
+import src.constants as const
 from src.logger import log
 from src.typing import JsonDict
 
-import src.constants as const
 
 ############# CLASS #############
 

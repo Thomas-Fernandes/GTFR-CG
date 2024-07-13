@@ -3,12 +3,12 @@ from PIL import Image, ImageFilter, ImageDraw
 
 from os import path
 
-from src.routes.redirect import renderRedirection
+import src.constants as const
 from src.logger import log
+from src.routes.redirect import renderRedirection
 from src.statistics import updateStats
 from src.typing import Context, JsonResponse, RenderView
 from src.web_utils import createJsonResponse
-import src.constants as const
 
 from src.app import app
 bp_processed_images = Blueprint(const.ROUTES.proc_img.bp_name, __name__.split('.')[-1])
@@ -115,6 +115,7 @@ def renderProcessedImages() -> RenderView:
     output_bg = path.join(user_processed_path, const.PROCESSED_ARTWORK_FILENAME)
     generateCoverArt(generated_artwork_path, output_bg, include_center_artwork)
     generateThumbnails(output_bg, user_processed_path)
+    log.log("Image generation completed successfully.")
     updateStats(to_increment="artworkGenerations")
 
     context: Context = {
