@@ -22,9 +22,12 @@ def renderHome() -> RenderView:
     context["stats"] = getJsonStatsFromFile()
     context["plurals"] = getPluralMarks(context["stats"])
     context["genius_token"] = session.get("genius_token", "")
+    context["session_state"] = session.get("session_state", "initializing")
     for key in const.AVAILABLE_STATS: # fill missing stats with default values
         if key not in context["stats"]:
             context["stats"][key] = const.EMPTY_STATS[key]
+    if context["session_state"] == "initializing":
+        session["session_state"] = "running"
     return render_template(const.ROUTES.home.view_filename, **context)
 
 @app.errorhandler(const.HttpStatus.NOT_FOUND.value) # needs to be applied to app, not blueprint

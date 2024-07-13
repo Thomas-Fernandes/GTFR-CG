@@ -4,24 +4,27 @@ $(document).ready(function() {
         window.location.href = "/home";
         return;
     }
-    const genius_token = document.getElementById("genius-token").innerHTML;
-    if (!genius_token) {
-        sendToast(
-            "Genius API token not found.\n"
-                + "Lyrics fetch is disabled.",
-            ResponseStatus.ERROR, 10
-        );
-        sendToast(
-            "Add your Genius API token to .env\n"
-                + "and restart the application to\n"
-                + "enable lyrics fetch.",
-            ResponseStatus.WARN, 20
-        );
-    } else {
-        sendToast(
-            "Welcome to GTFR-CG!\n"
-                + "Application started successfully.",
-            ResponseStatus.SUCCESS
-        );
+    const sessionState = document.getElementById("session-state").innerHTML;
+    if (sessionState === "initializing") {
+        const geniusToken = document.getElementById("genius-token").innerHTML;
+        if (!geniusToken) {
+            sendToast(
+                "Genius API token not found.\n"
+                    + "Lyrics fetch is disabled.",
+                ResponseStatus.ERROR, 10
+            );
+            sendToast(
+                "Add your Genius API token to your\n" +
+                    ".env file and restart the application\n" +
+                    "to enable lyrics fetch.",
+                ResponseStatus.WARN, 20
+            );
+        } else {
+            sendToast(
+                "Welcome to GTFR-CG!\n"
+                    + "Application started successfully.",
+                ResponseStatus.SUCCESS
+            );
+        }
     }
 });

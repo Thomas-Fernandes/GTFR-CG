@@ -16,6 +16,7 @@
         <button type="button" onclick="window.location.href='{{ url_for('lyrics.renderLyrics') }}'"><span class="right">Lyrics</span></button>
     </div>
     <div class="stats-board">
+        <p id="session-state" class="hidden">{{ session_state }}</p>
         <p id="genius-token" class="hidden">{{ genius_token }}</p>
         <div class="stats-entry">
             <h3 class="stat-title">Date of First Operation</h3>
