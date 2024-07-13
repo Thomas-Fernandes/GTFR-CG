@@ -4,12 +4,12 @@ from src.logger import log
 
 def install_requirements() -> None:
     log.info("Installing requirements...")
-    result = subprocess.run(['pip', 'install', '-r', 'requirements.txt'], capture_output=True, text=True)
+    result = subprocess.run(["pip", "install", "-r", "requirements.txt"], capture_output=True, text=True)
 
     installed_packages: list[str] = []
 
     for line in result.stdout.splitlines():
-        if 'Successfully installed' in line:
+        if "Successfully installed" in line:
             installed_packages.extend(line.split()[2:])
 
     if installed_packages:
@@ -20,5 +20,5 @@ def install_requirements() -> None:
 
     for line in result.stderr.splitlines():
         # Filter warning and message
-        if 'WARNING: The script' not in line and 'Consider adding this directory to PATH' not in line:
+        if not (line.startswith("WARNING: The script") or line.startswith("Consider adding this directory to PATH")):
             log.error(line)
