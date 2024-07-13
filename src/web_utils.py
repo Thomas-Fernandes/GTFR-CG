@@ -1,7 +1,7 @@
 from flask import jsonify
 
-import src.constants as const
 from src.typing import JsonResponse
+import src.constants as const
 
 def checkImageFilenameValid(filename: str | None) -> str | None:
     if filename == None or filename.strip() == "":

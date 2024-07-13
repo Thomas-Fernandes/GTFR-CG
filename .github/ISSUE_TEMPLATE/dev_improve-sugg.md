@@ -1,7 +1,7 @@
 ---
 name: DEV - Improvement suggestion
 about: Suggest an improvement to an existing feature
-title: "\U00002197\U0000FE0F "
+title: "\U00002197 "
 labels: enhancement
 assignees:
 
