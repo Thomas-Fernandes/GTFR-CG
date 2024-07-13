@@ -46,6 +46,11 @@ ROUTES = Routes(
         view_filename="home.html",
         bp_name="home",
     ),
+    redirect = Route(
+        path="/redirect",
+        view_filename="redirect.html",
+        bp_name="redirect",
+    ),
     art_gen = Route(
         path="/artwork-generation",
         view_filename="artwork-generation.html",
@@ -116,5 +121,4 @@ PATTERNS = [
     (compile(r"No results found for: \"(.*)\""),                          lambda m: f"No results found for \"{m.group(1)}\"."),
     (compile(r"Specified song does not contain lyrics. Rejecting."),      lambda m: "The specified song does not contain lyrics and was rejected."),
     (compile(r"Specified song does not have a valid lyrics. Rejecting."), lambda m: "The specified song does not have valid lyrics and was rejected."),
-    (compile(r"Done."),                                                   lambda m: "Lyrics were successfully found and populated.")
 ]

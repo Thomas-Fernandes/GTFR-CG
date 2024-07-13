@@ -24,6 +24,7 @@ class Route:
 class Routes:
     root: Route
     home: Route
+    redirect: Route
     art_gen: Route
     proc_img: Route
     lyrics: Route
