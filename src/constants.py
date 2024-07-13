@@ -46,6 +46,11 @@ ROUTES = Routes(
         view_filename="home.html",
         bp_name="home",
     ),
+    redirect = Route(
+        path="/redirect",
+        view_filename="redirect.html",
+        bp_name="redirect",
+    ),
     art_gen = Route(
         path="/artwork-generation",
         view_filename="artwork-generation.html",
