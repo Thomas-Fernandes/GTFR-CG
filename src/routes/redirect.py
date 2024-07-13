@@ -13,9 +13,9 @@ def renderRedirection(redirectTo: str, err: str) -> RenderView:
     log.warn(f"Redirecting to page \"{redirectTo}\" "
              f"following error: \"{err}\"...")
     context: Context = {
-        "redirectTo": redirectTo,
+        "redirectTo": redirectTo.replace(".html", ""),
         "errorText": err,
 
-        "plural": "s" if err == const.ERR_NO_IMG else None,
+        "plural": "s",
     }
     return render_template(const.ROUTES.redirect.view_filename, **context)

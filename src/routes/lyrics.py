@@ -7,6 +7,7 @@ from typing import Optional
 
 import src.constants as const
 from src.logger import log
+from src.routes.redirect import renderRedirection
 from src.statistics import updateStats
 from src.typing import Context, RenderView
 
@@ -17,6 +18,7 @@ session = app.config
 genius = None
 try:
     genius = Genius(const.GENIUS_API_TOKEN)
+    session["genius_token"] = const.GENIUS_API_TOKEN
 except TypeError as e:
     log.error(f"Error while creating Genius object: {e}. "
               "Lyrics fetching will not work.")
@@ -75,7 +77,7 @@ def updateTextarea() -> RenderView:
 
 @bp_lyrics.route(const.ROUTES.lyrics.path, methods=["GET"])
 def renderLyrics() -> RenderView:
-    # if genius is None:
-    #     return renderRedirection(const.ROUTES.home.view_filename, const.ERR_GENIUS_TOKEN)
+    if genius is None:
+        return renderRedirection(const.ROUTES.home.view_filename, const.ERR_GENIUS_TOKEN)
 
     return render_template(const.ROUTES.lyrics.view_filename, **const.DEFAULT_CONTEXT)

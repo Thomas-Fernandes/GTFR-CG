@@ -21,6 +21,7 @@ def renderHome() -> RenderView:
     context = const.DEFAULT_CONTEXT
     context["stats"] = getJsonStatsFromFile()
     context["plurals"] = getPluralMarks(context["stats"])
+    context["genius_token"] = session.get("genius_token", "")
     for key in const.AVAILABLE_STATS: # fill missing stats with default values
         if key not in context["stats"]:
             context["stats"][key] = const.EMPTY_STATS[key]
