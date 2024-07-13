@@ -1,10 +1,10 @@
-import subprocess
+from subprocess import run
 
 from src.logger import log
 
 def install_requirements() -> None:
     log.info("Installing requirements...")
-    result = subprocess.run(["pip", "install", "-r", "requirements.txt"], capture_output=True, text=True)
+    result = run(["pip", "install", "-r", "requirements.txt"], capture_output=True, text=True)
 
     installed_packages: list[str] = []
 
@@ -20,5 +20,5 @@ def install_requirements() -> None:
 
     for line in result.stderr.splitlines():
         # Filter warning and message
-        if not (line.startswith("WARNING: The script") or line.startswith("Consider adding this directory to PATH")):
+        if line.startswith("WARNING: The script") and line.startswith("Consider adding this directory to PATH"):
             log.error(line)
