@@ -1,4 +1,4 @@
-const AcceptedFileExtensions = Object.freeze([
+const ACCEPTED_IMG_EXTENSIONS = Object.freeze([
     "jpg",
     "jpeg",
     "png"
@@ -77,13 +77,13 @@ $(document).ready(function() {
             sendToast("Please select an image file.", ResponseStatus.WARN);
         }
 
-        const fileHasAcceptedExtension = $("#file")[0].files.length !== 0 &&
-            AcceptedFileExtensions.includes($("#file")[0].files[0].name.split(".").slice(-1)[0].toLowerCase());
+        const fileHasAcceptedExtension =
+            ACCEPTED_IMG_EXTENSIONS.includes($("#file")[0].files[0].name.split(".").slice(-1)[0].toLowerCase());
         if (!fileHasAcceptedExtension) {
             hideSpinner("artwork-generation_file-upload");
             sendToast(
                 "Please select a valid image file.\n" +
-                    "Accepted file extensions: " + ACCEPTED_FILE_EXTENSIONS.join(", ") + ".",
+                    "Accepted file extensions: " + ACCEPTED_IMG_EXTENSIONS.join(", ") + ".",
                 ResponseStatus.ERROR
             );
             return;
