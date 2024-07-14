@@ -123,6 +123,7 @@ ERR_NO_FILE = "Invalid file: No file selected."
 ERR_NO_IMG = "No image was selected or uploaded."
 ERR_INVALID_FILE_TYPE = "Invalid file type. Only PNG and JPG files are allowed."
 ERR_NO_IMG_URL = "No image URL provided"
+ERR_INVALID_THUMBNAIL = "Invalid thumbnail index."
 ERR_FAIL_DOWNLOAD = "Failed to download image."
 
 # Genius
