@@ -40,5 +40,4 @@ RenderView: TypeAlias = str
 
 ############ SOFTWARE ############
 
-DictKeys: TypeAlias = list[str]
 JsonDict: TypeAlias = dict[str, Optional[str | int]]

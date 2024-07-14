@@ -36,7 +36,7 @@ class Logger:
     def getFormattedMessage(message: str, level: Optional[LoggingLevel] = None) -> str:
         """ Formats a message to log.
         :param message: [string] The core message to log.
-        :param level: [LoggingLevel] The level of the message, used as a prefix. (default: None)
+        :param level: [LoggingLevel?] The level of the message, used as a prefix. (default: None)
         :return: [string] The formatted message.
         """
         match level:
@@ -105,7 +105,7 @@ class Logger:
     def send(self, message: str, level: Optional[LoggingLevel] = None) -> None:
         """ Sends a message to log.
         :param message: [string] The message to log.
-        :param level: [LoggingLevel] The level of the message. (default: None)
+        :param level: [LoggingLevel?] The level of the message. (default: None)
         """
         message_to_log = self.getFormattedMessage(message, level)
         if self.__log_file is not None and self.__log_file.strip() != "":
@@ -116,7 +116,7 @@ class Logger:
 
     def __init__(self, log_file: Optional[str] = None) -> None:
         """ Initializes the logger.
-        :param log_file: [string] The path of the file to write logs to. (default: None --- standard output)
+        :param log_file: [string?] The path of the file to write logs to. (default: None --- standard output)
         """
         self.__log_file = log_file
 

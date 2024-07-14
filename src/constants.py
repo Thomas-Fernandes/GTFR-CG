@@ -5,7 +5,7 @@ from os import getenv, name as osName
 from re import compile
 from typing import Optional
 
-from src.typing import Context, DictKeys, JsonDict, Route, Routes
+from src.typing import Context, JsonDict, Route, Routes
 
 ############# ENUMS #############
 
@@ -86,13 +86,23 @@ DEFAULT_CONTEXT: Context = {
 DATE_FORMAT_FULL = "%Y-%m-%d %H:%M:%S"
 STATS_FILE_PATH = "stats.json"
 DEFAULT_EXPIRATION = 2 # in days (integer)
+class AvailableStats(Enum):
+    """ Enum for the available statistics.
+    """
+    dateFirstOperation = "dateFirstOperation"
+    dateLastOperation = "dateLastOperation"
+    artworkGenerations = "artworkGenerations"
+    lyricsFetches = "lyricsFetches"
 EMPTY_STATS: JsonDict = {
-    "dateFirstOperation": "N/A",
-    "dateLastOperation": "N/A",
-    "artworkGenerations": 0,
-    "lyricsFetches": 0,
+    AvailableStats.dateFirstOperation.value: "N/A",
+    AvailableStats.dateLastOperation.value: "N/A",
+    AvailableStats.artworkGenerations.value: 0,
+    AvailableStats.lyricsFetches.value: 0,
 }
-AVAILABLE_STATS: DictKeys = list(EMPTY_STATS.keys())
+INCREMENTABLE_STATS: list[str] = [
+    AvailableStats.artworkGenerations.value,
+    AvailableStats.lyricsFetches.value,
+]
 
 # Paths
 SLASH = '/' if (osName != 'nt') else '\\'
