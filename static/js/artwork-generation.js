@@ -4,19 +4,29 @@ const ACCEPTED_IMG_EXTENSIONS = Object.freeze([
     "png"
 ]);
 
-const maxTitleLength = 42;
-const maxCropLength = 12;
+const MAX_TITLE_LENGTH = 42;
+const MAX_CROP_LEGTH = 12;
 
 const getTitleWithAdjustedLength = (title) => {
-    title = title.slice(0, maxTitleLength - 3);
+    title = title.slice(0, MAX_TITLE_LENGTH - 3);
 
     // find the first space before the max length to cut the string there
-    let end = title[title.length - 1] === " " ? title.length - 1 : title.lastIndexOf(" ", maxTitleLength);
+    let end = title[title.length - 1] === " " ? title.length - 1 : title.lastIndexOf(" ", MAX_TITLE_LENGTH);
 
     // if the space-determined crop is too intense, just cut the string at the max length
-    end = maxTitleLength - end > maxCropLength ? title.length : end;
+    end = MAX_TITLE_LENGTH - end > MAX_CROP_LEGTH ? title.length : end;
     return title.slice(0, end) + "...";
 };
+
+const YOUTUBE_URL = [
+    /https?:\/\/(www\.)?youtube\.com\/watch\?v=[a-zA-Z0-9_-]{11}/,
+    /https?:\/\/youtu\.be\/[a-zA-Z0-9_-]{11}/,
+];
+
+const isValidYoutubeUrl = (url) => {
+    return YOUTUBE_URL.some((pattern) => pattern.test(url));
+}
+
 
 $(document).ready(function() {
     $("#iTunesSearchForm").on("submit", (event) => {
@@ -40,9 +50,9 @@ $(document).ready(function() {
                 resultsDiv.empty();
                 if (data.results.length > 0) {
                     data.results.forEach((result) => {
-                        if (result.artistName?.length > maxTitleLength)
+                        if (result.artistName?.length > MAX_TITLE_LENGTH)
                             result.artistName = getTitleWithAdjustedLength(result.artistName);
-                        if (result.collectionName?.length > maxTitleLength)
+                        if (result.collectionName?.length > MAX_TITLE_LENGTH)
                             result.collectionName = getTitleWithAdjustedLength(result.collectionName);
                         const highResImageUrl = result.artworkUrl100.replace("100x100", "3000x3000"); // itunes max image size is 3000x3000
                         const img = $("<img>").attr("src", highResImageUrl).addClass("result-image").attr("alt", result.collectionName || result.trackName);
@@ -109,31 +119,38 @@ $(document).ready(function() {
             }
         });
     });
-    document.getElementById('youtubeThumbnailForm').addEventListener('submit', function (event) {
+    $("#youtubeThumbnailForm").on("submit", function(event) {
         event.preventDefault();
+        const url = $("#youtube_url").val().trim();
+
+        if (!isValidYoutubeUrl(url)) {
+            sendToast("Please enter a valid URL", ResponseStatus.ERROR);
+            return;
+        }
+
         showSpinner('youtube-thumbnail-submit');
-    
-        const url = document.getElementById('youtube_url').value;
-    
-        fetch('/artwork-generation/use-youtube-thumbnail', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
+
+        $.ajax({
+            url: '/artwork-generation/use-youtube-thumbnail',
+            type: 'POST',
+            contentType: 'application/x-www-form-urlencoded',
+            data: { url: url },
+            success: function(data) {
+
+                if (data.status === 'error') {
+                    hideSpinner('youtube-thumbnail-submit');
+                    sendToast("An error occurred on the server.", ResponseStatus.ERROR);
+                } else {
+                    window.addEventListener('beforeunload', function () {
+                        showSpinner('youtube-thumbnail-submit');
+                    });
+                    window.location.href = '/processed-images';
+                }
             },
-            body: 'url=' + encodeURIComponent(url)
-        })
-        .then(response => response.json())
-        .then(data => {
-            hideSpinner('youtube-thumbnail-submit');
-            if (data.status === 'error') {
-                alert(data.message);
-            } else {
-                window.location.href = '/processed-images';
+            error: function(jqXHR, textStatus, errorThrown) {
+                hideSpinner('youtube-thumbnail-submit');
+                sendToast("An error occurred. Please try again.", ResponseStatus.ERROR);
             }
-        })
-        .catch(error => {
-            hideSpinner('youtube-thumbnail-submit');
-            console.error('Error:', error);
         });
     });
 });

@@ -69,27 +69,8 @@ def useLocalImage() -> JsonResponse:
 
 ###### YouTube thumbnail ######
 
-@bp_artwork_generation.route(const.ROUTES.art_gen.path + "/use-youtube-thumbnail", methods=["POST"])
-def useYoutubeThumbnail() -> JsonResponse:
-    """
-    Handles the extraction and processing of a YouTube thumbnail from a given URL.
-
-    :return: JsonResponse containing the status and path of the processed image.
-    """
-    url = request.form.get("url")
-    if not url:
-        return createJsonResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_NO_IMG_URL)
-
-    video_id = extract_youtube_video_id(url)
-    if not video_id:
-        return createJsonResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_INVALID_YT_URL)
-
-    thumbnail_url = f"https://i3.ytimg.com/vi/{video_id}/maxresdefault.jpg"
-    return processThumbnail(thumbnail_url)
-
 def extract_youtube_video_id(url: str) -> Optional[str]:
-    """
-    Extracts youtube video id from given URL
+    """ Extracts youtube video id from given URL
 
     :param url: The youtube URL from which to extract the video ID
     :return: The extracted video ID or None if the URL does not match the expected formats
@@ -102,8 +83,7 @@ def extract_youtube_video_id(url: str) -> Optional[str]:
     return None
 
 def processThumbnail(thumbnail_url: str) -> JsonResponse:
-    """
-    Processes the thumbnail from the provided URL, saves it to the server, and updates the session
+    """ Processes the thumbnail from the provided URL, saves it to the server, and updates the session
 
     :param thumbnail_url: The URL of the youtube thumbnail to be processed
     :return: JsonResponse containing the status and path of the processed image
@@ -127,6 +107,23 @@ def processThumbnail(thumbnail_url: str) -> JsonResponse:
     session[const.SessionFields.include_center_artwork.value] = False
     
     return createJsonResponse(const.HttpStatus.OK.value, "/processed-images")
+
+@bp_artwork_generation.route(const.ROUTES.art_gen.path + "/use-youtube-thumbnail", methods=["POST"])
+def useYoutubeThumbnail() -> JsonResponse:
+    """ Handles the extraction and processing of a YouTube thumbnail from a given URL.
+
+    :return: JsonResponse containing the status and path of the processed image.
+    """
+    url = request.form.get("url")
+    if not url:
+        return createJsonResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_NO_IMG_URL)
+
+    video_id = extract_youtube_video_id(url)
+    if not video_id:
+        return createJsonResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_INVALID_YT_URL)
+
+    thumbnail_url = f"https://i3.ytimg.com/vi/{video_id}/maxresdefault.jpg"
+    return processThumbnail(thumbnail_url)
 
 @bp_artwork_generation.route(const.ROUTES.art_gen.path, methods=["GET"])
 def renderArtworkGeneration() -> RenderView:

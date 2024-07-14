@@ -108,6 +108,7 @@ ERR_NO_IMG = "No image was selected or uploaded."
 ERR_INVALID_FILE_TYPE = "Invalid file type. Only PNG and JPG files are allowed."
 ERR_NO_IMG_URL = "No image URL provided"
 ERR_FAIL_DOWNLOAD = "Failed to download image."
+ERR_INVALID_YT_URL = "Invalid YouTube URL."
 
 # Genius
 load_dotenv()
