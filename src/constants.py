@@ -47,15 +47,15 @@ ROUTES = Routes(
         path="/",
         view_filename="home.html",
     ),
-    home = Route(
-        path="/home",
-        view_filename="home.html",
-        bp_name="home",
-    ),
     redirect = Route(
         path="/redirect",
         view_filename="redirect.html",
         bp_name="redirect",
+    ),
+    home = Route(
+        path="/home",
+        view_filename="home.html",
+        bp_name="home",
     ),
     art_gen = Route(
         path="/artwork-generation",

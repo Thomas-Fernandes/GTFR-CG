@@ -35,7 +35,7 @@ class Stats:
         }
 
     def __repr__(self) -> str:
-        """ Returns the dataclass as a string.
+        """ Returns the Stats dataclass as a string.
         :return: [string] The dataclass' content, as a string.
         """
         stats_dict = self.dict()
