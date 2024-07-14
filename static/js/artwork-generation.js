@@ -74,6 +74,7 @@ $(document).ready(function() {
         const formFiles = $("#file")[0].files;
 
         if (formFiles.length === 0) {
+            hideSpinner("artwork-generation_file-upload");
             sendToast("Please select an image file.", ResponseStatus.WARN);
         }
 
@@ -106,6 +107,33 @@ $(document).ready(function() {
                 hideSpinner("artwork-generation_file-upload");
                 sendToast(err, ResponseStatus.ERROR);
             }
+        });
+    });
+    document.getElementById('youtubeThumbnailForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+        showSpinner('youtube-thumbnail-submit');
+    
+        const url = document.getElementById('youtube_url').value;
+    
+        fetch('/artwork-generation/use-youtube-thumbnail', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'url=' + encodeURIComponent(url)
+        })
+        .then(response => response.json())
+        .then(data => {
+            hideSpinner('youtube-thumbnail-submit');
+            if (data.status === 'error') {
+                alert(data.message);
+            } else {
+                window.location.href = '/processed-images';
+            }
+        })
+        .catch(error => {
+            hideSpinner('youtube-thumbnail-submit');
+            console.error('Error:', error);
         });
     });
 });

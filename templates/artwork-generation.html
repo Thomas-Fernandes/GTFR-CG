@@ -45,6 +45,17 @@
     </form>
     <span class="top-bot-spacer"></span>
 
+    <h1>...or use a YouTube thumbnail</h1>
+    <form id="youtubeThumbnailForm" method="POST" action="/artwork-generation/use-youtube-thumbnail">
+        <div class="flexbox">
+            <input type="text" name="url" id="youtube_url" placeholder="Paste YouTube URL here" required />
+            <div class="action-button" id="youtube-thumbnail-submit">
+                <input type="submit" value="GENERATE" class="action-button" />
+                <div id="youtube-thumbnail-spinner" class="spinner" style="display:none;"></div>
+            </div>            
+        </div>
+    </form>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="{{ url_for('static', filename='js/_generic.js') }}"></script>
     <script src="{{ url_for('static', filename='js/artwork-generation.js') }}"></script>
