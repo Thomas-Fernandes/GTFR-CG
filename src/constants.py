@@ -31,9 +31,16 @@ HOST_HOME = "0.0.0.0"
 DEFAULT_PORT = 8000
 
 class SessionFields(Enum):
+    # Application
+    session_status = "session_status"
     user_folder = "user_folder"
+
+    # Artwork generation
     generated_artwork_path = "generated_artwork_path"
     include_center_artwork = "include_center_artwork"
+
+    # Lyrics
+    genius_token = "genius_token"
 
 # Routes and views
 ROUTES = Routes(
