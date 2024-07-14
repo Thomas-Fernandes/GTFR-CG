@@ -9,4 +9,7 @@ def getNowEpoch() -> str: # in MM-DD 24-hour format
     return formatted_time
 
 def getDefaultExpirationTimestamp() -> int:
+    """ Returns the default expiration timestamp.
+    :return: [integer] The default expiration timestamp.
+    """
     return int(time() - const.DEFAULT_EXPIRATION * const.TimeInSeconds.DAY.value)

@@ -4,9 +4,8 @@ from src.logger import log
 
 def install_requirements(req_path: str = "requirements.txt") -> None:
     """ Installs the packages required by the application, from the requirements file.
-    :param req_path: The path to the requirements file. (default: "requirements.txt")
+    :param req_path: [string] The path to the requirements file. (default: "requirements.txt")
     """
-
     log.info("Installing requirements...")
     result = run(["pip", "install", "-r", req_path], capture_output=True, text=True)
 

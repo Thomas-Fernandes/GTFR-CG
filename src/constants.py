@@ -10,6 +10,8 @@ from src.typing import Context, DictKeys, JsonDict, Route, Routes
 ############# ENUMS #############
 
 class HttpStatus(Enum):
+    """ Enum for HTTP status codes.
+    """
     OK = 200
     REDIRECT = 302
     BAD_REQUEST = 400
@@ -17,6 +19,8 @@ class HttpStatus(Enum):
     INTERNAL_SERVER_ERROR = 500
 
 class TimeInSeconds(Enum):
+    """ Enum for time units, converted to seconds.
+    """
     SECOND = 1
     MINUTE = 60 * SECOND
     HOUR   = 60 * MINUTE
@@ -31,6 +35,8 @@ HOST_HOME = "0.0.0.0"
 DEFAULT_PORT = 8000
 
 class SessionFields(Enum):
+    """ Enum for the fields in the session.
+    """
     user_folder = "user_folder"
     generated_artwork_path = "generated_artwork_path"
     include_center_artwork = "include_center_artwork"

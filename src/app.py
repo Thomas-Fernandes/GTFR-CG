@@ -19,7 +19,6 @@ app = Flask(__name__.split('.')[-1]) # so that the app name is app, not {dirpath
 def initApp() -> None:
     """ Initializes the Flask app: declares config and session, assigns blueprints.
     """
-
     app.config["SESSION_PERMANENT"] = False
     app.config["SESSION_TYPE"] = "filesystem"
     app.config["SESSION_FILE_DIR"] = const.SESSION_DIR
@@ -42,10 +41,9 @@ def initApp() -> None:
 
 def main(host: str = const.HOST_HOME, port: int = const.DEFAULT_PORT) -> None:
     f""" Main function to clean the cache, initialize the server and start it.
-    :param host: The host address to run the server on. (default: "{const.HOST_HOME}")
-    :param port: The port to run the server on. (default: {const.DEFAULT_PORT})
+    :param host: [string] The host address to run the server on. (default: "{const.HOST_HOME}")
+    :param port: [integer] The port to run the server on. (default: {const.DEFAULT_PORT})
     """
-
     host_display_name = "localhost" if host == const.HOST_HOME else host
     log.log(f"Starting server @ http://{host_display_name}:{port}")
 
@@ -55,10 +53,9 @@ def main(host: str = const.HOST_HOME, port: int = const.DEFAULT_PORT) -> None:
     @DeprecationWarning # cache cleanup process is to be redefined
     def removeExpiredContent(folder: str) -> int:
         """ Removes entries in the given folder that are older than the default expiration time.
-        :param folder: The folder to remove expired entries from.
-        :return: The number of entries removed.
+        :param folder: [string] The folder to remove expired entries from.
+        :return: [integer] The number of entries removed.
         """
-
         eliminated_entries_count: int = 0
         filepaths: list[str] = [path.join(folder, f) for f in listdir(folder)]
 
@@ -80,7 +77,7 @@ def main(host: str = const.HOST_HOME, port: int = const.DEFAULT_PORT) -> None:
     def cacheCleanup() -> None:
         """ Cleans up the cache by removing expired entries.
         """
-        to_clean: list[str] = ["DIRECTORY_NAME"] # FIXME used as a placeholder
+        to_clean: list[str] = ["DIRECTORY_NAME"] # used as a placeholder
         eliminated_entries_count: int = 0
 
         for folder in to_clean:
