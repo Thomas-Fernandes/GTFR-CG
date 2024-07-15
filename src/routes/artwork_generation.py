@@ -76,12 +76,11 @@ def useLocalImage() -> JsonResponse:
 ###### YouTube thumbnail ######
 
 def extract_youtube_video_id(url: str) -> Optional[str]:
-    """ Extracts youtube video id from given URL
-
-    :param url: The youtube URL from which to extract the video ID
-    :return: The extracted video ID or None if the URL does not match the expected formats
+    """ Extracts the YouTube video ID from the provided URL.
+    :param url: [str] The YouTube URL from which to extract the video ID.
+    :return: [str or None] The extracted video ID, or None if the URL does not match the expected formats
     """
-    for pattern in const.YOUTUBE_URL:
+    for pattern in const.YOUTUBE_URL_PATTERNS:
         match = pattern.match(url)
         if match:
             return match.group(1)
@@ -89,10 +88,9 @@ def extract_youtube_video_id(url: str) -> Optional[str]:
     return None
 
 def processThumbnail(thumbnail_url: str) -> JsonResponse:
-    """ Processes the thumbnail from the provided URL, saves it to the server, and updates the session
-
-    :param thumbnail_url: The URL of the youtube thumbnail to be processed
-    :return: JsonResponse containing the status and path of the processed image
+    """ Processes the thumbnail from the provided URL, saves it to the server, and updates the session.
+    :param thumbnail_url: [str] The URL of the YouTube thumbnail to be processed.
+    :return: [JsonResponse] Contains the status and path of the processed image.
     """
     if const.SessionFields.user_folder.value not in session:
         session[const.SessionFields.user_folder.value] = str(uuid4())
@@ -117,8 +115,7 @@ def processThumbnail(thumbnail_url: str) -> JsonResponse:
 @bp_artwork_generation.route(const.ROUTES.art_gen.path + "/use-youtube-thumbnail", methods=["POST"])
 def useYoutubeThumbnail() -> JsonResponse:
     """ Handles the extraction and processing of a YouTube thumbnail from a given URL.
-
-    :return: JsonResponse containing the status and path of the processed image.
+    :return: [JsonResponse] Contains the status and path of the processed image.
     """
     url = request.form.get("url")
     if not url:

@@ -81,7 +81,7 @@ class Logger:
             stderr_content = new_stderr.read()
 
             def process_message(line: str) -> str:
-                for (pattern, action) in const.PATTERNS:
+                for (pattern, action) in const.LYRICSGENIUS_PATTERNS:
                     match: Optional[Match[str]] = pattern.match(line)
                     if match is not None:
                         return action(match)
