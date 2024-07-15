@@ -16,7 +16,15 @@ session = app.config
 
 @staticmethod
 def generateCoverArt(input_path: str, output_path: str, include_center_artwork: bool = True) -> None:
+    """ Generates the cover art for the given input image and saves it to the output path.
+    :param input_path: [string] The path to the input image.
+    :param output_path: [string] The path to save the output image.
+    :param include_center_artwork: [bool] Whether to include the center artwork in the cover art. (default: True)
+    """
     def getSessionFirstName() -> str:
+        """ Returns the first segment of the session id.
+        :return: [string] The first segment of the session id.
+        """
         return input_path.split(const.SLASH)[-2].split('-')[0]
     log.info(f"Generating cover art... (session {getSessionFirstName()}-...)")
 
@@ -65,6 +73,10 @@ def generateCoverArt(input_path: str, output_path: str, include_center_artwork: 
 
 @staticmethod
 def generateThumbnails(bg_path: str, output_folder: str) -> None:
+    """ Generates the thumbnails for the given background image and saves them in the output folder.
+    :param bg_path: [string] The path to the background image.
+    :param output_folder: [string] The path to the folder where the thumbnails will be saved.
+    """
     log.info(f"Generating thumbnails... (session {bg_path.split(const.SLASH)[-2].split('-')[0]}-...)")
 
     for position in const.LOGO_POSITIONS:
@@ -88,6 +100,10 @@ def generateThumbnails(bg_path: str, output_folder: str) -> None:
 
 @bp_processed_images.route("/download-image/<filename>", methods=["GET"])
 def downloadImage(filename: str) -> Response | JsonResponse:
+    """ Downloads the image with the given filename.
+    :param filename: [string] The name of the image to download.
+    :return: [Response | JsonResponse] The response containing the image, or an error message.
+    """
     if const.SessionFields.user_folder.value not in session:
         return createJsonResponse(const.HttpStatus.NOT_FOUND.value, const.ERR_INVALID_SESSION)
 
@@ -96,15 +112,25 @@ def downloadImage(filename: str) -> Response | JsonResponse:
     return send_from_directory(directory, filename, as_attachment=True)
 
 @bp_processed_images.route("/download-thumbnail/<idx>", methods=["GET"])
-def downloadThumbnail(idx: str) -> Response | JsonResponse:
+def downloadThumbnail(str_idx: str) -> Response | JsonResponse:
+    """ Downloads the thumbnail with the given index.
+    :param str_idx: [string] The index of the thumbnail to download.
+    :return: [Response | JsonResponse] The response containing the thumbnail, or an error message.
+    """
+    idx = int(str_idx.strip())
+    if idx not in range(1, 10):
+        return createJsonResponse(const.HttpStatus.NOT_FOUND.value, const.ERR_INVALID_THUMBNAIL)
     filename: str = \
         f"{const.THUMBNAIL_PREFIX}" \
-        f"{const.LOGO_POSITIONS[int(idx) - 1]}" \
+        f"{const.LOGO_POSITIONS[idx - 1]}" \
         f"{const.THUMBNAIL_EXT}"
     return downloadImage(filename)
 
 @bp_processed_images.route(const.ROUTES.proc_img.path, methods=["GET"])
 def renderProcessedImages() -> RenderView:
+    """ Renders the processed artwork and thumbnails, and returns the processed images view.
+    :return: [RenderView | RenderView] The rendered view, or a redirection if the session has no processed image.
+    """
     if const.SessionFields.generated_artwork_path.value not in session:
         return renderRedirection(const.ROUTES.art_gen.path, const.ERR_NO_IMG)
 

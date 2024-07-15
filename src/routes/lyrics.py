@@ -18,6 +18,11 @@ genius = Genius(const.GENIUS_API_TOKEN)
 
 @staticmethod
 def fetchLyricsFromGenius(song_title: str, artist_name: str) -> str:
+    """ Tries to fetch the lyrics of a song from Genius.com.
+    :param song_title: [string] The title of the song.
+    :param artist_name: [string] The name of the artist.
+    :return: [string] The stringified lyrics of the song.
+    """
     song: Optional[Genius.Song] = None
     try:
         with log.redirect_stdout_stderr() as (stdout, stderr): # type: ignore
@@ -33,7 +38,12 @@ def fetchLyricsFromGenius(song_title: str, artist_name: str) -> str:
     lyrics = sub(r"\d+Embed$", '', lyrics).strip()
 
     # Ensure double newline before song parts
+    @staticmethod
     def add_newline_before_song_parts(lyrics: str) -> str:
+        """ Adds a newline before song parts that are enclosed in double quotes.
+        :param lyrics: [string] The stringified lyrics to process.
+        :return: [string] The processed stringified lyrics.
+        """
         song_parts = split(r"<[^>]+>", lyrics)
         new_lyrics = []
         for (i, part) in enumerate(song_parts):
@@ -53,6 +63,9 @@ def fetchLyricsFromGenius(song_title: str, artist_name: str) -> str:
 
 @bp_lyrics.route(const.ROUTES.lyrics.path, methods=["POST"])
 def updateTextarea() -> RenderView:
+    """ Updates the lyrics context variable with the fetched lyrics.
+    :return: [RenderView] The rendered view, with the updated lyrics.
+    """
     artist: Optional[str] = request.form.get("artist", None)
     song: Optional[str] = request.form.get("song", None)
     lyrics_text: Optional[str] = request.form.get("lyrics")
@@ -67,4 +80,7 @@ def updateTextarea() -> RenderView:
 
 @bp_lyrics.route(const.ROUTES.lyrics.path, methods=["GET"])
 def renderLyrics() -> RenderView:
+    """ Renders the lyrics page.
+    :return: [RenderView] The rendered view.
+    """
     return render_template(const.ROUTES.lyrics.view_filename, **const.DEFAULT_CONTEXT)
