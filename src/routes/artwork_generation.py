@@ -18,6 +18,9 @@ session = app.config
 
 @bp_artwork_generation.route(const.ROUTES.art_gen.path + "/use-itunes-image", methods=["POST"])
 def useItunesImage() -> JsonResponse:
+    """ Interprets the fetched iTunes URL and saves the image to the user's folder.
+    :return: [JsonResponse] The response to the request.
+    """
     image_url: Optional[str] = request.form.get("url")
     if image_url is None:
         return createJsonResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_NO_IMG_URL)
@@ -43,6 +46,9 @@ def useItunesImage() -> JsonResponse:
 
 @bp_artwork_generation.route(const.ROUTES.art_gen.path + "/use-local-image", methods=["POST"])
 def useLocalImage() -> JsonResponse:
+    """ Saves the uploaded image to the user's folder.
+    :return: [JsonResponse] The response to the request.
+    """
     if const.SessionFields.user_folder.value not in session:
         session[const.SessionFields.user_folder.value] = str(uuid4())
     user_folder = str(session[const.SessionFields.user_folder.value])
@@ -127,4 +133,7 @@ def useYoutubeThumbnail() -> JsonResponse:
 
 @bp_artwork_generation.route(const.ROUTES.art_gen.path, methods=["GET"])
 def renderArtworkGeneration() -> RenderView:
+    """ Renders the artwork generation page.
+    :return: [RenderView] The rendered view.
+    """
     return render_template(const.ROUTES.art_gen.view_filename)

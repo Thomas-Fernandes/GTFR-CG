@@ -17,6 +17,8 @@ from src.statistics import onLaunch as printInitStatistics
 global app
 app = Flask(__name__.split('.')[-1]) # so that the app name is app, not {dirpath}.app
 def initApp() -> None:
+    """ Initializes the Flask app: declares config and session, assigns blueprints.
+    """
     app.config["SESSION_PERMANENT"] = False
     app.config["SESSION_TYPE"] = "filesystem"
     app.config["SESSION_FILE_DIR"] = const.SESSION_DIR
@@ -38,6 +40,10 @@ def initApp() -> None:
     Session(app)
 
 def main(host: str = const.HOST_HOME, port: int = const.DEFAULT_PORT) -> None:
+    f""" Main function to clean the cache, initialize the server and start it.
+    :param host: [string] The host address to run the server on. (default: "{const.HOST_HOME}")
+    :param port: [integer] The port to run the server on. (default: {const.DEFAULT_PORT})
+    """
     host_display_name = "localhost" if host == const.HOST_HOME else host
     log.log(f"Starting server @ http://{host_display_name}:{port}")
 
@@ -45,8 +51,12 @@ def main(host: str = const.HOST_HOME, port: int = const.DEFAULT_PORT) -> None:
     makedirs(processed_folder, exist_ok=True)
 
     @DeprecationWarning # cache cleanup process is to be redefined
-    def removeOldUploads(folder: str) -> int:
-        eliminated_files_count: int = 0
+    def removeExpiredContent(folder: str) -> int:
+        """ Removes entries in the given folder that are older than the default expiration time.
+        :param folder: [string] The folder to remove expired entries from.
+        :return: [integer] The number of entries removed.
+        """
+        eliminated_entries_count: int = 0
         filepaths: list[str] = [path.join(folder, f) for f in listdir(folder)]
 
         def isFileExpired(file: str) -> bool:
@@ -55,26 +65,29 @@ def main(host: str = const.HOST_HOME, port: int = const.DEFAULT_PORT) -> None:
         for file in filepaths:
             if isFileExpired(file):
                 remove(file)
-                eliminated_files_count += 1
+                eliminated_entries_count += 1
         if listdir(folder) == []: # if folder is empty, remove it
             rmtree(folder)
-        if eliminated_files_count != 0:
-            pluralMarks = ["s", "were"] if eliminated_files_count != 1 else ["", "was"]
-            log.info(f"{eliminated_files_count} cached file{pluralMarks[0]} {pluralMarks[1]} " \
+        if eliminated_entries_count != 0:
+            pluralMarks = ["s", "were"] if eliminated_entries_count != 1 else ["", "was"]
+            log.info(f"{eliminated_entries_count} cached file{pluralMarks[0]} {pluralMarks[1]} " \
                 f"removed in {folder.split(const.SLASH)[0]}.")
-        return eliminated_files_count
+        return eliminated_entries_count
 
     def cacheCleanup() -> None:
-        to_clean = ["DIRECTORY_NAME" + const.SLASH]
-        eliminated_files_count: int = 0
+        """ Cleans up the cache by removing expired entries.
+        """
+        to_clean: list[str] = ["DIRECTORY_NAME"] # used as a placeholder
+        eliminated_entries_count: int = 0
 
         for folder in to_clean:
-            if not path.isdir(folder):
+            folder_path = path.join(folder + const.SLASH)
+            if not path.isdir(folder_path):
                 continue
-            session_dirname_list = listdir(folder)
+            session_dirname_list = listdir(folder_path)
             for sdn in session_dirname_list:
-                eliminated_files_count += removeOldUploads(folder + sdn)
-            if eliminated_files_count == 0:
+                eliminated_entries_count += removeExpiredContent(folder_path + sdn)
+            if eliminated_entries_count == 0:
                 log.info("Cache still fresh. Loading...")
 
     printInitStatistics()

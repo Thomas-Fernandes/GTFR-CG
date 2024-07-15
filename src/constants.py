@@ -5,11 +5,13 @@ from os import getenv, name as osName
 from re import compile
 from typing import Optional
 
-from src.typing import Context, DictKeys, JsonDict, Route, Routes
+from src.typing import Context, JsonDict, Route, Routes
 
 ############# ENUMS #############
 
 class HttpStatus(Enum):
+    """ Enum for HTTP status codes.
+    """
     OK = 200
     REDIRECT = 302
     BAD_REQUEST = 400
@@ -17,6 +19,8 @@ class HttpStatus(Enum):
     INTERNAL_SERVER_ERROR = 500
 
 class TimeInSeconds(Enum):
+    """ Enum for time units, converted to seconds.
+    """
     SECOND = 1
     MINUTE = 60 * SECOND
     HOUR   = 60 * MINUTE
@@ -31,6 +35,8 @@ HOST_HOME = "0.0.0.0"
 DEFAULT_PORT = 8000
 
 class SessionFields(Enum):
+    """ Enum for the fields in the session.
+    """
     user_folder = "user_folder"
     generated_artwork_path = "generated_artwork_path"
     include_center_artwork = "include_center_artwork"
@@ -41,15 +47,15 @@ ROUTES = Routes(
         path="/",
         view_filename="home.html",
     ),
-    home = Route(
-        path="/home",
-        view_filename="home.html",
-        bp_name="home",
-    ),
     redirect = Route(
         path="/redirect",
         view_filename="redirect.html",
         bp_name="redirect",
+    ),
+    home = Route(
+        path="/home",
+        view_filename="home.html",
+        bp_name="home",
     ),
     art_gen = Route(
         path="/artwork-generation",
@@ -80,13 +86,23 @@ DEFAULT_CONTEXT: Context = {
 DATE_FORMAT_FULL = "%Y-%m-%d %H:%M:%S"
 STATS_FILE_PATH = "stats.json"
 DEFAULT_EXPIRATION = 2 # in days (integer)
+class AvailableStats(Enum):
+    """ Enum for the available statistics.
+    """
+    dateFirstOperation = "dateFirstOperation"
+    dateLastOperation = "dateLastOperation"
+    artworkGenerations = "artworkGenerations"
+    lyricsFetches = "lyricsFetches"
 EMPTY_STATS: JsonDict = {
-    "dateFirstOperation": "N/A",
-    "dateLastOperation": "N/A",
-    "artworkGenerations": 0,
-    "lyricsFetches": 0,
+    AvailableStats.dateFirstOperation.value: "N/A",
+    AvailableStats.dateLastOperation.value: "N/A",
+    AvailableStats.artworkGenerations.value: 0,
+    AvailableStats.lyricsFetches.value: 0,
 }
-AVAILABLE_STATS: DictKeys = list(EMPTY_STATS.keys())
+INCREMENTABLE_STATS: list[str] = [
+    AvailableStats.artworkGenerations.value,
+    AvailableStats.lyricsFetches.value,
+]
 
 # Paths
 SLASH = '/' if (osName != 'nt') else '\\'
@@ -107,6 +123,7 @@ ERR_NO_FILE = "Invalid file: No file selected."
 ERR_NO_IMG = "No image was selected or uploaded."
 ERR_INVALID_FILE_TYPE = "Invalid file type. Only PNG and JPG files are allowed."
 ERR_NO_IMG_URL = "No image URL provided"
+ERR_INVALID_THUMBNAIL = "Invalid thumbnail index."
 ERR_FAIL_DOWNLOAD = "Failed to download image."
 ERR_INVALID_YT_URL = "Invalid YouTube URL."
 
