@@ -12,12 +12,22 @@
     <span class="top-bot-spacer"></span>
     <h1>Home</h1>
     <div class="navbar">
-        <button type="button" onclick="window.location.href='{{ url_for('art-gen.renderArtworkGeneration') }}'"><span class="right">Artwork Generation</span></button>
-        <button type="button" onclick="window.location.href='{{ url_for('lyrics.renderLyrics') }}'"><span class="right">Lyrics</span></button>
+        <button type="button"
+            onclick="window.location.href='{{ url_for('art-gen.renderArtworkGeneration') }}'"
+        >
+            <span class="right">Artwork Generation</span>
+        </button>
+        <button type="button"
+            onclick="window.location.href='{{ url_for('lyrics.renderLyrics') }}'"
+        >
+            <span class="right">Lyrics</span>
+        </button>
     </div>
     <div class="stats-board">
-        <p id="session-state" class="hidden">{{ session_state }}</p>
-        <p id="genius-token" class="hidden">{{ genius_token }}</p>
+        <div class="hidden">
+            <p id="session-status">{{ session_status }}</p>
+            <p id="genius-token">{{ genius_token }}</p>
+        </div>
         <div class="stats-entry">
             <h3 class="stat-title">Date of First Operation</h3>
             <p class="stat-text">{{ stats.dateFirstOperation }}</p>

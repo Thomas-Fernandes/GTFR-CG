@@ -5,7 +5,7 @@ from os import getenv, name as osName
 from re import compile
 from typing import Optional
 
-from src.typing import Context, DictKeys, JsonDict, Route, Routes
+from src.typing import Context, ContextObj, DictKeys, JsonDict, Route, Routes
 
 ############# ENUMS #############
 
@@ -74,13 +74,35 @@ ROUTES = Routes(
         bp_name="lyrics",
     ),
 )
-DEFAULT_CONTEXT: Context = {
+DEFAULT_CONTEXT_OBJ = ContextObj(
+    ### REDIRECT
+    redirect_to = "",
+    error_text = "",
+    plural = "s",
+
     ### HOME
-    "stats": {},
-    "pluralMarks": {},
+    stats = {},
+    plurals = {},
+    session_status = "initializing",
+    genius_token = "",
 
     ### LYRICS
-    "lyrics": "",
+    lyrics = "",
+)
+DEFAULT_CONTEXT: Context = {
+    ### REDIRECT
+    "redirect_to": DEFAULT_CONTEXT_OBJ.redirect_to,
+    "error_text": DEFAULT_CONTEXT_OBJ.error_text,
+    "plural": DEFAULT_CONTEXT_OBJ.plural,
+
+    ### HOME
+    "stats": DEFAULT_CONTEXT_OBJ.stats,
+    "plurals": DEFAULT_CONTEXT_OBJ.plurals,
+    "session_status": DEFAULT_CONTEXT_OBJ.session_status,
+    "genius_token": DEFAULT_CONTEXT_OBJ.genius_token,
+
+    ### LYRICS
+    "lyrics": DEFAULT_CONTEXT_OBJ.lyrics,
 }
 
 # Statistics

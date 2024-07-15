@@ -4,8 +4,8 @@ $(document).ready(function() {
         window.location.href = "/home";
         return;
     }
-    const sessionState = document.getElementById("session-state").innerHTML;
-    if (sessionState === "initializing") {
+    const sessionStatus = document.getElementById("session-status").innerHTML;
+    if (sessionStatus === "initializing") {
         const geniusToken = document.getElementById("genius-token").innerHTML;
         if (!geniusToken) {
             sendToast(
@@ -23,7 +23,7 @@ $(document).ready(function() {
             sendToast(
                 "Welcome to GTFR-CG!\n"
                     + "Application started successfully.",
-                ResponseStatus.SUCCESS
+                ResponseStatus.SUCCESS, 5
             );
         }
     }

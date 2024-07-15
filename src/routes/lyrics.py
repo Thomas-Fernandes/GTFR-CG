@@ -18,7 +18,7 @@ session = app.config
 genius = None
 try:
     genius = Genius(const.GENIUS_API_TOKEN)
-    session[const.SessionFields.genius_token] = const.GENIUS_API_TOKEN
+    session[const.SessionFields.genius_token.value] = const.GENIUS_API_TOKEN
 except TypeError as e:
     log.error(f"Error while creating Genius object: {e}. "
               "Lyrics fetching will not work.")

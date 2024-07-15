@@ -9,12 +9,12 @@ bp_redirect = Blueprint(const.ROUTES.redirect.bp_name, __name__.split('.')[-1])
 session = app.config
 
 @bp_redirect.route(const.ROUTES.redirect.path, methods=["GET"])
-def renderRedirection(redirectTo: str, err: str) -> RenderView:
-    log.warn(f"Redirecting to page \"{redirectTo}\" "
+def renderRedirection(redirect_to: str, err: str) -> RenderView:
+    log.warn(f"Redirecting to page \"{redirect_to}\" "
              f"following error: \"{err}\"...")
     context: Context = {
-        "redirectTo": redirectTo.replace(".html", ""),
-        "errorText": err,
+        "redirect_to": redirect_to.replace(".html", ""),
+        "error_text": err,
 
         "plural": "s",
     }

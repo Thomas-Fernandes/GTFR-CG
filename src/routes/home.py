@@ -18,17 +18,17 @@ def getPluralMarks(stats: JsonDict) -> JsonDict:
 
 @bp_home.route(const.ROUTES.home.path)
 def renderHome() -> RenderView:
-    context = const.DEFAULT_CONTEXT
-    context["stats"] = getJsonStatsFromFile()
-    context["plurals"] = getPluralMarks(context["stats"])
-    context["genius_token"] = session.get(const.SessionFields.genius_token, "")
-    context["session_state"] = session.get(const.SessionFields.session_status, "initializing")
+    context = const.DEFAULT_CONTEXT_OBJ
+    context.stats = getJsonStatsFromFile()
+    context.plurals = getPluralMarks(context.stats)
+    context.genius_token = session.get(const.SessionFields.genius_token.value, const.DEFAULT_CONTEXT_OBJ.genius_token)
+    context.session_status = session.get(const.SessionFields.session_status.value, const.DEFAULT_CONTEXT_OBJ.session_status)
     for key in const.AVAILABLE_STATS: # fill missing stats with default values
-        if key not in context["stats"]:
-            context["stats"][key] = const.EMPTY_STATS[key]
-    if context["session_state"] == "initializing":
-        session[const.SessionFields.session_status] = "running"
-    return render_template(const.ROUTES.home.view_filename, **context)
+        if key not in context.stats:
+            context.stats[key] = const.EMPTY_STATS[key]
+    if context.session_status == "initializing":
+        session[const.SessionFields.session_status.value] = "running"
+    return render_template(const.ROUTES.home.view_filename, **context.__dict__)
 
 @app.errorhandler(const.HttpStatus.NOT_FOUND.value) # needs to be applied to app, not blueprint
 def pageNotFound(_e: Exception) -> RenderView:
