@@ -41,6 +41,7 @@ RenderView: TypeAlias = str
 DictKeys: TypeAlias = list[str]
 JsonDict: TypeAlias = dict[str, Optional[str | int]]
 
+@dataclass(slots=True, kw_only=True)
 class ContextObj:
     redirect_to: str
     error_text: str

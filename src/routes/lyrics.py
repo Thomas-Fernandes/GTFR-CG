@@ -71,7 +71,7 @@ def updateTextarea() -> RenderView:
         lyrics_text = fetchLyricsFromGenius(song, artist)
 
     context: Context = {
-        "lyrics": lyrics_text,
+        "lyrics": lyrics_text or "",
     }
     return render_template(const.ROUTES.lyrics.view_filename, **context)
 

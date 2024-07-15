@@ -32,7 +32,7 @@ def initApp() -> None:
             bp_home,
             bp_lyrics,
             bp_processed_images,
-            bp_redirect
+            bp_redirect,
         ]
         for blueprint in blueprints:
             app.register_blueprint(blueprint)
