@@ -18,12 +18,20 @@ class LoggingLevel(Enum):
     ERROR    = 0x400
     CRITICAL = 0x500
 
-def getDefaultFormattedMessage(message: str) -> str:
-    """ Returns the default formatted message.
-    :param message: [string] The core message to log.
-    :return: [string] The formatted message.
+def getPrefix(level: LoggingLevel | None) -> str:
+    """ Returns the prefix of a logging level.
+    :param level: [LoggingLevel] The logging level.
+    :return: [string] The prefix of the logging level.
     """
-    return f"{getNowEpoch()}] {message}"
+    match level:
+        case LoggingLevel.DEBUG:    return "DEBUG"
+        case LoggingLevel.INFO:     return "INFO."
+        case LoggingLevel.LOG:      return "LOG.."
+        case LoggingLevel.WARN:     return "WARN?"
+        case LoggingLevel.ERROR:    return "ERR?!"
+        case LoggingLevel.CRITICAL: return "CRIT!"
+        case None:                  return ""
+    raise ValueError(f"Invalid logging level ({level})")
 
 class Logger:
     """ Logger class to log messages.
@@ -33,34 +41,24 @@ class Logger:
     """
 
     @staticmethod
-    def getFormattedMessage(message: str, level: Optional[LoggingLevel] = None) -> str:
+    def getFormattedMessage(msg: str, level: Optional[LoggingLevel] = None) -> str:
         """ Formats a message to log.
-        :param message: [string] The core message to log.
+        :param msg: [string] The core message to log.
         :param level: [LoggingLevel?] The level of the message, used as a prefix. (default: None)
         :return: [string] The formatted message.
         """
-        match level:
-            case LoggingLevel.DEBUG:
-                return f"[DEBUG | {getDefaultFormattedMessage(message)}"
-            case LoggingLevel.INFO:
-                return f"[INFO. | {getDefaultFormattedMessage(message)}"
-            case LoggingLevel.LOG:
-                return f"[LOG.. | {getDefaultFormattedMessage(message)}"
-            case LoggingLevel.WARN:
-                return f"[WARN? | {getDefaultFormattedMessage(message)}"
-            case LoggingLevel.ERROR:
-                return f"[ERR?! | {getDefaultFormattedMessage(message)}"
-            case LoggingLevel.CRITICAL:
-                return f"[CRIT! | {getDefaultFormattedMessage(message)}"
-            case None:
-                return f"[{getDefaultFormattedMessage(message)}"
-        raise ValueError(f"Invalid logging level ({level})")
+        prefix: str = getPrefix(level)
+        if prefix != "":
+            return f"[{prefix} | {getNowEpoch()}] {msg}"
+        else:
+            return f"[{getNowEpoch()}] {msg}"
 
-    def error(self, message: str) -> None: self.send(message, LoggingLevel.ERROR)
-    def warn(self,  message: str) -> None: self.send(message, LoggingLevel.WARN)
-    def log(self,   message: str) -> None: self.send(message, LoggingLevel.LOG)
-    def info(self,  message: str) -> None: self.send(message, LoggingLevel.INFO)
-    def debug(self, message: str) -> None: self.send(message, LoggingLevel.DEBUG)
+    def critical(self, msg: str) -> None: self.send(msg, LoggingLevel.CRITICAL)
+    def error(self,    msg: str) -> None: self.send(msg, LoggingLevel.ERROR)
+    def warn(self,     msg: str) -> None: self.send(msg, LoggingLevel.WARN)
+    def log(self,      msg: str) -> None: self.send(msg, LoggingLevel.LOG)
+    def info(self,     msg: str) -> None: self.send(msg, LoggingLevel.INFO)
+    def debug(self,    msg: str) -> None: self.send(msg, LoggingLevel.DEBUG)
 
     @contextmanager
     def redirect_stdout_stderr(self) -> Iterator[tuple[StringIO, StringIO]]:
@@ -102,12 +100,12 @@ class Logger:
                     processed_line = process_message(line)
                     self.error(processed_line)
 
-    def send(self, message: str, level: Optional[LoggingLevel] = None) -> None:
+    def send(self, msg: str, level: Optional[LoggingLevel] = None) -> None:
         """ Sends a message to log.
-        :param message: [string] The message to log.
+        :param msg: [string] The message to log.
         :param level: [LoggingLevel?] The level of the message. (default: None)
         """
-        message_to_log = self.getFormattedMessage(message, level)
+        message_to_log = self.getFormattedMessage(msg, level)
         if self.__log_file is not None and self.__log_file.strip() != "":
             with open(self.__log_file, 'a') as file:
                 file.write(message_to_log + '\n')
