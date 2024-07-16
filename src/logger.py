@@ -8,8 +8,8 @@ from typing import Iterator, Optional
 import src.constants as const
 from src.soft_utils import getNowEpoch
 
-class LoggingLevel(Enum):
-    """ Enum for logging levels, classified by severity.
+class LogSeverity(Enum):
+    """ Enum for logging severitys, classified by severity.
     """
     DEBUG    = 0x100
     INFO     = 0x200
@@ -18,20 +18,20 @@ class LoggingLevel(Enum):
     ERROR    = 0x400
     CRITICAL = 0x500
 
-def getPrefix(level: LoggingLevel | None) -> str:
-    """ Returns the prefix of a logging level.
-    :param level: [LoggingLevel] The logging level.
-    :return: [string] The prefix of the logging level.
+def getPrefix(severity: LogSeverity | None) -> str:
+    """ Returns the prefix of a logging severity.
+    :param severity: [LogSeverity] The logging severity.
+    :return: [string] The prefix of the logging severity.
     """
-    match level:
-        case LoggingLevel.DEBUG:    return "DEBUG"
-        case LoggingLevel.INFO:     return "INFO."
-        case LoggingLevel.LOG:      return "LOG.."
-        case LoggingLevel.WARN:     return "WARN?"
-        case LoggingLevel.ERROR:    return "ERR?!"
-        case LoggingLevel.CRITICAL: return "CRIT!"
+    match severity:
+        case LogSeverity.DEBUG:    return "DEBUG"
+        case LogSeverity.INFO:     return "INFO."
+        case LogSeverity.LOG:      return "LOG.."
+        case LogSeverity.WARN:     return "WARN?"
+        case LogSeverity.ERROR:    return "ERR?!"
+        case LogSeverity.CRITICAL: return "CRIT!"
         case None:                  return ""
-    raise ValueError(f"Invalid logging level ({level})")
+    raise ValueError(f"Invalid logging severity ({severity})")
 
 class Logger:
     """ Logger class to log messages.
@@ -41,24 +41,24 @@ class Logger:
     """
 
     @staticmethod
-    def getFormattedMessage(msg: str, level: Optional[LoggingLevel] = None) -> str:
+    def getFormattedMessage(msg: str, severity: Optional[LogSeverity] = None) -> str:
         """ Formats a message to log.
         :param msg: [string] The core message to log.
-        :param level: [LoggingLevel?] The level of the message, used as a prefix. (default: None)
+        :param severity: [LogSeverity?] The severity of the message, used as a prefix. (default: None)
         :return: [string] The formatted message.
         """
-        prefix: str = getPrefix(level)
+        prefix: str = getPrefix(severity)
         if prefix != "":
             return f"[{prefix} | {getNowEpoch()}] {msg}"
         else:
             return f"[{getNowEpoch()}] {msg}"
 
-    def critical(self, msg: str) -> None: self.send(msg, LoggingLevel.CRITICAL)
-    def error(self,    msg: str) -> None: self.send(msg, LoggingLevel.ERROR)
-    def warn(self,     msg: str) -> None: self.send(msg, LoggingLevel.WARN)
-    def log(self,      msg: str) -> None: self.send(msg, LoggingLevel.LOG)
-    def info(self,     msg: str) -> None: self.send(msg, LoggingLevel.INFO)
-    def debug(self,    msg: str) -> None: self.send(msg, LoggingLevel.DEBUG)
+    def critical(self, msg: str) -> None: self.send(msg, LogSeverity.CRITICAL)
+    def error(self,    msg: str) -> None: self.send(msg, LogSeverity.ERROR)
+    def warn(self,     msg: str) -> None: self.send(msg, LogSeverity.WARN)
+    def log(self,      msg: str) -> None: self.send(msg, LogSeverity.LOG)
+    def info(self,     msg: str) -> None: self.send(msg, LogSeverity.INFO)
+    def debug(self,    msg: str) -> None: self.send(msg, LogSeverity.DEBUG)
 
     @contextmanager
     def redirect_stdout_stderr(self) -> Iterator[tuple[StringIO, StringIO]]:
@@ -100,22 +100,30 @@ class Logger:
                     processed_line = process_message(line)
                     self.error(processed_line)
 
-    def send(self, msg: str, level: Optional[LoggingLevel] = None) -> None:
+    def send(self, msg: str, severity: LogSeverity = LogSeverity.LOG) -> None:
         """ Sends a message to log.
         :param msg: [string] The message to log.
-        :param level: [LoggingLevel?] The level of the message. (default: None)
+        :param severity: [LogSeverity?] The severity of the message. (default: None)
         """
-        message_to_log = self.getFormattedMessage(msg, level)
+        if severity.value < self.__severity.value: return
+
+        message_to_log = self.getFormattedMessage(msg, severity)
         if self.__log_file is not None and self.__log_file.strip() != "":
             with open(self.__log_file, 'a') as file:
                 file.write(message_to_log + '\n')
         else:
             print(message_to_log)
 
-    def __init__(self, log_file: Optional[str] = None) -> None:
+    def __init__(
+            self,
+            severity: LogSeverity = LogSeverity.INFO,
+            log_file: Optional[str] = None
+    ) -> None:
         """ Initializes the logger.
+        :param severity: [LogSeverity?] The logger will only log with that severity or higher. (default: LogSeverity.INFO)
         :param log_file: [string?] The path of the file to write logs to. (default: None --- standard output)
         """
+        self.__severity = severity
         self.__log_file = log_file
 
 global log
