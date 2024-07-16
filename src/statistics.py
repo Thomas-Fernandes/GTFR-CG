@@ -66,10 +66,12 @@ def getJsonStatsFromFile(path: str = const.STATS_FILE_PATH, init: bool = False) 
     :param init: [bool] Whether to initialize the statistics file if it doesn't exist. (default: False)
     :return: [dict] The statistics from the statistics file.
     """
+    log.debug(f"Getting stats from file: {path}...")
     try:
         if not path.endswith(".json"):
             raise ValueError("The stats file must be a JSON file.")
         with open(path, "r") as file:
+            log.debug(f"  Stats file ({path}) found.")
             return loads(file.read()) # <- read stats from stats file
     except FileNotFoundError:
         log.warn(f"No stats file ({path}). Initializing new stats file...")
@@ -114,11 +116,13 @@ def initStats(from_error: bool = False) -> JsonDict:
     :param from_error: [bool] Whether the initialization is due to an error. (default: False)
     :return: [dict] The statistics from the statistics file.
     """
+    log.debug("Initializing statistics...")
     stats: JsonDict = {}
     if from_error:
         stats[const.AvailableStats.dateFirstOperation.value] = "N/A"
 
     with open(const.STATS_FILE_PATH, "w") as file:
+        log.debug(f"  Stats file created @ {const.STATS_FILE_PATH}")
         file.write(dumps(stats))
 
     log.info("Statistics initialization complete.")
@@ -127,8 +131,11 @@ def initStats(from_error: bool = False) -> JsonDict:
 def onLaunch() -> None:
     """ Initializes the project with the statistics from the statistics file.
     """
+    log.debug("Initializing project with statistics...")
+    log.debug(f"  Getting stats from file: {const.STATS_FILE_PATH}...")
     json_stats: JsonDict = getJsonStatsFromFile(const.STATS_FILE_PATH)
 
+    log.debug("  Creating Stats object with values from file...")
     stats = Stats(
         date_first_operation=json_stats.get(const.AvailableStats.dateFirstOperation.value),
         date_last_operation=json_stats.get(const.AvailableStats.dateLastOperation.value),
