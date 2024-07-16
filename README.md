@@ -114,9 +114,12 @@ python launcher.py
   - ***[1.2.3]** Jul 06 2024*: Project now supports artwork generation without center artwork, has statistics and gets reworked... [#059](https://github.com/Thomas-Fernandes/GTFR/pull/59)
     - routes are reworked and redirection is implemented
     - toasts are implemented as a feedback system of web actions
-    - a loading spinner now comes alongside on action buttons
     - `requirements.txt` and this README are created
-  - ***[1.2.4]** Coming July 2024*: Project will support artwork generation from a YouTube link, have some bugs fixed. [#???](#card_file_box-changelog)
+  - ***[1.2.4]** Coming July 2024*: Project will support artwork generation from a YouTube link, gets some more reworks. [#???](#card_file_box-changelog)
+    - a loading spinner now comes alongside action buttons
+    - documentation strings are added to the codebase
+    - the artwork generation page is reworked to welcome YT section and better UX
+    - the logger system is reinforced to log more actions and be customizable
 - ***[1.3.0]** Coming July 2024*: **Lyrics Fetch** — Project will support lyrics fetching from Genius and their conversion to lyrics blocks. [#???](#card_file_box-changelog)
 - ***[1.4.0]** Coming later...*: **Lyrics Cards** — Project will support automatic cards generation from text blocks. [#???](#card_file_box-changelog)
 - ***[1.5.0]** Coming later...*: **Boost!** — Project will see its existing functionalities sharpened. [#???](#card_file_box-changelog)
