@@ -38,6 +38,7 @@ def useItunesImage() -> JsonResponse:
         file.write(image_response.content)
 
     session[const.SessionFields.generated_artwork_path.value] = image_path
+    log.log(f"Found iTunes image and saved it to {image_path}")
     return createJsonResponse(const.HttpStatus.OK.value)
 
 @bp_artwork_generation.route(const.ROUTES.art_gen.path + "/use-local-image", methods=["POST"])

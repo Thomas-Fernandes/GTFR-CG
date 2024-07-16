@@ -9,7 +9,7 @@ import src.constants as const
 from src.soft_utils import getNowEpoch
 
 class LogSeverity(Enum):
-    """ Enum for logging severitys, classified by severity.
+    """ Enum for severity levels.
     """
     DEBUG    = 0x100
     INFO     = 0x200
@@ -17,6 +17,13 @@ class LogSeverity(Enum):
     WARN     = 0x300
     ERROR    = 0x400
     CRITICAL = 0x500
+
+    def __lt__(self, other: 'LogSeverity') -> bool: return self.value <  other.value
+    def __le__(self, other: 'LogSeverity') -> bool: return self.value <= other.value
+    def __eq__(self, other: 'LogSeverity') -> bool: return self.value == other.value
+    def __ne__(self, other: 'LogSeverity') -> bool: return self.value != other.value
+    def __ge__(self, other: 'LogSeverity') -> bool: return self.value >= other.value
+    def __gt__(self, other: 'LogSeverity') -> bool: return self.value  > other.value
 
 def getPrefix(severity: LogSeverity | None) -> str:
     """ Returns the prefix of a logging severity.
@@ -114,6 +121,12 @@ class Logger:
         else:
             print(message_to_log)
 
+    def getSeverity(self) -> LogSeverity:
+        """ Returns the severity level of the logger.
+        :return: [LogSeverity] The severity level of the logger.
+        """
+        return self.__severity
+
     def __init__(
             self,
             severity: LogSeverity = LogSeverity.INFO,
@@ -127,4 +140,13 @@ class Logger:
         self.__log_file = log_file
 
 global log
-log = Logger()
+def getSeverityArg(args: list[str]) -> LogSeverity:
+    severity: LogSeverity = LogSeverity.LOG
+    if len(args) > 1 and args[1].upper() in LogSeverity.__members__:
+        try:
+            severity = LogSeverity[args[1].upper()]
+        except KeyError:
+            print(f"Invalid severity level: '{args[1]}'")
+            exit(1)
+    return severity
+log = Logger(severity=getSeverityArg(sys.argv))

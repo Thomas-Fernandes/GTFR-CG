@@ -139,9 +139,12 @@ def renderProcessedImages() -> RenderView:
     generated_artwork_path = str(session[const.SessionFields.generated_artwork_path.value])
     include_center_artwork = session.get(const.SessionFields.include_center_artwork.value, True)
     output_bg = path.join(user_processed_path, const.PROCESSED_ARTWORK_FILENAME)
+
     generateCoverArt(generated_artwork_path, output_bg, include_center_artwork)
     generateThumbnails(output_bg, user_processed_path)
-    log.log("Image generation completed successfully.")
+
+    center_mark = "with" if include_center_artwork else "without"
+    log.log(f"Images generation ({center_mark} center artwork) completed successfully.")
     updateStats(to_increment="artworkGenerations")
 
     context: Context = {

@@ -87,8 +87,10 @@ def main(host: str = const.HOST_HOME, port: int = const.DEFAULT_PORT) -> None:
             session_dirname_list = listdir(folder_path)
             for sdn in session_dirname_list:
                 eliminated_entries_count += removeExpiredContent(folder_path + sdn)
-            if eliminated_entries_count == 0:
-                log.info("Cache still fresh. Loading...")
+        if eliminated_entries_count == 0:
+            log.info("Cache still fresh!")
+        else:
+            log.info(f"Cache cleanup complete (-{eliminated_entries_count}).")
 
     printInitStatistics()
     cacheCleanup()
