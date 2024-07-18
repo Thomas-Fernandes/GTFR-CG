@@ -117,18 +117,18 @@ def downloadImage(filename: str) -> Response | JsonResponse:
     return send_from_directory(directory, filename, as_attachment=True)
 
 @bp_processed_images.route("/download-thumbnail/<idx>", methods=["GET"])
-def downloadThumbnail(str_idx: str) -> Response | JsonResponse:
+def downloadThumbnail(idx: str) -> Response | JsonResponse:
     """ Downloads the thumbnail with the given index.
-    :param str_idx: [string] The index of the thumbnail to download.
+    :param idx: [string] The index of the thumbnail to download.
     :return: [Response | JsonResponse] The response containing the thumbnail, or an error message.
     """
-    idx = int(str_idx.strip())
-    if idx not in range(1, 10):
-        log.error(f"Invalid thumbnail index: {idx}")
+    idx_img = int(idx.strip())
+    if idx_img not in range(1, 10):
+        log.error(f"Invalid thumbnail index: {idx_img}")
         return createJsonResponse(const.HttpStatus.NOT_FOUND.value, const.ERR_INVALID_THUMBNAIL)
     filename: str = \
         f"{const.THUMBNAIL_PREFIX}" \
-        f"{const.LOGO_POSITIONS[idx - 1]}" \
+        f"{const.LOGO_POSITIONS[idx_img - 1]}" \
         f"{const.THUMBNAIL_EXT}"
     return downloadImage(filename)
 

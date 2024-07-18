@@ -62,7 +62,7 @@ def main(host: str = const.HOST_HOME, port: int = const.DEFAULT_PORT) -> None:
         :param folder: [string] The folder to remove expired entries from.
         :return: [integer] The number of entries removed.
         """
-        log.debug(f"Cleaning up cache for {folder}...")
+        log.debug(f"    Cleaning up cache for {folder}...")
         eliminated_entries_count: int = 0
         filepaths: list[str] = [path.join(folder, f) for f in listdir(folder)]
 
@@ -71,21 +71,23 @@ def main(host: str = const.HOST_HOME, port: int = const.DEFAULT_PORT) -> None:
             :param file: [string] The file to check.
             :return: [bool] True if the file is past the expiration time, False otherwise.
             """
-            return path.isfile(file) and int(path.getmtime(file)) < getDefaultExpirationTimestamp()
+            isExpired = path.isfile(file) and int(path.getmtime(file)) < getDefaultExpirationTimestamp()
+            log.debug(f"      {file} {'is' if isExpired else 'is not'} expired.")
+            return isExpired
 
         for file in filepaths:
             if isFileExpired(file):
-                log.debug(f"\tRemoving expired file: {file}")
+                log.debug(f"      Removing expired file: {file}")
                 remove(file)
                 eliminated_entries_count += 1
         if listdir(folder) == []: # if folder is empty, remove it
-            log.debug(f"\tRemoving empty folder: {folder}")
+            log.debug(f"      Removing empty folder: {folder}")
             rmtree(folder)
         if eliminated_entries_count != 0:
             pluralMarks = ["s", "were"] if eliminated_entries_count != 1 else ["", "was"]
-            log.info(f"{eliminated_entries_count} cached file{pluralMarks[0]} {pluralMarks[1]} " \
+            log.info(f"      {eliminated_entries_count} cached file{pluralMarks[0]} {pluralMarks[1]} " \
                 f"removed in {folder.split(const.SLASH)[0]}.")
-        log.debug(f"\tCache cleanup complete for {folder}.")
+        log.debug(f"    Cache cleanup complete for {folder}.")
         return eliminated_entries_count
 
     def cacheCleanup() -> None:
@@ -103,10 +105,11 @@ def main(host: str = const.HOST_HOME, port: int = const.DEFAULT_PORT) -> None:
             session_dirname_list = listdir(folder_path)
             for sdn in session_dirname_list:
                 eliminated_entries_count += removeExpiredContent(folder_path + sdn)
+            log.debug(f"  Cache cleanup complete for {folder}.")
         if eliminated_entries_count == 0:
             log.info("Cache still fresh!")
         else:
-            log.log(f"Cache cleanup complete (-{eliminated_entries_count}).")
+            log.log(f"Cache cleanup complete (-{eliminated_entries_count} entries).")
 
     printInitStatistics()
     cacheCleanup()

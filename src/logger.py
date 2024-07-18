@@ -90,13 +90,17 @@ class Logger:
                         return action(match)
                 return line
 
+            (artist, song) = ("", "")
             if stdout_content is not None:
                 stdout_content = stdout_content.strip()
                 for line in stdout_content.splitlines():
                     processed_line = process_message(line)
                     if processed_line == "Done.":
-                        self.log("Lyrics were successfully found and populated.")
+                        self.log(f"Lyrics for {song} by {artist} were successfully found and populated.")
                     else:
+                        if processed_line.startswith("Lyrics for"):
+                            song = processed_line.split("Lyrics for ")[1].split(" by")[0]
+                            artist = processed_line.split("by ")[1].split(" are being searched...")[0]
                         self.info(processed_line)
 
             if stderr_content is not None:
@@ -149,9 +153,9 @@ def getSeverityArg(args: list[str]) -> LogSeverity:
     severity: LogSeverity = LogSeverity.LOG
     if len(args) > 1 and args[1].upper() in LogSeverity.__members__:
         try:
-            print(getFormattedMessage(f"  Trying to set severity level to {args[1].upper()}", LogSeverity.DEBUG))
+            print(getFormattedMessage(f"  Trying to set severity level to {args[1].upper()}", LogSeverity.INFO))
             severity = LogSeverity[args[1].upper()]
-            print(getFormattedMessage(f"  Severity level set to {severity}", LogSeverity.DEBUG))
+            print(getFormattedMessage(f"  Severity level set to {severity}", LogSeverity.INFO))
         except KeyError:
             print(getFormattedMessage(f"  Invalid severity level: '{args[1]}'", LogSeverity.CRITICAL))
             print(getFormattedMessage("  Available severity levels:", LogSeverity.INFO))
