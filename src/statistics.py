@@ -28,10 +28,10 @@ class Stats:
         :return: [dict] The dataclass as a dictionary.
         """
         return {
-            "dateFirstOperation": self.date_first_operation,
-            "dateLastOperation": self.date_last_operation,
-            "artworkGenerations": self.artwork_generations,
-            "lyricsFetches": self.lyrics_fetches,
+            const.AvailableStats.dateFirstOperation.value: self.date_first_operation,
+            const.AvailableStats.dateLastOperation.value: self.date_last_operation,
+            const.AvailableStats.artworkGenerations.value: self.artwork_generations,
+            const.AvailableStats.lyricsFetches.value: self.lyrics_fetches,
         }
 
     def __repr__(self) -> str:
@@ -87,6 +87,7 @@ def updateStats(path: str = const.STATS_FILE_PATH, to_increment: Optional[str] =
     """
     json_stats: JsonDict = getJsonStatsFromFile(path)
 
+    log.debug(f"Updating stats from file: {path}...")
     new_stats: JsonDict = {}
     new_stats[const.AvailableStats.dateFirstOperation.value] = \
         json_stats.get(const.AvailableStats.dateFirstOperation.value, getNowEpoch())
@@ -99,10 +100,13 @@ def updateStats(path: str = const.STATS_FILE_PATH, to_increment: Optional[str] =
 
     if to_increment in const.INCREMENTABLE_STATS:
         new_stats[to_increment] += 1
+    else:
+        log.warn(f"Invalid statistic to increment: {to_increment}")
 
     try:
         with open(path, "w") as file:
-            file.write(dumps(new_stats)) # <- write new stats to stats file
+            log.debug(f"Writing stats to file: {path}...")
+            file.write(dumps(new_stats))
     except FileNotFoundError:
         log.warn(f"Error when writing to stats file ({path}). Initializing new stats file...")
         initStats()
