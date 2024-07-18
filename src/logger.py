@@ -112,7 +112,7 @@ class Logger:
         """
         if severity.value < self.__severity.value: return
 
-        message_to_log = self.getFormattedMessage(msg, severity)
+        message_to_log = getFormattedMessage(msg, severity)
         if self.__log_file is not None and self.__log_file.strip() != "":
             if self.__severity <= LogSeverity.DEBUG:
                 print(f"Writing to log file: {self.__log_file}")

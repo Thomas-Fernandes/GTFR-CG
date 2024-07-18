@@ -25,12 +25,15 @@ def renderHome() -> RenderView:
     """ Renders the home page.
     :return: [RenderView] The rendered view.
     """
+    log.debug(f"Loading {const.ROUTES.home.bp_name} page context...")
     context = const.DEFAULT_CONTEXT
     context["stats"] = getJsonStatsFromFile()
     context["plurals"] = getPluralMarks(context["stats"])
     for key in [s.name for s in const.AvailableStats]: # fill missing stats with default values
         if key not in context["stats"]:
             context["stats"][key] = const.EMPTY_STATS[key]
+    log.debug(f"{const.ROUTES.home.bp_name} page context loaded.")
+    log.debug(f"Rendering {const.ROUTES.home.bp_name} page...")
     return render_template(const.ROUTES.home.view_filename, **context)
 
 @app.errorhandler(const.HttpStatus.NOT_FOUND.value) # needs to be applied to app, not blueprint
@@ -47,7 +50,7 @@ def pageNotFound(_e: Exception) -> RenderView:
         """
         return "/" + '/'.join(url.split(const.SLASH)[3:])
     log.warn(f"Page not found: {extractSearchedPath(request.url)}. "
-             f"Redirecting to home page ({const.ROUTES.home.path}).")
+             f"Redirecting to {const.ROUTES.home.bp_name} page ({const.ROUTES.home.path}).")
     return render_template(const.ROUTES.home.view_filename, **const.DEFAULT_CONTEXT)
 
 @bp_home.route("/")
@@ -55,4 +58,5 @@ def root() -> RenderView:
     """ Flask's root route, directly redirects to the home page.
     :return: [RenderView] The home page.
     """
+    log.debug("Rendering root page...")
     return render_template(const.ROUTES.home.view_filename, **const.DEFAULT_CONTEXT)

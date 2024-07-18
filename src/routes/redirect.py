@@ -23,4 +23,5 @@ def renderRedirection(redirect_to: str, err: str) -> RenderView:
 
         "plural": "s" if err == const.ERR_NO_IMG else None,
     }
+    log.debug(f"Rendering {const.ROUTES.redirect.bp_name} page...")
     return render_template(const.ROUTES.redirect.view_filename, **context)

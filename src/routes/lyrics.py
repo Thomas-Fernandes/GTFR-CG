@@ -32,6 +32,7 @@ def fetchLyricsFromGenius(song_title: str, artist_name: str) -> str:
     if song is None:
         return "Lyrics not found."
 
+    log.debug("Sanitizing the fetched lyrics...")
     lyrics = song.lyrics
     # Removing charabia at the beginning and end of the lyrics
     lyrics = sub(r"^.*Lyrics\[", '[', lyrics).strip()
@@ -57,8 +58,10 @@ def fetchLyricsFromGenius(song_title: str, artist_name: str) -> str:
         return ''.join(new_lyrics)
 
     lyrics = add_newline_before_song_parts(lyrics)
-    updateStats(to_increment="lyricsFetches")
+    log.debug("Lyrics sanitized successfully.")
+    updateStats(to_increment=const.AvailableStats.lyricsFetches.value)
 
+    log.info(f"Lyrics fetch for {artist_name} - \"{song_title}\" complete.")
     return lyrics
 
 @bp_lyrics.route(const.ROUTES.lyrics.path, methods=["POST"])
@@ -76,6 +79,7 @@ def updateTextarea() -> RenderView:
     context: Context = {
         "lyrics": lyrics_text,
     }
+    log.debug(f"Rendering {const.ROUTES.lyrics.bp_name} page...")
     return render_template(const.ROUTES.lyrics.view_filename, **context)
 
 @bp_lyrics.route(const.ROUTES.lyrics.path, methods=["GET"])
@@ -83,4 +87,5 @@ def renderLyrics() -> RenderView:
     """ Renders the lyrics page.
     :return: [RenderView] The rendered view.
     """
+    log.debug(f"Rendering {const.ROUTES.lyrics.bp_name} page...")
     return render_template(const.ROUTES.lyrics.view_filename, **const.DEFAULT_CONTEXT)
