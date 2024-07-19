@@ -49,7 +49,7 @@ def main(host: str = const.HOST_HOME, port: int = const.DEFAULT_PORT) -> None:
     host_display_name = "localhost" if host == const.HOST_HOME else host
     log.log(f"Starting server @ http://{host_display_name}:{port}")
 
-    def removeExpiredProcessed(folder: str, cache_type: str) -> int:
+    def removeExpiredCache(folder: str, cache_type: str) -> int:
         """ Removes expired processed images.
         :param folder: [string] The folder whose content is to clean if expired.
         :return: [integer] The number of entries removed.
@@ -57,24 +57,35 @@ def main(host: str = const.HOST_HOME, port: int = const.DEFAULT_PORT) -> None:
         nb_eliminated_entries: int = 0
         if not path.isdir(folder):
             return 0
-        directory_paths: list[str] = [path.join(folder, f) for f in listdir(folder)]
+
         def isFileExpired(filepath: str, filetype: str) -> bool:
             try:
-                return path.isfile(filepath) and int(path.getmtime(filepath)) < getExpirationTimestamp(filetype)
+                return path.isfile(filepath) and int(path.getmtime(filepath)) < getExpirationTimestamp(filetype, app.config)
             except Exception as e:
                 log.error(f"Error while checking file expiration: {e}")
                 exit(1)
-        for dir in directory_paths:
-            cache_dir_path = dir + const.SLASH + ((cache_type + const.SLASH) if path.isdir(dir + const.SLASH + cache_type) else "")
-            filepaths: list[str] = [path.join(cache_dir_path, f) for f in listdir(cache_dir_path)]
+
+        if cache_type == const.AvailableCacheElemType.sessions.value:
+            filepaths: list[str] = [path.join(folder, f) for f in listdir(folder)]
             for file in filepaths:
                 if isFileExpired(file, cache_type):
                     remove(file)
                     nb_eliminated_entries += 1
-            if len(listdir(dir)) == 0:
-                removedirs(dir)
-            if len(listdir(cache_dir_path)) == 0:
-                removedirs(cache_dir_path)
+            if len(listdir(folder)) == 0:
+                removedirs(folder)
+        else:
+            directory_paths: list[str] = [path.join(folder, f) for f in listdir(folder)]
+            for dir in directory_paths:
+                cache_dir_path = dir + const.SLASH + ((cache_type + const.SLASH) if path.isdir(dir + const.SLASH + cache_type) else "")
+                filepaths: list[str] = [path.join(cache_dir_path, f) for f in listdir(cache_dir_path)]
+                for file in filepaths:
+                    if isFileExpired(file, cache_type):
+                        remove(file)
+                        nb_eliminated_entries += 1
+                if len(listdir(dir)) == 0:
+                    removedirs(dir)
+                if len(listdir(cache_dir_path)) == 0:
+                    removedirs(cache_dir_path)
         if nb_eliminated_entries != 0:
             pluralMarks = ["s", "were"] if nb_eliminated_entries != 1 else ["", "was"]
             log.info(f"{nb_eliminated_entries} cached file{pluralMarks[0]} {pluralMarks[1]} " \
@@ -86,9 +97,9 @@ def main(host: str = const.HOST_HOME, port: int = const.DEFAULT_PORT) -> None:
         """
         nb_eliminated_entries: int = 0
 
-        # nb_eliminated_entries += removeExpiredSessions(const.SESSION_DIR)
-        nb_eliminated_entries += removeExpiredProcessed(const.PROCESSED_DIR, "images")
-        nb_eliminated_entries += removeExpiredProcessed(const.PROCESSED_DIR, "cards")
+        nb_eliminated_entries += removeExpiredCache(const.SESSION_DIR, const.AvailableCacheElemType.sessions.value)
+        nb_eliminated_entries += removeExpiredCache(const.PROCESSED_DIR, const.AvailableCacheElemType.images.value)
+        nb_eliminated_entries += removeExpiredCache(const.PROCESSED_DIR, const.AvailableCacheElemType.cards.value)
 
         if nb_eliminated_entries == 0:
             log.info("Cache still fresh. Loading...")
