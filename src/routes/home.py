@@ -22,6 +22,9 @@ def getPluralMarks(stats: JsonDict) -> JsonDict:
 
 @bp_home.route(const.ROUTES.home.path)
 def renderHome() -> RenderView:
+    """ Renders the home page.
+    :return: [RenderView] The rendered view.
+    """
     context = const.DEFAULT_CONTEXT_OBJ
     context.stats = getJsonStatsFromFile()
     context.plurals = getPluralMarks(context.stats)
