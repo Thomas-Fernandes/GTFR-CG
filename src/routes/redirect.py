@@ -1,8 +1,8 @@
 from flask import Blueprint, render_template
 
+import src.constants as const
 from src.logger import log
 from src.typing import Context, RenderView
-import src.constants as const
 
 from src.app import app
 bp_redirect = Blueprint(const.ROUTES.redirect.bp_name, __name__.split('.')[-1])

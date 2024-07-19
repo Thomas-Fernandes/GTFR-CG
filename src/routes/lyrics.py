@@ -15,7 +15,13 @@ from src.app import app
 bp_lyrics = Blueprint(const.ROUTES.lyrics.bp_name, __name__.split('.')[-1])
 session = app.config
 
-genius = Genius(const.GENIUS_API_TOKEN)
+genius = None
+try:
+    genius = Genius(const.GENIUS_API_TOKEN)
+    session[const.SessionFields.genius_token.value] = const.GENIUS_API_TOKEN
+except TypeError as e:
+    log.error(f"Error while creating Genius object: {e}. "
+              "Lyrics fetching will not work.")
 
 @staticmethod
 def fetchLyricsFromGenius(song_title: str, artist_name: str) -> str:
@@ -78,7 +84,7 @@ def updateTextarea() -> RenderView:
         lyrics_text = fetchLyricsFromGenius(song, artist)
 
     context: Context = {
-        "lyrics": lyrics_text,
+        "lyrics": lyrics_text or "",
     }
     return render_template(const.ROUTES.lyrics.view_filename, **context)
 
