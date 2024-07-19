@@ -26,15 +26,20 @@ def renderHome() -> RenderView:
     :return: [RenderView] The rendered view.
     """
     log.debug(f"Loading {const.ROUTES.home.bp_name} page context...")
-    context = const.DEFAULT_CONTEXT
-    context["stats"] = getJsonStatsFromFile()
-    context["plurals"] = getPluralMarks(context["stats"])
-    for key in [s.name for s in const.AvailableStats]: # fill missing stats with default values
-        if key not in context["stats"]:
-            context["stats"][key] = const.EMPTY_STATS[key]
+    context = const.DEFAULT_CONTEXT_OBJ
+    context.stats = getJsonStatsFromFile()
+    context.plurals = getPluralMarks(context.stats)
+    context.genius_token = session.get(const.SessionFields.genius_token.value, const.DEFAULT_CONTEXT_OBJ.genius_token)
+    context.session_status = session.get(const.SessionFields.session_status.value, const.DEFAULT_CONTEXT_OBJ.session_status)
+    for key in const.AvailableStats: # fill missing stats with default values
+        if key.value not in context.stats:
+            context.stats[key.value] = const.EMPTY_STATS[key.value]
+    if context.session_status == "initializing":
+        session[const.SessionFields.session_status.value] = "running"
     log.debug(f"{const.ROUTES.home.bp_name} page context loaded.")
+
     log.debug(f"Rendering {const.ROUTES.home.bp_name} page...")
-    return render_template(const.ROUTES.home.view_filename, **context)
+    return render_template(const.ROUTES.home.view_filename, **context.__dict__)
 
 @app.errorhandler(const.HttpStatus.NOT_FOUND.value) # needs to be applied to app, not blueprint
 def pageNotFound(_e: Exception) -> RenderView:

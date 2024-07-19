@@ -1,11 +1,9 @@
 from flask import Response
 
 from dataclasses import dataclass
-from typing import Any, Optional, TypeAlias
+from typing import Optional, TypeAlias
 
 ############ BROWSER ############
-
-Context: TypeAlias = dict[str, Any]
 
 @dataclass
 class Route:
@@ -64,3 +62,21 @@ RenderView: TypeAlias = str
 ############ SOFTWARE ############
 
 JsonDict: TypeAlias = dict[str, Optional[str | int]]
+
+@dataclass(kw_only=True)
+class ContextObj:
+    redirect_to: str
+    error_text: str
+    plural: str
+
+    stats: JsonDict
+    plurals: JsonDict
+    session_status: str
+    genius_token: str
+
+    lyrics: str
+
+    def __init__(self, **kwargs: JsonDict) -> None:
+        self.__dict__.update(kwargs)
+
+Context: TypeAlias = dict[str, JsonDict | str]
