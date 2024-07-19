@@ -7,8 +7,6 @@ from typing import Optional
 
 from src.typing import Context, ContextObj, JsonDict, Route, Routes
 
-############# ENUMS #############
-
 class HttpStatus(Enum):
     """ Enum for HTTP status codes.
     """
@@ -26,9 +24,13 @@ class TimeInSeconds(Enum):
     HOUR   = 60 * MINUTE
     DAY    = 24 * HOUR
     WEEK   = 7 * DAY
+    MONTH  = int(30.44 * DAY)
     YEAR   = int(365.256 * DAY)
 
-######### REGULAR TYPES #########
+class AvailableCacheElemType(Enum):
+    sessions = "sessions"
+    images = "images"
+    cards = "cards"
 
 # Server config
 HOST_HOME = "0.0.0.0"
@@ -114,7 +116,6 @@ DEFAULT_CONTEXT: Context = {
 # Statistics
 DATE_FORMAT_FULL = "%Y-%m-%d %H:%M:%S"
 STATS_FILE_PATH = "stats.json"
-DEFAULT_EXPIRATION = 2 # in days (integer)
 class AvailableStats(Enum):
     """ Enum for the available statistics.
     """

@@ -77,7 +77,7 @@ def generateThumbnails(bg_path: str, output_folder: str) -> None:
     :param bg_path: [string] The path to the background image.
     :param output_folder: [string] The path to the folder where the thumbnails will be saved.
     """
-    log.info(f"Generating thumbnails... (session {bg_path.split(const.SLASH)[-2].split('-')[0]}-...)")
+    log.info(f"Generating thumbnails... (session {bg_path.split(const.SLASH)[-3].split('-')[0]}-...)")
 
     for position in const.LOGO_POSITIONS:
         logo_path = f"{position}.png"
@@ -107,7 +107,7 @@ def downloadImage(filename: str) -> Response | JsonResponse:
     if const.SessionFields.user_folder.value not in session:
         return createJsonResponse(const.HttpStatus.NOT_FOUND.value, const.ERR_INVALID_SESSION)
 
-    user_folder = str(session[const.SessionFields.user_folder.value])
+    user_folder = str(session[const.SessionFields.user_folder.value]) + const.SLASH + const.AvailableCacheElemType.images.value
     directory = path.abspath(path.join(const.PROCESSED_DIR, user_folder))
     return send_from_directory(directory, filename, as_attachment=True)
 
@@ -135,7 +135,7 @@ def renderProcessedImages() -> RenderView:
     if const.SessionFields.generated_artwork_path.value not in session:
         return renderRedirection(const.ROUTES.art_gen.path, const.ERR_NO_IMG)
 
-    user_folder = str(session[const.SessionFields.user_folder.value])
+    user_folder = str(session[const.SessionFields.user_folder.value]) + const.SLASH + const.AvailableCacheElemType.images.value
     user_processed_path = path.join(const.PROCESSED_DIR, user_folder)
     generated_artwork_path = str(session[const.SessionFields.generated_artwork_path.value])
     include_center_artwork = session.get(const.SessionFields.include_center_artwork.value, True)

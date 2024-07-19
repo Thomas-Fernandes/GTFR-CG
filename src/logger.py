@@ -120,5 +120,4 @@ class Logger:
         """
         self.__log_file = log_file
 
-global log
 log = Logger()
