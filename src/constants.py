@@ -5,7 +5,7 @@ from os import getenv, name as osName
 from re import compile
 from typing import Optional
 
-from src.typing import Context, JsonDict, Route, Routes
+from src.typing import Context, ContextObj, JsonDict, Route, Routes
 
 ############# ENUMS #############
 
@@ -37,7 +37,10 @@ DEFAULT_PORT = 8000
 class SessionFields(Enum):
     """ Enum for the fields in the session.
     """
+    # Application
+    session_status = "session_status"
     user_folder = "user_folder"
+
     generated_artwork_path = "generated_artwork_path"
     include_center_artwork = "include_center_artwork"
 
@@ -122,7 +125,7 @@ ERR_INVALID_SESSION = "Session expired or invalid."
 ERR_NO_FILE = "Invalid file: No file selected."
 ERR_NO_IMG = "No image was selected or uploaded."
 ERR_INVALID_FILE_TYPE = "Invalid file type. Only PNG and JPG files are allowed."
-ERR_NO_IMG_URL = "No image URL provided"
+ERR_NO_IMG_URL = "No image URL provided."
 ERR_INVALID_THUMBNAIL = "Invalid thumbnail index."
 ERR_FAIL_DOWNLOAD = "Failed to download image."
 

@@ -7,6 +7,7 @@ from typing import Optional
 
 import src.constants as const
 from src.logger import log
+from src.routes.redirect import renderRedirection
 from src.statistics import updateStats
 from src.typing import Context, RenderView
 
@@ -23,6 +24,9 @@ def fetchLyricsFromGenius(song_title: str, artist_name: str) -> str:
     :param artist_name: [string] The name of the artist.
     :return: [string] The stringified lyrics of the song.
     """
+    if genius is None:
+        return const.ERR_GENIUS_TOKEN
+
     song: Optional[Genius.Song] = None
     try:
         with log.redirect_stdout_stderr() as (stdout, stderr): # type: ignore
@@ -83,4 +87,6 @@ def renderLyrics() -> RenderView:
     """ Renders the lyrics page.
     :return: [RenderView] The rendered view.
     """
+    if genius is None:
+        return renderRedirection(const.ROUTES.home.view_filename, const.ERR_GENIUS_TOKEN)
     return render_template(const.ROUTES.lyrics.view_filename, **const.DEFAULT_CONTEXT)
