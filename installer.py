@@ -1,5 +1,5 @@
-from os import chdir, environ, name as osName, pathsep
-from subprocess import CalledProcessError, CompletedProcess, Popen, run
+from os import chdir, environ, name as osName, pathsep, system
+from subprocess import CalledProcessError, DEVNULL, CompletedProcess, Popen, run
 from typing import Optional
 
 from src.logger import log, LogSeverity
@@ -21,43 +21,53 @@ def installNodePackages() -> None:
 
     def getNvmVersion() -> Optional[str]:
         """ Checks if Nvm is installed.
-        :return: [bool] True if Nvm is installed, False otherwise.
+        :return: [str] The version of Nvm if it is installed, None otherwise.
         """
         try:
-            result = run(["nvm", "version"], capture_output=True, text=True)
-            return result.stdout.strip()
-        except FileNotFoundError:
+            if osName == "nt": # Windows
+                run(["powershell", "-Command", "nvm v"], check=True, shell=True)
+                return ""
+            else: # Ubuntu
+                nvm_script = "$HOME/.nvm/nvm.sh"
+                result = run(f"source {nvm_script} && nvm --version",
+                    capture_output=True, text=True, check=True, shell=True, executable="/bin/bash"
+                )
+                return " " + result.stdout.strip()
+        except CalledProcessError:
             return None
 
     def launchNodePackagesInstallation() -> None:
-        try:
-            chdir("GTFR-CG")
-            if osName == "nt":
-                Popen(r'explorer /select,"."')
-                with open("install-nvm.ps1", "w") as file:
-                    file.write(""
-                        "Invoke-WebRequest -Uri https://github.com/coreybutler/nvm-windows/releases/latest/download/nvm-setup.exe -OutFile $env:USERPROFILE\\nvm-setup.exe" "\n"
-                        "Start-Process -FilePath $env:USERPROFILE\\nvm-setup.exe -Wait" "\n"
-                        "nvm version" "\n"
-                        "nvm install 20" "\n"
-                        "nvm use 20" "\n"
-
-                        "Read-Host -Prompt 'Press any key to continue...'" "\n"
-                    )
-                input("Please install Nvm by running 'install-nvm.ps1' with PowerShell,\n\tthen press Enter to continue...")
-            else:
-                quitIfError(run(["npm", "install"], capture_output=True, check=True))
-            chdir("..")
-        except CalledProcessError as e:
-            log.critical(f"  Error while trying to install Node packages: {e}")
-            exit(1)
+        chdir("GTFR-CG")
+        if osName == "nt":
+            system("npm install --silent")
+        else:
+            quitIfError(run(["npm", "install", "--silent"], capture_output=True, check=True))
+        chdir("..")
         log.log("  Node packages installation complete.")
+
+    def launchNvmInstallation() -> None:
+        try:
+            if osName == "nt":
+                chdir("GTFR-CG")
+                Popen(r'explorer /select,"."')
+                input("Please install Nvm by running 'install-nvm.ps1' with PowerShell.\n"
+                      "\tYou may need to restart your terminal or even reboot to use Nvm.\n"
+                      "\tPress Enter to continue..."
+                )
+                chdir("..")
+            else:
+                quitIfError(run(["sudo", "apt-get", "update"], capture_output=True, check=True))
+        except CalledProcessError as e:
+            log.critical(f"  Error while trying to install Nvm: {e}")
+            exit(1)
+        log.log("  Nvm installation complete.")
+
     installedNvmVersion = getNvmVersion()
     if installedNvmVersion is not None:
-        log.log(f"  Nvm {installedNvmVersion} is already installed.")
-        return
+        log.log(f"  Nvm{installedNvmVersion} is already installed.")
+    else:
+        launchNvmInstallation()
     launchNodePackagesInstallation()
-    exit(0)
 
 @staticmethod
 def installNode() -> None:
@@ -140,3 +150,7 @@ def installPythonReq(req_path: str = "requirements.txt") -> None:
 
     if log.getSeverity() < LogSeverity.LOG:
         print() # Add a newline for better readability
+
+if __name__ == '__main__':
+    installPythonReq()
+    installReactReq()
