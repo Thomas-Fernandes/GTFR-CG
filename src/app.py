@@ -19,11 +19,15 @@ app = Flask(__name__.split('.')[-1]) # so that the app name is app, not {dirpath
 def initApp() -> None:
     """ Initializes the Flask app: declares config and session, assigns blueprints.
     """
+    log.debug("Initializing app...")
     app.config["SESSION_PERMANENT"] = False
     app.config["SESSION_TYPE"] = "filesystem"
     app.config["SESSION_FILE_DIR"] = const.SESSION_DIR
 
     def initBlueprints() -> None:
+        """ Initializes the blueprints for the app.
+        """
+        log.debug("  Initializing blueprints...")
         from src.routes.artwork_generation import bp_artwork_generation
         from src.routes.home import bp_home
         from src.routes.lyrics import bp_lyrics
@@ -38,8 +42,10 @@ def initApp() -> None:
         ]
         for blueprint in blueprints:
             app.register_blueprint(blueprint)
+        log.debug("  Blueprints initialized.")
     initBlueprints()
     Session(app)
+    log.debug("App initialized.")
 
 def main(host: str = const.HOST_HOME, port: int = const.DEFAULT_PORT) -> None:
     f""" Main function to clean the cache, initialize the server and start it.
@@ -47,7 +53,7 @@ def main(host: str = const.HOST_HOME, port: int = const.DEFAULT_PORT) -> None:
     :param port: [integer] The port to run the server on. (default: {const.DEFAULT_PORT})
     """
     host_display_name = "localhost" if host == const.HOST_HOME else host
-    log.log(f"Starting server @ http://{host_display_name}:{port}")
+    log.log(f"Starting server @ http://{host_display_name}:{port}...")
 
     def removeExpiredCache(folder: str, cache_type: str) -> int:
         """ Removes expired processed images.
@@ -97,12 +103,15 @@ def main(host: str = const.HOST_HOME, port: int = const.DEFAULT_PORT) -> None:
         """
         nb_eliminated_entries: int = 0
 
+        log.debug("Cleaning up cache...")
         nb_eliminated_entries += removeExpiredCache(const.SESSION_DIR, const.AvailableCacheElemType.sessions.value)
         nb_eliminated_entries += removeExpiredCache(const.PROCESSED_DIR, const.AvailableCacheElemType.images.value)
         nb_eliminated_entries += removeExpiredCache(const.PROCESSED_DIR, const.AvailableCacheElemType.cards.value)
 
         if nb_eliminated_entries == 0:
             log.info("Cache still fresh. Loading...")
+        else:
+            log.log(f"Cache cleanup complete (-{eliminated_entries_count} entries).")
 
     printInitStatistics()
     cacheCleanup()
