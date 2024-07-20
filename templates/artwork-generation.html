@@ -50,8 +50,8 @@
         <div class="flexbox">
             <input type="text" name="url" id="youtube_url" placeholder="Paste YouTube URL here" />
             <div class="action-button" id="youtube-thumbnail-submit">
-                <input type="submit" value="GENERATE" class="action-button" />
-                <div id="youtube-thumbnail-spinner" class="spinner" style="display:none;"></div>
+                <input type="submit" value="SEARCH" class="action-button" onclick="showSpinner('youtube-thumbnail-submit')" />
+                <div id="youtube-thumbnail-spinner" class="spinner"></div>
             </div>            
         </div>
     </form>

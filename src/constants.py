@@ -140,8 +140,8 @@ LYRICSGENIUS_PATTERNS = [
     (compile(r"Specified song does not have a valid lyrics. Rejecting."), lambda m: "The specified song does not have valid lyrics and was rejected."),
 ]
 
-# YouTube URL Patterns
-YOUTUBE_URL_PATTERNS = [
+# YouTube URL regex
+REGEX_YOUTUBE_URL = [
     compile(r'https?://(?:www\.)?youtube\.com/watch\?.*?v=([a-zA-Z0-9_-]{11})'),  # Normal url
     compile(r'https?://youtu\.be/([a-zA-Z0-9_-]{11})'),                           # Short url
 ]

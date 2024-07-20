@@ -128,27 +128,27 @@ $(document).ready(function() {
             return;
         }
 
-        showSpinner('youtube-thumbnail-submit');
+        showSpinner("youtube-thumbnail-submit");
 
         $.ajax({
-            url: '/artwork-generation/use-youtube-thumbnail',
-            type: 'POST',
-            contentType: 'application/x-www-form-urlencoded',
+            url: "/artwork-generation/use-youtube-thumbnail",
+            type: "POST",
+            contentType: "application/x-www-form-urlencoded",
             data: { url: url },
             success: function(data) {
 
-                if (data.status === 'error') {
-                    hideSpinner('youtube-thumbnail-submit');
+                if (data.status === "error") {
+                    hideSpinner("youtube-thumbnail-submit");
                     sendToast("An error occurred on the server.", ResponseStatus.ERROR);
                 } else {
-                    window.addEventListener('beforeunload', function () {
-                        showSpinner('youtube-thumbnail-submit');
+                    window.addEventListener("beforeunload", function () {
+                        showSpinner("youtube-thumbnail-submit");
                     });
-                    window.location.href = '/processed-images';
+                    window.location.href = "/processed-images";
                 }
             },
-            error: function(jqXHR, textStatus, errorThrown) {
-                hideSpinner('youtube-thumbnail-submit');
+            error: function() {
+                hideSpinner("youtube-thumbnail-submit");
                 sendToast("An error occurred. Please try again.", ResponseStatus.ERROR);
             }
         });

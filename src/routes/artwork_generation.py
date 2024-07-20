@@ -75,19 +75,19 @@ def useLocalImage() -> JsonResponse:
 
 ###### YouTube thumbnail ######
 
-def extract_youtube_video_id(url: str) -> Optional[str]:
+def extractYoutubeVideoId(url: str) -> Optional[str]:
     """ Extracts the YouTube video ID from the provided URL.
     :param url: [str] The YouTube URL from which to extract the video ID.
     :return: [str or None] The extracted video ID, or None if the URL does not match the expected formats
     """
-    for pattern in const.YOUTUBE_URL_PATTERNS:
+    for pattern in const.REGEX_YOUTUBE_URL:
         match = pattern.match(url)
-        if match:
+        if match is not None:
             return match.group(1)
     
     return None
 
-def processThumbnail(thumbnail_url: str) -> JsonResponse:
+def processYoutubeThumbnail(thumbnail_url: str) -> JsonResponse:
     """ Processes the thumbnail from the provided URL, saves it to the server, and updates the session.
     :param thumbnail_url: [str] The URL of the YouTube thumbnail to be processed.
     :return: [JsonResponse] Contains the status and path of the processed image.
@@ -118,15 +118,15 @@ def useYoutubeThumbnail() -> JsonResponse:
     :return: [JsonResponse] Contains the status and path of the processed image.
     """
     url = request.form.get("url")
-    if not url:
+    if url is None:
         return createJsonResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_NO_IMG_URL)
 
-    video_id = extract_youtube_video_id(url)
-    if not video_id:
+    video_id = extractYoutubeVideoId(url)
+    if video_id is None:
         return createJsonResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_INVALID_YT_URL)
 
     thumbnail_url = f"https://i3.ytimg.com/vi/{video_id}/maxresdefault.jpg"
-    return processThumbnail(thumbnail_url)
+    return processYoutubeThumbnail(thumbnail_url)
 
 @bp_artwork_generation.route(const.ROUTES.art_gen.path, methods=["GET"])
 def renderArtworkGeneration() -> RenderView:
