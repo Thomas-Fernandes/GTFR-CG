@@ -1,7 +1,7 @@
 from flask import Response
 
 from dataclasses import dataclass
-from typing import Optional, TypeAlias
+from typing import Literal, Optional, TypeAlias
 
 ############ BROWSER ############
 
@@ -60,6 +60,33 @@ JsonResponse: TypeAlias = tuple[Response, int]
 RenderView: TypeAlias = str
 
 ############ SOFTWARE ############
+
+CachedElemType: TypeAlias = Literal[
+    "sessions",
+    "images",
+    "cards",
+]
+@dataclass(kw_only=True)
+class Cache:
+    """ Dataclass to store cache information.
+
+    Attributes:
+        sessions: [string] The name of the Flask sessions directory.
+        images: [string] The name of the images directory.
+        cards: [string] The name of the cards directory.
+    """
+    sessions: str
+    images: str
+    cards: str
+
+    def __repr__(self) -> str:
+        """ Returns the Cache dataclass as a string
+        :return: [string] The dataclass' content, as a string.
+        """
+        content: str = ""
+        for (key, value) in self.__dict__.items():
+            content += f"{key}={value}, "
+        return f"Cache({content[:-2]})"
 
 JsonDict: TypeAlias = dict[str, Optional[str | int]]
 

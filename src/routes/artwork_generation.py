@@ -29,7 +29,7 @@ def useItunesImage() -> JsonResponse:
         log.debug("User folder not found in session. Creating a new one.")
         session[const.SessionFields.user_folder.value] = str(uuid4())
 
-    user_folder = str(session[const.SessionFields.user_folder.value])
+    user_folder = str(session[const.SessionFields.user_folder.value]) + const.SLASH + const.AvailableCacheElemType.images.value + const.SLASH
     user_processed_path = path.join(const.PROCESSED_DIR, user_folder)
     log.info(f"Creating user processed path: {user_processed_path}")
     makedirs(user_processed_path, exist_ok=True)
@@ -59,7 +59,7 @@ def useLocalImage() -> JsonResponse:
     if const.SessionFields.user_folder.value not in session:
         log.debug("User folder not found in session. Creating a new one.")
         session[const.SessionFields.user_folder.value] = str(uuid4())
-    user_folder = str(session[const.SessionFields.user_folder.value])
+    user_folder = str(session[const.SessionFields.user_folder.value]) + const.SLASH + const.AvailableCacheElemType.images.value + const.SLASH
 
     file = request.files["file"]
     def checkImageFilenameValid(filename: str | None) -> Optional[str]:

@@ -144,7 +144,6 @@ class Logger:
         self.__severity = severity
         self.__log_file = log_file
 
-global log
 def getSeverityArg(args: list[str]) -> LogSeverity:
     """ Gets the severity level from the command line arguments.
     :param args: [list] The command line arguments.

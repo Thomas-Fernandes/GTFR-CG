@@ -4,13 +4,13 @@ from flask_session import Session
 from waitress import serve
 
 # Python standard libraries
-from os import path, makedirs, remove, listdir
-from shutil import rmtree
+from os import listdir, makedirs, path, remove, removedirs
+from sys import exit
 
 # Local modules
 import src.constants as const
 from src.logger import log
-from src.soft_utils import getDefaultExpirationTimestamp
+from src.soft_utils import getExpirationTimestamp
 from src.statistics import onLaunch as printInitStatistics
 
 # Application initialization
@@ -55,63 +55,63 @@ def main(host: str = const.HOST_HOME, port: int = const.DEFAULT_PORT) -> None:
     host_display_name = "localhost" if host == const.HOST_HOME else host
     log.log(f"Starting server @ http://{host_display_name}:{port}...")
 
-    processed_folder = const.PROCESSED_DIR
-    makedirs(processed_folder, exist_ok=True)
-    log.debug(f"Processed folder created @ {processed_folder}")
-
-    def removeExpiredContent(folder: str) -> int:
-        """ Removes entries in the given folder that are older than the default expiration time.
-        :param folder: [string] The folder to remove expired entries from.
+    def removeExpiredCache(folder: str, cache_type: str) -> int:
+        """ Removes expired processed images.
+        :param folder: [string] The folder whose content is to clean if expired.
         :return: [integer] The number of entries removed.
         """
-        log.debug(f"    Cleaning up cache for {folder}...")
-        eliminated_entries_count: int = 0
-        filepaths: list[str] = [path.join(folder, f) for f in listdir(folder)]
+        nb_eliminated_entries: int = 0
+        if not path.isdir(folder):
+            return 0
 
-        def isFileExpired(file: str) -> bool:
-            """ Checks if the file is expired.
-            :param file: [string] The file to check.
-            :return: [bool] True if the file is past the expiration time, False otherwise.
-            """
-            isExpired = path.isfile(file) and int(path.getmtime(file)) < getDefaultExpirationTimestamp()
-            log.debug(f"      {file} {'is' if isExpired else 'is not'} expired.")
-            return isExpired
+        def isFileExpired(filepath: str, filetype: str) -> bool:
+            try:
+                return path.isfile(filepath) and int(path.getmtime(filepath)) < getExpirationTimestamp(filetype, app.config)
+            except Exception as e:
+                log.error(f"Error while checking file expiration: {e}")
+                exit(1)
 
-        for file in filepaths:
-            if isFileExpired(file):
-                log.debug(f"      Removing expired file: {file}")
-                remove(file)
-                eliminated_entries_count += 1
-        if listdir(folder) == []: # if folder is empty, remove it
-            log.debug(f"      Removing empty folder: {folder}")
-            rmtree(folder)
-        if eliminated_entries_count != 0:
-            pluralMarks = ["s", "were"] if eliminated_entries_count != 1 else ["", "was"]
-            log.info(f"      {eliminated_entries_count} cached file{pluralMarks[0]} {pluralMarks[1]} " \
-                f"removed in {folder.split(const.SLASH)[0]}.")
-        log.debug(f"    Cache cleanup complete for {folder}.")
-        return eliminated_entries_count
+        if cache_type == const.AvailableCacheElemType.sessions.value:
+            filepaths: list[str] = [path.join(folder, f) for f in listdir(folder)]
+            for file in filepaths:
+                if isFileExpired(file, cache_type):
+                    remove(file)
+                    nb_eliminated_entries += 1
+            if len(listdir(folder)) == 0:
+                removedirs(folder)
+        else:
+            directory_paths: list[str] = [path.join(folder, f) for f in listdir(folder)]
+            for dir in directory_paths:
+                cache_dir_path = dir + const.SLASH + ((cache_type + const.SLASH) if path.isdir(dir + const.SLASH + cache_type) else "")
+                filepaths: list[str] = [path.join(cache_dir_path, f) for f in listdir(cache_dir_path)]
+                for file in filepaths:
+                    if isFileExpired(file, cache_type):
+                        remove(file)
+                        nb_eliminated_entries += 1
+                if len(listdir(dir)) == 0:
+                    removedirs(dir)
+                if len(listdir(cache_dir_path)) == 0:
+                    removedirs(cache_dir_path)
+        if nb_eliminated_entries != 0:
+            pluralMarks = ["s", "were"] if nb_eliminated_entries != 1 else ["", "was"]
+            log.info(f"{nb_eliminated_entries} cached file{pluralMarks[0]} {pluralMarks[1]} " \
+                f"removed in {folder + cache_type}.")
+        return nb_eliminated_entries
 
     def cacheCleanup() -> None:
         """ Cleans up the cache by removing expired entries.
         """
-        log.debug("Cleaning up cache...")
-        to_clean: list[str] = ["processed"] # used as a placeholder
-        eliminated_entries_count: int = 0
+        nb_eliminated_entries: int = 0
 
-        for folder in to_clean:
-            log.debug(f"  Cleaning up {folder}...")
-            folder_path = path.join(folder + const.SLASH)
-            if not path.isdir(folder_path):
-                continue
-            session_dirname_list = listdir(folder_path)
-            for sdn in session_dirname_list:
-                eliminated_entries_count += removeExpiredContent(folder_path + sdn)
-            log.debug(f"  Cache cleanup complete for {folder}.")
-        if eliminated_entries_count == 0:
-            log.info("Cache still fresh!")
+        log.debug("Cleaning up cache...")
+        nb_eliminated_entries += removeExpiredCache(const.SESSION_DIR, const.AvailableCacheElemType.sessions.value)
+        nb_eliminated_entries += removeExpiredCache(const.PROCESSED_DIR, const.AvailableCacheElemType.images.value)
+        nb_eliminated_entries += removeExpiredCache(const.PROCESSED_DIR, const.AvailableCacheElemType.cards.value)
+
+        if nb_eliminated_entries == 0:
+            log.info("Cache still fresh. Loading...")
         else:
-            log.log(f"Cache cleanup complete (-{eliminated_entries_count} entries).")
+            log.log(f"Cache cleanup complete (-{nb_eliminated_entries} entries).")
 
     printInitStatistics()
     cacheCleanup()
