@@ -1,5 +1,5 @@
-from os import environ, name as osName, pathsep
-from subprocess import CalledProcessError, CompletedProcess, run
+from os import chdir, environ, name as osName, pathsep
+from subprocess import CalledProcessError, CompletedProcess, Popen, run
 from typing import Optional
 
 from src.logger import log, LogSeverity
@@ -14,6 +14,52 @@ def quitIfError(result: CompletedProcess[bytes]) -> None:
         exit(1)
 
 @staticmethod
+def installNodePackages() -> None:
+    """ Installs the Node.js packages required by the front-end application.
+    """
+    log.log("  Installing Node packages...")
+
+    def getNvmVersion() -> Optional[str]:
+        """ Checks if Nvm is installed.
+        :return: [bool] True if Nvm is installed, False otherwise.
+        """
+        try:
+            result = run(["nvm", "version"], capture_output=True, text=True)
+            return result.stdout.strip()
+        except FileNotFoundError:
+            return None
+
+    def launchNodePackagesInstallation() -> None:
+        try:
+            chdir("GTFR-CG")
+            if osName == "nt":
+                Popen(r'explorer /select,"."')
+                with open("install-nvm.ps1", "w") as file:
+                    file.write(""
+                        "Invoke-WebRequest -Uri https://github.com/coreybutler/nvm-windows/releases/latest/download/nvm-setup.exe -OutFile $env:USERPROFILE\\nvm-setup.exe" "\n"
+                        "Start-Process -FilePath $env:USERPROFILE\\nvm-setup.exe -Wait" "\n"
+                        "nvm version" "\n"
+                        "nvm install 20" "\n"
+                        "nvm use 20" "\n"
+
+                        "Read-Host -Prompt 'Press any key to continue...'" "\n"
+                    )
+                input("Please install Nvm by running 'install-nvm.ps1' with PowerShell,\n\tthen press Enter to continue...")
+            else:
+                quitIfError(run(["npm", "install"], capture_output=True, check=True))
+            chdir("..")
+        except CalledProcessError as e:
+            log.critical(f"  Error while trying to install Node packages: {e}")
+            exit(1)
+        log.log("  Node packages installation complete.")
+    installedNvmVersion = getNvmVersion()
+    if installedNvmVersion is not None:
+        log.log(f"  Nvm {installedNvmVersion} is already installed.")
+        return
+    launchNodePackagesInstallation()
+    exit(0)
+
+@staticmethod
 def installNode() -> None:
     def getNodeVersion() -> Optional[str]:
         """ Checks if Node.js is installed.
@@ -24,15 +70,6 @@ def installNode() -> None:
             return result.stdout.strip()
         except FileNotFoundError:
             return None
-
-    def addNodeToPath() -> None:
-        """ Adds Node.js to the PATH environment variable, necessary for Windows.
-        """
-        node_path = r"C:\Program Files\nodejs" # Update this path if Node.js is installed elsewhere
-        current_path = environ.get("PATH", "")
-        if node_path not in current_path:
-            new_path = current_path + pathsep + node_path
-            environ["PATH"] = new_path
 
     def launchNodeJsInstallation() -> None:
         """ Installs Node.js, needed for React.
@@ -61,7 +98,7 @@ def installNode() -> None:
             exit(1)
         log.log(f"  Node.js {result.stdout.strip()} installation complete.")
 
-    if osName == "nt": addNodeToPath() # Windows
+    if osName == "nt": environ["Path"] += pathsep + r"C:\Program Files\nodejs"
     installedNodeVersion = getNodeVersion()
     if installedNodeVersion is not None:
         log.log(f"  Node.js {installedNodeVersion} is already installed.")
@@ -73,6 +110,7 @@ def installReactReq() -> None:
     """
     log.log("Installing React requirements...")
     installNode()
+    installNodePackages()
     log.log("React requirements installation complete.\n")
 
 def installPythonReq(req_path: str = "requirements.txt") -> None:
