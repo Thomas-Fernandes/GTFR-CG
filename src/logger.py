@@ -164,4 +164,4 @@ def getSeverityArg(args: list[str]) -> LogSeverity:
     return severity
 print(getFormattedMessage("Trying to initialize logger variable...", LogSeverity.DEBUG))
 log = Logger(severity=getSeverityArg(sys.argv))
-log.debug("Logger initialized.")
+log.log(f"Logger initialized with level '{log.getSeverity().name}'.")
