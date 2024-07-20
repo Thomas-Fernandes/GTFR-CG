@@ -18,13 +18,13 @@ const getTitleWithAdjustedLength = (title) => {
     return title.slice(0, end) + "...";
 };
 
-const YOUTUBE_URL = [
+const REGEX_YOUTUBE_URL = [
     /https?:\/\/(www\.)?youtube\.com\/watch\?v=[a-zA-Z0-9_-]{11}/,
     /https?:\/\/youtu\.be\/[a-zA-Z0-9_-]{11}/,
 ];
 
 const isValidYoutubeUrl = (url) => {
-    return YOUTUBE_URL.some((pattern) => pattern.test(url));
+    return REGEX_YOUTUBE_URL.some((pattern) => pattern.test(url));
 }
 
 
