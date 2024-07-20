@@ -46,6 +46,7 @@ def useItunesImage() -> JsonResponse:
         file.write(image_response.content)
 
     session[const.SessionFields.generated_artwork_path.value] = image_path
+    session[const.SessionFields.include_center_artwork.value] = True
     log.log(f"Found iTunes image and saved it to {image_path}")
     return createJsonResponse(const.HttpStatus.OK.value)
 
@@ -101,13 +102,12 @@ def useLocalImage() -> JsonResponse:
 def extractYoutubeVideoId(url: str) -> Optional[str]:
     """ Extracts the YouTube video ID from the provided URL.
     :param url: [str] The YouTube URL from which to extract the video ID.
-    :return: [str or None] The extracted video ID, or None if the URL does not match the expected formats
+    :return: [str | None] The extracted video ID, or None if the URL does not match the expected formats
     """
     for pattern in const.REGEX_YOUTUBE_URL:
         match = pattern.match(url)
         if match is not None:
             return match.group(1)
-    
     return None
 
 def processYoutubeThumbnail(thumbnail_url: str) -> JsonResponse:
@@ -117,7 +117,7 @@ def processYoutubeThumbnail(thumbnail_url: str) -> JsonResponse:
     """
     if const.SessionFields.user_folder.value not in session:
         session[const.SessionFields.user_folder.value] = str(uuid4())
-    
+
     user_folder = str(session[const.SessionFields.user_folder.value]) + const.SLASH + const.AvailableCacheElemType.images.value + const.SLASH
     user_processed_path = path.join(const.PROCESSED_DIR, user_folder)
     makedirs(user_processed_path, exist_ok=True)
@@ -125,14 +125,14 @@ def processYoutubeThumbnail(thumbnail_url: str) -> JsonResponse:
     image_response = requestsGet(thumbnail_url)
     if image_response.status_code != const.HttpStatus.OK.value:
         return createJsonResponse(const.HttpStatus.INTERNAL_SERVER_ERROR.value, const.ERR_FAIL_DOWNLOAD)
-    
+
     image_path = path.join(user_processed_path, "youtube_thumbnail.png")
     with open(image_path, "wb") as file:
         file.write(image_response.content)
-    
+
     session[const.SessionFields.generated_artwork_path.value] = image_path
     session[const.SessionFields.include_center_artwork.value] = False
-    
+
     return createJsonResponse(const.HttpStatus.OK.value, "/processed-images")
 
 @bp_artwork_generation.route(const.ROUTES.art_gen.path + "/use-youtube-thumbnail", methods=["POST"])
@@ -156,5 +156,6 @@ def renderArtworkGeneration() -> RenderView:
     """ Renders the artwork generation page.
     :return: [RenderView] The rendered view.
     """
+    session[const.SessionFields.include_center_artwork.value] = True
     log.debug(f"Rendering {const.ROUTES.art_gen.bp_name} page...")
     return render_template(const.ROUTES.art_gen.view_filename)
