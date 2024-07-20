@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload or Search for Cover Art</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/_generic.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/artwork-generation.css') }}" />
+</head>
+<body id="head">
+    <div id="toast-container"></div>
+    <span class="top-bot-spacer"></span>
+    <div class="navbar">
+        <button type="button" onclick="window.location.href='{{ url_for('home.renderHome') }}'"><span class="left">Home</span></button>
+    </div>
+    <h1>Search for cover art on iTunes</h1>
+    <form id="iTunesSearchForm" method="POST">
+        <div class="flexbox">
+            <input type="text" name="query" id="query" placeholder="Search on iTunes" />
+            <select name="country" id="country" aria-label="Country">
+                <option value="fr" selected>France</option>
+                <option value="us">United States</option>
+                <option value="nz">New Zealand</option>
+            </select>
+            <div class="action-button" id="artwork-generation_search-form">
+                <input type="submit" value="SEARCH" class="action-button" onclick="showSpinner('artwork-generation_search-form')" />
+            </div>
+        </div>
+    </form>
+    <div id="results" class="result-container"></div>
+
+    <h1>...or upload your image</h1>
+    <form id="fileUpload" method="POST" action="/artwork-generation/use-local-image" enctype="multipart/form-data">
+        <div class="flexbox">
+            <input type="file" name="file" id="file" class="file" />
+            <p class="error">{{ error }}</p>
+            <label class="checkbox" for="include_center_artwork">
+                <input type="checkbox" name="include_center_artwork" id="include_center_artwork" checked>
+                <p class="checkbox-label italic">Include center artwork</p>
+            </label>
+            <div class="action-button" id="artwork-generation_file-upload">
+                <input type="submit" value="UPLOAD" class="action-button" onclick="showSpinner('artwork-generation_file-upload')" />
+            </div>
+        </div>
+    </form>
+    <span class="top-bot-spacer"></span>
+
+    <h1>...or use a YouTube thumbnail</h1>
+    <form id="youtubeThumbnailForm" method="POST" action="/artwork-generation/use-youtube-thumbnail">
+        <div class="flexbox">
+            <input type="text" name="url" id="youtube_url" placeholder="Paste YouTube URL here" />
+            <div class="action-button" id="youtube-thumbnail-submit">
+                <input type="submit" value="SEARCH" class="action-button" onclick="showSpinner('youtube-thumbnail-submit')" />
+                <div id="youtube-thumbnail-spinner" class="spinner"></div>
+            </div>            
+        </div>
+    </form>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="{{ url_for('static', filename='js/_generic.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/artwork-generation.js') }}"></script>
+</body>
+</html>

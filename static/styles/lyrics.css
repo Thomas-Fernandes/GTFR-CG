@@ -1,52 +1,13 @@
-.search-form, .lyrics-form {
+form {
     justify-content: center;
-    align-items: center;
-    width: 100%;
-}
 
-.search-bars {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 20px;
-    flex-direction: row;
-}
+    .search-bars {
+        flex-direction: row;
+        gap: 10px;
+    }
 
-input[type="text"], textarea {
-    width: 50%;
-    padding: 1.5rem;
-    margin: 1.5rem 0;
-    border: 2px solid #ddd;
-    border-radius: 0.2rem;
-    font-size: 20px;
-    text-align: left; /* Align text to the left */
-}
-
-textarea {
-    height: 300px;
-}
-
-.button {
-    width: 33%;
-    background: #ffff64;
-    border: none;
-    border-radius: 0.2rem;
-    cursor: pointer;
-    color: #000;
-    letter-spacing: 0.3rem;
-    font-size: 24px;
-    font-weight: bold;
-    transition: all 0.3s;
-}
-
-.button:hover {
-    background-color: #0056b3;
-}
-
-.search-button {
-    padding: 1.5rem; /* same height as search bars */
-}
-
-.save-button:hover {
-    background-color: #0056b3;
+    textarea {
+        height: 300px;
+        padding: 1rem;
+    }
 }

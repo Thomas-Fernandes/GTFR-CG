@@ -1,27 +1,23 @@
-from flask import jsonify, Response
+from flask import jsonify
 
-from typing import TypeAlias
-
-import src.constants as constants
-
-def checkFilenameValid(filename: str | None) -> str | None:
-    if (filename == None or filename.strip() == ''):
-        return constants.ERR_NO_FILE
-    if (not('.' in filename and filename.rsplit('.', 1)[1].lower() in ['png', 'jpg', 'jpeg'])):
-        return constants.ERR_INVALID_FILE_TYPE
-    return None
-
-JsonResponse: TypeAlias = tuple[Response, int]
+from src.typing import JsonResponse
 
 def createJsonResponse(status_code: int, message: str = "") -> JsonResponse:
-    if (status_code == 200):
-        status = 'success'
-    elif (status_code in [400, 404, 500]):
-        status = 'error'
-    else:
-        status = 'unknown'
+    """ Creates a JSON response with the given status code and message.
+    :param status_code: [integer] The status code of the response.
+    :param message: [string] The message to include in the response. (default: "")
+    :return: [JsonResponse] The JSON response and its status code.
+    """
+    match status_code:
+        case 200:
+            status = "success"
+        case 400, 404, 500:
+            status = "error"
+        case _:
+            status = "unknown"
 
-    response = {'status': status}
-    if (message):
-        response['message'] = message
+    response = { "status": status }
+    message = message.strip()
+    if len(message) > 1:
+        response["message"] = message
     return (jsonify(response), status_code)
