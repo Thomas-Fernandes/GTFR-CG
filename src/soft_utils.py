@@ -4,6 +4,9 @@ from datetime import datetime
 import src.constants as const
 
 def getNowEpoch() -> str: # in MM-DD 24-hour format
+    """ Returns the current time in epoch format.
+    :return: [string] The current time in epoch format.
+    """
     current_time = datetime.now()
     formatted_time = current_time.strftime(const.DATE_FORMAT_FULL)
     return formatted_time

@@ -22,4 +22,5 @@ def renderRedirection(redirect_to: str, err: str) -> RenderView:
         "error_text": err,
         "plural": "s",
     }
+    log.debug(f"Rendering {const.ROUTES.redirect.bp_name} page...")
     return render_template(const.ROUTES.redirect.view_filename, **context)
