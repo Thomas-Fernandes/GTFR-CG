@@ -115,7 +115,7 @@ python launcher.py
     - routes are reworked and redirection is implemented
     - toasts are implemented as a feedback system of web actions
     - `requirements.txt` and this README are created
-  - ***[1.2.4]** Coming July 2024*: Project will support artwork generation from a YouTube link, gets some more reworks. [#???](#card_file_box-changelog)
+  - ***[1.2.4]** Coming July 2024*: Project now supports artwork generation from a YouTube link, gets some more reworks. [#???](#card_file_box-changelog)
     - a loading spinner now comes alongside action buttons
     - documentation strings are added to the codebase
     - the artwork generation page is reworked to welcome YT section and better UX
