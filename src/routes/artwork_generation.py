@@ -118,7 +118,7 @@ def processYoutubeThumbnail(thumbnail_url: str) -> JsonResponse:
     if const.SessionFields.user_folder.value not in session:
         session[const.SessionFields.user_folder.value] = str(uuid4())
     
-    user_folder = str(session[const.SessionFields.user_folder.value])
+    user_folder = str(session[const.SessionFields.user_folder.value]) + const.SLASH + const.AvailableCacheElemType.images.value + const.SLASH
     user_processed_path = path.join(const.PROCESSED_DIR, user_folder)
     makedirs(user_processed_path, exist_ok=True)
 
