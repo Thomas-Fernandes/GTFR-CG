@@ -111,7 +111,7 @@ def main(host: str = const.HOST_HOME, port: int = const.DEFAULT_PORT) -> None:
         if nb_eliminated_entries == 0:
             log.info("Cache still fresh. Loading...")
         else:
-            log.log(f"Cache cleanup complete (-{eliminated_entries_count} entries).")
+            log.log(f"Cache cleanup complete (-{nb_eliminated_entries} entries).")
 
     printInitStatistics()
     cacheCleanup()
