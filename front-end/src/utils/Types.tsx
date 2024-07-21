@@ -8,9 +8,15 @@ type Statistics = {
 type ResponseStatus = "info" | "success" | "warning" | "error";
 
 type Context = {
+    // Home
     session_status?: string;
     genius_token?: string;
     stats?: Statistics;
-};
+
+    // Redirect
+    error_text?: string;
+    redirect_to?: string;
+    plural?: string;
+}
 
 export type { Context, ResponseStatus, Statistics };

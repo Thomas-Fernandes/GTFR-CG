@@ -40,7 +40,7 @@ const Home = (context: Context = defaultContext): React.JSX.Element => {
   }, [context]);
 
   return (
-    <div>
+    <>
       <div id="toast-container"></div>
       <span className="top-bot-spacer"></span>
       <h1>Home</h1>
@@ -82,7 +82,7 @@ const Home = (context: Context = defaultContext): React.JSX.Element => {
         </div>
       </div>
       <span className="top-bot-spacer"></span>
-    </div>
+    </>
   );
 };
 
