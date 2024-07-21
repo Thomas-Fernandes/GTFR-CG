@@ -1,0 +1,13 @@
+form {
+    justify-content: center;
+
+    .search-bars {
+        flex-direction: row;
+        gap: 10px;
+    }
+
+    textarea {
+        height: 300px;
+        padding: 1rem;
+    }
+}

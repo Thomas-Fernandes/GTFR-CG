@@ -4,12 +4,12 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 // import ProcessedImages from "./pages/ProcessedImages";
 // import ArtworkGeneration from "./pages/ArtworkGeneration";
 // import Redirect from "./pages/Redirect";
-import Home from "./pages/Home";
+import Home from "./pages/Home/Home";
+
 import "./App.css";
 
 const App = () => {
   return (
-    <body>
     <Router>
       <Routes>
         {/* <Route path="/lyrics" element={<Lyrics />} />
@@ -20,7 +20,6 @@ const App = () => {
         <Route path="*" element={<Home />} />
       </Routes>
     </Router>
-    </body>
   )
 }
 
