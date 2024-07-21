@@ -16,11 +16,13 @@
 
   <img title="Python" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/1028px-Python-logo-notext.svg.png" width="28px" alt="Python" />
   <img title="Flask" src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files//flask.svg" width="28px" alt="Flask" />
-  <img title="HTML" src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/html/html.png" width="28px" alt="HTML" />
-  <img title="CSS" src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/css/css.png" width="28px" alt="CSS" />
-  <img title="JavaScript" src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files//js.svg" width="28px" alt="JS" />
-  <!-- <img title="React" src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files//react.svg" width="28px" alt="React" /> -->
-  <!-- <img title="TypeScript" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Typescript_logo_2020.svg/2048px-Typescript_logo_2020.svg.png" width="28px" alt="TScript" /> -->
+  <!-- <img title="HTML" src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/html/html.png" width="28px" alt="HTML" /> -->
+  <!-- <img title="CSS" src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/css/css.png" width="28px" alt="CSS" /> -->
+  <!-- <img title="JavaScript" src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files//js.svg" width="28px" alt="JS" /> -->
+  <img title="React.js" src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files//react.svg" width="28px" alt="React" />
+  <img title="Vite" src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files//vite.svg" width="28px" alt="Vite" />
+  <img title="TypeScript" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Typescript_logo_2020.svg/2048px-Typescript_logo_2020.svg.png" width="28px" alt="TScript" />
+  &nbsp;<sup><b>| formerly:</b></sup>&nbsp;
   <img title="GIMP" src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files//gimp.svg" width="28px" alt="GIMP" />
   <img title="Adobe Premiere Pro" src="https://upload.wikimedia.org/wikipedia/commons/4/40/Adobe_Premiere_Pro_CC_icon.svg" width="28px" alt="Premiere" />
 
@@ -44,7 +46,7 @@
 
 ## :memo: Description
 
-**GTFR-CG** is a Python web application that generates content serving the creation of [**Genius Traductions Françaises**](https://www.youtube.com/c/geniustraductionsfrancaises) videos.  
+**GTFR-CG** is a React-Python web application that generates content serving the creation of [**Genius Traductions Françaises**](https://www.youtube.com/c/geniustraductionsfrancaises) videos.  
 Generate artwork and lyrics cards that can then be edited into **translation videos**.  
 Save time by interacting with the APIs of **iTunes** and **Genius** to automate parts of the edition process!  
 One day, maybe one day, this application maybe even be able to generate whole videos by itself...
@@ -56,10 +58,11 @@ One day, maybe one day, this application maybe even be able to generate whole vi
 ## :gear: Requirements
 
 This application was tested on and designed for Windows 11 and Ubuntu 22.04.  
-All the required Python modules are listed in [the requirements file](./requirements.txt). They will be installed upon launch.
+All the required back end modules are listed in [the requirements file](./requirements.txt). They will be installed upon launch of the back end.  
+All the required front end software and modules can be installed by running the [installer file](./installer.py) with Python 3.10.
 
 > [!CAUTION]
-> **GTFR-CG**'s code is written in **Python 3.10** and is **not** compatible with anterior versions.  
+> **GTFR-CG**'s back end is written in **Python 3.10**. It is compatible with later versions, but **not compatible with anterior versions**.  
 > You can check your Python version by running `python --version` in your terminal.
 </blockquote>
 
@@ -72,11 +75,26 @@ All the required Python modules are listed in [the requirements file](./requirem
 
 ## :movie_camera: Usage
 
-&nbsp;&nbsp; :rocket:&nbsp; **Build & Launch**
+&nbsp;&nbsp; :clamp:&nbsp; **Build**
 
 ``` bash
-pip install -r requirements.txt && # OPTIONAL \
-python launcher.py
+python installer.py # will install back end modules, front end software & modules
+```
+
+&#xa0;
+
+&nbsp;&nbsp; :rocket:&nbsp; **Launch**
+
+Back end:
+
+``` bash
+python launcher.py # will check if the needed modules and installed, then launch the application
+```
+
+Front end:
+
+``` bash
+cd front-end/ && npm run dev # will launch the front end of the application
 ```
 
 &#xa0;
@@ -105,7 +123,7 @@ python launcher.py
 ## :card_file_box: Changelog
 
 - ***[1.0.0]** May 09 2024*: **Hello World!** — Project creation.
-- ***[1.0.1]** Jun 23 2024*: [**@QuentindiMeo**](https://github.com/QuentindiMeo) joins the project. Project starts.
+- ***[1.0.1]** Jun 23 2024*: [**@QuentindiMeo**](https://github.com/QuentindiMeo) joins the project. Project starts. [#001](https://github.com/Thomas-Fernandes/GTFR/pull/1)
 - ***[1.1.0]** Jun 23 2024*: **Welcome** — Project now supports artwork generation from a local file.
 - ***[1.1.1]** Jun 24 2024*: Project gets a new visual appearance. [#005](https://github.com/Thomas-Fernandes/GTFR/pull/5)
 - ***[1.2.0]** Jun 27 2024*: **Thumbnails** — Project now supports artwork generation from iTunes. [#010](https://github.com/Thomas-Fernandes/GTFR/pull/10)
@@ -115,7 +133,7 @@ python launcher.py
     - routes are reworked and redirection is implemented
     - toasts are implemented as a feedback system of web actions
     - `requirements.txt` and this README are created
-  - ***[1.2.4]** Coming July 2024*: Project now supports artwork generation from a YouTube link, gets some more reworks. [#???](#card_file_box-changelog)
+  - ***[1.2.4]** Coming July 2024*: Project now supports artwork generation from a YouTube link, gets some more reworks. [#086](https://github.com/Thomas-Fernandes/GTFR-CG/pull/86)
     - a loading spinner now comes alongside action buttons
     - documentation strings are added to the codebase
     - the artwork generation page is reworked to welcome YT section and better UX

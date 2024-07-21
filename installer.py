@@ -20,7 +20,7 @@ def installNodePackages() -> None:
     log.log("  Installing Node packages...")
 
     def launchNodePackagesInstallation() -> None:
-        chdir("GTFR-CG")
+        chdir("front-end")
         if osName == "nt":
             system("npm install --silent")
         else:
@@ -56,8 +56,8 @@ def installNvm() -> None:
         log.log("  Installing Nvm...")
         try:
             if osName == "nt":
-                chdir("GTFR-CG")
-                Popen(r'explorer /select,"."')
+                chdir("front-end")
+                Popen(r'explorer /select,"install-nvm.ps1"')
                 input("Please install Nvm by running 'install-nvm.ps1' with PowerShell.\n"
                       "\tYou may need to restart your terminal or even reboot to use Nvm.\n"
                       "\tPress Enter to continue..."
