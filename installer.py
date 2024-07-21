@@ -58,11 +58,11 @@ def installNvm() -> None:
             if osName == "nt":
                 chdir("front-end")
                 Popen(r'explorer /select,"install-nvm.ps1"')
+                chdir("..")
                 input("Please install Nvm by running 'install-nvm.ps1' with PowerShell.\n"
                       "\tYou may need to restart your terminal or even reboot to use Nvm.\n"
                       "\tPress Enter to continue..."
                 )
-                chdir("..")
             else:
                 quitIfError(run(["sudo", "apt-get", "update"], capture_output=True, check=True))
         except CalledProcessError as e:
