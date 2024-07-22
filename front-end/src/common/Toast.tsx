@@ -9,7 +9,8 @@ const convertToHtmlMessage = (message: string) => {
     .replace(/\t/g, "&nbsp;&nbsp;&nbsp;&nbsp;")
   ;
 };
-const sendToast = (
+
+export const sendToast = (
   message: string,
   type: ResponseStatus = RESPONSE_STATUS.ERROR,
   duration: number = DEFAULT_EVENT_DURATION.SECONDS_TOAST
@@ -43,7 +44,7 @@ const sendToast = (
   }, duration * 1000);
 }
 
-const dismissToast = (toast: HTMLElement, duration: number = DEFAULT_EVENT_DURATION.MS_FADE_OUT) => {
+export const dismissToast = (toast: HTMLElement, duration: number = DEFAULT_EVENT_DURATION.MS_FADE_OUT) => {
   toast.style.animation = `fade-out ${duration.toString()}ms forwards`;
   setTimeout(() => {
     toast.style.marginTop = `-${toast.offsetHeight}px`;
@@ -54,5 +55,3 @@ const dismissToast = (toast: HTMLElement, duration: number = DEFAULT_EVENT_DURAT
     }, duration);
   }, DEFAULT_EVENT_DURATION.MS_VERTICAL_SLIDE);
 }
-
-export { sendToast, dismissToast };

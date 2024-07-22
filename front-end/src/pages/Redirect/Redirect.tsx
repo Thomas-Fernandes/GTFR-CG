@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 
 import { DEFAULT_CONTEXT, DEFAULT_EVENT_DURATION } from "../../common/Constants";
-import { isEmpty } from "../../common/utils/ObjUtils";
 import { Context } from "../../common/Types";
+import { isEmpty } from "../../common/utils/ObjUtils";
 
 import "./Redirect.css";
 

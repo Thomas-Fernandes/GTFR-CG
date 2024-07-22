@@ -1,13 +1,13 @@
-type Statistics = {
+export type Statistics = {
   dateFirstOperation: string;
   dateLastOperation: string;
   artworkGenerations: number;
   lyricsFetches: number;
 };
 
-type ResponseStatus = "info" | "success" | "warn" | "error";
+export type ResponseStatus = "info" | "success" | "warn" | "error";
 
-type Context = {
+export type Context = {
   // Home
   session_status?: string;
   genius_token?: string;
@@ -17,6 +17,9 @@ type Context = {
   error_text?: string;
   redirect_to?: string;
   plural?: string;
+
+  // Lyrics
+  lyrics?: string;
 }
 
-export type { Context, ResponseStatus, Statistics };
+export type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";

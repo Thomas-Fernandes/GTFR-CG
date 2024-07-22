@@ -1,37 +1,38 @@
 import { Context, ResponseStatus } from "./Types";
 
-const REGEX_YOUTUBE_URL = [
+export const REGEX_YOUTUBE_URL = [
   /https?:\/\/(www\.)?youtube\.com\/watch\?v=[a-zA-Z0-9_-]{11}/,
   /https?:\/\/youtu\.be\/[a-zA-Z0-9_-]{11}/,
 ];
 
-const ACCEPTED_IMG_EXTENSIONS = [
+export const ACCEPTED_IMG_EXTENSIONS = [
   "jpg",
   "jpeg",
-  "png"
+  "png",
 ];
 
-const DEFAULT_EVENT_DURATION = {
+export const DEFAULT_EVENT_DURATION = {
   SECONDS_TOAST: 5,
   MS_FADE_OUT: 500,
   MS_VERTICAL_SLIDE: 200,
 };
 
-const RESPONSE_STATUS: Record<string, ResponseStatus> = {
+export const RESPONSE_STATUS: Record<string, ResponseStatus> = {
   INFO: "info",
   SUCCESS: "success",
   WARN: "warn",
   ERROR: "error",
 };
 
-const _PATHS = {
+export const _PATHS = {
   home: "/home",
   redirect: "/redirect",
   artworkGeneration: "/artwork-generation",
+  processedImages: "/processed-images",
   lyrics: "/lyrics",
 };
 
-const DEFAULT_CONTEXT: Context = {
+export const DEFAULT_CONTEXT: Context = {
   // Home
   session_status: "initializing",
   genius_token: "",
@@ -47,5 +48,3 @@ const DEFAULT_CONTEXT: Context = {
   redirect_to: _PATHS.home,
   plural: "s",
 };
-
-export { ACCEPTED_IMG_EXTENSIONS, DEFAULT_CONTEXT, DEFAULT_EVENT_DURATION, _PATHS, REGEX_YOUTUBE_URL, RESPONSE_STATUS };

@@ -1,6 +1,6 @@
 import { sendToast } from "./Toast";
 
-const showSpinner = (name: string) => {
+export const showSpinner = (name: string) => {
   if (!name) {
     sendToast("HTML Spinner id is required", "error");
     return;
@@ -43,11 +43,9 @@ const showSpinner = (name: string) => {
   spinnerContainer.style.alignSelf = "center";
 }
 
-const hideSpinner = (name: string) => {
+export const hideSpinner = (name: string) => {
   const spinnerContainer = document.getElementById("spinner-container" + "-" + name);
   if (spinnerContainer) {
     spinnerContainer.style.display = "none";
   }
 }
-
-export { showSpinner, hideSpinner };
