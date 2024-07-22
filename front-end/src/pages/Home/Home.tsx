@@ -1,38 +1,41 @@
 import { useEffect } from "react";
 
-import { defaultContext } from "../../utils/Constants";
-import { Context } from "../../utils/Types";
-import { sendToast } from "../../utils/Generic";
+import { _PATHS, DEFAULT_CONTEXT, RESPONSE_STATUS } from "../../common/Constants";
+import { isEmpty } from "../../common/utils/ObjUtils";
+import { sendToast } from "../../common/Toast";
+import { Context } from "../../common/Types";
 
 import "./Home.css";
 
-const Home = (context: Context = defaultContext): React.JSX.Element => {
+const Home = (passedContext: Context): React.JSX.Element => {
+  const context = isEmpty(passedContext) ? DEFAULT_CONTEXT : passedContext;
+
   useEffect(() => {
     if (!window.location.href.endsWith("/home")) {
       window.location.href = "/home";
       return;
     }
 
-    if (context.session_status === "initializing") {
+    if (context.session_status === DEFAULT_CONTEXT.session_status) {
       if (!context.genius_token) {
         sendToast(
           "Genius API token not found.\n"
             + "Lyrics fetch is disabled.",
-          "error",
+          RESPONSE_STATUS.ERROR,
           10
         );
         sendToast(
           "Add your Genius API token to your\n" +
             ".env file and restart the application\n" +
             "to enable lyrics fetch.",
-          "warning",
+          RESPONSE_STATUS.WARN,
           20
         );
       } else {
         sendToast(
           "Welcome to GTFR-CG!\n"
             + "Application started successfully.",
-          "success",
+          RESPONSE_STATUS.SUCCESS,
           5
         );
       }
@@ -46,12 +49,12 @@ const Home = (context: Context = defaultContext): React.JSX.Element => {
       <h1>Home</h1>
       <div className="navbar">
         <button type="button"
-          onClick={() => { window.location.href="{{ url_for('art-gen.renderArtworkGeneration') }}"; }}
+          onClick={() => { window.location.href = _PATHS.artworkGeneration; }}
         >
           <span className="right">Artwork Generation</span>
         </button>
         <button type="button"
-          onClick={() => { window.location.href="{{ url_for('lyrics.renderLyrics') }}"; }}
+          onClick={() => { window.location.href = _PATHS.lyrics; }}
         >
           <span className="right">Lyrics</span>
         </button>

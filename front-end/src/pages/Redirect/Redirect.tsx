@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { defaultContext } from "../../utils/Constants";
-import { Context } from "../../utils/Types";
+
+import { DEFAULT_CONTEXT, DEFAULT_EVENT_DURATION } from "../../common/Constants";
+import { isEmpty } from "../../common/utils/ObjUtils";
+import { Context } from "../../common/Types";
 
 import "./Redirect.css";
-import { isEmpty } from "../../utils/ObjUtils";
 
-const Redirect = (passedContext?: Context): React.JSX.Element => {
-  const context = !isEmpty(passedContext) ? passedContext : defaultContext;
-  const [countdown, setCountdown] = useState(5);
-  const [plural, setPlural] = useState("s");
+const Redirect = (passedContext: Context): React.JSX.Element => {
+  const context = isEmpty(passedContext) ? DEFAULT_CONTEXT : passedContext;
+  const [countdown, setCountdown] = useState(DEFAULT_EVENT_DURATION.SECONDS_TOAST);
+  const [plural, setPlural] = useState(DEFAULT_CONTEXT.plural);
 
   useEffect(() => {
     let secondsBeforeRedirect = countdown;
