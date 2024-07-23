@@ -17,12 +17,19 @@ export const DEFAULT_EVENT_DURATION = {
   MS_VERTICAL_SLIDE: 200,
 };
 
+export const RESPONSE: Record<string, Record<string, string>> = {
+  ERROR: {
+    LYRICS_NOT_FOUND: "Lyrics not found.",
+  },
+};
+
 export const RESPONSE_STATUS: Record<string, ResponseStatus> = {
   INFO: "info",
   SUCCESS: "success",
   WARN: "warn",
   ERROR: "error",
 };
+export const TOAST_TYPE = RESPONSE_STATUS;
 
 export const TITLE = {
   PREFIX: "GTFR-CG - ",

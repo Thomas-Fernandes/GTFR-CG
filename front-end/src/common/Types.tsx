@@ -1,3 +1,18 @@
+export type ApiResponse = {
+  status: string;
+  message: string;
+};
+
+type ItunesResult = {
+  artistName: string;
+  collectionName: string;
+  trackName: string;
+  artworkUrl100: string;
+};
+export type ItunesResponse = {
+  results: ItunesResult[];
+};
+
 export type Statistics = {
   dateFirstOperation: string;
   dateLastOperation: string;

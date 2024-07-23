@@ -12,7 +12,7 @@ const Redirect = (passedContext: Context): React.JSX.Element => {
   const [countdown, setCountdown] = useState(DEFAULT_EVENT_DURATION.SECONDS_TOAST);
   const [plural, setPlural] = useState(DEFAULT_CONTEXT.plural);
 
-  useTitle(TITLE.PREFIX + TITLE.LYRICS);
+  useTitle(TITLE.LYRICS);
 
   useEffect(() => {
     let secondsBeforeRedirect = countdown;

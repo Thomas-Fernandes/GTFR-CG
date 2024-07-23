@@ -1,6 +1,6 @@
-import { HttpMethod } from './Types';
+import { ApiResponse, HttpMethod } from './Types';
 
-const sendRequest = async (method: HttpMethod, url: string, body: object): Promise<object> => {
+const sendRequest = async (method: HttpMethod, url: string, body: object): Promise<ApiResponse> => {
   const response = await fetch(url, {
     method: method,
     headers: {

@@ -1,8 +1,10 @@
-import { useEffect } from "react";
+import { FormEvent, useEffect, useState } from "react";
 
-import { PATHS, ACCEPTED_IMG_EXTENSIONS, DEFAULT_CONTEXT, REGEX_YOUTUBE_URL, RESPONSE_STATUS, TITLE } from "../../common/Constants";
-import { showSpinner } from "../../common/Spinner";
-import { Context } from "../../common/Types";
+import { PATHS, ACCEPTED_IMG_EXTENSIONS, DEFAULT_CONTEXT, REGEX_YOUTUBE_URL, RESPONSE_STATUS, TITLE, TOAST_TYPE } from "../../common/Constants";
+import { sendRequest } from "../../common/Requests";
+import { hideSpinner, showSpinner } from "../../common/Spinner";
+import { sendToast } from "../../common/Toast";
+import { Context, ItunesResponse } from "../../common/Types";
 import useTitle from "../../common/UseTitle";
 import { isEmpty } from "../../common/utils/ObjUtils";
 
@@ -25,12 +27,12 @@ const getTitleWithAdjustedLength = (title: string): string => {
 const isValidYoutubeUrl = (url: string): boolean => {
     return REGEX_YOUTUBE_URL.some((pattern) => pattern.test(url));
 }
-/*
-const submitItunesSearchForm = (event) => {
+
+const submitItunesSearchForm = (event: FormEvent<HTMLInputElement>, {itunesResults, setItunesResults}: {itunesResults: JSX.Element, setItunesResults: React.Dispatch<React.SetStateAction<JSX.Element>>}) => {
   event.preventDefault();
 
-  const query = $("#query").val();
-  const country = $("#country").val();
+  const query = document.getElementById("query")?.innerText ?? "";
+  const country = document.getElementById("country")?.innerText ?? "";
 
   $.ajax({
     url: "https://itunes.apple.com/search",
@@ -41,10 +43,8 @@ const submitItunesSearchForm = (event) => {
       limit: 6
     },
     dataType: "jsonp",
-    success: function(data) {
+    success: (data: ItunesResponse) => {
       hideSpinner("artwork-generation_search-form");
-      const resultsDiv = $("#results");
-      resultsDiv.empty();
       if (data.results.length > 0) {
         data.results.forEach((result) => {
           if (result.artistName?.length > MAX_TITLE_LENGTH)
@@ -52,27 +52,33 @@ const submitItunesSearchForm = (event) => {
           if (result.collectionName?.length > MAX_TITLE_LENGTH)
             result.collectionName = getTitleWithAdjustedLength(result.collectionName);
           const highResImageUrl = result.artworkUrl100.replace("100x100", "3000x3000"); // itunes max image size is 3000x3000
-          const img = $("<img>").attr("src", highResImageUrl).addClass("result-image").attr("alt", result.collectionName || result.trackName);
-          const imgName = $("<p>").addClass("centered bold italic").text(`${result.artistName} - ${result.collectionName.replace(" - Single", "")}`);
-          const btn = $("<button>").text("Use this image").on("click", () => {
-            $.post("/artwork-generation/use-itunes-image", { url: highResImageUrl }, (response) => {
-              if (response.status === RESPONSE_STATUS.SUCCESS) {
-                window.location.href = "/processed-images";
-              } else {
-                sendToast(response.message, RESPONSE_STATUS.ERROR);
-              }
-            });
-          });
-          const resultItem = $("<div>").addClass("result-item").append(img).append(btn);
-          resultItem.append(img).append(imgName).append(btn);
-          resultsDiv.append(resultItem);
+          const resultItem =
+            <div className="result-item">
+            <img src={highResImageUrl} className="result-image" alt={result.collectionName || result.trackName} />;
+              <p className="centered bold italic">{result.artistName} - {result.collectionName.replace(" - Single", "")}</p>;
+              <button onClick={async () => {
+                const response = await sendRequest("POST", "/artwork-generation/use-itunes-image", { url: highResImageUrl });
+                if (response.status === RESPONSE_STATUS.SUCCESS) {
+                  sendToast(response.message, TOAST_TYPE.SUCCESS);
+                  // window.location.href = PATHS.processedImages;
+                } else {
+                  sendToast(response.message, TOAST_TYPE.ERROR);
+                }
+              }}>Use this image</button>;
+            </div>;
+          setItunesResults(
+            <div>
+              {itunesResults}
+              {resultItem}
+            </div>
+          );
         });
       } else {
-        sendToast("No results found.", RESPONSE_STATUS.WARN);
+        sendToast("No results found.", TOAST_TYPE.WARN);
       }
     },
-    error: (err) => {
-      sendToast(err, RESPONSE_STATUS.ERROR);
+    error: (err: string) => {
+      sendToast(err, TOAST_TYPE.ERROR);
     }
   });
 };
@@ -83,7 +89,7 @@ const submitFileUpload = (event) => {
 
   if (formFiles.length === 0) {
     hideSpinner("artwork-generation_file-upload");
-    sendToast("Please select an image file.", RESPONSE_STATUS.WARN);
+    sendToast("Please select an image file.", TOAST_TYPE.WARN);
   }
 
   const fileHasAcceptedExtension =
@@ -93,7 +99,7 @@ const submitFileUpload = (event) => {
     sendToast(
       "Please select a valid image file.\n" +
         "Accepted file extensions: " + ACCEPTED_IMG_EXTENSIONS.join(", ") + ".",
-      RESPONSE_STATUS.ERROR
+      TOAST_TYPE.ERROR
     );
     return;
   }
@@ -108,12 +114,12 @@ const submitFileUpload = (event) => {
       if (response.status === (RESPONSE_STATUS.SUCCESS)) {
         window.location.href = "/processed-images";
       } else {
-        sendToast(response.message, RESPONSE_STATUS.ERROR);
+        sendToast(response.message, TOAST_TYPE.ERROR);
       }
     },
     error: (err) => {
       hideSpinner("artwork-generation_file-upload");
-      sendToast(err, RESPONSE_STATUS.ERROR);
+      sendToast(err, TOAST_TYPE.ERROR);
     }
   });
 };
@@ -123,7 +129,7 @@ const submitYoutubeThumbnailUrl = (event) => {
     const url = $("#youtube_url").val().trim();
 
     if (!isValidYoutubeUrl(url)) {
-       sendToast("Please enter a valid URL", RESPONSE_STATUS.ERROR);
+       sendToast("Please enter a valid URL", TOAST_TYPE.ERROR);
        return;
     }
 
@@ -137,7 +143,7 @@ const submitYoutubeThumbnailUrl = (event) => {
       success: (data) => {
         if (data.status === "error") {
           hideSpinner("youtube-thumbnail-submit");
-          sendToast("An error occurred on the server.", RESPONSE_STATUS.ERROR);
+          sendToast("An error occurred on the server.", TOAST_TYPE.ERROR);
         } else {
           window.addEventListener("beforeunload", function () {
             showSpinner("youtube-thumbnail-submit");
@@ -147,15 +153,16 @@ const submitYoutubeThumbnailUrl = (event) => {
       },
       error: function() {
         hideSpinner("youtube-thumbnail-submit");
-        sendToast("An error occurred. Please try again.", RESPONSE_STATUS.ERROR);
+        sendToast("An error occurred. Please try again.", TOAST_TYPE.ERROR);
       }
     });
 };
-*/
+
 const ArtworkGeneration = (passedContext: Context): React.JSX.Element => {
   const context = isEmpty(passedContext) ? DEFAULT_CONTEXT : passedContext;
+  const [itunesResults, setItunesResults] = useState(<></>);
 
-  useTitle(TITLE.PREFIX + TITLE.ARTWORK_GENERATION);
+  useTitle(TITLE.ARTWORK_GENERATION);
 
   useEffect(() => {
 
@@ -186,7 +193,7 @@ const ArtworkGeneration = (passedContext: Context): React.JSX.Element => {
           </div>
         </div>
       </form>
-      <div id="results" className="result-container"></div>
+      <div id="results" className="result-container">{ itunesResults }</div>
 
       <h1>...or upload your image</h1>
       <form id="fileUpload" method="POST" action="/artwork-generation/use-local-image" encType="multipart/form-data">

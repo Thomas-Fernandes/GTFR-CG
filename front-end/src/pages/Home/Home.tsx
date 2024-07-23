@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-import { PATHS, DEFAULT_CONTEXT, RESPONSE_STATUS, TITLE } from "../../common/Constants";
+import { PATHS, DEFAULT_CONTEXT, TITLE, TOAST_TYPE } from "../../common/Constants";
 import { sendToast } from "../../common/Toast";
 import { Context } from "../../common/Types";
 import useTitle from "../../common/UseTitle";
@@ -11,7 +11,7 @@ import "./Home.css";
 const Home = (passedContext: Context): React.JSX.Element => {
   const context = isEmpty(passedContext) ? DEFAULT_CONTEXT : passedContext;
 
-  useTitle(TITLE.PREFIX + TITLE.HOME);
+  useTitle(TITLE.HOME);
 
   useEffect(() => {
     if (!window.location.href.endsWith("/home")) {
@@ -24,21 +24,21 @@ const Home = (passedContext: Context): React.JSX.Element => {
         sendToast(
           "Genius API token not found.\n"
             + "Lyrics fetch is disabled.",
-          RESPONSE_STATUS.ERROR,
+          TOAST_TYPE.ERROR,
           10
         );
         sendToast(
           "Add your Genius API token to your\n" +
             ".env file and restart the application\n" +
             "to enable lyrics fetch.",
-          RESPONSE_STATUS.WARN,
+          TOAST_TYPE.WARN,
           20
         );
       } else {
         sendToast(
           "Welcome to GTFR-CG!\n"
             + "Application started successfully.",
-          RESPONSE_STATUS.SUCCESS,
+          TOAST_TYPE.SUCCESS,
           5
         );
       }

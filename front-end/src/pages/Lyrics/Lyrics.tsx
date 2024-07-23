@@ -1,32 +1,26 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from "react";
 
-import { PATHS, DEFAULT_CONTEXT, TITLE } from '../../common/Constants';
-import { showSpinner } from '../../common/Spinner';
-import { Context } from '../../common/Types';
-import useTitle from '../../common/UseTitle';
-import { isEmpty } from '../../common/utils/ObjUtils';
+import { PATHS, DEFAULT_CONTEXT, TITLE, RESPONSE, TOAST_TYPE } from "../../common/Constants";
+import { showSpinner } from "../../common/Spinner";
+import { sendToast } from "../../common/Toast";
+import { Context } from "../../common/Types";
+import useTitle from "../../common/UseTitle";
+import { isEmpty } from "../../common/utils/ObjUtils";
 
-import './Lyrics.css';
-
-// const ErrorMsg = Object.freeze({
-//   LYRICS_NOT_FOUND: "Lyrics not found.",
-// });
-
-// $(document).ready(function() {
-//   if ($("textarea").val() === ErrorMsg.LYRICS_NOT_FOUND) {
-//       sendToast(ErrorMsg.LYRICS_NOT_FOUND, ResponseStatus.WARN);
-//       $("textarea").val("");
-//   }
-// });
+import "./Lyrics.css";
 
 const Lyrics = (passedContext: Context): React.JSX.Element => {
   const context = isEmpty(passedContext) ? DEFAULT_CONTEXT : passedContext;
+  const [lyrics, setLyrics] = useState("");
 
-  useTitle(TITLE.PREFIX + TITLE.LYRICS);
+  useTitle(TITLE.LYRICS);
 
   useEffect(() => {
-
-  }, [context]);
+    if (lyrics === RESPONSE.ERROR.LYRICS_NOT_FOUND) {
+      sendToast(RESPONSE.ERROR.LYRICS_NOT_FOUND, TOAST_TYPE.WARN);
+      setLyrics("");
+    }
+  }, [context, lyrics]);
 
   return (
     <>
@@ -42,15 +36,15 @@ const Lyrics = (passedContext: Context): React.JSX.Element => {
           <input type="text" id="artist" name="artist" placeholder="Enter artist name" required />
           <input type="text" id="song"   name="song"   placeholder="Enter song name"   required />
           <div className="action-button" id="lyrics_search">
-            <input type="submit" value="Search Lyrics" className="action-button search-button" onClick={() => showSpinner('lyrics_search') } />
+            <input type="submit" value="Search Lyrics" className="action-button search-button" onClick={() => showSpinner("lyrics_search") } />
           </div>
         </div>
       </form>
       <form method="POST" className="lyrics-form flexbox">
-        <textarea name="lyrics" rows={20} cols={80} placeholder="Lyrics will appear here...">{ context.lyrics }</textarea>
+        <textarea name="lyrics" rows={20} cols={80} placeholder="Lyrics will appear here...">{ lyrics }</textarea>
         <br />
         <div className="action-button" id="lyrics_save">
-          <input type="submit" value="Save Lyrics" className="action-button save-button" onClick={() => showSpinner('lyrics_save') } />
+          <input type="submit" value="Save Lyrics" className="action-button save-button" onClick={() => showSpinner("lyrics_save") } />
         </div>
       </form>
     </>

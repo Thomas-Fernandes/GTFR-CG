@@ -1,11 +1,11 @@
-import { useEffect } from 'react';
+import { useEffect } from "react";
 
-import { PATHS, DEFAULT_CONTEXT, TITLE } from '../../common/Constants';
-import { Context } from '../../common/Types';
-import useTitle from '../../common/UseTitle';
-import { isEmpty } from '../../common/utils/ObjUtils';
+import { PATHS, DEFAULT_CONTEXT, TITLE } from "../../common/Constants";
+import { Context } from "../../common/Types";
+import useTitle from "../../common/UseTitle";
+import { isEmpty } from "../../common/utils/ObjUtils";
 
-import './ProcessedImages.css';
+import "./ProcessedImages.css";
 
 // allow user to click on the image to select it for download
 // $("a").click(() => {
@@ -22,7 +22,7 @@ const submitDownloadThumbnail = (form?: HTMLFormElement) => {
 const ProcessedImages = (passedContext: Context): React.JSX.Element => {
   const context = isEmpty(passedContext) ? DEFAULT_CONTEXT : passedContext;
 
-  useTitle(TITLE.PREFIX + TITLE.PROCESSED_IMAGES);
+  useTitle(TITLE.PROCESSED_IMAGES);
 
   useEffect(() => {
 
