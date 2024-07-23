@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
 
-import { _PATHS, DEFAULT_CONTEXT } from '../../common/Constants';
+import { PATHS, DEFAULT_CONTEXT, TITLE } from '../../common/Constants';
 import { Context } from '../../common/Types';
+import useTitle from '../../common/UseTitle';
 import { isEmpty } from '../../common/utils/ObjUtils';
 
 import './ProcessedImages.css';
@@ -21,6 +22,8 @@ const submitDownloadThumbnail = (form?: HTMLFormElement) => {
 const ProcessedImages = (passedContext: Context): React.JSX.Element => {
   const context = isEmpty(passedContext) ? DEFAULT_CONTEXT : passedContext;
 
+  useTitle(TITLE.PREFIX + TITLE.PROCESSED_IMAGES);
+
   useEffect(() => {
 
   }, [context]);
@@ -29,8 +32,8 @@ const ProcessedImages = (passedContext: Context): React.JSX.Element => {
   <>
     <span className="top-bot-spacer"></span>
     <div className="navbar">
-      <button type="button" onClick={() => window.location.href = _PATHS.artworkGeneration}><span className="left">Artwork Generation</span></button>
-      <button type="button" onClick={() => window.location.href = _PATHS.lyrics}><span className="right">Lyrics</span></button>
+      <button type="button" onClick={() => window.location.href = PATHS.artworkGeneration}><span className="left">Artwork Generation</span></button>
+      <button type="button" onClick={() => window.location.href = PATHS.lyrics}><span className="right">Lyrics</span></button>
     </div>
     <h1>Processed Artworks</h1>
     <div className="image-panels">

@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
 
-import { _PATHS, DEFAULT_CONTEXT } from '../../common/Constants';
+import { PATHS, DEFAULT_CONTEXT, TITLE } from '../../common/Constants';
 import { showSpinner } from '../../common/Spinner';
 import { Context } from '../../common/Types';
+import useTitle from '../../common/UseTitle';
 import { isEmpty } from '../../common/utils/ObjUtils';
 
 import './Lyrics.css';
@@ -21,6 +22,8 @@ import './Lyrics.css';
 const Lyrics = (passedContext: Context): React.JSX.Element => {
   const context = isEmpty(passedContext) ? DEFAULT_CONTEXT : passedContext;
 
+  useTitle(TITLE.PREFIX + TITLE.LYRICS);
+
   useEffect(() => {
 
   }, [context]);
@@ -30,8 +33,8 @@ const Lyrics = (passedContext: Context): React.JSX.Element => {
       <div id="toast-container"></div>
       <span className="top-bot-spacer"></span>
       <div className="navbar">
-        <button type="button" onClick={() => window.location.href = _PATHS.home }><span className="left">Home</span></button>
-        <button type="button" onClick={() => window.location.href = _PATHS.artworkGeneration }><span className="left">Artwork Generation</span></button>
+        <button type="button" onClick={() => window.location.href = PATHS.home }><span className="left">Home</span></button>
+        <button type="button" onClick={() => window.location.href = PATHS.artworkGeneration }><span className="left">Artwork Generation</span></button>
       </div>
       <h1>Lyrics</h1>
       <form method="POST" className="search-form flexbox flex-row">

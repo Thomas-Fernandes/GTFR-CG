@@ -1,14 +1,17 @@
 import { useEffect } from "react";
 
-import { _PATHS, DEFAULT_CONTEXT, RESPONSE_STATUS } from "../../common/Constants";
+import { PATHS, DEFAULT_CONTEXT, RESPONSE_STATUS, TITLE } from "../../common/Constants";
 import { sendToast } from "../../common/Toast";
 import { Context } from "../../common/Types";
+import useTitle from "../../common/UseTitle";
 import { isEmpty } from "../../common/utils/ObjUtils";
 
 import "./Home.css";
 
 const Home = (passedContext: Context): React.JSX.Element => {
   const context = isEmpty(passedContext) ? DEFAULT_CONTEXT : passedContext;
+
+  useTitle(TITLE.PREFIX + TITLE.HOME);
 
   useEffect(() => {
     if (!window.location.href.endsWith("/home")) {
@@ -49,12 +52,12 @@ const Home = (passedContext: Context): React.JSX.Element => {
       <h1>Home</h1>
       <div className="navbar">
         <button type="button"
-          onClick={() => { window.location.href = _PATHS.artworkGeneration; }}
+          onClick={() => { window.location.href = PATHS.artworkGeneration; }}
         >
           <span className="right">Artwork Generation</span>
         </button>
         <button type="button"
-          onClick={() => { window.location.href = _PATHS.lyrics; }}
+          onClick={() => { window.location.href = PATHS.lyrics; }}
         >
           <span className="right">Lyrics</span>
         </button>

@@ -24,7 +24,16 @@ export const RESPONSE_STATUS: Record<string, ResponseStatus> = {
   ERROR: "error",
 };
 
-export const _PATHS = {
+export const TITLE = {
+  PREFIX: "GTFR-CG - ",
+  HOME: "Home",
+  LYRICS: "Lyrics",
+  PROCESSED_IMAGES: "Processed Images",
+  ARTWORK_GENERATION: "Artwork Generation",
+  REDIRECT: "Redirect",
+};
+
+export const PATHS = {
   home: "/home",
   redirect: "/redirect",
   artworkGeneration: "/artwork-generation",
@@ -45,6 +54,6 @@ export const DEFAULT_CONTEXT: Context = {
 
   // Redirect
   error_text: "",
-  redirect_to: _PATHS.home,
+  redirect_to: PATHS.home,
   plural: "s",
 };

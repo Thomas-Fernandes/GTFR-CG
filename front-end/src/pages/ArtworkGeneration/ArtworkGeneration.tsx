@@ -1,8 +1,9 @@
 import { useEffect } from "react";
 
-import { _PATHS, ACCEPTED_IMG_EXTENSIONS, DEFAULT_CONTEXT, REGEX_YOUTUBE_URL, RESPONSE_STATUS } from "../../common/Constants";
+import { PATHS, ACCEPTED_IMG_EXTENSIONS, DEFAULT_CONTEXT, REGEX_YOUTUBE_URL, RESPONSE_STATUS, TITLE } from "../../common/Constants";
 import { showSpinner } from "../../common/Spinner";
 import { Context } from "../../common/Types";
+import useTitle from "../../common/UseTitle";
 import { isEmpty } from "../../common/utils/ObjUtils";
 
 import "./ArtworkGeneration.css";
@@ -154,6 +155,8 @@ const submitYoutubeThumbnailUrl = (event) => {
 const ArtworkGeneration = (passedContext: Context): React.JSX.Element => {
   const context = isEmpty(passedContext) ? DEFAULT_CONTEXT : passedContext;
 
+  useTitle(TITLE.PREFIX + TITLE.ARTWORK_GENERATION);
+
   useEffect(() => {
 
   }, [context]);
@@ -164,7 +167,7 @@ const ArtworkGeneration = (passedContext: Context): React.JSX.Element => {
       <span className="top-bot-spacer"></span>
       <div className="navbar">
         <button type="button"
-          onClick={() => window.location.href = _PATHS.home }
+          onClick={() => window.location.href = PATHS.home }
         >
           <span className="left">Home</span>
         </button>
