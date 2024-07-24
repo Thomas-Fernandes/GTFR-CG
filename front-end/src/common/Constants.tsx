@@ -23,6 +23,9 @@ export const ARTWORK_GENERATION = {
 };
 
 export const RESPONSE: Record<string, Record<string, string>> = {
+  WARN: {
+    NO_RESULTS_FOUND: "No results found.",
+  },
   ERROR: {
     LYRICS_NOT_FOUND: "Lyrics not found.",
   },
@@ -35,6 +38,11 @@ export const RESPONSE_STATUS: Record<string, ResponseStatus> = {
   ERROR: "error",
 };
 export const TOAST_TYPE = RESPONSE_STATUS;
+export const SPINNER_ID = {
+  ITUNES: "artwork-generation_search-form",
+  FILE_UPLOAD: "artwork-generation_file-upload",
+  YOUTUBE_URL: "artwork-generation_youtube-url",
+}
 
 export const TITLE = {
   PREFIX: "GTFR-CG - ",
@@ -69,3 +77,5 @@ export const DEFAULT_CONTEXT: Context = {
   redirect_to: PATHS.home,
   plural: "s",
 };
+
+export const BACKEND_URL = "http://localhost:8000";

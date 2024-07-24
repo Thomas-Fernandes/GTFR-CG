@@ -1,10 +1,10 @@
 import { FormEvent, useEffect, useState } from "react";
 
-import { PATHS, ACCEPTED_IMG_EXTENSIONS, DEFAULT_CONTEXT, REGEX_YOUTUBE_URL, RESPONSE_STATUS, TITLE, TOAST_TYPE, ARTWORK_GENERATION } from "../../common/Constants";
+import { PATHS, ACCEPTED_IMG_EXTENSIONS, DEFAULT_CONTEXT, REGEX_YOUTUBE_URL, RESPONSE_STATUS, TITLE, TOAST_TYPE, ARTWORK_GENERATION, RESPONSE, SPINNER_ID } from "../../common/Constants";
 import { objectToQueryString, sendRequest } from "../../common/Requests";
 import { hideSpinner, showSpinner } from "../../common/Spinner";
 import { sendToast } from "../../common/Toast";
-import { ApiResponse, Context, ItunesQuery, ItunesResponse, ItunesResult, UseStateSetter } from "../../common/Types";
+import { ApiResponse, Context, ItunesQuery, ItunesResponse, ItunesResult, UseStateSetter, YoutubeQuery } from "../../common/Types";
 import useTitle from "../../common/UseTitle";
 import { isEmpty } from "../../common/utils/ObjUtils";
 
@@ -25,10 +25,10 @@ const isValidYoutubeUrl = (url: string): boolean => {
     return REGEX_YOUTUBE_URL.some((pattern) => pattern.test(url));
 }
 
-const submitItunesSearchForm = async (event: FormEvent<HTMLInputElement>, body: ItunesQuery, setItunesResults: UseStateSetter<Array<ItunesResult>>) => {
+const handleSubmitItunesSearch = async (event: FormEvent<HTMLInputElement>, body: ItunesQuery, setItunesResults: UseStateSetter<Array<ItunesResult>>) => {
   event.preventDefault();
 
-  showSpinner("artwork-generation_search-form");
+  showSpinner(SPINNER_ID.ITUNES);
 
   const data = {
     term: body.term,
@@ -40,7 +40,7 @@ const submitItunesSearchForm = async (event: FormEvent<HTMLInputElement>, body: 
   const resultItems: Array<ItunesResult> = [];
 
   sendRequest("POST", "https://itunes.apple.com/search" + queryString).then((result: ItunesResponse) => {
-    hideSpinner("artwork-generation_search-form");
+    hideSpinner(SPINNER_ID.ITUNES);
     if (result.resultCount > 0) {
       result.results.forEach((result) => {
         if (result.artistName?.length > ARTWORK_GENERATION.MAX_TITLE_LENGTH)
@@ -56,17 +56,16 @@ const submitItunesSearchForm = async (event: FormEvent<HTMLInputElement>, body: 
       });
       setItunesResults(resultItems);
     } else {
-      sendToast("No results found.", TOAST_TYPE.WARN);
+      sendToast(RESPONSE.WARN.NO_RESULTS_FOUND, TOAST_TYPE.WARN);
     }
   }).catch((error: ApiResponse) => {
-    hideSpinner("artwork-generation_search-form");
-    console.error(error.message);
-    sendToast(error.message, TOAST_TYPE.ERROR);
     setItunesResults(resultItems);
+    hideSpinner(SPINNER_ID.ITUNES);
+    sendToast(error.message, TOAST_TYPE.ERROR);
   });
 };
 
-const submitFileUpload = (event) => {
+const handleSubmitFileUpload = async (event: FormEvent<HTMLInputElement>) => {
   event.preventDefault();
   const formFiles = $("#file")[0].files;
 
@@ -107,16 +106,19 @@ const submitFileUpload = (event) => {
   });
 };
 
-const submitYoutubeThumbnailUrl = (event: FormEvent<HTMLInputElement>) => {
+const handleSubmitYoutubeUrl = async (event: FormEvent<HTMLInputElement>, body: YoutubeQuery) => {
     event.preventDefault();
-    const url = $("#youtube_url").val().trim();
 
-    if (!isValidYoutubeUrl(url)) {
+    if (!isValidYoutubeUrl(body.url)) {
        sendToast("Please enter a valid URL", TOAST_TYPE.ERROR);
        return;
     }
 
-    showSpinner("youtube-thumbnail-submit");
+    showSpinner(SPINNER_ID.YOUTUBE_URL);
+
+    const data = {
+      url: body.url,
+    };
 
     $.ajax({
       url: "/artwork-generation/use-youtube-thumbnail",
@@ -143,10 +145,18 @@ const submitYoutubeThumbnailUrl = (event: FormEvent<HTMLInputElement>) => {
 
 const ArtworkGeneration = (passedContext: Context): React.JSX.Element => {
   const context = isEmpty(passedContext) ? DEFAULT_CONTEXT : passedContext;
+
+  // iTunes search
   const [term, setTerm] = useState("");
   const [country, setCountry] = useState("fr");
-  const [includeCenterArtwork, setIncludeCenterArtwork] = useState(true);
   const [itunesResults, setItunesResults] = useState([] as Array<ItunesResult>);
+
+  // File upload
+  const [file, setFile] = useState<File>();
+  const [includeCenterArtwork, setIncludeCenterArtwork] = useState(true);
+
+  // YouTube thumbnail
+  const [youtubeUrl, setYoutubeUrl] = useState("");
 
   useTitle(TITLE.ARTWORK_GENERATION);
 
@@ -166,7 +176,7 @@ const ArtworkGeneration = (passedContext: Context): React.JSX.Element => {
         </button>
       </div>
       <h1>Search for cover art on iTunes</h1>
-      <form id="iTunesSearchForm">
+      <form>
         <div className="flexbox">
           <input type="text" name="query" id="query" placeholder="Search on iTunes" onChange={(e) => setTerm(e.target.value)} />
           <select name="country" id="country" aria-label="Country" defaultValue="fr" onChange={(e) => setCountry(e.target.value)}>
@@ -174,16 +184,17 @@ const ArtworkGeneration = (passedContext: Context): React.JSX.Element => {
             <option value="us">United States</option>
             <option value="nz">New Zealand</option>
           </select>
-          <div className="action-button" id="artwork-generation_search-form">
+          <div className="action-button" id={SPINNER_ID.ITUNES}>
             <input
-              type="submit"
-              value="SEARCH"
-              className="action-button"
-              onClick={(e) => submitItunesSearchForm(e, {term: term, country: country}, setItunesResults)}
+              type="submit" className="action-button"
+              value="SEARCH" onClick={(e) => handleSubmitItunesSearch(e, {term: term, country: country}, setItunesResults)}
             />
           </div>
         </div>
       </form>
+      { itunesResults.length > 0 &&
+        <button className="warn minimal centered" onClick={() => setItunesResults([])}>Clear results</button>
+      }
       <div id="results" className="result-container">
         { itunesResults.map((item, key) => {
           const highResImageUrl = item.artworkUrl100.replace("100x100", "3000x3000"); // itunes max image size is 3000x3000;
@@ -206,33 +217,35 @@ const ArtworkGeneration = (passedContext: Context): React.JSX.Element => {
       </div>
 
       <h1>...or upload your image</h1>
-      <form id="fileUpload" method="POST" action="/artwork-generation/use-local-image" encType="multipart/form-data">
+      <form action="/artwork-generation/use-local-image" encType="multipart/form-data">
         <div className="flexbox">
-          <input type="file" name="file" id="file" className="file" />
+          <input type="file" name="file" id="file" className="file"
+            onChange={(e) => setFile(e.target.files ? e.target.files[0] : undefined)}
+          />
           <label className="checkbox" htmlFor="include_center_artwork">
             <input
-              type="checkbox"
-              name="include_center_artwork"
-              id="include_center_artwork"
-              defaultChecked
+              type="checkbox" name="include_center_artwork" id="include_center_artwork" defaultChecked
               onChange={(e) => setIncludeCenterArtwork(e.target.checked)}
             />
             <p className="checkbox-label italic">Include center artwork</p>
           </label>
-          <div className="action-button" id="artwork-generation_file-upload">
-            <input type="submit" value="SEARCH" className="action-button" onClick={() => showSpinner("artwork-generation_file-upload")} />
+          <div className="action-button" id={SPINNER_ID.FILE_UPLOAD}>
+            <input type="submit" value="SEARCH" className="action-button"
+              onClick={() => showSpinner(SPINNER_ID.FILE_UPLOAD)}
+            />
           </div>
         </div>
       </form>
       <span className="top-bot-spacer"></span>
 
       <h1>...or use a YouTube thumbnail</h1>
-      <form id="youtubeThumbnailForm" method="POST" action="/artwork-generation/use-youtube-thumbnail">
+      <form action="/artwork-generation/use-youtube-thumbnail">
         <div className="flexbox">
-          <input type="text" name="url" id="youtube_url" placeholder="Paste YouTube URL here" />
-          <div className="action-button" id="youtube-thumbnail-submit">
-            <input type="submit" value="SEARCH" className="action-button" onClick={ () => showSpinner("youtube-thumbnail-submit") } />
-            <div id="youtube-thumbnail-spinner" className="spinner"></div>
+          <input type="text" name="url" id="youtube_url" placeholder="Paste YouTube URL here" onChange={(e) => setYoutubeUrl(e.target.value)} />
+          <div className="action-button" id={SPINNER_ID.YOUTUBE_URL}>
+            <input type="submit" value="SEARCH" className="action-button"
+              onClick={() => showSpinner(SPINNER_ID.YOUTUBE_URL)}
+            />
           </div>
         </div>
       </form>

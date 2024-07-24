@@ -2,12 +2,30 @@ form {
     input {
         padding: 1.5rem;
         margin: 1.5rem 0;
-        border: 2px solid #ddd;
+        border: 2px solid #dddddd;
 
         &.file {
             width: 75%;
             margin-bottom: 1%;
         }
+    }
+}
+
+.warn.minimal.centered {
+    background-color: #8fbc8f;
+
+    margin-bottom: 2%;
+    width: 180px;
+    font-size: 14px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+
+    &:hover {
+        cursor: pointer;
+        background-color: #0056b3;
     }
 }
 
@@ -34,7 +52,7 @@ form {
             max-width: 200px;
             max-height: 200px;
 
-            border: 1px solid #ddd;
+            border: 1px solid #dddddd;
             border-radius: 4px;
 
             padding: 5px;

@@ -17,6 +17,9 @@ export type ItunesResponse = {
   results: ItunesResult[];
 };
 
+export type YoutubeQuery = {
+  url: string;
+};
 export type ItunesQuery = {
   term: string;
   entity?: string;

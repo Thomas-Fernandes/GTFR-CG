@@ -15,6 +15,8 @@ export const sendToast = (
   type: ResponseStatus = RESPONSE_STATUS.ERROR,
   duration: number = DEFAULT_EVENT_DURATION.SECONDS_TOAST
 ) => {
+  console.error(`Toast: ${type} - ${message}`);
+
   const toast = document.createElement("div");
   toast.className = "toast " + type.trim().toLowerCase();
   toast.innerHTML = convertToHtmlMessage(message);
