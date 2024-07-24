@@ -25,7 +25,7 @@ export const showSpinner = (name: string) => {
     spinner.classList.add("spinner");
 
     const favicon = document.createElement("img");
-    favicon.src = "/static/favicon.ico";
+    favicon.src = "/favicon.ico";
     favicon.alt = "favicon";
     spinner.appendChild(favicon);
 

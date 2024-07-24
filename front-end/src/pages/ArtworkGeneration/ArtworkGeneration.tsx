@@ -1,26 +1,23 @@
 import { FormEvent, useEffect, useState } from "react";
 
-import { PATHS, ACCEPTED_IMG_EXTENSIONS, DEFAULT_CONTEXT, REGEX_YOUTUBE_URL, RESPONSE_STATUS, TITLE, TOAST_TYPE } from "../../common/Constants";
-import { sendRequest } from "../../common/Requests";
+import { PATHS, ACCEPTED_IMG_EXTENSIONS, DEFAULT_CONTEXT, REGEX_YOUTUBE_URL, RESPONSE_STATUS, TITLE, TOAST_TYPE, ARTWORK_GENERATION } from "../../common/Constants";
+import { objectToQueryString, sendRequest } from "../../common/Requests";
 import { hideSpinner, showSpinner } from "../../common/Spinner";
 import { sendToast } from "../../common/Toast";
-import { Context, ItunesResponse } from "../../common/Types";
+import { ApiResponse, Context, ItunesQuery, ItunesResponse, ItunesResult, UseStateSetter } from "../../common/Types";
 import useTitle from "../../common/UseTitle";
 import { isEmpty } from "../../common/utils/ObjUtils";
 
 import "./ArtworkGeneration.css";
 
-const MAX_TITLE_LENGTH = 42;
-const MAX_CROP_LENGTH = 12;
-
 const getTitleWithAdjustedLength = (title: string): string => {
-  title = title.slice(0, MAX_TITLE_LENGTH - 3);
+  title = title.slice(0, ARTWORK_GENERATION.MAX_TITLE_LENGTH - 3);
 
   // find the first space before the max length to cut the string there
-  let end = title[title.length - 1].endsWith(" ") ? title.length - 1 : title.lastIndexOf(" ", MAX_TITLE_LENGTH);
+  let end = title[title.length - 1].endsWith(" ") ? title.length - 1 : title.lastIndexOf(" ", ARTWORK_GENERATION.MAX_TITLE_LENGTH);
 
   // if the space-determined crop is too intense, just cut the string at the max length
-  end = MAX_TITLE_LENGTH - end > MAX_CROP_LENGTH ? title.length : end;
+  end = ARTWORK_GENERATION.MAX_TITLE_LENGTH - end > ARTWORK_GENERATION.MAX_CROP_LENGTH ? title.length : end;
   return title.slice(0, end) + "...";
 };
 
@@ -28,58 +25,44 @@ const isValidYoutubeUrl = (url: string): boolean => {
     return REGEX_YOUTUBE_URL.some((pattern) => pattern.test(url));
 }
 
-const submitItunesSearchForm = (event: FormEvent<HTMLInputElement>, {itunesResults, setItunesResults}: {itunesResults: JSX.Element, setItunesResults: React.Dispatch<React.SetStateAction<JSX.Element>>}) => {
+const submitItunesSearchForm = async (event: FormEvent<HTMLInputElement>, body: ItunesQuery, setItunesResults: UseStateSetter<Array<ItunesResult>>) => {
   event.preventDefault();
 
-  const query = document.getElementById("query")?.innerText ?? "";
-  const country = document.getElementById("country")?.innerText ?? "";
+  showSpinner("artwork-generation_search-form");
 
-  $.ajax({
-    url: "https://itunes.apple.com/search",
-    data: {
-      term: query,
-      entity: "album", // album by default, but can be "song", "movie", "tv-show"...
-      country: country,
-      limit: 6
-    },
-    dataType: "jsonp",
-    success: (data: ItunesResponse) => {
-      hideSpinner("artwork-generation_search-form");
-      if (data.results.length > 0) {
-        data.results.forEach((result) => {
-          if (result.artistName?.length > MAX_TITLE_LENGTH)
-            result.artistName = getTitleWithAdjustedLength(result.artistName);
-          if (result.collectionName?.length > MAX_TITLE_LENGTH)
-            result.collectionName = getTitleWithAdjustedLength(result.collectionName);
-          const highResImageUrl = result.artworkUrl100.replace("100x100", "3000x3000"); // itunes max image size is 3000x3000
-          const resultItem =
-            <div className="result-item">
-            <img src={highResImageUrl} className="result-image" alt={result.collectionName || result.trackName} />;
-              <p className="centered bold italic">{result.artistName} - {result.collectionName.replace(" - Single", "")}</p>;
-              <button onClick={async () => {
-                const response = await sendRequest("POST", "/artwork-generation/use-itunes-image", { url: highResImageUrl });
-                if (response.status === RESPONSE_STATUS.SUCCESS) {
-                  sendToast(response.message, TOAST_TYPE.SUCCESS);
-                  // window.location.href = PATHS.processedImages;
-                } else {
-                  sendToast(response.message, TOAST_TYPE.ERROR);
-                }
-              }}>Use this image</button>;
-            </div>;
-          setItunesResults(
-            <div>
-              {itunesResults}
-              {resultItem}
-            </div>
-          );
+  const data = {
+    term: body.term,
+    entity: body.entity ?? "album", // album by default, but can be "song", "movie", "tv-show"...
+    country: body.country,
+    limit: body.limit ?? 6,
+  };
+  const queryString = objectToQueryString(data);
+  const resultItems: Array<ItunesResult> = [];
+
+  sendRequest("POST", "https://itunes.apple.com/search" + queryString).then((result: ItunesResponse) => {
+    hideSpinner("artwork-generation_search-form");
+    if (result.resultCount > 0) {
+      result.results.forEach((result) => {
+        if (result.artistName?.length > ARTWORK_GENERATION.MAX_TITLE_LENGTH)
+          result.artistName = getTitleWithAdjustedLength(result.artistName);
+        if (result.collectionName?.length > ARTWORK_GENERATION.MAX_TITLE_LENGTH)
+          result.collectionName = getTitleWithAdjustedLength(result.collectionName);
+        resultItems.push({
+          artistName: result.artistName,
+          collectionName: result.collectionName,
+          trackName: result.trackName,
+          artworkUrl100: result.artworkUrl100.replace("100x100", "3000x3000"), // itunes max image size is 3000x3000
         });
-      } else {
-        sendToast("No results found.", TOAST_TYPE.WARN);
-      }
-    },
-    error: (err: string) => {
-      sendToast(err, TOAST_TYPE.ERROR);
+      });
+      setItunesResults(resultItems);
+    } else {
+      sendToast("No results found.", TOAST_TYPE.WARN);
     }
+  }).catch((error: ApiResponse) => {
+    hideSpinner("artwork-generation_search-form");
+    console.error(error.message);
+    sendToast(error.message, TOAST_TYPE.ERROR);
+    setItunesResults(resultItems);
   });
 };
 
@@ -110,21 +93,21 @@ const submitFileUpload = (event) => {
     data: new FormData($("#fileUpload")[0]),
     processData: false,
     contentType: false,
-    success: (response) => {
+    success: (response: ApiResponse) => {
       if (response.status === (RESPONSE_STATUS.SUCCESS)) {
         window.location.href = "/processed-images";
       } else {
         sendToast(response.message, TOAST_TYPE.ERROR);
       }
     },
-    error: (err) => {
+    error: (err: string) => {
       hideSpinner("artwork-generation_file-upload");
       sendToast(err, TOAST_TYPE.ERROR);
     }
   });
 };
 
-const submitYoutubeThumbnailUrl = (event) => {
+const submitYoutubeThumbnailUrl = (event: FormEvent<HTMLInputElement>) => {
     event.preventDefault();
     const url = $("#youtube_url").val().trim();
 
@@ -160,7 +143,10 @@ const submitYoutubeThumbnailUrl = (event) => {
 
 const ArtworkGeneration = (passedContext: Context): React.JSX.Element => {
   const context = isEmpty(passedContext) ? DEFAULT_CONTEXT : passedContext;
-  const [itunesResults, setItunesResults] = useState(<></>);
+  const [term, setTerm] = useState("");
+  const [country, setCountry] = useState("fr");
+  const [includeCenterArtwork, setIncludeCenterArtwork] = useState(true);
+  const [itunesResults, setItunesResults] = useState([] as Array<ItunesResult>);
 
   useTitle(TITLE.ARTWORK_GENERATION);
 
@@ -180,31 +166,61 @@ const ArtworkGeneration = (passedContext: Context): React.JSX.Element => {
         </button>
       </div>
       <h1>Search for cover art on iTunes</h1>
-      <form id="iTunesSearchForm" method="POST">
+      <form id="iTunesSearchForm">
         <div className="flexbox">
-          <input type="text" name="query" id="query" placeholder="Search on iTunes" />
-          <select name="country" id="country" aria-label="Country">
-            <option value="fr" selected>France</option>
+          <input type="text" name="query" id="query" placeholder="Search on iTunes" onChange={(e) => setTerm(e.target.value)} />
+          <select name="country" id="country" aria-label="Country" defaultValue="fr" onChange={(e) => setCountry(e.target.value)}>
+            <option value="fr">France</option>
             <option value="us">United States</option>
             <option value="nz">New Zealand</option>
           </select>
           <div className="action-button" id="artwork-generation_search-form">
-            <input type="submit" value="SEARCH" className="action-button" onClick={ () => showSpinner("artwork-generation_search-form") } />
+            <input
+              type="submit"
+              value="SEARCH"
+              className="action-button"
+              onClick={(e) => submitItunesSearchForm(e, {term: term, country: country}, setItunesResults)}
+            />
           </div>
         </div>
       </form>
-      <div id="results" className="result-container">{ itunesResults }</div>
+      <div id="results" className="result-container">
+        { itunesResults.map((item, key) => {
+          const highResImageUrl = item.artworkUrl100.replace("100x100", "3000x3000"); // itunes max image size is 3000x3000;
+          return (
+            <div className="result-item" key={"result" + key.toString()}>
+              <img src={highResImageUrl} className="result-image" alt={item.collectionName || item.trackName} />
+              <p className="centered bold italic">{item.artistName} - {item.collectionName.replace(" - Single", "")}</p>
+              <button onClick={async () => {
+                const response: ApiResponse = await sendRequest("POST", "/artwork-generation/use-itunes-image", { url: highResImageUrl });
+                if (response.status === RESPONSE_STATUS.SUCCESS) {
+                  sendToast(response.message, TOAST_TYPE.SUCCESS);
+                  // window.location.href = PATHS.processedImages;
+                } else {
+                  sendToast(response.message, TOAST_TYPE.ERROR);
+                }
+              }}>Use this image</button>
+            </div>
+          )
+        })}
+      </div>
 
       <h1>...or upload your image</h1>
       <form id="fileUpload" method="POST" action="/artwork-generation/use-local-image" encType="multipart/form-data">
         <div className="flexbox">
           <input type="file" name="file" id="file" className="file" />
           <label className="checkbox" htmlFor="include_center_artwork">
-            <input type="checkbox" name="include_center_artwork" id="include_center_artwork" checked />
+            <input
+              type="checkbox"
+              name="include_center_artwork"
+              id="include_center_artwork"
+              defaultChecked
+              onChange={(e) => setIncludeCenterArtwork(e.target.checked)}
+            />
             <p className="checkbox-label italic">Include center artwork</p>
           </label>
           <div className="action-button" id="artwork-generation_file-upload">
-            <input type="submit" value="SEARCH" className="action-button" onClick={ () => showSpinner("artwork-generation_file-upload") } />
+            <input type="submit" value="SEARCH" className="action-button" onClick={() => showSpinner("artwork-generation_file-upload")} />
           </div>
         </div>
       </form>

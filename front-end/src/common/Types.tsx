@@ -1,16 +1,27 @@
+export type UseStateSetter<T> = React.Dispatch<React.SetStateAction<T>>;
+
 export type ApiResponse = {
   status: string;
   message: string;
+  data: object;
 };
 
-type ItunesResult = {
+export type ItunesResult = {
   artistName: string;
   collectionName: string;
   trackName: string;
   artworkUrl100: string;
 };
 export type ItunesResponse = {
+  resultCount: number;
   results: ItunesResult[];
+};
+
+export type ItunesQuery = {
+  term: string;
+  entity?: string;
+  country: string;
+  limit?: number;
 };
 
 export type Statistics = {

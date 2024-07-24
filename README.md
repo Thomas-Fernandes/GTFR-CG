@@ -101,7 +101,7 @@ cd front-end/ && npm run dev # will launch the front end of the application
 
 &nbsp;&nbsp; :bookmark_tabs:&nbsp; **General Information**
 
-- By default, the application runs locally on ports 8000 (back) and 5173 (front). Access it @ [**http://localhost:5173**](http://localhost:5173).
+- By default, the application runs locally on ports 8000 (back) and 4242 (front). Access it @ [**http://localhost:4242**](http://localhost:4242).
 - The application features 6 major pages:
   - [x] **Home**: the main page, where your statistics are displayed and you can navigate to **Artwork Generation** and **Lyrics**.
   - [ ] **Tests** *(TBD)*: the unit tests page, to check the application's integrity.
@@ -140,6 +140,7 @@ cd front-end/ && npm run dev # will launch the front end of the application
     - the artwork generation page is reworked to welcome YT section and better UX
     - the logger system is reinforced to log more actions and be customizable
 - ***[1.3.0]** Coming July 2024*: **Lyrics Fetch** — Project will support lyrics fetching from Genius and their conversion to lyrics blocks. [#???](#card_file_box-changelog)
+  - ***[1.3.1]** Coming later...*: The project's front end will be fully migrated to React Typescript with Vite. [#???](#card_file_box-changelog)
 - ***[1.4.0]** Coming later...*: **Lyrics Cards** — Project will support automatic cards generation from text blocks. [#???](#card_file_box-changelog)
 - ***[1.5.0]** Coming later...*: **Boost!** — Project will see its existing functionalities sharpened. [#???](#card_file_box-changelog)
 - ***[1.6.0]** Coming later...*: **Koh-Lanta** — Project will be unified in an all-in-one application. [#???](#card_file_box-changelog)

@@ -17,6 +17,11 @@ export const DEFAULT_EVENT_DURATION = {
   MS_VERTICAL_SLIDE: 200,
 };
 
+export const ARTWORK_GENERATION = {
+  MAX_TITLE_LENGTH: 42,
+  MAX_CROP_LENGTH: 12,
+};
+
 export const RESPONSE: Record<string, Record<string, string>> = {
   ERROR: {
     LYRICS_NOT_FOUND: "Lyrics not found.",
