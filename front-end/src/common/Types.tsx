@@ -20,6 +20,9 @@ export type ItunesResponse = {
 export type YoutubeQuery = {
   url: string;
 };
+export type FileUploadQuery = {
+  file?: File;
+};
 export type ItunesQuery = {
   term: string;
   entity?: string;
