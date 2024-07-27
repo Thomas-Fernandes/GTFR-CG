@@ -1,10 +1,10 @@
-import { DEFAULT_EVENT_DURATION, RESPONSE_STATUS } from "./Constants";
-import { ResponseStatus } from "./Types";
+import { DEFAULT_EVENT_DURATION, TOAST_TYPE } from "./Constants";
+import { ToastType } from "./Types";
 
 const convertToHtmlMessage = (message: string) => {
   return message.trim()
     .replace(/\r/g, "")
-    .replace(/\n/g, "<br>")
+    .replace(/\n/g, "<br />")
     .replace(/ {2}/g, "&nbsp;&nbsp;")
     .replace(/\t/g, "&nbsp;&nbsp;&nbsp;&nbsp;")
   ;
@@ -12,10 +12,11 @@ const convertToHtmlMessage = (message: string) => {
 
 export const sendToast = (
   message: string,
-  type: ResponseStatus = RESPONSE_STATUS.ERROR,
+  type: ToastType = TOAST_TYPE.ERROR,
   duration: number = DEFAULT_EVENT_DURATION.SECONDS_TOAST
 ) => {
-  console.error(`Toast: ${type} - ${message}`);
+  if (type === TOAST_TYPE.WARN || type === TOAST_TYPE.ERROR)
+    console.error(`Toast: ${type} - ${message}`);
 
   const toast = document.createElement("div");
   toast.className = "toast " + type.trim().toLowerCase();

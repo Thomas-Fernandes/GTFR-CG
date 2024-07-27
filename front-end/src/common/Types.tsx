@@ -1,7 +1,30 @@
-export type UseStateSetter<T> = React.Dispatch<React.SetStateAction<T>>;
+import { Dispatch, SetStateAction } from "react";
+
+/**************** LYRICS *****************/
 
 export type LyricsResponse = {
   lyrics: string;
+};
+export type LyricsRequest = {
+  artist: string;
+  track: string;
+};
+
+/*************** PROCESSED ***************/
+
+export type ImageDownloadRequest = {
+  selectedImage: string;
+};
+
+/**************** ART_GEN ****************/
+
+export type YoutubeRequest = {
+  url: string;
+};
+
+export type FileUploadRequest = {
+  file?: File;
+  includeCenterArtwork: boolean;
 };
 
 export type ItunesResult = {
@@ -14,31 +37,14 @@ export type ItunesResponse = {
   resultCount: number;
   results: ItunesResult[];
 };
-
-export type ApiResponse = {
-  status: string;
-  message: string;
-  data: object;
-};
-
-export type LyricsRequest = {
-  artist: string;
-  track: string;
-};
-
-export type YoutubeQuery = {
-  url: string;
-};
-export type FileUploadQuery = {
-  file?: File;
-  includeCenterArtwork: boolean;
-};
-export type ItunesQuery = {
+export type ItunesRequest = {
   term: string;
   entity?: string;
   country: string;
   limit?: number;
 };
+
+/***************** HOME ******************/
 
 export type Statistics = {
   dateFirstOperation: string;
@@ -47,7 +53,20 @@ export type Statistics = {
   lyricsFetches: number;
 };
 
+/**************** GENERIC ****************/
+
+export type ApiResponse = {
+  status: string;
+  message: string;
+  data: object;
+};
+
+export type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";
+
 export type ResponseStatus = "info" | "success" | "warn" | "error";
+export type ToastType = "info" | "success" | "warn" | "error";
+
+export type UseStateSetter<T> = Dispatch<SetStateAction<T>>;
 
 export type Context = {
   // Home
@@ -63,5 +82,3 @@ export type Context = {
   // Lyrics
   lyrics?: string;
 }
-
-export type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";

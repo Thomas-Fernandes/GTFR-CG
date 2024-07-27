@@ -1,30 +1,25 @@
 import { FormEvent, useState } from "react";
 
-import { PATHS, ACCEPTED_IMG_EXTENSIONS, REGEX_YOUTUBE_URL, RESPONSE_STATUS, TITLE, TOAST_TYPE, ARTWORK_GENERATION, RESPONSE, SPINNER_ID, BACKEND_URL, ITUNES_URL } from "../../common/Constants";
+import { ARTWORK_GENERATION, BACKEND_URL, ITUNES_URL, PATHS, RESPONSE, RESPONSE_STATUS, SPINNER_ID, TITLE, TOAST_TYPE } from "../../common/Constants";
 import { objectToQueryString, sendRequest } from "../../common/Requests";
 import { hideSpinner, showSpinner } from "../../common/Spinner";
 import { sendToast } from "../../common/Toast";
-import { ApiResponse, FileUploadQuery, ItunesQuery, ItunesResponse, ItunesResult, UseStateSetter, YoutubeQuery } from "../../common/Types";
+import { ApiResponse, FileUploadRequest, ItunesRequest, ItunesResponse, ItunesResult, UseStateSetter, YoutubeRequest } from "../../common/Types";
 import useTitle from "../../common/UseTitle";
 
 import "./ArtworkGeneration.css";
 
 const getTitleWithAdjustedLength = (title: string): string => {
-  title = title.slice(0, ARTWORK_GENERATION.MAX_TITLE_LENGTH - 3);
+  title = title.slice(0, ARTWORK_GENERATION.ITUNES.MAX_TITLE_LENGTH - 3);
 
   // find the first space before the max length to cut the string there
-  let end = title[title.length - 1].endsWith(" ") ? title.length - 1 : title.lastIndexOf(" ", ARTWORK_GENERATION.MAX_TITLE_LENGTH);
+  let end = title[title.length - 1].endsWith(" ") ? title.length - 1 : title.lastIndexOf(" ", ARTWORK_GENERATION.ITUNES.MAX_TITLE_LENGTH);
 
   // if the space-determined crop is too intense, just cut the string at the max length
-  end = ARTWORK_GENERATION.MAX_TITLE_LENGTH - end > ARTWORK_GENERATION.MAX_CROP_LENGTH ? title.length : end;
+  end = ARTWORK_GENERATION.ITUNES.MAX_TITLE_LENGTH - end > ARTWORK_GENERATION.ITUNES.MAX_CROP_LENGTH ? title.length : end;
   return title.slice(0, end) + "...";
 };
-
-const isValidYoutubeUrl = (url: string): boolean => {
-    return REGEX_YOUTUBE_URL.some((pattern) => pattern.test(url));
-}
-
-const handleSubmitItunesSearch = async (e: FormEvent<HTMLFormElement>, body: ItunesQuery, setItunesResults: UseStateSetter<ItunesResult[]>) => {
+const handleSubmitItunesSearch = async (e: FormEvent<HTMLFormElement>, body: ItunesRequest, setItunesResults: UseStateSetter<ItunesResult[]>) => {
   e.preventDefault();
 
   showSpinner(SPINNER_ID.ITUNES);
@@ -36,14 +31,14 @@ const handleSubmitItunesSearch = async (e: FormEvent<HTMLFormElement>, body: Itu
     limit: body.limit ?? 6,
   };
   const queryString = objectToQueryString(data);
-  const resultItems: Array<ItunesResult> = [];
+  const resultItems: ItunesResult[] = [];
 
   sendRequest("POST", ITUNES_URL + "/search" + queryString).then((result: ItunesResponse) => {
     if (result.resultCount > 0) {
       result.results.forEach((result) => {
-        if (result.artistName?.length > ARTWORK_GENERATION.MAX_TITLE_LENGTH)
+        if (result.artistName?.length > ARTWORK_GENERATION.ITUNES.MAX_TITLE_LENGTH)
           result.artistName = getTitleWithAdjustedLength(result.artistName);
-        if (result.collectionName?.length > ARTWORK_GENERATION.MAX_TITLE_LENGTH)
+        if (result.collectionName?.length > ARTWORK_GENERATION.ITUNES.MAX_TITLE_LENGTH)
           result.collectionName = getTitleWithAdjustedLength(result.collectionName);
         resultItems.push({
           artistName: result.artistName,
@@ -64,7 +59,10 @@ const handleSubmitItunesSearch = async (e: FormEvent<HTMLFormElement>, body: Itu
   });
 };
 
-const handleSubmitFileUpload = async (e: FormEvent<HTMLFormElement>, body: FileUploadQuery) => {
+const isFileExtensionAccepted = (fileName: string, acceptedExtensions: string[]): boolean => {
+  return acceptedExtensions.includes(fileName.split(".").slice(-1)[0].toLowerCase());
+}
+const handleSubmitFileUpload = async (e: FormEvent<HTMLFormElement>, body: FileUploadRequest) => {
   e.preventDefault();
 
   if (!body.file) {
@@ -77,13 +75,12 @@ const handleSubmitFileUpload = async (e: FormEvent<HTMLFormElement>, body: FileU
     includeCenterArtwork: body.includeCenterArtwork,
   };
 
-  const fileHasAcceptedExtension =
-    ACCEPTED_IMG_EXTENSIONS.includes(data.file.name.split(".").slice(-1)[0].toLowerCase());
-  if (!fileHasAcceptedExtension) {
+  const fileExtensionIsAccepted = isFileExtensionAccepted(data.file.name, ARTWORK_GENERATION.FILE_UPLOAD.ACCEPTED_IMG_EXTENSIONS);
+  if (!fileExtensionIsAccepted) {
     hideSpinner("artwork-generation_file-upload");
     sendToast(
-      "Please select a valid image file.\n" +
-        "Accepted file extensions: " + ACCEPTED_IMG_EXTENSIONS.join(", ") + ".",
+      RESPONSE.WARN.INVALID_FILE_TYPE + "\n" +
+        "Accepted file extensions: " + ARTWORK_GENERATION.FILE_UPLOAD.ACCEPTED_IMG_EXTENSIONS.join(", ") + ".",
       TOAST_TYPE.ERROR
     );
     return;
@@ -106,7 +103,10 @@ const handleSubmitFileUpload = async (e: FormEvent<HTMLFormElement>, body: FileU
   });
 };
 
-const handleSubmitYoutubeUrl = async (e: FormEvent<HTMLFormElement>, body: YoutubeQuery) => {
+const isValidYoutubeUrl = (url: string): boolean => {
+    return ARTWORK_GENERATION.YOUTUBE.REGEX_YOUTUBE_URL.some((pattern) => pattern.test(url));
+}
+const handleSubmitYoutubeUrl = async (e: FormEvent<HTMLFormElement>, body: YoutubeRequest) => {
     e.preventDefault();
 
     if (!isValidYoutubeUrl(body.url)) {
