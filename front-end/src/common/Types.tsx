@@ -22,6 +22,7 @@ export type YoutubeQuery = {
 };
 export type FileUploadQuery = {
   file?: File;
+  includeCenterArtwork: boolean;
 };
 export type ItunesQuery = {
   term: string;

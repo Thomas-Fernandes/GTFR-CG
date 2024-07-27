@@ -69,10 +69,16 @@ const handleSubmitFileUpload = async (e: FormEvent<HTMLFormElement>, body: FileU
 
   if (!body.file) {
     sendToast(RESPONSE.WARN.NO_IMG, TOAST_TYPE.WARN);
+    return;
   }
 
+  const data = {
+    file: new FormData(e.currentTarget).get("file") as File,
+    includeCenterArtwork: body.includeCenterArtwork,
+  };
+
   const fileHasAcceptedExtension =
-    ACCEPTED_IMG_EXTENSIONS.includes($("#file")[0].files[0].name.split(".").slice(-1)[0].toLowerCase());
+    ACCEPTED_IMG_EXTENSIONS.includes(data.file.name.split(".").slice(-1)[0].toLowerCase());
   if (!fileHasAcceptedExtension) {
     hideSpinner("artwork-generation_file-upload");
     sendToast(
@@ -85,7 +91,7 @@ const handleSubmitFileUpload = async (e: FormEvent<HTMLFormElement>, body: FileU
 
   showSpinner(SPINNER_ID.FILE_UPLOAD);
 
-  const data = new FormData(body.file);
+  console.log(data);
 
   sendRequest("POST", "/artwork-generation/use-local-image", data).then((response: ApiResponse) => {
     if (response.status === RESPONSE_STATUS.SUCCESS) {
@@ -97,14 +103,6 @@ const handleSubmitFileUpload = async (e: FormEvent<HTMLFormElement>, body: FileU
     sendToast(error.message, TOAST_TYPE.ERROR);
   }).finally(() => {
     hideSpinner(SPINNER_ID.FILE_UPLOAD);
-  });
-
-  $.ajax({
-    data: new FormData($("#fileUpload")[0]),
-    processData: false,
-    contentType: false,
-    success: (response: ApiResponse) => {
-    },
   });
 };
 
@@ -202,7 +200,7 @@ const ArtworkGeneration = (): React.JSX.Element => {
       </div>
 
       <h1>...or upload your image</h1>
-      <form encType="multipart/form-data" onSubmit={(e) => handleSubmitFileUpload(e, {file: file})}>
+      <form encType="multipart/form-data" onSubmit={(e) => handleSubmitFileUpload(e, {file: file, includeCenterArtwork: includeCenterArtwork})}>
         <div className="flexbox">
           <input type="file" name="file" id="file" className="file"
             onChange={(e) => setFile(e.target.files ? e.target.files[0] : undefined)}

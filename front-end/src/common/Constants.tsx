@@ -26,12 +26,10 @@ export const RESPONSE: Record<string, Record<string, string>> = {
   WARN: {
     // Artwork Generation
     NO_RESULTS_FOUND: "No results found.",
+    NO_IMG: "Please select an image file.",
     INVALID_URL: "Please enter a valid URL.",
   },
   ERROR: {
-    // Artwork Generation
-    NO_IMG: "Please select an image file.",
-
     // Lyrics
     LYRICS_NOT_FOUND: "Lyrics not found.",
   },
