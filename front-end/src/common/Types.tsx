@@ -69,16 +69,8 @@ export type ToastType = "info" | "success" | "warn" | "error";
 export type UseStateSetter<T> = Dispatch<SetStateAction<T>>;
 
 export type Context = {
-  // Home
-  session_status?: string;
-  genius_token?: string;
-  stats?: Statistics;
-
   // Redirect
   error_text?: string;
   redirect_to?: string;
   plural?: string;
-
-  // Lyrics
-  lyrics?: string;
 }

@@ -33,21 +33,25 @@ export const ARTWORK_GENERATION = {
 
 /**************** GENERIC ****************/
 
-export const RESPONSE: Record<string, Record<string, string>> = {
-  WARN: {
-    // Artwork Generation
+export const TOAST: Record<string, string> = {
+  // Home
+    WELCOME: "Welcome to GTFR-CG!\n"
+      + "Application started successfully.",
+    GENIUS_TOKEN_NOT_FOUND: "Genius API token not found.\n"
+      + "Lyrics fetch is disabled.",
+    ADD_GENIUS_TOKEN: "Add your Genius API token to your\n"
+      + ".env file and restart the application\n"
+      + "to enable lyrics fetch.",
+
+  // Artwork Generation
     NO_RESULTS_FOUND: "No results found.",
     NO_IMG: "Please select an image file.",
     INVALID_FILE_TYPE: "Please select a valid image file.",
     INVALID_URL: "Please enter a valid URL.",
 
-    // Lyrics
+  // Lyrics
     MISSING_FIELDS: "Please fill out all the required fields.",
-  },
-  ERROR: {
-    // Lyrics
     LYRICS_NOT_FOUND: "Lyrics not found.",
-  },
 };
 
 export const RESPONSE_STATUS: Record<string, ResponseStatus> = {
@@ -95,16 +99,6 @@ export const PATHS = {
 };
 
 export const DEFAULT_CONTEXT: Context = {
-  // Home
-  session_status: "initializing",
-  genius_token: "",
-  stats: {
-    dateFirstOperation: "N/A",
-    dateLastOperation: "N/A",
-    artworkGenerations: 0,
-    lyricsFetches: 0,
-  },
-
   // Redirect
   error_text: "",
   redirect_to: PATHS.home,
@@ -112,4 +106,4 @@ export const DEFAULT_CONTEXT: Context = {
 };
 
 export const ITUNES_URL = "https://itunes.apple.com";
-export const BACKEND_URL = "http://localhost:8000";
+export const BACKEND_URL = "http://localhost:8000/api";

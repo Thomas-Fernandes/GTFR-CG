@@ -1,6 +1,6 @@
 import { FormEvent, useState } from "react";
 
-import { ARTWORK_GENERATION, BACKEND_URL, ITUNES_URL, PATHS, RESPONSE, RESPONSE_STATUS, SPINNER_ID, TITLE, TOAST_TYPE } from "../../common/Constants";
+import { ARTWORK_GENERATION, BACKEND_URL, ITUNES_URL, PATHS, RESPONSE_STATUS, SPINNER_ID, TITLE, TOAST_TYPE } from "../../common/Constants";
 import { objectToQueryString, sendRequest } from "../../common/Requests";
 import { hideSpinner, showSpinner } from "../../common/Spinner";
 import { sendToast } from "../../common/Toast";
@@ -49,7 +49,7 @@ const handleSubmitItunesSearch = async (e: FormEvent<HTMLFormElement>, body: Itu
       });
       setItunesResults(resultItems);
     } else {
-      sendToast(RESPONSE.WARN.NO_RESULTS_FOUND, TOAST_TYPE.WARN);
+      sendToast(TOAST.NO_RESULTS_FOUND, TOAST_TYPE.WARN);
     }
   }).catch((error: ApiResponse) => {
     setItunesResults(resultItems);
@@ -66,7 +66,7 @@ const handleSubmitFileUpload = async (e: FormEvent<HTMLFormElement>, body: FileU
   e.preventDefault();
 
   if (!body.file) {
-    sendToast(RESPONSE.WARN.NO_IMG, TOAST_TYPE.WARN);
+    sendToast(TOAST.NO_IMG, TOAST_TYPE.WARN);
     return;
   }
 
@@ -79,7 +79,7 @@ const handleSubmitFileUpload = async (e: FormEvent<HTMLFormElement>, body: FileU
   if (!fileExtensionIsAccepted) {
     hideSpinner("artwork-generation_file-upload");
     sendToast(
-      RESPONSE.WARN.INVALID_FILE_TYPE + "\n" +
+      TOAST.INVALID_FILE_TYPE + "\n" +
         "Accepted file extensions: " + ARTWORK_GENERATION.FILE_UPLOAD.ACCEPTED_IMG_EXTENSIONS.join(", ") + ".",
       TOAST_TYPE.ERROR
     );
@@ -110,7 +110,7 @@ const handleSubmitYoutubeUrl = async (e: FormEvent<HTMLFormElement>, body: Youtu
     e.preventDefault();
 
     if (!isValidYoutubeUrl(body.url)) {
-       sendToast(RESPONSE.ERROR.INVALID_URL, TOAST_TYPE.ERROR);
+       sendToast(TOAST.INVALID_URL, TOAST_TYPE.ERROR);
        return;
     }
 

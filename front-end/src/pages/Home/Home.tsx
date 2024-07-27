@@ -1,92 +1,113 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
-import { PATHS, DEFAULT_CONTEXT, TITLE, TOAST_TYPE } from "../../common/Constants";
+import { BACKEND_URL, PATHS, TITLE, TOAST, TOAST_TYPE } from "../../common/Constants";
+import { is2xxSuccessful, sendRequest } from "../../common/Requests";
+
 import { sendToast } from "../../common/Toast";
-import { Context } from "../../common/Types";
+import { Statistics } from "../../common/Types";
 import useTitle from "../../common/UseTitle";
-import { isEmpty } from "../../common/utils/ObjUtils";
 
 import "./Home.css";
 
-const Home = (passedContext: Context): React.JSX.Element => {
-  const context = isEmpty(passedContext) ? DEFAULT_CONTEXT : passedContext;
+const fetchStatistics = (): Statistics => {
+  sendRequest("GET", BACKEND_URL + "/statistics").then((response) => {
+    if (is2xxSuccessful(response.status)) {
+      return response.data as Statistics;
+    } else {
+      throw new Error("");
+    }
+  }).catch((error) => {
+    sendToast(error.message, TOAST_TYPE.ERROR);
+  });
+  return {} as Statistics;
+};
+
+const fetchGeniusToken = (): string => {
+  sendRequest("GET", BACKEND_URL + "/genius-token").then((response) => {
+    if (is2xxSuccessful(response.status)) {
+      sendToast(TOAST.WELCOME, TOAST_TYPE.SUCCESS, 5);
+      return response.data;
+    } else {
+      throw new Error(TOAST.GENIUS_TOKEN_NOT_FOUND);
+    }
+  }).catch((error) => {
+    sendToast(error.message, TOAST_TYPE.ERROR, 10);
+    sendToast(TOAST.ADD_GENIUS_TOKEN, TOAST_TYPE.WARN, 20);
+  });
+  return "";
+};
+
+const Home = (): React.JSX.Element => {
+  const [geniusToken, setGeniusToken] = useState("");
+  const [stats, setStats] = useState<Statistics>({} as Statistics);
 
   useTitle(TITLE.HOME);
 
   useEffect(() => {
-    if (!window.location.href.endsWith("/home")) {
-      window.location.href = "/home";
+    if (!window.location.href.endsWith(PATHS.home)) {
+      window.location.href = PATHS.home;
       return;
     }
 
-    if (context.session_status === DEFAULT_CONTEXT.session_status) {
-      if (!context.genius_token) {
-        sendToast(
-          "Genius API token not found.\n"
-            + "Lyrics fetch is disabled.",
-          TOAST_TYPE.ERROR,
-          10
-        );
-        sendToast(
-          "Add your Genius API token to your\n" +
-            ".env file and restart the application\n" +
-            "to enable lyrics fetch.",
-          TOAST_TYPE.WARN,
-          20
-        );
-      } else {
-        sendToast(
-          "Welcome to GTFR-CG!\n"
-            + "Application started successfully.",
-          TOAST_TYPE.SUCCESS,
-          5
-        );
-      }
+    const routeKey = location.pathname;
+    const hasVisited = sessionStorage.getItem(routeKey);
+
+    setStats(fetchStatistics());
+
+    if (!hasVisited) {
+      setGeniusToken(fetchGeniusToken());
+      sessionStorage.setItem(routeKey, "visited");
     }
-  }, [context]);
+  }, []);
 
   return (
     <>
       <div id="toast-container"></div>
       <span className="top-bot-spacer"></span>
+
       <h1>Home</h1>
+
       <div className="navbar">
-        <button type="button"
-          onClick={() => { window.location.href = PATHS.artworkGeneration; }}
-        >
+        <button type="button" onClick={() => { window.location.href = PATHS.artworkGeneration; }}>
           <span className="right">Artwork Generation</span>
         </button>
-        <button type="button"
-          onClick={() => { window.location.href = PATHS.lyrics; }}
-        >
+        <button type="button" onClick={() => { window.location.href = PATHS.lyrics; }}>
           <span className="right">Lyrics</span>
         </button>
       </div>
+
       <div className="stats-board">
-        <div className="hidden">
-          <p id="session-status">{ context.session_status }</p>
-          <p id="genius-token">{ context.genius_token }</p>
-        </div>
         <div className="stats-entry">
           <h3 className="stat-title">Date of First Operation</h3>
-          <p className="stat-text">{ context.stats?.dateFirstOperation }</p>
+          <p className="stat-text">{ stats.dateFirstOperation }</p>
         </div>
+
         <hr />
+
         <div className="stats-entry">
           <h3 className="stat-title">Date of Last Operation</h3>
-          <p className="stat-text">{ context.stats?.dateLastOperation }</p>
+          <p className="stat-text">{ stats.dateLastOperation }</p>
         </div>
+
         <hr />
+
         <div className="stats-entry">
           <h3 className="stat-title">Artwork Generations</h3>
-          <p className="stat-text">{ context.stats?.artworkGenerations }</p>
+          <p className="stat-text">{ stats.artworkGenerations }</p>
         </div>
+
         <hr />
+
         <div className="stats-entry">
           <h3 className="stat-title">Genius Lyrics Fetches</h3>
-          <p className="stat-text">{ context.stats?.lyricsFetches }</p>
+          <p className="stat-text">{ stats.lyricsFetches }</p>
         </div>
       </div>
+
+      <div className="hidden">
+        <p>{ geniusToken }</p>
+      </div>
+
       <span className="top-bot-spacer"></span>
     </>
   );

@@ -10,13 +10,22 @@ const convertToHtmlMessage = (message: string) => {
   ;
 };
 
+const flattenMessage = (message: string) => {
+  return message.trim()
+    .replace(/\r/g, "")
+    .replace(/\n/g, " ")
+    .replace(/ {2}/g, "  ")
+    .replace(/\t/g, "    ")
+  ;
+}
+
 export const sendToast = (
   message: string,
   type: ToastType = TOAST_TYPE.ERROR,
   duration: number = DEFAULT_EVENT_DURATION.SECONDS_TOAST
 ) => {
   if (type === TOAST_TYPE.WARN || type === TOAST_TYPE.ERROR)
-    console.error(`Toast: ${type} - ${message}`);
+    console.error(`Toast: ${type} - ${flattenMessage(message)}`);
 
   const toast = document.createElement("div");
   toast.className = "toast " + type.trim().toLowerCase();

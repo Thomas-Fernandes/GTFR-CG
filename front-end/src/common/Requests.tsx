@@ -1,11 +1,7 @@
 import { HttpMethod } from './Types';
 
-export const objectToQueryString = (obj: Record<string, unknown>): string => {
-  const finalObj: Record<string, string> = {};
-  for (const key in obj)
-    if (obj[key] !== undefined && obj[key] !== null)
-      finalObj[key] = obj[key].toString();
-  return "?" + (new URLSearchParams(finalObj).toString());
+export const is2xxSuccessful = (status: number): boolean => {
+  return status >= 200 && status < 300;
 };
 
 export const sendRequest = async (method: HttpMethod, url: string, body?: object) => {
@@ -14,7 +10,7 @@ export const sendRequest = async (method: HttpMethod, url: string, body?: object
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(body ?? {}),
+    body: JSON.stringify(body),
   });
 
   if (!response.ok) {
@@ -24,3 +20,11 @@ export const sendRequest = async (method: HttpMethod, url: string, body?: object
 
   return await response.json();
 }
+
+export const objectToQueryString = (obj: Record<string, unknown>): string => {
+  const finalObj: Record<string, string> = {};
+  for (const key in obj)
+    if (obj[key] !== undefined && obj[key] !== null)
+      finalObj[key] = obj[key].toString();
+  return "?" + (new URLSearchParams(finalObj).toString());
+};

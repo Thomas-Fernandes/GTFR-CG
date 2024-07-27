@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { BACKEND_URL, PATHS, RESPONSE, SPINNER_ID, TITLE, TOAST_TYPE } from "../../common/Constants";
+import { BACKEND_URL, PATHS, SPINNER_ID, TITLE, TOAST_TYPE } from "../../common/Constants";
 import { sendRequest } from "../../common/Requests";
 import { hideSpinner, showSpinner } from "../../common/Spinner";
 import { sendToast } from "../../common/Toast";
@@ -22,15 +22,15 @@ const handleLyricsSearchSubmit = (e: React.FormEvent<HTMLFormElement>, body: Lyr
   e.preventDefault();
 
   if (body.artist.trim() === "" || body.track.trim() === "") {
-    sendToast(RESPONSE.WARN.MISSING_FIELDS, TOAST_TYPE.WARN);
+    sendToast(TOAST.MISSING_FIELDS, TOAST_TYPE.WARN);
     return;
   }
 
   showSpinner(SPINNER_ID.LYRICS_SEARCH);
 
   sendRequest("POST", BACKEND_URL + "/lyrics", body).then((response: LyricsResponse) => {
-    if (response.lyrics === RESPONSE.ERROR.LYRICS_NOT_FOUND) {
-      sendToast(RESPONSE.ERROR.LYRICS_NOT_FOUND, TOAST_TYPE.WARN);
+    if (response.lyrics === TOAST.LYRICS_NOT_FOUND) {
+      sendToast(TOAST.LYRICS_NOT_FOUND, TOAST_TYPE.WARN);
       setLyrics("");
     } else {
       setLyrics(response.lyrics);
