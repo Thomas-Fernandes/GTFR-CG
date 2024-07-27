@@ -1,6 +1,6 @@
 import { FormEvent, useState } from "react";
 
-import { PATHS, ACCEPTED_IMG_EXTENSIONS, REGEX_YOUTUBE_URL, RESPONSE_STATUS, TITLE, TOAST_TYPE, ARTWORK_GENERATION, RESPONSE, SPINNER_ID } from "../../common/Constants";
+import { PATHS, ACCEPTED_IMG_EXTENSIONS, REGEX_YOUTUBE_URL, RESPONSE_STATUS, TITLE, TOAST_TYPE, ARTWORK_GENERATION, RESPONSE, SPINNER_ID, BACKEND_URL, ITUNES_URL } from "../../common/Constants";
 import { objectToQueryString, sendRequest } from "../../common/Requests";
 import { hideSpinner, showSpinner } from "../../common/Spinner";
 import { sendToast } from "../../common/Toast";
@@ -24,7 +24,7 @@ const isValidYoutubeUrl = (url: string): boolean => {
     return REGEX_YOUTUBE_URL.some((pattern) => pattern.test(url));
 }
 
-const handleSubmitItunesSearch = async (e: FormEvent<HTMLFormElement>, body: ItunesQuery, setItunesResults: UseStateSetter<Array<ItunesResult>>) => {
+const handleSubmitItunesSearch = async (e: FormEvent<HTMLFormElement>, body: ItunesQuery, setItunesResults: UseStateSetter<ItunesResult[]>) => {
   e.preventDefault();
 
   showSpinner(SPINNER_ID.ITUNES);
@@ -38,7 +38,7 @@ const handleSubmitItunesSearch = async (e: FormEvent<HTMLFormElement>, body: Itu
   const queryString = objectToQueryString(data);
   const resultItems: Array<ItunesResult> = [];
 
-  sendRequest("POST", "https://itunes.apple.com/search" + queryString).then((result: ItunesResponse) => {
+  sendRequest("POST", ITUNES_URL + "/search" + queryString).then((result: ItunesResponse) => {
     if (result.resultCount > 0) {
       result.results.forEach((result) => {
         if (result.artistName?.length > ARTWORK_GENERATION.MAX_TITLE_LENGTH)
@@ -93,7 +93,7 @@ const handleSubmitFileUpload = async (e: FormEvent<HTMLFormElement>, body: FileU
 
   console.log(data);
 
-  sendRequest("POST", "/artwork-generation/use-local-image", data).then((response: ApiResponse) => {
+  sendRequest("POST", BACKEND_URL + "/artwork-generation/use-local-image", data).then((response: ApiResponse) => {
     if (response.status === RESPONSE_STATUS.SUCCESS) {
       // window.location.href = PATHS.processedImages;
     } else {
@@ -120,7 +120,7 @@ const handleSubmitYoutubeUrl = async (e: FormEvent<HTMLFormElement>, body: Youtu
       url: body.url,
     };
 
-    sendRequest("POST", "/artwork-generation/use-youtube-thumbnail", data).then((response: ApiResponse) => {
+    sendRequest("POST", BACKEND_URL + "/artwork-generation/use-youtube-thumbnail", data).then((response: ApiResponse) => {
       if (response.status === RESPONSE_STATUS.SUCCESS) {
         // window.location.href = PATHS.processedImages;
       } else {
@@ -137,7 +137,7 @@ const ArtworkGeneration = (): React.JSX.Element => {
   // iTunes search
   const [term, setTerm] = useState("");
   const [country, setCountry] = useState("fr");
-  const [itunesResults, setItunesResults] = useState([] as Array<ItunesResult>);
+  const [itunesResults, setItunesResults] = useState([] as ItunesResult[]);
 
   // File upload
   const [file, setFile] = useState<File>();
@@ -185,7 +185,7 @@ const ArtworkGeneration = (): React.JSX.Element => {
                 <img src={highResImageUrl} className="result-image" alt={item.collectionName || item.trackName} />
                 <p className="centered bold italic">{item.artistName} - {item.collectionName.replace(" - Single", "")}</p>
                 <button onClick={async () => {
-                  const response: ApiResponse = await sendRequest("POST", "/artwork-generation/use-itunes-image", { url: highResImageUrl });
+                  const response: ApiResponse = await sendRequest("POST", BACKEND_URL + "/artwork-generation/use-itunes-image", { url: highResImageUrl });
                   if (response.status === RESPONSE_STATUS.SUCCESS) {
                     sendToast(response.message, TOAST_TYPE.SUCCESS);
                     // window.location.href = PATHS.processedImages;

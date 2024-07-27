@@ -1,9 +1,7 @@
 export type UseStateSetter<T> = React.Dispatch<React.SetStateAction<T>>;
 
-export type ApiResponse = {
-  status: string;
-  message: string;
-  data: object;
+export type LyricsResponse = {
+  lyrics: string;
 };
 
 export type ItunesResult = {
@@ -15,6 +13,17 @@ export type ItunesResult = {
 export type ItunesResponse = {
   resultCount: number;
   results: ItunesResult[];
+};
+
+export type ApiResponse = {
+  status: string;
+  message: string;
+  data: object;
+};
+
+export type LyricsRequest = {
+  artist: string;
+  track: string;
 };
 
 export type YoutubeQuery = {

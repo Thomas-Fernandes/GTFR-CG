@@ -5,13 +5,6 @@ export const showSpinner = (name: string) => {
     sendToast("HTML Spinner id is required", "error");
     return;
   }
-  if (name === "lyrics_search") {
-    const hasInvalidField =
-      !((document.getElementById("artist") as HTMLInputElement)?.value)
-      || !((document.getElementById("song") as HTMLInputElement)?.value);
-    if (hasInvalidField)
-      return; // Do not show spinner if the form is not fully filled
-  }
 
   const button = document.getElementById(name);
 

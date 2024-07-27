@@ -28,6 +28,9 @@ export const RESPONSE: Record<string, Record<string, string>> = {
     NO_RESULTS_FOUND: "No results found.",
     NO_IMG: "Please select an image file.",
     INVALID_URL: "Please enter a valid URL.",
+
+    // Lyrics
+    MISSING_FIELDS: "Please fill out all the required fields.",
   },
   ERROR: {
     // Lyrics
@@ -43,9 +46,14 @@ export const RESPONSE_STATUS: Record<string, ResponseStatus> = {
 };
 export const TOAST_TYPE = RESPONSE_STATUS;
 export const SPINNER_ID = {
+  // Artwork Generation
   ITUNES: "artwork-generation_search-form",
   FILE_UPLOAD: "artwork-generation_file-upload",
   YOUTUBE_URL: "artwork-generation_youtube-url",
+
+  // Lyrics
+  LYRICS_SEARCH: "lyrics_search",
+  LYRICS_SAVE: "lyrics_save",
 }
 
 export const TITLE = {
@@ -83,4 +91,5 @@ export const DEFAULT_CONTEXT: Context = {
   plural: "s",
 };
 
+export const ITUNES_URL = "https://itunes.apple.com";
 export const BACKEND_URL = "http://localhost:8000";

@@ -1,9 +1,8 @@
 form {
     justify-content: center;
 
-    .search-bars {
-        flex-direction: row;
-        gap: 10px;
+    .search-bar {
+        gap: 16px;
     }
 
     textarea {
