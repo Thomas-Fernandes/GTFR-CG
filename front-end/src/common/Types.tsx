@@ -3,7 +3,11 @@ import { Dispatch, SetStateAction } from "react";
 /**************** LYRICS *****************/
 
 export type LyricsResponse = {
-  lyrics: string;
+  status: number;
+  message: string;
+  data: {
+    lyrics: string;
+  };
 };
 export type LyricsRequest = {
   artist: string;
@@ -70,7 +74,7 @@ export type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";
 export type ResponseStatus = "info" | "success" | "warn" | "error";
 export type ToastType = "info" | "success" | "warn" | "error";
 
-export type UseStateSetter<T> = Dispatch<SetStateAction<T>>;
+export type StateSetter<T> = Dispatch<SetStateAction<T>>;
 
 export type Context = {
   // Redirect

@@ -3,7 +3,7 @@ import { FormEvent, JSX, useState } from "react";
 import { is2xxSuccessful, objectToQueryString, sendRequest } from "../../common/Requests";
 import { hideSpinner, showSpinner } from "../../common/Spinner";
 import { sendToast } from "../../common/Toast";
-import { ApiResponse, FileUploadRequest, ItunesRequest, ItunesResponse, ItunesResult, UseStateSetter, YoutubeRequest } from "../../common/Types";
+import { ApiResponse, FileUploadRequest, ItunesRequest, ItunesResponse, ItunesResult, StateSetter, YoutubeRequest } from "../../common/Types";
 import useTitle from "../../common/UseTitle";
 import { FILE_UPLOAD, ITUNES, YOUTUBE } from "../../constants/ArtworkGeneration";
 import { BACKEND_URL, ITUNES_URL, PATHS, SPINNER_ID, TITLE, TOAST, TOAST_TYPE } from "../../constants/Common";
@@ -43,7 +43,7 @@ const getTitleWithAdjustedLength = (title: string): string => {
   end = ITUNES.MAX_TITLE_LENGTH - end > ITUNES.MAX_CROP_LENGTH ? title.length : end;
   return title.slice(0, end) + "...";
 };
-const handleSubmitItunesSearch = async (e: FormEvent<HTMLFormElement>, body: ItunesRequest, setItunesResults: UseStateSetter<ItunesResult[]>) => {
+const handleSubmitItunesSearch = async (e: FormEvent<HTMLFormElement>, body: ItunesRequest, setItunesResults: StateSetter<ItunesResult[]>) => {
   e.preventDefault();
 
   showSpinner(SPINNER_ID.ITUNES);
@@ -171,7 +171,7 @@ const ArtworkGeneration = (): JSX.Element => {
   return (
     <>
       <div id="toast-container"></div>
-      <span className="top-bot-spacer"></span>
+      <span className="top-bot-spacer" />
 
       <div className="navbar">
         <button type="button" onClick={() => window.location.href = PATHS.home }>
@@ -241,7 +241,7 @@ const ArtworkGeneration = (): JSX.Element => {
         </div>
       </form>
 
-      <span className="top-bot-spacer"></span>
+      <span className="top-bot-spacer" />
     </>
   );
 };

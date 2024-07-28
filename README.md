@@ -1,5 +1,5 @@
 <div align="center" id="top">
-    <h1>:scroll: Genius Traductions Françaises Content Generator :film_strip:</h1>
+    <h1>:scroll: Genius traductions françaises Content Generator :film_strip:</h1>
 </div>
 
 <div align="center">
@@ -46,7 +46,7 @@
 
 ## :memo: Description
 
-**GTFR-CG** is a React-Python web application that generates content serving the creation of [**Genius Traductions Françaises**](https://www.youtube.com/c/geniustraductionsfrancaises) videos.  
+**GTFR-CG** is a React-Python web application that generates content serving the creation of [**Genius traductions françaises**](https://www.youtube.com/c/geniustraductionsfrancaises) videos.  
 Generate artwork and lyrics cards that can then be edited into **translation videos**.  
 Save time by interacting with the APIs of **iTunes** and **Genius** to automate parts of the edition process!  
 One day, maybe one day, this application maybe even be able to generate whole videos by itself...

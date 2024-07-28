@@ -63,7 +63,7 @@ const Home = (): JSX.Element => {
   return (
     <>
       <div id="toast-container"></div>
-      <span className="top-bot-spacer"></span>
+      <span className="top-bot-spacer" />
 
       <h1>Home</h1>
 
@@ -108,7 +108,7 @@ const Home = (): JSX.Element => {
         <p>{ geniusToken }</p>
       </div>
 
-      <span className="top-bot-spacer"></span>
+      <span className="top-bot-spacer" />
     </>
   );
 };

@@ -1,24 +1,23 @@
 import { FormEvent, useState } from "react";
 
-import { sendRequest } from "../../common/Requests";
+import { is2xxSuccessful, sendRequest } from "../../common/Requests";
 import { hideSpinner, showSpinner } from "../../common/Spinner";
 import { sendToast } from "../../common/Toast";
-import { LyricsRequest, LyricsResponse, UseStateSetter } from "../../common/Types";
+import { ApiResponse, LyricsRequest, LyricsResponse, StateSetter } from "../../common/Types";
 import useTitle from "../../common/UseTitle";
 import { BACKEND_URL, PATHS, SPINNER_ID, TITLE, TOAST, TOAST_TYPE } from "../../constants/Common";
 
 import "./Lyrics.css";
 
-const handleLyricsSaveSubmit = (e: FormEvent<HTMLFormElement>): void => {
+const handleLyricsSaveSubmit = (e: FormEvent<HTMLFormElement>, body: string): void => {
   e.preventDefault();
 
   showSpinner(SPINNER_ID.LYRICS_SAVE);
-  setTimeout(() => {}, 1000);
-  console.log("Lyrics saved!");
+  // TODO
   hideSpinner(SPINNER_ID.LYRICS_SAVE);
 };
 
-const handleLyricsSearchSubmit = (e: FormEvent<HTMLFormElement>, body: LyricsRequest, setLyrics: UseStateSetter<string>): void => {
+const handleLyricsSearchSubmit = (e: FormEvent<HTMLFormElement>, body: LyricsRequest, setLyrics: StateSetter<string>): void => {
   e.preventDefault();
 
   if (body.artist.trim() === "" || body.track.trim() === "") {
@@ -29,23 +28,30 @@ const handleLyricsSearchSubmit = (e: FormEvent<HTMLFormElement>, body: LyricsReq
   showSpinner(SPINNER_ID.LYRICS_SEARCH);
 
   sendRequest("POST", BACKEND_URL + "/lyrics", body).then((response: LyricsResponse) => {
-    if (response.lyrics === TOAST.LYRICS_NOT_FOUND) {
+    if (!is2xxSuccessful(response.status)) {
+      throw new Error(response.message);
+    }
+
+    if (response.data.lyrics === TOAST.LYRICS_NOT_FOUND) {
       sendToast(TOAST.LYRICS_NOT_FOUND, TOAST_TYPE.WARN);
       setLyrics("");
     } else {
-      setLyrics(response.lyrics);
+      setLyrics(response.data.lyrics);
     }
   }).catch((error: ApiResponse) => {
-    sendToast(error.message, TOAST_TYPE.ERROR);
     setLyrics("");
+    sendToast(error.message, TOAST_TYPE.ERROR);
   }).finally(() => {
     hideSpinner(SPINNER_ID.LYRICS_SEARCH);
   });
 };
 
 const Lyrics = (): JSX.Element => {
+  // Search
   const [artist, setArtist] = useState("");
   const [track, setTrack] = useState("");
+
+  // Lyrics
   const [lyrics, setLyrics] = useState("");
 
   useTitle(TITLE.LYRICS);
@@ -53,20 +59,27 @@ const Lyrics = (): JSX.Element => {
   return (
     <>
       <div id="toast-container"></div>
-      <span className="top-bot-spacer"></span>
+      <span className="top-bot-spacer" />
+
       <div className="navbar">
-        <button type="button" onClick={() => window.location.href = PATHS.home }><span className="left">Home</span></button>
-        <button type="button" onClick={() => window.location.href = PATHS.artworkGeneration }><span className="left">Artwork Generation</span></button>
+        <button type="button" onClick={() => window.location.href = PATHS.home }>
+          <span className="left">{TITLE.HOME}</span>
+        </button>
+        <button type="button" onClick={() => window.location.href = PATHS.artworkGeneration }>
+          <span className="left">{TITLE.ARTWORK_GENERATION}</span>
+        </button>
       </div>
+
       <h1>Lyrics</h1>
-      <form className="flexbox flex-row" onSubmit={(e) => handleLyricsSearchSubmit(e, {artist: artist, track: track}, setLyrics)}>
+
+      <form className="flexbox" onSubmit={(e) => handleLyricsSearchSubmit(e, {artist, track}, setLyrics)}>
         <div className="search-bar flex-row">
-          <input
-            type="text" name="artist" placeholder="Enter artist name" required
+          <input required
+            type="text" name="artist" placeholder="Enter artist name"
             onChange={(e) => setArtist(e.target.value)}
           />
-          <input
-            type="text" name="track" placeholder="Enter song name" required
+          <input required
+            type="text" name="track" placeholder="Enter song name"
             onChange={(e) => setTrack(e.target.value)}
           />
           <div className="action-button" id={SPINNER_ID.LYRICS_SEARCH}>
@@ -74,12 +87,14 @@ const Lyrics = (): JSX.Element => {
           </div>
         </div>
       </form>
+
       <hr />
-      <form className="flexbox" onSubmit={(e) => handleLyricsSaveSubmit(e)}>
+
+      <form className="flexbox" onSubmit={(e) => handleLyricsSaveSubmit(e, lyrics)}>
         <textarea
-          name="lyrics"
-          rows={20} cols={80}
-          placeholder="Lyrics will appear here..." value={lyrics} onChange={(e) => setLyrics(e.target.value)}
+          name="lyrics" rows={20} cols={80}
+          placeholder="Lyrics will appear here..." value={lyrics}
+          onChange={(e) => setLyrics(e.target.value)}
         />
         <div className="action-button" id={SPINNER_ID.LYRICS_SAVE}>
           <input type="submit" value="Save Lyrics" className="action-button save-button" />
