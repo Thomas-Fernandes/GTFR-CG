@@ -11,7 +11,7 @@ form {
     }
 }
 
-.warn.minimal.centered {
+#clear {
     background-color: #8fbc8f;
 
     margin-bottom: 2%;
@@ -28,7 +28,6 @@ form {
         background-color: #0056b3;
     }
 }
-
 #results.result-container {
     &:empty {
         display: none;

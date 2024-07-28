@@ -1,6 +1,7 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { JSX } from "react";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
-import { PATHS } from "./common/Constants";
+import { PATHS } from "./constants/Common";
 import ArtworkGeneration from "./pages/ArtworkGeneration/ArtworkGeneration";
 import Home from "./pages/Home/Home";
 import Lyrics from "./pages/Lyrics/Lyrics";
@@ -9,7 +10,7 @@ import Redirect from "./pages/Redirect/Redirect";
 
 import "./App.css";
 
-const App = (): React.JSX.Element => {
+const App = (): JSX.Element => {
   return (
     <Router>
       <Routes>

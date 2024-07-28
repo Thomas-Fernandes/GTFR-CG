@@ -1,10 +1,11 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, JSX, useState } from "react";
 
-import { BACKEND_URL, PATHS, PROCESSED_IMAGES, TITLE, TOAST_TYPE } from "../../common/Constants";
 import { sendRequest } from "../../common/Requests";
 import { sendToast } from "../../common/Toast";
 import { ImageDownloadRequest } from "../../common/Types";
 import useTitle from "../../common/UseTitle";
+import { BACKEND_URL, PATHS, TITLE, TOAST_TYPE } from "../../constants/Common";
+import { COVER_ART_FILENAME, DEFAULT_SELECTED_POSITION, LOGO_POSITIONS } from "../../constants/ProcessedImages";
 
 import "./ProcessedImages.css";
 
@@ -17,7 +18,7 @@ const handleSubmitDownloadImage = (e: FormEvent<HTMLFormElement>, body: ImageDow
   }
 
   sendRequest("POST", BACKEND_URL + "/download-image" + encodeURIComponent(body.selectedImage)).then(() => {
-  }).catch((error) => {
+  }).catch((error: ApiResponse) => {
     sendToast(error.message, TOAST_TYPE.ERROR);
   });
 }
@@ -26,8 +27,8 @@ const processImageName = (thumbnail: string): string => {
   return `thumbnail_${thumbnail}.png`;
 }
 
-const ProcessedImages = (): React.JSX.Element => {
-  const [selectedThumbnail, setSelectedThumbnail] = useState(PROCESSED_IMAGES.DEFAULT_SELECTED_POSITION); // default value is 4 (center-left)
+const ProcessedImages = (): JSX.Element => {
+  const [selectedThumbnail, setSelectedThumbnail] = useState(DEFAULT_SELECTED_POSITION); // default value is 4 (center-left)
 
   useTitle(TITLE.PROCESSED_IMAGES);
 
@@ -42,8 +43,8 @@ const ProcessedImages = (): React.JSX.Element => {
     <h1>Processed Artworks</h1>
     <div className="image-panels">
       <div className="image-container">
-        <img src={PROCESSED_IMAGES.COVER_ART_FILENAME} alt="background thumbnail" />
-        <form onSubmit={(e) => { handleSubmitDownloadImage(e, {selectedImage: PROCESSED_IMAGES.COVER_ART_FILENAME}) }}>
+        <img src={COVER_ART_FILENAME} alt="background thumbnail" />
+        <form onSubmit={(e) => { handleSubmitDownloadImage(e, {selectedImage: COVER_ART_FILENAME}) }}>
           <input type="submit" value="Download" className="button" />
         </form>
       </div>
@@ -51,7 +52,7 @@ const ProcessedImages = (): React.JSX.Element => {
       <div className="thumbnails">
         <form onSubmit={(e) => { handleSubmitDownloadImage(e, {selectedImage: processImageName(selectedThumbnail)}) }}>
           <div className="thumbnail-grid">
-            { PROCESSED_IMAGES.LOGO_POSITIONS.map((logoPosition, idx) => {
+            { LOGO_POSITIONS.map((logoPosition, idx) => {
               return (
                 <div
                   className="thumbnail-item" key={"thumbnail-item" + idx.toString()}
@@ -61,7 +62,7 @@ const ProcessedImages = (): React.JSX.Element => {
                   </label>
                   <input
                     type="radio" id={"radio_" + idx} name="selected_thumbnail_idx" value={idx.toString()}
-                    defaultChecked={logoPosition === PROCESSED_IMAGES.DEFAULT_SELECTED_POSITION}
+                    defaultChecked={logoPosition === DEFAULT_SELECTED_POSITION}
                     onClick={() => setSelectedThumbnail(logoPosition)}
                   />
                 </div>

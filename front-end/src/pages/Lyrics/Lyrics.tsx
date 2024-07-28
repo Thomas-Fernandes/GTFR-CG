@@ -1,15 +1,15 @@
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 
-import { BACKEND_URL, PATHS, SPINNER_ID, TITLE, TOAST_TYPE } from "../../common/Constants";
 import { sendRequest } from "../../common/Requests";
 import { hideSpinner, showSpinner } from "../../common/Spinner";
 import { sendToast } from "../../common/Toast";
 import { LyricsRequest, LyricsResponse, UseStateSetter } from "../../common/Types";
 import useTitle from "../../common/UseTitle";
+import { BACKEND_URL, PATHS, SPINNER_ID, TITLE, TOAST, TOAST_TYPE } from "../../constants/Common";
 
 import "./Lyrics.css";
 
-const handleLyricsSaveSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+const handleLyricsSaveSubmit = (e: FormEvent<HTMLFormElement>): void => {
   e.preventDefault();
 
   showSpinner(SPINNER_ID.LYRICS_SAVE);
@@ -18,7 +18,7 @@ const handleLyricsSaveSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
   hideSpinner(SPINNER_ID.LYRICS_SAVE);
 };
 
-const handleLyricsSearchSubmit = (e: React.FormEvent<HTMLFormElement>, body: LyricsRequest, setLyrics: UseStateSetter<string>): void => {
+const handleLyricsSearchSubmit = (e: FormEvent<HTMLFormElement>, body: LyricsRequest, setLyrics: UseStateSetter<string>): void => {
   e.preventDefault();
 
   if (body.artist.trim() === "" || body.track.trim() === "") {
@@ -35,7 +35,7 @@ const handleLyricsSearchSubmit = (e: React.FormEvent<HTMLFormElement>, body: Lyr
     } else {
       setLyrics(response.lyrics);
     }
-  }).catch((error) => {
+  }).catch((error: ApiResponse) => {
     sendToast(error.message, TOAST_TYPE.ERROR);
     setLyrics("");
   }).finally(() => {
@@ -43,7 +43,7 @@ const handleLyricsSearchSubmit = (e: React.FormEvent<HTMLFormElement>, body: Lyr
   });
 };
 
-const Lyrics = (): React.JSX.Element => {
+const Lyrics = (): JSX.Element => {
   const [artist, setArtist] = useState("");
   const [track, setTrack] = useState("");
   const [lyrics, setLyrics] = useState("");

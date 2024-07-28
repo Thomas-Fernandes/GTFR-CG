@@ -1,22 +1,46 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, JSX, useState } from "react";
 
-import { ARTWORK_GENERATION, BACKEND_URL, ITUNES_URL, PATHS, RESPONSE_STATUS, SPINNER_ID, TITLE, TOAST_TYPE } from "../../common/Constants";
-import { objectToQueryString, sendRequest } from "../../common/Requests";
+import { is2xxSuccessful, objectToQueryString, sendRequest } from "../../common/Requests";
 import { hideSpinner, showSpinner } from "../../common/Spinner";
 import { sendToast } from "../../common/Toast";
 import { ApiResponse, FileUploadRequest, ItunesRequest, ItunesResponse, ItunesResult, UseStateSetter, YoutubeRequest } from "../../common/Types";
 import useTitle from "../../common/UseTitle";
+import { FILE_UPLOAD, ITUNES, YOUTUBE } from "../../constants/ArtworkGeneration";
+import { BACKEND_URL, ITUNES_URL, PATHS, SPINNER_ID, TITLE, TOAST, TOAST_TYPE } from "../../constants/Common";
 
 import "./ArtworkGeneration.css";
 
+const renderItunesResult = (item: ItunesResult, key: number): JSX.Element => {
+  return (
+    <div className="result-item" key={"result" + key.toString()}>
+      <img src={item.artworkUrl100} className="result-image" alt={item.collectionName || item.trackName} />
+      <p className="centered bold italic">{item.artistName} - {item.collectionName.replace(" - Single", "")}</p>
+      <button onClick={() => {
+        const data = {
+          url: item.artworkUrl100,
+        };
+        sendRequest("POST", BACKEND_URL + "/artwork-generation/use-itunes-image", data).then((response: ApiResponse) => {
+          if (is2xxSuccessful(response.status)) {
+            sendToast(response.message, TOAST_TYPE.SUCCESS);
+            // window.location.href = PATHS.processedImages;
+          } else {
+            throw new Error(response.message);
+          }
+        }).catch((error: ApiResponse) => {
+          sendToast(error.message, TOAST_TYPE.ERROR);
+        });
+      }}>Use this image</button>
+    </div>
+  );
+};
 const getTitleWithAdjustedLength = (title: string): string => {
-  title = title.slice(0, ARTWORK_GENERATION.ITUNES.MAX_TITLE_LENGTH - 3);
+  title = title.slice(0, ITUNES.MAX_TITLE_LENGTH - 3);
 
   // find the first space before the max length to cut the string there
-  let end = title[title.length - 1].endsWith(" ") ? title.length - 1 : title.lastIndexOf(" ", ARTWORK_GENERATION.ITUNES.MAX_TITLE_LENGTH);
+  let end = title[title.length - 1].endsWith(" ") ? title.length - 1 : title.lastIndexOf(" ", ITUNES.MAX_TITLE_LENGTH);
 
   // if the space-determined crop is too intense, just cut the string at the max length
-  end = ARTWORK_GENERATION.ITUNES.MAX_TITLE_LENGTH - end > ARTWORK_GENERATION.ITUNES.MAX_CROP_LENGTH ? title.length : end;
+  end = ITUNES.MAX_TITLE_LENGTH - end > ITUNES.MAX_CROP_LENGTH ? title.length : end;
   return title.slice(0, end) + "...";
 };
 const handleSubmitItunesSearch = async (e: FormEvent<HTMLFormElement>, body: ItunesRequest, setItunesResults: UseStateSetter<ItunesResult[]>) => {
@@ -25,20 +49,23 @@ const handleSubmitItunesSearch = async (e: FormEvent<HTMLFormElement>, body: Itu
   showSpinner(SPINNER_ID.ITUNES);
 
   const data = {
-    term: body.term,
+    ...body,
     entity: body.entity ?? "album", // album by default, but can be "song", "movie", "tv-show"...
-    country: body.country,
     limit: body.limit ?? 6,
   };
   const queryString = objectToQueryString(data);
-  const resultItems: ItunesResult[] = [];
 
+  const resultItems: ItunesResult[] = [];
   sendRequest("POST", ITUNES_URL + "/search" + queryString).then((result: ItunesResponse) => {
-    if (result.resultCount > 0) {
-      result.results.forEach((result) => {
-        if (result.artistName?.length > ARTWORK_GENERATION.ITUNES.MAX_TITLE_LENGTH)
+    if (!is2xxSuccessful(result.status)) {
+      throw new Error(result.message);
+    }
+
+    if (result.data.resultCount > 0) {
+      result.data.results.forEach((result) => {
+        if (result.artistName?.length > ITUNES.MAX_TITLE_LENGTH)
           result.artistName = getTitleWithAdjustedLength(result.artistName);
-        if (result.collectionName?.length > ARTWORK_GENERATION.ITUNES.MAX_TITLE_LENGTH)
+        if (result.collectionName?.length > ITUNES.MAX_TITLE_LENGTH)
           result.collectionName = getTitleWithAdjustedLength(result.collectionName);
         resultItems.push({
           artistName: result.artistName,
@@ -71,16 +98,15 @@ const handleSubmitFileUpload = async (e: FormEvent<HTMLFormElement>, body: FileU
   }
 
   const data = {
+    ...body,
     file: new FormData(e.currentTarget).get("file") as File,
-    includeCenterArtwork: body.includeCenterArtwork,
   };
 
-  const fileExtensionIsAccepted = isFileExtensionAccepted(data.file.name, ARTWORK_GENERATION.FILE_UPLOAD.ACCEPTED_IMG_EXTENSIONS);
+  const fileExtensionIsAccepted = isFileExtensionAccepted(data.file.name, FILE_UPLOAD.ACCEPTED_IMG_EXTENSIONS);
   if (!fileExtensionIsAccepted) {
-    hideSpinner("artwork-generation_file-upload");
     sendToast(
       TOAST.INVALID_FILE_TYPE + "\n" +
-        "Accepted file extensions: " + ARTWORK_GENERATION.FILE_UPLOAD.ACCEPTED_IMG_EXTENSIONS.join(", ") + ".",
+        "Accepted file extensions: " + FILE_UPLOAD.ACCEPTED_IMG_EXTENSIONS.join(", ") + ".",
       TOAST_TYPE.ERROR
     );
     return;
@@ -88,14 +114,12 @@ const handleSubmitFileUpload = async (e: FormEvent<HTMLFormElement>, body: FileU
 
   showSpinner(SPINNER_ID.FILE_UPLOAD);
 
-  console.log(data);
-
   sendRequest("POST", BACKEND_URL + "/artwork-generation/use-local-image", data).then((response: ApiResponse) => {
-    if (response.status === RESPONSE_STATUS.SUCCESS) {
-      // window.location.href = PATHS.processedImages;
-    } else {
-      sendToast(response.message, TOAST_TYPE.ERROR);
+    if (!is2xxSuccessful(response.status)) {
+      throw new Error(response.message);
     }
+
+    // window.location.href = PATHS.processedImages;
   }).catch((error: ApiResponse) => {
     sendToast(error.message, TOAST_TYPE.ERROR);
   }).finally(() => {
@@ -104,7 +128,7 @@ const handleSubmitFileUpload = async (e: FormEvent<HTMLFormElement>, body: FileU
 };
 
 const isValidYoutubeUrl = (url: string): boolean => {
-    return ARTWORK_GENERATION.YOUTUBE.REGEX_YOUTUBE_URL.some((pattern) => pattern.test(url));
+  return YOUTUBE.REGEX_YOUTUBE_URL.some((pattern: RegExp) => pattern.test(url));
 }
 const handleSubmitYoutubeUrl = async (e: FormEvent<HTMLFormElement>, body: YoutubeRequest) => {
     e.preventDefault();
@@ -116,16 +140,12 @@ const handleSubmitYoutubeUrl = async (e: FormEvent<HTMLFormElement>, body: Youtu
 
     showSpinner(SPINNER_ID.YOUTUBE_URL);
 
-    const data = {
-      url: body.url,
-    };
-
-    sendRequest("POST", BACKEND_URL + "/artwork-generation/use-youtube-thumbnail", data).then((response: ApiResponse) => {
-      if (response.status === RESPONSE_STATUS.SUCCESS) {
-        // window.location.href = PATHS.processedImages;
-      } else {
-        sendToast(response.message, TOAST_TYPE.ERROR);
+    sendRequest("POST", BACKEND_URL + "/artwork-generation/use-youtube-thumbnail", body).then((response: ApiResponse) => {
+      if (!is2xxSuccessful(response.status)) {
+        throw new Error(response.message);
       }
+
+      // window.location.href = PATHS.processedImages;
     }).catch((error: ApiResponse) => {
       sendToast(error.message, TOAST_TYPE.ERROR);
     }).finally(() => {
@@ -133,7 +153,7 @@ const handleSubmitYoutubeUrl = async (e: FormEvent<HTMLFormElement>, body: Youtu
     });
 };
 
-const ArtworkGeneration = (): React.JSX.Element => {
+const ArtworkGeneration = (): JSX.Element => {
   // iTunes search
   const [term, setTerm] = useState("");
   const [country, setCountry] = useState("fr");
@@ -152,18 +172,22 @@ const ArtworkGeneration = (): React.JSX.Element => {
     <>
       <div id="toast-container"></div>
       <span className="top-bot-spacer"></span>
+
       <div className="navbar">
-        <button type="button"
-          onClick={() => window.location.href = PATHS.home }
-        >
-          <span className="left">Home</span>
+        <button type="button" onClick={() => window.location.href = PATHS.home }>
+          <span className="left">{TITLE.HOME}</span>
         </button>
       </div>
+
       <h1>Search for cover art on iTunes</h1>
-      <form onSubmit={(e) => handleSubmitItunesSearch(e, {term: term, country: country}, setItunesResults)}>
+      <form onSubmit={(e) => handleSubmitItunesSearch(e, {term, country}, setItunesResults)}>
         <div className="flexbox">
-          <input type="text" name="query" id="query" placeholder="Search on iTunes" onChange={(e) => setTerm(e.target.value)} />
-          <select name="country" id="country" aria-label="Country" defaultValue="fr" onChange={(e) => setCountry(e.target.value)}>
+          <input type="text" placeholder="Search on iTunes"
+            onChange={(e) => setTerm(e.target.value)}
+          />
+          <select aria-label="Country"
+            defaultValue="fr" onChange={(e) => setCountry(e.target.value)}
+          >
             <option value="fr">France</option>
             <option value="us">United States</option>
             <option value="nz">New Zealand</option>
@@ -175,34 +199,19 @@ const ArtworkGeneration = (): React.JSX.Element => {
       </form>
       <div className="results">
         { itunesResults.length > 0 &&
-          <button className="warn minimal centered" onClick={() => setItunesResults([])}>Clear results</button>
+          <button id="clear" onClick={() => setItunesResults([])}>Clear results</button>
         }
         <div id="results" className="result-container">
-          { itunesResults.map((item, key) => {
-            const highResImageUrl = item.artworkUrl100.replace("100x100", "3000x3000"); // itunes max image size is 3000x3000;
-            return (
-              <div className="result-item" key={"result" + key.toString()}>
-                <img src={highResImageUrl} className="result-image" alt={item.collectionName || item.trackName} />
-                <p className="centered bold italic">{item.artistName} - {item.collectionName.replace(" - Single", "")}</p>
-                <button onClick={async () => {
-                  const response: ApiResponse = await sendRequest("POST", BACKEND_URL + "/artwork-generation/use-itunes-image", { url: highResImageUrl });
-                  if (response.status === RESPONSE_STATUS.SUCCESS) {
-                    sendToast(response.message, TOAST_TYPE.SUCCESS);
-                    // window.location.href = PATHS.processedImages;
-                  } else {
-                    sendToast(response.message, TOAST_TYPE.ERROR);
-                  }
-                }}>Use this image</button>
-              </div>
-            )
-          })}
+          { itunesResults.map((item, key) => renderItunesResult(item, key)) }
         </div>
       </div>
 
+      <hr />
+
       <h1>...or upload your image</h1>
-      <form encType="multipart/form-data" onSubmit={(e) => handleSubmitFileUpload(e, {file: file, includeCenterArtwork: includeCenterArtwork})}>
+      <form onSubmit={(e) => handleSubmitFileUpload(e, {file, includeCenterArtwork})} encType="multipart/form-data">
         <div className="flexbox">
-          <input type="file" name="file" id="file" className="file"
+          <input type="file" name="file" className="file"
             onChange={(e) => setFile(e.target.files ? e.target.files[0] : undefined)}
           />
           <label className="checkbox" htmlFor="include_center_artwork">
@@ -217,12 +226,13 @@ const ArtworkGeneration = (): React.JSX.Element => {
           </div>
         </div>
       </form>
-      <span className="top-bot-spacer"></span>
 
-      <h1>...or use a YouTube thumbnail</h1>
+      <hr />
+
+      <h1>...or use a YouTube video thumbnail</h1>
       <form onSubmit={(e) => handleSubmitYoutubeUrl(e, {url: youtubeUrl})}>
         <div className="flexbox">
-          <input type="text" name="url" id="youtube_url" placeholder="Paste YouTube URL here"
+          <input type="text" placeholder="Paste YouTube video URL here"
             onChange={(e) => setYoutubeUrl(e.target.value)}
           />
           <div className="action-button" id={SPINNER_ID.YOUTUBE_URL}>
@@ -230,6 +240,8 @@ const ArtworkGeneration = (): React.JSX.Element => {
           </div>
         </div>
       </form>
+
+      <span className="top-bot-spacer"></span>
     </>
   );
 };

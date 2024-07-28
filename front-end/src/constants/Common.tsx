@@ -1,35 +1,4 @@
-import { Context, ResponseStatus } from "./Types";
-
-export const PROCESSED_IMAGES = {
-  COVER_ART_FILENAME: "ProcessedArtwork.png",
-
-  LOGO_POSITIONS: [
-    "top-left", "top-center", "top-right",
-    "center-left", "center-center", "center-right",
-    "bottom-left", "bottom-center", "bottom-right",
-  ],
-  DEFAULT_SELECTED_POSITION: "center-left",
-};
-
-export const ARTWORK_GENERATION = {
-  ITUNES: {
-    MAX_TITLE_LENGTH: 42,
-    MAX_CROP_LENGTH: 12,
-  },
-  FILE_UPLOAD: {
-    ACCEPTED_IMG_EXTENSIONS: [
-      "jpg",
-      "jpeg",
-      "png",
-    ]
-  },
-  YOUTUBE: {
-    REGEX_YOUTUBE_URL: [
-      /https?:\/\/(www\.)?youtube\.com\/watch\?v=[a-zA-Z0-9_-]{11}/,
-      /https?:\/\/youtu\.be\/[a-zA-Z0-9_-]{11}/,
-    ],
-  },
-};
+import { Context, ResponseStatus } from "../common/Types";
 
 /**************** GENERIC ****************/
 
@@ -69,13 +38,13 @@ export const DEFAULT_EVENT_DURATION = {
 };
 export const SPINNER_ID = {
   // Artwork Generation
-  ITUNES: "artwork-generation_search-form",
-  FILE_UPLOAD: "artwork-generation_file-upload",
-  YOUTUBE_URL: "artwork-generation_youtube-url",
+    ITUNES: "artwork-generation_search-form",
+    FILE_UPLOAD: "artwork-generation_file-upload",
+    YOUTUBE_URL: "artwork-generation_youtube-url",
 
   // Lyrics
-  LYRICS_SEARCH: "lyrics_search",
-  LYRICS_SAVE: "lyrics_save",
+    LYRICS_SEARCH: "lyrics_search",
+    LYRICS_SAVE: "lyrics_save",
 }
 
 /***************** CONFIG ****************/

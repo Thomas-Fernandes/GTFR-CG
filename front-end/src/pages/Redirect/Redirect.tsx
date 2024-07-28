@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from "react";
+import { JSX, useEffect, useState } from "react";
 
-import { DEFAULT_CONTEXT, DEFAULT_EVENT_DURATION, TITLE } from "../../common/Constants";
 import { Context } from "../../common/Types";
 import useTitle from "../../common/UseTitle";
 import { isEmpty } from "../../common/utils/ObjUtils";
+import { DEFAULT_CONTEXT, DEFAULT_EVENT_DURATION, TITLE } from "../../constants/Common";
 
 import "./Redirect.css";
 
-const Redirect = (passedContext: Context): React.JSX.Element => {
+const Redirect = (passedContext: Context): JSX.Element => {
   const context = isEmpty(passedContext) ? DEFAULT_CONTEXT : passedContext;
   const [countdown, setCountdown] = useState(DEFAULT_EVENT_DURATION.SECONDS_TOAST);
   const [plural, setPlural] = useState(DEFAULT_CONTEXT.plural);

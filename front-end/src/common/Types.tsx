@@ -34,8 +34,12 @@ export type ItunesResult = {
   artworkUrl100: string;
 };
 export type ItunesResponse = {
-  resultCount: number;
-  results: ItunesResult[];
+  status: number;
+  message: string;
+  data: {
+    resultCount: number;
+    results: ItunesResult[];
+  };
 };
 export type ItunesRequest = {
   term: string;
@@ -56,7 +60,7 @@ export type Statistics = {
 /**************** GENERIC ****************/
 
 export type ApiResponse = {
-  status: string;
+  status: number;
   message: string;
   data: object;
 };

@@ -1,43 +1,43 @@
-import { useEffect, useState } from "react";
+import { JSX, useEffect, useState } from "react";
 
-import { BACKEND_URL, PATHS, TITLE, TOAST, TOAST_TYPE } from "../../common/Constants";
 import { is2xxSuccessful, sendRequest } from "../../common/Requests";
+import { BACKEND_URL, PATHS, TITLE, TOAST, TOAST_TYPE } from "../../constants/Common";
 
 import { sendToast } from "../../common/Toast";
-import { Statistics } from "../../common/Types";
+import { ApiResponse, Statistics } from "../../common/Types";
 import useTitle from "../../common/UseTitle";
 
 import "./Home.css";
 
 const fetchStatistics = (): Statistics => {
-  sendRequest("GET", BACKEND_URL + "/statistics").then((response) => {
-    if (is2xxSuccessful(response.status)) {
-      return response.data as Statistics;
-    } else {
+  sendRequest("GET", BACKEND_URL + "/statistics").then((response: ApiResponse) => {
+    if (!is2xxSuccessful(response.status)) {
       throw new Error("");
     }
-  }).catch((error) => {
+
+    return response.data as Statistics;
+  }).catch((error: ApiResponse) => {
     sendToast(error.message, TOAST_TYPE.ERROR);
   });
   return {} as Statistics;
 };
 
 const fetchGeniusToken = (): string => {
-  sendRequest("GET", BACKEND_URL + "/genius-token").then((response) => {
-    if (is2xxSuccessful(response.status)) {
-      sendToast(TOAST.WELCOME, TOAST_TYPE.SUCCESS, 5);
-      return response.data;
-    } else {
+  sendRequest("GET", BACKEND_URL + "/genius-token").then((response: ApiResponse) => {
+    if (!is2xxSuccessful(response.status)) {
       throw new Error(TOAST.GENIUS_TOKEN_NOT_FOUND);
     }
-  }).catch((error) => {
+
+    sendToast(TOAST.WELCOME, TOAST_TYPE.SUCCESS, 5);
+    return response.data;
+  }).catch((error: ApiResponse) => {
     sendToast(error.message, TOAST_TYPE.ERROR, 10);
     sendToast(TOAST.ADD_GENIUS_TOKEN, TOAST_TYPE.WARN, 20);
   });
   return "";
 };
 
-const Home = (): React.JSX.Element => {
+const Home = (): JSX.Element => {
   const [geniusToken, setGeniusToken] = useState("");
   const [stats, setStats] = useState<Statistics>({} as Statistics);
 
@@ -68,11 +68,11 @@ const Home = (): React.JSX.Element => {
       <h1>Home</h1>
 
       <div className="navbar">
-        <button type="button" onClick={() => { window.location.href = PATHS.artworkGeneration; }}>
-          <span className="right">Artwork Generation</span>
+        <button type="button" onClick={() => { window.location.href = PATHS.artworkGeneration }}>
+          <span className="right">{TITLE.ARTWORK_GENERATION}</span>
         </button>
-        <button type="button" onClick={() => { window.location.href = PATHS.lyrics; }}>
-          <span className="right">Lyrics</span>
+        <button type="button" onClick={() => { window.location.href = PATHS.lyrics }}>
+          <span className="right">{TITLE.LYRICS}</span>
         </button>
       </div>
 
