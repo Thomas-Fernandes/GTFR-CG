@@ -1,28 +1,3 @@
-div.navbar {
-    width: 67%;
-
-    button {
-        width: calc(50% - 32px);
-        padding: 6% 0;
-
-        span {
-            font-size: 24px;
-        }
-
-        span.right:before {
-            right: 0;
-
-            content: '\00bb'; /* double right arrow character */
-        }
-
-        &:hover {
-            span.right:before {
-                right: 5%;
-            }
-        }
-    }
-}
-
 .stats-board {
     width: 50%;
 

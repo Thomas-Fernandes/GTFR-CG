@@ -32,7 +32,9 @@ const Redirect = (passedContext: Context): JSX.Element => {
   return (
     <>
       <span className="top-bot-spacer" />
+
       <h1>Redirection page</h1>
+
       <div className="board">
         <h3 className="title">You are being redirected after an error was met...</h3>
         <p className="err">{ context?.error_text }</p>
@@ -40,6 +42,7 @@ const Redirect = (passedContext: Context): JSX.Element => {
           You will be redirected to&nbsp;<span id="direction">{ context?.redirect_to }</span>&nbsp;in&nbsp;<span id="countdown">{ countdown }</span>&nbsp;second<span id="plural">{ plural }</span>.
         </p>
       </div>
+
       <span className="top-bot-spacer" />
     </>
   );
