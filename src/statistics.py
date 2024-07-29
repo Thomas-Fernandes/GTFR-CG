@@ -122,8 +122,10 @@ def initStats(from_error: bool = False) -> JsonDict:
     """
     log.debug("Initializing statistics...")
     stats: JsonDict = {}
-    if from_error:
-        stats[const.AvailableStats.dateFirstOperation.value] = "N/A"
+    stats.setdefault(const.AvailableStats.dateFirstOperation.value, "N/A")
+    stats.setdefault(const.AvailableStats.dateLastOperation.value, "N/A")
+    stats.setdefault(const.AvailableStats.artworkGenerations.value, 0)
+    stats.setdefault(const.AvailableStats.lyricsFetches.value, 0)
 
     with open(const.STATS_FILE_PATH, "w") as file:
         log.debug(f"  Stats file created @ {const.STATS_FILE_PATH}")

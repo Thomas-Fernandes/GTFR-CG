@@ -1,4 +1,5 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, jsonify, render_template, request
+from flask_cors import cross_origin
 
 import src.constants as const
 from src.logger import log
@@ -8,6 +9,34 @@ from src.typing import RenderView
 from src.app import app
 bp_home = Blueprint(const.ROUTES.home.bp_name, __name__.split('.')[-1])
 session = app.config
+
+@bp_home.route("/api/genius-token", methods=["GET"])
+@cross_origin()
+def getGeniusToken() -> JsonDict:
+    """ Returns the Genius API token.
+    :return: [str] The Genius API token.
+    """
+    log.debug("GET - Fetching Genius API token...")
+    token = session.get(const.SessionFields.genius_token.value, "")
+    return jsonify(
+        status=200,
+        message="Genius API token fetched successfully.",
+        data=token
+    )
+
+@bp_home.route("/api/statistics", methods=["GET"])
+@cross_origin()
+def getStatistics() -> JsonDict:
+    """ Returns the statistics as a JSON object.
+    :return: [JsonDict] The statistics.
+    """
+    log.debug("GET - Fetching statistics...")
+    stats = getJsonStatsFromFile()
+    return jsonify(
+        status=200,
+        message="Statistics fetched successfully.",
+        data=stats
+    )
 
 @staticmethod
 def getPluralMarks(stats: JsonDict) -> JsonDict:

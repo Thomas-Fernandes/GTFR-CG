@@ -3,6 +3,9 @@ import { Context, ResponseStatus } from "../common/Types";
 /**************** GENERIC ****************/
 
 export const TOAST: Record<string, string> = {
+  DEFAULT: "An unknown error occurred.\n"
+    + "Please try again later or open an issue.",
+
   // Home
     WELCOME: "Welcome to GTFR-CG!\n"
       + "Application started successfully.",
