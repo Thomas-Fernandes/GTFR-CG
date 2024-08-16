@@ -24,8 +24,11 @@ const renderItunesResult = (item: ItunesResult, key: number): JSX.Element => {
             throw new Error(response.message);
           }
 
-          sendRequest("POST", BACKEND_URL + PATHS.processedImages);
-          window.location.href = PATHS.processedImages;
+          sendRequest("POST", BACKEND_URL + PATHS.processedImages).then(() => {
+            window.location.href = PATHS.processedImages;
+          }).catch((error: ApiResponse) => {
+            sendToast(error.message, TOAST_TYPE.ERROR);
+          });
       }).catch((error: ApiResponse) => {
           sendToast(error.message, TOAST_TYPE.ERROR);
         });

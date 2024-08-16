@@ -1,12 +1,14 @@
-form {
-    justify-content: center;
+#lyrics {
+    form {
+        justify-content: center;
 
-    .search-bar {
-        gap: 16px;
-    }
+        .search-bar {
+            gap: 16px;
+        }
 
-    textarea {
-        height: 300px;
-        padding: 1rem;
+        textarea {
+            height: 300px;
+            padding: 1rem;
+        }
     }
 }

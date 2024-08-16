@@ -79,7 +79,7 @@ const Home = (): JSX.Element => {
   }, []);
 
   return (
-    <>
+    <div id="home">
       <div id="toast-container"></div>
       <span className="top-bot-spacer" />
 
@@ -127,7 +127,7 @@ const Home = (): JSX.Element => {
       </div>
 
       <span className="top-bot-spacer" />
-    </>
+    </div>
   );
 };
 

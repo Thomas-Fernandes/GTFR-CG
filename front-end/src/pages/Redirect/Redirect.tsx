@@ -30,7 +30,7 @@ const Redirect = (passedContext: Context): JSX.Element => {
   }, [context, countdown]);
 
   return (
-    <>
+    <div id="redirect">
       <span className="top-bot-spacer" />
 
       <h1>Redirection page</h1>
@@ -44,7 +44,7 @@ const Redirect = (passedContext: Context): JSX.Element => {
       </div>
 
       <span className="top-bot-spacer" />
-    </>
+    </div>
   );
 }
 

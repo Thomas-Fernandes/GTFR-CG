@@ -58,7 +58,7 @@ const Lyrics = (): JSX.Element => {
   useTitle(TITLE.LYRICS);
 
   return (
-    <>
+    <div id="lyrics">
       <div id="toast-container"></div>
       <span className="top-bot-spacer" />
 
@@ -101,7 +101,7 @@ const Lyrics = (): JSX.Element => {
           <input type="submit" value="Save Lyrics" className="action-button save-button" />
         </div>
       </form>
-    </>
+    </div>
   )
 };
 

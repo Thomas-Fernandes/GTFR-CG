@@ -52,7 +52,7 @@ const ProcessedImages = (): JSX.Element => {
   useTitle(TITLE.PROCESSED_IMAGES);
 
   return (
-  <>
+  <div id="processed-images">
     <div id="toast-container"></div>
     <span className="top-bot-spacer" />
 
@@ -89,7 +89,7 @@ const ProcessedImages = (): JSX.Element => {
     </div>
 
     <span className="top-bot-spacer" />
-  </>
+  </div>
   )
 };
 
