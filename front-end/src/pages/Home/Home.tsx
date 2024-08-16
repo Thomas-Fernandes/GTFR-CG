@@ -1,12 +1,13 @@
 import { JSX, useEffect, useState } from "react";
 
 import { is2xxSuccessful, sendRequest } from "../../common/Requests";
-import { BACKEND_URL, PATHS, TITLE, TOAST, TOAST_TYPE } from "../../constants/Common";
+import { BACKEND_URL, PATHS, SPINNER_ID, TITLE, TOAST, TOAST_TYPE } from "../../constants/Common";
 
 import { sendToast } from "../../common/Toast";
 import { Statistics } from "../../common/Types";
 import useTitle from "../../common/UseTitle";
 
+import { hideSpinner, showSpinner } from "../../common/Spinner";
 import "./Home.css";
 
 const fetchStatistics = async (): Promise<Statistics> => {
@@ -33,6 +34,19 @@ const fetchGeniusToken = async (): Promise<string> => {
   return response.data;
 };
 
+const hideAllStatsSpinners = (): void => {
+  hideSpinner(SPINNER_ID.STATISTICS_FIRST_OPERATION);
+  hideSpinner(SPINNER_ID.STATISTICS_LAST_OPERATION);
+  hideSpinner(SPINNER_ID.STATISTICS_ARTWORK_GENERATION);
+  hideSpinner(SPINNER_ID.STATISTICS_LYRICS_FETCHES);
+}
+const showAllStatsSpinners = (): void => {
+  showSpinner(SPINNER_ID.STATISTICS_FIRST_OPERATION);
+  showSpinner(SPINNER_ID.STATISTICS_LAST_OPERATION);
+  showSpinner(SPINNER_ID.STATISTICS_ARTWORK_GENERATION);
+  showSpinner(SPINNER_ID.STATISTICS_LYRICS_FETCHES);
+}
+
 const Home = (): JSX.Element => {
   const [geniusToken, setGeniusToken] = useState("");
   const [stats, setStats] = useState<Statistics>({} as Statistics);
@@ -49,8 +63,10 @@ const Home = (): JSX.Element => {
       const routeKey = location.pathname;
       const hasVisited = sessionStorage.getItem(routeKey);
 
+      showAllStatsSpinners();
       const stats = await fetchStatistics();
       setStats(stats);
+      hideAllStatsSpinners();
 
       if (!hasVisited) {
         const token = await fetchGeniusToken();
@@ -81,28 +97,28 @@ const Home = (): JSX.Element => {
       <div className="stats-board">
         <div className="stats-entry">
           <h3 className="stat-title">Date of First Operation</h3>
-          <p className="stat-text">{ stats.dateFirstOperation }</p>
+          <p className="stat-text" id={SPINNER_ID.STATISTICS_FIRST_OPERATION}>{ stats.dateFirstOperation }</p>
         </div>
 
         <hr />
 
         <div className="stats-entry">
           <h3 className="stat-title">Date of Last Operation</h3>
-          <p className="stat-text">{ stats.dateLastOperation }</p>
+          <p className="stat-text" id={SPINNER_ID.STATISTICS_LAST_OPERATION}>{ stats.dateLastOperation }</p>
         </div>
 
         <hr />
 
         <div className="stats-entry">
           <h3 className="stat-title">Artwork Generations</h3>
-          <p className="stat-text">{ stats.artworkGenerations }</p>
+          <p className="stat-text" id={SPINNER_ID.STATISTICS_ARTWORK_GENERATION}>{ stats.artworkGenerations }</p>
         </div>
 
         <hr />
 
         <div className="stats-entry">
           <h3 className="stat-title">Genius Lyrics Fetches</h3>
-          <p className="stat-text">{ stats.lyricsFetches }</p>
+          <p className="stat-text" id={SPINNER_ID.STATISTICS_LYRICS_FETCHES}>{ stats.lyricsFetches }</p>
         </div>
       </div>
 

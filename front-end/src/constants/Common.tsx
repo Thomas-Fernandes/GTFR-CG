@@ -40,6 +40,12 @@ export const DEFAULT_EVENT_DURATION = {
   MS_VERTICAL_SLIDE: 200,
 };
 export const SPINNER_ID = {
+  // Home
+    STATISTICS_FIRST_OPERATION: "home_statistics_first-operation",
+    STATISTICS_LAST_OPERATION: "home_statistics_last-operation",
+    STATISTICS_ARTWORK_GENERATION: "home_statistics_artwork-generation",
+    STATISTICS_LYRICS_FETCHES: "home_statistics_lyrics-fetches",
+
   // Artwork Generation
     ITUNES: "artwork-generation_search-form",
     FILE_UPLOAD: "artwork-generation_file-upload",
