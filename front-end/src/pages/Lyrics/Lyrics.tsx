@@ -26,7 +26,7 @@ const handleLyricsSearchSubmit = (e: FormEvent<HTMLFormElement>, body: LyricsReq
   }
 
   showSpinner(SPINNER_ID.LYRICS_SEARCH);
-  console.log("Searching for lyrics...", body);
+  console.log("Searching for the lyrics of...", body);
 
   sendRequest("POST", BACKEND_URL + "/lyrics", body).then((response: LyricsResponse) => {
     if (!is2xxSuccessful(response.status)) {

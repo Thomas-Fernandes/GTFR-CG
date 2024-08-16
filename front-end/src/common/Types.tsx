@@ -66,7 +66,7 @@ export type Statistics = {
 export type ApiResponse = {
   status: number;
   message: string;
-  data: object;
+  data?: object;
 };
 
 export type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";

@@ -1,7 +1,9 @@
 from requests.exceptions import ReadTimeout as ReadTimeoutException
-from flask import Blueprint, render_template, request
+from flask import Blueprint, jsonify, render_template, request
+from flask_cors import cross_origin
 from lyricsgenius import Genius
 
+from ast import literal_eval
 from re import sub, split, match
 from typing import Optional
 
@@ -9,7 +11,7 @@ import src.constants as const
 from src.logger import log
 from src.routes.redirect import renderRedirection
 from src.statistics import updateStats
-from src.typing import Context, RenderView
+from src.typing import Context, JsonDict, RenderView
 
 from src.app import app
 bp_lyrics = Blueprint(const.ROUTES.lyrics.bp_name, __name__.split('.')[-1])
@@ -91,6 +93,23 @@ def updateTextarea() -> RenderView:
     }
     log.debug(f"Rendering {const.ROUTES.lyrics.bp_name} page...")
     return render_template(const.ROUTES.lyrics.view_filename, **context)
+
+@bp_lyrics.route("/api/lyrics", methods=["POST"])
+@cross_origin()
+def getGeniusLyrics() -> JsonDict:
+    """ Fetches the lyrics of a song from Genius.com.
+    :return: [JsonDict] The JSON response containing the fetched lyrics.
+    """
+    log.debug("POST - Fetching lyrics...")
+    body = literal_eval(request.get_data(as_text=True))
+    lyrics = fetchLyricsFromGenius(body["songName"], body["artist"])
+    return jsonify(
+        status=200,
+        message="Lyrics fetched successfully.",
+        data={
+            "lyrics": lyrics,
+        },
+    )
 
 @bp_lyrics.route(const.ROUTES.lyrics.path, methods=["GET"])
 def renderLyrics() -> RenderView:
