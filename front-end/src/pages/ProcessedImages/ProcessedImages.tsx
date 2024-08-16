@@ -1,10 +1,9 @@
 import { FormEvent, JSX, useState } from "react";
 
-import { sendRequest } from "../../common/Requests";
 import { sendToast } from "../../common/Toast";
-import { ApiResponse, ImageDownloadRequest, StateSetter } from "../../common/Types";
+import { ImageDownloadRequest, StateSetter } from "../../common/Types";
 import useTitle from "../../common/UseTitle";
-import { BACKEND_URL, PATHS, TITLE, TOAST_TYPE } from "../../constants/Common";
+import { PATHS, TITLE, TOAST_TYPE } from "../../constants/Common";
 import { COVER_ART_FILENAME, DEFAULT_SELECTED_POSITION, LOGO_POSITIONS, PROCESSED_IMAGES_PATH } from "../../constants/ProcessedImages";
 
 import "./ProcessedImages.css";
@@ -13,15 +12,26 @@ const handleSubmitDownloadImage = (e: FormEvent<HTMLFormElement>, body: ImageDow
   e.preventDefault();
 
   if (!body.selectedImage) {
-    sendToast("Please select a thumbnail", TOAST_TYPE.ERROR);
+    sendToast("Please select an image to download", TOAST_TYPE.ERROR);
     return;
   }
 
-  sendRequest("POST", BACKEND_URL + "/download-image" + encodeURIComponent(body.selectedImage)).then(() => {
-    // TODO - handle the response
-  }).catch((error: ApiResponse) => {
-    sendToast(error.message, TOAST_TYPE.ERROR);
-  });
+  const filepath = `${PROCESSED_IMAGES_PATH}/${body.selectedImage}`;
+  const filename = filepath.split('/').pop();
+  const outputFilename = filename === COVER_ART_FILENAME ? "background.png" : filename;
+
+  const link = document.createElement("a");
+  link.download = outputFilename ?? "download.png";
+  link.href = filepath;
+  document.body.appendChild(link);
+
+  try {
+    link.click();
+  } catch (err) {
+    sendToast((err as Error).message, TOAST_TYPE.ERROR);
+  } finally {
+    document.body.removeChild(link);
+  }
 };
 
 const processImageName = (position: string): string => {

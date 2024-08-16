@@ -116,7 +116,7 @@ def generateThumbnails(bg_path: str, output_folder: str) -> None:
         final_image.save(f"./front-end/public/processed-images/thumbnail_{position}.png")
         log.debug(f"Thumbnail saved: {output_path}")
 
-@bp_processed_images.route("/download-image/<filename>", methods=["GET"])
+@bp_processed_images.route("/api" + "/download-image/<filename>", methods=["GET"])
 def downloadImage(filename: str) -> Response | JsonResponse:
     """ Downloads the image with the given filename.
     :param filename: [string] The name of the image to download.
@@ -131,7 +131,7 @@ def downloadImage(filename: str) -> Response | JsonResponse:
     log.info(f"Downloading image: {filename}")
     return send_from_directory(directory, filename, as_attachment=True)
 
-@bp_processed_images.route("/download-thumbnail/<idx>", methods=["GET"])
+@bp_processed_images.route("/api" + "/download-thumbnail/<idx>", methods=["GET"])
 def downloadThumbnail(idx: str) -> Response | JsonResponse:
     """ Downloads the thumbnail with the given index.
     :param idx: [string] The index of the thumbnail to download.
