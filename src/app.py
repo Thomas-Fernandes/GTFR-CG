@@ -4,7 +4,7 @@ from flask_session import Session
 from waitress import serve
 
 # Python standard libraries
-from os import listdir, path, remove, removedirs
+from os import listdir, makedirs, path, remove, removedirs
 from sys import exit
 
 # Local modules
@@ -44,6 +44,7 @@ def initApp() -> None:
             app.register_blueprint(blueprint)
         log.debug("  Blueprints initialized.")
     initBlueprints()
+    makedirs("./front-end/public/processed-images", exist_ok=True)
     Session(app)
     log.debug("App initialized.")
 

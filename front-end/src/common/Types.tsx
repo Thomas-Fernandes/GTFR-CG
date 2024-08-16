@@ -2,9 +2,7 @@ import { Dispatch, SetStateAction } from "react";
 
 /**************** LYRICS *****************/
 
-export type LyricsResponse = {
-  status: number;
-  message: string;
+export type LyricsResponse = ApiResponse & {
   data: {
     lyrics: string;
   };
@@ -14,10 +12,17 @@ export type LyricsRequest = {
   songName: string;
 };
 
+
 /*************** PROCESSED ***************/
 
 export type ImageDownloadRequest = {
   selectedImage: string;
+};
+
+export type ProcessedImagesPathResponse = ApiResponse & {
+  data: {
+    path: string;
+  };
 };
 
 /**************** ART_GEN ****************/
@@ -38,12 +43,8 @@ export type ItunesResult = {
   artworkUrl100: string;
 };
 export type ItunesResponse = {
-  status: number;
-  message: string;
-  data: {
-    resultCount: number;
-    results: ItunesResult[];
-  };
+  resultCount: number;
+  results: ItunesResult[];
 };
 export type ItunesRequest = {
   term: string;

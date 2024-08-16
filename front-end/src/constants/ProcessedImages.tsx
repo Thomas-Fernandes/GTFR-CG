@@ -7,3 +7,5 @@ export const LOGO_POSITIONS = [
 ];
 
 export const DEFAULT_SELECTED_POSITION = "center-left";
+
+export const PROCESSED_IMAGES_PATH = "./processed-images";

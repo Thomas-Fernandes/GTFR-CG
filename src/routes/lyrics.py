@@ -1,10 +1,10 @@
-from requests.exceptions import ReadTimeout as ReadTimeoutException
 from flask import Blueprint, jsonify, render_template, request
 from flask_cors import cross_origin
 from lyricsgenius import Genius
 
 from ast import literal_eval
 from re import sub, split, match
+from requests.exceptions import ReadTimeout as ReadTimeoutException
 from typing import Optional
 
 import src.constants as const

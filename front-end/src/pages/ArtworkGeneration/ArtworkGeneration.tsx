@@ -20,16 +20,18 @@ const renderItunesResult = (item: ItunesResult, key: number): JSX.Element => {
           url: item.artworkUrl100,
         };
         sendRequest("POST", BACKEND_URL + "/artwork-generation/use-itunes-image", data).then((response: ApiResponse) => {
-          if (is2xxSuccessful(response.status)) {
-            sendToast(response.message, TOAST_TYPE.SUCCESS);
-            // window.location.href = PATHS.processedImages;
-          } else {
+          if (!is2xxSuccessful(response.status)) {
             throw new Error(response.message);
           }
-        }).catch((error: ApiResponse) => {
+
+          sendRequest("POST", BACKEND_URL + PATHS.processedImages);
+          window.location.href = PATHS.processedImages;
+      }).catch((error: ApiResponse) => {
           sendToast(error.message, TOAST_TYPE.ERROR);
         });
-      }}>Use this image</button>
+      }}>
+        Use this image
+      </button>
     </div>
   );
 };
@@ -43,6 +45,8 @@ const getTitleWithAdjustedLength = (title: string): string => {
   end = ITUNES.MAX_TITLE_LENGTH - end > ITUNES.MAX_CROP_LENGTH ? title.length : end;
   return title.slice(0, end) + "...";
 };
+// iTunes reference: https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/iTuneSearchAPI/Searching.html#//apple_ref/doc/uid/TP40017632-CH5-SW1
+// Ben Dodson's iTunes artwork finder which we mimic: https://github.com/bendodson/itunes-artwork-finder
 const handleSubmitItunesSearch = async (e: FormEvent<HTMLFormElement>, body: ItunesRequest, setItunesResults: StateSetter<ItunesResult[]>) => {
   e.preventDefault();
 
@@ -56,7 +60,13 @@ const handleSubmitItunesSearch = async (e: FormEvent<HTMLFormElement>, body: Itu
   const queryString = objectToQueryString(data);
 
   const resultItems: ItunesResult[] = [];
-  sendRequest("POST", ITUNES_URL + "/search" + queryString).then((result: ItunesResponse) => {
+  sendRequest("POST", ITUNES_URL + "/search" + queryString).then((response: ItunesResponse) => {
+    const result = {
+      status: 200,
+      message: "Success",
+      data: response,
+    };
+
     if (!is2xxSuccessful(result.status)) {
       throw new Error(result.message);
     }
@@ -88,7 +98,7 @@ const handleSubmitItunesSearch = async (e: FormEvent<HTMLFormElement>, body: Itu
 
 const isFileExtensionAccepted = (fileName: string, acceptedExtensions: string[]): boolean => {
   return acceptedExtensions.includes(fileName.split(".").slice(-1)[0].toLowerCase());
-}
+};
 const handleSubmitFileUpload = async (e: FormEvent<HTMLFormElement>, body: FileUploadRequest) => {
   e.preventDefault();
 
@@ -119,7 +129,8 @@ const handleSubmitFileUpload = async (e: FormEvent<HTMLFormElement>, body: FileU
       throw new Error(response.message);
     }
 
-    // window.location.href = PATHS.processedImages;
+    sendRequest("POST", BACKEND_URL + PATHS.processedImages);
+    window.location.href = PATHS.processedImages;
   }).catch((error: ApiResponse) => {
     sendToast(error.message, TOAST_TYPE.ERROR);
   }).finally(() => {
@@ -129,7 +140,7 @@ const handleSubmitFileUpload = async (e: FormEvent<HTMLFormElement>, body: FileU
 
 const isValidYoutubeUrl = (url: string): boolean => {
   return YOUTUBE.REGEX_YOUTUBE_URL.some((pattern: RegExp) => pattern.test(url));
-}
+};
 const handleSubmitYoutubeUrl = async (e: FormEvent<HTMLFormElement>, body: YoutubeRequest) => {
     e.preventDefault();
 
@@ -145,7 +156,8 @@ const handleSubmitYoutubeUrl = async (e: FormEvent<HTMLFormElement>, body: Youtu
         throw new Error(response.message);
       }
 
-      // window.location.href = PATHS.processedImages;
+      sendRequest("POST", BACKEND_URL + PATHS.processedImages);
+      window.location.href = PATHS.processedImages;
     }).catch((error: ApiResponse) => {
       sendToast(error.message, TOAST_TYPE.ERROR);
     }).finally(() => {
@@ -169,7 +181,7 @@ const ArtworkGeneration = (): JSX.Element => {
   useTitle(TITLE.ARTWORK_GENERATION);
 
   return (
-    <>
+    <div id="artwork-generation">
       <div id="toast-container"></div>
       <span className="top-bot-spacer" />
 
@@ -245,7 +257,7 @@ const ArtworkGeneration = (): JSX.Element => {
       </form>
 
       <span className="top-bot-spacer" />
-    </>
+    </div>
   );
 };
 

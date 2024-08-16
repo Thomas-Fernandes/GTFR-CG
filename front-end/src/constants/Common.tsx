@@ -5,6 +5,8 @@ import { Context, ResponseStatus } from "../common/Types";
 export const TOAST: Record<string, string> = {
   DEFAULT: "An unknown error occurred.\n"
     + "Please try again later or open an issue.",
+  SERVER_UNAVAILABLE: "Server unavailable.\n"
+    + "Please check that the Python server is running.",
 
   // Home
     WELCOME: "Welcome to GTFR-CG!\n"

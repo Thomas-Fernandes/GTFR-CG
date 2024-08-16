@@ -1,4 +1,5 @@
-from flask import Blueprint, render_template, Response, send_from_directory
+from flask import Blueprint, jsonify, render_template, Response, send_from_directory
+from flask_cors import cross_origin
 from PIL import Image, ImageFilter, ImageDraw
 
 from os import path
@@ -13,6 +14,18 @@ from src.web_utils import createJsonResponse
 from src.app import app
 bp_processed_images = Blueprint(const.ROUTES.proc_img.bp_name, __name__.split('.')[-1])
 session = app.config
+
+@bp_processed_images.route("/api" + "/processed-images-path", methods=["GET"])
+@cross_origin()
+def getProcessedImagesPath() -> JsonResponse:
+    log.debug("GET - Retrieving processed images path...")
+    return jsonify(
+        status=200,
+        message="Processed images path retrieved successfully.",
+        data={
+            "path": "/" + session[const.SessionFields.user_folder.value],
+        },
+    )
 
 @staticmethod
 def generateCoverArt(input_path: str, output_path: str, include_center_artwork: bool = True) -> None:
@@ -70,6 +83,7 @@ def generateCoverArt(input_path: str, output_path: str, include_center_artwork: 
         final_image.paste(center_image, (top_left_x, top_left_y))
 
     final_image.save(output_path)
+    final_image.save(f"./front-end/public/processed-images/{const.PROCESSED_ARTWORK_FILENAME}")
     log.debug(f"Cover art saved: {output_path}")
 
 @staticmethod
@@ -99,6 +113,7 @@ def generateThumbnails(bg_path: str, output_folder: str) -> None:
         final_image = new_background.convert("RGB")
         output_path = path.join(output_folder, f"thumbnail_{position}.png")
         final_image.save(output_path)
+        final_image.save(f"./front-end/public/processed-images/thumbnail_{position}.png")
         log.debug(f"Thumbnail saved: {output_path}")
 
 @bp_processed_images.route("/download-image/<filename>", methods=["GET"])
@@ -158,3 +173,15 @@ def renderProcessedImages() -> RenderView:
     }
     log.debug(f"Rendering {const.ROUTES.proc_img.bp_name} page...")
     return render_template(const.ROUTES.proc_img.view_filename, **context)
+
+@bp_processed_images.route("/api" + const.ROUTES.proc_img.path, methods=["POST"])
+@cross_origin()
+def renderProcessedImagesApi() -> JsonResponse:
+    """ Renders the processed artwork and thumbnails, and returns the processed images view.
+    :return: [JsonResponse] The response containing the status and message.
+    """
+    renderProcessedImages()
+    return jsonify(
+        status=200,
+        message="Processed images path retrieved successfully.",
+    )

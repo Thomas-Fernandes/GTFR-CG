@@ -1,4 +1,4 @@
-import { HTTP_STATUS } from "../constants/Common";
+import { HTTP_STATUS, TOAST } from "../constants/Common";
 import { HttpMethod } from "./Types";
 
 export const is2xxSuccessful = (status: number): boolean => {
@@ -16,8 +16,14 @@ export const sendRequest = async (method: HttpMethod, url: string, body?: object
       body: JSON.stringify(body),
     });
   } catch (err) {
+    if (err instanceof Error && err.message === "Failed to fetch") {
+      return {
+        status: HTTP_STATUS.SERVER_UNAVAILABLE,
+        message: TOAST.SERVER_UNAVAILABLE,
+      };
+    }
     return {
-      status: 503,
+      status: HTTP_STATUS.INTERNAL_SERVER_ERROR,
       message: (err as Error).message,
     };
   }

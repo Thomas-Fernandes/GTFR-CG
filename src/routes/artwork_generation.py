@@ -1,6 +1,8 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, jsonify, render_template, request
+from flask_cors import cross_origin
 from requests import get as requestsGet
 
+from ast import literal_eval
 from os import path, makedirs
 from typing import Optional
 from uuid import uuid4
@@ -17,11 +19,12 @@ session = app.config
 ########### iTunes ###########
 
 @bp_artwork_generation.route(const.ROUTES.art_gen.path + "/use-itunes-image", methods=["POST"])
-def useItunesImage() -> JsonResponse:
+def useItunesImage(url: str | None) -> JsonResponse:
     """ Interprets the fetched iTunes URL and saves the image to the user's folder.
     :return: [JsonResponse] The response to the request.
     """
-    image_url: Optional[str] = request.form.get("url")
+    # image_url: Optional[str] = request.form.get("url")
+    image_url: Optional[str] = url
     if image_url is None:
         return createJsonResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_NO_IMG_URL)
 
@@ -49,6 +52,17 @@ def useItunesImage() -> JsonResponse:
     session[const.SessionFields.include_center_artwork.value] = True
     log.log(f"Found iTunes image and saved it to {image_path}")
     return createJsonResponse(const.HttpStatus.OK.value)
+
+@bp_artwork_generation.route("/api" + const.ROUTES.art_gen.path + "/use-itunes-image", methods=["POST"])
+@cross_origin()
+def useItunesImageApi() -> JsonResponse:
+    log.debug("POST - Generating artwork using iTunes image...")
+    body = literal_eval(request.get_data(as_text=True))
+    useItunesImage(body.get("url"))
+    return jsonify(
+        status=200,
+        message="iTunes image processed successfully.",
+    )
 
 ######### Local image ########
 
@@ -97,6 +111,15 @@ def useLocalImage() -> JsonResponse:
     log.log("Local image upload complete.")
     return createJsonResponse(const.HttpStatus.OK.value)
 
+@bp_artwork_generation.route("/api" + const.ROUTES.art_gen.path + "/use-local-image", methods=["POST"])
+@cross_origin()
+def useLocalImageApi() -> JsonResponse:
+    useLocalImage()
+    return jsonify(
+        status=200,
+        message="Image uploaded successfully.",
+    )
+
 ###### YouTube thumbnail ######
 
 def extractYoutubeVideoId(url: str) -> Optional[str]:
@@ -136,11 +159,12 @@ def processYoutubeThumbnail(thumbnail_url: str) -> JsonResponse:
     return createJsonResponse(const.HttpStatus.OK.value, "/processed-images")
 
 @bp_artwork_generation.route(const.ROUTES.art_gen.path + "/use-youtube-thumbnail", methods=["POST"])
-def useYoutubeThumbnail() -> JsonResponse:
+def useYoutubeThumbnail(url: str | None) -> JsonResponse:
     """ Handles the extraction and processing of a YouTube thumbnail from a given URL.
     :return: [JsonResponse] Contains the status and path of the processed image.
     """
-    url = request.form.get("url")
+    # url = request.form.get("url")
+
     if url is None:
         return createJsonResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_NO_IMG_URL)
 
@@ -151,7 +175,17 @@ def useYoutubeThumbnail() -> JsonResponse:
     thumbnail_url = f"https://i3.ytimg.com/vi/{video_id}/maxresdefault.jpg"
     return processYoutubeThumbnail(thumbnail_url)
 
-@bp_artwork_generation.route(const.ROUTES.art_gen.path, methods=["GET"])
+@bp_artwork_generation.route("/api" + const.ROUTES.art_gen.path + "/use-youtube-thumbnail", methods=["POST"])
+@cross_origin()
+def useYoutubeThumbnailApi() -> JsonResponse:
+    body = literal_eval(request.get_data(as_text=True))
+    useYoutubeThumbnail(body.get("url"))
+    return jsonify(
+        status=200,
+        message="YouTube thumbnail processed successfully.",
+    )
+
+@bp_artwork_generation.route("/api" + const.ROUTES.art_gen.path, methods=["POST"])
 def renderArtworkGeneration() -> RenderView:
     """ Renders the artwork generation page.
     :return: [RenderView] The rendered view.
