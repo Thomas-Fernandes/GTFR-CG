@@ -7,6 +7,8 @@ export const TOAST: Record<string, string> = {
     + "Please try again later or open an issue.",
   SERVER_UNAVAILABLE: "Server unavailable.\n"
     + "Please check that the Python server is running.",
+  NO_SPINNER_ID: "HTML Spinner id is required.",
+  NO_SPINNER_CONTAINER: "Spinner container not found.",
 
   // Home
     WELCOME: "Welcome to GTFR-CG!\n"
@@ -22,6 +24,9 @@ export const TOAST: Record<string, string> = {
     NO_IMG: "Please select an image file.",
     INVALID_FILE_TYPE: "Please select a valid image file.",
     INVALID_URL: "Please enter a valid URL.",
+
+  // Processed Images
+    NO_IMG_SELECTION: "Please select an image to download",
 
   // Lyrics
     MISSING_FIELDS: "Please fill out all the required fields.",

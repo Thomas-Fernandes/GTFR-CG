@@ -3,7 +3,7 @@ import { FormEvent, JSX, useState } from "react";
 import { sendToast } from "../../common/Toast";
 import { ImageDownloadRequest, StateSetter } from "../../common/Types";
 import useTitle from "../../common/UseTitle";
-import { PATHS, TITLE, TOAST_TYPE } from "../../constants/Common";
+import { PATHS, TITLE, TOAST, TOAST_TYPE } from "../../constants/Common";
 import { COVER_ART_FILENAME, DEFAULT_SELECTED_POSITION, LOGO_POSITIONS, PROCESSED_IMAGES_PATH } from "../../constants/ProcessedImages";
 
 import "./ProcessedImages.css";
@@ -12,7 +12,7 @@ const handleSubmitDownloadImage = (e: FormEvent<HTMLFormElement>, body: ImageDow
   e.preventDefault();
 
   if (!body.selectedImage) {
-    sendToast("Please select an image to download", TOAST_TYPE.ERROR);
+    sendToast(TOAST.NO_IMG_SELECTION, TOAST_TYPE.ERROR);
     return;
   }
 

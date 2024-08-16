@@ -1,8 +1,9 @@
+import { TOAST, TOAST_TYPE } from "../constants/Common";
 import { sendToast } from "./Toast";
 
 export const showSpinner = (name: string) => {
   if (!name) {
-    sendToast("HTML Spinner id is required", "error");
+    sendToast(TOAST.NO_SPINNER_ID, TOAST_TYPE.ERROR);
     return;
   }
 
@@ -27,9 +28,9 @@ export const showSpinner = (name: string) => {
   }
 
   // Show the spinner
-  const spinnerContainer: HTMLElement = button?.querySelector(".spinner-container") as HTMLElement;
+  const spinnerContainer = button?.querySelector(".spinner-container") as HTMLElement;
   if (!spinnerContainer) {
-    sendToast("Spinner container not found", "error");
+    sendToast(TOAST.NO_SPINNER_CONTAINER, TOAST_TYPE.ERROR);
     return;
   }
   spinnerContainer.style.display = "block";
