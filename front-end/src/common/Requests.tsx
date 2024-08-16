@@ -1,17 +1,26 @@
-import { HttpMethod } from './Types';
+import { HTTP_STATUS } from "../constants/Common";
+import { HttpMethod } from "./Types";
 
 export const is2xxSuccessful = (status: number): boolean => {
-  return status >= 200 && status < 300;
+  return status >= HTTP_STATUS.OK && status < HTTP_STATUS.MULTIPLE_CHOICES;
 };
 
 export const sendRequest = async (method: HttpMethod, url: string, body?: object) => {
-  const response = await fetch(url, {
-    method: method,
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(body),
-  });
+  let response;
+  try {
+    response = await fetch(url, {
+      method: method,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    });
+  } catch (err) {
+    return {
+      status: 503,
+      message: (err as Error).message,
+    };
+  }
 
   if (!response.ok) {
     console.error(`Error: ${response.status} ${response.statusText}`);

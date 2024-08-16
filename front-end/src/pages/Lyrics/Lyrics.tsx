@@ -20,12 +20,13 @@ const handleLyricsSaveSubmit = (e: FormEvent<HTMLFormElement>, body: string): vo
 const handleLyricsSearchSubmit = (e: FormEvent<HTMLFormElement>, body: LyricsRequest, setLyrics: StateSetter<string>): void => {
   e.preventDefault();
 
-  if (body.artist.trim() === "" || body.track.trim() === "") {
+  if (body.artist.trim() === "" || body.songName.trim() === "") {
     sendToast(TOAST.MISSING_FIELDS, TOAST_TYPE.WARN);
     return;
   }
 
   showSpinner(SPINNER_ID.LYRICS_SEARCH);
+  console.log("Searching for lyrics...", body);
 
   sendRequest("POST", BACKEND_URL + "/lyrics", body).then((response: LyricsResponse) => {
     if (!is2xxSuccessful(response.status)) {
@@ -49,7 +50,7 @@ const handleLyricsSearchSubmit = (e: FormEvent<HTMLFormElement>, body: LyricsReq
 const Lyrics = (): JSX.Element => {
   // Search
   const [artist, setArtist] = useState("");
-  const [track, setTrack] = useState("");
+  const [songName, setSongName] = useState("");
 
   // Lyrics
   const [lyrics, setLyrics] = useState("");
@@ -72,15 +73,15 @@ const Lyrics = (): JSX.Element => {
 
       <h1>Lyrics</h1>
 
-      <form className="flexbox" onSubmit={(e) => handleLyricsSearchSubmit(e, {artist, track}, setLyrics)}>
+      <form className="flexbox" onSubmit={(e) => handleLyricsSearchSubmit(e, {artist, songName}, setLyrics)}>
         <div className="search-bar flex-row">
           <input required
             type="text" name="artist" placeholder="Enter artist name"
             onChange={(e) => setArtist(e.target.value)}
           />
           <input required
-            type="text" name="track" placeholder="Enter song name"
-            onChange={(e) => setTrack(e.target.value)}
+            type="text" name="songName" placeholder="Enter song name"
+            onChange={(e) => setSongName(e.target.value)}
           />
           <div className="action-button" id={SPINNER_ID.LYRICS_SEARCH}>
             <input type="submit" value="SEARCH" className="action-button search-button" />

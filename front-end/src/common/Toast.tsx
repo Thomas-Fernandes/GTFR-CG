@@ -24,6 +24,8 @@ export const sendToast = (
   type: ToastType = TOAST_TYPE.ERROR,
   duration: number = DEFAULT_EVENT_DURATION.SECONDS_TOAST
 ) => {
+  if (message === "Failed to fetch")
+    message += ".\nPlease check that the Python server is running.";
   if (type === TOAST_TYPE.WARN || type === TOAST_TYPE.ERROR)
     console.error(`Toast: ${type} - ${flattenMessage(message)}`);
 

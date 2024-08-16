@@ -11,7 +11,7 @@ export type LyricsResponse = {
 };
 export type LyricsRequest = {
   artist: string;
-  track: string;
+  songName: string;
 };
 
 /*************** PROCESSED ***************/
