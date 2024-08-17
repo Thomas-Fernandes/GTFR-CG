@@ -1,4 +1,4 @@
-import { FormEvent, JSX, useState } from "react";
+import { FormEvent, JSX, useEffect, useState } from "react";
 
 import { sendToast } from "../../common/Toast";
 import { ImageDownloadRequest, StateSetter } from "../../common/Types";
@@ -6,6 +6,8 @@ import useTitle from "../../common/UseTitle";
 import { PATHS, TITLE, TOAST, TOAST_TYPE } from "../../constants/Common";
 import { COVER_ART_FILENAME, DEFAULT_SELECTED_POSITION, LOGO_POSITIONS, PROCESSED_IMAGES_PATH } from "../../constants/ProcessedImages";
 
+import { useNavigate } from "react-router-dom";
+import { doesFileExist } from "../../common/utils/FileUtils";
 import "./ProcessedImages.css";
 
 const handleSubmitDownloadImage = (e: FormEvent<HTMLFormElement>, body: ImageDownloadRequest): void => {
@@ -57,9 +59,19 @@ const renderThumbnailOption = (
 };
 
 const ProcessedImages = (): JSX.Element => {
+  const navigate = useNavigate();
+
   const [selectedThumbnail, setSelectedThumbnail] = useState(DEFAULT_SELECTED_POSITION); // default value is 4 (center-left)
 
   useTitle(TITLE.PROCESSED_IMAGES);
+
+  useEffect(() => {
+    doesFileExist(PROCESSED_IMAGES_PATH + "/" + COVER_ART_FILENAME).then((exists: boolean) => {
+      if (!exists) {
+        navigate(`${PATHS.redirect}?error_text=${TOAST.NO_PROCESSED_IMAGE}&redirect_to=${PATHS.artworkGeneration}`);
+      }
+    });
+  });
 
   return (
   <div id="processed-images">

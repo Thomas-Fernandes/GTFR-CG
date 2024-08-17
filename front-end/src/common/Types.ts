@@ -12,7 +12,6 @@ export type LyricsRequest = {
   songName: string;
 };
 
-
 /*************** PROCESSED ***************/
 
 export type ImageDownloadRequest = {
@@ -76,10 +75,3 @@ export type ResponseStatus = "info" | "success" | "warn" | "error";
 export type ToastType = "info" | "success" | "warn" | "error";
 
 export type StateSetter<T> = Dispatch<SetStateAction<T>>;
-
-export type Context = {
-  // Redirect
-  error_text?: string;
-  redirect_to?: string;
-  plural?: string;
-}

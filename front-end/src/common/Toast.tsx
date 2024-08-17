@@ -9,7 +9,6 @@ const convertToHtmlMessage = (message: string) => {
     .replace(/\t/g, "&nbsp;&nbsp;&nbsp;&nbsp;")
   ;
 };
-
 const flattenMessage = (message: string) => {
   return message.trim()
     .replace(/\r/g, "")
@@ -17,7 +16,7 @@ const flattenMessage = (message: string) => {
     .replace(/ {2}/g, "  ")
     .replace(/\t/g, "    ")
   ;
-}
+};
 
 export const sendToast = (
   message: string,
@@ -46,15 +45,16 @@ export const sendToast = (
    progressFill.style.transitionDuration = `${duration}s`;
    setTimeout(() => {
      progressFill.style.width = "0%";
-   }, 10);
-  }, 10);
+   }, DEFAULT_EVENT_DURATION.MS_PROGRESS_UPDATE);
+  }, DEFAULT_EVENT_DURATION.MS_PROGRESS_UPDATE);
+
   toast.addEventListener("click", () => {
     dismissToast(toast);
   });
   setTimeout(() => {
     dismissToast(toast);
   }, duration * 1000);
-}
+};
 
 export const dismissToast = (toast: HTMLElement, duration: number = DEFAULT_EVENT_DURATION.MS_FADE_OUT) => {
   toast.style.animation = `fade-out ${duration.toString()}ms forwards`;
@@ -66,4 +66,4 @@ export const dismissToast = (toast: HTMLElement, duration: number = DEFAULT_EVEN
       document.getElementById("toast-container")?.offsetHeight; // Reflow to ensure the transition applies correctly
     }, duration);
   }, DEFAULT_EVENT_DURATION.MS_VERTICAL_SLIDE);
-}
+};
