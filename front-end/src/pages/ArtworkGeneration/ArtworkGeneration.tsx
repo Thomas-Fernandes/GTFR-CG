@@ -110,6 +110,9 @@ const handleSubmitFileUpload = async (e: FormEvent<HTMLFormElement>, body: FileU
     return;
   }
 
+  const formData = new FormData();
+  formData.append('file', new FormData(e.currentTarget).get("file") as File);
+  formData.append('includeCenterArtwork', body.includeCenterArtwork.toString());
   const data = {
     ...body,
     file: new FormData(e.currentTarget).get("file") as File,
@@ -127,13 +130,16 @@ const handleSubmitFileUpload = async (e: FormEvent<HTMLFormElement>, body: FileU
 
   showSpinner(SPINNER_ID.FILE_UPLOAD);
 
-  sendRequest("POST", BACKEND_URL + "/artwork-generation/use-local-image", data).then((response: ApiResponse) => {
+  sendRequest("POST", BACKEND_URL + "/artwork-generation/use-local-image", formData).then((response: ApiResponse) => {
     if (!is2xxSuccessful(response.status)) {
       throw new Error(response.message);
     }
 
-    sendRequest("POST", BACKEND_URL + PATHS.processedImages);
-    window.location.href = PATHS.processedImages;
+    sendRequest("POST", BACKEND_URL + PATHS.processedImages).then(() => {
+      window.location.href = PATHS.processedImages;
+    }).catch((error: ApiResponse) => {
+      sendToast(error.message, TOAST_TYPE.ERROR);
+    });
   }).catch((error: ApiResponse) => {
     sendToast(error.message, TOAST_TYPE.ERROR);
   }).finally(() => {
@@ -159,8 +165,11 @@ const handleSubmitYoutubeUrl = async (e: FormEvent<HTMLFormElement>, body: Youtu
         throw new Error(response.message);
       }
 
-      sendRequest("POST", BACKEND_URL + PATHS.processedImages);
-      window.location.href = PATHS.processedImages;
+      sendRequest("POST", BACKEND_URL + PATHS.processedImages).then(() => {
+        window.location.href = PATHS.processedImages;
+      }).catch((error: ApiResponse) => {
+        sendToast(error.message, TOAST_TYPE.ERROR);
+      });
     }).catch((error: ApiResponse) => {
       sendToast(error.message, TOAST_TYPE.ERROR);
     }).finally(() => {

@@ -8,15 +8,20 @@ export const is2xxSuccessful = (status: number): boolean => {
   return status >= HTTP_STATUS.OK && status < HTTP_STATUS.MULTIPLE_CHOICES;
 };
 
-export const sendRequest = async (method: HttpMethod, url: string, body?: object) => {
-  let response;
+export const sendRequest = async (method: HttpMethod, url: string, body?: unknown) => {
+  const requestHeaders = body instanceof FormData
+    ? {}
+    : {
+      "Content-Type": "application/json",
+    };
+  const requestBody = body instanceof FormData ? body : JSON.stringify(body);
+  let response = undefined;
+
   try {
     response = await fetch(url, {
       method: method,
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(body),
+      headers: requestHeaders as HeadersInit,
+      body: requestBody as BodyInit,
     });
   } catch (err) {
     if (err instanceof Error && err.message === "Failed to fetch") {
