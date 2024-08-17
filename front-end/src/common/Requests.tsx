@@ -15,7 +15,7 @@ export const sendRequest = async (method: HttpMethod, url: string, body?: unknow
       "Content-Type": "application/json",
     };
   const requestBody = body instanceof FormData ? body : JSON.stringify(body);
-  let response = undefined;
+  let response: Response;
 
   try {
     response = await fetch(url, {

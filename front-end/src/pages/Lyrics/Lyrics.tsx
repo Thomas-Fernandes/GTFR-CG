@@ -85,10 +85,10 @@ const Lyrics = (): JSX.Element => {
       <span className="top-bot-spacer" />
 
       <div className="navbar">
-        <button type="button" onClick={() => window.location.href = PATHS.home }>
+        <button type="button" onClick={() => navigate(PATHS.home)}>
           <span className="left">{TITLE.HOME}</span>
         </button>
-        <button type="button" onClick={() => window.location.href = PATHS.artworkGeneration }>
+        <button type="button" onClick={() => navigate(PATHS.artworkGeneration)}>
           <span className="left">{TITLE.ARTWORK_GENERATION}</span>
         </button>
       </div>

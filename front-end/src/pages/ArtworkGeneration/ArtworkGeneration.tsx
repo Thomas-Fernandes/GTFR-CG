@@ -1,4 +1,5 @@
 import { FormEvent, JSX, useState } from "react";
+import { NavigateFunction, useNavigate } from "react-router-dom";
 
 import { is2xxSuccessful, objectToQueryString, sendRequest } from "../../common/Requests";
 import { hideSpinner, showSpinner } from "../../common/Spinner";
@@ -10,7 +11,7 @@ import { BACKEND_URL, ITUNES_URL, PATHS, SPINNER_ID, TITLE, TOAST, TOAST_TYPE } 
 
 import "./ArtworkGeneration.css";
 
-const renderItunesResult = (item: ItunesResult, key: number): JSX.Element => {
+const renderItunesResult = (item: ItunesResult, key: number, navigate: NavigateFunction): JSX.Element => {
   return (
     <div className="result-item" key={"result" + key.toString()}>
       <img src={item.artworkUrl100} className="result-image" alt={item.collectionName || item.trackName} />
@@ -25,7 +26,7 @@ const renderItunesResult = (item: ItunesResult, key: number): JSX.Element => {
           }
 
           sendRequest("POST", BACKEND_URL + PATHS.processedImages).then(() => {
-            window.location.href = PATHS.processedImages;
+            navigate(PATHS.processedImages);
           }).catch((error: ApiResponse) => {
             sendToast(error.message, TOAST_TYPE.ERROR);
           });
@@ -102,7 +103,7 @@ const handleSubmitItunesSearch = async (e: FormEvent<HTMLFormElement>, body: Itu
 const isFileExtensionAccepted = (fileName: string, acceptedExtensions: string[]): boolean => {
   return acceptedExtensions.includes(fileName.split(".").slice(-1)[0].toLowerCase());
 };
-const handleSubmitFileUpload = async (e: FormEvent<HTMLFormElement>, body: FileUploadRequest) => {
+const handleSubmitFileUpload = async (e: FormEvent<HTMLFormElement>, body: FileUploadRequest, navigate: NavigateFunction) => {
   e.preventDefault();
 
   if (!body.file) {
@@ -136,7 +137,7 @@ const handleSubmitFileUpload = async (e: FormEvent<HTMLFormElement>, body: FileU
     }
 
     sendRequest("POST", BACKEND_URL + PATHS.processedImages).then(() => {
-      window.location.href = PATHS.processedImages;
+      navigate(PATHS.processedImages);
     }).catch((error: ApiResponse) => {
       sendToast(error.message, TOAST_TYPE.ERROR);
     });
@@ -150,12 +151,12 @@ const handleSubmitFileUpload = async (e: FormEvent<HTMLFormElement>, body: FileU
 const isValidYoutubeUrl = (url: string): boolean => {
   return YOUTUBE.REGEX_YOUTUBE_URL.some((pattern: RegExp) => pattern.test(url));
 };
-const handleSubmitYoutubeUrl = async (e: FormEvent<HTMLFormElement>, body: YoutubeRequest) => {
+const handleSubmitYoutubeUrl = async (e: FormEvent<HTMLFormElement>, body: YoutubeRequest, navigate: NavigateFunction) => {
     e.preventDefault();
 
     if (!isValidYoutubeUrl(body.url)) {
-       sendToast(TOAST.INVALID_URL, TOAST_TYPE.ERROR);
-       return;
+      sendToast(TOAST.INVALID_URL, TOAST_TYPE.ERROR);
+      return;
     }
 
     showSpinner(SPINNER_ID.YOUTUBE_URL);
@@ -166,7 +167,7 @@ const handleSubmitYoutubeUrl = async (e: FormEvent<HTMLFormElement>, body: Youtu
       }
 
       sendRequest("POST", BACKEND_URL + PATHS.processedImages).then(() => {
-        window.location.href = PATHS.processedImages;
+        navigate(PATHS.processedImages);
       }).catch((error: ApiResponse) => {
         sendToast(error.message, TOAST_TYPE.ERROR);
       });
@@ -178,6 +179,8 @@ const handleSubmitYoutubeUrl = async (e: FormEvent<HTMLFormElement>, body: Youtu
 };
 
 const ArtworkGeneration = (): JSX.Element => {
+  const navigate = useNavigate();
+
   // iTunes search
   const [term, setTerm] = useState("");
   const [country, setCountry] = useState("fr");
@@ -198,10 +201,10 @@ const ArtworkGeneration = (): JSX.Element => {
       <span className="top-bot-spacer" />
 
       <div className="navbar">
-        <button type="button" onClick={() => window.location.href = PATHS.home }>
+        <button type="button" onClick={() => navigate(PATHS.home)}>
           <span className="left">{TITLE.HOME}</span>
         </button>
-        <button type="button" onClick={() => window.location.href = PATHS.lyrics }>
+        <button type="button" onClick={() => navigate(PATHS.lyrics)}>
           <span className="right">{TITLE.LYRICS}</span>
         </button>
       </div>
@@ -229,14 +232,14 @@ const ArtworkGeneration = (): JSX.Element => {
           <button id="clear" onClick={() => setItunesResults([])}>Clear results</button>
         }
         <div id="results" className="result-container">
-          { itunesResults.map((item, key) => renderItunesResult(item, key)) }
+          { itunesResults.map((item, key) => renderItunesResult(item, key, navigate)) }
         </div>
       </div>
 
       <hr />
 
       <h1>...or upload your image</h1>
-      <form onSubmit={(e) => handleSubmitFileUpload(e, {file, includeCenterArtwork})} encType="multipart/form-data">
+      <form onSubmit={(e) => handleSubmitFileUpload(e, {file, includeCenterArtwork}, navigate)} encType="multipart/form-data">
         <div className="flexbox">
           <input type="file" name="file" className="file"
             onChange={(e) => setFile(e.target.files ? e.target.files[0] : undefined)}
@@ -257,7 +260,7 @@ const ArtworkGeneration = (): JSX.Element => {
       <hr />
 
       <h1>...or use a YouTube video thumbnail</h1>
-      <form onSubmit={(e) => handleSubmitYoutubeUrl(e, {url: youtubeUrl})}>
+      <form onSubmit={(e) => handleSubmitYoutubeUrl(e, {url: youtubeUrl}, navigate)}>
         <div className="flexbox">
           <input type="text" placeholder="Paste YouTube video URL here"
             onChange={(e) => setYoutubeUrl(e.target.value)}

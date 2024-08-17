@@ -1,13 +1,14 @@
 import { JSX, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { is2xxSuccessful, sendRequest } from "../../common/Requests";
 import { BACKEND_URL, PATHS, SPINNER_ID, TITLE, TOAST, TOAST_TYPE } from "../../constants/Common";
 
+import { hideSpinner, showSpinner } from "../../common/Spinner";
 import { sendToast } from "../../common/Toast";
 import { StateSetter, Statistics } from "../../common/Types";
 import useTitle from "../../common/UseTitle";
 
-import { hideSpinner, showSpinner } from "../../common/Spinner";
 import "./Home.css";
 
 const fetchStatistics = (setStats: StateSetter<Statistics>) => {
@@ -52,6 +53,8 @@ const showAllStatsSpinners = (): void => {
 };
 
 const Home = (): JSX.Element => {
+  const navigate = useNavigate();
+
   const [geniusToken, setGeniusToken] = useState("");
   const [stats, setStats] = useState<Statistics>({} as Statistics);
 
@@ -60,7 +63,7 @@ const Home = (): JSX.Element => {
   useEffect(() => {
     const fetchAndSetData = async () => {
       if (!window.location.href.endsWith(PATHS.home)) {
-        window.location.href = PATHS.home;
+        navigate(PATHS.home);
         return;
       }
 
@@ -88,10 +91,10 @@ const Home = (): JSX.Element => {
       <h1>Home</h1>
 
       <div className="home navbar">
-        <button type="button" onClick={() => { window.location.href = PATHS.artworkGeneration }}>
+        <button type="button" onClick={() => { navigate(PATHS.artworkGeneration)}}>
           <span className="right">{TITLE.ARTWORK_GENERATION}</span>
         </button>
-        <button type="button" onClick={() => { window.location.href = PATHS.lyrics }}>
+        <button type="button" onClick={() => { navigate(PATHS.lyrics)}}>
           <span className="right">{TITLE.LYRICS}</span>
         </button>
       </div>
