@@ -1,6 +1,7 @@
-from flask import Blueprint, jsonify, render_template, request
+from flask import Blueprint, jsonify, render_template, Response, request
 from flask_cors import cross_origin
 from requests import get as requestsGet
+from werkzeug.datastructures import FileStorage
 
 from ast import literal_eval
 from os import path, makedirs
@@ -55,7 +56,7 @@ def useItunesImage(url: str | None) -> JsonResponse:
 
 @bp_artwork_generation.route("/api" + const.ROUTES.art_gen.path + "/use-itunes-image", methods=["POST"])
 @cross_origin()
-def useItunesImageApi() -> JsonResponse:
+def useItunesImageApi() -> Response:
     log.debug("POST - Generating artwork using iTunes image...")
     body = literal_eval(request.get_data(as_text=True))
     useItunesImage(body.get("url"))
@@ -67,7 +68,7 @@ def useItunesImageApi() -> JsonResponse:
 ######### Local image ########
 
 @bp_artwork_generation.route(const.ROUTES.art_gen.path + "/use-local-image", methods=["POST"])
-def useLocalImage() -> JsonResponse:
+def useLocalImage(file: FileStorage) -> JsonResponse:
     """ Saves the uploaded image to the user's folder.
     :return: [JsonResponse] The response to the request.
     """
@@ -76,7 +77,7 @@ def useLocalImage() -> JsonResponse:
         session[const.SessionFields.user_folder.value] = str(uuid4())
     user_folder = str(session[const.SessionFields.user_folder.value]) + const.SLASH + const.AvailableCacheElemType.images.value + const.SLASH
 
-    file = request.files["file"]
+    # file = request.files["file"]
     def checkImageFilenameValid(filename: str | None) -> Optional[str]:
         """ Checks if the given filename is valid for an image file.
         :param filename: [string] The filename to check.
@@ -113,8 +114,13 @@ def useLocalImage() -> JsonResponse:
 
 @bp_artwork_generation.route("/api" + const.ROUTES.art_gen.path + "/use-local-image", methods=["POST"])
 @cross_origin()
-def useLocalImageApi() -> JsonResponse:
-    useLocalImage()
+def useLocalImageApi() -> Response:
+    if 'file' not in request.files:
+        return jsonify({
+            "status": 400,
+            "message": "No file part in the request"
+        })
+    useLocalImage(request.files["file"])
     return jsonify(
         status=200,
         message="Image uploaded successfully.",
@@ -177,7 +183,7 @@ def useYoutubeThumbnail(url: str | None) -> JsonResponse:
 
 @bp_artwork_generation.route("/api" + const.ROUTES.art_gen.path + "/use-youtube-thumbnail", methods=["POST"])
 @cross_origin()
-def useYoutubeThumbnailApi() -> JsonResponse:
+def useYoutubeThumbnailApi() -> Response:
     body = literal_eval(request.get_data(as_text=True))
     useYoutubeThumbnail(body.get("url"))
     return jsonify(

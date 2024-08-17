@@ -176,7 +176,7 @@ def renderProcessedImages() -> RenderView:
 
 @bp_processed_images.route("/api" + const.ROUTES.proc_img.path, methods=["POST"])
 @cross_origin()
-def renderProcessedImagesApi() -> JsonResponse:
+def renderProcessedImagesApi() -> Response:
     """ Renders the processed artwork and thumbnails, and returns the processed images view.
     :return: [JsonResponse] The response containing the status and message.
     """

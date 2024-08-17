@@ -13,10 +13,10 @@ export const sendRequest = async (method: HttpMethod, url: string, body?: object
   try {
     response = await fetch(url, {
       method: method,
-      headers: {
+      headers: body instanceof FormData ? {} : {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(body),
+      body: body instanceof FormData ? body : JSON.stringify(body),
     });
   } catch (err) {
     if (err instanceof Error && err.message === "Failed to fetch") {
