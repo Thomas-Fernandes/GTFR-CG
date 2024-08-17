@@ -28,6 +28,7 @@ export const TOAST: Record<string, string> = {
     NO_IMG: "Please select an image file.",
     INVALID_FILE_TYPE: "Please select a valid image file.",
     INVALID_URL: "Please enter a valid URL.",
+    PROCESSING_IN_PROGRESS: "Images processing already in progress.\n",
 
   // Processed Images
     NO_IMG_SELECTION: "Please select an image to download.",

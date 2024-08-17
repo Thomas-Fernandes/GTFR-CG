@@ -1,177 +1,37 @@
 import { FormEvent, JSX, useState } from "react";
-import { NavigateFunction, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import { is2xxSuccessful, objectToQueryString, sendRequest } from "../../common/Requests";
 import { hideSpinner, showSpinner } from "../../common/Spinner";
 import { sendToast } from "../../common/Toast";
-import { ApiResponse, FileUploadRequest, ItunesRequest, ItunesResponse, ItunesResult, StateSetter, YoutubeRequest } from "../../common/Types";
+import { ApiResponse, FileUploadRequest, ItunesRequest, ItunesResponse, ItunesResult, YoutubeRequest } from "../../common/Types";
 import useTitle from "../../common/UseTitle";
 import { FILE_UPLOAD, ITUNES, YOUTUBE } from "../../constants/ArtworkGeneration";
 import { BACKEND_URL, ITUNES_URL, PATHS, SPINNER_ID, TITLE, TOAST, TOAST_TYPE } from "../../constants/Common";
 
 import "./ArtworkGeneration.css";
 
-const renderItunesResult = (item: ItunesResult, key: number, navigate: NavigateFunction): JSX.Element => {
-  return (
-    <div className="result-item" key={"result" + key.toString()}>
-      <img src={item.artworkUrl100} className="result-image" alt={item.collectionName || item.trackName} />
-      <p className="centered bold italic">{item.artistName} - {item.collectionName.replace(" - Single", "")}</p>
-      <div className="flex-row" id={SPINNER_ID.ITUNES_OPTION + key.toString()}>
-        <button onClick={() => {
-          const data = {
-            url: item.artworkUrl100,
-          };
+const ArtworkGeneration = (): JSX.Element => {
+  const navigate = useNavigate();
 
-          const spinnerKey = SPINNER_ID.ITUNES_OPTION + key.toString();
-          showSpinner(spinnerKey);
+  const [isProcessingLoading, setIsProcessingLoading] = useState(false);
 
-          sendRequest("POST", BACKEND_URL + "/artwork-generation/use-itunes-image", data).then((response: ApiResponse) => {
-            if (!is2xxSuccessful(response.status)) {
-              throw new Error(response.message);
-            }
-
-            sendRequest("POST", BACKEND_URL + PATHS.processedImages).then(() => {
-              navigate(PATHS.processedImages);
-            }).catch((error: ApiResponse) => {
-              sendToast(error.message, TOAST_TYPE.ERROR);
-            }).finally(() => {
-              hideSpinner(spinnerKey);
-            });
-        }).catch((error: ApiResponse) => {
-            sendToast(error.message, TOAST_TYPE.ERROR);
-            hideSpinner(spinnerKey);
-          });
-        }}>
-          Use this image
-        </button>
-      </div>
-    </div>
-  );
-};
-const getTitleWithAdjustedLength = (title: string): string => {
-  title = title.slice(0, ITUNES.MAX_TITLE_LENGTH - 3);
-
-  // find the first space before the max length to cut the string there
-  let end = title[title.length - 1].endsWith(" ") ? title.length - 1 : title.lastIndexOf(" ", ITUNES.MAX_TITLE_LENGTH);
-
-  // if the space-determined crop is too intense, just cut the string at the max length
-  end = ITUNES.MAX_TITLE_LENGTH - end > ITUNES.MAX_CROP_LENGTH ? title.length : end;
-  return title.slice(0, end) + "...";
-};
-// iTunes reference: https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/iTuneSearchAPI/Searching.html#//apple_ref/doc/uid/TP40017632-CH5-SW1
-// Ben Dodson's iTunes artwork finder which we mimic: https://github.com/bendodson/itunes-artwork-finder
-const handleSubmitItunesSearch = async (e: FormEvent<HTMLFormElement>, body: ItunesRequest, setItunesResults: StateSetter<ItunesResult[]>) => {
-  e.preventDefault();
-
-  showSpinner(SPINNER_ID.ITUNES);
-
-  const data = {
-    ...body,
-    entity: body.entity ?? "album", // album by default, but can be "song", "movie", "tv-show"...
-    limit: body.limit ?? 6,
-  };
-  const queryString = objectToQueryString(data);
-
-  const resultItems: ItunesResult[] = [];
-  sendRequest("POST", ITUNES_URL + "/search" + queryString).then((response: ItunesResponse) => {
-    const result = {
-      status: 200,
-      message: "Success",
-      data: response,
-    };
-
-    if (!is2xxSuccessful(result.status)) {
-      throw new Error(result.message);
-    }
-
-    if (result.data.resultCount > 0) {
-      result.data.results.forEach((result) => {
-        if (result.artistName?.length > ITUNES.MAX_TITLE_LENGTH)
-          result.artistName = getTitleWithAdjustedLength(result.artistName);
-        if (result.collectionName?.length > ITUNES.MAX_TITLE_LENGTH)
-          result.collectionName = getTitleWithAdjustedLength(result.collectionName);
-        resultItems.push({
-          artistName: result.artistName,
-          collectionName: result.collectionName,
-          trackName: result.trackName,
-          artworkUrl100: result.artworkUrl100.replace("100x100", "3000x3000"), // itunes max image size is 3000x3000
-        });
-      });
-      setItunesResults(resultItems);
-    } else {
-      sendToast(TOAST.NO_RESULTS_FOUND, TOAST_TYPE.WARN);
-    }
-  }).catch((error: ApiResponse) => {
-    setItunesResults(resultItems);
-    sendToast(error.message, TOAST_TYPE.ERROR);
-  }).finally(() => {
-    hideSpinner(SPINNER_ID.ITUNES);
-  });
-};
-
-const isFileExtensionAccepted = (fileName: string, acceptedExtensions: string[]): boolean => {
-  return acceptedExtensions.includes(fileName.split(".").slice(-1)[0].toLowerCase());
-};
-const handleSubmitFileUpload = async (e: FormEvent<HTMLFormElement>, body: FileUploadRequest, navigate: NavigateFunction) => {
-  e.preventDefault();
-
-  if (!body.file) {
-    sendToast(TOAST.NO_IMG, TOAST_TYPE.WARN);
-    return;
-  }
-
-  const formData = new FormData();
-  formData.append('file', new FormData(e.currentTarget).get("file") as File);
-  formData.append('includeCenterArtwork', body.includeCenterArtwork.toString());
-  const data = {
-    ...body,
-    file: new FormData(e.currentTarget).get("file") as File,
-  };
-
-  const fileExtensionIsAccepted = isFileExtensionAccepted(data.file.name, FILE_UPLOAD.ACCEPTED_IMG_EXTENSIONS);
-  if (!fileExtensionIsAccepted) {
-    sendToast(
-      TOAST.INVALID_FILE_TYPE + "\n" +
-        "Accepted file extensions: " + FILE_UPLOAD.ACCEPTED_IMG_EXTENSIONS.join(", ") + ".",
-      TOAST_TYPE.ERROR
-    );
-    return;
-  }
-
-  showSpinner(SPINNER_ID.FILE_UPLOAD);
-
-  sendRequest("POST", BACKEND_URL + "/artwork-generation/use-local-image", formData).then((response: ApiResponse) => {
-    if (!is2xxSuccessful(response.status)) {
-      throw new Error(response.message);
-    }
-
-    sendRequest("POST", BACKEND_URL + PATHS.processedImages).then(() => {
-      navigate(PATHS.processedImages);
-    }).catch((error: ApiResponse) => {
-      sendToast(error.message, TOAST_TYPE.ERROR);
-    }).finally(() => {
-      hideSpinner(SPINNER_ID.FILE_UPLOAD);
-    });
-  }).catch((error: ApiResponse) => {
-    sendToast(error.message, TOAST_TYPE.ERROR);
-    hideSpinner(SPINNER_ID.FILE_UPLOAD);
-  });
-};
-
-const isValidYoutubeUrl = (url: string): boolean => {
-  return YOUTUBE.REGEX_YOUTUBE_URL.some((pattern: RegExp) => pattern.test(url));
-};
-const handleSubmitYoutubeUrl = async (e: FormEvent<HTMLFormElement>, body: YoutubeRequest, navigate: NavigateFunction) => {
-    e.preventDefault();
-
-    if (!isValidYoutubeUrl(body.url)) {
-      sendToast(TOAST.INVALID_URL, TOAST_TYPE.ERROR);
+  // iTunes search
+  const handleSubmitItunesResult = (item: ItunesResult, key: number) => {
+    if (isProcessingLoading) {
+      sendToast(TOAST.PROCESSING_IN_PROGRESS, TOAST_TYPE.WARN);
       return;
     }
 
-    showSpinner(SPINNER_ID.YOUTUBE_URL);
+    const data = {
+      url: item.artworkUrl100,
+    };
 
-    sendRequest("POST", BACKEND_URL + "/artwork-generation/use-youtube-thumbnail", body).then((response: ApiResponse) => {
+    setIsProcessingLoading(true);
+    const spinnerKey = SPINNER_ID.ITUNES_OPTION + key.toString();
+    showSpinner(spinnerKey);
+
+    sendRequest("POST", BACKEND_URL + "/artwork-generation/use-itunes-image", data).then((response: ApiResponse) => {
       if (!is2xxSuccessful(response.status)) {
         throw new Error(response.message);
       }
@@ -181,27 +41,191 @@ const handleSubmitYoutubeUrl = async (e: FormEvent<HTMLFormElement>, body: Youtu
       }).catch((error: ApiResponse) => {
         sendToast(error.message, TOAST_TYPE.ERROR);
       }).finally(() => {
-        hideSpinner(SPINNER_ID.YOUTUBE_URL);
+        hideSpinner(spinnerKey);
+        setIsProcessingLoading(false);
       });
     }).catch((error: ApiResponse) => {
       sendToast(error.message, TOAST_TYPE.ERROR);
-      hideSpinner(SPINNER_ID.YOUTUBE_URL);
+      hideSpinner(spinnerKey);
+      setIsProcessingLoading(false);
     });
-};
+  };
+  const renderItunesResult = (item: ItunesResult, key: number): JSX.Element => {
+    return (
+      <div className="result-item" key={"result" + key.toString()}>
+        <img src={item.artworkUrl100} className="result-image" alt={item.collectionName || item.trackName} />
+        <p className="centered bold italic">{item.artistName} - {item.collectionName.replace(" - Single", "")}</p>
+        <div className="flex-row" id={SPINNER_ID.ITUNES_OPTION + key.toString()}>
+          <button onClick={() => handleSubmitItunesResult(item, key)}>
+            Use this image
+          </button>
+        </div>
+      </div>
+    );
+  };
+  const getTitleWithAdjustedLength = (title: string): string => {
+    title = title.slice(0, ITUNES.MAX_TITLE_LENGTH - 3);
 
-const ArtworkGeneration = (): JSX.Element => {
-  const navigate = useNavigate();
+    // find the first space before the max length to cut the string there
+    let end = title[title.length - 1].endsWith(" ") ? title.length - 1 : title.lastIndexOf(" ", ITUNES.MAX_TITLE_LENGTH);
 
-  // iTunes search
+    // if the space-determined crop is too intense, just cut the string at the max length
+    end = ITUNES.MAX_TITLE_LENGTH - end > ITUNES.MAX_CROP_LENGTH ? title.length : end;
+    return title.slice(0, end) + "...";
+  };
+  // iTunes reference: https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/iTuneSearchAPI/Searching.html#//apple_ref/doc/uid/TP40017632-CH5-SW1
+  // Ben Dodson's iTunes artwork finder which we mimic: https://github.com/bendodson/itunes-artwork-finder
+  const handleSubmitItunesSearch = async (e: FormEvent<HTMLFormElement>, body: ItunesRequest) => {
+    e.preventDefault();
+
+    showSpinner(SPINNER_ID.ITUNES);
+
+    const data = {
+      ...body,
+      entity: body.entity ?? "album", // album by default, but can be "song", "movie", "tv-show"...
+      limit: body.limit ?? 6,
+    };
+    const queryString = objectToQueryString(data);
+
+    const resultItems: ItunesResult[] = [];
+    sendRequest("POST", ITUNES_URL + "/search" + queryString).then((response: ItunesResponse) => {
+      const result = {
+        status: 200,
+        message: "Success",
+        data: response,
+      };
+
+      if (!is2xxSuccessful(result.status)) {
+        throw new Error(result.message);
+      }
+
+      if (result.data.resultCount > 0) {
+        result.data.results.forEach((result) => {
+          if (result.artistName?.length > ITUNES.MAX_TITLE_LENGTH)
+            result.artistName = getTitleWithAdjustedLength(result.artistName);
+          if (result.collectionName?.length > ITUNES.MAX_TITLE_LENGTH)
+            result.collectionName = getTitleWithAdjustedLength(result.collectionName);
+          resultItems.push({
+            artistName: result.artistName,
+            collectionName: result.collectionName,
+            trackName: result.trackName,
+            artworkUrl100: result.artworkUrl100.replace("100x100", "3000x3000"), // itunes max image size is 3000x3000
+          });
+        });
+        setItunesResults(resultItems);
+      } else {
+        sendToast(TOAST.NO_RESULTS_FOUND, TOAST_TYPE.WARN);
+      }
+    }).catch((error: ApiResponse) => {
+      setItunesResults(resultItems);
+      sendToast(error.message, TOAST_TYPE.ERROR);
+    }).finally(() => {
+      hideSpinner(SPINNER_ID.ITUNES);
+    });
+  };
   const [term, setTerm] = useState("");
   const [country, setCountry] = useState("fr");
   const [itunesResults, setItunesResults] = useState([] as ItunesResult[]);
 
   // File upload
+  const isFileExtensionAccepted = (fileName: string, acceptedExtensions: string[]): boolean => {
+    return acceptedExtensions.includes(fileName.split(".").slice(-1)[0].toLowerCase());
+  };
+  const handleSubmitFileUpload = async (e: FormEvent<HTMLFormElement>, body: FileUploadRequest) => {
+    e.preventDefault();
+
+    if (isProcessingLoading) {
+      sendToast(TOAST.PROCESSING_IN_PROGRESS, TOAST_TYPE.WARN);
+      return;
+    }
+
+    if (!body.file) {
+      sendToast(TOAST.NO_IMG, TOAST_TYPE.WARN);
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", new FormData(e.currentTarget).get("file") as File);
+    formData.append("includeCenterArtwork", body.includeCenterArtwork.toString());
+    const data = {
+      ...body,
+      file: new FormData(e.currentTarget).get("file") as File,
+    };
+
+    const fileExtensionIsAccepted = isFileExtensionAccepted(data.file.name, FILE_UPLOAD.ACCEPTED_IMG_EXTENSIONS);
+    if (!fileExtensionIsAccepted) {
+      sendToast(
+        TOAST.INVALID_FILE_TYPE + "\n" +
+          "Accepted file extensions: " + FILE_UPLOAD.ACCEPTED_IMG_EXTENSIONS.join(", ") + ".",
+        TOAST_TYPE.ERROR
+      );
+      return;
+    }
+
+    setIsProcessingLoading(true);
+    showSpinner(SPINNER_ID.FILE_UPLOAD);
+
+    sendRequest("POST", BACKEND_URL + "/artwork-generation/use-local-image", formData).then((response: ApiResponse) => {
+      if (!is2xxSuccessful(response.status)) {
+        throw new Error(response.message);
+      }
+
+      sendRequest("POST", BACKEND_URL + PATHS.processedImages).then(() => {
+        navigate(PATHS.processedImages);
+      }).catch((error: ApiResponse) => {
+        sendToast(error.message, TOAST_TYPE.ERROR);
+      }).finally(() => {
+        hideSpinner(SPINNER_ID.FILE_UPLOAD);
+        setIsProcessingLoading(false);
+      });
+    }).catch((error: ApiResponse) => {
+      sendToast(error.message, TOAST_TYPE.ERROR);
+      hideSpinner(SPINNER_ID.FILE_UPLOAD);
+      setIsProcessingLoading(false);
+    });
+  };
   const [file, setFile] = useState<File>();
   const [includeCenterArtwork, setIncludeCenterArtwork] = useState(true);
 
   // YouTube thumbnail
+  const isValidYoutubeUrl = (url: string): boolean => {
+    return YOUTUBE.REGEX_YOUTUBE_URL.some((pattern: RegExp) => pattern.test(url));
+  };
+  const handleSubmitYoutubeUrl = async (e: FormEvent<HTMLFormElement>, body: YoutubeRequest) => {
+      e.preventDefault();
+
+      if (isProcessingLoading) {
+        sendToast(TOAST.PROCESSING_IN_PROGRESS, TOAST_TYPE.WARN);
+        return;
+      }
+
+      if (!isValidYoutubeUrl(body.url)) {
+        sendToast(TOAST.INVALID_URL, TOAST_TYPE.ERROR);
+        return;
+      }
+
+      setIsProcessingLoading(true);
+      showSpinner(SPINNER_ID.YOUTUBE_URL);
+
+      sendRequest("POST", BACKEND_URL + "/artwork-generation/use-youtube-thumbnail", body).then((response: ApiResponse) => {
+        if (!is2xxSuccessful(response.status)) {
+          throw new Error(response.message);
+        }
+
+        sendRequest("POST", BACKEND_URL + PATHS.processedImages).then(() => {
+          navigate(PATHS.processedImages);
+        }).catch((error: ApiResponse) => {
+          sendToast(error.message, TOAST_TYPE.ERROR);
+        }).finally(() => {
+          hideSpinner(SPINNER_ID.YOUTUBE_URL);
+          setIsProcessingLoading(false);
+        });
+      }).catch((error: ApiResponse) => {
+        sendToast(error.message, TOAST_TYPE.ERROR);
+        hideSpinner(SPINNER_ID.YOUTUBE_URL);
+        setIsProcessingLoading(false);
+      });
+  };
   const [youtubeUrl, setYoutubeUrl] = useState("");
 
   useTitle(TITLE.ARTWORK_GENERATION);
@@ -221,7 +245,7 @@ const ArtworkGeneration = (): JSX.Element => {
       </div>
 
       <h1>Search for cover art on iTunes</h1>
-      <form onSubmit={(e) => handleSubmitItunesSearch(e, {term, country}, setItunesResults)}>
+      <form onSubmit={(e) => handleSubmitItunesSearch(e, {term, country})}>
         <div className="flexbox">
           <input type="text" placeholder="Search on iTunes"
             onChange={(e) => setTerm(e.target.value)}
@@ -243,14 +267,14 @@ const ArtworkGeneration = (): JSX.Element => {
           <button id="clear" onClick={() => setItunesResults([])}>Clear results</button>
         }
         <div id="results" className="result-container">
-          { itunesResults.map((item, key) => renderItunesResult(item, key, navigate)) }
+          { itunesResults.map((item, key) => renderItunesResult(item, key)) }
         </div>
       </div>
 
       <hr />
 
       <h1>...or upload your image</h1>
-      <form onSubmit={(e) => handleSubmitFileUpload(e, {file, includeCenterArtwork}, navigate)} encType="multipart/form-data">
+      <form onSubmit={(e) => handleSubmitFileUpload(e, {file, includeCenterArtwork})} encType="multipart/form-data">
         <div className="flexbox">
           <input type="file" name="file" className="file"
             onChange={(e) => setFile(e.target.files ? e.target.files[0] : undefined)}
@@ -271,7 +295,7 @@ const ArtworkGeneration = (): JSX.Element => {
       <hr />
 
       <h1>...or use a YouTube video thumbnail</h1>
-      <form onSubmit={(e) => handleSubmitYoutubeUrl(e, {url: youtubeUrl}, navigate)}>
+      <form onSubmit={(e) => handleSubmitYoutubeUrl(e, {url: youtubeUrl})}>
         <div className="flexbox">
           <input type="text" placeholder="Paste YouTube video URL here"
             onChange={(e) => setYoutubeUrl(e.target.value)}
