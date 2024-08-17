@@ -1,13 +1,40 @@
-form {
+form.search-form {
+    display: flex;
     justify-content: center;
+    margin-bottom: 20px;
+}
 
-    .search-bars {
-        flex-direction: row;
-        gap: 10px;
-    }
+.search-bars {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
 
-    textarea {
-        height: 300px;
-        padding: 1rem;
-    }
+form.lyrics-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.lyrics-form > div {
+    width: 60%;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.lyrics-form label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+    text-align: center;
+}
+
+.lyrics-form textarea {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    box-sizing: border-box;
+    overflow: hidden;
+    resize: none;
 }
