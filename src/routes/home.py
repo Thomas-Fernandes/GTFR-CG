@@ -21,7 +21,9 @@ def getGeniusToken() -> JsonDict:
     return jsonify(
         status=200,
         message="Genius API token fetched successfully.",
-        data=token
+        data={
+            "token": token,
+        },
     )
 
 @bp_home.route("/api/statistics", methods=["GET"])
@@ -35,7 +37,7 @@ def getStatistics() -> JsonDict:
     return jsonify(
         status=200,
         message="Statistics fetched successfully.",
-        data=stats
+        data=stats,
     )
 
 @staticmethod

@@ -4,34 +4,38 @@ import { is2xxSuccessful, sendRequest } from "../../common/Requests";
 import { BACKEND_URL, PATHS, SPINNER_ID, TITLE, TOAST, TOAST_TYPE } from "../../constants/Common";
 
 import { sendToast } from "../../common/Toast";
-import { Statistics } from "../../common/Types";
+import { StateSetter, Statistics } from "../../common/Types";
 import useTitle from "../../common/UseTitle";
 
 import { hideSpinner, showSpinner } from "../../common/Spinner";
 import "./Home.css";
 
-const fetchStatistics = async (): Promise<Statistics> => {
-  const response = await sendRequest("GET", BACKEND_URL + "/statistics");
+const fetchStatistics = (setStats: StateSetter<Statistics>) => {
+  sendRequest("GET", BACKEND_URL + "/statistics").then((response) => {
+    if (!is2xxSuccessful(response.status)) {
+      sendToast(response.message, TOAST_TYPE.ERROR);
+      return;
+    }
 
-  if (!is2xxSuccessful(response.status)) {
-    sendToast(response.message, TOAST_TYPE.ERROR);
-    return {} as Statistics;
-  }
-
-  return response.data as Statistics;
+    setStats(response.data as Statistics);
+  }).catch((error) => {
+    sendToast(error.message, TOAST_TYPE.ERROR);
+  });
 };
 
-const fetchGeniusToken = async (): Promise<string> => {
-  const response = await sendRequest("GET", BACKEND_URL + "/genius-token");
+const fetchGeniusToken = (setGeniusToken: StateSetter<string>) => {
+  sendRequest("GET", BACKEND_URL + "/genius-token").then((response) => {
+    if (!is2xxSuccessful(response.status) || response.data.token === "") {
+      sendToast(response.message, TOAST_TYPE.ERROR, 10);
+      sendToast(TOAST.ADD_GENIUS_TOKEN, TOAST_TYPE.WARN, 20);
+      return;
+    }
 
-  if (!is2xxSuccessful(response.status)) {
-    sendToast(response.message, TOAST_TYPE.ERROR, 10);
-    sendToast(TOAST.ADD_GENIUS_TOKEN, TOAST_TYPE.WARN, 20);
-    return "";
-  }
-
-  sendToast(TOAST.WELCOME, TOAST_TYPE.SUCCESS, 5);
-  return response.data;
+    sendToast(TOAST.WELCOME, TOAST_TYPE.SUCCESS, 5);
+    setGeniusToken(response.data.token);
+  }).catch((error) => {
+    sendToast(error.message, TOAST_TYPE.ERROR);
+  });
 };
 
 const hideAllStatsSpinners = (): void => {
@@ -64,13 +68,11 @@ const Home = (): JSX.Element => {
       const hasVisited = sessionStorage.getItem(routeKey);
 
       showAllStatsSpinners();
-      const stats = await fetchStatistics();
-      setStats(stats);
+      fetchStatistics(setStats);
       hideAllStatsSpinners();
 
       if (!hasVisited) {
-        const token = await fetchGeniusToken();
-        setGeniusToken(token);
+        fetchGeniusToken(setGeniusToken);
         sessionStorage.setItem(routeKey, "visited");
       }
     };
@@ -123,7 +125,7 @@ const Home = (): JSX.Element => {
       </div>
 
       <div className="hidden">
-        <p>{ geniusToken }</p>
+        <p>Genius Token: '{ geniusToken }'</p>
       </div>
 
       <span className="top-bot-spacer" />

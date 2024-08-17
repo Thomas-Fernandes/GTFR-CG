@@ -1,4 +1,5 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { is2xxSuccessful, sendRequest } from "../../common/Requests";
 import { hideSpinner, showSpinner } from "../../common/Spinner";
@@ -26,7 +27,6 @@ const handleLyricsSearchSubmit = (e: FormEvent<HTMLFormElement>, body: LyricsReq
   }
 
   showSpinner(SPINNER_ID.LYRICS_SEARCH);
-  console.log("Searching for the lyrics of...", body);
 
   sendRequest("POST", BACKEND_URL + "/lyrics", body).then((response: LyricsResponse) => {
     if (!is2xxSuccessful(response.status)) {
@@ -47,7 +47,21 @@ const handleLyricsSearchSubmit = (e: FormEvent<HTMLFormElement>, body: LyricsReq
   });
 };
 
+const isTokenSet = async (): Promise<boolean> => {
+  return sendRequest("GET", BACKEND_URL + "/genius-token").then((response) => {
+    if (is2xxSuccessful(response.status) && response.data.token !== "") {
+      return true;
+    }
+    return false;
+  }).catch((error) => {
+    sendToast(error.message, TOAST_TYPE.ERROR);
+    return false;
+  });
+};
+
 const Lyrics = (): JSX.Element => {
+  const navigate = useNavigate();
+
   // Search
   const [artist, setArtist] = useState("");
   const [songName, setSongName] = useState("");
@@ -56,6 +70,14 @@ const Lyrics = (): JSX.Element => {
   const [lyrics, setLyrics] = useState("");
 
   useTitle(TITLE.LYRICS);
+
+  useEffect(() => {
+    isTokenSet().then((isSet: boolean) => {
+      if (!isSet) {
+        navigate(`${PATHS.redirect}?error_text=${TOAST.NO_GENIUS_TOKEN}&redirect_to=${PATHS.home}`);
+      }
+    });
+  });
 
   return (
     <div id="lyrics">
