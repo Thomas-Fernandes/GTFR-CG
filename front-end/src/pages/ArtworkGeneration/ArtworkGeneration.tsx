@@ -16,26 +16,35 @@ const renderItunesResult = (item: ItunesResult, key: number, navigate: NavigateF
     <div className="result-item" key={"result" + key.toString()}>
       <img src={item.artworkUrl100} className="result-image" alt={item.collectionName || item.trackName} />
       <p className="centered bold italic">{item.artistName} - {item.collectionName.replace(" - Single", "")}</p>
-      <button onClick={() => {
-        const data = {
-          url: item.artworkUrl100,
-        };
-        sendRequest("POST", BACKEND_URL + "/artwork-generation/use-itunes-image", data).then((response: ApiResponse) => {
-          if (!is2xxSuccessful(response.status)) {
-            throw new Error(response.message);
-          }
+      <div className="flex-row" id={SPINNER_ID.ITUNES_OPTION + key.toString()}>
+        <button onClick={() => {
+          const data = {
+            url: item.artworkUrl100,
+          };
 
-          sendRequest("POST", BACKEND_URL + PATHS.processedImages).then(() => {
-            navigate(PATHS.processedImages);
-          }).catch((error: ApiResponse) => {
+          const spinnerKey = SPINNER_ID.ITUNES_OPTION + key.toString();
+          showSpinner(spinnerKey);
+
+          sendRequest("POST", BACKEND_URL + "/artwork-generation/use-itunes-image", data).then((response: ApiResponse) => {
+            if (!is2xxSuccessful(response.status)) {
+              throw new Error(response.message);
+            }
+
+            sendRequest("POST", BACKEND_URL + PATHS.processedImages).then(() => {
+              navigate(PATHS.processedImages);
+            }).catch((error: ApiResponse) => {
+              sendToast(error.message, TOAST_TYPE.ERROR);
+            }).finally(() => {
+              hideSpinner(spinnerKey);
+            });
+        }).catch((error: ApiResponse) => {
             sendToast(error.message, TOAST_TYPE.ERROR);
+            hideSpinner(spinnerKey);
           });
-      }).catch((error: ApiResponse) => {
-          sendToast(error.message, TOAST_TYPE.ERROR);
-        });
-      }}>
-        Use this image
-      </button>
+        }}>
+          Use this image
+        </button>
+      </div>
     </div>
   );
 };
@@ -140,10 +149,11 @@ const handleSubmitFileUpload = async (e: FormEvent<HTMLFormElement>, body: FileU
       navigate(PATHS.processedImages);
     }).catch((error: ApiResponse) => {
       sendToast(error.message, TOAST_TYPE.ERROR);
+    }).finally(() => {
+      hideSpinner(SPINNER_ID.FILE_UPLOAD);
     });
   }).catch((error: ApiResponse) => {
     sendToast(error.message, TOAST_TYPE.ERROR);
-  }).finally(() => {
     hideSpinner(SPINNER_ID.FILE_UPLOAD);
   });
 };
@@ -170,10 +180,11 @@ const handleSubmitYoutubeUrl = async (e: FormEvent<HTMLFormElement>, body: Youtu
         navigate(PATHS.processedImages);
       }).catch((error: ApiResponse) => {
         sendToast(error.message, TOAST_TYPE.ERROR);
+      }).finally(() => {
+        hideSpinner(SPINNER_ID.YOUTUBE_URL);
       });
     }).catch((error: ApiResponse) => {
       sendToast(error.message, TOAST_TYPE.ERROR);
-    }).finally(() => {
       hideSpinner(SPINNER_ID.YOUTUBE_URL);
     });
 };

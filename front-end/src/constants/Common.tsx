@@ -60,6 +60,7 @@ export const SPINNER_ID = {
 
   // Artwork Generation
     ITUNES: "artwork-generation_search-form",
+    ITUNES_OPTION: "artwork-generation_itunes-result",
     FILE_UPLOAD: "artwork-generation_file-upload",
     YOUTUBE_URL: "artwork-generation_youtube-url",
 
