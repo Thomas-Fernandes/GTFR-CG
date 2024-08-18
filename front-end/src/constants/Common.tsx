@@ -35,6 +35,7 @@ export const TOAST: Record<string, string> = {
 
   // Lyrics
     MISSING_FIELDS: "Please fill out all the required fields.",
+    FETCH_IN_PROGRESS: "Lyrics fetch already in progress.",
     LYRICS_NOT_FOUND: "Lyrics not found.",
 };
 

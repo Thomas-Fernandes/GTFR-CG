@@ -15,6 +15,8 @@ const Lyrics = (): JSX.Element => {
 
   const navigate = useNavigate();
 
+  const [isFetching, setIsFetching] = useState(false);
+
   const [artist, setArtist] = useState("");
   const [songName, setSongName] = useState("");
 
@@ -33,11 +35,17 @@ const Lyrics = (): JSX.Element => {
   const handleLyricsSearchSubmit = (e: FormEvent<HTMLFormElement>, body: LyricsRequest) => {
     e.preventDefault();
 
+    if (isFetching) {
+      sendToast(TOAST.FETCH_IN_PROGRESS, TOAST_TYPE.WARN);
+      return;
+    }
+
     if (body.artist.trim() === "" || body.songName.trim() === "") {
       sendToast(TOAST.MISSING_FIELDS, TOAST_TYPE.WARN);
       return;
     }
 
+    setIsFetching(true);
     showSpinner(SPINNER_ID.LYRICS_SEARCH);
 
     sendRequest("POST", BACKEND_URL + "/lyrics", body).then((response: LyricsResponse) => {
@@ -56,6 +64,7 @@ const Lyrics = (): JSX.Element => {
       sendToast(error.message, TOAST_TYPE.ERROR);
     }).finally(() => {
       hideSpinner(SPINNER_ID.LYRICS_SEARCH);
+      setIsFetching(false);
     });
   };
 

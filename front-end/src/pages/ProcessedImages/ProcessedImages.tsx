@@ -8,7 +8,6 @@ import { doesFileExist } from "../../common/utils/FileUtils";
 import { PATHS, TITLE, TOAST, TOAST_TYPE } from "../../constants/Common";
 import { COVER_ART_FILENAME, DEFAULT_SELECTED_POSITION, LOGO_POSITIONS, PROCESSED_IMAGES_PATH } from "../../constants/ProcessedImages";
 
-
 import "./ProcessedImages.css";
 
 const ProcessedImages = (): JSX.Element => {
