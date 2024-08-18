@@ -6,7 +6,7 @@ import { hideSpinner, showSpinner } from "../../common/Spinner";
 import { sendToast } from "../../common/Toast";
 import { ApiResponse, LyricsRequest, LyricsResponse } from "../../common/Types";
 import useTitle from "../../common/UseTitle";
-import { BACKEND_URL, PATHS, SPINNER_ID, TITLE, TOAST, TOAST_TYPE } from "../../constants/Common";
+import { API, BACKEND_URL, PATHS, SPINNER_ID, TITLE, TOAST, TOAST_TYPE } from "../../constants/Common";
 
 import "./Lyrics.css";
 
@@ -48,7 +48,7 @@ const Lyrics = (): JSX.Element => {
     setIsFetching(true);
     showSpinner(SPINNER_ID.LYRICS_SEARCH);
 
-    sendRequest("POST", BACKEND_URL + "/lyrics", body).then((response: LyricsResponse) => {
+    sendRequest("POST", BACKEND_URL + API.LYRICS.GET_LYRICS, body).then((response: LyricsResponse) => {
       if (!is2xxSuccessful(response.status)) {
         throw new Error(response.message);
       }
@@ -69,7 +69,7 @@ const Lyrics = (): JSX.Element => {
   };
 
   const isTokenSet = async (): Promise<boolean> => {
-    return sendRequest("GET", BACKEND_URL + "/genius-token").then((response) => {
+    return sendRequest("GET", BACKEND_URL + API.GENIUS_TOKEN).then((response) => {
       if (is2xxSuccessful(response.status) && response.data.token !== "") {
         return true;
       }

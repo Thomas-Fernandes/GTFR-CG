@@ -7,7 +7,7 @@ import { sendToast } from "../../common/Toast";
 import { ApiResponse, FileUploadRequest, ItunesRequest, ItunesResponse, ItunesResult, YoutubeRequest } from "../../common/Types";
 import useTitle from "../../common/UseTitle";
 import { FILE_UPLOAD, ITUNES, YOUTUBE } from "../../constants/ArtworkGeneration";
-import { BACKEND_URL, ITUNES_URL, PATHS, SPINNER_ID, TITLE, TOAST, TOAST_TYPE } from "../../constants/Common";
+import { API, BACKEND_URL, ITUNES_URL, PATHS, SPINNER_ID, TITLE, TOAST, TOAST_TYPE } from "../../constants/Common";
 
 import "./ArtworkGeneration.css";
 
@@ -42,12 +42,12 @@ const ArtworkGeneration = (): JSX.Element => {
     const spinnerKey = SPINNER_ID.ITUNES_OPTION + key.toString();
     showSpinner(spinnerKey);
 
-    sendRequest("POST", BACKEND_URL + "/artwork-generation/use-itunes-image", data).then((response: ApiResponse) => {
+    sendRequest("POST", BACKEND_URL + API.ARTWORK_GENERATION.ITUNES, data).then((response: ApiResponse) => {
       if (!is2xxSuccessful(response.status)) {
         throw new Error(response.message);
       }
 
-      sendRequest("POST", BACKEND_URL + PATHS.processedImages).then(() => {
+      sendRequest("POST", BACKEND_URL + API.PROCESSED_IMAGES.PROCESS_IMAGES).then(() => {
         navigate(PATHS.processedImages);
       }).catch((error: ApiResponse) => {
         sendToast(error.message, TOAST_TYPE.ERROR);
@@ -173,12 +173,12 @@ const ArtworkGeneration = (): JSX.Element => {
     setIsProcessingLoading(true);
     showSpinner(SPINNER_ID.FILE_UPLOAD);
 
-    sendRequest("POST", BACKEND_URL + "/artwork-generation/use-local-image", formData).then((response: ApiResponse) => {
+    sendRequest("POST", BACKEND_URL + API.ARTWORK_GENERATION.FILE_UPLOAD, formData).then((response: ApiResponse) => {
       if (!is2xxSuccessful(response.status)) {
         throw new Error(response.message);
       }
 
-      sendRequest("POST", BACKEND_URL + PATHS.processedImages).then(() => {
+      sendRequest("POST", BACKEND_URL + API.PROCESSED_IMAGES.PROCESS_IMAGES).then(() => {
         navigate(PATHS.processedImages);
       }).catch((error: ApiResponse) => {
         sendToast(error.message, TOAST_TYPE.ERROR);
@@ -213,12 +213,12 @@ const ArtworkGeneration = (): JSX.Element => {
       setIsProcessingLoading(true);
       showSpinner(SPINNER_ID.YOUTUBE_URL);
 
-      sendRequest("POST", BACKEND_URL + "/artwork-generation/use-youtube-thumbnail", body).then((response: ApiResponse) => {
+      sendRequest("POST", BACKEND_URL + API.ARTWORK_GENERATION.YOUTUBE_THUMBNAIL, body).then((response: ApiResponse) => {
         if (!is2xxSuccessful(response.status)) {
           throw new Error(response.message);
         }
 
-        sendRequest("POST", BACKEND_URL + PATHS.processedImages).then(() => {
+        sendRequest("POST", BACKEND_URL + API.PROCESSED_IMAGES.PROCESS_IMAGES).then(() => {
           navigate(PATHS.processedImages);
         }).catch((error: ApiResponse) => {
           sendToast(error.message, TOAST_TYPE.ERROR);

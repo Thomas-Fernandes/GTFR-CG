@@ -74,7 +74,7 @@ def fetchLyricsFromGenius(song_title: str, artist_name: str) -> str:
     log.info(f"Lyrics fetch for {artist_name} - \"{song_title}\" complete.")
     return lyrics
 
-@bp_lyrics.route(api_prefix, methods=["POST"])
+@bp_lyrics.route(api_prefix + "/get-genius-lyrics", methods=["POST"])
 @cross_origin()
 def getGeniusLyrics() -> Response:
     """ Fetches the lyrics of a song from Genius.com.

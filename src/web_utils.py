@@ -9,7 +9,6 @@ def createApiResponse(status_code: int, message: str = "", data: Optional[object
     :param data: [object?] The data to include in the response. (default: None)
     :return: [Response] The response of the request.
     """
-    print(status_code, message, data)
     return jsonify(
         status=status_code,
         message=message,

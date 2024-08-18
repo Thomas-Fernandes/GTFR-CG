@@ -2,7 +2,7 @@ import { JSX, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { is2xxSuccessful, sendRequest } from "../../common/Requests";
-import { BACKEND_URL, PATHS, SPINNER_ID, TITLE, TOAST, TOAST_TYPE } from "../../constants/Common";
+import { API, BACKEND_URL, PATHS, SPINNER_ID, TITLE, TOAST, TOAST_TYPE } from "../../constants/Common";
 
 import { hideSpinner, showSpinner } from "../../common/Spinner";
 import { sendToast } from "../../common/Toast";
@@ -20,7 +20,7 @@ const Home = (): JSX.Element => {
   const [stats, setStats] = useState<Statistics>({} as Statistics);
 
   const fetchStatistics = () => {
-    sendRequest("GET", BACKEND_URL + "/statistics").then((response) => {
+    sendRequest("GET", BACKEND_URL + API.STATISTICS).then((response) => {
       if (!is2xxSuccessful(response.status)) {
         sendToast(response.message, TOAST_TYPE.ERROR);
         return;
@@ -33,7 +33,7 @@ const Home = (): JSX.Element => {
   };
 
   const fetchGeniusToken = () => {
-    sendRequest("GET", BACKEND_URL + "/genius-token").then((response) => {
+    sendRequest("GET", BACKEND_URL + API.GENIUS_TOKEN).then((response) => {
       if (!is2xxSuccessful(response.status) || response.data.token === "") {
         sendToast(response.message, TOAST_TYPE.ERROR, 10);
         sendToast(TOAST.ADD_GENIUS_TOKEN, TOAST_TYPE.WARN, 20);

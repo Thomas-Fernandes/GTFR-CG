@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, Response
+from flask import Blueprint, Response
 from flask_cors import cross_origin
 from PIL import Image, ImageFilter, ImageDraw
 
@@ -101,7 +101,7 @@ def generateThumbnails(bg_path: str, output_folder: str) -> None:
         final_image.save(f"./front-end/public/processed-images/thumbnail_{position}.png")
         log.debug(f"Thumbnail saved: {output_path}")
 
-@bp_processed_images.route("/api" + const.ROUTES.proc_img.path, methods=["POST"])
+@bp_processed_images.route(api_prefix + "/process-images", methods=["POST"])
 @cross_origin()
 def processArtwork() -> Response:
     """ Renders the processed background image and thumbnails.

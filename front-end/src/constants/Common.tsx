@@ -91,6 +91,25 @@ export const PATHS = {
   lyrics: "/lyrics",
 };
 
+export const API = {
+  STATISTICS: "/statistics",
+  GENIUS_TOKEN: "/genius-token",
+
+  ARTWORK_GENERATION: {
+    ITUNES: PATHS.artworkGeneration + "/use-itunes-image",
+    FILE_UPLOAD: PATHS.artworkGeneration + "/use-local-image",
+    YOUTUBE_THUMBNAIL: PATHS.artworkGeneration + "/use-youtube-thumbnail",
+  },
+
+  PROCESSED_IMAGES: {
+    PROCESS_IMAGES: PATHS.processedImages + "/process-images",
+  },
+
+  LYRICS: {
+    GET_LYRICS: PATHS.lyrics + "/get-genius-lyrics",
+  },
+};
+
 export const DEFAULT_REDIRECTION = {
   error_text: "",
   redirect_to: PATHS.home,
