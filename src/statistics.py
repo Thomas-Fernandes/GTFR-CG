@@ -60,10 +60,9 @@ from json import loads, dumps, JSONDecodeError
 
 from src.soft_utils import getNowEpoch
 
-def getJsonStatsFromFile(path: str = const.STATS_FILE_PATH, init: bool = False) -> JsonDict:
+def getJsonStatsFromFile(path: str = const.STATS_FILE_PATH) -> JsonDict:
     f""" Returns the statistics contained in a JSON statistics file.
     :param path: [string] The path to the statistics file. (default: {const.STATS_FILE_PATH})
-    :param init: [bool] Whether to initialize the statistics file if it doesn't exist. (default: False)
     :return: [dict] The statistics from the statistics file.
     """
     log.debug(f"Getting stats from file: {path}...")
@@ -75,10 +74,10 @@ def getJsonStatsFromFile(path: str = const.STATS_FILE_PATH, init: bool = False) 
             return loads(file.read()) # <- read stats from stats file
     except FileNotFoundError:
         log.warn(f"No stats file ({path}). Initializing new stats file...")
-        return initStats(from_error=init)
+        return initStats()
     except JSONDecodeError:
         log.warn(f"Error decoding stats file ({path}). Initializing new stats file...")
-        return initStats(from_error=True)
+        return initStats()
 
 def updateStats(path: str = const.STATS_FILE_PATH, to_increment: Optional[str] = None) -> None:
     f""" Updates the statistics contained in a JSON statistics file.
@@ -115,17 +114,16 @@ def updateStats(path: str = const.STATS_FILE_PATH, to_increment: Optional[str] =
 
     log.info(f"Stats updated: {new_stats}")
 
-def initStats(from_error: bool = False) -> JsonDict:
+def initStats() -> JsonDict:
     """ Initializes the statistics contained in a JSON statistics file.
-    :param from_error: [bool] Whether the initialization is due to an error. (default: False)
     :return: [dict] The statistics from the statistics file.
     """
     log.debug("Initializing statistics...")
     stats: JsonDict = {}
-    stats.setdefault(const.AvailableStats.dateFirstOperation.value, "N/A")
-    stats.setdefault(const.AvailableStats.dateLastOperation.value, "N/A")
-    stats.setdefault(const.AvailableStats.artworkGenerations.value, 0)
-    stats.setdefault(const.AvailableStats.lyricsFetches.value, 0)
+    stats.setdefault(const.AvailableStats.dateFirstOperation.value, const.EMPTY_STATS[const.AvailableStats.dateFirstOperation.value])
+    stats.setdefault(const.AvailableStats.dateLastOperation.value, const.EMPTY_STATS[const.AvailableStats.dateLastOperation.value])
+    stats.setdefault(const.AvailableStats.artworkGenerations.value, const.EMPTY_STATS[const.AvailableStats.artworkGenerations.value])
+    stats.setdefault(const.AvailableStats.lyricsFetches.value, const.EMPTY_STATS[const.AvailableStats.lyricsFetches.value])
 
     with open(const.STATS_FILE_PATH, "w") as file:
         log.debug(f"  Stats file created @ {const.STATS_FILE_PATH}")

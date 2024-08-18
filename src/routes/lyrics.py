@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, render_template, request
+from flask import Blueprint, request, Response
 from flask_cors import cross_origin
 from lyricsgenius import Genius
 
@@ -9,13 +9,13 @@ from typing import Optional
 
 import src.constants as const
 from src.logger import log
-from src.routes.redirect import renderRedirection
 from src.statistics import updateStats
-from src.typing import Context, JsonDict, RenderView
+from src.web_utils import createApiResponse
 
 from src.app import app
 bp_lyrics = Blueprint(const.ROUTES.lyrics.bp_name, __name__.split('.')[-1])
 session = app.config
+api_prefix = const.API_ROUTE + const.ROUTES.lyrics.path
 
 genius = None
 try:
@@ -25,7 +25,6 @@ except TypeError as e:
     log.error(f"Error while creating Genius object: {e}. "
               "Lyrics fetching will not work.")
 
-@staticmethod
 def fetchLyricsFromGenius(song_title: str, artist_name: str) -> str:
     """ Tries to fetch the lyrics of a song from Genius.com.
     :param song_title: [string] The title of the song.
@@ -51,7 +50,6 @@ def fetchLyricsFromGenius(song_title: str, artist_name: str) -> str:
     lyrics = sub(r"\d+Embed$", '', lyrics).strip()
 
     # Ensure double newline before song parts
-    @staticmethod
     def add_newline_before_song_parts(lyrics: str) -> str:
         """ Adds a newline before song parts that are enclosed in double quotes.
         :param lyrics: [string] The stringified lyrics to process.
@@ -76,48 +74,18 @@ def fetchLyricsFromGenius(song_title: str, artist_name: str) -> str:
     log.info(f"Lyrics fetch for {artist_name} - \"{song_title}\" complete.")
     return lyrics
 
-@bp_lyrics.route(const.ROUTES.lyrics.path, methods=["POST"])
-def updateTextarea() -> RenderView:
-    """ Updates the lyrics context variable with the fetched lyrics.
-    :return: [RenderView] The rendered view, with the updated lyrics.
-    """
-    artist: Optional[str] = request.form.get("artist", None)
-    song: Optional[str] = request.form.get("song", None)
-    lyrics_text: Optional[str] = request.form.get("lyrics")
-
-    if artist is not None and song is not None:
-        lyrics_text = fetchLyricsFromGenius(song, artist)
-
-    context: Context = {
-        "lyrics": lyrics_text or "",
-    }
-    log.debug(f"Rendering {const.ROUTES.lyrics.bp_name} page...")
-    return render_template(const.ROUTES.lyrics.view_filename, **context)
-
-@bp_lyrics.route("/api/lyrics", methods=["POST"])
+@bp_lyrics.route(api_prefix, methods=["POST"])
 @cross_origin()
-def getGeniusLyrics() -> JsonDict:
+def getGeniusLyrics() -> Response:
     """ Fetches the lyrics of a song from Genius.com.
-    :return: [JsonDict] The JSON response containing the fetched lyrics.
+    :return: [Response] The response to the request.
     """
-    log.debug("POST - Fetching lyrics...")
+    log.debug("POST - Fetching lyrics from Genius...")
     body = literal_eval(request.get_data(as_text=True))
-    lyrics = fetchLyricsFromGenius(body["songName"], body["artist"])
-    return jsonify(
-        status=200,
-        message="Lyrics fetched successfully.",
-        data={
-            "lyrics": lyrics,
-        },
-    )
+    song_name: Optional[str] = body.get("songName")
+    artist: Optional[str] = body.get("artist")
+    if song_name is None or artist is None:
+        return createApiResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_NO_IMG_URL)
 
-@bp_lyrics.route(const.ROUTES.lyrics.path, methods=["GET"])
-def renderLyrics() -> RenderView:
-    """ Renders the lyrics page.
-    :return: [RenderView] The rendered view.
-    """
-    if genius is None:
-        return renderRedirection(const.ROUTES.home.view_filename, const.ERR_GENIUS_TOKEN)
-
-    log.debug(f"Rendering {const.ROUTES.lyrics.bp_name} page...")
-    return render_template(const.ROUTES.lyrics.view_filename, **const.DEFAULT_CONTEXT)
+    lyrics = fetchLyricsFromGenius(song_name, artist)
+    return createApiResponse(const.HttpStatus.OK.value, "Lyrics fetched successfully.", {"lyrics": lyrics})

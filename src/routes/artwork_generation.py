@@ -1,7 +1,6 @@
-from flask import Blueprint, jsonify, render_template, Response, request
+from flask import Blueprint, Response, request
 from flask_cors import cross_origin
 from requests import get as requestsGet
-from werkzeug.datastructures import FileStorage
 
 from ast import literal_eval
 from os import path, makedirs
@@ -10,24 +9,24 @@ from uuid import uuid4
 
 import src.constants as const
 from src.logger import log
-from src.typing import JsonResponse, RenderView
-from src.web_utils import createJsonResponse
+from src.web_utils import createApiResponse
 
 from src.app import app
 bp_artwork_generation = Blueprint(const.ROUTES.art_gen.bp_name, __name__.split('.')[-1])
 session = app.config
+api_prefix = const.API_ROUTE + const.ROUTES.art_gen.path
 
-########### iTunes ###########
-
-@bp_artwork_generation.route(const.ROUTES.art_gen.path + "/use-itunes-image", methods=["POST"])
-def useItunesImage(url: str | None) -> JsonResponse:
+@bp_artwork_generation.route(api_prefix + "/use-itunes-image", methods=["POST"])
+@cross_origin()
+def useItunesImage() -> Response:
     """ Interprets the fetched iTunes URL and saves the image to the user's folder.
-    :return: [JsonResponse] The response to the request.
+    :return: [Response] The response to the request.
     """
-    # image_url: Optional[str] = request.form.get("url")
-    image_url: Optional[str] = url
+    log.debug("POST - Generating artwork using an iTunes image...")
+    body = literal_eval(request.get_data(as_text=True))
+    image_url: Optional[str] = body.get("url")
     if image_url is None:
-        return createJsonResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_NO_IMG_URL)
+        return createApiResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_NO_IMG_URL)
 
     if const.SessionFields.user_folder.value not in session:
         log.debug("User folder not found in session. Creating a new one.")
@@ -41,7 +40,7 @@ def useItunesImage(url: str | None) -> JsonResponse:
     log.debug(f"Fetching iTunes image from URL: {image_url}")
     image_response = requestsGet(image_url) # fetch iTunes image from deducted URL
     if image_response.status_code != const.HttpStatus.OK.value:
-        return createJsonResponse(const.HttpStatus.INTERNAL_SERVER_ERROR.value, const.ERR_FAIL_DOWNLOAD)
+        return createApiResponse(const.HttpStatus.INTERNAL_SERVER_ERROR.value, const.ERR_FAIL_DOWNLOAD)
     log.debug("iTunes image fetched successfully.")
 
     image_path = path.join(user_processed_path, "itunes_image.png")
@@ -51,33 +50,26 @@ def useItunesImage(url: str | None) -> JsonResponse:
 
     session[const.SessionFields.generated_artwork_path.value] = image_path
     session[const.SessionFields.include_center_artwork.value] = True
+
     log.log(f"Found iTunes image and saved it to {image_path}")
-    return createJsonResponse(const.HttpStatus.OK.value)
+    return createApiResponse(const.HttpStatus.OK.value, "iTunes image processed successfully.")
 
-@bp_artwork_generation.route("/api" + const.ROUTES.art_gen.path + "/use-itunes-image", methods=["POST"])
+@bp_artwork_generation.route(api_prefix + "/use-local-image", methods=["POST"])
 @cross_origin()
-def useItunesImageApi() -> Response:
-    log.debug("POST - Generating artwork using iTunes image...")
-    body = literal_eval(request.get_data(as_text=True))
-    useItunesImage(body.get("url"))
-    return jsonify(
-        status=200,
-        message="iTunes image processed successfully.",
-    )
-
-######### Local image ########
-
-@bp_artwork_generation.route(const.ROUTES.art_gen.path + "/use-local-image", methods=["POST"])
-def useLocalImage(file: FileStorage) -> JsonResponse:
+def useLocalImage() -> Response:
     """ Saves the uploaded image to the user's folder.
-    :return: [JsonResponse] The response to the request.
+    :return: [Response] The response to the request.
     """
+    log.debug("POST - Generating artwork using a local image...")
+    if "file" not in request.files:
+        return createApiResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_NO_FILE)
+    file = request.files["file"]
+
     if const.SessionFields.user_folder.value not in session:
         log.debug("User folder not found in session. Creating a new one.")
         session[const.SessionFields.user_folder.value] = str(uuid4())
     user_folder = str(session[const.SessionFields.user_folder.value]) + const.SLASH + const.AvailableCacheElemType.images.value + const.SLASH
 
-    # file = request.files["file"]
     def checkImageFilenameValid(filename: str | None) -> Optional[str]:
         """ Checks if the given filename is valid for an image file.
         :param filename: [string] The filename to check.
@@ -92,9 +84,9 @@ def useLocalImage(file: FileStorage) -> JsonResponse:
     error = checkImageFilenameValid(file.filename)
     if error is not None:
         log.error(error)
-        return createJsonResponse(const.HttpStatus.BAD_REQUEST.value, error)
+        return createApiResponse(const.HttpStatus.BAD_REQUEST.value, error)
     if file.filename is None:
-        return createJsonResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_NO_FILE)
+        return createApiResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_NO_FILE)
     log.debug(f"Image filename is valid: {file.filename}")
 
     include_center_artwork: bool = \
@@ -104,29 +96,15 @@ def useLocalImage(file: FileStorage) -> JsonResponse:
     log.info(f"Creating user processed path: {user_processed_path}")
     makedirs(user_processed_path, exist_ok=True)
 
-    filepath = path.join(user_processed_path, "uploaded_image.png")
-    log.debug(f"Saving uploaded image to {filepath}")
-    file.save(filepath)
-    session[const.SessionFields.generated_artwork_path.value] = filepath
+    image_path = path.join(user_processed_path, "uploaded_image.png")
+    log.debug(f"Saving uploaded image to {image_path}")
+    file.save(image_path)
+
+    session[const.SessionFields.generated_artwork_path.value] = image_path
     session[const.SessionFields.include_center_artwork.value] = include_center_artwork
-    log.log("Local image upload complete.")
-    return createJsonResponse(const.HttpStatus.OK.value)
 
-@bp_artwork_generation.route("/api" + const.ROUTES.art_gen.path + "/use-local-image", methods=["POST"])
-@cross_origin()
-def useLocalImageApi() -> Response:
-    if 'file' not in request.files:
-        return jsonify({
-            "status": 400,
-            "message": "No file part in the request"
-        })
-    useLocalImage(request.files["file"])
-    return jsonify(
-        status=200,
-        message="Image uploaded successfully.",
-    )
-
-###### YouTube thumbnail ######
+    log.log(f"Local image upload complete and saved it to {image_path}")
+    return createApiResponse(const.HttpStatus.OK.value, "Image uploaded successfully.")
 
 def extractYoutubeVideoId(url: str) -> Optional[str]:
     """ Extracts the YouTube video ID from the provided URL.
@@ -139,10 +117,10 @@ def extractYoutubeVideoId(url: str) -> Optional[str]:
             return match.group(1)
     return None
 
-def processYoutubeThumbnail(thumbnail_url: str) -> JsonResponse:
+def processYoutubeThumbnail(thumbnail_url: str) -> Response:
     """ Processes the thumbnail from the provided URL, saves it to the server, and updates the session.
     :param thumbnail_url: [str] The URL of the YouTube thumbnail to be processed.
-    :return: [JsonResponse] Contains the status and path of the processed image.
+    :return: [Response] Contains the status and path of the processed image.
     """
     if const.SessionFields.user_folder.value not in session:
         session[const.SessionFields.user_folder.value] = str(uuid4())
@@ -153,7 +131,7 @@ def processYoutubeThumbnail(thumbnail_url: str) -> JsonResponse:
 
     image_response = requestsGet(thumbnail_url)
     if image_response.status_code != const.HttpStatus.OK.value:
-        return createJsonResponse(const.HttpStatus.INTERNAL_SERVER_ERROR.value, const.ERR_FAIL_DOWNLOAD)
+        return createApiResponse(const.HttpStatus.INTERNAL_SERVER_ERROR.value, const.ERR_FAIL_DOWNLOAD)
 
     image_path = path.join(user_processed_path, "youtube_thumbnail.png")
     with open(image_path, "wb") as file:
@@ -162,40 +140,24 @@ def processYoutubeThumbnail(thumbnail_url: str) -> JsonResponse:
     session[const.SessionFields.generated_artwork_path.value] = image_path
     session[const.SessionFields.include_center_artwork.value] = False
 
-    return createJsonResponse(const.HttpStatus.OK.value, "/processed-images")
+    log.log(f"YouTube thumbnail upload complete and saved it to {image_path}")
+    return createApiResponse(const.HttpStatus.OK.value, "YouTube thumbnail processed successfully.")
 
-@bp_artwork_generation.route(const.ROUTES.art_gen.path + "/use-youtube-thumbnail", methods=["POST"])
-def useYoutubeThumbnail(url: str | None) -> JsonResponse:
+@bp_artwork_generation.route(api_prefix + "/use-youtube-thumbnail", methods=["POST"])
+@cross_origin()
+def useYoutubeThumbnail() -> Response:
     """ Handles the extraction and processing of a YouTube thumbnail from a given URL.
-    :return: [JsonResponse] Contains the status and path of the processed image.
+    :return: [Response] The response to the request.
     """
-    # url = request.form.get("url")
+    log.debug("POST - Generating artwork using a YouTube thumbnail...")
+    body = literal_eval(request.get_data(as_text=True))
+    youtube_url: Optional[str] = body.get("url")
+    if youtube_url is None:
+        return createApiResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_NO_IMG_URL)
 
-    if url is None:
-        return createJsonResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_NO_IMG_URL)
-
-    video_id = extractYoutubeVideoId(url)
+    video_id = extractYoutubeVideoId(youtube_url)
     if video_id is None:
-        return createJsonResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_INVALID_YT_URL)
+        return createApiResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_INVALID_YT_URL)
 
     thumbnail_url = f"https://i3.ytimg.com/vi/{video_id}/maxresdefault.jpg"
     return processYoutubeThumbnail(thumbnail_url)
-
-@bp_artwork_generation.route("/api" + const.ROUTES.art_gen.path + "/use-youtube-thumbnail", methods=["POST"])
-@cross_origin()
-def useYoutubeThumbnailApi() -> Response:
-    body = literal_eval(request.get_data(as_text=True))
-    useYoutubeThumbnail(body.get("url"))
-    return jsonify(
-        status=200,
-        message="YouTube thumbnail processed successfully.",
-    )
-
-@bp_artwork_generation.route("/api" + const.ROUTES.art_gen.path, methods=["POST"])
-def renderArtworkGeneration() -> RenderView:
-    """ Renders the artwork generation page.
-    :return: [RenderView] The rendered view.
-    """
-    session[const.SessionFields.include_center_artwork.value] = True
-    log.debug(f"Rendering {const.ROUTES.art_gen.bp_name} page...")
-    return render_template(const.ROUTES.art_gen.view_filename)

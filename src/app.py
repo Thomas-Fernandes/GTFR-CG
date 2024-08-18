@@ -32,13 +32,11 @@ def initApp() -> None:
         from src.routes.home import bp_home
         from src.routes.lyrics import bp_lyrics
         from src.routes.processed_images import bp_processed_images
-        from src.routes.redirect import bp_redirect
         blueprints = [
             bp_artwork_generation,
             bp_home,
             bp_lyrics,
             bp_processed_images,
-            bp_redirect,
         ]
         for blueprint in blueprints:
             app.register_blueprint(blueprint)

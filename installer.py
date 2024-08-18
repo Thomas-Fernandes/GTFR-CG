@@ -4,7 +4,6 @@ from typing import Optional
 
 from src.logger import log, LogSeverity
 
-@staticmethod
 def quitIfError(result: CompletedProcess[bytes]) -> None:
     """ Quits the installation if an error occurred.
     :param result: [CompletedProcess] The result of the subprocess.
@@ -13,7 +12,6 @@ def quitIfError(result: CompletedProcess[bytes]) -> None:
         log.critical(f"Error while trying to install React: {result.stderr}")
         exit(1)
 
-@staticmethod
 def installNodePackages() -> None:
     """ Installs the Node packages required by the front-end application.
     """
@@ -30,7 +28,6 @@ def installNodePackages() -> None:
 
     launchNodePackagesInstallation()
 
-@staticmethod
 def installNvm() -> None:
     """ Installs Nvm, needed for Node
     """
@@ -76,7 +73,6 @@ def installNvm() -> None:
         return
     launchNvmInstallation()
 
-@staticmethod
 def installNode() -> None:
     """ Installs Node.js, needed for React.
     """

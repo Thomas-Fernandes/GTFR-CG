@@ -1,23 +1,17 @@
-from flask import jsonify
+from flask import jsonify, Response
 
-from src.typing import JsonResponse
+from typing import Optional
 
-def createJsonResponse(status_code: int, message: str = "") -> JsonResponse:
+def createApiResponse(status_code: int, message: str = "", data: Optional[object] = None) -> Response:
     """ Creates a JSON response with the given status code and message.
     :param status_code: [integer] The status code of the response.
     :param message: [string] The message to include in the response. (default: "")
-    :return: [JsonResponse] The JSON response and its status code.
+    :param data: [object?] The data to include in the response. (default: None)
+    :return: [Response] The response of the request.
     """
-    match status_code:
-        case 200:
-            status = "success"
-        case 400, 404, 500:
-            status = "error"
-        case _:
-            status = "unknown"
-
-    response = { "status": status }
-    message = message.strip()
-    if len(message) > 1:
-        response["message"] = message
-    return (jsonify(response), status_code)
+    print(status_code, message, data)
+    return jsonify(
+        status=status_code,
+        message=message,
+        data=data,
+    )
