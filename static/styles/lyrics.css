@@ -37,4 +37,5 @@ form.lyrics-form {
     box-sizing: border-box;
     overflow: hidden;
     resize: none;
+    background-image: linear-gradient(to right, transparent calc(0.91ch * 62), lightgray calc(0.91ch * 62), lightgray calc(0.91ch * 63), transparent calc(0.91ch * 63));
 }
