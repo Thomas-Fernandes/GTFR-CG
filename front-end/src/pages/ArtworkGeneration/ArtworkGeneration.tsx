@@ -12,9 +12,20 @@ import { BACKEND_URL, ITUNES_URL, PATHS, SPINNER_ID, TITLE, TOAST, TOAST_TYPE } 
 import "./ArtworkGeneration.css";
 
 const ArtworkGeneration = (): JSX.Element => {
+  useTitle(TITLE.ARTWORK_GENERATION);
+
   const navigate = useNavigate();
 
   const [isProcessingLoading, setIsProcessingLoading] = useState(false);
+
+  const [term, setTerm] = useState("");
+  const [country, setCountry] = useState("fr");
+  const [itunesResults, setItunesResults] = useState([] as ItunesResult[]);
+
+  const [file, setFile] = useState<File>();
+  const [includeCenterArtwork, setIncludeCenterArtwork] = useState(true);
+
+  const [youtubeUrl, setYoutubeUrl] = useState("");
 
   // iTunes search
   const handleSubmitItunesResult = (item: ItunesResult, key: number) => {
@@ -75,7 +86,7 @@ const ArtworkGeneration = (): JSX.Element => {
   };
   // iTunes reference: https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/iTuneSearchAPI/Searching.html#//apple_ref/doc/uid/TP40017632-CH5-SW1
   // Ben Dodson's iTunes artwork finder which we mimic: https://github.com/bendodson/itunes-artwork-finder
-  const handleSubmitItunesSearch = async (e: FormEvent<HTMLFormElement>, body: ItunesRequest) => {
+  const handleSubmitItunesSearch = (e: FormEvent<HTMLFormElement>, body: ItunesRequest) => {
     e.preventDefault();
 
     showSpinner(SPINNER_ID.ITUNES);
@@ -123,15 +134,12 @@ const ArtworkGeneration = (): JSX.Element => {
       hideSpinner(SPINNER_ID.ITUNES);
     });
   };
-  const [term, setTerm] = useState("");
-  const [country, setCountry] = useState("fr");
-  const [itunesResults, setItunesResults] = useState([] as ItunesResult[]);
 
   // File upload
   const isFileExtensionAccepted = (fileName: string, acceptedExtensions: string[]): boolean => {
     return acceptedExtensions.includes(fileName.split(".").slice(-1)[0].toLowerCase());
   };
-  const handleSubmitFileUpload = async (e: FormEvent<HTMLFormElement>, body: FileUploadRequest) => {
+  const handleSubmitFileUpload = (e: FormEvent<HTMLFormElement>, body: FileUploadRequest) => {
     e.preventDefault();
 
     if (isProcessingLoading) {
@@ -184,14 +192,12 @@ const ArtworkGeneration = (): JSX.Element => {
       setIsProcessingLoading(false);
     });
   };
-  const [file, setFile] = useState<File>();
-  const [includeCenterArtwork, setIncludeCenterArtwork] = useState(true);
 
   // YouTube thumbnail
   const isValidYoutubeUrl = (url: string): boolean => {
     return YOUTUBE.REGEX_YOUTUBE_URL.some((pattern: RegExp) => pattern.test(url));
   };
-  const handleSubmitYoutubeUrl = async (e: FormEvent<HTMLFormElement>, body: YoutubeRequest) => {
+  const handleSubmitYoutubeUrl = (e: FormEvent<HTMLFormElement>, body: YoutubeRequest) => {
       e.preventDefault();
 
       if (isProcessingLoading) {
@@ -226,9 +232,6 @@ const ArtworkGeneration = (): JSX.Element => {
         setIsProcessingLoading(false);
       });
   };
-  const [youtubeUrl, setYoutubeUrl] = useState("");
-
-  useTitle(TITLE.ARTWORK_GENERATION);
 
   return (
     <div id="artwork-generation">
