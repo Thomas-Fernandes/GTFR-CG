@@ -112,7 +112,7 @@ cd front-end/ && npm run dev # will launch the front end of the application
 - You can navigate between pages using the navigation buttons at the top of each page.
 - The application features a [toast notification system](https://web.dev/articles/building/a-toast-component) that will give you feedback on your unsuccessful actions.
 - Most of the application's back end actions and reactions will be logged in the terminal *via* Python.
-  - *(TBD)* You can define a minimum severity level in the `.env` file, choosing the logger verbosity's. Check out [`.env.example`](./installer.py) for more information.
+  - *(TBD)* You can define a minimum severity level in the `.env` file, choosing the logger verbosity's. Check out [`.env.example`](./.env.example) for more information.
 - Your user statistics are stored at the root of the repository in a file named `stats.json`.
 - If you encounter external Python module issues, try running `pip install -r requirements.txt --force-reinstall` for a complete reinstall.
 
@@ -134,13 +134,13 @@ cd front-end/ && npm run dev # will launch the front end of the application
     - routes are reworked and redirection is implemented
     - toasts are implemented as a feedback system of web actions
     - `requirements.txt` and this README are created
-  - ***[1.2.4]** Coming July 2024*: Project now supports artwork generation from a YouTube link, gets some more reworks. [#086](https://github.com/Thomas-Fernandes/GTFR-CG/pull/86)
+  - ***[1.2.4]** Jul 20 2024*: Project now supports artwork generation from a YouTube link, gets some more reworks. [#086](https://github.com/Thomas-Fernandes/GTFR-CG/pull/86)
     - a loading spinner now comes alongside action buttons
     - documentation strings are added to the codebase
     - the artwork generation page is reworked to welcome YT section and better UX
     - the logger system is reinforced to log more actions and be customizable
-- ***[1.3.0]** Coming July 2024*: **Lyrics Fetch** — Project will support lyrics fetching from Genius and their conversion to lyrics blocks. [#???](#card_file_box-changelog)
-  - ***[1.3.1]** Coming later...*: The project's front end will be fully migrated to React Typescript with Vite. [#???](#card_file_box-changelog)
+- ***[1.3.0]** Aug 18 2024*: **Lyrics Fetch** — Project will support lyrics fetching from Genius and their conversion to lyrics blocks. [#089](https://github.com/Thomas-Fernandes/GTFR-CG/pull/89)
+  - ***[1.3.1]** Aug 18 2024*: The project's front end will be fully migrated to **React Typescript with Vite**. [#088](https://github.com/Thomas-Fernandes/GTFR-CG/pull/88)
 - ***[1.4.0]** Coming later...*: **Lyrics Cards** — Project will support automatic cards generation from text blocks. [#???](#card_file_box-changelog)
 - ***[1.5.0]** Coming later...*: **Boost!** — Project will see its existing functionalities sharpened. [#???](#card_file_box-changelog)
 - ***[1.6.0]** Coming later...*: **Koh-Lanta** — Project will be unified in an all-in-one application. [#???](#card_file_box-changelog)
