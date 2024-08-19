@@ -77,6 +77,7 @@ export const TITLE = {
   PREFIX: "GTFR-CG - ",
 
   REDIRECT: "Redirect",
+  TESTS: "Tests",
   HOME: "Home",
   ARTWORK_GENERATION: "Artwork Generation",
   PROCESSED_IMAGES: "Processed Images",
@@ -86,6 +87,7 @@ export const TITLE = {
 export const PATHS = {
   redirect: "/redirect",
   home: "/home",
+  tests: "/tests",
   artworkGeneration: "/artwork-generation",
   processedImages: "/processed-images",
   lyrics: "/lyrics",
