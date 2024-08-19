@@ -29,7 +29,7 @@ def fetchLyricsFromGenius(song_title: str, artist_name: str) -> list[dict[str, s
     """ Tries to fetch the lyrics of a song from Genius.com.
     :param song_title: [string] The title of the song.
     :param artist_name: [string] The name of the artist.
-    :return: [string] The stringified lyrics of the song.
+    :return: [list] A list of tuples with section names and lyrics.
     """
     if genius is None:
         return [{"section": "error", "lyrics": const.ERR_GENIUS_TOKEN}]
@@ -68,7 +68,7 @@ def fetchLyricsFromGenius(song_title: str, artist_name: str) -> list[dict[str, s
     log.debug("Lyrics sanitized successfully.")
 
     # Split lyrics into blocks based on sections, e.g. "[Chorus]"
-    parts = split(r'(\[.*?\])', lyrics)
+    parts = split(r"(\[.*?\])", lyrics)
     lyrics_parts = [{"section": parts[i], "lyrics": parts[i + 1].strip()} for i in range(1, len(parts) - 1, 2)]
 
     log.debug("Lyrics split into parts successfully.")
