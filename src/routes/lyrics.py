@@ -51,6 +51,9 @@ def fetchLyricsFromGenius(song_title: str, artist_name: str) -> list[tuple[str, 
     # Removing "You might also like" part
     lyrics = sub(r"You might also like", '\n', lyrics)
 
+    if lyrics.startswith("[Paroles de") or lyrics.startswith("[Traduction de"):
+        lyrics = '\n'.join(lyrics.split('\n')[1:]).strip()
+
     # Ensure double newline before song parts
     @staticmethod
     def add_newline_before_song_parts(lyrics: str) -> str:
