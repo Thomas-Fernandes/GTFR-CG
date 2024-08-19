@@ -24,14 +24,14 @@ except TypeError as e:
               "Lyrics fetching will not work.")
 
 @staticmethod
-def fetchLyricsFromGenius(song_title: str, artist_name: str) -> str:
-    """ Tries to fetch the lyrics of a song from Genius.com.
+def fetchLyricsFromGenius(song_title: str, artist_name: str) -> list[tuple[str, str]]:
+    """ Fetches lyrics from Genius.com and splits them into parts.
     :param song_title: [string] The title of the song.
     :param artist_name: [string] The name of the artist.
-    :return: [string] The stringified lyrics of the song.
+    :return: [list] A list of tuples with section names and lyrics.
     """
     if genius is None:
-        return const.ERR_GENIUS_TOKEN
+        return [("Error", "Genius API token not found.")]
 
     song: Optional[Genius.Song] = None
     try:
@@ -40,13 +40,19 @@ def fetchLyricsFromGenius(song_title: str, artist_name: str) -> str:
     except ReadTimeoutException as e:
         log.error(f"Lyrics fetch failed: {e}")
     if song is None:
-        return "Lyrics not found."
+        return [{"section": "Error", "lyrics": const.ERR_GENIUS_TOKEN}]
 
     log.debug("Sanitizing the fetched lyrics...")
     lyrics = song.lyrics
     # Removing charabia at the beginning and end of the lyrics
     lyrics = sub(r"^.*Lyrics\[", '[', lyrics).strip()
     lyrics = sub(r"\d+Embed$", '', lyrics).strip()
+
+    # Removing "You might also like" part
+    lyrics = sub(r"You might also like", '\n', lyrics)
+
+    if lyrics.startswith("[Paroles de") or lyrics.startswith("[Traduction de"):
+        lyrics = '\n'.join(lyrics.split('\n')[1:]).strip()
 
     # Ensure double newline before song parts
     @staticmethod
@@ -55,39 +61,45 @@ def fetchLyricsFromGenius(song_title: str, artist_name: str) -> str:
         :param lyrics: [string] The stringified lyrics to process.
         :return: [string] The processed stringified lyrics.
         """
-        song_parts = split(r"<[^>]+>", lyrics)
-        new_lyrics = []
-        for (i, part) in enumerate(song_parts):
-            if match(r'"[^"]*"', part):
-                if i == 0 or song_parts[i-1].endswith("\n\n") or song_parts[i-1].strip() == "":
-                    new_lyrics.append(part)
-                else:
-                    new_lyrics.append("\n\n" + part)
-            else:
-                new_lyrics.append(part)
-        return ''.join(new_lyrics)
+        return sub(r"(?<=\])\s*(?=\[)", "\n\n", lyrics)
 
     lyrics = add_newline_before_song_parts(lyrics)
     log.debug("Lyrics sanitized successfully.")
+
+    # Split lyrics into blocks based on sections like [Chorus], [Verse], etc.
+    parts = split(r'(\[.*?\])', lyrics)
+    lyrics_parts = [(parts[i], parts[i + 1].strip()) for i in range(1, len(parts) - 1, 2)]
+
+    log.debug("Lyrics split into parts successfully.")
     updateStats(to_increment=const.AvailableStats.lyricsFetches.value)
 
     log.info(f"Lyrics fetch for {artist_name} - \"{song_title}\" complete.")
-    return lyrics
+    return lyrics_parts
 
 @bp_lyrics.route(const.ROUTES.lyrics.path, methods=["POST"])
 def updateTextarea() -> RenderView:
-    """ Updates the lyrics context variable with the fetched lyrics.
+    """ Updates the lyrics context variable with the fetched or edited lyrics based on action.
     :return: [RenderView] The rendered view, with the updated lyrics.
     """
     artist: Optional[str] = request.form.get("artist", None)
-    song: Optional[str] = request.form.get("song", None)
-    lyrics_text: Optional[str] = request.form.get("lyrics")
+    song: Optional[str]   = request.form.get("song", None)
+    action: str           = request.form.get("action", "search")
+    lyrics_parts          = []
 
-    if artist is not None and song is not None:
-        lyrics_text = fetchLyricsFromGenius(song, artist)
+    if action == "search" and artist is not None and song is not None:
+        lyrics_parts = fetchLyricsFromGenius(song, artist)
+        lyrics_parts = [{"section": section, "lyrics": part} for section, part in lyrics_parts]
+    elif action == "save":
+        i = 1
+        while (f"lyrics_part_{i}" in request.form):
+            section = request.form.get(f"lyrics_section_{i}")
+            part    = request.form.get(f"lyrics_part_{i}")
+            if section and part:
+                lyrics_parts.append({"section": section, "lyrics": part})
+            i += 1
 
     context: Context = {
-        "lyrics": lyrics_text or "",
+        "lyrics_parts": lyrics_parts or [],
     }
     log.debug(f"Rendering {const.ROUTES.lyrics.bp_name} page...")
     return render_template(const.ROUTES.lyrics.view_filename, **context)

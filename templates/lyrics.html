@@ -15,20 +15,32 @@
         <button type="button" onclick="window.location.href='{{ url_for('art-gen.renderArtworkGeneration') }}'"><span class="left">Artwork Generation</span></button>
     </div>
     <h1>Lyrics</h1>
+    
+    <!-- Search Lyrics Form -->
     <form method="POST" class="search-form flexbox flex-row">
         <div class="search-bars">
             <input type="text" id="artist" name="artist" placeholder="Enter artist name" required>
-            <input type="text" id="song"   name="song"   placeholder="Enter song name"   required>
+            <input type="text" id="song" name="song" placeholder="Enter song name" required>
+            <input type="hidden" name="action" value="search">
             <div class="action-button" id="lyrics_search">
                 <input type="submit" value="Search Lyrics" class="action-button search-button" onclick="showSpinner('lyrics_search')">
             </div>
         </div>
     </form>
+    
+    <!-- Save Lyrics Form -->
     <form method="POST" class="lyrics-form flexbox">
-        <textarea name="lyrics" rows="20" cols="80" placeholder="Lyrics will appear here...">{{ lyrics }}</textarea>
+        {% for part in lyrics_parts %}
+            <div>
+                <label>{{ part.section }}</label>
+                <input type="hidden" name="lyrics_section_{{ loop.index }}" value="{{ part.section }}">
+                <textarea name="lyrics_part_{{ loop.index }}" rows="5" cols="80">{{ part.lyrics }}</textarea>
+            </div>
+        {% endfor %}
         <br>
-        <div class="action-button" id="lyrics_save">
-            <input type="submit" value="Save Lyrics" class="action-button save-button" onclick="showSpinner('lyrics_save')">
+        <div class="action-button" id="lyrics_save" style="display: none;">
+            <input type="hidden" name="action" value="save">
+            <input type="submit" value="Save Lyrics" class="action-button save-button">
         </div>
     </form>
 
