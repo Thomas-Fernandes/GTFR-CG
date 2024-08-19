@@ -2,9 +2,14 @@ import { Dispatch, SetStateAction } from "react";
 
 /**************** LYRICS *****************/
 
+export type LyricsPart = {
+  section: string;
+  lyrics: string;
+};
+
 export type LyricsResponse = ApiResponse & {
   data: {
-    lyrics: string;
+    lyrics_parts: LyricsPart[];
   };
 };
 export type LyricsRequest = {

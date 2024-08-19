@@ -115,6 +115,7 @@ ERR_INVALID_FILE_TYPE = "Invalid file type. Only PNG and JPG files are allowed."
 ERR_NO_IMG_URL = "No image URL provided."
 ERR_FAIL_DOWNLOAD = "Failed to download image."
 ERR_GENIUS_TOKEN = "Genius API token not found."
+ERR_LYRICS_NOT_FOUND = "Lyrics not found."
 
 # Genius
 load_dotenv()

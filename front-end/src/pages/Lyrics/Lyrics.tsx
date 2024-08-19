@@ -1,10 +1,11 @@
 import { FormEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { AutoResizeTextarea } from "../../common/components/AutoResizeTextarea";
 import { is2xxSuccessful, sendRequest } from "../../common/Requests";
 import { hideSpinner, showSpinner } from "../../common/Spinner";
 import { sendToast } from "../../common/Toast";
-import { ApiResponse, LyricsRequest, LyricsResponse } from "../../common/Types";
+import { ApiResponse, LyricsPart, LyricsRequest, LyricsResponse } from "../../common/Types";
 import useTitle from "../../common/UseTitle";
 import { API, BACKEND_URL, PATHS, SPINNER_ID, TITLE, TOAST, TOAST_TYPE } from "../../constants/Common";
 
@@ -20,15 +21,30 @@ const Lyrics = (): JSX.Element => {
   const [artist, setArtist] = useState("");
   const [songName, setSongName] = useState("");
 
-  const [lyrics, setLyrics] = useState("");
+  const [lyricsParts, setLyricsParts] = useState([] as LyricsPart[]);
 
   // Lyrics
-  const handleLyricsSaveSubmit = (e: FormEvent<HTMLFormElement>, body: string) => {
+  const handleLyricsSaveSubmit = (e: FormEvent<HTMLFormElement>, body: string[][]) => {
     e.preventDefault();
 
     showSpinner(SPINNER_ID.LYRICS_SAVE);
+    console.log(body);
     // TODO
     hideSpinner(SPINNER_ID.LYRICS_SAVE);
+  };
+
+  const convertToCardContents = (lyricsParts: LyricsPart[]): string[][] => {
+    const cardContents: string[][] = [];
+
+    console.log(lyricsParts);
+    // TODO
+    return cardContents;
+  };
+
+  const handleSetLyricsParts = (lyrics: string, idx: number) => {
+    const updatedLyricsParts = [...lyricsParts];
+    updatedLyricsParts[idx].lyrics = lyrics;
+    setLyricsParts(updatedLyricsParts);
   };
 
   // Search
@@ -53,15 +69,19 @@ const Lyrics = (): JSX.Element => {
         throw new Error(response.message);
       }
 
-      if (response.data.lyrics === TOAST.LYRICS_NOT_FOUND) {
-        sendToast(TOAST.LYRICS_NOT_FOUND, TOAST_TYPE.WARN);
-        setLyrics("");
+      const responseFirstSection = response.data.lyrics_parts[0].section;
+      if (["error", "warn"].includes(responseFirstSection)) {
+        sendToast(
+          response.data.lyrics_parts[0].lyrics,
+          responseFirstSection === "error" ? TOAST_TYPE.ERROR : TOAST_TYPE.WARN
+        );
+        setLyricsParts([]);
       } else {
-        setLyrics(response.data.lyrics);
+        setLyricsParts(response.data.lyrics_parts);
       }
     }).catch((error: ApiResponse) => {
-      setLyrics("");
       sendToast(error.message, TOAST_TYPE.ERROR);
+      setLyricsParts([]);
     }).finally(() => {
       hideSpinner(SPINNER_ID.LYRICS_SEARCH);
       setIsFetching(false);
@@ -104,7 +124,7 @@ const Lyrics = (): JSX.Element => {
 
       <h1>Lyrics</h1>
 
-      <form className="flexbox" onSubmit={(e) => handleLyricsSearchSubmit(e, {artist, songName})}>
+      <form className="search-form flexbox" onSubmit={(e) => handleLyricsSearchSubmit(e, {artist, songName})}>
         <div className="search-bar flex-row">
           <input required
             type="text" name="artist" placeholder="Enter artist name"
@@ -120,18 +140,27 @@ const Lyrics = (): JSX.Element => {
         </div>
       </form>
 
-      <hr />
+      { lyricsParts.length > 0 &&
+        <>
+          <hr />
 
-      <form className="flexbox" onSubmit={(e) => handleLyricsSaveSubmit(e, lyrics)}>
-        <textarea
-          name="lyrics" rows={20} cols={80}
-          placeholder="Lyrics will appear here..." value={lyrics}
-          onChange={(e) => setLyrics(e.target.value)}
-        />
-        <div className="action-button" id={SPINNER_ID.LYRICS_SAVE}>
-          <input type="submit" value="Save Lyrics" className="action-button save-button" />
-        </div>
-      </form>
+          <form className="lyrics-form flexbox" onSubmit={(e) => handleLyricsSaveSubmit(e, convertToCardContents(lyricsParts))}>
+            { lyricsParts.map((part, idx) => (
+              <div key={idx} className="lyrics-part">
+                <label>{part.section}</label>
+                <AutoResizeTextarea
+                  name={`lyrics_part_${idx}`} rows={5} cols={80}
+                  value={part.lyrics} onChange={(e) => handleSetLyricsParts(e.target.value, idx)}
+                />
+                <hr className="w-66 mv-0" />
+              </div>
+            ))}
+            <div className="action-button" id={SPINNER_ID.LYRICS_SAVE}>
+              <input type="submit" value="CONVERT TO CARDS" className="action-button save-button" />
+            </div>
+          </form>
+        </>
+      }
     </div>
   )
 };

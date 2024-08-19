@@ -6,9 +6,31 @@
             gap: 16px;
         }
 
-        textarea {
-            height: 300px;
-            padding: 1rem;
+        &.lyrics-form {
+            margin-top: 2%;
+
+            &> div {
+                width: 60%;
+                margin-bottom: 20px;
+                text-align: center;
+            }
+
+            label {
+                font-weight: bold;
+                text-align: center;
+            }
+
+            textarea {
+                width: 100%;
+                padding: 10px;
+                background-image:
+                    linear-gradient(to right,
+                        transparent calc(0.92ch * 62),
+                        lightgray calc(0.92ch * 62),
+                        lightgray calc(0.92ch * 63),
+                        transparent calc(0.92ch * 63)
+                    );
+            }
         }
     }
 }

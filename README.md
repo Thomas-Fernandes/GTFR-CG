@@ -139,8 +139,8 @@ cd front-end/ && npm run dev # will launch the front end of the application
     - documentation strings are added to the codebase
     - the artwork generation page is reworked to welcome YT section and better UX
     - the logger system is reinforced to log more actions and be customizable
-- ***[1.3.0]** Aug 18 2024*: **Lyrics Fetch** — Project will support lyrics fetching from Genius and their conversion to lyrics blocks. [#089](https://github.com/Thomas-Fernandes/GTFR-CG/pull/89)
-  - ***[1.3.1]** Aug 18 2024*: The project's front end will be fully migrated to **React Typescript with Vite**. [#088](https://github.com/Thomas-Fernandes/GTFR-CG/pull/88)
+- ***[1.3.0]** Aug 19 2024*: **Lyrics Fetch** — Project will support lyrics fetching from Genius and their conversion to lyrics blocks. [#089](https://github.com/Thomas-Fernandes/GTFR-CG/pull/89)
+  - ***[1.3.1]** Aug 19 2024*: The project's front end will be fully migrated to **React Typescript with Vite**. [#088](https://github.com/Thomas-Fernandes/GTFR-CG/pull/88)
 - ***[1.4.0]** Coming later...*: **Lyrics Cards** — Project will support automatic cards generation from text blocks. [#???](#card_file_box-changelog)
 - ***[1.5.0]** Coming later...*: **Boost!** — Project will see its existing functionalities sharpened. [#???](#card_file_box-changelog)
 - ***[1.6.0]** Coming later...*: **Koh-Lanta** — Project will be unified in an all-in-one application. [#???](#card_file_box-changelog)

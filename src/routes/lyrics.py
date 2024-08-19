@@ -3,7 +3,7 @@ from flask_cors import cross_origin
 from lyricsgenius import Genius
 
 from ast import literal_eval
-from re import sub, split, match
+from re import sub, split
 from requests.exceptions import ReadTimeout as ReadTimeoutException
 from typing import Optional
 
@@ -25,14 +25,14 @@ except TypeError as e:
     log.error(f"Error while creating Genius object: {e}. "
               "Lyrics fetching will not work.")
 
-def fetchLyricsFromGenius(song_title: str, artist_name: str) -> str:
+def fetchLyricsFromGenius(song_title: str, artist_name: str) -> list[dict[str, str]]:
     """ Tries to fetch the lyrics of a song from Genius.com.
     :param song_title: [string] The title of the song.
     :param artist_name: [string] The name of the artist.
     :return: [string] The stringified lyrics of the song.
     """
     if genius is None:
-        return const.ERR_GENIUS_TOKEN
+        return [{"section": "error", "lyrics": const.ERR_GENIUS_TOKEN}]
 
     song: Optional[Genius.Song] = None
     try:
@@ -41,7 +41,7 @@ def fetchLyricsFromGenius(song_title: str, artist_name: str) -> str:
     except ReadTimeoutException as e:
         log.error(f"Lyrics fetch failed: {e}")
     if song is None:
-        return "Lyrics not found."
+        return [{"section": "warn", "lyrics": const.ERR_LYRICS_NOT_FOUND}]
 
     log.debug("Sanitizing the fetched lyrics...")
     lyrics = song.lyrics
@@ -49,30 +49,33 @@ def fetchLyricsFromGenius(song_title: str, artist_name: str) -> str:
     lyrics = sub(r"^.*Lyrics\[", '[', lyrics).strip()
     lyrics = sub(r"\d+Embed$", '', lyrics).strip()
 
+    # Removing "You might also like" advertising's legend
+    lyrics = lyrics.replace("You might also like", '\n')
+
+    # Removing track name translation header
+    if lyrics.startswith("[Paroles de") or lyrics.startswith("[Traduction de"):
+        lyrics = '\n'.join(lyrics.split('\n')[1:]).strip()
+
     # Ensure double newline before song parts
     def add_newline_before_song_parts(lyrics: str) -> str:
         """ Adds a newline before song parts that are enclosed in double quotes.
         :param lyrics: [string] The stringified lyrics to process.
         :return: [string] The processed stringified lyrics.
         """
-        song_parts = split(r"<[^>]+>", lyrics)
-        new_lyrics = []
-        for (i, part) in enumerate(song_parts):
-            if match(r'"[^"]*"', part):
-                if i == 0 or song_parts[i-1].endswith("\n\n") or song_parts[i-1].strip() == "":
-                    new_lyrics.append(part)
-                else:
-                    new_lyrics.append("\n\n" + part)
-            else:
-                new_lyrics.append(part)
-        return ''.join(new_lyrics)
+        return sub(r"(?<=\])\s*(?=\[)", "\n\n", lyrics)
 
     lyrics = add_newline_before_song_parts(lyrics)
     log.debug("Lyrics sanitized successfully.")
+
+    # Split lyrics into blocks based on sections, e.g. "[Chorus]"
+    parts = split(r'(\[.*?\])', lyrics)
+    lyrics_parts = [{"section": parts[i], "lyrics": parts[i + 1].strip()} for i in range(1, len(parts) - 1, 2)]
+
+    log.debug("Lyrics split into parts successfully.")
     updateStats(to_increment=const.AvailableStats.lyricsFetches.value)
 
     log.info(f"Lyrics fetch for {artist_name} - \"{song_title}\" complete.")
-    return lyrics
+    return lyrics_parts
 
 @bp_lyrics.route(api_prefix + "/get-genius-lyrics", methods=["POST"])
 @cross_origin()
@@ -87,5 +90,5 @@ def getGeniusLyrics() -> Response:
     if song_name is None or artist is None:
         return createApiResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_NO_IMG_URL)
 
-    lyrics = fetchLyricsFromGenius(song_name, artist)
-    return createApiResponse(const.HttpStatus.OK.value, "Lyrics fetched successfully.", {"lyrics": lyrics})
+    lyrics_parts = fetchLyricsFromGenius(song_name, artist)
+    return createApiResponse(const.HttpStatus.OK.value, "Lyrics fetched successfully.", {"lyrics_parts": lyrics_parts})
