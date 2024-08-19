@@ -1,20 +1,19 @@
-from flask import Blueprint, render_template, Response, send_from_directory
+from flask import Blueprint, Response
+from flask_cors import cross_origin
 from PIL import Image, ImageFilter, ImageDraw
 
 from os import path
 
 import src.constants as const
 from src.logger import log
-from src.routes.redirect import renderRedirection
 from src.statistics import updateStats
-from src.typing import Context, JsonResponse, RenderView
-from src.web_utils import createJsonResponse
+from src.web_utils import createApiResponse
 
 from src.app import app
 bp_processed_images = Blueprint(const.ROUTES.proc_img.bp_name, __name__.split('.')[-1])
 session = app.config
+api_prefix = const.API_ROUTE + const.ROUTES.proc_img.path
 
-@staticmethod
 def generateCoverArt(input_path: str, output_path: str, include_center_artwork: bool = True) -> None:
     """ Generates the cover art for the given input image and saves it to the output path.
     :param input_path: [string] The path to the input image.
@@ -70,9 +69,9 @@ def generateCoverArt(input_path: str, output_path: str, include_center_artwork: 
         final_image.paste(center_image, (top_left_x, top_left_y))
 
     final_image.save(output_path)
+    final_image.save(f"./front-end/public/processed-images/{const.PROCESSED_ARTWORK_FILENAME}")
     log.debug(f"Cover art saved: {output_path}")
 
-@staticmethod
 def generateThumbnails(bg_path: str, output_folder: str) -> None:
     """ Generates the thumbnails for the given background image and saves them in the output folder.
     :param bg_path: [string] The path to the background image.
@@ -99,47 +98,18 @@ def generateThumbnails(bg_path: str, output_folder: str) -> None:
         final_image = new_background.convert("RGB")
         output_path = path.join(output_folder, f"thumbnail_{position}.png")
         final_image.save(output_path)
+        final_image.save(f"./front-end/public/processed-images/thumbnail_{position}.png")
         log.debug(f"Thumbnail saved: {output_path}")
 
-@bp_processed_images.route("/download-image/<filename>", methods=["GET"])
-def downloadImage(filename: str) -> Response | JsonResponse:
-    """ Downloads the image with the given filename.
-    :param filename: [string] The name of the image to download.
-    :return: [Response | JsonResponse] The response containing the image, or an error message.
-    """
-    if const.SessionFields.user_folder.value not in session:
-        log.error("No user folder found in session.")
-        return createJsonResponse(const.HttpStatus.NOT_FOUND.value, const.ERR_INVALID_SESSION)
-
-    user_folder = str(session[const.SessionFields.user_folder.value]) + const.SLASH + const.AvailableCacheElemType.images.value
-    directory = path.abspath(path.join(const.PROCESSED_DIR, user_folder))
-    log.info(f"Downloading image: {filename}")
-    return send_from_directory(directory, filename, as_attachment=True)
-
-@bp_processed_images.route("/download-thumbnail/<idx>", methods=["GET"])
-def downloadThumbnail(idx: str) -> Response | JsonResponse:
-    """ Downloads the thumbnail with the given index.
-    :param idx: [string] The index of the thumbnail to download.
-    :return: [Response | JsonResponse] The response containing the thumbnail, or an error message.
-    """
-    idx_img = int(idx.strip())
-    if idx_img not in range(1, 10):
-        log.error(f"Invalid thumbnail index: {idx_img}")
-        return createJsonResponse(const.HttpStatus.NOT_FOUND.value, const.ERR_INVALID_THUMBNAIL)
-    filename: str = \
-        f"{const.THUMBNAIL_PREFIX}" \
-        f"{const.LOGO_POSITIONS[idx_img - 1]}" \
-        f"{const.THUMBNAIL_EXT}"
-    return downloadImage(filename)
-
-@bp_processed_images.route(const.ROUTES.proc_img.path, methods=["GET"])
-def renderProcessedImages() -> RenderView:
-    """ Renders the processed artwork and thumbnails, and returns the processed images view.
-    :return: [RenderView | RenderView] The rendered view, or a redirection if the session has no processed image.
+@bp_processed_images.route(api_prefix + "/process-images", methods=["POST"])
+@cross_origin()
+def processArtwork() -> Response:
+    """ Renders the processed background image and thumbnails.
+    :return: [Response] The response to the request.
     """
     if const.SessionFields.generated_artwork_path.value not in session:
         log.error("No processed image found in session.")
-        return renderRedirection(const.ROUTES.art_gen.path, const.ERR_NO_IMG)
+        return createApiResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_NO_IMG)
 
     user_folder = str(session[const.SessionFields.user_folder.value]) + const.SLASH + const.AvailableCacheElemType.images.value
     user_processed_path = path.join(const.PROCESSED_DIR, user_folder)
@@ -153,8 +123,4 @@ def renderProcessedImages() -> RenderView:
     log.log(f"Images generation ({center_mark} center artwork) complete.")
     updateStats(to_increment=const.AvailableStats.artworkGenerations.value)
 
-    context: Context = {
-        const.SessionFields.user_folder.value: user_folder,
-    }
-    log.debug(f"Rendering {const.ROUTES.proc_img.bp_name} page...")
-    return render_template(const.ROUTES.proc_img.view_filename, **context)
+    return createApiResponse(const.HttpStatus.OK.value, "Processed images path retrieved successfully.")

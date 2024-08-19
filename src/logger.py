@@ -2,7 +2,7 @@ from contextlib import contextmanager
 from enum import Enum
 from io import StringIO
 from re import Match
-import sys # On doit importer tout le module sinon ça ne marche pas
+import sys # The whole module must be imported for output redirection to work
 from typing import Iterator, Optional
 
 import src.constants as const
@@ -35,7 +35,6 @@ class SeverityPrefix(Enum):
     ERROR    = "ERR?!"
     CRITICAL = "CRIT!"
 
-@staticmethod
 def getFormattedMessage(msg: str, severity: Optional[LogSeverity] = None) -> str:
     """ Formats a message to log.
     :param msg: [string] The core message to log.
@@ -120,7 +119,7 @@ class Logger:
         if self.__log_file is not None and self.__log_file.strip() != "":
             if self.__severity <= LogSeverity.DEBUG:
                 print(f"Writing to log file: {self.__log_file}")
-            with open(self.__log_file, 'a') as file:
+            with open(self.__log_file, "a") as file:
                 file.write(message_to_log + '\n')
         else:
             print(message_to_log)
@@ -133,9 +132,9 @@ class Logger:
         return self.__severity
 
     def __init__(
-            self,
-            severity: LogSeverity = LogSeverity.INFO,
-            log_file: Optional[str] = None
+        self,
+        severity: LogSeverity = LogSeverity.INFO,
+        log_file: Optional[str] = None
     ) -> None:
         """ Initializes the logger.
         :param severity: [LogSeverity?] The logger will only log with that severity or higher. (default: LogSeverity.INFO)
@@ -164,4 +163,4 @@ def getSeverityArg(args: list[str]) -> LogSeverity:
     return severity
 print(getFormattedMessage("Trying to initialize logger variable...", LogSeverity.DEBUG))
 log = Logger(severity=getSeverityArg(sys.argv))
-log.debug("Logger initialized.")
+log.log(f"Logger initialized with level '{log.getSeverity().name}'.")

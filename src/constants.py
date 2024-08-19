@@ -5,15 +5,13 @@ from os import getenv, name as osName
 from re import compile
 from typing import Optional
 
-from src.typing import Context, ContextObj, JsonDict, Route, Routes
+from src.typing import JsonDict, Route, Routes
 
 class HttpStatus(Enum):
     """ Enum for HTTP status codes.
     """
     OK = 200
-    REDIRECT = 302
     BAD_REQUEST = 400
-    NOT_FOUND = 404
     INTERNAL_SERVER_ERROR = 500
 
 class TimeInSeconds(Enum):
@@ -40,7 +38,6 @@ class SessionFields(Enum):
     """ Enum for the fields in the session.
     """
     # Application
-    session_status = "session_status"
     user_folder = "user_folder"
 
     # Artwork generation
@@ -50,68 +47,33 @@ class SessionFields(Enum):
     # Lyrics
     genius_token = "genius_token"
 
-# Routes and views
+# Routes
+API_ROUTE = "/api"
 ROUTES = Routes(
     root = Route(
         path="/",
-        view_filename="home.html",
     ),
     redirect = Route(
         path="/redirect",
-        view_filename="redirect.html",
         bp_name="redirect",
     ),
     home = Route(
         path="/home",
-        view_filename="home.html",
         bp_name="home",
     ),
     art_gen = Route(
         path="/artwork-generation",
-        view_filename="artwork-generation.html",
         bp_name="art-gen",
     ),
     proc_img = Route(
         path="/processed-images",
-        view_filename="processed-images.html",
         bp_name="processed-images",
     ),
     lyrics = Route(
         path="/lyrics",
-        view_filename="lyrics.html",
         bp_name="lyrics",
     ),
 )
-DEFAULT_CONTEXT_OBJ = ContextObj(
-    ### REDIRECT
-    redirect_to = "",
-    error_text = "",
-    plural = "s",
-
-    ### HOME
-    stats = {},
-    plurals = {},
-    session_status = "initializing",
-    genius_token = "",
-
-    ### LYRICS
-    lyrics = "",
-)
-DEFAULT_CONTEXT: Context = {
-    ### REDIRECT
-    "redirect_to": DEFAULT_CONTEXT_OBJ.redirect_to,
-    "error_text": DEFAULT_CONTEXT_OBJ.error_text,
-    "plural": DEFAULT_CONTEXT_OBJ.plural,
-
-    ### HOME
-    "stats": DEFAULT_CONTEXT_OBJ.stats,
-    "plurals": DEFAULT_CONTEXT_OBJ.plurals,
-    "session_status": DEFAULT_CONTEXT_OBJ.session_status,
-    "genius_token": DEFAULT_CONTEXT_OBJ.genius_token,
-
-    ### LYRICS
-    "lyrics": DEFAULT_CONTEXT_OBJ.lyrics,
-}
 
 # Statistics
 DATE_FORMAT_FULL = "%Y-%m-%d %H:%M:%S"
@@ -140,7 +102,6 @@ SESSION_DIR = "flask_session" + SLASH
 PROCESSED_DIR = "processed" + SLASH
 PROCESSED_ARTWORK_FILENAME = "ProcessedArtwork.png"
 THUMBNAIL_DIR = "assets" + SLASH + "thumbnails" + SLASH
-THUMBNAIL_PREFIX = "thumbnail_"; THUMBNAIL_EXT = ".png"
 LOGO_POSITIONS = [
     "top-left",    "top-center",    "top-right",
     "center-left", "center-center", "center-right",
@@ -148,14 +109,13 @@ LOGO_POSITIONS = [
 ]
 
 # Error messages
-ERR_INVALID_SESSION = "Session expired or invalid."
 ERR_NO_FILE = "Invalid file: No file selected."
 ERR_NO_IMG = "No image was selected or uploaded."
 ERR_INVALID_FILE_TYPE = "Invalid file type. Only PNG and JPG files are allowed."
 ERR_NO_IMG_URL = "No image URL provided."
-ERR_INVALID_THUMBNAIL = "Invalid thumbnail index."
 ERR_FAIL_DOWNLOAD = "Failed to download image."
 ERR_GENIUS_TOKEN = "Genius API token not found."
+ERR_LYRICS_NOT_FOUND = "Lyrics not found."
 
 # Genius
 load_dotenv()

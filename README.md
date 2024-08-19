@@ -1,5 +1,5 @@
 <div align="center" id="top">
-    <h1>:scroll: Genius Traductions Françaises Content Generator :film_strip:</h1>
+    <h1>:scroll: Genius traductions françaises Content Generator :film_strip:</h1>
 </div>
 
 <div align="center">
@@ -15,13 +15,15 @@
   <sup><b>The technical stack at play:</b></sup>
 
   <img title="Python" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/1028px-Python-logo-notext.svg.png" width="28px" alt="Python" />
-  <img title="Flask" src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files//flask.svg" width="28px" alt="Flask" />
-  <img title="HTML" src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/html/html.png" width="28px" alt="HTML" />
-  <img title="CSS" src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/css/css.png" width="28px" alt="CSS" />
-  <img title="JavaScript" src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files//js.svg" width="28px" alt="JS" />
-  <!-- <img title="React" src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files//react.svg" width="28px" alt="React" /> -->
-  <!-- <img title="TypeScript" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Typescript_logo_2020.svg/2048px-Typescript_logo_2020.svg.png" width="28px" alt="TScript" /> -->
-  <img title="GIMP" src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files//gimp.svg" width="28px" alt="GIMP" />
+  <img title="Flask" src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files/flask.svg" width="28px" alt="Flask" />
+  <!-- <img title="HTML" src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/html/html.png" width="28px" alt="HTML" /> -->
+  <!-- <img title="CSS" src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/css/css.png" width="28px" alt="CSS" /> -->
+  <!-- <img title="JavaScript" src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files/js.svg" width="28px" alt="JS" /> -->
+  <img title="React.js" src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files/react.svg" width="28px" alt="React" />
+  <img title="Vite" src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files/vite.svg" width="28px" alt="Vite" />
+  <img title="TypeScript" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Typescript_logo_2020.svg/2048px-Typescript_logo_2020.svg.png" width="28px" alt="TScript" />
+  &nbsp;<sup><b>| formerly:</b></sup>&nbsp;
+  <img title="GIMP" src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files/gimp.svg" width="28px" alt="GIMP" />
   <img title="Adobe Premiere Pro" src="https://upload.wikimedia.org/wikipedia/commons/4/40/Adobe_Premiere_Pro_CC_icon.svg" width="28px" alt="Premiere" />
 
 </div>
@@ -44,7 +46,7 @@
 
 ## :memo: Description
 
-**GTFR-CG** is a Python web application that generates content serving the creation of [**Genius Traductions Françaises**](https://www.youtube.com/c/geniustraductionsfrancaises) videos.  
+**GTFR-CG** is a React-Python web application that generates content serving the creation of [**Genius traductions françaises**](https://www.youtube.com/c/geniustraductionsfrancaises) videos.  
 Generate artwork and lyrics cards that can then be edited into **translation videos**.  
 Save time by interacting with the APIs of **iTunes** and **Genius** to automate parts of the edition process!  
 One day, maybe one day, this application maybe even be able to generate whole videos by itself...
@@ -55,57 +57,74 @@ One day, maybe one day, this application maybe even be able to generate whole vi
 
 ## :gear: Requirements
 
-This application was tested on and designed for Windows 11 and Ubuntu 22.04.  
-All the required Python modules are listed in [the requirements file](./requirements.txt). They will be installed upon launch.
+This application was tested on, and designed for **Windows 11** and **Ubuntu 22.04**.  
+All the required back end modules are listed in [the requirements file](./requirements.txt). They will be installed upon launch of the back end.  
+All the required front end software and modules can be installed by running [the installer file](./installer.py) with Python 3.10.
 
 > [!CAUTION]
-> **GTFR-CG**'s code is written in **Python 3.10** and is **not** compatible with anterior versions.  
+> **GTFR-CG**'s back end is written in **Python 3.10**. It is compatible with later versions, but **not with anterior versions**.  
 > You can check your Python version by running `python --version` in your terminal.
 </blockquote>
 
 > [!IMPORTANT]
-> In order for **GTFR-CG**'s lyrics fetch feature to work, you need to define a `GENIUS_API_TOKEN` variable in a file named `.env` at the root of the repository.  
-> As you can imagine, you need to assign your Genius API token as its value.  
-> Without it, the application will still run, but the lyrics fetch feature will be disabled.
+> In order for **GTFR-CG**'s lyrics fetch feature to work, you need to declare a `GENIUS_API_TOKEN` variable in the `.env` file at the root of the repository.  
+> Find more information about it by reading through [the tutorial .env file](./.env.example).  
+> Without this token, the GTFR-CG application will still run, but the lyrics fetch feature will be disabled.
 
 &#xa0;
 
 ## :movie_camera: Usage
 
-&nbsp;&nbsp; :rocket:&nbsp; **Build & Launch**
+&nbsp;&nbsp; :clamp:&nbsp; **Build**
 
 ``` bash
-pip install -r requirements.txt && # OPTIONAL \
-python launcher.py
+python installer.py # will install back end modules, front end software & modules
+```
+
+&#xa0;
+
+&nbsp;&nbsp; :rocket:&nbsp; **Launch**
+
+**Back end:**
+
+``` bash
+python launcher.py # will check if the needed modules and installed, then launch the application
+```
+
+**Front end:**
+
+``` bash
+cd front-end/ && npm run dev # will launch the front end of the application
 ```
 
 &#xa0;
 
 &nbsp;&nbsp; :bookmark_tabs:&nbsp; **General Information**
 
-- By default, the application runs locally using [**Flask**](https://flask.palletsprojects.com/en/3.0.x/), on port 8000. Access it @ [**http://localhost:8000**](http://localhost:8000).
-  - Feel free to tweak this at will.
-- The application features 5 main pages:
-  - **Home**: the main page, where your statistics are displayed and you can navigate to **Artwork Generation** and **Lyrics**.
-  - **Artwork Generation**: the page where you can generate artwork from a local file or an iTunes search.
-    - **Processed Images**: the page where you can download a background image and a YouTube thumbnail.
-  - **Lyrics**: the page where you can fetch lyrics from Genius and convert them to lyrics blocks.
-    - **Cards** (coming soon): the page where cards are generated from text blocks.
-- You can navigate between pages using the navigation bar at the top of the page.
+- By default, the application runs locally on ports 8000 (back) and 4242 (front). Access it @ [**http://localhost:4242**](http://localhost:4242).
+- The application features 6 major pages:
+  - [x] **Home**: the main page, where your statistics are displayed and you can navigate to **Artwork Generation** and **Lyrics**.
+  - [ ] **Tests** *(TBD)*: the unit tests page, to check the application's integrity.
+  - [x] **Artwork Generation**: the page where you can generate artwork from a local file or an iTunes search.
+    - [x] **Processed Images**: the page where you can download a background image and a YouTube thumbnail.
+  - [x] **Lyrics**: the page where you can fetch lyrics from Genius and convert them to lyrics blocks.
+    - [ ] **Cards** *(TBD)*: the page where cards are generated from text blocks.
+- You can navigate between pages using the navigation buttons at the top of each page.
 - The application features a [toast notification system](https://web.dev/articles/building/a-toast-component) that will give you feedback on your unsuccessful actions.
-- Most of the application's actions and reactions will be logged in the terminal, *via* Python.
+- Most of the application's back end actions and reactions will be logged in the terminal *via* Python.
+  - *(TBD)* You can define a minimum severity level in the `.env` file, choosing the logger verbosity's. Check out [`.env.example`](./.env.example) for more information.
 - Your user statistics are stored at the root of the repository in a file named `stats.json`.
-- If you encounter external module issues, try running `pip install -r requirements.txt --force-reinstall` for a complete reinstall.
+- If you encounter external Python module issues, try running `pip install -r requirements.txt --force-reinstall` for a complete reinstall.
 
 > [!NOTE]
-> Feel free **report** any kind of malfunction or **request a feature** by [**opening an issue**](https://github.com/Thomas-Fernandes/GTFR/issues)!
+> **Report** any kind of malfunction or **request a feature** by [**opening an issue**](https://github.com/Thomas-Fernandes/GTFR/issues)!
 
 &#xa0;
 
 ## :card_file_box: Changelog
 
 - ***[1.0.0]** May 09 2024*: **Hello World!** — Project creation.
-- ***[1.0.1]** Jun 23 2024*: [**@QuentindiMeo**](https://github.com/QuentindiMeo) joins the project. Project starts.
+- ***[1.0.1]** Jun 23 2024*: [**@QuentindiMeo**](https://github.com/QuentindiMeo) joins the project. Project starts. [#001](https://github.com/Thomas-Fernandes/GTFR/pull/1)
 - ***[1.1.0]** Jun 23 2024*: **Welcome** — Project now supports artwork generation from a local file.
 - ***[1.1.1]** Jun 24 2024*: Project gets a new visual appearance. [#005](https://github.com/Thomas-Fernandes/GTFR/pull/5)
 - ***[1.2.0]** Jun 27 2024*: **Thumbnails** — Project now supports artwork generation from iTunes. [#010](https://github.com/Thomas-Fernandes/GTFR/pull/10)
@@ -115,12 +134,13 @@ python launcher.py
     - routes are reworked and redirection is implemented
     - toasts are implemented as a feedback system of web actions
     - `requirements.txt` and this README are created
-  - ***[1.2.4]** Coming July 2024*: Project now supports artwork generation from a YouTube link, gets some more reworks. [#???](#card_file_box-changelog)
+  - ***[1.2.4]** Jul 20 2024*: Project now supports artwork generation from a YouTube link, gets some more reworks. [#086](https://github.com/Thomas-Fernandes/GTFR-CG/pull/86)
     - a loading spinner now comes alongside action buttons
     - documentation strings are added to the codebase
     - the artwork generation page is reworked to welcome YT section and better UX
     - the logger system is reinforced to log more actions and be customizable
-- ***[1.3.0]** Coming July 2024*: **Lyrics Fetch** — Project will support lyrics fetching from Genius and their conversion to lyrics blocks. [#???](#card_file_box-changelog)
+- ***[1.3.0]** Aug 19 2024*: **Lyrics Fetch** — Project will support lyrics fetching from Genius and their conversion to lyrics blocks. [#089](https://github.com/Thomas-Fernandes/GTFR-CG/pull/89)
+  - ***[1.3.1]** Aug 19 2024*: The project's front end will be fully migrated to **React Typescript with Vite**. [#088](https://github.com/Thomas-Fernandes/GTFR-CG/pull/88)
 - ***[1.4.0]** Coming later...*: **Lyrics Cards** — Project will support automatic cards generation from text blocks. [#???](#card_file_box-changelog)
 - ***[1.5.0]** Coming later...*: **Boost!** — Project will see its existing functionalities sharpened. [#???](#card_file_box-changelog)
 - ***[1.6.0]** Coming later...*: **Koh-Lanta** — Project will be unified in an all-in-one application. [#???](#card_file_box-changelog)
