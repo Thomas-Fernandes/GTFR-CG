@@ -1,71 +1,52 @@
-import { JSX, useEffect, useState } from "react";
+import { JSX } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { is2xxSuccessful, sendRequest } from "../../common/Requests";
-import { API, BACKEND_URL, PATHS, TITLE, TOAST, TOAST_TYPE } from "../../constants/Common";
+import { API, BACKEND_URL, PATHS, TITLE } from "../../constants/Common";
 
-import { sendToast } from "../../common/Toast";
-import { Statistics } from "../../common/Types";
 import useTitle from "../../common/UseTitle";
 
+import { TestResult } from "./Test";
 import "./Tests.css";
+import { TestsBoard } from "./TestsBoard";
 
 const Tests = (): JSX.Element => {
   useTitle(TITLE.TESTS);
 
   const navigate = useNavigate();
 
-  const [geniusToken, setGeniusToken] = useState("");
-  const [stats, setStats] = useState<Statistics>({} as Statistics);
+  const testStatistics = (): TestResult => {
+    let result = { successful: false, prompt: "" };
 
-  const fetchStatistics = () => {
     sendRequest("GET", BACKEND_URL + API.STATISTICS).then((response) => {
-      if (!is2xxSuccessful(response.status)) {
-        sendToast(response.message, TOAST_TYPE.ERROR);
-        return;
-      }
-
-      setStats(response.data as Statistics);
+      result = { successful: is2xxSuccessful(response.status), prompt: response.message };
     }).catch((error) => {
-      sendToast(error.message, TOAST_TYPE.ERROR);
+      result = { successful: false, prompt: error.message };
     });
+    return result;
   };
 
-  const fetchGeniusToken = () => {
+  const testGeniusToken = (): TestResult => {
+    let result = { successful: false, prompt: "" };
+
     sendRequest("GET", BACKEND_URL + API.GENIUS_TOKEN).then((response) => {
-      if (!is2xxSuccessful(response.status) || response.data.token === "") {
-        sendToast(response.message, TOAST_TYPE.ERROR, 10);
-        sendToast(TOAST.ADD_GENIUS_TOKEN, TOAST_TYPE.WARN, 20);
-        return;
-      }
-
-      sendToast(TOAST.WELCOME, TOAST_TYPE.SUCCESS, 5);
-      setGeniusToken(response.data.token);
+      result = { successful: is2xxSuccessful(response.status), prompt: response.message };
     }).catch((error) => {
-      sendToast(error.message, TOAST_TYPE.ERROR);
+      result = { successful: false, prompt: error.message };
     });
+    return result;
   };
 
-  useEffect(() => {
-    const fetchAndSetData = () => {
-      if (!window.location.href.endsWith(PATHS.tests)) {
-        navigate(PATHS.tests);
-        return;
-      }
-
-      const routeKey = location.pathname;
-      const hasVisited = sessionStorage.getItem(routeKey);
-
-      fetchStatistics();
-
-      if (!hasVisited) {
-        fetchGeniusToken();
-        sessionStorage.setItem(routeKey, "visited");
-      }
-    };
-
-    fetchAndSetData();
-  }, [navigate]);
+  const boards = {
+    env_var: {
+      id: "env-var",
+      title: "Environment Variables",
+      tests: [
+        { title: "Genius Token", func: testGeniusToken },
+        { title: "Statistics", func: testStatistics },
+      ],
+    },
+  };
 
   return (
     <div id="tests">
@@ -80,7 +61,32 @@ const Tests = (): JSX.Element => {
 
       <h1>Tests</h1>
 
-      <div className="stats-board">
+      <div id="page" className="flex-row">
+        <div className="column">
+          <TestsBoard {...boards.env_var} />
+
+          <div className="board" id="art-gen">
+          </div>
+
+          <div className="board" id="art-gen">
+          </div>
+        </div>
+
+        <div className="column">
+          <div id="external" className="board">
+            <h2>External</h2>
+            <div className="flex-row test">
+              <h3>Genius Token</h3>
+              <p>ééééé</p>
+            </div>
+          </div>
+
+          <div className="board" id="art-gen">
+          </div>
+
+          <div className="board" id="art-gen">
+          </div>
+        </div>
       </div>
 
       <span className="top-bot-spacer" />
