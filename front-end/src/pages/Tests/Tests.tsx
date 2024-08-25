@@ -72,7 +72,7 @@ const Tests = (): JSX.Element => {
       <div id="toast-container"></div>
       <span className="top-bot-spacer" />
 
-      <div className="tests navbar">
+      <div className="navbar">
         <button type="button" onClick={() => navigate(PATHS.home)}>
           <span className="left">{TITLE.HOME}</span>
         </button>
