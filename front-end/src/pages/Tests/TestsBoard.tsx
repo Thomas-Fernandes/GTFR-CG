@@ -1,9 +1,9 @@
-import { Test, TestResult } from "./Test";
+import { Test, TestProps } from "./Test";
 
 type TestsBoardProps = {
-  id: string;
-  title: string;
-  tests: { title: string, func: () => TestResult }[];
+  id?: string;
+  title?: string;
+  tests?: TestProps[];
 };
 
 export const TestsBoard = (props: TestsBoardProps) => {
@@ -12,7 +12,7 @@ export const TestsBoard = (props: TestsBoardProps) => {
   return (
     <div id={id} className="board">
       <h2>{title}</h2>
-      { tests.map((test) => (
+      { tests?.map((test) => (
         <Test key={test.title} title={test.title} func={test.func} />
       ))}
     </div>

@@ -2,43 +2,40 @@ import { JSX } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { is2xxSuccessful, sendRequest } from "../../common/Requests";
+import { StateSetter } from "../../common/Types";
+import useTitle from "../../common/UseTitle";
 import { API, BACKEND_URL, PATHS, TITLE } from "../../constants/Common";
 
-import useTitle from "../../common/UseTitle";
-
 import { TestResult } from "./Test";
-import "./Tests.css";
 import { TestsBoard } from "./TestsBoard";
+
+import "./Tests.css";
 
 const Tests = (): JSX.Element => {
   useTitle(TITLE.TESTS);
 
   const navigate = useNavigate();
 
-  const testStatistics = (): TestResult => {
-    let result = { successful: false, prompt: "" };
-
-    sendRequest("GET", BACKEND_URL + API.STATISTICS).then((response) => {
-      result = { successful: is2xxSuccessful(response.status), prompt: response.message };
+  const testStatistics = async (setter: StateSetter<TestResult>) => {
+    const start = Date.now();
+    await sendRequest("GET", BACKEND_URL + API.STATISTICS).then((response) => {
+      setter({ successful: is2xxSuccessful(response.status), prompt: response.message, duration: Date.now() - start });
     }).catch((error) => {
-      result = { successful: false, prompt: error.message };
+      setter({ successful: false, prompt: error.message, duration: Date.now() - start });
     });
-    return result;
   };
 
-  const testGeniusToken = (): TestResult => {
-    let result = { successful: false, prompt: "" };
-
-    sendRequest("GET", BACKEND_URL + API.GENIUS_TOKEN).then((response) => {
-      result = { successful: is2xxSuccessful(response.status), prompt: response.message };
+  const testGeniusToken = async (setter: StateSetter<TestResult>) => {
+    const start = Date.now();
+    await sendRequest("GET", BACKEND_URL + API.GENIUS_TOKEN).then((response) => {
+      setter({ successful: is2xxSuccessful(response.status), prompt: response.message, duration: Date.now() - start });
     }).catch((error) => {
-      result = { successful: false, prompt: error.message };
+      setter({ successful: false, prompt: error.message, duration: Date.now() - start });
     });
-    return result;
   };
 
-  const boards = {
-    env_var: {
+  const boards = [
+    {
       id: "env-var",
       title: "Environment Variables",
       tests: [
@@ -46,7 +43,7 @@ const Tests = (): JSX.Element => {
         { title: "Statistics", func: testStatistics },
       ],
     },
-  };
+  ];
 
   return (
     <div id="tests">
@@ -63,7 +60,7 @@ const Tests = (): JSX.Element => {
 
       <div id="page" className="flex-row">
         <div className="column">
-          <TestsBoard {...boards.env_var} />
+          <TestsBoard {...(boards.find((b) => b.id === "env-var"))} />
 
           <div className="board" id="art-gen">
           </div>
@@ -72,7 +69,7 @@ const Tests = (): JSX.Element => {
           </div>
         </div>
 
-        <div className="column">
+        {/* <div className="column">
           <div id="external" className="board">
             <h2>External</h2>
             <div className="flex-row test">
@@ -86,7 +83,7 @@ const Tests = (): JSX.Element => {
 
           <div className="board" id="art-gen">
           </div>
-        </div>
+        </div> */}
       </div>
 
       <span className="top-bot-spacer" />
