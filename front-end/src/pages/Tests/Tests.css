@@ -13,12 +13,28 @@
                 box-shadow: 0 0 10px rgba(0,0,0,0.1);
                 border: 4px solid #0000001a;
                 border-radius: 1em;
+                padding-bottom: 2%;
 
                 .test {
-                    margin: 16px 8px;
+                    margin: 2% 4%;
+                    gap: 1%;
 
                     h3 {
-                        width: 30%;
+                        min-width: 42%;
+                        justify-content: center;
+                    }
+                    button {
+                        width: -webkit-fill-available;
+                    }
+                    p {
+                        width: -webkit-fill-available;
+                        font-size: 16px;
+                        text-align: center;
+
+                        span {
+                            display: contents;
+                            font-size: inherit;
+                        }
                     }
                 }
             }

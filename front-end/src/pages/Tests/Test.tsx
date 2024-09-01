@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import { StateSetter } from "../../common/Types";
+import { isEmpty } from "../../common/utils/ObjUtils";
 
 export type TestResult = {
   successful: boolean;
@@ -29,13 +30,19 @@ export const Test = (props: TestProps) => {
   };
 
   return (
-    <div id={`test-${title}`} className="test flex-row">
+    <div id={`test-${title.replace(" ", "_").toLowerCase()}`} className="test flex-row">
       <h3>{title}</h3>
-      <button type="button" onClick={() => runTest(func)}>
-        {testIsRunning ? "Running..." : "Run test"}
-      </button>
+      { isEmpty(result) &&
+        <button type="button" onClick={() => runTest(func)}>
+          {testIsRunning ? "Running..." : "Run test"}
+        </button>
+      }
       { result?.successful &&
-        <p>{`Test completed in ${result.duration}ms`}</p>
+        <p>
+          Test completed&nbsp;<br/>
+          <span className={`${result?.successful ? "t-green" : "t-red"}`}>{result?.successful ? "successfully" : "with a failure"}</span><br/>
+          &nbsp;in {result?.duration} milliseconds
+        </p>
       }
     </div>
   );

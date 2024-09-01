@@ -69,7 +69,7 @@ const Tests = (): JSX.Element => {
           </div>
         </div>
 
-        {/* <div className="column">
+        <div className="column">
           <div id="external" className="board">
             <h2>External</h2>
             <div className="flex-row test">
@@ -83,7 +83,7 @@ const Tests = (): JSX.Element => {
 
           <div className="board" id="art-gen">
           </div>
-        </div> */}
+        </div>
       </div>
 
       <span className="top-bot-spacer" />
