@@ -4,11 +4,12 @@ import { useNavigate } from "react-router-dom";
 import { is2xxSuccessful, sendRequest } from "../../common/Requests";
 import { StateSetter } from "../../common/Types";
 import useTitle from "../../common/UseTitle";
-import { API, BACKEND_URL, PATHS, TITLE } from "../../constants/Common";
+import { API, BACKEND_URL, PATHS, TITLE, TOAST_TYPE } from "../../constants/Common";
 
 import { TestResult } from "./Test";
 import { TestsBoard } from "./TestsBoard";
 
+import { dismissToast, sendToast } from "../../common/Toast";
 import "./Tests.css";
 
 const Tests = (): JSX.Element => {
@@ -16,6 +17,15 @@ const Tests = (): JSX.Element => {
 
   const navigate = useNavigate();
 
+  // ENV-VAR
+  const testGeniusToken = async (setter: StateSetter<TestResult>) => {
+    const start = Date.now();
+    await sendRequest("GET", BACKEND_URL + API.GENIUS_TOKEN).then((response) => {
+      setter({ successful: is2xxSuccessful(response.status), prompt: response.message, duration: Date.now() - start });
+    }).catch((error) => {
+      setter({ successful: false, prompt: error.message, duration: Date.now() - start });
+    });
+  };
   const testStatistics = async (setter: StateSetter<TestResult>) => {
     const start = Date.now();
     await sendRequest("GET", BACKEND_URL + API.STATISTICS).then((response) => {
@@ -25,13 +35,23 @@ const Tests = (): JSX.Element => {
     });
   };
 
-  const testGeniusToken = async (setter: StateSetter<TestResult>) => {
+  // FRONT-END
+  const testSnacks = async (setter: StateSetter<TestResult>) => {
     const start = Date.now();
-    await sendRequest("GET", BACKEND_URL + API.GENIUS_TOKEN).then((response) => {
-      setter({ successful: is2xxSuccessful(response.status), prompt: response.message, duration: Date.now() - start });
-    }).catch((error) => {
-      setter({ successful: false, prompt: error.message, duration: Date.now() - start });
-    });
+    const toastContainer = document.getElementById("toast-container");
+
+    if (!toastContainer) {
+      setter({ successful: false, prompt: "Toast container not found", duration: Date.now() - start });
+      return;
+    }
+
+    sendToast("Testing snacks", TOAST_TYPE.INFO);
+    if (toastContainer.childElementCount === 0) {
+      setter({ successful: false, prompt: "Snacks not working", duration: Date.now() - start });
+    } else {
+      setter({ successful: true, prompt: "Snacks tested", duration: Date.now() - start });
+      dismissToast(toastContainer.lastElementChild as HTMLElement, 0);
+    }
   };
 
   const boards = [
@@ -43,6 +63,13 @@ const Tests = (): JSX.Element => {
         { title: "Statistics", func: testStatistics },
       ],
     },
+    {
+      id: "front-end",
+      title: "Front-end Features",
+      tests: [
+        { title: "Snacks", func: testSnacks },
+      ],
+    }
   ];
 
   return (
@@ -61,10 +88,7 @@ const Tests = (): JSX.Element => {
       <div id="page" className="flex-row">
         <div className="column">
           <TestsBoard {...(boards.find((b) => b.id === "env-var"))} />
-
-          <div className="board" id="art-gen">
-          </div>
-
+          <TestsBoard {...(boards.find((b) => b.id === "front-end"))} />
           <div className="board" id="art-gen">
           </div>
         </div>
@@ -76,9 +100,6 @@ const Tests = (): JSX.Element => {
               <h3>Genius Token</h3>
               <p>ééééé</p>
             </div>
-          </div>
-
-          <div className="board" id="art-gen">
           </div>
 
           <div className="board" id="art-gen">

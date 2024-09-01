@@ -2,11 +2,12 @@
     #page {
         width: 80%;
         margin: auto;
-        gap: 16px;
+        gap: 1rem;
 
         .column {
             width: 100%;
             margin: auto;
+            gap: 1rem;
 
             .board {
                 background: #ffffff;

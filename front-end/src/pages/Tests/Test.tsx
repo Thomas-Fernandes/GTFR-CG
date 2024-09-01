@@ -32,16 +32,15 @@ export const Test = (props: TestProps) => {
   return (
     <div id={`test-${title.replace(" ", "_").toLowerCase()}`} className="test flex-row">
       <h3>{title}</h3>
-      { isEmpty(result) &&
+      { isEmpty(result) ?
         <button type="button" onClick={() => runTest(func)}>
           {testIsRunning ? "Running..." : "Run test"}
         </button>
-      }
-      { result?.successful &&
+      :
         <p>
-          Test completed&nbsp;<br/>
+          Test completed<br/>
           <span className={`${result?.successful ? "t-green" : "t-red"}`}>{result?.successful ? "successfully" : "with a failure"}</span><br/>
-          &nbsp;in {result?.duration} milliseconds
+          in {result?.duration} milliseconds
         </p>
       }
     </div>
