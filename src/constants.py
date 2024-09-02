@@ -117,8 +117,9 @@ ERR_FAIL_DOWNLOAD = "Failed to download image."
 ERR_GENIUS_TOKEN = "Genius API token not found."
 ERR_LYRICS_NOT_FOUND = "Lyrics not found."
 
-# Genius
+# .env contents
 load_dotenv()
+LOGGER_SEVERITY: Optional[str] = getenv("LOGGER_SEVERITY")
 GENIUS_API_TOKEN: Optional[str] = getenv("GENIUS_API_TOKEN")
 
 # Patterns for lyricsGenius prints
