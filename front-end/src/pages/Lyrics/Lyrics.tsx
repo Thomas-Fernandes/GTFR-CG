@@ -34,11 +34,10 @@ const Lyrics = (): JSX.Element => {
   };
 
   const convertToCardContents = (lyricsParts: LyricsPart[]): string[][] => {
-    const cardContents: string[][] = [];
-
-    console.log(lyricsParts);
-    // TODO
-    return cardContents;
+    // Input: [{section: "Verse 1", lyrics: "The whole lyrics\nOf the section\nAre here as is\nTotally disorganized"}, ...]
+    // Output: [["The whole lyrics\nOf the section", "Are here as is\nTotally disorganized"], ...]
+    //   -> Each inner array is a section, each string is a card
+    return lyricsParts.map(part => part.lyrics.split("\n\n"));
   };
 
   const handleSetLyricsParts = (lyrics: string, idx: number) => {
