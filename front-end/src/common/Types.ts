@@ -1,5 +1,9 @@
 import { Dispatch, SetStateAction } from "react";
 
+/**************** CARDS ******************/
+
+export type SongPartsCards = string[][];
+
 /**************** LYRICS *****************/
 
 export type LyricsPart = {

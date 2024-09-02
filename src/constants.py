@@ -73,6 +73,10 @@ ROUTES = Routes(
         path="/lyrics",
         bp_name="lyrics",
     ),
+    cards_gen = Route(
+        path="/cards-generation",
+        bp_name="cards-gen",
+    ),
 )
 
 # Statistics
@@ -116,6 +120,7 @@ ERR_NO_IMG_URL = "No image URL provided."
 ERR_FAIL_DOWNLOAD = "Failed to download image."
 ERR_GENIUS_TOKEN = "Genius API token not found."
 ERR_LYRICS_NOT_FOUND = "Lyrics not found."
+ERR_CARDS_CONTENTS_NOT_FOUND = "No cards contents provided."
 
 # Genius
 load_dotenv()

@@ -28,7 +28,7 @@ export const TOAST: Record<string, string> = {
     NO_IMG: "Please select an image file.",
     INVALID_FILE_TYPE: "Please select a valid image file.",
     INVALID_URL: "Please enter a valid URL.",
-    PROCESSING_IN_PROGRESS: "Images processing already in progress.\n",
+    PROCESSING_IN_PROGRESS: "Images processing already in progress.",
 
   // Processed Images
     NO_IMG_SELECTION: "Please select an image to download.",
@@ -37,6 +37,7 @@ export const TOAST: Record<string, string> = {
     MISSING_FIELDS: "Please fill out all the required fields.",
     FETCH_IN_PROGRESS: "Lyrics fetch already in progress.",
     LYRICS_NOT_FOUND: "Lyrics not found.",
+    SAVING_IN_PROGRESS: "Lyrics saving already in progress.",
 };
 
 export const RESPONSE_STATUS: Record<string, ResponseStatus> = {
@@ -89,6 +90,7 @@ export const PATHS = {
   artworkGeneration: "/artwork-generation",
   processedImages: "/processed-images",
   lyrics: "/lyrics",
+  cardsGeneration: "/cards-generation",
 };
 
 export const API = {
@@ -107,6 +109,10 @@ export const API = {
 
   LYRICS: {
     GET_LYRICS: PATHS.lyrics + "/get-genius-lyrics",
+  },
+
+  CARDS: {
+    SAVE_CARDS_CONTENTS: PATHS.cardsGeneration + "/save-cards-contents",
   },
 };
 

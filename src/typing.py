@@ -42,6 +42,7 @@ class Routes:
     art_gen: Route
     proc_img: Route
     lyrics: Route
+    cards_gen: Route
 
     def __repr__(self) -> str:
         """ Returns the Routes dataclass as a string

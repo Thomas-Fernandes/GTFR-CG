@@ -5,7 +5,7 @@ import { AutoResizeTextarea } from "../../common/components/AutoResizeTextarea";
 import { is2xxSuccessful, sendRequest } from "../../common/Requests";
 import { hideSpinner, showSpinner } from "../../common/Spinner";
 import { sendToast } from "../../common/Toast";
-import { ApiResponse, LyricsPart, LyricsRequest, LyricsResponse } from "../../common/Types";
+import { ApiResponse, LyricsPart, LyricsRequest, LyricsResponse, SongPartsCards } from "../../common/Types";
 import useTitle from "../../common/UseTitle";
 import { API, BACKEND_URL, PATHS, SPINNER_ID, TITLE, TOAST, TOAST_TYPE } from "../../constants/Common";
 
@@ -17,6 +17,7 @@ const Lyrics = (): JSX.Element => {
   const navigate = useNavigate();
 
   const [isFetching, setIsFetching] = useState(false);
+  const [isSavingCardsContent, setIsSavingCardsContent] = useState(false);
 
   const [artist, setArtist] = useState("");
   const [songName, setSongName] = useState("");
@@ -24,16 +25,36 @@ const Lyrics = (): JSX.Element => {
   const [lyricsParts, setLyricsParts] = useState([] as LyricsPart[]);
 
   // Lyrics
-  const handleLyricsSaveSubmit = (e: FormEvent<HTMLFormElement>, body: string[][]) => {
+  const handleLyricsSaveSubmit = (e: FormEvent<HTMLFormElement>, body: SongPartsCards) => {
     e.preventDefault();
 
+    if (isSavingCardsContent) {
+      sendToast(TOAST.PROCESSING_IN_PROGRESS, TOAST_TYPE.WARN);
+      return;
+    }
+
+    setIsSavingCardsContent(true);
     showSpinner(SPINNER_ID.LYRICS_SAVE);
-    console.log(body);
-    // TODO
-    hideSpinner(SPINNER_ID.LYRICS_SAVE);
+
+    const data = {
+      cards_contents: body,
+    };
+
+    sendRequest("POST", BACKEND_URL + API.CARDS.SAVE_CARDS_CONTENTS, data).then((response: ApiResponse) => {
+      if (!is2xxSuccessful(response.status)) {
+        throw new Error(response.message);
+      }
+
+      // navigate(PATHS.cardsGeneration);
+    }).catch((error: ApiResponse) => {
+      sendToast(error.message, TOAST_TYPE.ERROR);
+      setIsSavingCardsContent(false);
+    }).finally(() => {
+      hideSpinner(SPINNER_ID.LYRICS_SAVE);
+    });
   };
 
-  const convertToCardContents = (lyricsParts: LyricsPart[]): string[][] => {
+  const convertToCardContents = (lyricsParts: LyricsPart[]): SongPartsCards => {
     // Input: [{section: "Verse 1", lyrics: "The whole lyrics\nOf the section\nAre here as is\nTotally disorganized"}, ...]
     // Output: [["The whole lyrics\nOf the section", "Are here as is\nTotally disorganized"], ...]
     //   -> Each inner array is a section, each string is a card
