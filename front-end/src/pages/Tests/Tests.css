@@ -1,4 +1,8 @@
 #tests {
+    button[id="run-all"] {
+        width: 35%;
+        margin: 0 auto 2% auto
+    }
     #page {
         width: 80%;
         margin: auto;
@@ -15,6 +19,11 @@
                 border: 4px solid #0000001a;
                 border-radius: 1em;
                 padding-bottom: 2%;
+
+                .title {
+                    font-size: xx-large;
+                    margin: 1em 0;
+                }
 
                 .test {
                     margin: 2% 4%;

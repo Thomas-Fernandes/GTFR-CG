@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { RefObject, useState } from "react";
 
 import { StateSetter } from "../../common/Types";
 import { isEmpty } from "../../common/utils/ObjUtils";
@@ -14,10 +14,11 @@ export type TestFunc = (setter: StateSetter<TestResult>) => Promise<void>;
 export type TestProps = {
   title: string;
   func: TestFunc;
+  buttonRef: RefObject<HTMLButtonElement>;
 };
 
 export const Test = (props: TestProps) => {
-  const { title, func } = props;
+  const { title, func, buttonRef } = props;
 
   const [result, setResult] = useState<TestResult>({} as TestResult);
   const [testIsRunning, setTestIsRunning] = useState(false);
@@ -33,8 +34,8 @@ export const Test = (props: TestProps) => {
     <div id={`test-${title.replace(" ", "_").toLowerCase()}`} className="test flex-row">
       <h3>{title}</h3>
       { isEmpty(result) ?
-        <button type="button" onClick={() => runTest(func)}>
-          {testIsRunning ? "Running..." : "Run test"}
+        <button type="button" ref={buttonRef} onClick={() => runTest(func)}>
+          {testIsRunning ? "Running..." : "Run Test"}
         </button>
       :
         <p>

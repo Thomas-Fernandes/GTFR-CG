@@ -1,19 +1,25 @@
-import { JSX } from "react";
+import { JSX, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { is2xxSuccessful, sendRequest } from "../../common/Requests";
-import { StateSetter } from "../../common/Types";
+import { is2xxSuccessful, objectToQueryString, sendRequest } from "../../common/Requests";
+import { dismissToast, sendToast } from "../../common/Toast";
+import { ItunesResponse, LyricsResponse, StateSetter } from "../../common/Types";
 import useTitle from "../../common/UseTitle";
-import { API, BACKEND_URL, PATHS, TITLE, TOAST_TYPE } from "../../constants/Common";
+import { API, BACKEND_URL, ITUNES_URL, PATHS, TITLE, TOAST_TYPE } from "../../constants/Common";
 
 import { TestResult } from "./Test";
 import { TestsBoard } from "./TestsBoard";
 
-import { dismissToast, sendToast } from "../../common/Toast";
 import "./Tests.css";
 
 const Tests = (): JSX.Element => {
   useTitle(TITLE.TESTS);
+
+  const refGeniusToken = useRef<HTMLButtonElement>(null);
+  const refStatistics = useRef<HTMLButtonElement>(null);
+  const refSnacks = useRef<HTMLButtonElement>(null);
+  const refItunes = useRef<HTMLButtonElement>(null);
+  const refGenius = useRef<HTMLButtonElement>(null);
 
   const navigate = useNavigate();
 
@@ -54,23 +60,63 @@ const Tests = (): JSX.Element => {
     }
   };
 
+  // API
+  const testItunes = async (setter: StateSetter<TestResult>) => {
+    const start = Date.now();
+    const data = { term: "hello", country: "US", entity: "album", limit: 10 };
+    const queryString = objectToQueryString(data);
+
+    await sendRequest("POST", ITUNES_URL + "/search" + queryString).then((response: ItunesResponse) => {
+      setter({ successful: response.resultCount > 0, prompt: "iTunes API test successful", duration: Date.now() - start });
+    }).catch((error) => {
+      setter({ successful: false, prompt: error.message, duration: Date.now() - start });
+    });
+  };
+  const testGenius = async (setter: StateSetter<TestResult>) => {
+    const start = Date.now();
+    const body = { artist: "Adele", songName: "Hello" };
+    await sendRequest("POST", BACKEND_URL + API.LYRICS.GET_LYRICS, body).then((response: LyricsResponse) => {
+      setter({ successful: is2xxSuccessful(response.status), prompt: response.message, duration: Date.now() - start });
+    }).catch((error) => {
+      setter({ successful: false, prompt: error.message, duration: Date.now() - start });
+    });
+  };
+
   const boards = [
     {
       id: "env-var",
       title: "Environment Variables",
       tests: [
-        { title: "Genius Token", func: testGeniusToken },
-        { title: "Statistics", func: testStatistics },
+        { title: "Genius Token", func: testGeniusToken, buttonRef: refGeniusToken },
+        { title: "Statistics", func: testStatistics, buttonRef: refStatistics },
       ],
     },
     {
       id: "front-end",
-      title: "Front-end Features",
+      title: "Front-End Components",
       tests: [
-        { title: "Snacks", func: testSnacks },
+        { title: "Snacks", func: testSnacks, buttonRef: refSnacks },
       ],
-    }
+    },
+    {
+      id: "api",
+      title: "API",
+      tests: [
+        { title: "iTunes", func: testItunes, buttonRef: refItunes },
+        { title: "Genius Lyrics", func: testGenius, buttonRef: refGenius },
+      ],
+    },
   ];
+
+  const [clickedRunAll, setClickedRunAll] = useState(false);
+  const handleRunAll = () => {
+    setClickedRunAll(true);
+    if (refGeniusToken.current) refGeniusToken.current.click();
+    if (refStatistics.current) refStatistics.current.click();
+    if (refSnacks.current) refSnacks.current.click();
+    if (refItunes.current) refItunes.current.click();
+    if (refGenius.current) refGenius.current.click();
+  };
 
   return (
     <div id="tests">
@@ -85,25 +131,16 @@ const Tests = (): JSX.Element => {
 
       <h1>Tests</h1>
 
+      <button type="button" className={clickedRunAll ? "hidden" : ""} id="run-all" onClick={handleRunAll}>Run All Tests</button>
+
       <div id="page" className="flex-row">
         <div className="column">
           <TestsBoard {...(boards.find((b) => b.id === "env-var"))} />
           <TestsBoard {...(boards.find((b) => b.id === "front-end"))} />
-          <div className="board" id="art-gen">
-          </div>
         </div>
 
         <div className="column">
-          <div id="external" className="board">
-            <h2>External</h2>
-            <div className="flex-row test">
-              <h3>Genius Token</h3>
-              <p>ééééé</p>
-            </div>
-          </div>
-
-          <div className="board" id="art-gen">
-          </div>
+        <TestsBoard {...(boards.find((b) => b.id === "api"))} />
         </div>
       </div>
 

@@ -11,9 +11,9 @@ export const TestsBoard = (props: TestsBoardProps) => {
 
   return (
     <div id={id} className="board">
-      <h2>{title}</h2>
+      <h2 className="title">{title}</h2>
       { tests?.map((test) => (
-        <Test key={test.title} title={test.title} func={test.func} />
+        <Test key={test.title} title={test.title} func={test.func} buttonRef={test.buttonRef} />
       ))}
     </div>
   );
