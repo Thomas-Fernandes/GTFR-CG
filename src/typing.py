@@ -1,5 +1,3 @@
-from flask import Response
-
 from dataclasses import dataclass
 from typing import Literal, Optional, TypeAlias
 
@@ -11,11 +9,9 @@ class Route:
 
     Attributes:
         path: [string] The path of the route.
-        view_filename: [string?] The filename of the view to render. (default: None)
         bp_name: [string?] The name of the blueprint. (default: None)
     """
     path: str
-    view_filename: Optional[str] = None
     bp_name: Optional[str] = None
 
     def __repr__(self) -> str:
@@ -56,9 +52,6 @@ class Routes:
             content += f"{key}={value}, "
         return f"Routes({content[:-2]})"
 
-JsonResponse: TypeAlias = tuple[Response, int]
-RenderView: TypeAlias = str
-
 ############ SOFTWARE ############
 
 CachedElemType: TypeAlias = Literal[
@@ -89,21 +82,3 @@ class Cache:
         return f"Cache({content[:-2]})"
 
 JsonDict: TypeAlias = dict[str, Optional[str | int]]
-
-@dataclass(kw_only=True)
-class ContextObj:
-    redirect_to: str
-    error_text: str
-    plural: str
-
-    stats: JsonDict
-    plurals: JsonDict
-    session_status: str
-    genius_token: str
-
-    lyrics: str
-
-    def __init__(self, **kwargs: JsonDict) -> None:
-        self.__dict__.update(kwargs)
-
-Context: TypeAlias = dict[str, JsonDict | str]

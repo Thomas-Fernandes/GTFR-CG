@@ -3,7 +3,10 @@
 .*/*
 *~
 
-# environment file
+# Installation files
+*.ps1
+
+# Environment file
 .env
 
 # Flask bytecode cache
@@ -13,7 +16,7 @@ flask_session/
 __pycache__/
 
 # Statistics file
-*.json
+stats.json
 
 # Log files
 *.log
