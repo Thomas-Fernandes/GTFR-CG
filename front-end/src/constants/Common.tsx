@@ -9,6 +9,7 @@ export const TOAST: Record<string, string> = {
     + "Please check that the Python server is running.",
   NO_SPINNER_ID: "HTML Spinner id is required.",
   NO_SPINNER_CONTAINER: "Spinner container not found.",
+  PROCESSING_IN_PROGRESS: "Processing already in progress.",
 
   // Redirect
     NO_PROCESSED_IMAGE: "No processed image found.",
@@ -28,7 +29,6 @@ export const TOAST: Record<string, string> = {
     NO_IMG: "Please select an image file.",
     INVALID_FILE_TYPE: "Please select a valid image file.",
     INVALID_URL: "Please enter a valid URL.",
-    PROCESSING_IN_PROGRESS: "Images processing already in progress.",
 
   // Processed Images
     NO_IMG_SELECTION: "Please select an image to download.",

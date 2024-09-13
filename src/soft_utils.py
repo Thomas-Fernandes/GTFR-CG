@@ -6,6 +6,14 @@ from datetime import datetime
 import src.constants as const
 from src.typing import CachedElemType
 
+def getNowStamp() -> str: # as YY-MM-DD_HH-MM-SS
+    """ Returns the current time in stamp format.
+    :return: [string] The current time in stamp format.
+    """
+    current_time = datetime.now()
+    formatted_time = current_time.strftime(const.DATE_FORMAT_STAMP)
+    return formatted_time
+
 def getNowEpoch() -> str: # in MM-DD 24-hour format
     """ Returns the current time in epoch format.
     :return: [string] The current time in epoch format.

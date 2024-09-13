@@ -80,6 +80,7 @@ ROUTES = Routes(
 )
 
 # Statistics
+DATE_FORMAT_STAMP = "%Y%m%d_%H%M%S"
 DATE_FORMAT_FULL = "%Y-%m-%d %H:%M:%S"
 STATS_FILE_PATH = "stats.json"
 class AvailableStats(Enum):
@@ -121,6 +122,8 @@ ERR_FAIL_DOWNLOAD = "Failed to download image."
 ERR_GENIUS_TOKEN = "Genius API token not found."
 ERR_LYRICS_NOT_FOUND = "Lyrics not found."
 ERR_CARDS_CONTENTS_NOT_FOUND = "No cards contents provided."
+ERR_CARDS_CONTENTS_INVALID = "Invalid cards contents provided."
+ERR_CARDS_CONTENTS_SAVE_FAILED = "Failed to save cards contents."
 
 # Genius
 load_dotenv()

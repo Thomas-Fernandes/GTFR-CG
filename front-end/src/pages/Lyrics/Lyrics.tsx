@@ -48,9 +48,9 @@ const Lyrics = (): JSX.Element => {
       // navigate(PATHS.cardsGeneration);
     }).catch((error: ApiResponse) => {
       sendToast(error.message, TOAST_TYPE.ERROR);
-      setIsSavingCardsContent(false);
     }).finally(() => {
       hideSpinner(SPINNER_ID.LYRICS_SAVE);
+      setIsSavingCardsContent(false);
     });
   };
 

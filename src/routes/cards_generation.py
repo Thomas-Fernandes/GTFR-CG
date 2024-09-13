@@ -2,10 +2,13 @@ from flask import Blueprint, Response, request
 from flask_cors import cross_origin
 
 from ast import literal_eval
+from os import path, makedirs
 from typing import Optional
+from uuid import uuid4
 
 import src.constants as const
 from src.logger import log
+from src.soft_utils import getNowStamp
 from src.web_utils import createApiResponse
 
 from src.app import app
@@ -13,8 +16,41 @@ bp_cards_generation = Blueprint(const.ROUTES.cards_gen.bp_name, __name__.split('
 session = app.config
 api_prefix = const.API_ROUTE + const.ROUTES.cards_gen.path
 
+def isListListStr(obj) -> bool: # type: ignore
+    """ Checks if the object is a list of lists of strings.
+    :param obj: [list[list[str]]?] The object to check.
+    :return: [bool] True if the object is a list of lists of strings, False otherwise.
+    """
+    if not isinstance(obj, list):
+        return False
+    for elem in obj:
+        if not isinstance(elem, list):
+            return False
+        for sub_elem in elem:
+            if not isinstance(sub_elem, str):
+                return False
+    return True
 def saveCardsContents(cards_contents: list[list[str]]) -> Response:
-    # TODO save cards_contents
+    if const.SessionFields.user_folder.value not in session:
+        log.debug("User folder not found in session. Creating a new one.")
+        session[const.SessionFields.user_folder.value] = str(uuid4())
+
+    user_folder = str(session[const.SessionFields.user_folder.value]) + const.SLASH + const.AvailableCacheElemType.cards.value + const.SLASH
+    user_processed_path = path.join(const.PROCESSED_DIR, user_folder)
+    makedirs(user_processed_path, exist_ok=True)
+
+    if not isListListStr(cards_contents):
+        return createApiResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_CARDS_CONTENTS_INVALID)
+
+    filepath = path.join(user_processed_path, f"contents_{getNowStamp()}.txt")
+    try:
+        with open(filepath, "w") as file:
+            for card in cards_contents:
+                file.write("\n\n".join(card) + "\n\n")
+    except Exception as e:
+        log.error(f"Error while saving cards contents: {e}")
+        return createApiResponse(const.HttpStatus.INTERNAL_SERVER_ERROR.value, const.ERR_CARDS_CONTENTS_SAVE_FAILED)
+
     return createApiResponse(const.HttpStatus.OK.value, "Cards contents saved successfully.")
 
 @bp_cards_generation.route(api_prefix + "/save-cards-contents", methods=["POST"])
