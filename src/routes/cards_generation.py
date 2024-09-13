@@ -8,13 +8,41 @@ from uuid import uuid4
 
 import src.constants as const
 from src.logger import log
-from src.soft_utils import getNowStamp
+from src.soft_utils import getCardsContentsFromFile, getNowStamp, writeCardsContentsToFile
+from src.typing import CardsContents
 from src.web_utils import createApiResponse
 
 from src.app import app
 bp_cards_generation = Blueprint(const.ROUTES.cards_gen.bp_name, __name__.split('.')[-1])
 session = app.config
 api_prefix = const.API_ROUTE + const.ROUTES.cards_gen.path
+
+def generateCards(cards_contents: CardsContents) -> Response:
+    if const.SessionFields.user_folder.value not in session:
+        log.debug("User folder not found in session. Creating a new one.")
+        session[const.SessionFields.user_folder.value] = str(uuid4())
+
+    # TODO - generate cards
+    return createApiResponse(const.HttpStatus.OK.value, "Cards generated successfully.")
+
+@bp_cards_generation.route(api_prefix + "/generate-cards", methods=["POST"])
+@cross_origin()
+def postGenerateCards() -> Response:
+    """ Generates cards using the contents previously saved.
+    :return: [Response] The response to the request.
+    """
+    log.debug("POST - Generating cards...")
+    if const.SessionFields.cards_contents.value not in session:
+        return createApiResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_CARDS_CONTENTS_NOT_FOUND)
+
+    #body = literal_eval(request.get_data(as_text=True)) # TODO - contains parameters for card generation
+    try:
+        cards_contents: CardsContents = getCardsContentsFromFile(session[const.SessionFields.cards_contents.value])
+    except Exception as e:
+        log.error(f"Error while getting cards contents: {e}")
+        return createApiResponse(const.HttpStatus.INTERNAL_SERVER_ERROR.value, const.ERR_CARDS_CONTENTS_READ_FAILED)
+
+    return generateCards(cards_contents)
 
 def isListListStr(obj) -> bool: # type: ignore
     """ Checks if the object is a list of lists of strings.
@@ -30,7 +58,7 @@ def isListListStr(obj) -> bool: # type: ignore
             if not isinstance(sub_elem, str):
                 return False
     return True
-def saveCardsContents(cards_contents: list[list[str]]) -> Response:
+def saveCardsContents(cards_contents: CardsContents) -> Response:
     if const.SessionFields.user_folder.value not in session:
         log.debug("User folder not found in session. Creating a new one.")
         session[const.SessionFields.user_folder.value] = str(uuid4())
@@ -44,12 +72,11 @@ def saveCardsContents(cards_contents: list[list[str]]) -> Response:
 
     filepath = path.join(user_processed_path, f"contents_{getNowStamp()}.txt")
     try:
-        with open(filepath, "w") as file:
-            for card in cards_contents:
-                file.write("\n\n".join(card) + "\n\n")
+        writeCardsContentsToFile(filepath, cards_contents)
     except Exception as e:
         log.error(f"Error while saving cards contents: {e}")
         return createApiResponse(const.HttpStatus.INTERNAL_SERVER_ERROR.value, const.ERR_CARDS_CONTENTS_SAVE_FAILED)
+    session[const.SessionFields.cards_contents.value] = filepath
 
     return createApiResponse(const.HttpStatus.OK.value, "Cards contents saved successfully.")
 

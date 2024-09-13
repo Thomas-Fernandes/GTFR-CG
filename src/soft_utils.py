@@ -4,7 +4,18 @@ from time import time
 from datetime import datetime
 
 import src.constants as const
-from src.typing import CachedElemType
+from src.typing import CachedElemType, CardsContents
+
+def getCardsContentsFromFile(filepath: str) -> CardsContents:
+    with open(filepath, "r") as file:
+        all_cards = [card.split("\n\n") for card in file.read().split("\n\n\n")]
+    cards = [[elem for elem in card if elem != ""] for card in all_cards][0] # remove empty elements & flatten the list
+    return [card.split("\n") for card in cards]
+
+def writeCardsContentsToFile(filepath: str, cards_contents: list[list[str]]) -> None:
+    with open(filepath, "w") as file:
+        for card in cards_contents:
+            file.write("\n\n".join(card) + "\n\n")
 
 def getNowStamp() -> str: # as YY-MM-DD_HH-MM-SS
     """ Returns the current time in stamp format.

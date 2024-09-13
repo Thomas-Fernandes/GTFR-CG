@@ -55,6 +55,8 @@ class Routes:
 
 ############ SOFTWARE ############
 
+CardsContents: TypeAlias = list[list[str]]
+
 CachedElemType: TypeAlias = Literal[
     "sessions",
     "images",

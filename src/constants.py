@@ -47,6 +47,9 @@ class SessionFields(Enum):
     # Lyrics
     genius_token = "genius_token"
 
+    # Cards generation
+    cards_contents = "cards_contents"
+
 # Routes
 API_ROUTE = "/api"
 ROUTES = Routes(
@@ -124,6 +127,7 @@ ERR_LYRICS_NOT_FOUND = "Lyrics not found."
 ERR_CARDS_CONTENTS_NOT_FOUND = "No cards contents provided."
 ERR_CARDS_CONTENTS_INVALID = "Invalid cards contents provided."
 ERR_CARDS_CONTENTS_SAVE_FAILED = "Failed to save cards contents."
+ERR_CARDS_CONTENTS_READ_FAILED = "Failed to read cards contents."
 
 # Genius
 load_dotenv()
