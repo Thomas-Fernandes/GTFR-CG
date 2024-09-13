@@ -17,7 +17,7 @@ bp_cards_generation = Blueprint(const.ROUTES.cards_gen.bp_name, __name__.split('
 session = app.config
 api_prefix = const.API_ROUTE + const.ROUTES.cards_gen.path
 
-def generateCards(cards_contents: CardsContents) -> Response:
+def generateCards(cards_contents: CardsContents, gen_outro: bool, include_bg_img: bool) -> Response:
     if const.SessionFields.user_folder.value not in session:
         log.debug("User folder not found in session. Creating a new one.")
         session[const.SessionFields.user_folder.value] = str(uuid4())
@@ -35,14 +35,17 @@ def postGenerateCards() -> Response:
     if const.SessionFields.cards_contents.value not in session:
         return createApiResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_CARDS_CONTENTS_NOT_FOUND)
 
-    #body = literal_eval(request.get_data(as_text=True)) # TODO - contains parameters for card generation
+    body = literal_eval(request.get_data(as_text=True)) # TODO - contains parameters for card generation
+    if const.SessionFields.gen_outro.value not in body or const.SessionFields.include_bg_img.value not in body:
+        return createApiResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_CARDS_GEN_PARAMS_NOT_FOUND)
+
     try:
         cards_contents: CardsContents = getCardsContentsFromFile(session[const.SessionFields.cards_contents.value])
     except Exception as e:
         log.error(f"Error while getting cards contents: {e}")
         return createApiResponse(const.HttpStatus.INTERNAL_SERVER_ERROR.value, const.ERR_CARDS_CONTENTS_READ_FAILED)
 
-    return generateCards(cards_contents)
+    return generateCards(cards_contents, body[const.SessionFields.gen_outro.value], body[const.SessionFields.include_bg_img.value])
 
 def isListListStr(obj) -> bool: # type: ignore
     """ Checks if the object is a list of lists of strings.

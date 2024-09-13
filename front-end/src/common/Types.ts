@@ -2,6 +2,11 @@ import { Dispatch, SetStateAction } from "react";
 
 /**************** CARDS ******************/
 
+export type CardsGenerationRequest = {
+  generateOutro: boolean;
+  includeBackgroundImg: boolean;
+};
+
 export type SongPartsCards = string[][];
 
 /**************** LYRICS *****************/

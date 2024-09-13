@@ -1,4 +1,17 @@
 #cards-generation {
+    form {
+        .settings {
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        input[type="submit"] {
+            margin: auto;
+            width: 40%;
+        }
+    }
+
     #image-panels {
     }
 }

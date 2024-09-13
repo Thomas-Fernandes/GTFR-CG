@@ -49,6 +49,8 @@ class SessionFields(Enum):
 
     # Cards generation
     cards_contents = "cards_contents"
+    gen_outro = "generate_outro"
+    include_bg_img = "include_background_img"
 
 # Routes
 API_ROUTE = "/api"
@@ -128,6 +130,7 @@ ERR_CARDS_CONTENTS_NOT_FOUND = "No cards contents provided."
 ERR_CARDS_CONTENTS_INVALID = "Invalid cards contents provided."
 ERR_CARDS_CONTENTS_SAVE_FAILED = "Failed to save cards contents."
 ERR_CARDS_CONTENTS_READ_FAILED = "Failed to read cards contents."
+ERR_CARDS_GEN_PARAMS_NOT_FOUND = "Required parameters not found for cards generation."
 
 # Genius
 load_dotenv()

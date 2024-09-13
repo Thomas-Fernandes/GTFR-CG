@@ -66,29 +66,4 @@
         }
     }
 
-    .checkbox {
-        flex-direction: row;
-
-        &:hover {
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        input[type="checkbox"] {
-            margin: 0 10px 0 0;
-            transform: scale(1.5);
-            accent-color: #007BFF;
-            transition: 0.5s;
-
-            &:hover {
-                accent-color: #0056b3;
-                cursor: pointer;
-            }
-        }
-
-        p.checkbox-label {
-            font-size: 14px;
-            margin: 0;
-        }
-    }
 }

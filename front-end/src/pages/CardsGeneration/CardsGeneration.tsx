@@ -1,12 +1,13 @@
 import { FormEvent, JSX, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { hideSpinner, showSpinner } from "../../common/Spinner";
 import { sendToast } from "../../common/Toast";
-import { ImageDownloadRequest } from "../../common/Types";
+import { CardsGenerationRequest, ImageDownloadRequest } from "../../common/Types";
 import useTitle from "../../common/UseTitle";
 import { doesFileExist } from "../../common/utils/FileUtils";
 import { OUTRO_FILENAME, PROCESSED_CARDS_PATH } from "../../constants/CardsGeneration";
-import { PATHS, TITLE, TOAST, TOAST_TYPE } from "../../constants/Common";
+import { PATHS, SPINNER_ID, TITLE, TOAST, TOAST_TYPE } from "../../constants/Common";
 
 import "./CardsGeneration.css";
 
@@ -14,6 +15,11 @@ const CardsGeneration = (): JSX.Element => {
   useTitle(TITLE.CARDS_GENERATION);
 
   const navigate = useNavigate();
+
+  const [generateOutro, setGenerateOutro] = useState(true);
+  const [includeBackgroundImg, setIncludeBackgroundImg] = useState(true);
+
+  const [generationInProgress, setGenerationInProgress] = useState(false);
 
   const [cardPaths, setCardPaths] = useState([] as string[]);
 
@@ -57,6 +63,31 @@ const CardsGeneration = (): JSX.Element => {
     );
   };
 
+  const handleGenerateCards = (e: FormEvent<HTMLFormElement>, body: CardsGenerationRequest) => {
+    e.preventDefault();
+
+    if (generationInProgress) {
+      sendToast(TOAST.PROCESSING_IN_PROGRESS, TOAST_TYPE.WARN);
+      return;
+    }
+
+    setGenerationInProgress(true);
+    showSpinner(SPINNER_ID.CARDS_GENERATE);
+
+    const data = {
+      generate_outro: body.generateOutro,
+      include_background_img: body.includeBackgroundImg,
+    };
+
+    // TODO send request to generate cards
+    //   -> on success, set cardPaths
+    //   -> on failure, show toast
+    //   -> on finally, hide spinner
+
+    hideSpinner(SPINNER_ID.CARDS_GENERATE);
+    setGenerationInProgress(false);
+  };
+
   useEffect(() => {
     doesFileExist(PROCESSED_CARDS_PATH + "/" + OUTRO_FILENAME).then((outroCardExists: boolean) => {
       if (!outroCardExists && false) {
@@ -72,8 +103,11 @@ const CardsGeneration = (): JSX.Element => {
     <span className="top-bot-spacer" />
 
     <div className="navbar">
-      <button type="button" onClick={() => navigate(PATHS.artworkGeneration)}>
+      <button type="button" onClick={() => navigate(PATHS.home)}>
         <span className="left">{TITLE.HOME}</span>
+      </button>
+      <button type="button" onClick={() => navigate(PATHS.artworkGeneration)}>
+        <span className="left">{TITLE.ARTWORK_GENERATION}</span>
       </button>
       <button type="button" onClick={() => navigate(PATHS.lyrics)}>
         <span className="left">{TITLE.LYRICS}</span>
@@ -82,9 +116,30 @@ const CardsGeneration = (): JSX.Element => {
 
     <h1>{TITLE.CARDS_GENERATION}</h1>
 
-    <div id="settings">
-      {/* TODO */}
-    </div>
+    <form id="settings" onSubmit={(e) => handleGenerateCards(e, {generateOutro, includeBackgroundImg})}>
+      <div className="settings flexbox flex-row">
+        <label className="checkbox" htmlFor="generate_outro">
+          <input
+            type="checkbox" name="generate_outro" id="generate_outro" defaultChecked
+            onChange={(e) => setGenerateOutro(e.target.checked)}
+          />
+          <p className="checkbox-label italic">Generate outro image</p>
+        </label>
+        <label className="checkbox" htmlFor="include_background">
+          <input
+            type="checkbox" name="include_background" id="include_background" defaultChecked
+            onChange={(e) => setIncludeBackgroundImg(e.target.checked)}
+          />
+          <p className="checkbox-label italic">Include background image</p>
+        </label>
+      </div>
+
+      <div className="action-button" id={SPINNER_ID.CARDS_GENERATE}>
+        <input type="submit" value="GENERATE" className="action-button" />
+      </div>
+    </form>
+
+    <hr className="mv-2" />
 
     { cardPaths.length !== 0 &&
       <div id="cards">
