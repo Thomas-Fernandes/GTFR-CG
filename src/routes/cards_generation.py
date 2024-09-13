@@ -25,7 +25,7 @@ def generateCards(cards_contents: CardsContents, gen_outro: bool, include_bg_img
     # TODO - generate cards
     return createApiResponse(const.HttpStatus.OK.value, "Cards generated successfully.")
 
-@bp_cards_generation.route(api_prefix + "/generate-cards", methods=["POST"])
+@bp_cards_generation.route(api_prefix + "/generate", methods=["POST"])
 @cross_origin()
 def postGenerateCards() -> Response:
     """ Generates cards using the contents previously saved.
@@ -83,7 +83,7 @@ def saveCardsContents(cards_contents: CardsContents) -> Response:
 
     return createApiResponse(const.HttpStatus.OK.value, "Cards contents saved successfully.")
 
-@bp_cards_generation.route(api_prefix + "/save-cards-contents", methods=["POST"])
+@bp_cards_generation.route(api_prefix + "/save-contents", methods=["POST"])
 @cross_origin()
 def postCardsContents() -> Response:
     """ Saves the cards contents to the user's folder.

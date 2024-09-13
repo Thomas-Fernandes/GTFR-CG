@@ -2,6 +2,12 @@ import { Dispatch, SetStateAction } from "react";
 
 /**************** CARDS ******************/
 
+export type CardsGenerationResponse = ApiResponse & {
+  data: {
+    cards: string[];
+  };
+};
+
 export type CardsGenerationRequest = {
   generateOutro: boolean;
   includeBackgroundImg: boolean;

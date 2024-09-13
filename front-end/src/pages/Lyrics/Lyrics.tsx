@@ -40,7 +40,7 @@ const Lyrics = (): JSX.Element => {
       cards_contents: body,
     };
 
-    sendRequest("POST", BACKEND_URL + API.CARDS.SAVE_CARDS_CONTENTS, data).then((response: ApiResponse) => {
+    sendRequest("POST", BACKEND_URL + API.CARDS_GENERATION.SAVE_CARDS_CONTENTS, data).then((response: ApiResponse) => {
       if (!is2xxSuccessful(response.status)) {
         throw new Error(response.message);
       }

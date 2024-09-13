@@ -1,13 +1,14 @@
 import { FormEvent, JSX, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { is2xxSuccessful, sendRequest } from "../../common/Requests";
 import { hideSpinner, showSpinner } from "../../common/Spinner";
 import { sendToast } from "../../common/Toast";
-import { CardsGenerationRequest, ImageDownloadRequest } from "../../common/Types";
+import { ApiResponse, CardsGenerationRequest, CardsGenerationResponse, ImageDownloadRequest } from "../../common/Types";
 import useTitle from "../../common/UseTitle";
 import { doesFileExist } from "../../common/utils/FileUtils";
 import { OUTRO_FILENAME, PROCESSED_CARDS_PATH } from "../../constants/CardsGeneration";
-import { PATHS, SPINNER_ID, TITLE, TOAST, TOAST_TYPE } from "../../constants/Common";
+import { API, BACKEND_URL, PATHS, SPINNER_ID, TITLE, TOAST, TOAST_TYPE } from "../../constants/Common";
 
 import "./CardsGeneration.css";
 
@@ -79,13 +80,17 @@ const CardsGeneration = (): JSX.Element => {
       include_background_img: body.includeBackgroundImg,
     };
 
-    // TODO send request to generate cards
-    //   -> on success, set cardPaths
-    //   -> on failure, show toast
-    //   -> on finally, hide spinner
+    sendRequest("POST", BACKEND_URL + API.CARDS_GENERATION.GENERATE_CARDS, data).then((response: CardsGenerationResponse) => {
+      if (!is2xxSuccessful(response.status)) {
+        throw new Error(response.message);
+      }
 
-    hideSpinner(SPINNER_ID.CARDS_GENERATE);
-    setGenerationInProgress(false);
+      setCardPaths(response.data.cards);
+    }).catch((error: ApiResponse) => {
+      sendToast(error.message, TOAST_TYPE.ERROR);
+      hideSpinner(SPINNER_ID.CARDS_GENERATE);
+      setGenerationInProgress(false);
+    });
   };
 
   useEffect(() => {

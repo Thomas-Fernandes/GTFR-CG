@@ -117,8 +117,9 @@ export const API = {
     GET_LYRICS: PATHS.lyrics + "/get-genius-lyrics",
   },
 
-  CARDS: {
-    SAVE_CARDS_CONTENTS: PATHS.cardsGeneration + "/save-cards-contents",
+  CARDS_GENERATION: {
+    SAVE_CARDS_CONTENTS: PATHS.cardsGeneration + "/save-contents",
+    GENERATE_CARDS: PATHS.cardsGeneration + "/generate",
   },
 };
 
