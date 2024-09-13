@@ -14,6 +14,7 @@ export const TOAST: Record<string, string> = {
   // Redirect
     NO_PROCESSED_IMAGE: "No processed image found.",
     NO_GENIUS_TOKEN: "Genius API token not found.",
+    NO_CARDS_CONTENTS: "No cards contents found.",
 
   // Home
     WELCOME: "Welcome to GTFR-CG!\n"
@@ -82,6 +83,7 @@ export const TITLE = {
   ARTWORK_GENERATION: "Artwork Generation",
   PROCESSED_IMAGES: "Processed Images",
   LYRICS: "Lyrics",
+  CARDS_GENERATION: "Cards Generation",
 };
 
 export const PATHS = {
@@ -91,6 +93,7 @@ export const PATHS = {
   processedImages: "/processed-images",
   lyrics: "/lyrics",
   cardsGeneration: "/cards-generation",
+  processedCards: "/processed-cards",
 };
 
 export const API = {

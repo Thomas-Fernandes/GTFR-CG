@@ -57,7 +57,7 @@ def main(host: str = const.HOST_HOME, port: int = const.DEFAULT_PORT) -> None:
     log.log(f"Starting server @ http://{host_display_name}:{port}...")
 
     def removeExpiredCache(folder: str, cache_type: str) -> int:
-        """ Removes expired processed images.
+        """ Removes expired cache contents.
         :param folder: [string] The folder whose content is to clean if expired.
         :return: [integer] The number of entries removed.
         """

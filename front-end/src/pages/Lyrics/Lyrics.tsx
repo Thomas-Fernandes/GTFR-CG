@@ -140,6 +140,9 @@ const Lyrics = (): JSX.Element => {
         <button type="button" onClick={() => navigate(PATHS.artworkGeneration)}>
           <span className="left">{TITLE.ARTWORK_GENERATION}</span>
         </button>
+        <button type="button" onClick={() => navigate(PATHS.cardsGeneration)}>
+          <span className="right">{TITLE.CARDS_GENERATION}</span>
+        </button>
       </div>
 
       <h1>Lyrics</h1>
