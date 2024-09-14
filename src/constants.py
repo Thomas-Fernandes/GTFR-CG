@@ -155,5 +155,7 @@ REGEX_YOUTUBE_URL = [
     compile(r'https?://youtu\.be/([a-zA-Z0-9_-]{11})'),                           # Short url
 ]
 
-# Image processing
+# Cards processing
+METADATA_IDENTIFIER = "Metadata | "
+METADATA_SEP = " - "
 OUTRO_TEXT_COLOR = "f6f068"

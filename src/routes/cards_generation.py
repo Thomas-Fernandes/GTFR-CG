@@ -4,11 +4,13 @@ from PIL import Image
 
 from ast import literal_eval
 from os import path, makedirs
+from requests.exceptions import ReadTimeout as ReadTimeoutException
 from typing import Optional
 from uuid import uuid4
 
 import src.constants as const
 from src.logger import log
+from src.routes.lyrics import genius
 from src.soft_utils import getCardsContentsFromFile, getNowStamp, writeCardsContentsToFile
 from src.typing import CardsContents, Pixel
 from src.web_utils import createApiResponse
@@ -86,17 +88,55 @@ def generateCards(cards_contents: CardsContents, song_data: dict[str, str], gen_
 
     log.debug("  Generating card #00...")
     generateCard([], song_data, text_color, text_bg_color, avg_color, include_bg_img)
-    for card, idx in cards_contents:
+    log.debug("  Card #00 generated successfully.")
+    for idx, card in enumerate(cards_contents, start=1):
         log.debug(f"  Generating card #{'0' if idx < 10 else ''}{idx}...")
         generateCard(card, song_data, text_color, text_bg_color, avg_color, include_bg_img)
         log.debug(f"  Card #{'0' if idx < 10 else ''}{idx} generated successfully.")
     if gen_outro:
         log.debug("  Generating outro...")
-        generateOutroCard(song_data.authors)
+        generateOutroCard(song_data.get("authors", []))
         log.debug("  Outro generated successfully.")
 
     log.log("Cards generated successfully.")
     return createApiResponse(const.HttpStatus.OK.value, "Cards generated successfully.")
+
+def getSongMetadata(cards_contents: CardsContents) -> dict[str, str]:
+    """ Gets the metadata of the song from the cards contents.
+    :param cards_contents: [CardsContents] The contents of the cards.
+    :return: [dict] The metadata of the song.
+    """
+    metadata = cards_contents[0][0].replace(const.METADATA_IDENTIFIER, "").split(const.METADATA_SEP)
+    cards_contents = cards_contents[1:] # remove the metadata from the cards contents
+    song_data = {}
+    for datum in metadata:
+        key, value = datum.split(": ")
+        song_data[key] = value
+
+    def addAuthors(song_data: dict[str, str]) -> None:
+        """ Adds the authors to the song data.
+        :param song_data: [dict] The song data.
+        """
+        song_id = song_data.get("id", -1)
+        if song_id == -1:
+            raise ValueError("Song ID not found in metadata.")
+        song_contributors = None
+        try:
+            with log.redirect_stdout_stderr() as (stdout, stderr): # type: ignore
+                song_contributors = genius.song_contributors(song_id)
+        except ReadTimeoutException as e:
+            log.error(f"Lyrics fetch failed: {e}")
+        if song_contributors is None:
+            raise ValueError("Song contributors not found.")
+        contributors = []
+        for scribe in song_contributors["contributors"]["transcribers"]:
+            contributors.append({
+                "login": scribe["user"]["login"],
+                "attribution": str(int(scribe["attribution"] * 100)) + "%", # may be useful later
+            })
+        song_data["authors"] = [c["login"] for c in contributors[:3]]
+    addAuthors(song_data)
+    return song_data
 
 @bp_cards_generation.route(api_prefix + "/generate", methods=["POST"])
 @cross_origin()
@@ -109,15 +149,19 @@ def postGenerateCards() -> Response:
         return createApiResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_CARDS_CONTENTS_NOT_FOUND)
 
     body = literal_eval(request.get_data(as_text=True))
-    song_data: Optional[dict[str, str]] = body[const.SessionFields.song_data.value]
     gen_outro: Optional[str] = body[const.SessionFields.gen_outro.value]
     include_bg_img: Optional[str] = body[const.SessionFields.include_bg_img.value]
-    if song_data is None or gen_outro is None or include_bg_img is None:
+    if gen_outro is None or include_bg_img is None:
         return createApiResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_CARDS_GEN_PARAMS_NOT_FOUND)
 
     log.info("Getting cards contents from savefile...")
     try:
         cards_contents: CardsContents = getCardsContentsFromFile(session[const.SessionFields.cards_contents.value])
+
+        if len(cards_contents) == 0 or not cards_contents[0][0].startswith(const.METADATA_IDENTIFIER):
+            raise ValueError("Invalid cards contents.")
+
+        song_data = getSongMetadata(cards_contents)
     except Exception as e:
         log.error(f"Error while getting cards contents: {e}")
         return createApiResponse(const.HttpStatus.INTERNAL_SERVER_ERROR.value, const.ERR_CARDS_CONTENTS_READ_FAILED)

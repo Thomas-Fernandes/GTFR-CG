@@ -2,12 +2,6 @@ import { Dispatch, SetStateAction } from "react";
 
 /**************** CARDS ******************/
 
-export type CardsProps = {
-  artist: string;
-  songName: string;
-  authors: string[];
-};
-
 export type CardsGenerationResponse = ApiResponse & {
   data: {
     cards: string[];
@@ -15,7 +9,6 @@ export type CardsGenerationResponse = ApiResponse & {
 };
 
 export type CardsGenerationRequest = {
-  metadata: CardsProps;
   generateOutro: boolean;
   includeBackgroundImg: boolean;
 };
