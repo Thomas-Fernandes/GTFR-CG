@@ -8,7 +8,7 @@ export const AutoResizeTextarea = forwardRef<HTMLTextAreaElement, AutoResizeText
 
   useEffect(() => {
     const textarea = internalRef.current;
-    
+
     if (textarea) {
       const resizeTextarea = () => {
         textarea.style.height = "auto";
