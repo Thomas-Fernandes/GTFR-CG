@@ -1,10 +1,16 @@
 #home {
-    div.navbar.home {
-        width: 50%;
+    div.navbar {
+        &.home {
+            width: 50%;
 
-        button {
-            height: 100px;
-            width: -webkit-fill-available;
+            button {
+                height: 100px;
+                width: -webkit-fill-available;
+            }
+        }
+
+        &.tests {
+            margin-top: 24px;
         }
     }
 

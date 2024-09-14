@@ -135,6 +135,11 @@ const Home = (): JSX.Element => {
         </div>
       </div>
 
+      <div className="tests navbar">
+        <button type="button" onClick={() => navigate(PATHS.tests)}>
+          <span className="right">{TITLE.TESTS}</span>
+        </button>
+      </div>
       <div className="hidden">
         <p>Genius Token: '{ geniusToken }'</p>
       </div>
