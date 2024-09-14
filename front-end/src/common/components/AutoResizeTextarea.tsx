@@ -5,8 +5,10 @@ type AutoResizeTextareaProps = React.ComponentPropsWithoutRef<"textarea"> & { va
 export const AutoResizeTextarea = forwardRef<HTMLTextAreaElement, AutoResizeTextareaProps>(({ value, ...props }, ref) => {
   const internalRef = useRef<HTMLTextAreaElement>(null);
   const combinedRef = ref || internalRef;
+
   useEffect(() => {
     const textarea = internalRef.current;
+    
     if (textarea) {
       const resizeTextarea = () => {
         textarea.style.height = "auto";
