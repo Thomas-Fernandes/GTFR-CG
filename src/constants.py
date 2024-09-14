@@ -51,6 +51,7 @@ class SessionFields(Enum):
 
     # Cards generation
     cards_contents = "cards_contents"
+    song_data = "song_data"
     gen_outro = "generate_outro"
     include_bg_img = "include_background_img"
 

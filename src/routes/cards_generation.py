@@ -18,51 +18,83 @@ bp_cards_generation = Blueprint(const.ROUTES.cards_gen.bp_name, __name__.split('
 session = app.config
 api_prefix = const.API_ROUTE + const.ROUTES.cards_gen.path
 
-def should_use_black_text(hex_color: str) -> bool:
-    r, g, b = int(hex_color[0:2], 16), int(hex_color[2:4], 16), int(hex_color[4:6], 16)
-    # Calculate luminance (perceived brightness): 0.299 * R + 0.587 * G + 0.114 * B
-    luminance = 0.299 * r + 0.587 * g + 0.114 * b
-    return luminance > 128
-def getAverageColor(image_path: str) -> str:
-    try:
-        with Image.open(image_path) as img:
-            img = img.convert("RGB")
-    except Exception as e:
-        log.error(f"Error while opening image: {e}")
-        return "000000"
+def generateOutroCard(authors: list[str]) -> None:
+    pass
 
-    pixels: list[Pixel] = list(img.getdata())
+def generateCard(card: list[str], song_data: dict[str, str], text_color: str, text_bg_color: str, avg_color: str, include_bg_img: bool) -> None:
+    pass
 
-    total_r, total_g, total_b = 0, 0, 0
-    for r, g, b in pixels:
-        total_r += r
-        total_g += g
-        total_b += b
-
-    num_pixels = len(pixels)
-    avg_r = total_r // num_pixels
-    avg_g = total_g // num_pixels
-    avg_b = total_b // num_pixels
-
-    avg_hex = f"{avg_r:02x}{avg_g:02x}{avg_b:02x}"
-
-    return avg_hex
-
-def generateCards(cards_contents: CardsContents, gen_outro: bool, include_bg_img: bool) -> Response:
+def generateCards(cards_contents: CardsContents, song_data: dict[str, str], gen_outro: bool, include_bg_img: bool) -> Response:
+    """ Generates cards using the contents provided.
+    :param cards_contents: [CardsContents] The contents of the cards.
+    :param song_data: [dict] The data of the song.
+    :param gen_outro: [bool] True if the outro card should be generated, False otherwise.
+    :param include_bg_img: [bool] True if the background image should be included, False otherwise.
+    :return: [Response] The response to the request.
+    """
     if const.SessionFields.user_folder.value not in session:
         log.error("User folder not found in session. Needed thumbnail is unreachable.")
         return createApiResponse(const.HttpStatus.INTERNAL_SERVER_ERROR.value, const.ERR_USER_FOLDER_NOT_FOUND)
 
     log.info("Deducing cards color properties...")
+
+    def getAverageColor(image_path: str) -> str:
+        """ Gets the average color of an image.
+        :param image_path: [string] The path to the image.
+        :return: [string] The hex color of the average color.
+        """
+        try:
+            with Image.open(image_path) as img:
+                img = img.convert("RGB")
+        except Exception as e:
+            log.error(f"Error while opening image: {e}")
+            return "000000"
+
+        pixels: list[Pixel] = list(img.getdata())
+
+        total_r, total_g, total_b = 0, 0, 0
+        for r, g, b in pixels:
+            total_r += r
+            total_g += g
+            total_b += b
+
+        num_pixels = len(pixels)
+        avg_r = total_r // num_pixels
+        avg_g = total_g // num_pixels
+        avg_b = total_b // num_pixels
+
+        avg_hex = f"{avg_r:02x}{avg_g:02x}{avg_b:02x}"
+        return avg_hex
     avg_color = getAverageColor(const.PROCESSED_DIR + session[const.SessionFields.user_folder.value] + const.SLASH \
                 + const.AvailableCacheElemType.images.value + const.SLASH + const.PROCESSED_ARTWORK_FILENAME)
-    text_color = "000000" if should_use_black_text(avg_color) else "ffffff"
+
+    def shouldUseBlackText(hex_color: str) -> bool:
+        """ Checks if the text should be black or white, depending on the background color.
+        :param hex_color: [string] The hex color of the background.
+        :return: [bool] True if the text should be black, False otherwise.
+        """
+        r, g, b = int(hex_color[0:2], 16), int(hex_color[2:4], 16), int(hex_color[4:6], 16)
+        # Calculate luminance (perceived brightness): 0.299 * R + 0.587 * G + 0.114 * B
+        luminance = 0.299 * r + 0.587 * g + 0.114 * b
+        return luminance > 128
+    text_color = "000000" if shouldUseBlackText(avg_color) else "ffffff"
     text_bg_color = "ffffff" if text_color.startswith("0") else "000000"
     log.debug(f"Average color: {avg_color}, Text color: {text_color}, Text background color: {text_bg_color}")
-    log.info("Cards color properties calculated successfully.")
 
+    log.info("Cards color properties calculated successfully.")
     log.info("Generating cards...")
-    # TODO: Implement cards generation
+
+    log.debug("  Generating card #00...")
+    generateCard([], song_data, text_color, text_bg_color, avg_color, include_bg_img)
+    for card, idx in cards_contents:
+        log.debug(f"  Generating card #{'0' if idx < 10 else ''}{idx}...")
+        generateCard(card, song_data, text_color, text_bg_color, avg_color, include_bg_img)
+        log.debug(f"  Card #{'0' if idx < 10 else ''}{idx} generated successfully.")
+    if gen_outro:
+        log.debug("  Generating outro...")
+        generateOutroCard(song_data.authors)
+        log.debug("  Outro generated successfully.")
+
     log.log("Cards generated successfully.")
     return createApiResponse(const.HttpStatus.OK.value, "Cards generated successfully.")
 
@@ -77,10 +109,11 @@ def postGenerateCards() -> Response:
         return createApiResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_CARDS_CONTENTS_NOT_FOUND)
 
     body = literal_eval(request.get_data(as_text=True))
-    if const.SessionFields.gen_outro.value not in body or const.SessionFields.include_bg_img.value not in body:
+    song_data: Optional[dict[str, str]] = body[const.SessionFields.song_data.value]
+    gen_outro: Optional[str] = body[const.SessionFields.gen_outro.value]
+    include_bg_img: Optional[str] = body[const.SessionFields.include_bg_img.value]
+    if song_data is None or gen_outro is None or include_bg_img is None:
         return createApiResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_CARDS_GEN_PARAMS_NOT_FOUND)
-    gen_outro = body[const.SessionFields.gen_outro.value]
-    include_bg_img = body[const.SessionFields.include_bg_img.value]
 
     log.info("Getting cards contents from savefile...")
     try:
@@ -90,7 +123,7 @@ def postGenerateCards() -> Response:
         return createApiResponse(const.HttpStatus.INTERNAL_SERVER_ERROR.value, const.ERR_CARDS_CONTENTS_READ_FAILED)
     log.info("Cards contents retrieved successfully.")
 
-    return generateCards(cards_contents, gen_outro, include_bg_img)
+    return generateCards(cards_contents, song_data, gen_outro, include_bg_img)
 
 def isListListStr(obj) -> bool: # type: ignore
     """ Checks if the object is a list of lists of strings.

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { is2xxSuccessful, sendRequest } from "../../common/Requests";
 import { hideSpinner, showSpinner } from "../../common/Spinner";
 import { sendToast } from "../../common/Toast";
-import { ApiResponse, CardsGenerationRequest, CardsGenerationResponse, ImageDownloadRequest } from "../../common/Types";
+import { ApiResponse, CardsGenerationRequest, CardsGenerationResponse, CardsProps, ImageDownloadRequest } from "../../common/Types";
 import useTitle from "../../common/UseTitle";
 import { doesFileExist } from "../../common/utils/FileUtils";
 import { OUTRO_FILENAME, PROCESSED_CARDS_PATH } from "../../constants/CardsGeneration";
@@ -17,6 +17,7 @@ const CardsGeneration = (): JSX.Element => {
 
   const navigate = useNavigate();
 
+  const [metadata, setMetadata] = useState({} as CardsProps);
   const [generateOutro, setGenerateOutro] = useState(true);
   const [includeBackgroundImg, setIncludeBackgroundImg] = useState(true);
 
@@ -66,7 +67,7 @@ const CardsGeneration = (): JSX.Element => {
 
   const checkExistingCards = () => {
     doesFileExist(PROCESSED_CARDS_PATH + "/" + OUTRO_FILENAME);
-    setCardPaths([]); // TODO get "./processed-cards/XX.png" etc. + "./processed-cards/outro.png"
+    setCardPaths([]); // TODO get "./processed-cards/XX.png" etc. + "./processed-cards/outro.png"(?)
   };
 
   const handleGenerateCards = (e: FormEvent<HTMLFormElement>, body: CardsGenerationRequest) => {
@@ -81,6 +82,7 @@ const CardsGeneration = (): JSX.Element => {
     showSpinner(SPINNER_ID.CARDS_GENERATE);
 
     const data = {
+      song_data: body.metadata,
       generate_outro: body.generateOutro.toString(),
       include_background_img: body.includeBackgroundImg.toString(),
     };
@@ -90,6 +92,7 @@ const CardsGeneration = (): JSX.Element => {
         throw new Error(response.message);
       }
 
+      setMetadata(response.data.metadata);
       setCardPaths(response.data.cards);
     }).catch((error: ApiResponse) => {
       sendToast(error.message, TOAST_TYPE.ERROR);
@@ -117,7 +120,7 @@ const CardsGeneration = (): JSX.Element => {
 
     <h1>{TITLE.CARDS_GENERATION}</h1>
 
-    <form id="settings" onSubmit={(e) => handleGenerateCards(e, {generateOutro, includeBackgroundImg})}>
+    <form id="settings" onSubmit={(e) => handleGenerateCards(e, {metadata, generateOutro, includeBackgroundImg})}>
       <div className="settings flexbox flex-row">
         <label className="checkbox" htmlFor="generate_outro">
           <input

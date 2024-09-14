@@ -19,7 +19,7 @@ api_prefix = const.API_ROUTE + const.ROUTES.lyrics.path
 
 genius = None
 try:
-    genius = Genius(const.GENIUS_API_TOKEN)
+    genius = Genius(access_token=const.GENIUS_API_TOKEN, retries=3)
     session[const.SessionFields.genius_token.value] = const.GENIUS_API_TOKEN
 except TypeError as e:
     log.error(f"Error while creating Genius object: {e}. "
@@ -69,7 +69,14 @@ def fetchLyricsFromGenius(song_title: str, artist_name: str) -> list[dict[str, s
 
     # Split lyrics into blocks based on sections, e.g. "[Chorus]"
     parts = split(r"(\[.*?\])", lyrics)
-    lyrics_parts = [{"section": parts[i], "lyrics": parts[i + 1].strip()} for i in range(1, len(parts) - 1, 2)]
+    lyrics_parts = [{
+        "section": "[Metadata]",
+        "lyrics": f"id: {song.id}\nurl: {song.url}"
+    }]
+    # other available metadata: '_body', '_client', 'artist', 'lyrics', 'primary_artist', 'stats', 'annotation_count',
+    #   'api_path', 'full_title', 'header_image_thumbnail_url', 'header_image_url', 'lyrics_owner_id', 'lyrics_state',
+    #   'path', 'pyongs_count', 'song_art_image_thumbnail_url', 'song_art_image_url', 'title', 'title_with_featured'
+    lyrics_parts += [{"section": parts[i], "lyrics": parts[i + 1].strip()} for i in range(1, len(parts) - 1, 2)]
 
     log.debug("Lyrics split into parts successfully.")
     updateStats(to_increment=const.AvailableStats.lyricsFetches.value)

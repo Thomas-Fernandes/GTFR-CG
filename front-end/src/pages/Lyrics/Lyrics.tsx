@@ -22,6 +22,7 @@ const Lyrics = (): JSX.Element => {
   const [artist, setArtist] = useState("");
   const [songName, setSongName] = useState("");
 
+  const [pageMetadata, setPageMetadata] = useState({});
   const [lyricsParts, setLyricsParts] = useState([] as LyricsPart[]);
 
   // Lyrics
@@ -36,8 +37,9 @@ const Lyrics = (): JSX.Element => {
     setIsSavingCardsContent(true);
     showSpinner(SPINNER_ID.LYRICS_SAVE);
 
+    const metadata = "Metadata | " + Object.entries(pageMetadata).map(([key, value]) => `${key}: ${value}`).join(" - ");
     const data = {
-      cards_contents: body,
+      cards_contents: [[metadata]].concat(body),
     };
 
     sendRequest("POST", BACKEND_URL + API.CARDS_GENERATION.SAVE_CARDS_CONTENTS, data).then((response: ApiResponse) => {
@@ -97,7 +99,16 @@ const Lyrics = (): JSX.Element => {
         );
         setLyricsParts([]);
       } else {
-        setLyricsParts(response.data.lyrics_parts);
+        const metadata = response.data.lyrics_parts.find(part => part.section === "[Metadata]")?.lyrics.split("\n") ?? [];
+        const metadataObj = metadata.reduce((acc: { [key: string]: string }, curr) => {
+          const [key, value] = curr.split(": ");
+          acc[key] = value;
+          return acc;
+        }, {} as { [key: string]: string });
+        setPageMetadata(metadataObj);
+
+        const lyricsParts = response.data.lyrics_parts.filter(part => part.section !== "[Metadata]");
+        setLyricsParts(lyricsParts);
       }
     }).catch((error: ApiResponse) => {
       sendToast(error.message, TOAST_TYPE.ERROR);
