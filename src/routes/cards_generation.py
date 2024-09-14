@@ -3,6 +3,7 @@ from flask_cors import cross_origin
 from PIL import Image
 
 from ast import literal_eval
+from json import dumps
 from os import path, makedirs
 from requests.exceptions import ReadTimeout as ReadTimeoutException
 from typing import Optional
@@ -26,20 +27,7 @@ def generateOutroCard(contributors: list[str]) -> None:
 def generateCard(card: list[str], song_data: SongMetadata, cards_metadata: CardsMetadata) -> None:
     pass
 
-from json import dumps
-def generateCards(cards_contents: CardsContents, song_data: SongMetadata, gen_outro: bool, include_bg_img: bool) -> Response:
-    """ Generates cards using the contents provided.
-    :param cards_contents: [CardsContents] The contents of the cards.
-    :param song_data: [dict] The data of the song.
-    :param gen_outro: [bool] True if the outro card should be generated, False otherwise.
-    :param include_bg_img: [bool] True if the background image should be included, False otherwise.
-    :return: [Response] The response to the request.
-    """
-    if const.SessionFields.user_folder.value not in session:
-        log.error("User folder not found in session. Needed thumbnail is unreachable.")
-        return createApiResponse(const.HttpStatus.INTERNAL_SERVER_ERROR.value, const.ERR_USER_FOLDER_NOT_FOUND)
-
-    log.info("Deducing cards metadata...")
+def getCardsMetadata(song_data: SongMetadata, include_bg_img: bool) -> CardsMetadata:
     cards_metadata: CardsMetadata = {}
 
     def getAverageColor(image_path: str) -> str:
@@ -83,14 +71,29 @@ def generateCards(cards_contents: CardsContents, song_data: SongMetadata, gen_ou
         return luminance > 128
     cards_metadata["text_color"] = "ffffff" if shouldUseBlackText(cards_metadata["avg_color"]) else "000000"
     cards_metadata["text_bg_color"] = "000000" if cards_metadata["text_color"].startswith("0") else "ffffff"
-    cards_metadata["include_bg_img"] = include_bg_img
+    cards_metadata["include_bg_img"] = eval(include_bg_img.capitalize())
     cards_metadata["song_author"] = song_data.get("artist", "???")
     cards_metadata["song_title"] = song_data.get("title", "???")
     log.debug("  Cards metadata:", dumps(cards_metadata))
+    return cards_metadata
 
+def generateCards(cards_contents: CardsContents, song_data: SongMetadata, gen_outro: bool, include_bg_img: bool) -> Response:
+    """ Generates cards using the contents provided.
+    :param cards_contents: [CardsContents] The contents of the cards.
+    :param song_data: [dict] The data of the song.
+    :param gen_outro: [bool] True if the outro card should be generated, False otherwise.
+    :param include_bg_img: [bool] True if the background image should be included, False otherwise.
+    :return: [Response] The response to the request.
+    """
+    if const.SessionFields.user_folder.value not in session:
+        log.error("User folder not found in session. Needed thumbnail is unreachable.")
+        return createApiResponse(const.HttpStatus.INTERNAL_SERVER_ERROR.value, const.ERR_USER_FOLDER_NOT_FOUND)
+
+    log.info("Deducing cards metadata...")
+    cards_metadata = getCardsMetadata(song_data, include_bg_img)
     log.info("Cards metadata calculated successfully.")
-    log.info("Generating cards...")
 
+    log.info("Generating cards...")
     log.debug("  Generating card #00...")
     generateCard([], song_data, cards_metadata)
     log.debug("  Card #00 generated successfully.")
