@@ -45,7 +45,7 @@ const Lyrics = (): JSX.Element => {
         throw new Error(response.message);
       }
 
-      // navigate(PATHS.cardsGeneration);
+      navigate(PATHS.cardsGeneration);
     }).catch((error: ApiResponse) => {
       sendToast(error.message, TOAST_TYPE.ERROR);
     }).finally(() => {

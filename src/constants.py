@@ -26,6 +26,8 @@ class TimeInSeconds(Enum):
     YEAR   = int(365.256 * DAY)
 
 class AvailableCacheElemType(Enum):
+    """ Enum for the available cache elements.
+    """
     sessions = "sessions"
     images = "images"
     cards = "cards"
@@ -35,7 +37,7 @@ HOST_HOME = "0.0.0.0"
 DEFAULT_PORT = 8000
 
 class SessionFields(Enum):
-    """ Enum for the fields in the session.
+    """ Enum for the fields in the session object.
     """
     # Application
     user_folder = "user_folder"
@@ -119,6 +121,7 @@ LOGO_POSITIONS = [
 ]
 
 # Error messages
+ERR_USER_FOLDER_NOT_FOUND = "User folder not found."
 ERR_NO_FILE = "Invalid file: No file selected."
 ERR_NO_IMG = "No image was selected or uploaded."
 ERR_INVALID_FILE_TYPE = "Invalid file type. Only PNG and JPG files are allowed."
@@ -150,3 +153,6 @@ REGEX_YOUTUBE_URL = [
     compile(r'https?://(?:www\.)?youtube\.com/watch\?.*?v=([a-zA-Z0-9_-]{11})'),  # Normal url
     compile(r'https?://youtu\.be/([a-zA-Z0-9_-]{11})'),                           # Short url
 ]
+
+# Image processing
+OUTRO_TEXT_COLOR = "f6f068"

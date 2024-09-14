@@ -55,6 +55,7 @@ class Routes:
 
 ############ SOFTWARE ############
 
+Pixel: TypeAlias = tuple[int, int, int]
 CardsContents: TypeAlias = list[list[str]]
 
 CachedElemType: TypeAlias = Literal[

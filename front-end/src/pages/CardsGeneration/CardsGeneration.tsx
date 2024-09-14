@@ -1,4 +1,4 @@
-import { FormEvent, JSX, useEffect, useState } from "react";
+import { FormEvent, JSX, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { is2xxSuccessful, sendRequest } from "../../common/Requests";
@@ -64,6 +64,11 @@ const CardsGeneration = (): JSX.Element => {
     );
   };
 
+  const checkExistingCards = () => {
+    doesFileExist(PROCESSED_CARDS_PATH + "/" + OUTRO_FILENAME);
+    setCardPaths([]); // TODO get "./processed-cards/XX.png" etc. + "./processed-cards/outro.png"
+  };
+
   const handleGenerateCards = (e: FormEvent<HTMLFormElement>, body: CardsGenerationRequest) => {
     e.preventDefault();
 
@@ -76,8 +81,8 @@ const CardsGeneration = (): JSX.Element => {
     showSpinner(SPINNER_ID.CARDS_GENERATE);
 
     const data = {
-      generate_outro: body.generateOutro,
-      include_background_img: body.includeBackgroundImg,
+      generate_outro: body.generateOutro.toString(),
+      include_background_img: body.includeBackgroundImg.toString(),
     };
 
     sendRequest("POST", BACKEND_URL + API.CARDS_GENERATION.GENERATE_CARDS, data).then((response: CardsGenerationResponse) => {
@@ -92,15 +97,6 @@ const CardsGeneration = (): JSX.Element => {
       setGenerationInProgress(false);
     });
   };
-
-  useEffect(() => {
-    doesFileExist(PROCESSED_CARDS_PATH + "/" + OUTRO_FILENAME).then((outroCardExists: boolean) => {
-      if (!outroCardExists && false) {
-        navigate(`${PATHS.redirect}?redirect_to=${PATHS.lyrics}&error_text=${TOAST.NO_CARDS_CONTENTS}`);
-      }
-      setCardPaths([]); // TODO get "./processed-cards/XX.png" etc. + "./processed-cards/outro.png"
-    });
-  });
 
   return (
   <div id="cards-generation">
@@ -144,17 +140,19 @@ const CardsGeneration = (): JSX.Element => {
       </div>
     </form>
 
-    <hr className="mv-2" />
+    { cardPaths.length > 0 &&
+      <>
+        <hr className="mv-2" />
 
-    { cardPaths.length !== 0 &&
-      <div id="cards">
-        <button type="button" onClick={() => {}}>
-          Download All Cards
-        </button>
-        { cardPaths.map((cardPath, idx) =>
-          renderCard(cardPath, idx))
-        }
-      </div>
+        <div id="cards">
+          <button type="button" onClick={() => {}}>
+            Download All Cards
+          </button>
+          { cardPaths.map((cardPath, idx) =>
+            renderCard(cardPath, idx))
+          }
+        </div>
+      </>
     }
 
     <span className="top-bot-spacer" />
