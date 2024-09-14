@@ -71,11 +71,14 @@ def fetchLyricsFromGenius(song_title: str, artist_name: str) -> list[dict[str, s
     parts = split(r"(\[.*?\])", lyrics)
     lyrics_parts = [{
         "section": "[Metadata]",
-        "lyrics": f"id: {song.id}\nurl: {song.url}"
+        "lyrics": f"id: {song.id}" + "\n"
+            f"artist: {song.artist}" + "\n"
+            f"title: {song.title}" + "\n"
+            f"url: {song.url}"
     }]
-    # other available metadata: '_body', '_client', 'artist', 'lyrics', 'primary_artist', 'stats', 'annotation_count',
+    # other available metadata: '_body', '_client', 'lyrics', 'primary_artist', 'stats', 'annotation_count',
     #   'api_path', 'full_title', 'header_image_thumbnail_url', 'header_image_url', 'lyrics_owner_id', 'lyrics_state',
-    #   'path', 'pyongs_count', 'song_art_image_thumbnail_url', 'song_art_image_url', 'title', 'title_with_featured'
+    #   'path', 'pyongs_count', 'song_art_image_thumbnail_url', 'song_art_image_url', 'title_with_featured'
     lyrics_parts += [{"section": parts[i], "lyrics": parts[i + 1].strip()} for i in range(1, len(parts) - 1, 2)]
 
     log.debug("Lyrics split into parts successfully.")

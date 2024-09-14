@@ -157,5 +157,5 @@ REGEX_YOUTUBE_URL = [
 
 # Cards processing
 METADATA_IDENTIFIER = "Metadata | "
-METADATA_SEP = " - "
+METADATA_SEP = " ;;; "
 OUTRO_TEXT_COLOR = "f6f068"

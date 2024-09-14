@@ -55,6 +55,8 @@ class Routes:
 
 ############ SOFTWARE ############
 
+CardsMetadata: TypeAlias = dict[str, str | bool]
+SongMetadata: TypeAlias = dict[str, str]
 Pixel: TypeAlias = tuple[int, int, int]
 CardsContents: TypeAlias = list[list[str]]
 

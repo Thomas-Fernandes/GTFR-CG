@@ -12,7 +12,7 @@ import src.constants as const
 from src.logger import log
 from src.routes.lyrics import genius
 from src.soft_utils import getCardsContentsFromFile, getNowStamp, writeCardsContentsToFile
-from src.typing import CardsContents, Pixel
+from src.typing import CardsContents, CardsMetadata, Pixel, SongMetadata
 from src.web_utils import createApiResponse
 
 from src.app import app
@@ -20,13 +20,14 @@ bp_cards_generation = Blueprint(const.ROUTES.cards_gen.bp_name, __name__.split('
 session = app.config
 api_prefix = const.API_ROUTE + const.ROUTES.cards_gen.path
 
-def generateOutroCard(authors: list[str]) -> None:
+def generateOutroCard(contributors: list[str]) -> None:
     pass
 
-def generateCard(card: list[str], song_data: dict[str, str], text_color: str, text_bg_color: str, avg_color: str, include_bg_img: bool) -> None:
+def generateCard(card: list[str], song_data: SongMetadata, cards_metadata: CardsMetadata) -> None:
     pass
 
-def generateCards(cards_contents: CardsContents, song_data: dict[str, str], gen_outro: bool, include_bg_img: bool) -> Response:
+from json import dumps
+def generateCards(cards_contents: CardsContents, song_data: SongMetadata, gen_outro: bool, include_bg_img: bool) -> Response:
     """ Generates cards using the contents provided.
     :param cards_contents: [CardsContents] The contents of the cards.
     :param song_data: [dict] The data of the song.
@@ -38,7 +39,8 @@ def generateCards(cards_contents: CardsContents, song_data: dict[str, str], gen_
         log.error("User folder not found in session. Needed thumbnail is unreachable.")
         return createApiResponse(const.HttpStatus.INTERNAL_SERVER_ERROR.value, const.ERR_USER_FOLDER_NOT_FOUND)
 
-    log.info("Deducing cards color properties...")
+    log.info("Deducing cards metadata...")
+    cards_metadata: CardsMetadata = {}
 
     def getAverageColor(image_path: str) -> str:
         """ Gets the average color of an image.
@@ -67,8 +69,8 @@ def generateCards(cards_contents: CardsContents, song_data: dict[str, str], gen_
 
         avg_hex = f"{avg_r:02x}{avg_g:02x}{avg_b:02x}"
         return avg_hex
-    avg_color = getAverageColor(const.PROCESSED_DIR + session[const.SessionFields.user_folder.value] + const.SLASH \
-                + const.AvailableCacheElemType.images.value + const.SLASH + const.PROCESSED_ARTWORK_FILENAME)
+    cards_metadata["avg_color"] = getAverageColor(const.PROCESSED_DIR + session[const.SessionFields.user_folder.value] \
+        + const.SLASH + const.AvailableCacheElemType.images.value + const.SLASH + const.PROCESSED_ARTWORK_FILENAME)
 
     def shouldUseBlackText(hex_color: str) -> bool:
         """ Checks if the text should be black or white, depending on the background color.
@@ -79,23 +81,26 @@ def generateCards(cards_contents: CardsContents, song_data: dict[str, str], gen_
         # Calculate luminance (perceived brightness): 0.299 * R + 0.587 * G + 0.114 * B
         luminance = 0.299 * r + 0.587 * g + 0.114 * b
         return luminance > 128
-    text_color = "000000" if shouldUseBlackText(avg_color) else "ffffff"
-    text_bg_color = "ffffff" if text_color.startswith("0") else "000000"
-    log.debug(f"Average color: {avg_color}, Text color: {text_color}, Text background color: {text_bg_color}")
+    cards_metadata["text_color"] = "ffffff" if shouldUseBlackText(cards_metadata["avg_color"]) else "000000"
+    cards_metadata["text_bg_color"] = "000000" if cards_metadata["text_color"].startswith("0") else "ffffff"
+    cards_metadata["include_bg_img"] = include_bg_img
+    cards_metadata["song_author"] = song_data.get("artist", "???")
+    cards_metadata["song_title"] = song_data.get("title", "???")
+    log.debug("  Cards metadata:", dumps(cards_metadata))
 
-    log.info("Cards color properties calculated successfully.")
+    log.info("Cards metadata calculated successfully.")
     log.info("Generating cards...")
 
     log.debug("  Generating card #00...")
-    generateCard([], song_data, text_color, text_bg_color, avg_color, include_bg_img)
+    generateCard([], song_data, cards_metadata)
     log.debug("  Card #00 generated successfully.")
     for idx, card in enumerate(cards_contents, start=1):
         log.debug(f"  Generating card #{'0' if idx < 10 else ''}{idx}...")
-        generateCard(card, song_data, text_color, text_bg_color, avg_color, include_bg_img)
+        generateCard(card, song_data, cards_metadata)
         log.debug(f"  Card #{'0' if idx < 10 else ''}{idx} generated successfully.")
     if gen_outro:
         log.debug("  Generating outro...")
-        generateOutroCard(song_data.get("authors", []))
+        generateOutroCard(song_data.get("contributors", []))
         log.debug("  Outro generated successfully.")
 
     log.log("Cards generated successfully.")
@@ -113,8 +118,8 @@ def getSongMetadata(cards_contents: CardsContents) -> dict[str, str]:
         key, value = datum.split(": ")
         song_data[key] = value
 
-    def addAuthors(song_data: dict[str, str]) -> None:
-        """ Adds the authors to the song data.
+    def addSongContributors(song_data: dict[str, str]) -> None:
+        """ Adds the contributors to the song data.
         :param song_data: [dict] The song data.
         """
         song_id = song_data.get("id", -1)
@@ -134,8 +139,9 @@ def getSongMetadata(cards_contents: CardsContents) -> dict[str, str]:
                 "login": scribe["user"]["login"],
                 "attribution": str(int(scribe["attribution"] * 100)) + "%", # may be useful later
             })
-        song_data["authors"] = [c["login"] for c in contributors[:3]]
-    addAuthors(song_data)
+        song_data["contributors"] = [c["login"] for c in contributors[:3]]
+    addSongContributors(song_data)
+
     return song_data
 
 @bp_cards_generation.route(api_prefix + "/generate", methods=["POST"])
@@ -198,6 +204,7 @@ def saveCardsContents(cards_contents: CardsContents) -> Response:
     filepath = path.join(user_processed_path, f"contents_{getNowStamp()}.txt")
     try:
         writeCardsContentsToFile(filepath, cards_contents)
+        # TODO VIDER LE CACHE
     except Exception as e:
         log.error(f"Error while saving cards contents: {e}")
         return createApiResponse(const.HttpStatus.INTERNAL_SERVER_ERROR.value, const.ERR_CARDS_CONTENTS_SAVE_FAILED)

@@ -37,7 +37,7 @@ const Lyrics = (): JSX.Element => {
     setIsSavingCardsContent(true);
     showSpinner(SPINNER_ID.LYRICS_SAVE);
 
-    const metadata = "Metadata | " + Object.entries(pageMetadata).map(([key, value]) => `${key}: ${value}`).join(" - ");
+    const metadata = "Metadata | " + Object.entries(pageMetadata).map(([key, value]) => `${key}: ${value}`).join(" ;;; ");
     const data = {
       cards_contents: [[metadata]].concat(body),
     };
