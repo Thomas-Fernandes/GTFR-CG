@@ -112,7 +112,7 @@ cd front-end/ && npm run dev # will launch the front end of the application
 - You can navigate between pages using the navigation buttons at the top of each page.
 - The application features a [toast notification system](https://web.dev/articles/building/a-toast-component) that will give you feedback on your unsuccessful actions.
 - Most of the application's back end actions and reactions will be logged in the terminal *via* Python.
-  - *(TBD)* You can define a minimum severity level in the `.env` file, choosing the logger verbosity's. Check out [`.env.example`](./.env.example) for more information.
+  - You can define a minimum severity level in the `.env` file, choosing the logger verbosity's. Check out [`.env.example`](./.env.example) for more information.
 - Your user statistics are stored at the root of the repository in a file named `stats.json`.
 - If you encounter external Python module issues, try running `pip install -r requirements.txt --force-reinstall` for a complete reinstall.
 
