@@ -54,7 +54,7 @@ const CardsGeneration = (): JSX.Element => {
   ): JSX.Element => {
     const alt = "card" + "#" + idx.toString();
     return (
-      <div id="card" key={alt}>
+      <div className="card" key={alt}>
         <img src={cardPath} alt={alt} />
         <form onSubmit={(e) => handleSubmitDownloadCard(e, {selectedImage: cardPath})}>
           <input type="submit" value="Download" className="button" />
@@ -73,6 +73,7 @@ const CardsGeneration = (): JSX.Element => {
 
     setGenerationInProgress(true);
     showSpinner(SPINNER_ID.CARDS_GENERATE);
+    setCardPaths([]);
 
     const data = {
       generate_outro: body.generateOutro.toString(),
@@ -84,12 +85,20 @@ const CardsGeneration = (): JSX.Element => {
         throw new Error(response.message);
       }
 
-      setCardPaths(response.data.cards);
+      const nbGenerated = response.data.generated;
+      const cardPaths = [];
+      for (let i = 0; i < nbGenerated; i++) {
+        cardPaths.push(`${PROCESSED_CARDS_PATH}/${i.toString().padStart(2, "0")}.png`);
+      }
+      if (body.generateOutro)
+        cardPaths.push(`${PROCESSED_CARDS_PATH}/outro.png`);
+      setCardPaths(cardPaths);
     }).catch((error: ApiResponse) => {
       if (error.status === HTTP_STATUS.PRECONDITION_FAILED)
         sendToast(TOAST.NO_CARDS_CONTENTS, TOAST_TYPE.ERROR);
       else
         sendToast(error.message, TOAST_TYPE.ERROR);
+    }).finally(() => {
       hideSpinner(SPINNER_ID.CARDS_GENERATE);
       setGenerationInProgress(false);
     });
@@ -137,20 +146,14 @@ const CardsGeneration = (): JSX.Element => {
       </div>
     </form>
 
-    { !generationInProgress &&
-      <img src={PROCESSED_CARDS_PATH + "/" + "00.png"} alt="" id="card"
-        style={{"width": "50%", "height": "auto", "margin": "auto", "marginTop": "1rem"}}
-      />
-    }
-
     { cardPaths.length > 0 &&
       <>
         <hr className="mv-2" />
 
+        <button type="button" id="download-all" onClick={() => {}}>
+          Download All Cards
+        </button>
         <div id="cards">
-          <button type="button" onClick={() => {}}>
-            Download All Cards
-          </button>
           { cardPaths.map((cardPath, idx) =>
             renderCard(cardPath, idx))
           }

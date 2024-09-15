@@ -91,7 +91,7 @@ def getCardsMetadata(song_data: SongMetadata, include_bg_img: bool) -> CardMetad
     """
     bg_path = f"{const.PROCESSED_DIR}{session[const.SessionFields.user_folder.value]}{const.SLASH}" + \
         f"{const.AvailableCacheElemType.images.value}{const.SLASH}{const.PROCESSED_ARTWORK_FILENAME}"
-    if (not doesFileExist(bg_path)):
+    if not doesFileExist(bg_path):
         raise FileNotFoundError("Background image missing.")
     bg = Image.open(bg_path)
 
@@ -166,7 +166,7 @@ def generateCards(cards_contents: CardsContents, song_data: SongMetadata, gen_ou
         generateOutroCard(image_output_path, song_data.get("contributors", []), card_metadata.text_fonts[2])
     log.log("Cards generated successfully.")
 
-    return createApiResponse(const.HttpStatus.OK.value, "Cards generated successfully.")
+    return createApiResponse(const.HttpStatus.OK.value, "Cards generated successfully.", {"generated": len(cards_contents) + 1})
 
 def getSongMetadata(cards_contents: CardsContents) -> dict[str, str]:
     """ Gets the metadata of the song from the cards contents.

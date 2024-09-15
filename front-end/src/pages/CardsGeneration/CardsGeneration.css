@@ -12,6 +12,25 @@
         }
     }
 
-    #image-panels {
+    #download-all {
+        margin: auto auto 1rem auto;
+        width: 40%;
+    }
+
+    #cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+        gap: .5rem;
+
+        .card {
+            border: .1rem solid #dddddd;
+            border-radius: .5rem;
+            padding: 1rem;
+
+            input[type="submit"] {
+                margin-top: .5rem;
+                width: 60%;
+            }
+        }
     }
 }
