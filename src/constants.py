@@ -114,15 +114,18 @@ SLASH = '/' if (osName != 'nt') else '\\'
 SESSION_DIR = "flask_session" + SLASH
 PROCESSED_DIR = "processed" + SLASH
 PROCESSED_ARTWORK_FILENAME = "ProcessedArtwork.png"
+PROCESSED_OUTRO_FILENAME = "outro.png"
 FRONT_PROCESSED = f".{SLASH}front-end{SLASH}public{SLASH}"
-THUMBNAIL_DIR = "assets" + SLASH + "thumbnails" + SLASH
+FRONT_PROCESSED_IMAGES_DIR = f"{FRONT_PROCESSED}processed-{AvailableCacheElemType.images.value}{SLASH}"
+FRONT_PROCESSED_CARDS_DIR = f"{FRONT_PROCESSED}processed-{AvailableCacheElemType.cards.value}{SLASH}"
+THUMBNAIL_DIR = f"assets{SLASH}thumbnails{SLASH}"
 LOGO_POSITIONS = [
     "top-left",    "top-center",    "top-right",
     "center-left", "center-center", "center-right",
     "bottom-left", "bottom-center", "bottom-right"
 ]
-CARDS_DIR = "assets" + SLASH + "cards" + SLASH
-FONTS_DIR = "assets" + SLASH + "fonts" + SLASH
+CARDS_DIR = f"assets{SLASH}cards{SLASH}"
+FONTS_DIR = f"assets{SLASH}fonts{SLASH}"
 
 # Error messages
 ERR_USER_FOLDER_NOT_FOUND = "User folder not found."
@@ -161,4 +164,6 @@ REGEX_YOUTUBE_URL = [
 # Cards processing
 METADATA_IDENTIFIER = "Metadata | "
 METADATA_SEP = " ;;; "
+FONT_PROGRAMME = "programme.ttf"
+OUTRO_FONT_SIZE = 36
 OUTRO_TEXT_COLOR = (246, 240, 104) #f6f068

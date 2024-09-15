@@ -44,7 +44,8 @@ def initApp() -> None:
             app.register_blueprint(blueprint)
         log.debug("  Blueprints initialized.")
     initBlueprints()
-    makedirs("./front-end/public/processed-images", exist_ok=True)
+    makedirs(const.FRONT_PROCESSED_IMAGES_DIR, exist_ok=True)
+    makedirs(const.FRONT_PROCESSED_CARDS_DIR, exist_ok=True)
     Session(app)
     log.debug("App initialized.")
 

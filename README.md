@@ -88,7 +88,7 @@ python installer.py # will install back end modules, front end software & module
 **Back end:**
 
 ``` bash
-python launcher.py # will check if the needed modules and installed, then launch the application
+python launcher.py # will check needed modules and install, then launch the application
 ```
 
 **Front end:**

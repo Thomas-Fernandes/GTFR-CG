@@ -22,38 +22,58 @@ session = app.config
 api_prefix = const.API_ROUTE + const.ROUTES.cards_gen.path
 
 def generateOutroCard(output_path: str, contributor_logins: list[str]) -> None:
+    """ Generates the outro card mentioning the transcription contributors.
+    :param output_path: [string] The path to save the card to.
+    :param contributor_logins: [list[str]] The logins of the contributors.
+    """
     log.debug("  Generating outro card...")
     user_folder = path.abspath(str(session[const.SessionFields.user_folder.value]))
     user_folder = const.SLASH.join(user_folder.split(const.SLASH)[:-1])
-    image_file = f"{user_folder}{const.SLASH}{const.CARDS_DIR}{'outro.png'}"
+    image_file = f"{user_folder}{const.SLASH}{const.CARDS_DIR}{const.PROCESSED_OUTRO_FILENAME}"
     image: Image.Image = Image.open(image_file)
 
-    font_file = f"{user_folder}{const.SLASH}{const.FONTS_DIR}{'programme.ttf'}"
-    contributors_font = ImageFont.truetype(font_file, 36)
-    contributor_logins = [f"@{c}" for c in contributor_logins] # add '@' in front of each contributor login
-    contributors_str = "Traduit par : "
-    if len(contributor_logins) != 1:
-        contributors_str += ", ".join(contributor_logins[:-1]) + (" & " + contributor_logins[-1] if len(contributor_logins) > 2 else " & " + contributor_logins[0])
-    else:
-        contributors_str += contributor_logins[0]
+    font_file = f"{user_folder}{const.SLASH}{const.FONTS_DIR}{const.FONT_PROGRAMME}"
+    contributors_font = ImageFont.truetype(font_file, const.OUTRO_FONT_SIZE)
+    def getContributorsString(contributor_logins: list[str]) -> str:
+        """ Gets the string of contributors from their logins.
+        :param contributor_logins: [list[str]] The logins of the contributors.
+        :return: [str] The string of contributors.
+        """
+        contributor_logins = [f"@{c}" for c in contributor_logins] # add '@' before each login
+        contributors_str = "Traduit par : "
+        if len(contributor_logins) != 1:
+            contributors_str += ", ".join(contributor_logins[:-1]) + (" & " + contributor_logins[-1] if len(contributor_logins) > 2 else " & " + contributor_logins[0])
+        else:
+            contributors_str += contributor_logins[0]
+        return contributors_str
+    contributors_str = getContributorsString(contributor_logins)
 
     draw = ImageDraw.Draw(image)
     _, _, w, _ = draw.textbbox((0, 0), contributors_str, font=contributors_font) # deduce the width of the text to center it
     draw.text(((1920-w) / 2, 960), contributors_str, font=contributors_font, fill=const.OUTRO_TEXT_COLOR)
 
     image.save(output_path)
-    front_processed_dir = f"{const.FRONT_PROCESSED}processed-{const.AvailableCacheElemType.cards.value}{const.SLASH}"
-    makedirs(front_processed_dir, exist_ok=True)
-    image.save(f"{front_processed_dir}outro.png")
+    image.save(f"{const.FRONT_PROCESSED_CARDS_DIR}{const.PROCESSED_OUTRO_FILENAME}")
     log.debug("  Outro card generated successfully.")
 
 def generateCard(output_path: str, lyrics: list[str], song_data: SongMetadata, cards_metadata: CardsMetadata) -> None:
+    """ Generates a card using the provided lyrics and metadata.
+    :param output_path: [string] The path to save the card to.
+    :param lyrics: [list[str]] The lyrics to display on the card.
+    :param song_data: [dict] The data of the song.
+    :param cards_metadata: [dict] The metadata of the cards.
+    """
     card_name = output_path.split(const.SLASH)[-1]
     log.debug(f"  Generating card {card_name}...")
     # TODO
     log.debug(f"  Card {card_name} generated successfully.")
 
 def getCardsMetadata(song_data: SongMetadata, include_bg_img: bool) -> CardsMetadata:
+    """ Extracts the metadata needed for card generation from the song data.
+    :param song_data: [dict] The data of the song.
+    :param include_bg_img: [bool] True if the background image should be included, False otherwise.
+    :return: [dict] The metadata of the cards.
+    """
     cards_metadata: CardsMetadata = {}
 
     def getAverageColor(image_path: str) -> str:
@@ -129,7 +149,7 @@ def generateCards(cards_contents: CardsContents, song_data: SongMetadata, gen_ou
         image_output_path = f"{user_processed_path}{const.SLASH}{padding}{idx}.png"
         generateCard(image_output_path, card, song_data, cards_metadata)
     if gen_outro:
-        image_output_path = f"{user_processed_path}{const.SLASH}outro.png"
+        image_output_path = f"{user_processed_path}{const.SLASH}{const.PROCESSED_OUTRO_FILENAME}"
         generateOutroCard(image_output_path, song_data.get("contributors", []))
     log.log("Cards generated successfully.")
 
@@ -219,6 +239,10 @@ def isListListStr(obj) -> bool: # type: ignore
                 return False
     return True
 def saveCardsContents(cards_contents: CardsContents) -> Response:
+    """ Saves the cards contents to the user's folder.
+    :param cards_contents: [list[list[str]]] The contents of the cards.
+    :return: [Response] The response to the request.
+    """
     if const.SessionFields.user_folder.value not in session:
         log.debug("User folder not found in session. Creating a new one.")
         session[const.SessionFields.user_folder.value] = str(uuid4())
