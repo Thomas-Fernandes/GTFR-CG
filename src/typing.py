@@ -91,6 +91,8 @@ class CardMetadata:
         content: str = ""
         for (key, value) in self.__dict__.items():
             if value is not None:
+                if key == "bg" or key == "text_fonts":
+                    continue
                 content += f"{key}={value}, "
         return f"CardMetadata({content[:-2]})"
 # CardMetadata: TypeAlias = dict[str, str | bool | RGBAColor]

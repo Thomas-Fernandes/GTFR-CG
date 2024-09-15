@@ -1,11 +1,9 @@
+from colorthief import ColorThief
 from flask import Blueprint, Response, request
 from flask_cors import cross_origin
-from numpy import array as NpArray
 from PIL import Image, ImageDraw, ImageFont
 
 from ast import literal_eval
-from contextlib import redirect_stdout, redirect_stderr
-from io import StringIO
 from os import path, makedirs
 from requests.exceptions import ReadTimeout as ReadTimeoutException
 from typing import Optional
@@ -15,7 +13,7 @@ import src.constants as const
 from src.logger import log
 from src.routes.lyrics import genius
 from src.soft_utils import doesFileExist, getCardsContentsFromFile, getNowStamp, writeCardsContentsToFile
-from src.typing import CardsContents, CardMetadata, RGBAColor, RGBColor, SongMetadata
+from src.typing import CardsContents, CardMetadata, RGBAColor, SongMetadata
 from src.web_utils import createApiResponse
 
 from src.app import app
@@ -73,7 +71,7 @@ def generateCard(output_path: str, lyrics: list[str], card_metadata: CardMetadat
     bottom_color_bar = Image.new("RGBA", (1920, 200), card_metadata.dominant_color) # bottom: 880px -> 1080 - 880 = 200px
     card.paste(bottom_color_bar, (0, 880))
 
-    bottom_bar = Image.open(f"{const.CARDS_BOTTOM_B if card_metadata.text_bg_color[0] == 0 else const.CARDS_BOTTOM_W}")
+    bottom_bar = Image.open(f"{const.CARDS_BOTTOM_B if card_metadata.text_color[0] == 0 else const.CARDS_BOTTOM_W}")
     card.paste(bottom_bar, mask=bottom_bar)
 
     bottom_text = f"{card_metadata.song_author}, “{card_metadata.song_title}”"
@@ -82,10 +80,9 @@ def generateCard(output_path: str, lyrics: list[str], card_metadata: CardMetadat
 
     log.debug(f"    Card contents: {lyrics}")
     card.save(output_path)
+    card.save(f"{const.FRONT_PROCESSED_CARDS_DIR}{card_name}")
     log.info(f"  Card {card_name} generated successfully.")
 
-with redirect_stdout(StringIO()), redirect_stderr(StringIO()): # make it silent, removing the longdouble warning
-    from sklearn.cluster import KMeans
 def getCardsMetadata(song_data: SongMetadata, include_bg_img: bool) -> CardMetadata:
     """ Extracts the metadata needed for card generation from the song data.
     :param song_data: [dict] The data of the song.
@@ -101,40 +98,10 @@ def getCardsMetadata(song_data: SongMetadata, include_bg_img: bool) -> CardMetad
     song_author = song_data.get("artist", "???").upper()
     song_title = song_data.get("title", "???").upper()
 
-    def convertHexToRgba(hex_color: str) -> RGBAColor:
-        """ Converts a hex color to an RGBA tuple.
-        :param hex_color: [string] The hex color to convert.
-        :return: [tuple[int, int, int, int]] The RGBA tuple.
-        """
-        r, g, b = int(hex_color[0:2], 16), int(hex_color[2:4], 16), int(hex_color[4:6], 16)
-        return r, g, b, 255
-    def getDominantColor(image_path: str, n_clusters: int = 4, random_state: int = 777) -> str: # TRUST THE 777
-        """ Gets the dominant color of an image, using the K-means algorithm
-        :param image_path: [string] The path to the image.
-        :return: [str] The dominant color.
-        """
-        try:
-            with Image.open(image_path) as img:
-                img = img.convert("RGB")
-        except Exception as e:
-            log.error(f"Error while opening image: {e}")
-            return "000000"
-
-        pixels: list[RGBColor] = list(img.getdata())
-        if n_clusters < 1:  n_clusters = 1  # at least one cluster
-        if n_clusters > 16: n_clusters = 16 # limit the number of clusters to 16
-
-        log.info("  Deducing dominant color from background image via k-means...")
-        kMeans = KMeans(n_clusters=n_clusters, random_state=random_state)
-        kMeans.fit(NpArray(pixels))
-        dominant_colors = kMeans.cluster_centers_.astype(int)
-        dominant_colors = [f"{r:02x}{g:02x}{b:02x}" for r, g, b in dominant_colors]
-
-        log.debug(f"    {min(3, len(dominant_colors))} dominant colors: {dominant_colors[:3]}")
-        log.debug(f"    Deduced dominant color: {dominant_colors[0]}")
-        log.info("  Dominant color deduced successfully.")
-        return dominant_colors[0]
-    dominant_color = convertHexToRgba(getDominantColor(bg_path))
+    log.debug("  Calculating dominant color from background image...")
+    color_thief = ColorThief(bg_path)
+    dominant_color = color_thief.get_color(quality=1)
+    log.info(f"  Dominant color: {dominant_color}")
 
     def shouldUseBlackText(bg_color: RGBAColor) -> bool:
         """ Checks if the text should be black or white, depending on the background color.
@@ -144,8 +111,8 @@ def getCardsMetadata(song_data: SongMetadata, include_bg_img: bool) -> CardMetad
         r, g, b = bg_color[:3]
         # Calculate luminance (perceived brightness): 0.299 * R + 0.587 * G + 0.114 * B
         luminance = 0.3 * r + 0.6 * g + 0.1 * b
-        return luminance < 150
-    text_color = (255,255,255) if shouldUseBlackText(dominant_color) else (0,0,0)
+        return luminance > 150
+    text_color = (0,0,0) if shouldUseBlackText(dominant_color) else (255,255,255)
     text_bg_color = (255,255,255) if text_color[0] == 0 else (0,0,0)
 
     user_folder = path.abspath(str(session[const.SessionFields.user_folder.value]))
@@ -161,7 +128,7 @@ def getCardsMetadata(song_data: SongMetadata, include_bg_img: bool) -> CardMetad
         text_color=text_color, text_bg_color=text_bg_color,
         text_fonts=[lyrics_font, metadata_font, outro_font]
     )
-    log.debug(f"  Cards metadata: {cards_metadata}")
+    log.debug(f"  {cards_metadata}")
     return cards_metadata
 
 def generateCards(cards_contents: CardsContents, song_data: SongMetadata, gen_outro: bool, include_bg_img: bool) -> Response:
@@ -184,7 +151,7 @@ def generateCards(cards_contents: CardsContents, song_data: SongMetadata, gen_ou
         return createApiResponse(const.HttpStatus.PRECONDITION_FAILED.value, const.ERR_CARDS_BACKGROUND_NOT_FOUND)
     log.info("Cards metadata calculated successfully.")
 
-    log.log("Generating cards...")
+    log.info("Generating cards...")
     user_folder = str(session[const.SessionFields.user_folder.value]) + const.SLASH + const.AvailableCacheElemType.cards.value
     user_processed_path = path.join(const.PROCESSED_DIR, user_folder)
     image_output_path = f"{user_processed_path}{const.SLASH}00.png"
@@ -302,7 +269,6 @@ def saveCardsContents(cards_contents: CardsContents) -> Response:
     filepath = path.join(user_processed_path, f"contents_{getNowStamp()}.txt")
     try:
         writeCardsContentsToFile(filepath, cards_contents)
-        # TODO VIDER LE CACHE
     except Exception as e:
         log.error(f"Error while saving cards contents: {e}")
         return createApiResponse(const.HttpStatus.INTERNAL_SERVER_ERROR.value, const.ERR_CARDS_CONTENTS_SAVE_FAILED)

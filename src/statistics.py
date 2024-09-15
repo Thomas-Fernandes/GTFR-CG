@@ -70,7 +70,7 @@ def getJsonStatsFromFile(path: str = const.STATS_FILE_PATH) -> JsonDict:
         if not path.endswith(".json"):
             raise ValueError("The stats file must be a JSON file.")
         with open(path, "r") as file:
-            log.debug(f"  Stats file ({path}) found.")
+            log.debug(f"Loaded stats from file {path}.")
             return loads(file.read()) # <- read stats from stats file
     except FileNotFoundError:
         log.warn(f"No stats file ({path}). Initializing new stats file...")

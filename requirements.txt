@@ -13,5 +13,14 @@ python-dotenv==1.0.1 # for environment variables
 
 # Software
 pillow==10.4.0 # Image processing
+colorthief==0.2.1 # deducing dominant colors from images
+
+#########
+#########
+#########
+#########
+#########
+
+# Unused...
 numpy==2.1.1 # Machine Learning: deducing dominant colors from images
 scikit-learn==1.5.2 # ^ same

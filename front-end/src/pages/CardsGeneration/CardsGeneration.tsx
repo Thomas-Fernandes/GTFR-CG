@@ -137,6 +137,12 @@ const CardsGeneration = (): JSX.Element => {
       </div>
     </form>
 
+    { !generationInProgress &&
+      <img src={PROCESSED_CARDS_PATH + "/" + "00.png"} alt="" id="card"
+        style={{"width": "50%", "height": "auto", "margin": "auto", "marginTop": "1rem"}}
+      />
+    }
+
     { cardPaths.length > 0 &&
       <>
         <hr className="mv-2" />

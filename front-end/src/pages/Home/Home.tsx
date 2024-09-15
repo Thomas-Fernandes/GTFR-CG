@@ -91,12 +91,19 @@ const Home = (): JSX.Element => {
       <h1>Home</h1>
 
       <div className="home navbar">
-        <button type="button" onClick={() => navigate(PATHS.artworkGeneration)}>
-          <span className="right">{TITLE.ARTWORK_GENERATION}</span>
-        </button>
-        <button type="button" onClick={() => navigate(PATHS.lyrics)}>
-          <span className="right">{TITLE.LYRICS}</span>
-        </button>
+        <div className="navbar-row">
+          <button type="button" onClick={() => navigate(PATHS.artworkGeneration)}>
+            <span className="right">{TITLE.ARTWORK_GENERATION}</span>
+          </button>
+          <button type="button" onClick={() => navigate(PATHS.lyrics)}>
+            <span className="right">{TITLE.LYRICS}</span>
+          </button>
+        </div>
+        <div className="navbar-row">
+          <button type="button" onClick={() => navigate(PATHS.cardsGeneration)}>
+            <span className="right">{TITLE.CARDS_GENERATION}</span>
+          </button>
+        </div>
       </div>
 
       <div className="stats-board">

@@ -78,11 +78,17 @@ const ProcessedImages = (): JSX.Element => {
     <span className="top-bot-spacer" />
 
     <div className="navbar">
+      <button type="button" onClick={() => navigate(PATHS.home)}>
+        <span className="left">{TITLE.HOME}</span>
+      </button>
       <button type="button" onClick={() => navigate(PATHS.artworkGeneration)}>
         <span className="left">{TITLE.ARTWORK_GENERATION}</span>
       </button>
       <button type="button" onClick={() => navigate(PATHS.lyrics)}>
         <span className="right">{TITLE.LYRICS}</span>
+      </button>
+      <button type="button" onClick={() => navigate(PATHS.cardsGeneration)}>
+        <span className="right">{TITLE.CARDS_GENERATION}</span>
       </button>
     </div>
 
