@@ -8,7 +8,7 @@ import { ApiResponse, CardsGenerationRequest, CardsGenerationResponse, ImageDown
 import useTitle from "../../common/UseTitle";
 import { doesFileExist } from "../../common/utils/FileUtils";
 import { OUTRO_FILENAME, PROCESSED_CARDS_PATH } from "../../constants/CardsGeneration";
-import { API, BACKEND_URL, PATHS, SPINNER_ID, TITLE, TOAST, TOAST_TYPE } from "../../constants/Common";
+import { API, BACKEND_URL, HTTP_STATUS, PATHS, SPINNER_ID, TITLE, TOAST, TOAST_TYPE } from "../../constants/Common";
 
 import "./CardsGeneration.css";
 
@@ -92,7 +92,10 @@ const CardsGeneration = (): JSX.Element => {
 
       setCardPaths(response.data.cards);
     }).catch((error: ApiResponse) => {
-      sendToast(error.message, TOAST_TYPE.ERROR);
+      if (error.status === HTTP_STATUS.PRECONDITION_FAILED)
+        sendToast(TOAST.NO_CARDS_CONTENTS, TOAST_TYPE.ERROR);
+      else
+        sendToast(error.message, TOAST_TYPE.ERROR);
       hideSpinner(SPINNER_ID.CARDS_GENERATE);
       setGenerationInProgress(false);
     });

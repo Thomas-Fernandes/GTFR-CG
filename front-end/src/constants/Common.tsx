@@ -14,7 +14,8 @@ export const TOAST: Record<string, string> = {
   // Redirect
     NO_PROCESSED_IMAGE: "No processed image found.",
     NO_GENIUS_TOKEN: "Genius API token not found.",
-    NO_CARDS_CONTENTS: "No cards contents found.",
+    NO_CARDS_CONTENTS: "No cards contents found.\n"
+      + "Please generate contents via the Lyrics page first.",
 
   // Home
     WELCOME: "Welcome to GTFR-CG!\n"
@@ -144,6 +145,7 @@ export const HTTP_STATUS = {
   METHOD_NOT_ALLOWED: 405,
   REQUEST_TIMEOUT: 408,
   CONFLICT: 409,
+  PRECONDITION_FAILED: 412,
 
   INTERNAL_SERVER_ERROR: 500,
   NOT_IMPLEMENTED: 501,

@@ -12,6 +12,8 @@ class HttpStatus(Enum):
     """
     OK = 200
     BAD_REQUEST = 400
+    PRECONDITION_FAILED = 412
+    UNSUPPORTED_MEDIA_TYPE = 415
     INTERNAL_SERVER_ERROR = 500
 
 class TimeInSeconds(Enum):
@@ -98,6 +100,7 @@ class AvailableStats(Enum):
     dateLastOperation = "dateLastOperation"
     artworkGenerations = "artworkGenerations"
     lyricsFetches = "lyricsFetches"
+    cardsGenerations = "cardsGenerations"
 EMPTY_STATS: JsonDict = {
     AvailableStats.dateFirstOperation.value: "N/A",
     AvailableStats.dateLastOperation.value: "N/A",
@@ -118,14 +121,16 @@ PROCESSED_OUTRO_FILENAME = "outro.png"
 FRONT_PROCESSED = f".{SLASH}front-end{SLASH}public{SLASH}"
 FRONT_PROCESSED_IMAGES_DIR = f"{FRONT_PROCESSED}processed-{AvailableCacheElemType.images.value}{SLASH}"
 FRONT_PROCESSED_CARDS_DIR = f"{FRONT_PROCESSED}processed-{AvailableCacheElemType.cards.value}{SLASH}"
-THUMBNAIL_DIR = f"assets{SLASH}thumbnails{SLASH}"
+THUMBNAILS_DIR = f"assets{SLASH}thumbnails{SLASH}"
 LOGO_POSITIONS = [
     "top-left",    "top-center",    "top-right",
     "center-left", "center-center", "center-right",
     "bottom-left", "bottom-center", "bottom-right"
 ]
-CARDS_DIR = f"assets{SLASH}cards{SLASH}"
 FONTS_DIR = f"assets{SLASH}fonts{SLASH}"
+CARDS_DIR = f"assets{SLASH}cards{SLASH}"
+CARDS_BOTTOM_B = f"{CARDS_DIR}bottom_black.png"
+CARDS_BOTTOM_W = f"{CARDS_DIR}bottom_white.png"
 
 # Error messages
 ERR_USER_FOLDER_NOT_FOUND = "User folder not found."
@@ -141,6 +146,7 @@ ERR_CARDS_CONTENTS_INVALID = "Invalid cards contents provided."
 ERR_CARDS_CONTENTS_SAVE_FAILED = "Failed to save cards contents."
 ERR_CARDS_CONTENTS_READ_FAILED = "Failed to read cards contents."
 ERR_CARDS_GEN_PARAMS_NOT_FOUND = "Required parameters not found for cards generation."
+ERR_CARDS_BACKGROUND_NOT_FOUND = "No background image provided for cards generation."
 
 # Genius
 load_dotenv()

@@ -1,3 +1,5 @@
+from PIL import Image
+
 from dataclasses import dataclass
 from typing import Literal, Optional, TypeAlias
 
@@ -55,9 +57,42 @@ class Routes:
 
 ############ SOFTWARE ############
 
-CardsMetadata: TypeAlias = dict[str, str | bool]
 SongMetadata: TypeAlias = dict[str, str]
-Pixel: TypeAlias = tuple[int, int, int]
+RGBAColor: TypeAlias = tuple[int, int, int, int]
+RGBColor: TypeAlias = tuple[int, int, int]
+
+@dataclass
+class CardMetadata:
+    """ Dataclass to store the card's metadata.
+
+    Attributes:
+        song_author: [string] The author of the song.
+        song_title: [string] The title of the song.
+        include_bg_img: [bool] Whether to include the background image.
+        bg: [Image.Image] The background image of the card.
+        avg_color: [RGBColor] The average color of the background image.
+        text_color: [RGBColor] The text color of the card.
+        text_bg_color: [RGBColor] The background color for the text of the card.
+    """
+    song_author: str
+    song_title: str
+    include_bg_img: bool
+    bg: Image.Image
+    avg_color: RGBAColor
+    text_color: RGBColor
+    text_bg_color: RGBColor
+
+    def __repr__(self) -> str:
+        """ Returns the CardMetadata dataclass as a string
+        :return: [string] The dataclass' content, as a string.
+        """
+        content: str = ""
+        for (key, value) in self.__dict__.items():
+            if value is not None:
+                content += f"{key}={value}, "
+        return f"CardMetadata({content[:-2]})"
+# CardMetadata: TypeAlias = dict[str, str | bool | RGBAColor]
+
 CardsContents: TypeAlias = list[list[str]]
 
 CachedElemType: TypeAlias = Literal[

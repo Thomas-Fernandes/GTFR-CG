@@ -1,7 +1,8 @@
 from flask import Config
 
-from time import time
 from datetime import datetime
+from os import path
+from time import time
 
 import src.constants as const
 from src.typing import CachedElemType, CardsContents
@@ -12,6 +13,13 @@ def getNormalizedFilename(name: str) -> str: # FIXME unused, initially used for 
     :return: [string] The formatted name of the song.
     """
     return "".join([c for c in name.replace(" ", "_") if c.isalnum() or c == "_"]) # replace spaces with underscores, remove any non-alphanum char
+
+def doesFileExist(filepath: str) -> bool:
+    """ Checks if the file exists.
+    :param filepath: [string] The path to the file.
+    :return: [bool] Whether the file exists.
+    """
+    return path.isfile(filepath)
 
 def getCardsContentsFromFile(filepath: str) -> CardsContents:
     """ Returns the contents of the cards from a file.

@@ -3,7 +3,6 @@ from flask_cors import cross_origin
 from PIL import Image, ImageDraw, ImageFont
 
 from ast import literal_eval
-from json import dumps
 from os import path, makedirs
 from requests.exceptions import ReadTimeout as ReadTimeoutException
 from typing import Optional
@@ -12,8 +11,8 @@ from uuid import uuid4
 import src.constants as const
 from src.logger import log
 from src.routes.lyrics import genius
-from src.soft_utils import getCardsContentsFromFile, getNowStamp, writeCardsContentsToFile
-from src.typing import CardsContents, CardsMetadata, Pixel, SongMetadata
+from src.soft_utils import doesFileExist, getCardsContentsFromFile, getNowStamp, writeCardsContentsToFile
+from src.typing import CardsContents, CardMetadata, RGBAColor, RGBColor, SongMetadata
 from src.web_utils import createApiResponse
 
 from src.app import app
@@ -26,7 +25,7 @@ def generateOutroCard(output_path: str, contributor_logins: list[str]) -> None:
     :param output_path: [string] The path to save the card to.
     :param contributor_logins: [list[str]] The logins of the contributors.
     """
-    log.debug("  Generating outro card...")
+    log.info("  Generating outro card...")
     user_folder = path.abspath(str(session[const.SessionFields.user_folder.value]))
     user_folder = const.SLASH.join(user_folder.split(const.SLASH)[:-1])
     image_file = f"{user_folder}{const.SLASH}{const.CARDS_DIR}{const.PROCESSED_OUTRO_FILENAME}"
@@ -47,6 +46,7 @@ def generateOutroCard(output_path: str, contributor_logins: list[str]) -> None:
             contributors_str += contributor_logins[0]
         return contributors_str
     contributors_str = getContributorsString(contributor_logins)
+    log.debug(f"    Contributors: {contributors_str}")
 
     draw = ImageDraw.Draw(image)
     _, _, w, _ = draw.textbbox((0, 0), contributors_str, font=contributors_font) # deduce the width of the text to center it
@@ -54,27 +54,42 @@ def generateOutroCard(output_path: str, contributor_logins: list[str]) -> None:
 
     image.save(output_path)
     image.save(f"{const.FRONT_PROCESSED_CARDS_DIR}{const.PROCESSED_OUTRO_FILENAME}")
-    log.debug("  Outro card generated successfully.")
+    log.info("  Outro card generated successfully.")
 
-def generateCard(output_path: str, lyrics: list[str], song_data: SongMetadata, cards_metadata: CardsMetadata) -> None:
+def generateCard(output_path: str, lyrics: list[str], card_metadata: CardMetadata) -> None:
     """ Generates a card using the provided lyrics and metadata.
     :param output_path: [string] The path to save the card to.
     :param lyrics: [list[str]] The lyrics to display on the card.
-    :param song_data: [dict] The data of the song.
-    :param cards_metadata: [dict] The metadata of the cards.
+    :param cards_metadata: [dict] The metadata of the card.
     """
     card_name = output_path.split(const.SLASH)[-1]
-    log.debug(f"  Generating card {card_name}...")
-    # TODO
-    log.debug(f"  Card {card_name} generated successfully.")
+    log.info(f"  Generating card {card_name}...")
+    card: Image.Image = Image.new("RGBA", (1920, 1080), (255, 255, 255, 0))
 
-def getCardsMetadata(song_data: SongMetadata, include_bg_img: bool) -> CardsMetadata:
+    if (card_metadata.include_bg_img == True):
+        card.paste(card_metadata.bg, (0, -100))
+
+    bottom_color_bar = Image.new("RGBA", (1920, 200), card_metadata.avg_color) # bottom: 880px -> 1080 - 880 = 200px
+    card.paste(bottom_color_bar, (0, 880))
+
+    bottom_bar = Image.open(f"{const.CARDS_BOTTOM_W if card_metadata.text_bg_color[0] == 0 else const.CARDS_BOTTOM_B}")
+    card.paste(bottom_bar, (0, 0), bottom_bar)
+
+    log.debug(f"    Card contents: {lyrics}")
+    card.save(output_path)
+    log.info(f"  Card {card_name} generated successfully.")
+
+def getCardsMetadata(song_data: SongMetadata, include_bg_img: bool) -> CardMetadata:
     """ Extracts the metadata needed for card generation from the song data.
     :param song_data: [dict] The data of the song.
     :param include_bg_img: [bool] True if the background image should be included, False otherwise.
     :return: [dict] The metadata of the cards.
     """
-    cards_metadata: CardsMetadata = {}
+    bg_path = f"{const.PROCESSED_DIR}{session[const.SessionFields.user_folder.value]}{const.SLASH}" + \
+        f"{const.AvailableCacheElemType.images.value}{const.SLASH}{const.PROCESSED_ARTWORK_FILENAME}"
+    if (not doesFileExist(bg_path)):
+        raise FileNotFoundError("Background image missing.")
+    bg = Image.open(bg_path)
 
     def getAverageColor(image_path: str) -> str:
         """ Gets the average color of an image.
@@ -88,7 +103,7 @@ def getCardsMetadata(song_data: SongMetadata, include_bg_img: bool) -> CardsMeta
             log.error(f"Error while opening image: {e}")
             return "000000"
 
-        pixels: list[Pixel] = list(img.getdata())
+        pixels: list[RGBColor] = list(img.getdata())
 
         total_r, total_g, total_b = 0, 0, 0
         for r, g, b in pixels:
@@ -103,24 +118,35 @@ def getCardsMetadata(song_data: SongMetadata, include_bg_img: bool) -> CardsMeta
 
         avg_hex = f"{avg_r:02x}{avg_g:02x}{avg_b:02x}"
         return avg_hex
-    cards_metadata["avg_color"] = getAverageColor(const.PROCESSED_DIR + session[const.SessionFields.user_folder.value] \
-        + const.SLASH + const.AvailableCacheElemType.images.value + const.SLASH + const.PROCESSED_ARTWORK_FILENAME)
-
-    def shouldUseBlackText(hex_color: str) -> bool:
-        """ Checks if the text should be black or white, depending on the background color.
-        :param hex_color: [string] The hex color of the background.
-        :return: [bool] True if the text should be black, False otherwise.
+    def convertHexToRgba(hex_color: str) -> RGBAColor:
+        """ Converts a hex color to an RGBA tuple.
+        :param hex_color: [string] The hex color to convert.
+        :return: [tuple[int, int, int, int]] The RGBA tuple.
         """
         r, g, b = int(hex_color[0:2], 16), int(hex_color[2:4], 16), int(hex_color[4:6], 16)
+        return r, g, b, 255
+    avg_color = convertHexToRgba(getAverageColor(bg_path))
+
+    def shouldUseBlackText(bg_color: RGBAColor) -> bool:
+        """ Checks if the text should be black or white, depending on the background color.
+        :param bg_color: [RGBAColor] The background color.
+        :return: [bool] True if the text should be black, False otherwise.
+        """
+        r, g, b = bg_color[:3]
         # Calculate luminance (perceived brightness): 0.299 * R + 0.587 * G + 0.114 * B
-        luminance = 0.299 * r + 0.587 * g + 0.114 * b
-        return luminance > 128
-    cards_metadata["text_color"] = "ffffff" if shouldUseBlackText(cards_metadata["avg_color"]) else "000000"
-    cards_metadata["text_bg_color"] = "000000" if cards_metadata["text_color"].startswith("0") else "ffffff"
-    cards_metadata["include_bg_img"] = eval(include_bg_img.capitalize())
-    cards_metadata["song_author"] = song_data.get("artist", "???")
-    cards_metadata["song_title"] = song_data.get("title", "???")
-    log.debug(f"  Cards metadata: {dumps(cards_metadata)}")
+        luminance = 0.3 * r + 0.6 * g + 0.1 * b
+        return luminance > 150
+    text_color = (255,255,255) if shouldUseBlackText(avg_color) else (0,0,0)
+    text_bg_color = (0,0,0) if text_color[0] == 0 else (255,255,255)
+    song_author = song_data.get("artist", "???")
+    song_title = song_data.get("title", "???")
+
+    cards_metadata = CardMetadata(
+        song_author=song_author, song_title=song_title,
+        include_bg_img=eval(include_bg_img.capitalize()), bg=bg, avg_color=avg_color,
+        text_color=text_color, text_bg_color=text_bg_color,
+    )
+    log.debug(f"  Cards metadata: {cards_metadata}")
     return cards_metadata
 
 def generateCards(cards_contents: CardsContents, song_data: SongMetadata, gen_outro: bool, include_bg_img: bool) -> Response:
@@ -136,18 +162,23 @@ def generateCards(cards_contents: CardsContents, song_data: SongMetadata, gen_ou
         return createApiResponse(const.HttpStatus.INTERNAL_SERVER_ERROR.value, const.ERR_USER_FOLDER_NOT_FOUND)
 
     log.info("Deducing cards metadata...")
-    cards_metadata = getCardsMetadata(song_data, include_bg_img)
+    try:
+        card_metadata = getCardsMetadata(song_data, include_bg_img)
+    except FileNotFoundError as e:
+        log.error(f"Error while deducing cards metadata: {e}")
+        return createApiResponse(const.HttpStatus.PRECONDITION_FAILED.value, const.ERR_CARDS_BACKGROUND_NOT_FOUND)
     log.info("Cards metadata calculated successfully.")
 
-    log.info("Generating cards...")
+    log.log("Generating cards...")
     user_folder = str(session[const.SessionFields.user_folder.value]) + const.SLASH + const.AvailableCacheElemType.cards.value
     user_processed_path = path.join(const.PROCESSED_DIR, user_folder)
     image_output_path = f"{user_processed_path}{const.SLASH}00.png"
-    generateCard(image_output_path, [], song_data, cards_metadata)
+    generateCard(image_output_path, [], card_metadata)
+    cards_contents = cards_contents[1:] # remove the metadata from the cards contents
     for idx, card in enumerate(cards_contents, start=1):
         padding = '0' if idx < 10 else ''
         image_output_path = f"{user_processed_path}{const.SLASH}{padding}{idx}.png"
-        generateCard(image_output_path, card, song_data, cards_metadata)
+        generateCard(image_output_path, card, card_metadata)
     if gen_outro:
         image_output_path = f"{user_processed_path}{const.SLASH}{const.PROCESSED_OUTRO_FILENAME}"
         generateOutroCard(image_output_path, song_data.get("contributors", []))
@@ -161,7 +192,6 @@ def getSongMetadata(cards_contents: CardsContents) -> dict[str, str]:
     :return: [dict] The metadata of the song.
     """
     metadata = cards_contents[0][0].replace(const.METADATA_IDENTIFIER, "").split(const.METADATA_SEP)
-    cards_contents = cards_contents[1:] # remove the metadata from the cards contents
     song_data = {}
     for datum in metadata:
         key, value = datum.split(": ")
