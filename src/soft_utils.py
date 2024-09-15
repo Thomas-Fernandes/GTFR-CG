@@ -6,13 +6,28 @@ from datetime import datetime
 import src.constants as const
 from src.typing import CachedElemType, CardsContents
 
+def getNormalizedFilename(name: str) -> str: # FIXME unused, initially used for the filename of the generated cards
+    """ Formats the name of the song for the filename.
+    :param name: [string] The name of the song.
+    :return: [string] The formatted name of the song.
+    """
+    return "".join([c for c in name.replace(" ", "_") if c.isalnum() or c == "_"]) # replace spaces with underscores, remove any non-alphanum char
+
 def getCardsContentsFromFile(filepath: str) -> CardsContents:
+    """ Returns the contents of the cards from a file.
+    :param filepath: [string] The path to the file.
+    :return: [list] The contents of the cards.
+    """
     with open(filepath, "r") as file:
         all_cards = [card.split("\n\n") for card in file.read().split("\n\n\n")]
     cards = [[elem for elem in card if elem != ""] for card in all_cards][0] # remove empty elements & flatten the list
     return [card.split("\n") for card in cards]
 
 def writeCardsContentsToFile(filepath: str, cards_contents: list[list[str]]) -> None:
+    """ Writes the cards contents to a file.
+    :param filepath: [string] The path to the file.
+    :param cards_contents: [list] The contents of the cards.
+    """
     with open(filepath, "w") as file:
         for card in cards_contents:
             file.write("\n\n".join(card) + "\n\n")

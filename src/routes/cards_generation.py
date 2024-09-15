@@ -1,6 +1,6 @@
 from flask import Blueprint, Response, request
 from flask_cors import cross_origin
-from PIL import Image
+from PIL import Image, ImageDraw, ImageFont
 
 from ast import literal_eval
 from json import dumps
@@ -21,11 +21,37 @@ bp_cards_generation = Blueprint(const.ROUTES.cards_gen.bp_name, __name__.split('
 session = app.config
 api_prefix = const.API_ROUTE + const.ROUTES.cards_gen.path
 
-def generateOutroCard(contributors: list[str]) -> None:
-    pass
+def generateOutroCard(output_path: str, contributor_logins: list[str]) -> None:
+    log.debug("  Generating outro card...")
+    user_folder = path.abspath(str(session[const.SessionFields.user_folder.value]))
+    user_folder = const.SLASH.join(user_folder.split(const.SLASH)[:-1])
+    image_file = f"{user_folder}{const.SLASH}{const.CARDS_DIR}{'outro.png'}"
+    image: Image.Image = Image.open(image_file)
 
-def generateCard(card: list[str], song_data: SongMetadata, cards_metadata: CardsMetadata) -> None:
-    pass
+    font_file = f"{user_folder}{const.SLASH}{const.FONTS_DIR}{'programme.ttf'}"
+    contributors_font = ImageFont.truetype(font_file, 36)
+    contributor_logins = [f"@{c}" for c in contributor_logins] # add '@' in front of each contributor login
+    contributors_str = "Traduit par : "
+    if len(contributor_logins) != 1:
+        contributors_str += ", ".join(contributor_logins[:-1]) + (" & " + contributor_logins[-1] if len(contributor_logins) > 2 else " & " + contributor_logins[0])
+    else:
+        contributors_str += contributor_logins[0]
+
+    draw = ImageDraw.Draw(image)
+    _, _, w, _ = draw.textbbox((0, 0), contributors_str, font=contributors_font) # deduce the width of the text to center it
+    draw.text(((1920-w) / 2, 960), contributors_str, font=contributors_font, fill=const.OUTRO_TEXT_COLOR)
+
+    image.save(output_path)
+    front_processed_dir = f"{const.FRONT_PROCESSED}processed-{const.AvailableCacheElemType.cards.value}{const.SLASH}"
+    makedirs(front_processed_dir, exist_ok=True)
+    image.save(f"{front_processed_dir}outro.png")
+    log.debug("  Outro card generated successfully.")
+
+def generateCard(output_path: str, lyrics: list[str], song_data: SongMetadata, cards_metadata: CardsMetadata) -> None:
+    card_name = output_path.split(const.SLASH)[-1]
+    log.debug(f"  Generating card {card_name}...")
+    # TODO
+    log.debug(f"  Card {card_name} generated successfully.")
 
 def getCardsMetadata(song_data: SongMetadata, include_bg_img: bool) -> CardsMetadata:
     cards_metadata: CardsMetadata = {}
@@ -74,7 +100,7 @@ def getCardsMetadata(song_data: SongMetadata, include_bg_img: bool) -> CardsMeta
     cards_metadata["include_bg_img"] = eval(include_bg_img.capitalize())
     cards_metadata["song_author"] = song_data.get("artist", "???")
     cards_metadata["song_title"] = song_data.get("title", "???")
-    log.debug("  Cards metadata:", dumps(cards_metadata))
+    log.debug(f"  Cards metadata: {dumps(cards_metadata)}")
     return cards_metadata
 
 def generateCards(cards_contents: CardsContents, song_data: SongMetadata, gen_outro: bool, include_bg_img: bool) -> Response:
@@ -94,19 +120,19 @@ def generateCards(cards_contents: CardsContents, song_data: SongMetadata, gen_ou
     log.info("Cards metadata calculated successfully.")
 
     log.info("Generating cards...")
-    log.debug("  Generating card #00...")
-    generateCard([], song_data, cards_metadata)
-    log.debug("  Card #00 generated successfully.")
+    user_folder = str(session[const.SessionFields.user_folder.value]) + const.SLASH + const.AvailableCacheElemType.cards.value
+    user_processed_path = path.join(const.PROCESSED_DIR, user_folder)
+    image_output_path = f"{user_processed_path}{const.SLASH}00.png"
+    generateCard(image_output_path, [], song_data, cards_metadata)
     for idx, card in enumerate(cards_contents, start=1):
-        log.debug(f"  Generating card #{'0' if idx < 10 else ''}{idx}...")
-        generateCard(card, song_data, cards_metadata)
-        log.debug(f"  Card #{'0' if idx < 10 else ''}{idx} generated successfully.")
+        padding = '0' if idx < 10 else ''
+        image_output_path = f"{user_processed_path}{const.SLASH}{padding}{idx}.png"
+        generateCard(image_output_path, card, song_data, cards_metadata)
     if gen_outro:
-        log.debug("  Generating outro...")
-        generateOutroCard(song_data.get("contributors", []))
-        log.debug("  Outro generated successfully.")
-
+        image_output_path = f"{user_processed_path}{const.SLASH}outro.png"
+        generateOutroCard(image_output_path, song_data.get("contributors", []))
     log.log("Cards generated successfully.")
+
     return createApiResponse(const.HttpStatus.OK.value, "Cards generated successfully.")
 
 def getSongMetadata(cards_contents: CardsContents) -> dict[str, str]:

@@ -2,7 +2,7 @@ from flask import Blueprint, Response
 from flask_cors import cross_origin
 from PIL import Image, ImageFilter, ImageDraw
 
-from os import path
+from os import makedirs, path
 
 import src.constants as const
 from src.logger import log
@@ -79,6 +79,8 @@ def generateThumbnails(bg_path: str, output_folder: str) -> None:
     """
     log.info(f"Generating thumbnails... (session {bg_path.split(const.SLASH)[-3].split('-')[0]}-...)")
 
+    front_processed_dir = f"{const.FRONT_PROCESSED}processed-{const.AvailableCacheElemType.images.value}{const.SLASH}"
+    makedirs(front_processed_dir, exist_ok=True)
     for position in const.LOGO_POSITIONS:
         log.debug(f"Generating {position} thumbnail...")
         logo_path = f"{position}.png"
@@ -98,7 +100,7 @@ def generateThumbnails(bg_path: str, output_folder: str) -> None:
         final_image = new_background.convert("RGB")
         output_path = path.join(output_folder, f"thumbnail_{position}.png")
         final_image.save(output_path)
-        final_image.save(f"./front-end/public/processed-images/thumbnail_{position}.png")
+        final_image.save(f"{front_processed_dir}thumbnail_{position}.png")
         log.debug(f"Thumbnail saved: {output_path}")
 
 @bp_processed_images.route(api_prefix + "/process-images", methods=["POST"])
