@@ -1,12 +1,17 @@
+# Server
 Flask==3.0.3
 Flask-Session==0.8.0
 flask_cors==5.0.0
+waitress==3.0.0 # 'serve' command
 
-requests==2.32.3
-waitress==3.0.0
+# API
+requests==2.32.3 # for inner API calls
+lyricsgenius==3.0.1 # for Genius API calls
 
-python-dotenv==1.0.1
+# Local
+python-dotenv==1.0.1 # for environment variables
 
-pillow==10.4.0
-
-lyricsgenius==3.0.1
+# Software
+pillow==10.4.0 # Image processing
+numpy==2.1.1 # Machine Learning: deducing dominant colors from images
+scikit-learn==1.5.2 # ^ same

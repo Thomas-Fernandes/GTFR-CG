@@ -1,8 +1,11 @@
 from flask import Blueprint, Response, request
 from flask_cors import cross_origin
+from numpy import array as NpArray
 from PIL import Image, ImageDraw, ImageFont
 
 from ast import literal_eval
+from contextlib import redirect_stdout, redirect_stderr
+from io import StringIO
 from os import path, makedirs
 from requests.exceptions import ReadTimeout as ReadTimeoutException
 from typing import Optional
@@ -20,7 +23,7 @@ bp_cards_generation = Blueprint(const.ROUTES.cards_gen.bp_name, __name__.split('
 session = app.config
 api_prefix = const.API_ROUTE + const.ROUTES.cards_gen.path
 
-def generateOutroCard(output_path: str, contributor_logins: list[str]) -> None:
+def generateOutroCard(output_path: str, contributor_logins: list[str], outro_font: ImageFont.FreeTypeFont) -> None:
     """ Generates the outro card mentioning the transcription contributors.
     :param output_path: [string] The path to save the card to.
     :param contributor_logins: [list[str]] The logins of the contributors.
@@ -31,8 +34,6 @@ def generateOutroCard(output_path: str, contributor_logins: list[str]) -> None:
     image_file = f"{user_folder}{const.SLASH}{const.CARDS_DIR}{const.PROCESSED_OUTRO_FILENAME}"
     image: Image.Image = Image.open(image_file)
 
-    font_file = f"{user_folder}{const.SLASH}{const.FONTS_DIR}{const.FONT_PROGRAMME}"
-    contributors_font = ImageFont.truetype(font_file, const.OUTRO_FONT_SIZE)
     def getContributorsString(contributor_logins: list[str]) -> str:
         """ Gets the string of contributors from their logins.
         :param contributor_logins: [list[str]] The logins of the contributors.
@@ -46,11 +47,11 @@ def generateOutroCard(output_path: str, contributor_logins: list[str]) -> None:
             contributors_str += contributor_logins[0]
         return contributors_str
     contributors_str = getContributorsString(contributor_logins)
-    log.debug(f"    Contributors: {contributors_str}")
+    log.debug(f"    Contributors: {contributor_logins}")
 
     draw = ImageDraw.Draw(image)
-    _, _, w, _ = draw.textbbox((0, 0), contributors_str, font=contributors_font) # deduce the width of the text to center it
-    draw.text(((1920-w) / 2, 960), contributors_str, font=contributors_font, fill=const.OUTRO_TEXT_COLOR)
+    _, _, w, _ = draw.textbbox((0, 0), contributors_str, font=outro_font) # deduce the width of the text to center it
+    draw.text(((1920-w) / 2, 960), contributors_str, font=outro_font, fill=const.OUTRO_TEXT_COLOR)
 
     image.save(output_path)
     image.save(f"{const.FRONT_PROCESSED_CARDS_DIR}{const.PROCESSED_OUTRO_FILENAME}")
@@ -69,16 +70,22 @@ def generateCard(output_path: str, lyrics: list[str], card_metadata: CardMetadat
     if (card_metadata.include_bg_img == True):
         card.paste(card_metadata.bg, (0, -100))
 
-    bottom_color_bar = Image.new("RGBA", (1920, 200), card_metadata.avg_color) # bottom: 880px -> 1080 - 880 = 200px
+    bottom_color_bar = Image.new("RGBA", (1920, 200), card_metadata.dominant_color) # bottom: 880px -> 1080 - 880 = 200px
     card.paste(bottom_color_bar, (0, 880))
 
-    bottom_bar = Image.open(f"{const.CARDS_BOTTOM_W if card_metadata.text_bg_color[0] == 0 else const.CARDS_BOTTOM_B}")
-    card.paste(bottom_bar, (0, 0), bottom_bar)
+    bottom_bar = Image.open(f"{const.CARDS_BOTTOM_B if card_metadata.text_bg_color[0] == 0 else const.CARDS_BOTTOM_W}")
+    card.paste(bottom_bar, mask=bottom_bar)
+
+    bottom_text = f"{card_metadata.song_author}, “{card_metadata.song_title}”"
+    draw = ImageDraw.Draw(card)
+    draw.text((90, 960), bottom_text, font=card_metadata.text_fonts[1], fill=card_metadata.text_color)
 
     log.debug(f"    Card contents: {lyrics}")
     card.save(output_path)
     log.info(f"  Card {card_name} generated successfully.")
 
+with redirect_stdout(StringIO()), redirect_stderr(StringIO()): # make it silent, removing the longdouble warning
+    from sklearn.cluster import KMeans
 def getCardsMetadata(song_data: SongMetadata, include_bg_img: bool) -> CardMetadata:
     """ Extracts the metadata needed for card generation from the song data.
     :param song_data: [dict] The data of the song.
@@ -91,10 +98,20 @@ def getCardsMetadata(song_data: SongMetadata, include_bg_img: bool) -> CardMetad
         raise FileNotFoundError("Background image missing.")
     bg = Image.open(bg_path)
 
-    def getAverageColor(image_path: str) -> str:
-        """ Gets the average color of an image.
+    song_author = song_data.get("artist", "???").upper()
+    song_title = song_data.get("title", "???").upper()
+
+    def convertHexToRgba(hex_color: str) -> RGBAColor:
+        """ Converts a hex color to an RGBA tuple.
+        :param hex_color: [string] The hex color to convert.
+        :return: [tuple[int, int, int, int]] The RGBA tuple.
+        """
+        r, g, b = int(hex_color[0:2], 16), int(hex_color[2:4], 16), int(hex_color[4:6], 16)
+        return r, g, b, 255
+    def getDominantColor(image_path: str, n_clusters: int = 4, random_state: int = 777) -> str: # TRUST THE 777
+        """ Gets the dominant color of an image, using the K-means algorithm
         :param image_path: [string] The path to the image.
-        :return: [string] The hex color of the average color.
+        :return: [str] The dominant color.
         """
         try:
             with Image.open(image_path) as img:
@@ -104,28 +121,20 @@ def getCardsMetadata(song_data: SongMetadata, include_bg_img: bool) -> CardMetad
             return "000000"
 
         pixels: list[RGBColor] = list(img.getdata())
+        if n_clusters < 1:  n_clusters = 1  # at least one cluster
+        if n_clusters > 16: n_clusters = 16 # limit the number of clusters to 16
 
-        total_r, total_g, total_b = 0, 0, 0
-        for r, g, b in pixels:
-            total_r += r
-            total_g += g
-            total_b += b
+        log.info("  Deducing dominant color from background image via k-means...")
+        kMeans = KMeans(n_clusters=n_clusters, random_state=random_state)
+        kMeans.fit(NpArray(pixels))
+        dominant_colors = kMeans.cluster_centers_.astype(int)
+        dominant_colors = [f"{r:02x}{g:02x}{b:02x}" for r, g, b in dominant_colors]
 
-        num_pixels = len(pixels)
-        avg_r = total_r // num_pixels
-        avg_g = total_g // num_pixels
-        avg_b = total_b // num_pixels
-
-        avg_hex = f"{avg_r:02x}{avg_g:02x}{avg_b:02x}"
-        return avg_hex
-    def convertHexToRgba(hex_color: str) -> RGBAColor:
-        """ Converts a hex color to an RGBA tuple.
-        :param hex_color: [string] The hex color to convert.
-        :return: [tuple[int, int, int, int]] The RGBA tuple.
-        """
-        r, g, b = int(hex_color[0:2], 16), int(hex_color[2:4], 16), int(hex_color[4:6], 16)
-        return r, g, b, 255
-    avg_color = convertHexToRgba(getAverageColor(bg_path))
+        log.debug(f"    {min(3, len(dominant_colors))} dominant colors: {dominant_colors[:3]}")
+        log.debug(f"    Deduced dominant color: {dominant_colors[0]}")
+        log.info("  Dominant color deduced successfully.")
+        return dominant_colors[0]
+    dominant_color = convertHexToRgba(getDominantColor(bg_path))
 
     def shouldUseBlackText(bg_color: RGBAColor) -> bool:
         """ Checks if the text should be black or white, depending on the background color.
@@ -135,16 +144,22 @@ def getCardsMetadata(song_data: SongMetadata, include_bg_img: bool) -> CardMetad
         r, g, b = bg_color[:3]
         # Calculate luminance (perceived brightness): 0.299 * R + 0.587 * G + 0.114 * B
         luminance = 0.3 * r + 0.6 * g + 0.1 * b
-        return luminance > 150
-    text_color = (255,255,255) if shouldUseBlackText(avg_color) else (0,0,0)
-    text_bg_color = (0,0,0) if text_color[0] == 0 else (255,255,255)
-    song_author = song_data.get("artist", "???")
-    song_title = song_data.get("title", "???")
+        return luminance < 150
+    text_color = (255,255,255) if shouldUseBlackText(dominant_color) else (0,0,0)
+    text_bg_color = (255,255,255) if text_color[0] == 0 else (0,0,0)
+
+    user_folder = path.abspath(str(session[const.SessionFields.user_folder.value]))
+    user_folder = const.SLASH.join(user_folder.split(const.SLASH)[:-1])
+    font_file = f"{user_folder}{const.SLASH}{const.FONTS_DIR}{const.FONT_PROGRAMME}"
+    lyrics_font = ImageFont.truetype(font_file, const.CARDS_FONT_BIG_SIZE)
+    metadata_font = ImageFont.truetype(font_file, const.CARDS_FONT_MEDIUM_SIZE)
+    outro_font = ImageFont.truetype(font_file, const.CARDS_FONT_SMALL_SIZE)
 
     cards_metadata = CardMetadata(
         song_author=song_author, song_title=song_title,
-        include_bg_img=eval(include_bg_img.capitalize()), bg=bg, avg_color=avg_color,
+        include_bg_img=eval(include_bg_img.capitalize()), bg=bg, dominant_color=dominant_color,
         text_color=text_color, text_bg_color=text_bg_color,
+        text_fonts=[lyrics_font, metadata_font, outro_font]
     )
     log.debug(f"  Cards metadata: {cards_metadata}")
     return cards_metadata
@@ -181,7 +196,7 @@ def generateCards(cards_contents: CardsContents, song_data: SongMetadata, gen_ou
         generateCard(image_output_path, card, card_metadata)
     if gen_outro:
         image_output_path = f"{user_processed_path}{const.SLASH}{const.PROCESSED_OUTRO_FILENAME}"
-        generateOutroCard(image_output_path, song_data.get("contributors", []))
+        generateOutroCard(image_output_path, song_data.get("contributors", []), card_metadata.text_fonts[2])
     log.log("Cards generated successfully.")
 
     return createApiResponse(const.HttpStatus.OK.value, "Cards generated successfully.")

@@ -1,11 +1,39 @@
 from flask import Config
+from PIL import Image
 
 from datetime import datetime
 from os import path
 from time import time
 
 import src.constants as const
-from src.typing import CachedElemType, CardsContents
+from src.typing import CachedElemType, CardsContents, RGBColor
+
+def getAverageColor(image_path: str) -> str: # FIXME unused, initially used for the background color of the generated cards
+    """ Gets the average color of an image.
+    :param image_path: [string] The path to the image.
+    :return: [string] The hex color of the average color.
+    """
+    try:
+        with Image.open(image_path) as img:
+            img = img.convert("RGB")
+    except Exception as e:
+        # log.error(f"Error while opening image: {e}") # causes circular import on log
+        print(f"Error while opening image: {e}")
+        return "000000"
+
+    pixels: list[RGBColor] = list(img.getdata())
+    total_r, total_g, total_b = 0, 0, 0
+    for r, g, b in pixels:
+        total_r += r
+        total_g += g
+        total_b += b
+
+    num_pixels = len(pixels)
+    avg_r = total_r // num_pixels
+    avg_g = total_g // num_pixels
+    avg_b = total_b // num_pixels
+    avg_hex = f"{avg_r:02x}{avg_g:02x}{avg_b:02x}"
+    return avg_hex
 
 def getNormalizedFilename(name: str) -> str: # FIXME unused, initially used for the filename of the generated cards
     """ Formats the name of the song for the filename.

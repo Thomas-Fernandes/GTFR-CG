@@ -6,8 +6,7 @@ import { hideSpinner, showSpinner } from "../../common/Spinner";
 import { sendToast } from "../../common/Toast";
 import { ApiResponse, CardsGenerationRequest, CardsGenerationResponse, ImageDownloadRequest } from "../../common/Types";
 import useTitle from "../../common/UseTitle";
-import { doesFileExist } from "../../common/utils/FileUtils";
-import { OUTRO_FILENAME, PROCESSED_CARDS_PATH } from "../../constants/CardsGeneration";
+import { PROCESSED_CARDS_PATH } from "../../constants/CardsGeneration";
 import { API, BACKEND_URL, HTTP_STATUS, PATHS, SPINNER_ID, TITLE, TOAST, TOAST_TYPE } from "../../constants/Common";
 
 import "./CardsGeneration.css";
@@ -62,11 +61,6 @@ const CardsGeneration = (): JSX.Element => {
         </form>
       </div>
     );
-  };
-
-  const checkExistingCards = () => {
-    doesFileExist(PROCESSED_CARDS_PATH + "/" + OUTRO_FILENAME);
-    setCardPaths([]); // TODO get "./processed-cards/XX.png" etc. + "./processed-cards/outro.png"(?)
   };
 
   const handleGenerateCards = (e: FormEvent<HTMLFormElement>, body: CardsGenerationRequest) => {
