@@ -6,9 +6,8 @@
             margin-bottom: 1rem;
         }
 
-        input[type="submit"] {
+        .action-button {
             margin: auto;
-            width: 40%;
         }
     }
 

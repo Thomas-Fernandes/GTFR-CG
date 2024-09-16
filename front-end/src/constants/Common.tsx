@@ -40,6 +40,9 @@ export const TOAST: Record<string, string> = {
     FETCH_IN_PROGRESS: "Lyrics fetch already in progress.",
     LYRICS_NOT_FOUND: "Lyrics not found.",
     SAVING_IN_PROGRESS: "Lyrics saving already in progress.",
+
+  // Cards Generation
+    NO_CARDS: "No cards were generated.",
 };
 
 export const RESPONSE_STATUS: Record<string, ResponseStatus> = {

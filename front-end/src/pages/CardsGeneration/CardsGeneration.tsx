@@ -23,23 +23,24 @@ const CardsGeneration = (): JSX.Element => {
 
   const [cardPaths, setCardPaths] = useState([] as string[]);
 
-  const handleSubmitDownloadCard = (e: FormEvent<HTMLFormElement>, body: ImageDownloadRequest) => {
-    e.preventDefault();
+  const handleSubmitDownloadCard = (e: FormEvent<HTMLFormElement> | undefined, body: ImageDownloadRequest) => {
+    if (e)
+      e.preventDefault();
 
     if (!body.selectedImage) {
       sendToast(TOAST.NO_IMG_SELECTION, TOAST_TYPE.ERROR);
       return;
     }
 
-    const filepath = `${PROCESSED_CARDS_PATH}/${body.selectedImage}`;
-    const filename = filepath.split('/').pop();
+    const filename = body.selectedImage.split('/').pop();
 
     const link = document.createElement("a");
     link.download = filename ?? "card.png";
-    link.href = filepath;
+    link.href = body.selectedImage;
     document.body.appendChild(link);
 
     try {
+      console.log("Downloading", body.selectedImage);
       link.click();
     } catch (err) {
       sendToast((err as Error).message, TOAST_TYPE.ERROR);
@@ -47,9 +48,19 @@ const CardsGeneration = (): JSX.Element => {
       document.body.removeChild(link);
     }
   };
+  const handleDownloadAllCards = () => {
+    if (cardPaths.length === 0) {
+      sendToast(TOAST.NO_CARDS, TOAST_TYPE.WARN);
+      return;
+    }
+
+    for (const cardPath of cardPaths)
+      handleSubmitDownloadCard(undefined, {selectedImage: cardPath});
+  };
 
   const renderCard = (cardPath: string, nb: number): JSX.Element => {
-    const alt = "card" + "-" + nb.toString() + "_" + cardPath.split('/').pop();
+    const cardFileName = cardPath.split('/').pop() ?? "";
+    const alt = "card" + "-" + nb.toString() + "_" + cardFileName;
     return (
       <div className="card" key={alt}>
         <img src={cardPath} alt={alt} />
@@ -101,64 +112,64 @@ const CardsGeneration = (): JSX.Element => {
   };
 
   return (
-  <div id="cards-generation">
-    <div id="toast-container"></div>
-    <span className="top-bot-spacer" />
+    <div id="cards-generation">
+      <div id="toast-container"></div>
+      <span className="top-bot-spacer" />
 
-    <div className="navbar">
-      <button type="button" onClick={() => navigate(PATHS.home)}>
-        <span className="left">{TITLE.HOME}</span>
-      </button>
-      <button type="button" onClick={() => navigate(PATHS.artworkGeneration)}>
-        <span className="left">{TITLE.ARTWORK_GENERATION}</span>
-      </button>
-      <button type="button" onClick={() => navigate(PATHS.lyrics)}>
-        <span className="left">{TITLE.LYRICS}</span>
-      </button>
-    </div>
-
-    <h1>{TITLE.CARDS_GENERATION}</h1>
-
-    <form id="settings" onSubmit={(e) => handleGenerateCards(e, {generateOutro, includeBackgroundImg})}>
-      <div className="settings flexbox flex-row">
-        <label className="checkbox" htmlFor="generate_outro">
-          <input
-            type="checkbox" name="generate_outro" id="generate_outro" defaultChecked
-            onChange={(e) => setGenerateOutro(e.target.checked)}
-          />
-          <p className="checkbox-label italic">Generate outro image</p>
-        </label>
-        <label className="checkbox" htmlFor="include_background">
-          <input
-            type="checkbox" name="include_background" id="include_background" defaultChecked
-            onChange={(e) => setIncludeBackgroundImg(e.target.checked)}
-          />
-          <p className="checkbox-label italic">Include background image</p>
-        </label>
-      </div>
-
-      <div className="action-button" id={SPINNER_ID.CARDS_GENERATE}>
-        <input type="submit" value="GENERATE" className="action-button" />
-      </div>
-    </form>
-
-    { cardPaths.length > 0 &&
-      <>
-        <hr className="mv-2" />
-
-        <button type="button" id="download-all" onClick={() => {}}>
-          Download All Cards
+      <div className="navbar">
+        <button type="button" onClick={() => navigate(PATHS.home)}>
+          <span className="left">{TITLE.HOME}</span>
         </button>
-        <div id="cards">
-          { cardPaths.map((cardPath, idx) =>
-            renderCard(cardPath, idx + 1))
-          }
-        </div>
-      </>
-    }
+        <button type="button" onClick={() => navigate(PATHS.artworkGeneration)}>
+          <span className="left">{TITLE.ARTWORK_GENERATION}</span>
+        </button>
+        <button type="button" onClick={() => navigate(PATHS.lyrics)}>
+          <span className="left">{TITLE.LYRICS}</span>
+        </button>
+      </div>
 
-    <span className="top-bot-spacer" />
-  </div>
+      <h1>{TITLE.CARDS_GENERATION}</h1>
+
+      <form id="settings" onSubmit={(e) => handleGenerateCards(e, {generateOutro, includeBackgroundImg})}>
+        <div className="settings flexbox flex-row">
+          <label className="checkbox" htmlFor="generate_outro">
+            <input
+              type="checkbox" name="generate_outro" id="generate_outro" defaultChecked
+              onChange={(e) => setGenerateOutro(e.target.checked)}
+            />
+            <p className="checkbox-label italic">Generate outro image</p>
+          </label>
+          <label className="checkbox" htmlFor="include_background">
+            <input
+              type="checkbox" name="include_background" id="include_background" defaultChecked
+              onChange={(e) => setIncludeBackgroundImg(e.target.checked)}
+            />
+            <p className="checkbox-label italic">Include background image</p>
+          </label>
+        </div>
+
+        <div className="action-button" id={SPINNER_ID.CARDS_GENERATE}>
+          <input type="submit" value="GENERATE" className="action-button" />
+        </div>
+      </form>
+
+      { cardPaths.length > 0 &&
+        <>
+          <hr className="mv-2" />
+
+          <button type="button" id="download-all" onClick={handleDownloadAllCards}>
+            Download All Cards
+          </button>
+          <div id="cards">
+            { cardPaths.map((cardPath, idx) =>
+              renderCard(cardPath, idx + 1))
+            }
+          </div>
+        </>
+      }
+
+      <span className="top-bot-spacer" />
+    </div>
   )
 };
 
