@@ -71,14 +71,28 @@ def generateCard(output_path: str, lyrics: list[str], card_metadata: CardMetadat
     bottom_color_bar = Image.new("RGBA", (1920, 200), card_metadata.dominant_color) # bottom: 880px -> 1080 - 880 = 200px
     card.paste(bottom_color_bar, (0, 880))
 
-    bottom_bar = Image.open(f"{const.CARDS_BOTTOM_B if card_metadata.text_color[0] == 0 else const.CARDS_BOTTOM_W}")
+    bottom_bar = Image.open(f"{const.CARDS_BOTTOM_B if card_metadata.text_meta_color[0] == 0 else const.CARDS_BOTTOM_W}")
     card.paste(bottom_bar, mask=bottom_bar)
 
     bottom_text = f"{card_metadata.song_author}, “{card_metadata.song_title}”"
     draw = ImageDraw.Draw(card)
-    draw.text((90, 960), bottom_text, font=card_metadata.text_fonts[1], fill=card_metadata.text_color)
+    draw.text((const.X_META_LYRIC, const.Y_METADATA), bottom_text, font=card_metadata.text_fonts[1], fill=card_metadata.text_meta_color)
 
     log.debug(f"    Card contents: {lyrics}")
+    start_lyrics_from = const.Y_BOTTOM_LYRICS - (len(lyrics) * const.LYRIC_HEIGHT + (len(lyrics) - 1) * const.LYRIC_SPACING)
+    for lyric_line in lyrics:
+        lyric_px_length = draw.textlength(lyric_line, font=card_metadata.text_fonts[0])
+        rectangle_end_x_coord = const.X_META_LYRIC + const.LYRIC_BOX_OFFSET + const.LYRIC_TEXT_OFFSET + lyric_px_length
+        draw.rectangle(
+            [(const.X_META_LYRIC, start_lyrics_from), (rectangle_end_x_coord, start_lyrics_from + const.LYRIC_HEIGHT - 1)],
+            fill=card_metadata.text_meta_color
+        )
+        draw.text(
+            (const.X_META_LYRIC + const.LYRIC_BOX_OFFSET, start_lyrics_from + const.LYRIC_TEXT_OFFSET),
+            lyric_line, font=card_metadata.text_fonts[0], fill=card_metadata.text_lyrics_color
+        )
+        start_lyrics_from += const.LYRIC_HEIGHT + const.LYRIC_SPACING
+
     card.save(output_path)
     card.save(f"{const.FRONT_PROCESSED_CARDS_DIR}{card_name}")
     log.info(f"  Card {card_name} generated successfully.")
@@ -112,8 +126,8 @@ def getCardsMetadata(song_data: SongMetadata, include_bg_img: bool) -> CardMetad
         # Calculate luminance (perceived brightness): 0.299 * R + 0.587 * G + 0.114 * B
         luminance = 0.3 * r + 0.6 * g + 0.1 * b
         return luminance > 150
-    text_color = (0,0,0) if shouldUseBlackText(dominant_color) else (255,255,255)
-    text_bg_color = (255,255,255) if text_color[0] == 0 else (0,0,0)
+    text_meta_color = (0,0,0) if shouldUseBlackText(dominant_color) else (255,255,255)
+    text_lyrics_color = (255,255,255) if text_meta_color[0] == 0 else (0,0,0)
 
     user_folder = path.abspath(str(session[const.SessionFields.user_folder.value]))
     user_folder = const.SLASH.join(user_folder.split(const.SLASH)[:-1])
@@ -125,7 +139,7 @@ def getCardsMetadata(song_data: SongMetadata, include_bg_img: bool) -> CardMetad
     cards_metadata = CardMetadata(
         song_author=song_author, song_title=song_title,
         include_bg_img=eval(include_bg_img.capitalize()), bg=bg, dominant_color=dominant_color,
-        text_color=text_color, text_bg_color=text_bg_color,
+        text_meta_color=text_meta_color, text_lyrics_color=text_lyrics_color,
         text_fonts=[lyrics_font, metadata_font, outro_font]
     )
     log.debug(f"  {cards_metadata}")

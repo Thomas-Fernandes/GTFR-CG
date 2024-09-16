@@ -65,7 +65,7 @@ const CardsGeneration = (): JSX.Element => {
       <div className="card" key={alt}>
         <img src={cardPath} alt={alt} />
         <form onSubmit={(e) => handleSubmitDownloadCard(e, {selectedImage: cardPath})}>
-          <input type="submit" value="Download" className="button" />
+          <input type="submit" value={"Download " + cardFileName.replace(".png", "")} className="button" />
         </form>
       </div>
     );
@@ -155,7 +155,7 @@ const CardsGeneration = (): JSX.Element => {
 
       { cardPaths.length > 0 &&
         <>
-          <hr className="mv-2" />
+          <hr className="mv-1" />
 
           <button type="button" id="download-all" onClick={handleDownloadAllCards}>
             Download All Cards

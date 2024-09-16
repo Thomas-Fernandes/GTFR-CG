@@ -388,9 +388,9 @@ input[type="file"] {
     margin-top: 0;
     margin-bottom: 0;
 }
-.mv-2 {
-    margin-top: 2rem;
-    margin-bottom: 2rem;
+.mv-1 {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
 }
 
 .italic {

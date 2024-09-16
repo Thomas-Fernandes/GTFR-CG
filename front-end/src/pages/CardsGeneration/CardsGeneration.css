@@ -12,7 +12,8 @@
     }
 
     #download-all {
-        margin: auto auto 1rem auto;
+        margin: auto;
+        margin-bottom: 1rem;
         width: 40%;
     }
 
@@ -27,8 +28,9 @@
             padding: 1rem;
 
             input[type="submit"] {
+                margin: auto;
                 margin-top: .5rem;
-                width: 60%;
+                width: 80%;
             }
         }
     }

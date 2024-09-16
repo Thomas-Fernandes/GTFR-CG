@@ -71,8 +71,8 @@ class CardMetadata:
         include_bg_img: [bool] Whether to include the background image.
         bg: [Image.Image] The background image of the card.
         dominant_color: [RGBColor] The average color of the background image.
-        text_bg_color: [RGBColor] The background color for the text of the card.
-        text_color: [RGBColor] The text color of the card.
+        text_lyrics_color: [RGBColor] The background color for the text of the card.
+        text_meta_color: [RGBColor] The text color of the metadata of the card.
         text_fonts: [list[FreeTypeFont]] The font of the text.
     """
     song_author: str
@@ -80,8 +80,8 @@ class CardMetadata:
     include_bg_img: bool
     bg: Image.Image
     dominant_color: RGBAColor
-    text_bg_color: RGBColor
-    text_color: RGBColor
+    text_lyrics_color: RGBColor
+    text_meta_color: RGBColor
     text_fonts: list[ImageFont.FreeTypeFont]
 
     def __repr__(self) -> str:
