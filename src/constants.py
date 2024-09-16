@@ -142,6 +142,7 @@ ERR_INVALID_FILE_TYPE = "Invalid file type. Only PNG and JPG files are allowed."
 ERR_NO_IMG_URL = "No image URL provided."
 ERR_FAIL_DOWNLOAD = "Failed to download image."
 ERR_GENIUS_TOKEN = "Genius API token not found."
+ERR_LYRICS_MISSING_PARAMS = "Missing parameters for lyrics fetching."
 ERR_LYRICS_NOT_FOUND = "Lyrics not found."
 ERR_CARDS_CONTENTS_NOT_FOUND = "No cards contents provided."
 ERR_CARDS_CONTENTS_INVALID = "Invalid cards contents provided."
@@ -171,6 +172,9 @@ REGEX_YOUTUBE_URL = [
 ]
 
 # Cards processing
+TRANSLATION_TABLE = {
+    ord('\u0435'): 'e', # Replace Cyrillic 'е' with Latin 'e'
+}
 METADATA_IDENTIFIER = "Metadata | "
 METADATA_SEP = " ;;; "
 FONT_PROGRAMME = "programme-light.ttf"

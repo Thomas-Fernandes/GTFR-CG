@@ -110,8 +110,12 @@ def getCardsMetadata(song_data: SongMetadata, include_bg_img: bool) -> CardMetad
         raise FileNotFoundError("Background image missing.")
     bg = Image.open(bg_path)
 
-    song_author = song_data.get("artist", "???").upper()
-    song_title = song_data.get("title", "???").upper()
+    if song_data.get("artist", "???").startswith("Genius"):
+        song_author = song_data.get("title", "???").upper().split(" - ")[0]
+        song_title = song_data.get("title", "???").upper().split(" - ")[1].split(" (")[0]
+    else:
+        song_author = song_data.get("artist", "???").upper()
+        song_title = song_data.get("title", "???").upper()
 
     log.debug("  Calculating dominant color from background image...")
     color_thief = ColorThief(bg_path)
@@ -180,7 +184,8 @@ def generateCards(cards_contents: CardsContents, song_data: SongMetadata, gen_ou
         image_output_path = f"{user_processed_path}{const.SLASH}{const.PROCESSED_OUTRO_FILENAME}"
         generateOutroCard(image_output_path, song_data.get("contributors", []), card_metadata.text_fonts[2])
     log.log("Cards generated successfully.")
-    updateStats(to_increment=const.AvailableStats.cardsGenerated.value, increment=len(cards_contents) + 1 + int(gen_outro))
+    number_of_generated_cards = len(cards_contents) + 1 + (1 if gen_outro else 0)
+    updateStats(to_increment=const.AvailableStats.cardsGenerated.value, increment=number_of_generated_cards)
 
     return createApiResponse(const.HttpStatus.OK.value, "Cards generated successfully.", {"generated": len(cards_contents) + 1})
 

@@ -47,7 +47,8 @@ def fetchLyricsFromGenius(song_title: str, artist_name: str) -> list[dict[str, s
     lyrics = song.lyrics
     # Removing charabia at the beginning and end of the lyrics
     lyrics = sub(r"^.*Lyrics\[", '[', lyrics).strip()
-    lyrics = sub(r"\d+Embed$", '', lyrics).strip()
+    lyrics = lyrics.replace("Embed", "")
+    log.debug(lyrics)
 
     # Removing "You might also like" advertising's legend
     lyrics = lyrics.replace("You might also like", '\n')
@@ -98,7 +99,7 @@ def getGeniusLyrics() -> Response:
     song_name: Optional[str] = body.get("songName")
     artist: Optional[str] = body.get("artist")
     if song_name is None or artist is None:
-        return createApiResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_NO_IMG_URL)
+        return createApiResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_LYRICS_MISSING_PARAMS)
 
     lyrics_parts = fetchLyricsFromGenius(song_name, artist)
     return createApiResponse(const.HttpStatus.OK.value, "Lyrics fetched successfully.", {"lyrics_parts": lyrics_parts})
