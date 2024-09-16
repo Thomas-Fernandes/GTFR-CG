@@ -59,7 +59,7 @@ const CardsGeneration = (): JSX.Element => {
   };
 
   const renderCard = (cardPath: string, nb: number): JSX.Element => {
-    const cardFileName = cardPath.split('/').pop() ?? "";
+    const cardFileName = ((cardPath.split('/').pop() ?? "").split('?')[0] ?? "card") + ".png";
     const alt = "card" + "-" + nb.toString() + "_" + cardFileName;
     return (
       <div className="card" key={alt}>
@@ -99,7 +99,8 @@ const CardsGeneration = (): JSX.Element => {
         cardPaths.push(`${PROCESSED_CARDS_PATH}/${i.toString().padStart(2, "0")}.png`);
       if (body.generateOutro)
         cardPaths.push(`${PROCESSED_CARDS_PATH}/outro.png`);
-      setCardPaths(cardPaths);
+      const pathsWithCacheBuster = cardPaths.map((path) => `${path}?t=${Date.now()}`);
+      setCardPaths(pathsWithCacheBuster);
     }).catch((error: ApiResponse) => {
       if (error.status === HTTP_STATUS.PRECONDITION_FAILED)
         sendToast(TOAST.NO_CARDS_CONTENTS, TOAST_TYPE.ERROR);
