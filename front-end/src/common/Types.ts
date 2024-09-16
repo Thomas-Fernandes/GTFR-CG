@@ -79,6 +79,7 @@ export type Statistics = {
   dateLastOperation: string;
   artworkGenerations: number;
   lyricsFetches: number;
+  cardsGenerated: number;
 };
 
 /**************** GENERIC ****************/

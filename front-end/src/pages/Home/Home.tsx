@@ -8,6 +8,7 @@ import { hideSpinner, showSpinner } from "../../common/Spinner";
 import { sendToast } from "../../common/Toast";
 import { Statistics } from "../../common/Types";
 import useTitle from "../../common/UseTitle";
+import { STAT_NAME } from "../../constants/Home";
 
 import "./Home.css";
 
@@ -108,7 +109,7 @@ const Home = (): JSX.Element => {
 
       <div className="stats-board">
         <div className="stats-entry">
-          <h3 className="stat-title">Date of First Operation</h3>
+          <h3 className="stat-title">{STAT_NAME.DATE_FIRST_OPERATION}</h3>
           <p className="stat-text" id={SPINNER_ID.STATISTICS_FIRST_OPERATION}>
             {stats.dateFirstOperation}
           </p>
@@ -117,7 +118,7 @@ const Home = (): JSX.Element => {
         <hr />
 
         <div className="stats-entry">
-          <h3 className="stat-title">Date of Last Operation</h3>
+          <h3 className="stat-title">{STAT_NAME.DATE_LAST_OPERATION}</h3>
           <p className="stat-text" id={SPINNER_ID.STATISTICS_LAST_OPERATION}>
             {stats.dateLastOperation}
           </p>
@@ -126,7 +127,7 @@ const Home = (): JSX.Element => {
         <hr />
 
         <div className="stats-entry">
-          <h3 className="stat-title">Artwork Generations</h3>
+          <h3 className="stat-title">{STAT_NAME.ARTWORK_GENERATIONS}</h3>
           <p className="stat-text" id={SPINNER_ID.STATISTICS_ARTWORK_GENERATION}>
             {stats.artworkGenerations}
           </p>
@@ -135,9 +136,18 @@ const Home = (): JSX.Element => {
         <hr />
 
         <div className="stats-entry">
-          <h3 className="stat-title">Genius Lyrics Fetches</h3>
+          <h3 className="stat-title">{STAT_NAME.LYRICS_FETCHES}</h3>
           <p className="stat-text" id={SPINNER_ID.STATISTICS_LYRICS_FETCHES}>
             {stats.lyricsFetches}
+          </p>
+        </div>
+
+        <hr />
+
+        <div className="stats-entry">
+          <h3 className="stat-title">{STAT_NAME.CARDS_GENERATED}</h3>
+          <p className="stat-text" id={SPINNER_ID.STATISTICS_CARDS_GENERATION}>
+            {stats.cardsGenerated}
           </p>
         </div>
       </div>

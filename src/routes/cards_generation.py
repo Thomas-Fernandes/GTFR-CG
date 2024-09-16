@@ -13,6 +13,7 @@ import src.constants as const
 from src.logger import log
 from src.routes.lyrics import genius
 from src.soft_utils import doesFileExist, getCardsContentsFromFile, getNowStamp, writeCardsContentsToFile
+from src.statistics import updateStats
 from src.typing import CardsContents, CardMetadata, RGBAColor, SongMetadata
 from src.web_utils import createApiResponse
 
@@ -179,6 +180,7 @@ def generateCards(cards_contents: CardsContents, song_data: SongMetadata, gen_ou
         image_output_path = f"{user_processed_path}{const.SLASH}{const.PROCESSED_OUTRO_FILENAME}"
         generateOutroCard(image_output_path, song_data.get("contributors", []), card_metadata.text_fonts[2])
     log.log("Cards generated successfully.")
+    updateStats(to_increment=const.AvailableStats.cardsGenerated.value, increment=len(cards_contents) + 1 + int(gen_outro))
 
     return createApiResponse(const.HttpStatus.OK.value, "Cards generated successfully.", {"generated": len(cards_contents) + 1})
 

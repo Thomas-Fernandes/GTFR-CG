@@ -65,6 +65,7 @@ export const SPINNER_ID = {
     STATISTICS_LAST_OPERATION: "home_statistics_last-operation",
     STATISTICS_ARTWORK_GENERATION: "home_statistics_artwork-generation",
     STATISTICS_LYRICS_FETCHES: "home_statistics_lyrics-fetches",
+    STATISTICS_CARDS_GENERATION: "home_statistics_cards-generation",
 
   // Artwork Generation
     ITUNES: "artwork-generation_search-form",

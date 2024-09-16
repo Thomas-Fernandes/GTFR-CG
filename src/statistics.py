@@ -16,12 +16,14 @@ class Stats:
         date_last_operation: [string?] The date of the last operation. (default: None)
         artwork_generations: [int?] The number of artwork generations. (default: None)
         lyrics_fetches: [int?] The number of lyrics fetches. (default: None)
+        cards_generations: [int?] The number of cards generations. (default: None)
     """
 
     date_first_operation: Optional[str] = None
     date_last_operation: Optional[str] = None
     artwork_generations: Optional[int] = None
     lyrics_fetches: Optional[int] = None
+    cards_generations: Optional[int] = None
 
     def dict(self) -> JsonDict:
         """ Returns the dataclass as a dictionary.
@@ -32,6 +34,7 @@ class Stats:
             const.AvailableStats.dateLastOperation.value: self.date_last_operation,
             const.AvailableStats.artworkGenerations.value: self.artwork_generations,
             const.AvailableStats.lyricsFetches.value: self.lyrics_fetches,
+            const.AvailableStats.cardsGenerated.value: self.cards_generations,
         }
 
     def __repr__(self) -> str:
@@ -79,7 +82,7 @@ def getJsonStatsFromFile(path: str = const.STATS_FILE_PATH) -> JsonDict:
         log.warn(f"Error decoding stats file ({path}). Initializing new stats file...")
         return initStats()
 
-def updateStats(path: str = const.STATS_FILE_PATH, to_increment: Optional[str] = None) -> None:
+def updateStats(path: str = const.STATS_FILE_PATH, to_increment: Optional[str] = None, increment: int = 1) -> None:
     f""" Updates the statistics contained in a JSON statistics file.
     :param path: [string] The path to the statistics file. (default: {const.STATS_FILE_PATH})
     :param to_increment: [string?] The statistic to increment. (default: None)
@@ -96,9 +99,11 @@ def updateStats(path: str = const.STATS_FILE_PATH, to_increment: Optional[str] =
         int(json_stats.get(const.AvailableStats.artworkGenerations.value, 0))
     new_stats[const.AvailableStats.lyricsFetches.value] = \
         int(json_stats.get(const.AvailableStats.lyricsFetches.value, 0))
+    new_stats[const.AvailableStats.cardsGenerated.value] = \
+        int(json_stats.get(const.AvailableStats.cardsGenerated.value, 0))
 
     if to_increment in const.INCREMENTABLE_STATS:
-        new_stats[to_increment] += 1
+        new_stats[to_increment] += increment
     else:
         log.warn(f"Invalid statistic to increment: {to_increment}")
 
@@ -120,10 +125,8 @@ def initStats() -> JsonDict:
     """
     log.debug("Initializing statistics...")
     stats: JsonDict = {}
-    stats.setdefault(const.AvailableStats.dateFirstOperation.value, const.EMPTY_STATS[const.AvailableStats.dateFirstOperation.value])
-    stats.setdefault(const.AvailableStats.dateLastOperation.value, const.EMPTY_STATS[const.AvailableStats.dateLastOperation.value])
-    stats.setdefault(const.AvailableStats.artworkGenerations.value, const.EMPTY_STATS[const.AvailableStats.artworkGenerations.value])
-    stats.setdefault(const.AvailableStats.lyricsFetches.value, const.EMPTY_STATS[const.AvailableStats.lyricsFetches.value])
+    for stat in const.AvailableStats:
+        stats.setdefault(stat.value, const.EMPTY_STATS[stat.value])
 
     with open(const.STATS_FILE_PATH, "w") as file:
         log.debug(f"  Stats file created @ {const.STATS_FILE_PATH}")
@@ -145,6 +148,6 @@ def onLaunch() -> None:
         date_last_operation=json_stats.get(const.AvailableStats.dateLastOperation.value),
         artwork_generations=json_stats.get(const.AvailableStats.artworkGenerations.value),
         lyrics_fetches=json_stats.get(const.AvailableStats.lyricsFetches.value),
+        cards_generations=json_stats.get(const.AvailableStats.cardsGenerated.value),
     )
-
     log.info(f"Initializing project with statistics: {stats}")
