@@ -1,19 +1,25 @@
 #home {
-    div.navbar.home {
-        width: 50%;
-        flex-direction: column;
-        gap: .5rem;
-
-        .navbar-row {
-            flex-direction: row;
+    div.navbar {
+        &.home {
+            width: 50%;
+            flex-direction: column;
             gap: .5rem;
-            justify-content: center;
 
-            button {
-                height: 5rem;
-                width: 100%;
-                max-width: 50%;
+            .navbar-row {
+                flex-direction: row;
+                gap: .5rem;
+                justify-content: center;
+
+                button {
+                    height: 5rem;
+                    width: 100%;
+                    max-width: 50%;
+                }
             }
+        }
+
+        &.tests {
+            margin-top: 24px;
         }
     }
 

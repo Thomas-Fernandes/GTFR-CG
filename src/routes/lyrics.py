@@ -93,7 +93,7 @@ def getGeniusLyrics() -> Response:
     """ Fetches the lyrics of a song from Genius.com.
     :return: [Response] The response to the request.
     """
-    log.debug("POST - Fetching lyrics from Genius...")
+    log.log("POST - Fetching lyrics from Genius...")
     body = literal_eval(request.get_data(as_text=True))
     song_name: Optional[str] = body.get("songName")
     artist: Optional[str] = body.get("artist")

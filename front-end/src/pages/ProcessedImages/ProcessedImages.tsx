@@ -46,10 +46,7 @@ const ProcessedImages = (): JSX.Element => {
   const processImageName = (position: string): string => {
     return `thumbnail_${position}.png`;
   };
-  const renderThumbnailOption = (
-    logoPosition: string,
-    idx: number
-  ): JSX.Element => {
+  const renderThumbnailOption = (logoPosition: string, idx: number): JSX.Element => {
     return (
       <div className="thumbnail-item" key={"thumbnail-item" + idx.toString()}>
         <label htmlFor={"radio_" + idx}>

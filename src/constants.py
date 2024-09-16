@@ -148,8 +148,9 @@ ERR_CARDS_CONTENTS_READ_FAILED = "Failed to read cards contents."
 ERR_CARDS_GEN_PARAMS_NOT_FOUND = "Required parameters not found for cards generation."
 ERR_CARDS_BACKGROUND_NOT_FOUND = "No background image provided for cards generation."
 
-# Genius
+# .env contents
 load_dotenv()
+LOGGER_SEVERITY: Optional[str] = getenv("LOGGER_SEVERITY")
 GENIUS_API_TOKEN: Optional[str] = getenv("GENIUS_API_TOKEN")
 
 # Patterns for lyricsGenius prints

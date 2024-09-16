@@ -48,11 +48,8 @@ const CardsGeneration = (): JSX.Element => {
     }
   };
 
-  const renderCard = (
-    cardPath: string,
-    idx: number
-  ): JSX.Element => {
-    const alt = "card" + "#" + idx.toString();
+  const renderCard = (cardPath: string, nb: number): JSX.Element => {
+    const alt = "card" + "-" + nb.toString() + "_" + cardPath.split('/').pop();
     return (
       <div className="card" key={alt}>
         <img src={cardPath} alt={alt} />
@@ -87,9 +84,8 @@ const CardsGeneration = (): JSX.Element => {
 
       const nbGenerated = response.data.generated;
       const cardPaths = [];
-      for (let i = 0; i < nbGenerated; i++) {
+      for (let i = 0; i < nbGenerated; i++)
         cardPaths.push(`${PROCESSED_CARDS_PATH}/${i.toString().padStart(2, "0")}.png`);
-      }
       if (body.generateOutro)
         cardPaths.push(`${PROCESSED_CARDS_PATH}/outro.png`);
       setCardPaths(cardPaths);
@@ -155,7 +151,7 @@ const CardsGeneration = (): JSX.Element => {
         </button>
         <div id="cards">
           { cardPaths.map((cardPath, idx) =>
-            renderCard(cardPath, idx))
+            renderCard(cardPath, idx + 1))
           }
         </div>
       </>

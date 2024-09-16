@@ -368,6 +368,18 @@ input[type="file"] {
     }
 }
 
+.flexbox {
+    align-items: center;
+    align-content: center;
+    flex-wrap: wrap;
+}
+.flex-col {
+    flex-direction: column;
+}
+.flex-row {
+    flex-direction: row;
+}
+
 .hidden {
     display: none;
 }
@@ -388,14 +400,12 @@ input[type="file"] {
     font-weight: bold;
 }
 
-.flexbox {
-    align-items: center;
-    align-content: center;
-    flex-wrap: wrap;
+.t-green {
+    color: #007f00;
 }
-.flex-col {
-    flex-direction: column;
+.t-yellow {
+    color: #7f7f00;
 }
-.flex-row {
-    flex-direction: row;
+.t-red {
+    color: #7f0000;
 }
