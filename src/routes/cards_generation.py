@@ -183,8 +183,8 @@ def generateCards(cards_contents: CardsContents, song_data: SongMetadata, gen_ou
     if gen_outro:
         image_output_path = f"{user_processed_path}{const.SLASH}{const.PROCESSED_OUTRO_FILENAME}"
         generateOutroCard(image_output_path, song_data.get("contributors", []), card_metadata.text_fonts[2])
-    log.log("Cards generated successfully.")
-    number_of_generated_cards = len(cards_contents) + 1 + (1 if gen_outro else 0)
+    number_of_generated_cards = len(cards_contents) + (2 if gen_outro else 1) # lyrics + empty + outro card
+    log.log(f"Generated {number_of_generated_cards} card{'s' if number_of_generated_cards > 1 else ''} successfully.")
     updateStats(to_increment=const.AvailableStats.cardsGenerated.value, increment=number_of_generated_cards)
 
     return createApiResponse(const.HttpStatus.OK.value, "Cards generated successfully.", {"generated": len(cards_contents) + 1})
@@ -255,7 +255,7 @@ def postGenerateCards() -> Response:
         return createApiResponse(const.HttpStatus.INTERNAL_SERVER_ERROR.value, const.ERR_CARDS_CONTENTS_READ_FAILED)
     log.info("Cards contents retrieved successfully.")
 
-    return generateCards(cards_contents, song_data, gen_outro, include_bg_img)
+    return generateCards(cards_contents, song_data, eval(gen_outro.capitalize()), include_bg_img)
 
 def isListListStr(obj) -> bool: # type: ignore
     """ Checks if the object is a list of lists of strings.
