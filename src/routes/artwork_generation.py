@@ -123,6 +123,7 @@ def processYoutubeThumbnail(thumbnail_url: str) -> Response:
     :return: [Response] Contains the status and path of the processed image.
     """
     if const.SessionFields.user_folder.value not in session:
+        log.debug("User folder not found in session. Creating a new one.")
         session[const.SessionFields.user_folder.value] = str(uuid4())
 
     user_folder = str(session[const.SessionFields.user_folder.value]) + const.SLASH + const.AvailableCacheElemType.images.value + const.SLASH

@@ -1,5 +1,20 @@
 import { Dispatch, SetStateAction } from "react";
 
+/**************** CARDS ******************/
+
+export type CardsGenerationResponse = ApiResponse & {
+  data: {
+    generated: number;
+  };
+};
+
+export type CardsGenerationRequest = {
+  generateOutro: boolean;
+  includeBackgroundImg: boolean;
+};
+
+export type SongPartsCards = string[][];
+
 /**************** LYRICS *****************/
 
 export type LyricsPart = {
@@ -64,6 +79,7 @@ export type Statistics = {
   dateLastOperation: string;
   artworkGenerations: number;
   lyricsFetches: number;
+  cardsGenerated: number;
 };
 
 /**************** GENERIC ****************/

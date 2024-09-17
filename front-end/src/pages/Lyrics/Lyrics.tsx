@@ -5,7 +5,7 @@ import { AutoResizeTextarea } from "../../common/components/AutoResizeTextarea";
 import { is2xxSuccessful, sendRequest } from "../../common/Requests";
 import { hideSpinner, showSpinner } from "../../common/Spinner";
 import { sendToast } from "../../common/Toast";
-import { ApiResponse, LyricsPart, LyricsRequest, LyricsResponse } from "../../common/Types";
+import { ApiResponse, LyricsPart, LyricsRequest, LyricsResponse, SongPartsCards } from "../../common/Types";
 import useTitle from "../../common/UseTitle";
 import { API, BACKEND_URL, PATHS, SPINNER_ID, TITLE, TOAST, TOAST_TYPE } from "../../constants/Common";
 
@@ -19,28 +19,50 @@ const Lyrics = (): JSX.Element => {
   const [isGeniusTokenSet, setIsGeniusTokenSet] = useState(false);
 
   const [isFetching, setIsFetching] = useState(false);
+  const [isSavingCardsContent, setIsSavingCardsContent] = useState(false);
 
   const [artist, setArtist] = useState("");
   const [songName, setSongName] = useState("");
 
+  const [pageMetadata, setPageMetadata] = useState({});
   const [lyricsParts, setLyricsParts] = useState([] as LyricsPart[]);
 
   // Lyrics
-  const handleLyricsSaveSubmit = (e: FormEvent<HTMLFormElement>, body: string[][]) => {
+  const handleLyricsSaveSubmit = (e: FormEvent<HTMLFormElement>, body: SongPartsCards) => {
     e.preventDefault();
 
+    if (isSavingCardsContent) {
+      sendToast(TOAST.PROCESSING_IN_PROGRESS, TOAST_TYPE.WARN);
+      return;
+    }
+
+    setIsSavingCardsContent(true);
     showSpinner(SPINNER_ID.LYRICS_SAVE);
-    console.log(body);
-    // TODO
-    hideSpinner(SPINNER_ID.LYRICS_SAVE);
+
+    const metadata = "Metadata | " + Object.entries(pageMetadata).map(([key, value]) => `${key}: ${value}`).join(" ;;; ");
+    const data = {
+      cards_contents: [[metadata]].concat(body),
+    };
+
+    sendRequest("POST", BACKEND_URL + API.CARDS_GENERATION.SAVE_CARDS_CONTENTS, data).then((response: ApiResponse) => {
+      if (!is2xxSuccessful(response.status)) {
+        throw new Error(response.message);
+      }
+
+      navigate(PATHS.cardsGeneration);
+    }).catch((error: ApiResponse) => {
+      sendToast(error.message, TOAST_TYPE.ERROR);
+    }).finally(() => {
+      hideSpinner(SPINNER_ID.LYRICS_SAVE);
+      setIsSavingCardsContent(false);
+    });
   };
 
-  const convertToCardContents = (lyricsParts: LyricsPart[]): string[][] => {
-    const cardContents: string[][] = [];
-
-    console.log(lyricsParts);
-    // TODO
-    return cardContents;
+  const convertToCardContents = (lyricsParts: LyricsPart[]): SongPartsCards => {
+    // Input: [{section: "Verse 1", lyrics: "The whole lyrics\nOf the section\nAre here as is\nTotally disorganized"}, ...]
+    // Output: [["The whole lyrics\nOf the section", "Are here as is\nTotally disorganized"], ...]
+    //   -> Each inner array is a section, each string is a card
+    return lyricsParts.map(part => part.lyrics.split("\n\n"));
   };
 
   const handleSetLyricsParts = (lyrics: string, idx: number) => {
@@ -79,7 +101,16 @@ const Lyrics = (): JSX.Element => {
         );
         setLyricsParts([]);
       } else {
-        setLyricsParts(response.data.lyrics_parts);
+        const metadata = response.data.lyrics_parts.find(part => part.section === "[Metadata]")?.lyrics.split("\n") ?? [];
+        const metadataObj = metadata.reduce((acc: { [key: string]: string }, curr) => {
+          const [key, value] = curr.split(": ");
+          acc[key] = value;
+          return acc;
+        }, {} as { [key: string]: string });
+        setPageMetadata(metadataObj);
+
+        const lyricsParts = response.data.lyrics_parts.filter(part => part.section !== "[Metadata]");
+        setLyricsParts(lyricsParts);
       }
     }).catch((error: ApiResponse) => {
       sendToast(error.message, TOAST_TYPE.ERROR);
@@ -117,6 +148,9 @@ const Lyrics = (): JSX.Element => {
         </button>
         <button type="button" onClick={() => navigate(PATHS.artworkGeneration)}>
           <span className="left">{TITLE.ARTWORK_GENERATION}</span>
+        </button>
+        <button type="button" onClick={() => navigate(PATHS.cardsGeneration)}>
+          <span className="right">{TITLE.CARDS_GENERATION}</span>
         </button>
       </div>
 

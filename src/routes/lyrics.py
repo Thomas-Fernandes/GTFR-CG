@@ -19,7 +19,7 @@ api_prefix = const.API_ROUTE + const.ROUTES.lyrics.path
 
 genius = None
 try:
-    genius = Genius(const.GENIUS_API_TOKEN)
+    genius = Genius(access_token=const.GENIUS_API_TOKEN, retries=3)
     session[const.SessionFields.genius_token.value] = const.GENIUS_API_TOKEN
 except TypeError as e:
     log.error(f"Error while creating Genius object: {e}. "
@@ -49,6 +49,7 @@ def fetchLyricsFromGenius(song_title: str, artist_name: str) -> list[dict[str, s
     lyrics = sub(r"^.*Lyrics\[", '[', lyrics).strip()
     lyrics = sub(r"Embed\s*\d*\s*$", '', lyrics).strip()
     lyrics = sub(r"\d+\s*$", '', lyrics).strip()
+    log.debug(lyrics)
 
     # Removing "You might also like" advertising's legend
     lyrics = lyrics.replace("You might also like", '\n')
@@ -70,7 +71,17 @@ def fetchLyricsFromGenius(song_title: str, artist_name: str) -> list[dict[str, s
 
     # Split lyrics into blocks based on sections, e.g. "[Chorus]"
     parts = split(r"(\[.*?\])", lyrics)
-    lyrics_parts = [{"section": parts[i], "lyrics": parts[i + 1].strip()} for i in range(1, len(parts) - 1, 2)]
+    lyrics_parts = [{
+        "section": "[Metadata]",
+        "lyrics": f"id: {song.id}" + "\n"
+            f"artist: {song.artist}" + "\n"
+            f"title: {song.title}" + "\n"
+            f"url: {song.url}"
+    }]
+    # other available metadata: '_body', '_client', 'lyrics', 'primary_artist', 'stats', 'annotation_count',
+    #   'api_path', 'full_title', 'header_image_thumbnail_url', 'header_image_url', 'lyrics_owner_id', 'lyrics_state',
+    #   'path', 'pyongs_count', 'song_art_image_thumbnail_url', 'song_art_image_url', 'title_with_featured'
+    lyrics_parts += [{"section": parts[i], "lyrics": parts[i + 1].strip()} for i in range(1, len(parts) - 1, 2)]
 
     log.debug("Lyrics split into parts successfully.")
     updateStats(to_increment=const.AvailableStats.lyricsFetches.value)
@@ -89,7 +100,7 @@ def getGeniusLyrics() -> Response:
     song_name: Optional[str] = body.get("songName")
     artist: Optional[str] = body.get("artist")
     if song_name is None or artist is None:
-        return createApiResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_NO_IMG_URL)
+        return createApiResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_LYRICS_MISSING_PARAMS)
 
     lyrics_parts = fetchLyricsFromGenius(song_name, artist)
     return createApiResponse(const.HttpStatus.OK.value, "Lyrics fetched successfully.", {"lyrics_parts": lyrics_parts})

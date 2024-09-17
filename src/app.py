@@ -29,11 +29,13 @@ def initApp() -> None:
         """
         log.debug("  Initializing blueprints...")
         from src.routes.artwork_generation import bp_artwork_generation
+        from src.routes.cards_generation import bp_cards_generation
         from src.routes.home import bp_home
         from src.routes.lyrics import bp_lyrics
         from src.routes.processed_images import bp_processed_images
         blueprints = [
             bp_artwork_generation,
+            bp_cards_generation,
             bp_home,
             bp_lyrics,
             bp_processed_images,
@@ -42,7 +44,8 @@ def initApp() -> None:
             app.register_blueprint(blueprint)
         log.debug("  Blueprints initialized.")
     initBlueprints()
-    makedirs("./front-end/public/processed-images", exist_ok=True)
+    makedirs(const.FRONT_PROCESSED_IMAGES_DIR, exist_ok=True)
+    makedirs(const.FRONT_PROCESSED_CARDS_DIR, exist_ok=True)
     Session(app)
     log.debug("App initialized.")
 
@@ -55,7 +58,7 @@ def main(host: str = const.HOST_HOME, port: int = const.DEFAULT_PORT) -> None:
     log.log(f"Starting server @ http://{host_display_name}:{port}...")
 
     def removeExpiredCache(folder: str, cache_type: str) -> int:
-        """ Removes expired processed images.
+        """ Removes expired cache contents.
         :param folder: [string] The folder whose content is to clean if expired.
         :return: [integer] The number of entries removed.
         """

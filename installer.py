@@ -146,7 +146,7 @@ def installPythonReq(req_path: str = "requirements.txt") -> None:
             log.log(f"  New package installed: {package}")
         log.log("Python requirements installation complete.")
     else:
-        log.log("All the required Python packages were already installed.")
+        log.log("All required Python packages are already installed.")
 
     for line in result.stderr.splitlines():
         # Filter warning and message

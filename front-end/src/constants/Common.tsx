@@ -9,10 +9,13 @@ export const TOAST: Record<string, string> = {
     + "Please check that the Python server is running.",
   NO_SPINNER_ID: "HTML Spinner id is required.",
   NO_SPINNER_CONTAINER: "Spinner container not found.",
+  PROCESSING_IN_PROGRESS: "Processing already in progress.",
 
   // Redirect
     NO_PROCESSED_IMAGE: "No processed image found.",
     NO_GENIUS_TOKEN: "Genius API token not found.",
+    NO_CARDS_CONTENTS: "No cards contents found.\n"
+      + "Please generate contents via the Lyrics page first.",
 
   // Home
     WELCOME: "Welcome to GTFR-CG!\n"
@@ -28,7 +31,6 @@ export const TOAST: Record<string, string> = {
     NO_IMG: "Please select an image file.",
     INVALID_FILE_TYPE: "Please select a valid image file.",
     INVALID_URL: "Please enter a valid URL.",
-    PROCESSING_IN_PROGRESS: "Images processing already in progress.\n",
 
   // Processed Images
     NO_IMG_SELECTION: "Please select an image to download.",
@@ -37,6 +39,10 @@ export const TOAST: Record<string, string> = {
     MISSING_FIELDS: "Please fill out all the required fields.",
     FETCH_IN_PROGRESS: "Lyrics fetch already in progress.",
     LYRICS_NOT_FOUND: "Lyrics not found.",
+    SAVING_IN_PROGRESS: "Lyrics saving already in progress.",
+
+  // Cards Generation
+    NO_CARDS: "No cards were generated.",
 };
 
 export const RESPONSE_STATUS: Record<string, ResponseStatus> = {
@@ -59,6 +65,7 @@ export const SPINNER_ID = {
     STATISTICS_LAST_OPERATION: "home_statistics_last-operation",
     STATISTICS_ARTWORK_GENERATION: "home_statistics_artwork-generation",
     STATISTICS_LYRICS_FETCHES: "home_statistics_lyrics-fetches",
+    STATISTICS_CARDS_GENERATION: "home_statistics_cards-generation",
 
   // Artwork Generation
     ITUNES: "artwork-generation_search-form",
@@ -69,6 +76,9 @@ export const SPINNER_ID = {
   // Lyrics
     LYRICS_SEARCH: "lyrics_search",
     LYRICS_SAVE: "lyrics_save",
+
+  // Cards Generation
+    CARDS_GENERATE: "cards-generation_generate",
 }
 
 /***************** CONFIG ****************/
@@ -82,6 +92,7 @@ export const TITLE = {
   ARTWORK_GENERATION: "Artwork Generation",
   PROCESSED_IMAGES: "Processed Images",
   LYRICS: "Lyrics",
+  CARDS_GENERATION: "Cards Generation",
 };
 
 export const PATHS = {
@@ -91,6 +102,8 @@ export const PATHS = {
   artworkGeneration: "/artwork-generation",
   processedImages: "/processed-images",
   lyrics: "/lyrics",
+  cardsGeneration: "/cards-generation",
+  processedCards: "/processed-cards",
 };
 
 export const API = {
@@ -109,6 +122,11 @@ export const API = {
 
   LYRICS: {
     GET_LYRICS: PATHS.lyrics + "/get-genius-lyrics",
+  },
+
+  CARDS_GENERATION: {
+    SAVE_CARDS_CONTENTS: PATHS.cardsGeneration + "/save-contents",
+    GENERATE_CARDS: PATHS.cardsGeneration + "/generate",
   },
 };
 
@@ -133,6 +151,7 @@ export const HTTP_STATUS = {
   METHOD_NOT_ALLOWED: 405,
   REQUEST_TIMEOUT: 408,
   CONFLICT: 409,
+  PRECONDITION_FAILED: 412,
 
   INTERNAL_SERVER_ERROR: 500,
   NOT_IMPLEMENTED: 501,

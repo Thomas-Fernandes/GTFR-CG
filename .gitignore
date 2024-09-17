@@ -38,3 +38,6 @@ stats.json
 *.SVG
 *.webp
 *.WEBP
+
+# cards cache
+*.txt

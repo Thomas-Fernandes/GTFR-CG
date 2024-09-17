@@ -1,0 +1,37 @@
+#cards-generation {
+    form {
+        .settings {
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .action-button {
+            margin: auto;
+        }
+    }
+
+    #download-all {
+        margin: auto;
+        margin-bottom: 1rem;
+        width: 40%;
+    }
+
+    #cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+        gap: .5rem;
+
+        .card {
+            border: .1rem solid #dddddd;
+            border-radius: .5rem;
+            padding: 1rem;
+
+            input[type="submit"] {
+                margin: auto;
+                margin-top: .5rem;
+                width: 80%;
+            }
+        }
+    }
+}
