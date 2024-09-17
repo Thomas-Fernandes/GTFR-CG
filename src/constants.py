@@ -173,6 +173,7 @@ REGEX_YOUTUBE_URL = [
 
 # Cards processing
 TRANSLATION_TABLE = {
+    ord('\u2005'): ' ', # Replace four-per-em space with normal space
     ord('\u200b'): '', # Replace zero-width space with nothing
     ord('\u0435'): 'e', # Replace Cyrillic 'е' with Latin 'e'
 }
