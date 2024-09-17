@@ -16,6 +16,8 @@ const Lyrics = (): JSX.Element => {
 
   const navigate = useNavigate();
 
+  const [isGeniusTokenSet, setIsGeniusTokenSet] = useState(false);
+
   const [isFetching, setIsFetching] = useState(false);
   const [isSavingCardsContent, setIsSavingCardsContent] = useState(false);
 
@@ -119,24 +121,20 @@ const Lyrics = (): JSX.Element => {
     });
   };
 
-  const isTokenSet = async (): Promise<boolean> => {
-    return sendRequest("GET", BACKEND_URL + API.GENIUS_TOKEN).then((response) => {
-      if (is2xxSuccessful(response.status) && response.data.token !== "") {
-        return true;
-      }
-      return false;
-    }).catch((error) => {
-      sendToast(error.message, TOAST_TYPE.ERROR);
-      return false;
-    });
-  };
-
   useEffect(() => {
-    isTokenSet().then((isSet: boolean) => {
-      if (!isSet) {
-        navigate(`${PATHS.redirect}?error_text=${TOAST.NO_GENIUS_TOKEN}&redirect_to=${PATHS.home}`);
-      }
-    });
+    if (isGeniusTokenSet)
+      return;
+
+    const isTokenSet = async (): Promise<boolean> => {
+      return sendRequest("GET", BACKEND_URL + API.GENIUS_TOKEN).then((response) => {
+        return is2xxSuccessful(response.status) && response.data.token !== "";
+      }).catch((error) => {
+        sendToast(error.message, TOAST_TYPE.ERROR);
+        return false;
+      });
+    };
+
+    isTokenSet().then((isSet) => { setIsGeniusTokenSet(isSet); });
   });
 
   return (
