@@ -80,13 +80,13 @@ def generateThumbnails(bg_path: str, output_folder: str) -> None:
     log.info(f"Generating thumbnails... (session {bg_path.split(const.SLASH)[-3].split('-')[0]}-...)")
 
     for position in const.LOGO_POSITIONS:
-        log.debug(f"Generating {position} thumbnail...")
+        log.debug(f"  Generating {position} thumbnail...")
         logo_path = f"{position}.png"
         user_folder = path.abspath(str(session[const.SessionFields.user_folder.value]))
         user_folder = const.SLASH.join(user_folder.split(const.SLASH)[:-1])
-        overlay_file = f"{user_folder}{const.SLASH}{const.THUMBNAIL_DIR}{logo_path}"
+        overlay_file = f"{user_folder}{const.SLASH}{const.THUMBNAILS_DIR}{logo_path}"
         if (not path.exists(overlay_file)):
-            log.warn(f"Overlay file not found: {overlay_file}")
+            log.warn(f"  Overlay file not found: {overlay_file}")
             break
         overlay = Image.open(overlay_file)
 
@@ -98,8 +98,8 @@ def generateThumbnails(bg_path: str, output_folder: str) -> None:
         final_image = new_background.convert("RGB")
         output_path = path.join(output_folder, f"thumbnail_{position}.png")
         final_image.save(output_path)
-        final_image.save(f"./front-end/public/processed-images/thumbnail_{position}.png")
-        log.debug(f"Thumbnail saved: {output_path}")
+        final_image.save(f"{const.FRONT_PROCESSED_IMAGES_DIR}thumbnail_{position}.png")
+        log.debug(f"  Thumbnail saved: {output_path}")
 
 @bp_processed_images.route(api_prefix + "/process-images", methods=["POST"])
 @cross_origin()

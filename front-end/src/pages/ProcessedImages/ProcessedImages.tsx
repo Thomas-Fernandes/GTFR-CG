@@ -46,10 +46,7 @@ const ProcessedImages = (): JSX.Element => {
   const processImageName = (position: string): string => {
     return `thumbnail_${position}.png`;
   };
-  const renderThumbnailOption = (
-    logoPosition: string,
-    idx: number
-  ): JSX.Element => {
+  const renderThumbnailOption = (logoPosition: string, idx: number): JSX.Element => {
     return (
       <div className="thumbnail-item" key={"thumbnail-item" + idx.toString()}>
         <label htmlFor={"radio_" + idx}>
@@ -78,11 +75,17 @@ const ProcessedImages = (): JSX.Element => {
     <span className="top-bot-spacer" />
 
     <div className="navbar">
+      <button type="button" onClick={() => navigate(PATHS.home)}>
+        <span className="left">{TITLE.HOME}</span>
+      </button>
       <button type="button" onClick={() => navigate(PATHS.artworkGeneration)}>
         <span className="left">{TITLE.ARTWORK_GENERATION}</span>
       </button>
       <button type="button" onClick={() => navigate(PATHS.lyrics)}>
         <span className="right">{TITLE.LYRICS}</span>
+      </button>
+      <button type="button" onClick={() => navigate(PATHS.cardsGeneration)}>
+        <span className="right">{TITLE.CARDS_GENERATION}</span>
       </button>
     </div>
 

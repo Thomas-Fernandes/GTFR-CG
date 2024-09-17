@@ -1,10 +1,45 @@
 from flask import Config
 
-from time import time
 from datetime import datetime
+from os import path
+from time import time
 
 import src.constants as const
-from src.typing import CachedElemType
+from src.typing import CachedElemType, CardsContents
+
+def doesFileExist(filepath: str) -> bool:
+    """ Checks if the file exists.
+    :param filepath: [string] The path to the file.
+    :return: [bool] Whether the file exists.
+    """
+    return path.isfile(filepath)
+
+def getCardsContentsFromFile(filepath: str) -> CardsContents:
+    """ Returns the contents of the cards from a file.
+    :param filepath: [string] The path to the file.
+    :return: [list] The contents of the cards.
+    """
+    with open(filepath, "r") as file:
+        all_cards = [card.split("\n\n") for card in file.read().split("\n\n\n")]
+    cards = [[elem for elem in card if elem != ""] for card in all_cards][0] # remove empty elements & flatten the list
+    return [card.split("\n") for card in cards]
+
+def writeCardsContentsToFile(filepath: str, cards_contents: list[list[str]]) -> None:
+    """ Writes the cards contents to a file.
+    :param filepath: [string] The path to the file.
+    :param cards_contents: [list] The contents of the cards.
+    """
+    with open(filepath, "w") as file:
+        for card in cards_contents:
+            file.write(("\n\n".join(card) + "\n\n").translate(const.TRANSLATION_TABLE))
+
+def getNowStamp() -> str: # as YY-MM-DD_HH-MM-SS
+    """ Returns the current time in stamp format.
+    :return: [string] The current time in stamp format.
+    """
+    current_time = datetime.now()
+    formatted_time = current_time.strftime(const.DATE_FORMAT_STAMP)
+    return formatted_time
 
 def getNowEpoch() -> str: # in MM-DD 24-hour format
     """ Returns the current time in epoch format.

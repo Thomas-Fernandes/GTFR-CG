@@ -22,7 +22,7 @@ def useItunesImage() -> Response:
     """ Interprets the fetched iTunes URL and saves the image to the user's folder.
     :return: [Response] The response to the request.
     """
-    log.debug("POST - Generating artwork using an iTunes image...")
+    log.log("POST - Generating artwork using an iTunes image...")
     body = literal_eval(request.get_data(as_text=True))
     image_url: Optional[str] = body.get("url")
     if image_url is None:
@@ -60,7 +60,7 @@ def useLocalImage() -> Response:
     """ Saves the uploaded image to the user's folder.
     :return: [Response] The response to the request.
     """
-    log.debug("POST - Generating artwork using a local image...")
+    log.log("POST - Generating artwork using a local image...")
     if "file" not in request.files:
         return createApiResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_NO_FILE)
     file = request.files["file"]
@@ -123,6 +123,7 @@ def processYoutubeThumbnail(thumbnail_url: str) -> Response:
     :return: [Response] Contains the status and path of the processed image.
     """
     if const.SessionFields.user_folder.value not in session:
+        log.debug("User folder not found in session. Creating a new one.")
         session[const.SessionFields.user_folder.value] = str(uuid4())
 
     user_folder = str(session[const.SessionFields.user_folder.value]) + const.SLASH + const.AvailableCacheElemType.images.value + const.SLASH
@@ -149,7 +150,7 @@ def useYoutubeThumbnail() -> Response:
     """ Handles the extraction and processing of a YouTube thumbnail from a given URL.
     :return: [Response] The response to the request.
     """
-    log.debug("POST - Generating artwork using a YouTube thumbnail...")
+    log.log("POST - Generating artwork using a YouTube thumbnail...")
     body = literal_eval(request.get_data(as_text=True))
     youtube_url: Optional[str] = body.get("url")
     if youtube_url is None:

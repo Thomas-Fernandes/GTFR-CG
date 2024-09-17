@@ -245,6 +245,9 @@ const ArtworkGeneration = (): JSX.Element => {
         <button type="button" onClick={() => navigate(PATHS.lyrics)}>
           <span className="right">{TITLE.LYRICS}</span>
         </button>
+        <button type="button" onClick={() => navigate(PATHS.cardsGeneration)}>
+          <span className="right">{TITLE.CARDS_GENERATION}</span>
+        </button>
       </div>
 
       <h1>Search for cover art on iTunes</h1>

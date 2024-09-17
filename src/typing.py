@@ -1,3 +1,5 @@
+from PIL import Image, ImageFont
+
 from dataclasses import dataclass
 from typing import Literal, Optional, TypeAlias
 
@@ -42,6 +44,7 @@ class Routes:
     art_gen: Route
     proc_img: Route
     lyrics: Route
+    cards_gen: Route
 
     def __repr__(self) -> str:
         """ Returns the Routes dataclass as a string
@@ -53,6 +56,48 @@ class Routes:
         return f"Routes({content[:-2]})"
 
 ############ SOFTWARE ############
+
+SongMetadata: TypeAlias = dict[str, str]
+RGBAColor: TypeAlias = tuple[int, int, int, int]
+RGBColor: TypeAlias = tuple[int, int, int]
+
+@dataclass
+class CardMetadata:
+    """ Dataclass to store the card's metadata.
+
+    Attributes:
+        song_author: [string] The author of the song.
+        song_title: [string] The title of the song.
+        include_bg_img: [bool] Whether to include the background image.
+        bg: [Image.Image] The background image of the card.
+        dominant_color: [RGBColor] The average color of the background image.
+        text_lyrics_color: [RGBColor] The background color for the text of the card.
+        text_meta_color: [RGBColor] The text color of the metadata of the card.
+        text_fonts: [list[FreeTypeFont]] The font of the text.
+    """
+    song_author: str
+    song_title: str
+    include_bg_img: bool
+    bg: Image.Image
+    dominant_color: RGBAColor
+    text_lyrics_color: RGBColor
+    text_meta_color: RGBColor
+    text_fonts: list[ImageFont.FreeTypeFont]
+
+    def __repr__(self) -> str:
+        """ Returns the CardMetadata dataclass as a string
+        :return: [string] The dataclass' content, as a string.
+        """
+        content: str = ""
+        for (key, value) in self.__dict__.items():
+            if value is not None:
+                if key == "bg" or key == "text_fonts":
+                    continue
+                content += f"{key}={value}, "
+        return f"CardMetadata({content[:-2]})"
+# CardMetadata: TypeAlias = dict[str, str | bool | RGBAColor]
+
+CardsContents: TypeAlias = list[list[str]]
 
 CachedElemType: TypeAlias = Literal[
     "sessions",

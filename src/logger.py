@@ -143,24 +143,34 @@ class Logger:
         self.__severity = severity
         self.__log_file = log_file
 
+def exitInvalidSeverityLevel(severity: str) -> None:
+    """ Prints an error message for an invalid severity level and exits the program.
+    :param severity: [string] The invalid severity level.
+    """
+    print(getFormattedMessage(f"Invalid severity level: '{severity}'", LogSeverity.CRITICAL))
+    print(getFormattedMessage("Available severity levels:", LogSeverity.INFO))
+    for level in LogSeverity:
+        print(getFormattedMessage(f"\t- {level.name}", LogSeverity.INFO))
+    sys.exit(1)
 def getSeverityArg(args: list[str]) -> LogSeverity:
-    """ Gets the severity level from the command line arguments.
+    """ Gets the severity level from .env, otherwise from the command line arguments.
     :param args: [list] The command line arguments.
     :return: [LogSeverity] The severity level. (default: LogSeverity.LOG)
     """
+    if const.LOGGER_SEVERITY is not None:
+        if const.LOGGER_SEVERITY.upper() not in LogSeverity.__members__:
+            exitInvalidSeverityLevel(const.LOGGER_SEVERITY)
+        print(getFormattedMessage(f"  Severity level to {const.LOGGER_SEVERITY} according to .env file", LogSeverity.INFO))
+        return LogSeverity[const.LOGGER_SEVERITY]
+
     severity: LogSeverity = LogSeverity.LOG
-    if len(args) > 1 and args[1].upper() in LogSeverity.__members__:
-        try:
-            print(getFormattedMessage(f"  Trying to set severity level to {args[1].upper()}", LogSeverity.INFO))
-            severity = LogSeverity[args[1].upper()]
-            print(getFormattedMessage(f"  Severity level set to {severity}", LogSeverity.INFO))
-        except KeyError:
-            print(getFormattedMessage(f"  Invalid severity level: '{args[1]}'", LogSeverity.CRITICAL))
-            print(getFormattedMessage("  Available severity levels:", LogSeverity.INFO))
-            for level in LogSeverity:
-                print(getFormattedMessage(f"\t- {level.name}", LogSeverity.INFO))
-            sys.exit(1)
+    if len(args) > 1:
+        if args[1].upper() not in LogSeverity.__members__:
+            exitInvalidSeverityLevel(args[1])
+        print(getFormattedMessage(f"  Trying to set severity level to {args[1].upper()}", LogSeverity.INFO))
+        severity = LogSeverity[args[1].upper()]
+        print(getFormattedMessage(f"  Severity level set to {severity}", LogSeverity.INFO))
     return severity
 print(getFormattedMessage("Trying to initialize logger variable...", LogSeverity.DEBUG))
 log = Logger(severity=getSeverityArg(sys.argv))
-log.log(f"Logger initialized with level '{log.getSeverity().name}'.")
+log.log(f"Logger initialized with level {log.getSeverity().name}.")

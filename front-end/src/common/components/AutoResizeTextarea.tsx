@@ -1,8 +1,8 @@
 import { forwardRef, useEffect, useRef } from "react";
 
-type AutoResizeTextareaProps = React.ComponentPropsWithoutRef<"textarea">;
+type AutoResizeTextareaProps = React.ComponentPropsWithoutRef<"textarea"> & { value: string };
 
-export const AutoResizeTextarea = forwardRef<HTMLTextAreaElement, AutoResizeTextareaProps>((props, ref) => {
+export const AutoResizeTextarea = forwardRef<HTMLTextAreaElement, AutoResizeTextareaProps>(({ value, ...props }, ref) => {
   const internalRef = useRef<HTMLTextAreaElement>(null);
   const combinedRef = ref || internalRef;
 
@@ -12,7 +12,7 @@ export const AutoResizeTextarea = forwardRef<HTMLTextAreaElement, AutoResizeText
     if (textarea) {
       const resizeTextarea = () => {
         textarea.style.height = "auto";
-        textarea.style.height = `calc(${textarea.scrollHeight}px + 4px)`;
+        textarea.style.height = `${textarea.scrollHeight}px`;
       };
       resizeTextarea();
       textarea.addEventListener("input", resizeTextarea);
@@ -20,6 +20,6 @@ export const AutoResizeTextarea = forwardRef<HTMLTextAreaElement, AutoResizeText
         textarea.removeEventListener("input", resizeTextarea);
       };
     }
-  }, []);
-  return <textarea ref={combinedRef} {...props} />;
+  }, [value]);
+  return <textarea ref={combinedRef} value={value} {...props} />;
 });
