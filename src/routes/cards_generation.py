@@ -258,6 +258,9 @@ def postGenerateCards() -> Response:
     except Exception as e:
         log.error(f"Error while getting cards contents: {e}")
         return createApiResponse(const.HttpStatus.INTERNAL_SERVER_ERROR.value, const.ERR_CARDS_CONTENTS_READ_FAILED)
+    log.debug("  Cards contents:\n")
+    for card in cards_contents:
+        log.debug(f"    {card}")
     log.info("Cards contents retrieved successfully.")
 
     return generateCards(cards_contents, song_data, eval(gen_outro.capitalize()), include_bg_img)

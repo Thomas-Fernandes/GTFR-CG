@@ -31,7 +31,9 @@ def writeCardsContentsToFile(filepath: str, cards_contents: list[list[str]]) -> 
     """
     with open(filepath, "w") as file:
         for card in cards_contents:
-            file.write(("\n\n".join(card) + "\n\n").translate(const.TRANSLATION_TABLE))
+            has_content = len(card) > 0 and any([len(elem.strip(" \n")) > 0 for elem in card])
+            if has_content:
+                file.write(("\n\n".join(card) + "\n\n").translate(const.TRANSLATION_TABLE))
 
 def getNowStamp() -> str: # as YY-MM-DD_HH-MM-SS
     """ Returns the current time in stamp format.
