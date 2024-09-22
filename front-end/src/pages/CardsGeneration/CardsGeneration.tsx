@@ -35,7 +35,7 @@ const CardsGeneration = (): JSX.Element => {
     const filename = body.selectedImage.split('/').pop();
 
     const link = document.createElement("a");
-    link.download = filename ?? "card.png";
+    link.download = filename ? filename.split("?")[0] : "card.png";
     link.href = body.selectedImage;
     document.body.appendChild(link);
 

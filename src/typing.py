@@ -93,7 +93,10 @@ class CardMetadata:
             if value is not None:
                 if key == "bg" or key == "text_fonts":
                     continue
-                content += f"{key}={value}, "
+                if isinstance(value, str):
+                    content += f"{key}='{value}', "
+                else:
+                    content += f"{key}={value}, "
         return f"CardMetadata({content[:-2]})"
 # CardMetadata: TypeAlias = dict[str, str | bool | RGBAColor]
 

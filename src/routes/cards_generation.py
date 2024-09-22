@@ -39,6 +39,7 @@ def generateOutroCard(output_path: str, contributor_logins: list[str], outro_fon
         :return: [str] The string of contributors.
         """
         contributor_logins = [f"@{c}" for c in contributor_logins] # add '@' before each login
+        log.debug(f"  Contributors: {contributor_logins}")
         contributors_str = "Traduit par : "
         if len(contributor_logins) != 1:
             contributors_str += ", ".join(contributor_logins[:-1]) + (" & " + contributor_logins[-1] if len(contributor_logins) > 2 else " & " + contributor_logins[0])
@@ -46,7 +47,6 @@ def generateOutroCard(output_path: str, contributor_logins: list[str], outro_fon
             contributors_str += contributor_logins[0]
         return contributors_str
     contributors_str = getContributorsString(contributor_logins)
-    log.debug(f"    Contributors: {contributor_logins}")
 
     draw = ImageDraw.Draw(image)
     _, _, w, _ = draw.textbbox((0, 0), contributors_str, font=outro_font) # deduce the width of the text to center it
@@ -86,7 +86,7 @@ def generateCard(output_path: str, lyrics: list[str], card_metadata: CardMetadat
         rectangle_end_x_coord = const.X_META_LYRIC + const.LYRIC_BOX_OFFSET + const.LYRIC_TEXT_OFFSET + lyric_px_length
         draw.rectangle(
             [(const.X_META_LYRIC, start_lyrics_from), (rectangle_end_x_coord, start_lyrics_from + const.LYRIC_HEIGHT - 1)],
-            fill=card_metadata.text_meta_color
+            fill=((255,255,255) if card_metadata.text_lyrics_color[0] == 0 else (0,0,0))
         )
         draw.text(
             (const.X_META_LYRIC + const.LYRIC_BOX_OFFSET, start_lyrics_from + const.LYRIC_TEXT_OFFSET),
@@ -120,9 +120,9 @@ def getCardsMetadata(song_data: SongMetadata, include_bg_img: bool) -> CardMetad
     log.debug("  Calculating dominant color from background image...")
     color_thief = ColorThief(bg_path)
     dominant_color = color_thief.get_color(quality=1)
-    log.info(f"  Dominant color: {dominant_color}")
+    log.info(f"  Dominant color: {dominant_color}=#{hex(dominant_color[0])[2:]}{hex(dominant_color[1])[2:]}{hex(dominant_color[2])[2:]}")
 
-    def shouldUseBlackText(bg_color: RGBAColor) -> bool:
+    def getLuminance(bg_color: RGBAColor) -> int:
         """ Checks if the text should be black or white, depending on the background color.
         :param bg_color: [RGBAColor] The background color.
         :return: [bool] True if the text should be black, False otherwise.
@@ -130,9 +130,11 @@ def getCardsMetadata(song_data: SongMetadata, include_bg_img: bool) -> CardMetad
         r, g, b = bg_color[:3]
         # Calculate luminance (perceived brightness): 0.299 * R + 0.587 * G + 0.114 * B
         luminance = 0.3 * r + 0.6 * g + 0.1 * b
-        return luminance > 150
-    text_meta_color = (0,0,0) if shouldUseBlackText(dominant_color) else (255,255,255)
-    text_lyrics_color = (255,255,255) if text_meta_color[0] == 0 else (0,0,0)
+        log.debug(f"  Deducted luminance={round(luminance, 2)}, rgb=({round(0.3 * r, 2)}, {round(0.6 * g, 2)}, {round(0.1 * b, 2)})")
+        return int(luminance)
+    dominant_color_luminance = getLuminance(dominant_color)
+    text_meta_color = (0,0,0) if dominant_color_luminance > 128 else (255,255,255)
+    text_lyrics_color = (255,255,255) if dominant_color_luminance > 220 else (0,0,0)
 
     user_folder = path.abspath(str(session[const.SessionFields.user_folder.value]))
     user_folder = const.SLASH.join(user_folder.split(const.SLASH)[:-1])
@@ -217,10 +219,13 @@ def getSongMetadata(cards_contents: CardsContents) -> dict[str, str]:
             raise ValueError("Song contributors not found.")
         contributors = []
         for scribe in song_contributors["contributors"]["transcribers"]:
-            contributors.append({
-                "login": scribe["user"]["login"],
-                "attribution": str(int(scribe["attribution"] * 100)) + "%", # may be useful later
-            })
+            if scribe["attribution"] * 100 > const.ATTRIBUTION_PERCENTAGE_TOLERANCE: # ignore contributors with less
+                contributors.append({
+                    "login": scribe["user"]["login"],
+                    "attribution": str(int(scribe["attribution"] * 100)) + "%", # may be useful later
+                })
+            else:
+                log.debug(f"  Ignoring {scribe['user']['login']} with {round(scribe['attribution'] * 100, 2)}% attribution.")
         song_data["contributors"] = [c["login"] for c in contributors[:3]]
     addSongContributors(song_data)
 
