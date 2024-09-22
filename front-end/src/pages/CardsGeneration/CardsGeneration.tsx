@@ -9,6 +9,7 @@ import useTitle from "../../common/UseTitle";
 import { PROCESSED_CARDS_PATH } from "../../constants/CardsGeneration";
 import { API, BACKEND_URL, HTTP_STATUS, PATHS, SPINNER_ID, TITLE, TOAST, TOAST_TYPE } from "../../constants/Common";
 
+import ZipDownloadButton from "../../common/components/ZipDownloadButton";
 import "./CardsGeneration.css";
 
 const CardsGeneration = (): JSX.Element => {
@@ -35,7 +36,7 @@ const CardsGeneration = (): JSX.Element => {
     const filename = body.selectedImage.split('/').pop();
 
     const link = document.createElement("a");
-    link.download = filename ?? "card.png";
+    link.download = filename ? filename.split("?")[0] : "card.png";
     link.href = body.selectedImage;
     document.body.appendChild(link);
 
@@ -59,7 +60,7 @@ const CardsGeneration = (): JSX.Element => {
   };
 
   const renderCard = (cardPath: string, nb: number): JSX.Element => {
-    const cardFileName = ((cardPath.split('/').pop() ?? "").split('?')[0] ?? "card") + ".png";
+    const cardFileName = (cardPath.split('/').pop() ?? "").split('?')[0] ?? "card";
     const alt = "card" + "-" + nb.toString() + "_" + cardFileName;
     return (
       <div className="card" key={alt}>
@@ -158,9 +159,7 @@ const CardsGeneration = (): JSX.Element => {
         <>
           <hr className="mv-1" />
 
-          <button type="button" id="download-all" onClick={handleDownloadAllCards}>
-            Download All Cards
-          </button>
+          <ZipDownloadButton type="button" id="download-all" paths={cardPaths} output={"cards.zip"} />
           <div id="cards">
             { cardPaths.map((cardPath, idx) =>
               renderCard(cardPath, idx + 1))

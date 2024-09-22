@@ -109,7 +109,7 @@ def updateStats(path: str = const.STATS_FILE_PATH, to_increment: Optional[str] =
 
     try:
         with open(path, "w") as file:
-            log.debug(f"Writing stats to file: {path}")
+            log.debug(f"  Writing stats to file: {path}...")
             file.write(dumps(new_stats))
     except FileNotFoundError:
         log.warn(f"Error when writing to stats file ({path}). Initializing new stats file...")
