@@ -11,6 +11,7 @@ export type CardsGenerationResponse = ApiResponse & {
 export type CardsGenerationRequest = {
   generateOutro: boolean;
   includeBackgroundImg: boolean;
+  cardMetaname?: string;
 };
 
 export type SongPartsCards = string[][];
@@ -96,3 +97,5 @@ export type ResponseStatus = "info" | "success" | "warn" | "error";
 export type ToastType = "info" | "success" | "warn" | "error";
 
 export type StateSetter<T> = Dispatch<SetStateAction<T>>;
+
+export type Dict = { [key: string]: string };

@@ -1,6 +1,7 @@
 import { FormEvent, JSX, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
+import ZipDownloadButton from "../../common/components/ZipDownloadButton";
 import { is2xxSuccessful, sendRequest } from "../../common/Requests";
 import { hideSpinner, showSpinner } from "../../common/Spinner";
 import { sendToast } from "../../common/Toast";
@@ -9,7 +10,6 @@ import useTitle from "../../common/UseTitle";
 import { PROCESSED_CARDS_PATH } from "../../constants/CardsGeneration";
 import { API, BACKEND_URL, HTTP_STATUS, PATHS, SPINNER_ID, TITLE, TOAST, TOAST_TYPE } from "../../constants/Common";
 
-import ZipDownloadButton from "../../common/components/ZipDownloadButton";
 import "./CardsGeneration.css";
 
 const CardsGeneration = (): JSX.Element => {
@@ -25,7 +25,7 @@ const CardsGeneration = (): JSX.Element => {
 
   const [generateOutro, setGenerateOutro] = useState(true);
   const [includeBackgroundImg, setIncludeBackgroundImg] = useState(true);
-  const [cardMeta, setCardMeta] = useState("");
+  const [cardMetaname, setCardMetaname] = useState("");
 
   const [generationInProgress, setGenerationInProgress] = useState(false);
 
@@ -85,6 +85,7 @@ const CardsGeneration = (): JSX.Element => {
     const data = {
       generate_outro: body.generateOutro.toString(),
       include_background_img: body.includeBackgroundImg.toString(),
+      card_metaname: cardMetaname,
     };
 
     sendRequest("POST", BACKEND_URL + API.CARDS_GENERATION.GENERATE_CARDS, data).then((response: CardsGenerationResponse) => {
@@ -113,7 +114,7 @@ const CardsGeneration = (): JSX.Element => {
 
   useEffect(() => {
     if (isElementLoading) {
-      setCardMeta(qsCardMeta.current);
+      setCardMetaname(qsCardMeta.current);
       setIsElementLoading(false);
     }
   }, [isElementLoading]);
@@ -139,9 +140,10 @@ const CardsGeneration = (): JSX.Element => {
 
       <form id="settings" onSubmit={(e) => handleGenerateCards(e, {generateOutro, includeBackgroundImg})}>
         <div id="text-fields" className="settings flexbox flex-row">
-          <input required autoComplete="off"
-            type="text" name="metadata" placeholder="Enter card metadata"
-            value={cardMeta} onChange={(e) => setCardMeta(e.target.value)}
+          <input autoComplete="off"
+            type="text" name="metadata" placeholder="Card metadata will be inferred"
+            value={cardMetaname} onChange={(e) => setCardMetaname(e.target.value)}
+            style={!cardMetaname ? { fontStyle: "italic" } : {}}
           />
         </div>
         <div id="checkboxes" className="settings flexbox flex-row">

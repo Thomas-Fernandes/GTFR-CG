@@ -64,7 +64,7 @@ def generateCard(output_path: str, lyrics: list[str], card_metadata: CardMetadat
     """
     card_name = output_path.split(const.SLASH)[-1]
     log.info(f"  Generating card {card_name}...")
-    card: Image.Image = Image.new("RGBA", (1920, 1080), (255, 255, 255, 0))
+    card: Image.Image = Image.new("RGBA", (1920, 1080), (0,0,0,0))
 
     if (card_metadata.include_bg_img == True):
         card.paste(card_metadata.bg, (0, -100))
@@ -75,9 +75,8 @@ def generateCard(output_path: str, lyrics: list[str], card_metadata: CardMetadat
     bottom_bar = Image.open(f"{const.CARDS_BOTTOM_B if card_metadata.text_meta_color[0] == 0 else const.CARDS_BOTTOM_W}")
     card.paste(bottom_bar, mask=bottom_bar)
 
-    bottom_text = f"{card_metadata.song_author}, “{card_metadata.song_title}”"
     draw = ImageDraw.Draw(card)
-    draw.text((const.X_META_LYRIC, const.Y_METADATA), bottom_text, font=card_metadata.text_fonts[1], fill=card_metadata.text_meta_color)
+    draw.text((const.X_META_LYRIC, const.Y_METADATA), card_metadata.card_metaname, font=card_metadata.text_fonts[1], fill=card_metadata.text_meta_color)
 
     log.debug(f"    Card contents: {lyrics}")
     start_lyrics_from = const.Y_BOTTOM_LYRICS - (len(lyrics) * const.LYRIC_HEIGHT + (len(lyrics) - 1) * const.LYRIC_SPACING)
@@ -110,12 +109,15 @@ def getCardsMetadata(song_data: SongMetadata, include_bg_img: bool) -> CardMetad
         raise FileNotFoundError("Background image missing.")
     bg = Image.open(bg_path)
 
-    if song_data.get("artist", "???").startswith("Genius"):
-        song_author = song_data.get("title", "???").upper().split(" - ")[0]
-        song_title = song_data.get("title", "???").upper().split(" - ")[1].split(" (")[0]
-    else:
-        song_author = song_data.get("artist", "???").upper()
-        song_title = song_data.get("title", "???").upper()
+    card_metaname = song_data.get("card_metaname")
+    if card_metaname == "":
+        if song_data.get("artist", "???").startswith("Genius"):
+            song_author = song_data.get("title", "???").upper().split(" - ")[0]
+            song_title = song_data.get("title", "???").upper().split(" - ")[1].split(" (")[0]
+        else:
+            song_author = song_data.get("artist", "???").upper()
+            song_title = song_data.get("title", "???").upper()
+        card_metaname = f"{song_author}, “{song_title}”"
 
     log.debug("  Calculating dominant color from background image...")
     color_thief = ColorThief(bg_path)
@@ -144,7 +146,7 @@ def getCardsMetadata(song_data: SongMetadata, include_bg_img: bool) -> CardMetad
     outro_font = ImageFont.truetype(font_file, const.CARDS_FONT_SMALL_SIZE)
 
     cards_metadata = CardMetadata(
-        song_author=song_author, song_title=song_title,
+        card_metaname=card_metaname,
         include_bg_img=eval(include_bg_img.capitalize()), bg=bg, dominant_color=dominant_color,
         text_meta_color=text_meta_color, text_lyrics_color=text_lyrics_color,
         text_fonts=[lyrics_font, metadata_font, outro_font]
@@ -191,13 +193,15 @@ def generateCards(cards_contents: CardsContents, song_data: SongMetadata, gen_ou
 
     return createApiResponse(const.HttpStatus.OK.value, "Cards generated successfully.", {"generated": len(cards_contents) + 1})
 
-def getSongMetadata(cards_contents: CardsContents) -> dict[str, str]:
+def getSongMetadata(cards_contents: CardsContents, card_metaname: str | None) -> dict[str, str]:
     """ Gets the metadata of the song from the cards contents.
     :param cards_contents: [CardsContents] The contents of the cards.
     :return: [dict] The metadata of the song.
     """
     metadata = cards_contents[0][0].replace(const.METADATA_IDENTIFIER, "").split(const.METADATA_SEP)
-    song_data = {}
+    song_data = {
+        "card_metaname": card_metaname if card_metaname else "",
+    }
     for datum in metadata:
         key, value = datum.split(": ")
         song_data[key] = value
@@ -246,6 +250,7 @@ def postGenerateCards() -> Response:
     include_bg_img: Optional[str] = body[const.SessionFields.include_bg_img.value]
     if gen_outro is None or include_bg_img is None:
         return createApiResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_CARDS_GEN_PARAMS_NOT_FOUND)
+    card_metaname: Optional[str] = body[const.SessionFields.card_metaname.value]
 
     log.info("Getting cards contents from savefile...")
     try:
@@ -254,7 +259,7 @@ def postGenerateCards() -> Response:
         if len(cards_contents) == 0 or not cards_contents[0][0].startswith(const.METADATA_IDENTIFIER):
             raise ValueError("Invalid cards contents.")
 
-        song_data = getSongMetadata(cards_contents)
+        song_data = getSongMetadata(cards_contents, card_metaname)
     except Exception as e:
         log.error(f"Error while getting cards contents: {e}")
         return createApiResponse(const.HttpStatus.INTERNAL_SERVER_ERROR.value, const.ERR_CARDS_CONTENTS_READ_FAILED)

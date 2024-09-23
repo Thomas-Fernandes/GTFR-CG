@@ -56,6 +56,7 @@ class SessionFields(Enum):
     song_data = "song_data"
     gen_outro = "generate_outro"
     include_bg_img = "include_background_img"
+    card_metaname = "card_metaname"
 
 # Routes
 API_ROUTE = "/api"

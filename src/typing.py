@@ -66,8 +66,7 @@ class CardMetadata:
     """ Dataclass to store the card's metadata.
 
     Attributes:
-        song_author: [string] The author of the song.
-        song_title: [string] The title of the song.
+        card_metaname: [string] The author and title of the song.
         include_bg_img: [bool] Whether to include the background image.
         bg: [Image.Image] The background image of the card.
         dominant_color: [RGBColor] The average color of the background image.
@@ -75,8 +74,7 @@ class CardMetadata:
         text_meta_color: [RGBColor] The text color of the metadata of the card.
         text_fonts: [list[FreeTypeFont]] The font of the text.
     """
-    song_author: str
-    song_title: str
+    card_metaname: str
     include_bg_img: bool
     bg: Image.Image
     dominant_color: RGBAColor
