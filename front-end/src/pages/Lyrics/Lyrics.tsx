@@ -49,7 +49,11 @@ const Lyrics = (): JSX.Element => {
         throw new Error(response.message);
       }
 
-      navigate(PATHS.cardsGeneration);
+      const reqArtist = artist.toLowerCase().replace(/ /g, "-");
+      const cardArtist = reqArtist.includes("traduction") ? songName.split(" - ")[0] : artist;
+      const cardSongName = reqArtist.includes("traduction") ? songName.split(" - ")[1].split(" (")[0] : songName;
+      const cardMeta = `${cardArtist.toUpperCase()}, “${cardSongName.split(" (")[0].toUpperCase()}”`;
+      navigate(`${PATHS.cardsGeneration}?card_meta=${cardMeta}`);
     }).catch((error: ApiResponse) => {
       sendToast(error.message, TOAST_TYPE.ERROR);
     }).finally(() => {
@@ -134,7 +138,12 @@ const Lyrics = (): JSX.Element => {
       });
     };
 
-    isTokenSet().then((isSet) => { setIsGeniusTokenSet(isSet); });
+    isTokenSet().then((isSet) => {
+      if (!isSet)
+        navigate(`${PATHS.redirect}?redirect_to=${PATHS.home}&error_text=${TOAST.NO_GENIUS_TOKEN}`);
+      else
+        setIsGeniusTokenSet(true);
+    });
   });
 
   return (

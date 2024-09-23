@@ -1,5 +1,5 @@
-import { FormEvent, JSX, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { FormEvent, JSX, useEffect, useRef, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { is2xxSuccessful, sendRequest } from "../../common/Requests";
 import { hideSpinner, showSpinner } from "../../common/Spinner";
@@ -15,10 +15,17 @@ import "./CardsGeneration.css";
 const CardsGeneration = (): JSX.Element => {
   useTitle(TITLE.CARDS_GENERATION);
 
+  const [isElementLoading, setIsElementLoading] = useState(true);
+
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
   const navigate = useNavigate();
+
+  const qsCardMeta = useRef(searchParams.get("card_meta") ?? "");
 
   const [generateOutro, setGenerateOutro] = useState(true);
   const [includeBackgroundImg, setIncludeBackgroundImg] = useState(true);
+  const [cardMeta, setCardMeta] = useState("");
 
   const [generationInProgress, setGenerationInProgress] = useState(false);
 
@@ -48,15 +55,6 @@ const CardsGeneration = (): JSX.Element => {
     } finally {
       document.body.removeChild(link);
     }
-  };
-  const handleDownloadAllCards = () => {
-    if (cardPaths.length === 0) {
-      sendToast(TOAST.NO_CARDS, TOAST_TYPE.WARN);
-      return;
-    }
-
-    for (const cardPath of cardPaths)
-      handleSubmitDownloadCard(undefined, {selectedImage: cardPath});
   };
 
   const renderCard = (cardPath: string, nb: number): JSX.Element => {
@@ -113,6 +111,13 @@ const CardsGeneration = (): JSX.Element => {
     });
   };
 
+  useEffect(() => {
+    if (isElementLoading) {
+      setCardMeta(qsCardMeta.current);
+      setIsElementLoading(false);
+    }
+  }, [isElementLoading]);
+
   return (
     <div id="cards-generation">
       <div id="toast-container"></div>
@@ -133,7 +138,13 @@ const CardsGeneration = (): JSX.Element => {
       <h1>{TITLE.CARDS_GENERATION}</h1>
 
       <form id="settings" onSubmit={(e) => handleGenerateCards(e, {generateOutro, includeBackgroundImg})}>
-        <div className="settings flexbox flex-row">
+        <div id="text-fields" className="settings flexbox flex-row">
+          <input required autoComplete="off"
+            type="text" name="metadata" placeholder="Enter card metadata"
+            value={cardMeta} onChange={(e) => setCardMeta(e.target.value)}
+          />
+        </div>
+        <div id="checkboxes" className="settings flexbox flex-row">
           <label className="checkbox" htmlFor="generate_outro">
             <input
               type="checkbox" name="generate_outro" id="generate_outro" defaultChecked

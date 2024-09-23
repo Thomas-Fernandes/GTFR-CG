@@ -4,6 +4,13 @@
             justify-content: center;
             gap: 2rem;
             margin-bottom: 1rem;
+
+            &#text-fields {
+                input {
+                    height: 1rem;
+                    margin: 0;
+                }
+            }
         }
 
         .action-button {
