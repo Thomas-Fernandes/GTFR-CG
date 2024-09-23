@@ -247,9 +247,7 @@ def getSongMetadata(cards_contents: CardsContents, card_metaname: str | None) ->
     :return: [dict] The metadata of the song.
     """
     metadata = cards_contents[0][0].replace(const.METADATA_IDENTIFIER, "").split(const.METADATA_SEP)
-    song_data = {
-        "card_metaname": card_metaname if card_metaname else "",
-    }
+    song_data = { "card_metaname": card_metaname if card_metaname else "" }
     for datum in metadata:
         key, value = datum.split(": ")
         song_data[key] = value

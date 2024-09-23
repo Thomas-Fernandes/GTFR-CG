@@ -22,7 +22,6 @@ const CardsGeneration = (): JSX.Element => {
   const [generateOutro, setGenerateOutro] = useState(true);
   const [includeBackgroundImg, setIncludeBackgroundImg] = useState(true);
   const [cardMetaname, setCardMetaname] = useState("");
-  const [cardMetanameAlphabet, setCardMetanameAlphabet] = useState("");
 
   const [generationInProgress, setGenerationInProgress] = useState(false);
 
