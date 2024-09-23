@@ -52,7 +52,8 @@ const Lyrics = (): JSX.Element => {
       const cardArtist = pageMetadata.artist.startsWith("Genius") ? pageMetadata.title.split(" - ")[0] : pageMetadata.artist;
       const cardSongName = pageMetadata.artist.startsWith("Genius") ? pageMetadata.title.split(" - ")[1].split(" (")[0] : pageMetadata.title;
       const cardMeta = `${cardArtist.toUpperCase()}, “${cardSongName.toUpperCase()}”`;
-      navigate(`${PATHS.cardsGeneration}?card_meta=${cardMeta}`);
+      sessionStorage.setItem("cardMeta", cardMeta);
+      navigate(PATHS.cardsGeneration);
     }).catch((error: ApiResponse) => {
       sendToast(error.message, TOAST_TYPE.ERROR);
     }).finally(() => {

@@ -1,5 +1,5 @@
-import { FormEvent, JSX, useEffect, useRef, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { FormEvent, JSX, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import ZipDownloadButton from "../../common/components/ZipDownloadButton";
 import { is2xxSuccessful, sendRequest } from "../../common/Requests";
@@ -17,11 +17,7 @@ const CardsGeneration = (): JSX.Element => {
 
   const [isElementLoading, setIsElementLoading] = useState(true);
 
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
   const navigate = useNavigate();
-
-  const qsCardMeta = useRef(searchParams.get("card_meta") ?? "");
 
   const [generateOutro, setGenerateOutro] = useState(true);
   const [includeBackgroundImg, setIncludeBackgroundImg] = useState(true);
@@ -114,7 +110,7 @@ const CardsGeneration = (): JSX.Element => {
 
   useEffect(() => {
     if (isElementLoading) {
-      setCardMetaname(qsCardMeta.current);
+      setCardMetaname(sessionStorage.getItem("cardMeta") ?? "");
       setIsElementLoading(false);
     }
   }, [isElementLoading]);
