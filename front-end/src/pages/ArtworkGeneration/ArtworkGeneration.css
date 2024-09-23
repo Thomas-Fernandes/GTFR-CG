@@ -1,8 +1,23 @@
 #artwork-generation {
     form {
+        &#itunes {
+            #itunes-text {
+                margin-bottom: 0;
+            }
+
+            .itunes-search {
+                width: 33rem;
+
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                gap: 5%;
+            }
+        }
+
         input {
             padding: 1.5rem;
-            margin: 1.5rem 0;
+            margin: 1rem 0;
 
             &.file {
                 border: 2px solid #dddddd;
@@ -16,9 +31,9 @@
     #clear {
         background-color: #8fbc8f;
 
-        margin-bottom: 2%;
-        width: 180px;
-        font-size: 14px;
+        margin-bottom: 1rem;
+        width: 16rem;
+        font-size: 16px;
 
         display: flex;
         justify-content: center;
@@ -30,12 +45,14 @@
             background-color: #0056b3;
         }
     }
+
     #results.result-container {
         &:empty {
             display: none;
         }
         &:not(:empty) {
-            width: 60%;
+            max-width: 58rem;
+            width: 75%;
             margin: auto;
 
             display: grid;
@@ -49,19 +66,26 @@
             min-height: 300px;
             justify-content: space-between;
 
-            .result-image {
-                max-width: 200px;
-                max-height: 200px;
-
-                border: 1px solid #dddddd;
-                border-radius: 4px;
-
-                padding: 5px;
-            }
-
             button {
-                margin-top: 10px;
                 font-size: initial;
+
+                .result-image {
+                    max-width: 200px;
+                    max-height: 200px;
+
+                    border: 1px solid #dddddd;
+                    border-radius: 4px;
+
+                    padding: 5px;
+                }
+            }
+            .result-name {
+                margin: .5rem auto;
+                line-height: 1rem;
+            }
+            .result-text {
+                line-height: 1rem;
+                margin: 0 auto;
             }
         }
     }
