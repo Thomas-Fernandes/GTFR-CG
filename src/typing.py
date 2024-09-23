@@ -1,4 +1,4 @@
-from PIL import Image, ImageFont
+from PIL import Image
 
 from dataclasses import dataclass
 from typing import Literal, Optional, TypeAlias
@@ -72,7 +72,6 @@ class CardMetadata:
         dominant_color: [RGBColor] The average color of the background image.
         text_lyrics_color: [RGBColor] The background color for the text of the card.
         text_meta_color: [RGBColor] The text color of the metadata of the card.
-        text_fonts: [list[FreeTypeFont]] The font of the text.
     """
     card_metaname: str
     include_bg_img: bool
@@ -80,7 +79,6 @@ class CardMetadata:
     dominant_color: RGBAColor
     text_lyrics_color: RGBColor
     text_meta_color: RGBColor
-    text_fonts: list[ImageFont.FreeTypeFont]
 
     def __repr__(self) -> str:
         """ Returns the CardMetadata dataclass as a string
