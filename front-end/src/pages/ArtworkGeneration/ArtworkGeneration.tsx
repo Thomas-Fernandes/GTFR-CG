@@ -9,6 +9,7 @@ import useTitle from "../../common/UseTitle";
 import { FILE_UPLOAD, ITUNES, YOUTUBE } from "../../constants/ArtworkGeneration";
 import { API, BACKEND_URL, ITUNES_URL, PATHS, SPINNER_ID, TITLE, TOAST, TOAST_TYPE } from "../../constants/Common";
 
+import ImgButton from "../../common/components/ImgButton";
 import "./ArtworkGeneration.css";
 
 const ArtworkGeneration = (): JSX.Element => {
@@ -64,12 +65,9 @@ const ArtworkGeneration = (): JSX.Element => {
   const renderItunesResult = (item: ItunesResult, key: number): JSX.Element => {
     return (
       <div className="result-item" key={"result" + key.toString()}>
-        <img src={item.artworkUrl100} className="result-image" alt={item.collectionName || item.trackName} />
-        <p className="centered bold italic">{item.artistName} - {item.collectionName.replace(" - Single", "")}</p>
+        <ImgButton src={item.artworkUrl100} className="result-image" alt={item.collectionName || item.trackName} onClick={() => handleSubmitItunesResult(item, key)} />
+        <p className="result-text centered bold italic">{item.artistName} - {item.collectionName.replace(" - Single", "")}</p>
         <div className="flex-row" id={SPINNER_ID.ITUNES_OPTION + key.toString()}>
-          <button onClick={() => handleSubmitItunesResult(item, key)}>
-            Use this image
-          </button>
         </div>
       </div>
     );
@@ -251,19 +249,19 @@ const ArtworkGeneration = (): JSX.Element => {
       </div>
 
       <h1>Search for cover art on iTunes</h1>
-      <form onSubmit={(e) => handleSubmitItunesSearch(e, {term, country})}>
+      <form id="itunes" onSubmit={(e) => handleSubmitItunesSearch(e, {term, country})}>
         <div className="flexbox">
-          <input type="text" placeholder="Search on iTunes"
+          <input id="itunes-text" type="text" placeholder="Search on iTunes"
             onChange={(e) => setTerm(e.target.value)}
           />
-          <select aria-label="Country"
-            defaultValue="fr" onChange={(e) => setCountry(e.target.value)}
-          >
-            <option value="fr">France</option>
-            <option value="us">United States</option>
-            <option value="nz">New Zealand</option>
-          </select>
-          <div className="action-button" id={SPINNER_ID.ITUNES}>
+          <div id={SPINNER_ID.ITUNES} className="itunes-search">
+            <select aria-label="Country"
+              defaultValue="fr" onChange={(e) => setCountry(e.target.value)}
+            >
+              <option value="fr">France</option>
+              <option value="us">United States</option>
+              <option value="nz">New Zealand</option>
+            </select>
             <input type="submit" value="SEARCH" className="action-button" />
           </div>
         </div>
@@ -280,7 +278,7 @@ const ArtworkGeneration = (): JSX.Element => {
       <hr />
 
       <h1>...or upload your image</h1>
-      <form onSubmit={(e) => handleSubmitFileUpload(e, {file, includeCenterArtwork})} encType="multipart/form-data">
+      <form id="local" onSubmit={(e) => handleSubmitFileUpload(e, {file, includeCenterArtwork})} encType="multipart/form-data">
         <div className="flexbox">
           <input type="file" name="file" className="file"
             onChange={(e) => setFile(e.target.files ? e.target.files[0] : undefined)}
@@ -301,7 +299,7 @@ const ArtworkGeneration = (): JSX.Element => {
       <hr />
 
       <h1>...or use a YouTube video thumbnail</h1>
-      <form onSubmit={(e) => handleSubmitYoutubeUrl(e, {url: youtubeUrl})}>
+      <form id="youtube" onSubmit={(e) => handleSubmitYoutubeUrl(e, {url: youtubeUrl})}>
         <div className="flexbox">
           <input type="text" placeholder="Paste YouTube video URL here"
             onChange={(e) => setYoutubeUrl(e.target.value)}
