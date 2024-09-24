@@ -22,7 +22,7 @@ bp_cards_generation = Blueprint(const.ROUTES.cards_gen.bp_name, __name__.split('
 session = app.config
 api_prefix = const.API_ROUTE + const.ROUTES.cards_gen.path
 
-def generateOutroCard(output_path: str, contributor_logins: list[str], outro_font: ImageFont.FreeTypeFont) -> None:
+def generateOutroCard(output_path: str, contributor_logins: list[str]) -> None:
     """ Generates the outro card mentioning the transcription contributors.
     :param output_path: [string] The path to save the card to.
     :param contributor_logins: [list[str]] The logins of the contributors.
@@ -49,12 +49,54 @@ def generateOutroCard(output_path: str, contributor_logins: list[str], outro_fon
     contributors_str = getContributorsString(contributor_logins)
 
     draw = ImageDraw.Draw(image)
-    _, _, w, _ = draw.textbbox((0, 0), contributors_str, font=outro_font) # deduce the width of the text to center it
-    draw.text(((1920-w) / 2, 960), contributors_str, font=outro_font, fill=const.OUTRO_TEXT_COLOR)
+    _, _, w, _ = draw.textbbox((0, 0), contributors_str, font=const.FONT_OUTRO) # deduce the width of the text to center it
+    draw.text(((1920-w) / 2, 960), contributors_str, font=const.FONT_OUTRO, fill=const.OUTRO_TEXT_COLOR)
 
     image.save(output_path)
     image.save(f"{const.FRONT_PROCESSED_CARDS_DIR}{const.PROCESSED_OUTRO_FILENAME}")
     log.info("  Outro card generated successfully.")
+
+def getCharScript(char: str) -> str:
+    if char.isascii(): return "latin"
+    if char.isalpha(): return "cyrillic"
+    else: return "!unhandled"
+    # if char >= '\u4e00' and char <= '\u9fff': return "chinese"
+    # if char >= '\u3040' and char <= '\u30ff': return "japanese"
+    # if char >= '\u1100' and char <= '\u11ff': return "korean"
+    # if char >= '\u0e00' and char <= '\u0e7f': return "thai"
+    # if char >= '\u0590' and char <= '\u05ff': return "hebrew"
+    # if char >= '\u0600' and char <= '\u06ff': return "arabic"
+    # if char >= '\u0900' and char <= '\u097f': return "devanagari"
+    # if char >= '\u0980' and char <= '\u09ff': return "bengali"
+    # if char >= '\u0b80' and char <= '\u0bff': return "tamil"
+    # if char >= '\u0c00' and char <= '\u0c7f': return "telugu"
+    # if char >= '\u0c80' and char <= '\u0cff': return "kannada"
+    # if char >= '\u0d00' and char <= '\u0d7f': return "malayalam"
+    # if char >= '\u0d80' and char <= '\u0dff': return "sinhala"
+    # if char >= '\u10a0' and char <= '\u10ff': return "georgian"
+    # if char >= '\uac00' and char <= '\ud7af': return "hangul"
+    # if char >= '\u1200' and char <= '\u137f': return "ethiopic"
+    # if char >= '\u13a0' and char <= '\u13ff': return "cherokee"
+    # if char >= '\u1400' and char <= '\u167f': return "canadian_aboriginal"
+    # if char >= '\u1680' and char <= '\u169f': return "ogham"
+    # if char >= '\u16a0' and char <= '\u16ff': return "runic"
+    # if char >= '\u1700' and char <= '\u171f': return "tagalog"
+    # if char >= '\u1720' and char <= '\u173f': return "hanunoo"
+    # if char >= '\u1740' and char <= '\u175f': return "buhid"
+    # if char >= '\u1760' and char <= '\u177f': return "tagbanwa"
+    # if char >= '\u1780' and char <= '\u17ff': return "khmer"
+    # if char >= '\u1800' and char <= '\u18af': return "mongolian"
+    # if char >= '\u1900' and char <= '\u194f': return "limbu"
+    # if char >= '\u1950' and char <= '\u197f': return "tai_le"
+    # if char >= '\u1980' and char <= '\u19df': return "new_tai_lue"
+    # if char >= '\u19e0' and char <= '\u19ff': return "khmer_symbols"
+    # if char >= '\u1a00' and char <= '\u1a1f': return "buginese"
+    # if char >= '\u1a20' and char <= '\u1aaf': return "tai_tham"
+    # if char >= '\u1b00' and char <= '\u1b7f': return "balinese"
+    # if char >= '\u1b80' and char <= '\u1bbf': return "sundanese"
+    # if char >= '\u1c00' and char <= '\u1c4f': return "lepcha"
+    # if char >= '\u1c50' and char <= '\u1c7f': return "ol_chiki"
+    # else: return "emoji"
 
 def generateCard(output_path: str, lyrics: list[str], card_metadata: CardMetadata) -> None:
     """ Generates a card using the provided lyrics and metadata.
@@ -64,7 +106,7 @@ def generateCard(output_path: str, lyrics: list[str], card_metadata: CardMetadat
     """
     card_name = output_path.split(const.SLASH)[-1]
     log.info(f"  Generating card {card_name}...")
-    card: Image.Image = Image.new("RGBA", (1920, 1080), (255, 255, 255, 0))
+    card: Image.Image = Image.new("RGBA", (1920, 1080), (0,0,0,0))
 
     if (card_metadata.include_bg_img == True):
         card.paste(card_metadata.bg, (0, -100))
@@ -75,14 +117,27 @@ def generateCard(output_path: str, lyrics: list[str], card_metadata: CardMetadat
     bottom_bar = Image.open(f"{const.CARDS_BOTTOM_B if card_metadata.text_meta_color[0] == 0 else const.CARDS_BOTTOM_W}")
     card.paste(bottom_bar, mask=bottom_bar)
 
-    bottom_text = f"{card_metadata.song_author}, “{card_metadata.song_title}”"
     draw = ImageDraw.Draw(card)
-    draw.text((const.X_META_LYRIC, const.Y_METADATA), bottom_text, font=card_metadata.text_fonts[1], fill=card_metadata.text_meta_color)
+    def drawMetaname(draw: ImageDraw.ImageDraw, metaname: str, color: RGBAColor) -> None:
+        """ Draws the metadata name on the card.
+        :param draw: [ImageDraw.ImageDraw] The drawing object.
+        :param metaname: [str] The metadata name to draw.
+        :param color: [RGBAColor] The color to use.
+        """
+        cursor = 0
+        for char in metaname:
+            if getCharScript(char) == "latin":
+                draw.text((const.X_META_LYRIC + cursor, const.Y_METADATA), char, font=const.FONT_METANAME, fill=color)
+                cursor += draw.textlength(char, font=const.FONT_METANAME)
+            else:
+                draw.text((const.X_META_LYRIC + cursor, const.Y_METADATA - 7), char, font=const.FONT_METANAME_EUROPEAN, fill=color)
+                cursor += draw.textlength(char, font=const.FONT_METANAME_EUROPEAN)
+    drawMetaname(draw, card_metadata.card_metaname, card_metadata.text_meta_color)
 
     log.debug(f"    Card contents: {lyrics}")
     start_lyrics_from = const.Y_BOTTOM_LYRICS - (len(lyrics) * const.LYRIC_HEIGHT + (len(lyrics) - 1) * const.LYRIC_SPACING)
     for lyric_line in lyrics:
-        lyric_px_length = draw.textlength(lyric_line, font=card_metadata.text_fonts[0])
+        lyric_px_length = draw.textlength(lyric_line, font=const.FONT_LYRICS)
         rectangle_end_x_coord = const.X_META_LYRIC + const.LYRIC_BOX_OFFSET + const.LYRIC_TEXT_OFFSET + lyric_px_length
         draw.rectangle(
             [(const.X_META_LYRIC, start_lyrics_from), (rectangle_end_x_coord, start_lyrics_from + const.LYRIC_HEIGHT - 1)],
@@ -90,7 +145,7 @@ def generateCard(output_path: str, lyrics: list[str], card_metadata: CardMetadat
         )
         draw.text(
             (const.X_META_LYRIC + const.LYRIC_BOX_OFFSET, start_lyrics_from + const.LYRIC_TEXT_OFFSET),
-            lyric_line, font=card_metadata.text_fonts[0], fill=card_metadata.text_lyrics_color
+            lyric_line, font=const.FONT_LYRICS, fill=card_metadata.text_lyrics_color
         )
         start_lyrics_from += const.LYRIC_HEIGHT + const.LYRIC_SPACING
 
@@ -110,12 +165,15 @@ def getCardsMetadata(song_data: SongMetadata, include_bg_img: bool) -> CardMetad
         raise FileNotFoundError("Background image missing.")
     bg = Image.open(bg_path)
 
-    if song_data.get("artist", "???").startswith("Genius"):
-        song_author = song_data.get("title", "???").upper().split(" - ")[0]
-        song_title = song_data.get("title", "???").upper().split(" - ")[1].split(" (")[0]
-    else:
-        song_author = song_data.get("artist", "???").upper()
-        song_title = song_data.get("title", "???").upper()
+    card_metaname = song_data.get("card_metaname", "").upper()
+    if card_metaname == "":
+        if song_data.get("artist", "???").startswith("Genius"):
+            song_author = song_data.get("title", "???").upper().split(" - ")[0]
+            song_title = song_data.get("title", "???").upper().split(" - ")[1].split(" (")[0]
+        else:
+            song_author = song_data.get("artist", "???").upper()
+            song_title = song_data.get("title", "???").upper()
+        card_metaname = f"{song_author}, “{song_title}”"
 
     log.debug("  Calculating dominant color from background image...")
     color_thief = ColorThief(bg_path)
@@ -136,18 +194,10 @@ def getCardsMetadata(song_data: SongMetadata, include_bg_img: bool) -> CardMetad
     text_meta_color = (0,0,0) if dominant_color_luminance > 128 else (255,255,255)
     text_lyrics_color = (255,255,255) if dominant_color_luminance > 220 else (0,0,0)
 
-    user_folder = path.abspath(str(session[const.SessionFields.user_folder.value]))
-    user_folder = const.SLASH.join(user_folder.split(const.SLASH)[:-1])
-    font_file = f"{user_folder}{const.SLASH}{const.FONTS_DIR}{const.FONT_PROGRAMME}"
-    lyrics_font = ImageFont.truetype(font_file, const.CARDS_FONT_BIG_SIZE)
-    metadata_font = ImageFont.truetype(font_file, const.CARDS_FONT_MEDIUM_SIZE)
-    outro_font = ImageFont.truetype(font_file, const.CARDS_FONT_SMALL_SIZE)
-
     cards_metadata = CardMetadata(
-        song_author=song_author, song_title=song_title,
+        card_metaname=card_metaname,
         include_bg_img=eval(include_bg_img.capitalize()), bg=bg, dominant_color=dominant_color,
         text_meta_color=text_meta_color, text_lyrics_color=text_lyrics_color,
-        text_fonts=[lyrics_font, metadata_font, outro_font]
     )
     log.debug(f"  {cards_metadata}")
     return cards_metadata
@@ -184,20 +234,20 @@ def generateCards(cards_contents: CardsContents, song_data: SongMetadata, gen_ou
         generateCard(image_output_path, card, card_metadata)
     if gen_outro:
         image_output_path = f"{user_processed_path}{const.SLASH}{const.PROCESSED_OUTRO_FILENAME}"
-        generateOutroCard(image_output_path, song_data.get("contributors", []), card_metadata.text_fonts[2])
+        generateOutroCard(image_output_path, song_data.get("contributors", []))
     number_of_generated_cards = len(cards_contents) + (2 if gen_outro else 1) # lyrics + empty + outro card
     log.log(f"Generated {number_of_generated_cards} card{'s' if number_of_generated_cards > 1 else ''} successfully.")
     updateStats(to_increment=const.AvailableStats.cardsGenerated.value, increment=number_of_generated_cards)
 
     return createApiResponse(const.HttpStatus.OK.value, "Cards generated successfully.", {"generated": len(cards_contents) + 1})
 
-def getSongMetadata(cards_contents: CardsContents) -> dict[str, str]:
+def getSongMetadata(cards_contents: CardsContents, card_metaname: str | None) -> dict[str, str]:
     """ Gets the metadata of the song from the cards contents.
     :param cards_contents: [CardsContents] The contents of the cards.
     :return: [dict] The metadata of the song.
     """
     metadata = cards_contents[0][0].replace(const.METADATA_IDENTIFIER, "").split(const.METADATA_SEP)
-    song_data = {}
+    song_data = { "card_metaname": card_metaname if card_metaname else "" }
     for datum in metadata:
         key, value = datum.split(": ")
         song_data[key] = value
@@ -246,6 +296,7 @@ def postGenerateCards() -> Response:
     include_bg_img: Optional[str] = body[const.SessionFields.include_bg_img.value]
     if gen_outro is None or include_bg_img is None:
         return createApiResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_CARDS_GEN_PARAMS_NOT_FOUND)
+    card_metaname: Optional[str] = body[const.SessionFields.card_metaname.value]
 
     log.info("Getting cards contents from savefile...")
     try:
@@ -254,7 +305,7 @@ def postGenerateCards() -> Response:
         if len(cards_contents) == 0 or not cards_contents[0][0].startswith(const.METADATA_IDENTIFIER):
             raise ValueError("Invalid cards contents.")
 
-        song_data = getSongMetadata(cards_contents)
+        song_data = getSongMetadata(cards_contents, card_metaname)
     except Exception as e:
         log.error(f"Error while getting cards contents: {e}")
         return createApiResponse(const.HttpStatus.INTERNAL_SERVER_ERROR.value, const.ERR_CARDS_CONTENTS_READ_FAILED)

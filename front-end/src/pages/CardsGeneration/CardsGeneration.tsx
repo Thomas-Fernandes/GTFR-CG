@@ -1,6 +1,7 @@
-import { FormEvent, JSX, useState } from "react";
+import { FormEvent, JSX, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import ZipDownloadButton from "../../common/components/ZipDownloadButton";
 import { is2xxSuccessful, sendRequest } from "../../common/Requests";
 import { hideSpinner, showSpinner } from "../../common/Spinner";
 import { sendToast } from "../../common/Toast";
@@ -9,16 +10,18 @@ import useTitle from "../../common/UseTitle";
 import { PROCESSED_CARDS_PATH } from "../../constants/CardsGeneration";
 import { API, BACKEND_URL, HTTP_STATUS, PATHS, SPINNER_ID, TITLE, TOAST, TOAST_TYPE } from "../../constants/Common";
 
-import ZipDownloadButton from "../../common/components/ZipDownloadButton";
 import "./CardsGeneration.css";
 
 const CardsGeneration = (): JSX.Element => {
   useTitle(TITLE.CARDS_GENERATION);
 
+  const [isElementLoading, setIsElementLoading] = useState(true);
+
   const navigate = useNavigate();
 
   const [generateOutro, setGenerateOutro] = useState(true);
   const [includeBackgroundImg, setIncludeBackgroundImg] = useState(true);
+  const [cardMetaname, setCardMetaname] = useState("");
 
   const [generationInProgress, setGenerationInProgress] = useState(false);
 
@@ -49,15 +52,6 @@ const CardsGeneration = (): JSX.Element => {
       document.body.removeChild(link);
     }
   };
-  const handleDownloadAllCards = () => {
-    if (cardPaths.length === 0) {
-      sendToast(TOAST.NO_CARDS, TOAST_TYPE.WARN);
-      return;
-    }
-
-    for (const cardPath of cardPaths)
-      handleSubmitDownloadCard(undefined, {selectedImage: cardPath});
-  };
 
   const renderCard = (cardPath: string, nb: number): JSX.Element => {
     const cardFileName = (cardPath.split('/').pop() ?? "").split('?')[0] ?? "card";
@@ -87,6 +81,7 @@ const CardsGeneration = (): JSX.Element => {
     const data = {
       generate_outro: body.generateOutro.toString(),
       include_background_img: body.includeBackgroundImg.toString(),
+      card_metaname: body.cardMetaname,
     };
 
     sendRequest("POST", BACKEND_URL + API.CARDS_GENERATION.GENERATE_CARDS, data).then((response: CardsGenerationResponse) => {
@@ -113,6 +108,13 @@ const CardsGeneration = (): JSX.Element => {
     });
   };
 
+  useEffect(() => {
+    if (isElementLoading) {
+      setCardMetaname(sessionStorage.getItem("cardMeta") ?? "");
+      setIsElementLoading(false);
+    }
+  }, [isElementLoading]);
+
   return (
     <div id="cards-generation">
       <div id="toast-container"></div>
@@ -132,8 +134,15 @@ const CardsGeneration = (): JSX.Element => {
 
       <h1>{TITLE.CARDS_GENERATION}</h1>
 
-      <form id="settings" onSubmit={(e) => handleGenerateCards(e, {generateOutro, includeBackgroundImg})}>
-        <div className="settings flexbox flex-row">
+      <form id="settings" onSubmit={(e) => handleGenerateCards(e, {generateOutro, includeBackgroundImg, cardMetaname})}>
+        <div id="text-fields" className="settings flexbox flex-row">
+          <input autoComplete="off"
+            type="text" name="metaname" placeholder="if empty, the card metaname will be inferred"
+            value={cardMetaname} onChange={(e) => setCardMetaname(e.target.value)}
+            style={!cardMetaname ? { fontStyle: "italic", fontSize: ".75rem" } : {}}
+          />
+        </div>
+        <div id="selectors" className="settings flexbox flex-row">
           <label className="checkbox" htmlFor="generate_outro">
             <input
               type="checkbox" name="generate_outro" id="generate_outro" defaultChecked

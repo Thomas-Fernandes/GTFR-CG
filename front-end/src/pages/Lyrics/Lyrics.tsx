@@ -5,7 +5,7 @@ import { AutoResizeTextarea } from "../../common/components/AutoResizeTextarea";
 import { is2xxSuccessful, sendRequest } from "../../common/Requests";
 import { hideSpinner, showSpinner } from "../../common/Spinner";
 import { sendToast } from "../../common/Toast";
-import { ApiResponse, LyricsPart, LyricsRequest, LyricsResponse, SongPartsCards } from "../../common/Types";
+import { ApiResponse, Dict, LyricsPart, LyricsRequest, LyricsResponse, SongPartsCards } from "../../common/Types";
 import useTitle from "../../common/UseTitle";
 import { API, BACKEND_URL, PATHS, SPINNER_ID, TITLE, TOAST, TOAST_TYPE } from "../../constants/Common";
 
@@ -24,7 +24,7 @@ const Lyrics = (): JSX.Element => {
   const [artist, setArtist] = useState("");
   const [songName, setSongName] = useState("");
 
-  const [pageMetadata, setPageMetadata] = useState({});
+  const [pageMetadata, setPageMetadata] = useState({} as Dict);
   const [lyricsParts, setLyricsParts] = useState([] as LyricsPart[]);
 
   // Lyrics
@@ -49,6 +49,10 @@ const Lyrics = (): JSX.Element => {
         throw new Error(response.message);
       }
 
+      const cardArtist = pageMetadata.artist.startsWith("Genius") ? pageMetadata.title.split(" - ")[0] : pageMetadata.artist;
+      const cardSongName = pageMetadata.artist.startsWith("Genius") ? pageMetadata.title.split(" - ")[1].split(" (")[0] : pageMetadata.title;
+      const cardMeta = `${cardArtist.toUpperCase()}, “${cardSongName.toUpperCase()}”`;
+      sessionStorage.setItem("cardMeta", cardMeta);
       navigate(PATHS.cardsGeneration);
     }).catch((error: ApiResponse) => {
       sendToast(error.message, TOAST_TYPE.ERROR);
@@ -102,11 +106,11 @@ const Lyrics = (): JSX.Element => {
         setLyricsParts([]);
       } else {
         const metadata = response.data.lyrics_parts.find(part => part.section === "[Metadata]")?.lyrics.split("\n") ?? [];
-        const metadataObj = metadata.reduce((acc: { [key: string]: string }, curr) => {
+        const metadataObj = metadata.reduce((acc: Dict, curr) => {
           const [key, value] = curr.split(": ");
           acc[key] = value;
           return acc;
-        }, {} as { [key: string]: string });
+        }, {} as Dict);
         setPageMetadata(metadataObj);
 
         const lyricsParts = response.data.lyrics_parts.filter(part => part.section !== "[Metadata]");
@@ -134,7 +138,12 @@ const Lyrics = (): JSX.Element => {
       });
     };
 
-    isTokenSet().then((isSet) => { setIsGeniusTokenSet(isSet); });
+    isTokenSet().then((isSet) => {
+      if (!isSet)
+        navigate(`${PATHS.redirect}?redirect_to=${PATHS.home}&error_text=${TOAST.NO_GENIUS_TOKEN}`);
+      else
+        setIsGeniusTokenSet(true);
+    });
   });
 
   return (
