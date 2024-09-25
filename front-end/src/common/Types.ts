@@ -9,9 +9,10 @@ export type CardsGenerationResponse = ApiResponse & {
 };
 
 export type CardsGenerationRequest = {
+  cardMetaname: string;
+  bgImg: File | undefined;
   generateOutro: boolean;
   includeBackgroundImg: boolean;
-  cardMetaname: string;
 };
 
 export type SongPartsCards = string[][];
@@ -52,7 +53,7 @@ export type YoutubeRequest = {
 };
 
 export type FileUploadRequest = {
-  file?: File;
+  file: File | undefined;
   includeCenterArtwork: boolean;
 };
 

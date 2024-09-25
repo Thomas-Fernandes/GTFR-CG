@@ -6,9 +6,10 @@ type Props = {
   accept?: string;
   labelClassName?: string;
   captionClassName?: string;
+  setter: React.Dispatch<React.SetStateAction<File | undefined>>;
 };
 
-const FileUpload: React.FC<Props> = ({ id, label, accept, labelClassName, captionClassName }) => {
+const FileUploader: React.FC<Props> = ({ id, label, accept, labelClassName, captionClassName, setter }) => {
   const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -16,6 +17,7 @@ const FileUpload: React.FC<Props> = ({ id, label, accept, labelClassName, captio
       const file = event.target.files[0];
       const displayName = file.name.length > 20 ? `${file.name.slice(0, 17)}...` + file.name.split('.').pop() : file.name;
       setSelectedFileName(displayName);
+      setter(file);
     } else {
       setSelectedFileName(null);
     }
@@ -31,11 +33,11 @@ const FileUpload: React.FC<Props> = ({ id, label, accept, labelClassName, captio
       <label htmlFor="file-upload" className={labelClassName}>
         {label}
       </label>
-      <p className={captionClassName}>
+      <p className={captionClassName} style={selectedFileName ? {} : { fontStyle: "italic" }}>
         {selectedFileName ?? "No file selected."}
       </p>
     </div>
   );
 };
 
-export default FileUpload;
+export default FileUploader;

@@ -1,15 +1,17 @@
 import { FormEvent, JSX, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import FileUploader from "../../common/components/FileUploader";
+import ImgButton from "../../common/components/ImgButton";
 import { is2xxSuccessful, objectToQueryString, sendRequest } from "../../common/Requests";
 import { hideSpinner, showSpinner } from "../../common/Spinner";
 import { sendToast } from "../../common/Toast";
 import { ApiResponse, FileUploadRequest, ItunesRequest, ItunesResponse, ItunesResult, YoutubeRequest } from "../../common/Types";
 import useTitle from "../../common/UseTitle";
+import { isFileExtensionAccepted } from "../../common/utils/FileUtils";
 import { FILE_UPLOAD, ITUNES, YOUTUBE } from "../../constants/ArtworkGeneration";
 import { API, BACKEND_URL, ITUNES_URL, PATHS, SPINNER_ID, TITLE, TOAST, TOAST_TYPE } from "../../constants/Common";
 
-import ImgButton from "../../common/components/ImgButton";
 import "./ArtworkGeneration.css";
 
 const ArtworkGeneration = (): JSX.Element => {
@@ -134,9 +136,6 @@ const ArtworkGeneration = (): JSX.Element => {
   };
 
   // File upload
-  const isFileExtensionAccepted = (fileName: string, acceptedExtensions: string[]): boolean => {
-    return acceptedExtensions.includes(fileName.split(".").slice(-1)[0].toLowerCase());
-  };
   const handleSubmitFileUpload = (e: FormEvent<HTMLFormElement>, body: FileUploadRequest) => {
     e.preventDefault();
 
@@ -151,14 +150,11 @@ const ArtworkGeneration = (): JSX.Element => {
     }
 
     const formData = new FormData();
-    formData.append("file", new FormData(e.currentTarget).get("file") as File);
+    const file = new FormData(e.currentTarget).get("file") as File;
+    formData.append("file", file);
     formData.append("includeCenterArtwork", body.includeCenterArtwork.toString());
-    const data = {
-      ...body,
-      file: new FormData(e.currentTarget).get("file") as File,
-    };
 
-    const fileExtensionIsAccepted = isFileExtensionAccepted(data.file.name, FILE_UPLOAD.ACCEPTED_IMG_EXTENSIONS);
+    const fileExtensionIsAccepted = isFileExtensionAccepted(file.name, FILE_UPLOAD.ACCEPTED_IMG_EXTENSIONS);
     if (!fileExtensionIsAccepted) {
       sendToast(
         TOAST.INVALID_FILE_TYPE + "\n" +
@@ -280,9 +276,7 @@ const ArtworkGeneration = (): JSX.Element => {
       <h1>...or upload your image</h1>
       <form id="local" onSubmit={(e) => handleSubmitFileUpload(e, {file, includeCenterArtwork})} encType="multipart/form-data">
         <div className="flexbox">
-          <input type="file" name="file" className="file" accept="image/*"
-            onChange={(e) => setFile(e.target.files ? e.target.files[0] : undefined)}
-          />
+          <FileUploader id="background-image" label="Select background image" accept="image/*" setter={setFile} />
           <label className="checkbox" htmlFor="include_center_artwork">
             <input
               type="checkbox" name="include_center_artwork" id="include_center_artwork" defaultChecked

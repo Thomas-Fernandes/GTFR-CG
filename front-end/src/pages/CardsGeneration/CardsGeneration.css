@@ -13,13 +13,11 @@
             }
 
             &#file-upload {
-                width: 75%;
-                align-self: center;
-                border: 2px solid #dddddd;
+                gap: 1rem;
 
-                input {
-                    width: 100%;
-                    padding: 1.5rem;
+                >p {
+                    font-size: larger;
+                    font-weight: bold;
                 }
             }
         }
