@@ -280,7 +280,7 @@ const ArtworkGeneration = (): JSX.Element => {
       <h1>...or upload your image</h1>
       <form id="local" onSubmit={(e) => handleSubmitFileUpload(e, {file, includeCenterArtwork})} encType="multipart/form-data">
         <div className="flexbox">
-          <input type="file" name="file" className="file"
+          <input type="file" name="file" className="file" accept="image/*"
             onChange={(e) => setFile(e.target.files ? e.target.files[0] : undefined)}
           />
           <label className="checkbox" htmlFor="include_center_artwork">

@@ -371,8 +371,8 @@ input[type="file"] {
 }
 
 .flexbox {
+    justify-content: center;
     align-items: center;
-    align-content: center;
     flex-wrap: wrap;
 }
 .flex-col {
@@ -380,6 +380,9 @@ input[type="file"] {
 }
 .flex-row {
     flex-direction: row;
+}
+.g-1 {
+    gap: 1rem;
 }
 
 .hidden {
@@ -410,4 +413,24 @@ input[type="file"] {
 }
 .t-red {
     color: #7f0000;
+}
+
+.file-upload-component {
+    align-self: center;
+    cursor: pointer;
+    width: 32rem;
+    border: 2px solid #dddddd;
+    padding: .5rem;
+
+    * {
+        cursor: pointer;
+    }
+
+    label {
+        padding: .5rem 1rem;
+
+        background-color: #007bff;
+        color: #ffffff;
+        border-radius: .25rem;
+    }
 }

@@ -11,6 +11,17 @@
                     margin: 0;
                 }
             }
+
+            &#file-upload {
+                width: 75%;
+                align-self: center;
+                border: 2px solid #dddddd;
+
+                input {
+                    width: 100%;
+                    padding: 1.5rem;
+                }
+            }
         }
 
         .action-button {

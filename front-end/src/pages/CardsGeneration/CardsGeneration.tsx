@@ -1,6 +1,7 @@
 import { FormEvent, JSX, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import FileUpload from "../../common/components/FileUpload";
 import ZipDownloadButton from "../../common/components/ZipDownloadButton";
 import { is2xxSuccessful, sendRequest } from "../../common/Requests";
 import { hideSpinner, showSpinner } from "../../common/Spinner";
@@ -19,9 +20,10 @@ const CardsGeneration = (): JSX.Element => {
 
   const navigate = useNavigate();
 
+  const [cardMetaname, setCardMetaname] = useState("");
+  const [file, setFile] = useState<File>();
   const [generateOutro, setGenerateOutro] = useState(true);
   const [includeBackgroundImg, setIncludeBackgroundImg] = useState(true);
-  const [cardMetaname, setCardMetaname] = useState("");
 
   const [generationInProgress, setGenerationInProgress] = useState(false);
 
@@ -140,6 +142,12 @@ const CardsGeneration = (): JSX.Element => {
             type="text" name="metaname" placeholder="if empty, the card metaname will be inferred"
             value={cardMetaname} onChange={(e) => setCardMetaname(e.target.value)}
             style={!cardMetaname ? { fontStyle: "italic", fontSize: ".75rem" } : {}}
+          />
+        </div>
+        <FileUpload id="background-image" label="Select background image" accept="image/*" />
+        <div id="file-upload" className="settings flexbox flex-row">
+          <input type="file" name="manual-background" accept="image/*"
+            onChange={(e) => setFile(e.target.files ? e.target.files[0] : undefined)}
           />
         </div>
         <div id="selectors" className="settings flexbox flex-row">
