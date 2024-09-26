@@ -20,6 +20,7 @@ const FileUploader: React.FC<Props> = ({ id, label, accept, labelClassName, capt
       setter(file);
     } else {
       setSelectedFileName(null);
+      setter(undefined);
     }
   };
 

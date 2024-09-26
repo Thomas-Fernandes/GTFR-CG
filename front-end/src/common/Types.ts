@@ -26,7 +26,7 @@ export type LyricsPart = {
 
 export type LyricsResponse = ApiResponse & {
   data: {
-    lyrics_parts: LyricsPart[];
+    lyricsParts: LyricsPart[];
   };
 };
 export type LyricsRequest = {

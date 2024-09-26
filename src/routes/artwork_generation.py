@@ -1,6 +1,7 @@
 from flask import Blueprint, Response, request
 from flask_cors import cross_origin
 from requests import get as requestsGet
+from werkzeug.datastructures import FileStorage
 
 from ast import literal_eval
 from os import path, makedirs
@@ -9,7 +10,8 @@ from uuid import uuid4
 
 import src.constants as const
 from src.logger import log
-from src.web_utils import createApiResponse
+from src.utils.soft_utils import checkImageFilenameValid, snakeToCamelCase
+from src.utils.web_utils import createApiResponse
 
 from src.app import app
 bp_artwork_generation = Blueprint(const.ROUTES.art_gen.bp_name, __name__.split('.')[-1])
@@ -26,10 +28,11 @@ def useItunesImage() -> Response:
     body = literal_eval(request.get_data(as_text=True))
     image_url: Optional[str] = body.get("url")
     if image_url is None:
+        log.error(const.ERR_NO_IMG_URL)
         return createApiResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_NO_IMG_URL)
 
     if const.SessionFields.user_folder.value not in session:
-        log.debug("User folder not found in session. Creating a new one.")
+        log.debug(const.WARN_NO_USER_FOLDER)
         session[const.SessionFields.user_folder.value] = str(uuid4())
 
     user_folder = str(session[const.SessionFields.user_folder.value]) + const.SLASH + const.AvailableCacheElemType.images.value + const.SLASH
@@ -62,36 +65,27 @@ def useLocalImage() -> Response:
     """
     log.log("POST - Generating artwork using a local image...")
     if "file" not in request.files:
+        log.error(const.ERR_NO_FILE)
         return createApiResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_NO_FILE)
-    file = request.files["file"]
+    file: FileStorage = request.files["file"]
 
     if const.SessionFields.user_folder.value not in session:
-        log.debug("User folder not found in session. Creating a new one.")
+        log.debug(const.WARN_NO_USER_FOLDER)
         session[const.SessionFields.user_folder.value] = str(uuid4())
     user_folder = str(session[const.SessionFields.user_folder.value]) + const.SLASH + const.AvailableCacheElemType.images.value + const.SLASH
 
-    def checkImageFilenameValid(filename: str | None) -> Optional[str]:
-        """ Checks if the given filename is valid for an image file.
-        :param filename: [string] The filename to check.
-        :return: [string?] The error message if the filename is invalid, None otherwise.
-        """
-        log.debug(f"Checking image filename validity: {filename}")
-        if filename == None or filename.strip() == "":
-            return const.ERR_NO_FILE
-        if not('.' in filename and filename.rsplit('.', 1)[1].lower() in ["png", "jpg", "jpeg"]):
-            return const.ERR_INVALID_FILE_TYPE
-        return None
     error = checkImageFilenameValid(file.filename)
     if error is not None:
         log.error(error)
         return createApiResponse(const.HttpStatus.BAD_REQUEST.value, error)
     if file.filename is None:
+        log.error(const.ERR_NO_FILE)
         return createApiResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_NO_FILE)
     log.debug(f"Image filename is valid: {file.filename}")
 
     include_center_artwork: bool = \
-        const.SessionFields.include_center_artwork.value in request.form \
-        and request.form[const.SessionFields.include_center_artwork.value] == "on"
+        snakeToCamelCase(const.SessionFields.include_center_artwork.value) in request.form \
+        and request.form[snakeToCamelCase(const.SessionFields.include_center_artwork.value)] == "true"
     user_processed_path = path.join(const.PROCESSED_DIR, user_folder)
     log.info(f"Creating user processed path: {user_processed_path}")
     makedirs(user_processed_path, exist_ok=True)
@@ -123,7 +117,7 @@ def processYoutubeThumbnail(thumbnail_url: str) -> Response:
     :return: [Response] Contains the status and path of the processed image.
     """
     if const.SessionFields.user_folder.value not in session:
-        log.debug("User folder not found in session. Creating a new one.")
+        log.debug(const.WARN_NO_USER_FOLDER)
         session[const.SessionFields.user_folder.value] = str(uuid4())
 
     user_folder = str(session[const.SessionFields.user_folder.value]) + const.SLASH + const.AvailableCacheElemType.images.value + const.SLASH
@@ -154,10 +148,12 @@ def useYoutubeThumbnail() -> Response:
     body = literal_eval(request.get_data(as_text=True))
     youtube_url: Optional[str] = body.get("url")
     if youtube_url is None:
+        log.error(const.ERR_NO_IMG_URL)
         return createApiResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_NO_IMG_URL)
 
     video_id = extractYoutubeVideoId(youtube_url)
     if video_id is None:
+        log.error(const.ERR_INVALID_YT_URL)
         return createApiResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_INVALID_YT_URL)
 
     thumbnail_url = f"https://i3.ytimg.com/vi/{video_id}/maxresdefault.jpg"

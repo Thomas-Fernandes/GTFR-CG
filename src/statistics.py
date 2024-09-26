@@ -61,7 +61,7 @@ class Stats:
 
 from json import loads, dumps, JSONDecodeError
 
-from src.soft_utils import getNowEpoch
+from src.utils.soft_utils import getNowEpoch
 
 def getJsonStatsFromFile(path: str = const.STATS_FILE_PATH) -> JsonDict:
     f""" Returns the statistics contained in a JSON statistics file.

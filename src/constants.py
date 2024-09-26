@@ -54,6 +54,7 @@ class SessionFields(Enum):
     # Cards generation
     cards_contents = "cards_contents"
     song_data = "song_data"
+    enforce_background_image = "enforce_background_image"
     gen_outro = "generate_outro"
     include_bg_img = "include_background_img"
     card_metaname = "card_metaname"
@@ -136,6 +137,7 @@ CARDS_BOTTOM_B = f"{CARDS_DIR}bottom_black.png"
 CARDS_BOTTOM_W = f"{CARDS_DIR}bottom_white.png"
 
 # Error messages
+WARN_NO_USER_FOLDER = "User folder not found in session. Creating a new one."
 ERR_USER_FOLDER_NOT_FOUND = "User folder not found."
 ERR_NO_FILE = "Invalid file: No file selected."
 ERR_NO_IMG = "No image was selected or uploaded."

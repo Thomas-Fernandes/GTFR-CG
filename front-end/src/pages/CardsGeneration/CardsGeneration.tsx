@@ -96,7 +96,7 @@ const CardsGeneration = (): JSX.Element => {
 
     const formData = new FormData();
     if (body.bgImg)
-      formData.append("bgImg", body.bgImg);
+      formData.append("file", body.bgImg);
     formData.append("cardMetaname", body.cardMetaname);
     formData.append("generateOutro", body.generateOutro.toString());
     formData.append("includeBackgroundImg", body.includeBackgroundImg.toString());
@@ -171,13 +171,15 @@ const CardsGeneration = (): JSX.Element => {
             />
             <p className="checkbox-label italic">Generate outro image</p>
           </label>
-          <label className="checkbox" htmlFor="include_background">
-            <input
-              type="checkbox" name="include_background" id="include_background" defaultChecked
-              onChange={(e) => setIncludeBackgroundImg(e.target.checked)}
-            />
-            <p className="checkbox-label italic">Include background image</p>
-          </label>
+          { !bgImg &&
+            <label className="checkbox" htmlFor="include_background">
+              <input
+                type="checkbox" name="include_background" id="include_background" defaultChecked
+                onChange={(e) => setIncludeBackgroundImg(e.target.checked)}
+              />
+              <p className="checkbox-label italic">Include background image</p>
+            </label>
+          }
         </div>
 
         <div className="action-button" id={SPINNER_ID.CARDS_GENERATE}>

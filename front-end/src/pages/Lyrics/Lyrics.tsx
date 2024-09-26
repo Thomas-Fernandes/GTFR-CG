@@ -41,7 +41,7 @@ const Lyrics = (): JSX.Element => {
 
     const metadata = "Metadata | " + Object.entries(pageMetadata).map(([key, value]) => `${key}: ${value}`).join(" ;;; ");
     const data = {
-      cards_contents: [[metadata]].concat(body),
+      cardsContents: [[metadata]].concat(body),
     };
 
     sendRequest("POST", BACKEND_URL + API.CARDS_GENERATION.SAVE_CARDS_CONTENTS, data).then((response: ApiResponse) => {
@@ -97,15 +97,15 @@ const Lyrics = (): JSX.Element => {
         throw new Error(response.message);
       }
 
-      const responseFirstSection = response.data.lyrics_parts[0].section;
+      const responseFirstSection = response.data.lyricsParts[0].section;
       if (["error", "warn"].includes(responseFirstSection)) {
         sendToast(
-          response.data.lyrics_parts[0].lyrics,
+          response.data.lyricsParts[0].lyrics,
           responseFirstSection === "error" ? TOAST_TYPE.ERROR : TOAST_TYPE.WARN
         );
         setLyricsParts([]);
       } else {
-        const metadata = response.data.lyrics_parts.find(part => part.section === "[Metadata]")?.lyrics.split("\n") ?? [];
+        const metadata = response.data.lyricsParts.find(part => part.section === "[Metadata]")?.lyrics.split("\n") ?? [];
         const metadataObj = metadata.reduce((acc: Dict, curr) => {
           const [key, value] = curr.split(": ");
           acc[key] = value;
@@ -113,7 +113,7 @@ const Lyrics = (): JSX.Element => {
         }, {} as Dict);
         setPageMetadata(metadataObj);
 
-        const lyricsParts = response.data.lyrics_parts.filter(part => part.section !== "[Metadata]");
+        const lyricsParts = response.data.lyricsParts.filter(part => part.section !== "[Metadata]");
         setLyricsParts(lyricsParts);
       }
     }).catch((error: ApiResponse) => {
