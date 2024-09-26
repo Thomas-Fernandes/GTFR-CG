@@ -424,6 +424,7 @@ input[type="file"] {
 
     * {
         cursor: pointer;
+        margin: 0 .5rem;
     }
 
     label {
@@ -432,5 +433,30 @@ input[type="file"] {
         background-color: #007bff;
         color: #ffffff;
         border-radius: .25rem;
+    }
+
+    p {
+        margin-right: 0;
+    }
+
+    div, button {
+        margin: 0;
+    }
+}
+.btn-remove {
+    cursor: pointer;
+    padding: .25rem;
+    border: none;
+
+    background: none;
+    box-shadow: none;
+
+    color: #ffffff;
+    font-size: larger;
+    transition: all .01s;
+
+    &:hover {
+        color: #ff0000;
+        background: none;
     }
 }
