@@ -135,16 +135,29 @@ def generateCard(output_path: str, lyrics: list[str], card_metadata: CardMetadat
     drawMetaname(draw, card_metadata.card_metaname, card_metadata.text_meta_color)
 
     log.debug(f"    Card contents: {lyrics}")
+    start_translation_from = const.Y_BOTTOM_LYRICS - (len(lyrics) * const.TRANSLATION_HEIGHT + (len(lyrics) - 1) * const.TRANSLATION_SPACING)
     start_lyrics_from = const.Y_BOTTOM_LYRICS - (len(lyrics) * const.LYRIC_HEIGHT + (len(lyrics) - 1) * const.LYRIC_SPACING)
     for lyric_line in lyrics:
-        lyric_px_length = draw.textlength(lyric_line, font=const.FONT_LYRICS)
-        rectangle_end_x_coord = const.X_META_LYRIC + const.LYRIC_BOX_OFFSET + const.LYRIC_TEXT_OFFSET + lyric_px_length
+        lyric_px_length = draw.textlength(lyric_line, font=const.FONT_TRANSLATION)
+        rectangle_end_x_coord = const.X_META_LYRIC + const.TRANSLATION_BOX_OFFSET + const.TRANSLATION_TEXT_OFFSET + lyric_px_length
         draw.rectangle(
-            [(const.X_META_LYRIC, start_lyrics_from), (rectangle_end_x_coord, start_lyrics_from + const.LYRIC_HEIGHT - 1)],
+            [(const.X_META_LYRIC, start_translation_from), (rectangle_end_x_coord, start_translation_from + const.TRANSLATION_HEIGHT - 1)],
+            fill=((255,255,255) if card_metadata.text_translation_color[0] == 0 else (0,0,0))
+        )
+        draw.text(
+            (const.X_META_LYRIC + const.TRANSLATION_BOX_OFFSET, start_translation_from + const.TRANSLATION_TEXT_OFFSET),
+            lyric_line, font=const.FONT_TRANSLATION, fill=card_metadata.text_translation_color
+        )
+        start_translation_from += const.TRANSLATION_HEIGHT + const.TRANSLATION_SPACING
+        ############### "On s'ra plus comme avant (On s'ra plus, on s'ra plus comme avan"
+        lyric_px_length = draw.textlength(lyric_line, font=const.FONT_LYRICS)
+        rectangle_start_x_coord = (1920 - const.X_META_LYRIC) - const.LYRIC_BOX_OFFSET - const.LYRIC_TEXT_OFFSET - lyric_px_length
+        draw.rectangle(
+            [(rectangle_start_x_coord, start_lyrics_from), (1920 - const.X_META_LYRIC, start_lyrics_from + (const.LYRIC_HEIGHT) - 1)],
             fill=((255,255,255) if card_metadata.text_lyrics_color[0] == 0 else (0,0,0))
         )
         draw.text(
-            (const.X_META_LYRIC + const.LYRIC_BOX_OFFSET, start_lyrics_from + const.LYRIC_TEXT_OFFSET),
+            ((1920 - const.X_META_LYRIC - lyric_px_length) + const.LYRIC_BOX_OFFSET, start_lyrics_from + const.LYRIC_TEXT_OFFSET),
             lyric_line, font=const.FONT_LYRICS, fill=card_metadata.text_lyrics_color
         )
         start_lyrics_from += const.LYRIC_HEIGHT + const.LYRIC_SPACING
@@ -192,12 +205,13 @@ def getCardsMetadata(song_data: SongMetadata, include_bg_img: bool) -> CardMetad
         return int(luminance)
     dominant_color_luminance = getLuminance(dominant_color)
     text_meta_color = (0,0,0) if dominant_color_luminance > 128 else (255,255,255)
-    text_lyrics_color = (255,255,255) if dominant_color_luminance > 220 else (0,0,0)
+    text_translation_color = (255,255,255) if dominant_color_luminance > 220 else (0,0,0)
+    text_lyrics_color = (0,0,0) if text_translation_color[0] == 255 else (255,255,255)
 
     cards_metadata = CardMetadata(
         card_metaname=card_metaname,
         include_bg_img=eval(include_bg_img.capitalize()), bg=bg, dominant_color=dominant_color,
-        text_meta_color=text_meta_color, text_lyrics_color=text_lyrics_color,
+        text_meta_color=text_meta_color, text_translation_color=text_translation_color, text_lyrics_color=text_lyrics_color
     )
     log.debug(f"  {cards_metadata}")
     return cards_metadata

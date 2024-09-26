@@ -70,13 +70,15 @@ class CardMetadata:
         include_bg_img: [bool] Whether to include the background image.
         bg: [Image.Image] The background image of the card.
         dominant_color: [RGBColor] The average color of the background image.
-        text_lyrics_color: [RGBColor] The background color for the text of the card.
+        text_translation_color: [RGBColor] The background color for the translation text of the card.
+        text_lyrics_color: [RGBColor] The text color of the lyrics of the card.
         text_meta_color: [RGBColor] The text color of the metadata of the card.
     """
     card_metaname: str
     include_bg_img: bool
     bg: Image.Image
     dominant_color: RGBAColor
+    text_translation_color: RGBColor
     text_lyrics_color: RGBColor
     text_meta_color: RGBColor
 
