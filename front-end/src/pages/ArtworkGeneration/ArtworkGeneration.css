@@ -1,10 +1,6 @@
 #artwork-generation {
     form {
         &#itunes {
-            #itunes-text {
-                margin-bottom: 0;
-            }
-
             .itunes-search {
                 width: 33rem;
 
@@ -15,7 +11,11 @@
             }
         }
 
-        input {
+        &#local>div>label {
+            padding-top: .5rem;
+        }
+
+        input[type="submit"] {
             padding: 1.5rem;
             margin: 1rem 0;
 
@@ -25,6 +25,10 @@
                 width: 75%;
                 margin-bottom: 1%;
             }
+        }
+
+        input[type="text"] {
+            margin: 0;
         }
     }
 
@@ -90,4 +94,7 @@
         }
     }
 
+    hr {
+        margin-top: 2rem;
+    }
 }
