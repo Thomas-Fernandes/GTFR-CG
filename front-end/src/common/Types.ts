@@ -53,7 +53,7 @@ export type YoutubeRequest = {
 };
 
 export type FileUploadRequest = {
-  file: File | undefined;
+  localFile: File | undefined;
   includeCenterArtwork: boolean;
 };
 
