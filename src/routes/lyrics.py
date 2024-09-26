@@ -10,7 +10,7 @@ from typing import Optional
 import src.constants as const
 from src.logger import log
 from src.statistics import updateStats
-from src.web_utils import createApiResponse
+from src.utils.web_utils import createApiResponse
 
 from src.app import app
 bp_lyrics = Blueprint(const.ROUTES.lyrics.bp_name, __name__.split('.')[-1])
@@ -100,7 +100,8 @@ def getGeniusLyrics() -> Response:
     song_name: Optional[str] = body.get("songName")
     artist: Optional[str] = body.get("artist")
     if song_name is None or artist is None:
+        log.error(const.ERR_LYRICS_MISSING_PARAMS)
         return createApiResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_LYRICS_MISSING_PARAMS)
 
     lyrics_parts = fetchLyricsFromGenius(song_name, artist)
-    return createApiResponse(const.HttpStatus.OK.value, "Lyrics fetched successfully.", {"lyrics_parts": lyrics_parts})
+    return createApiResponse(const.HttpStatus.OK.value, "Lyrics fetched successfully.", {"lyricsParts": lyrics_parts})

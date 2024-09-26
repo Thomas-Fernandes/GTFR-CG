@@ -1,7 +1,8 @@
 from colorthief import ColorThief
 from flask import Blueprint, Response, request
 from flask_cors import cross_origin
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw
+from werkzeug.datastructures import FileStorage
 
 from ast import literal_eval
 from os import path, makedirs
@@ -12,10 +13,11 @@ from uuid import uuid4
 import src.constants as const
 from src.logger import log
 from src.routes.lyrics import genius
-from src.soft_utils import doesFileExist, getCardsContentsFromFile, getNowStamp, writeCardsContentsToFile
+from src.routes.processed_images import generateCoverArt
 from src.statistics import updateStats
 from src.typing import CardsContents, CardMetadata, RGBAColor, SongMetadata
-from src.web_utils import createApiResponse
+from src.utils.soft_utils import doesFileExist, getCardsContentsFromFile, getNowStamp, snakeToCamelCase, writeCardsContentsToFile
+from src.utils.web_utils import createApiResponse
 
 from src.app import app
 bp_cards_generation = Blueprint(const.ROUTES.cards_gen.bp_name, __name__.split('.')[-1])
@@ -160,7 +162,9 @@ def getCardsMetadata(song_data: SongMetadata, include_bg_img: bool) -> CardMetad
     :return: [dict] The metadata of the cards.
     """
     bg_path = f"{const.PROCESSED_DIR}{session[const.SessionFields.user_folder.value]}{const.SLASH}" + \
-        f"{const.AvailableCacheElemType.images.value}{const.SLASH}{const.PROCESSED_ARTWORK_FILENAME}"
+        f"{const.AvailableCacheElemType.images.value}{const.SLASH}" + \
+        f"{const.PROCESSED_ARTWORK_FILENAME}"
+    log.debug(f"  Background image path: {bg_path}")
     if not doesFileExist(bg_path):
         raise FileNotFoundError("Background image missing.")
     bg = Image.open(bg_path)
@@ -202,14 +206,16 @@ def getCardsMetadata(song_data: SongMetadata, include_bg_img: bool) -> CardMetad
     log.debug(f"  {cards_metadata}")
     return cards_metadata
 
-def generateCards(cards_contents: CardsContents, song_data: SongMetadata, gen_outro: bool, include_bg_img: bool) -> Response:
+def generateCards(cards_contents: CardsContents, song_data: SongMetadata, settings: dict[str, bool]) -> Response:
     """ Generates cards using the contents provided.
     :param cards_contents: [CardsContents] The contents of the cards.
-    :param song_data: [dict] The data of the song.
-    :param gen_outro: [bool] True if the outro card should be generated, False otherwise.
-    :param include_bg_img: [bool] True if the background image should be included, False otherwise.
+    :param song_data: [SongMetadata] The metadata of the song.
+    :param settings: [dict] The settings for card generation.
     :return: [Response] The response to the request.
     """
+    gen_outro = settings.get(const.SessionFields.gen_outro.value)
+    include_bg_img = settings.get(const.SessionFields.include_bg_img.value)
+
     if const.SessionFields.user_folder.value not in session:
         log.error("User folder not found in session. Needed thumbnail is unreachable.")
         return createApiResponse(const.HttpStatus.INTERNAL_SERVER_ERROR.value, const.ERR_USER_FOLDER_NOT_FOUND)
@@ -281,6 +287,24 @@ def getSongMetadata(cards_contents: CardsContents, card_metaname: str | None) ->
 
     return song_data
 
+def saveEnforcedBackgroundImage(file: FileStorage, include_center_artwork: bool) -> None:
+    if const.SessionFields.user_folder.value not in session:
+        log.debug(const.WARN_NO_USER_FOLDER)
+        session[const.SessionFields.user_folder.value] = str(uuid4())
+    user_folder = str(session[const.SessionFields.user_folder.value]) + const.SLASH + const.AvailableCacheElemType.images.value + const.SLASH
+    user_processed_path = path.join(const.PROCESSED_DIR, user_folder)
+    log.info(f"Creating user processed path: {user_processed_path}")
+    makedirs(user_processed_path, exist_ok=True)
+    image_path = path.join(user_processed_path, "uploaded_image.png")
+    log.debug(f"Saving uploaded image to {image_path}")
+    file.save(image_path)
+    output_bg = path.join(user_processed_path, const.PROCESSED_ARTWORK_FILENAME)
+    generateCoverArt(image_path, output_bg, include_center_artwork)
+
+def areCardgenParametersInvalid(enforce_background_image: bool, include_center_artwork: bool, include_bg_img: bool) -> bool:
+    return (enforce_background_image and include_center_artwork is None) \
+        or (not enforce_background_image and include_bg_img is None)
+
 @bp_cards_generation.route(api_prefix + "/generate", methods=["POST"])
 @cross_origin()
 def postGenerateCards() -> Response:
@@ -289,14 +313,23 @@ def postGenerateCards() -> Response:
     """
     log.debug("POST - Generating cards...")
     if const.SessionFields.cards_contents.value not in session:
+        log.error(const.ERR_CARDS_CONTENTS_NOT_FOUND)
         return createApiResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_CARDS_CONTENTS_NOT_FOUND)
 
-    body = literal_eval(request.get_data(as_text=True))
-    gen_outro: Optional[str] = body[const.SessionFields.gen_outro.value]
-    include_bg_img: Optional[str] = body[const.SessionFields.include_bg_img.value]
-    if gen_outro is None or include_bg_img is None:
+    enforce_background_image = "file" in request.files
+    include_center_artwork: Optional[bool] = None
+    gen_outro: Optional[str] = request.form[snakeToCamelCase(const.SessionFields.gen_outro.value)]
+    include_bg_img: Optional[str] = "true"
+    if enforce_background_image:
+        include_center_artwork = \
+            request.form[snakeToCamelCase(const.SessionFields.include_center_artwork.value)] == "true"
+        saveEnforcedBackgroundImage(request.files["file"], include_center_artwork)
+    else:
+        include_bg_img = request.form[snakeToCamelCase(const.SessionFields.include_bg_img.value)]
+    if areCardgenParametersInvalid(enforce_background_image, include_center_artwork, include_bg_img):
+        log.error(const.ERR_CARDS_GEN_PARAMS_NOT_FOUND)
         return createApiResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_CARDS_GEN_PARAMS_NOT_FOUND)
-    card_metaname: Optional[str] = body[const.SessionFields.card_metaname.value]
+    card_metaname: Optional[str] = request.form[snakeToCamelCase(const.SessionFields.card_metaname.value)]
 
     log.info("Getting cards contents from savefile...")
     try:
@@ -314,7 +347,11 @@ def postGenerateCards() -> Response:
         log.debug(f"    {card}")
     log.info("Cards contents retrieved successfully.")
 
-    return generateCards(cards_contents, song_data, eval(gen_outro.capitalize()), include_bg_img)
+    settings = {
+        const.SessionFields.gen_outro.value: eval(gen_outro.capitalize()),
+        const.SessionFields.include_bg_img.value: include_bg_img,
+    }
+    return generateCards(cards_contents, song_data, settings)
 
 def isListListStr(obj) -> bool: # type: ignore
     """ Checks if the object is a list of lists of strings.
@@ -336,7 +373,7 @@ def saveCardsContents(cards_contents: CardsContents) -> Response:
     :return: [Response] The response to the request.
     """
     if const.SessionFields.user_folder.value not in session:
-        log.debug("User folder not found in session. Creating a new one.")
+        log.debug(const.WARN_NO_USER_FOLDER)
         session[const.SessionFields.user_folder.value] = str(uuid4())
 
     user_folder = str(session[const.SessionFields.user_folder.value]) + const.SLASH + const.AvailableCacheElemType.cards.value + const.SLASH
@@ -344,6 +381,7 @@ def saveCardsContents(cards_contents: CardsContents) -> Response:
     makedirs(user_processed_path, exist_ok=True)
 
     if not isListListStr(cards_contents):
+        log.error(const.ERR_CARDS_CONTENTS_INVALID)
         return createApiResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_CARDS_CONTENTS_INVALID)
 
     filepath = path.join(user_processed_path, f"contents_{getNowStamp()}.txt")
@@ -365,7 +403,8 @@ def postCardsContents() -> Response:
     """
     log.debug("POST - Saving cards contents...")
     body = literal_eval(request.get_data(as_text=True))
-    cards_contents: Optional[list[list[str]]] = body.get("cards_contents")
+    cards_contents: Optional[list[list[str]]] = body.get("cardsContents")
     if cards_contents is None:
+        log.error(const.ERR_CARDS_CONTENTS_NOT_FOUND)
         return createApiResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_CARDS_CONTENTS_NOT_FOUND)
     return saveCardsContents(cards_contents)

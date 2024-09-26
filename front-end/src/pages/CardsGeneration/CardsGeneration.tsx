@@ -1,6 +1,7 @@
 import { FormEvent, JSX, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import FileUploader from "../../common/components/FileUploader";
 import ZipDownloadButton from "../../common/components/ZipDownloadButton";
 import { is2xxSuccessful, sendRequest } from "../../common/Requests";
 import { hideSpinner, showSpinner } from "../../common/Spinner";
@@ -10,6 +11,8 @@ import useTitle from "../../common/UseTitle";
 import { PROCESSED_CARDS_PATH } from "../../constants/CardsGeneration";
 import { API, BACKEND_URL, HTTP_STATUS, PATHS, SPINNER_ID, TITLE, TOAST, TOAST_TYPE } from "../../constants/Common";
 
+import { isFileExtensionAccepted } from "../../common/utils/FileUtils";
+import { FILE_UPLOAD } from "../../constants/ArtworkGeneration";
 import "./CardsGeneration.css";
 
 const CardsGeneration = (): JSX.Element => {
@@ -19,9 +22,11 @@ const CardsGeneration = (): JSX.Element => {
 
   const navigate = useNavigate();
 
+  const [cardMetaname, setCardMetaname] = useState("");
+  const [bgImg, setBgImg] = useState<File>();
+  const [includeCenterArtwork, setIncludeCenterArtwork] = useState(true);
   const [generateOutro, setGenerateOutro] = useState(true);
   const [includeBackgroundImg, setIncludeBackgroundImg] = useState(true);
-  const [cardMetaname, setCardMetaname] = useState("");
 
   const [generationInProgress, setGenerationInProgress] = useState(false);
 
@@ -74,17 +79,33 @@ const CardsGeneration = (): JSX.Element => {
       return;
     }
 
+    if (body.bgImg) {
+      const fileExtensionIsAccepted = isFileExtensionAccepted(body.bgImg.name, FILE_UPLOAD.ACCEPTED_IMG_EXTENSIONS);
+      if (!fileExtensionIsAccepted) {
+        sendToast(
+          TOAST.INVALID_FILE_TYPE + "\n" +
+            "Accepted file extensions: " + FILE_UPLOAD.ACCEPTED_IMG_EXTENSIONS.join(", ") + ".",
+          TOAST_TYPE.ERROR
+        );
+        return;
+      }
+    }
+
     setGenerationInProgress(true);
     showSpinner(SPINNER_ID.CARDS_GENERATE);
     setCardPaths([]);
 
-    const data = {
-      generate_outro: body.generateOutro.toString(),
-      include_background_img: body.includeBackgroundImg.toString(),
-      card_metaname: body.cardMetaname,
-    };
+    const formData = new FormData();
+    if (body.bgImg) {
+      formData.append("file", body.bgImg);
+      if (body.includeCenterArtwork !== undefined)
+        formData.append("includeCenterArtwork", body.includeCenterArtwork.toString());
+    } else if (body.includeBackgroundImg !== undefined)
+      formData.append("includeBackgroundImg", body.includeBackgroundImg.toString());
+    formData.append("cardMetaname", body.cardMetaname);
+    formData.append("generateOutro", body.generateOutro.toString());
 
-    sendRequest("POST", BACKEND_URL + API.CARDS_GENERATION.GENERATE_CARDS, data).then((response: CardsGenerationResponse) => {
+    sendRequest("POST", BACKEND_URL + API.CARDS_GENERATION.GENERATE_CARDS, formData).then((response: CardsGenerationResponse) => {
       if (!is2xxSuccessful(response.status)) {
         throw new Error(response.message);
       }
@@ -134,7 +155,7 @@ const CardsGeneration = (): JSX.Element => {
 
       <h1>{TITLE.CARDS_GENERATION}</h1>
 
-      <form id="settings" onSubmit={(e) => handleGenerateCards(e, {generateOutro, includeBackgroundImg, cardMetaname})}>
+      <form id="settings" onSubmit={(e) => handleGenerateCards(e, {cardMetaname, bgImg, includeCenterArtwork, generateOutro, includeBackgroundImg})}>
         <div id="text-fields" className="settings flexbox flex-row">
           <input autoComplete="off"
             type="text" name="metaname" placeholder="if empty, the card metaname will be inferred"
@@ -142,7 +163,19 @@ const CardsGeneration = (): JSX.Element => {
             style={!cardMetaname ? { fontStyle: "italic", fontSize: ".75rem" } : {}}
           />
         </div>
+        <div id="file-upload" className="settings flexbox flex-row">
+          <FileUploader id="background-image" label="Select image" caption="Enforce background image?" accept="image/*" setter={setBgImg} />
+        </div>
         <div id="selectors" className="settings flexbox flex-row">
+          { bgImg &&
+            <label className="checkbox" htmlFor="include_center_artwork">
+              <input
+                type="checkbox" name="include_center_artwork" id="include_center_artwork" defaultChecked
+                onChange={(e) => setIncludeCenterArtwork(e.target.checked)}
+              />
+              <p className="checkbox-label italic">Include center artwork</p>
+            </label>
+          }
           <label className="checkbox" htmlFor="generate_outro">
             <input
               type="checkbox" name="generate_outro" id="generate_outro" defaultChecked
@@ -150,13 +183,15 @@ const CardsGeneration = (): JSX.Element => {
             />
             <p className="checkbox-label italic">Generate outro image</p>
           </label>
-          <label className="checkbox" htmlFor="include_background">
-            <input
-              type="checkbox" name="include_background" id="include_background" defaultChecked
-              onChange={(e) => setIncludeBackgroundImg(e.target.checked)}
-            />
-            <p className="checkbox-label italic">Include background image</p>
-          </label>
+          { !bgImg &&
+            <label className="checkbox" htmlFor="include_background">
+              <input
+                type="checkbox" name="include_background" id="include_background" defaultChecked
+                onChange={(e) => setIncludeBackgroundImg(e.target.checked)}
+              />
+              <p className="checkbox-label italic">Include background image</p>
+            </label>
+          }
         </div>
 
         <div className="action-button" id={SPINNER_ID.CARDS_GENERATE}>

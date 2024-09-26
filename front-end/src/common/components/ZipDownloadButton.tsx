@@ -1,7 +1,7 @@
-import React from 'react';
+import React from "react";
 
-import { saveAs } from 'file-saver';
-import JSZip from 'jszip';
+import { saveAs } from "file-saver";
+import JSZip from "jszip";
 
 type Props = {
   id?: string;

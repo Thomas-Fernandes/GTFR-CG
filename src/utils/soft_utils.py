@@ -3,9 +3,18 @@ from flask import Config
 from datetime import datetime
 from os import path
 from time import time
+from typing import Optional
 
 import src.constants as const
 from src.typing import CachedElemType, CardsContents
+
+def snakeToCamelCase(snake_str: str) -> str:
+    """ Converts a snake_case string to a camelCase string.
+    :param snake_str: [string] The snake_case string.
+    :return: [string] The camelCase string.
+    """
+    components = snake_str.split("_")
+    return components[0] + "".join(x.title() for x in components[1:])
 
 def doesFileExist(filepath: str) -> bool:
     """ Checks if the file exists.
@@ -35,6 +44,17 @@ def writeCardsContentsToFile(filepath: str, cards_contents: list[list[str]]) -> 
             if has_content:
                 file.write(("\n\n".join(card) + "\n\n").translate(const.TRANSLATION_TABLE))
 
+def checkImageFilenameValid(filename: str | None) -> Optional[str]:
+    """ Checks if the given filename is valid for an image file.
+    :param filename: [string] The filename to check.
+    :return: [string?] The error message if the filename is invalid, None otherwise.
+    """
+    if filename == None or filename.strip() == "":
+        return const.ERR_NO_FILE
+    if not('.' in filename and filename.rsplit('.', 1)[1].lower() in ["png", "jpg", "jpeg"]):
+        return const.ERR_INVALID_FILE_TYPE
+    return None
+
 def getNowStamp() -> str: # as YY-MM-DD_HH-MM-SS
     """ Returns the current time in stamp format.
     :return: [string] The current time in stamp format.
@@ -51,9 +71,6 @@ def getNowEpoch() -> str: # in MM-DD 24-hour format
     formatted_time = current_time.strftime(const.DATE_FORMAT_FULL)
     return formatted_time
 
-# cards and images: 1 to 2 hours if the user is still logged in
-#   (maybe send a toast to remind him to download the generated files)
-# 20 to 30 minutes after the user logs out
 def getExpirationTimestamp(filetype: CachedElemType, session: Config) -> int:
     """ Returns the default expiration timestamp for a given cached element type.
     :param elem: [CachedElemType] A type of cached elements.

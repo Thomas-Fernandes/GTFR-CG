@@ -9,9 +9,11 @@ export type CardsGenerationResponse = ApiResponse & {
 };
 
 export type CardsGenerationRequest = {
-  generateOutro: boolean;
-  includeBackgroundImg: boolean;
   cardMetaname: string;
+  bgImg: File | undefined;
+  includeCenterArtwork?: boolean;
+  generateOutro: boolean;
+  includeBackgroundImg?: boolean;
 };
 
 export type SongPartsCards = string[][];
@@ -25,7 +27,7 @@ export type LyricsPart = {
 
 export type LyricsResponse = ApiResponse & {
   data: {
-    lyrics_parts: LyricsPart[];
+    lyricsParts: LyricsPart[];
   };
 };
 export type LyricsRequest = {
@@ -52,7 +54,7 @@ export type YoutubeRequest = {
 };
 
 export type FileUploadRequest = {
-  file?: File;
+  localFile: File | undefined;
   includeCenterArtwork: boolean;
 };
 

@@ -7,7 +7,7 @@ from os import path
 import src.constants as const
 from src.logger import log
 from src.statistics import updateStats
-from src.web_utils import createApiResponse
+from src.utils.web_utils import createApiResponse
 
 from src.app import app
 bp_processed_images = Blueprint(const.ROUTES.proc_img.bp_name, __name__.split('.')[-1])
@@ -108,7 +108,7 @@ def processArtwork() -> Response:
     :return: [Response] The response to the request.
     """
     if const.SessionFields.generated_artwork_path.value not in session:
-        log.error("No processed image found in session.")
+        log.error(const.ERR_NO_IMG)
         return createApiResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_NO_IMG)
 
     user_folder = str(session[const.SessionFields.user_folder.value]) + const.SLASH + const.AvailableCacheElemType.images.value

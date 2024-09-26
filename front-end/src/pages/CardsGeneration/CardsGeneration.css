@@ -11,6 +11,15 @@
                     margin: 0;
                 }
             }
+
+            &#file-upload {
+                gap: 1rem;
+
+                >p {
+                    font-size: larger;
+                    font-weight: bold;
+                }
+            }
         }
 
         .action-button {

@@ -1,5 +1,9 @@
 import { HTTP_STATUS } from "../../constants/Common";
 
+export const isFileExtensionAccepted = (fileName: string, acceptedExtensions: string[]): boolean => {
+  return acceptedExtensions.includes(fileName.split(".").slice(-1)[0].toLowerCase());
+};
+
 export const doesFileExist = async (fileName: string): Promise<boolean> => {
   try {
     const response = await fetch(fileName);
