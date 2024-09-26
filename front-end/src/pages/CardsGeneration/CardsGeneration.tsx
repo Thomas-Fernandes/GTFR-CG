@@ -24,6 +24,7 @@ const CardsGeneration = (): JSX.Element => {
 
   const [cardMetaname, setCardMetaname] = useState("");
   const [bgImg, setBgImg] = useState<File>();
+  const [includeCenterArtwork, setIncludeCenterArtwork] = useState(true);
   const [generateOutro, setGenerateOutro] = useState(true);
   const [includeBackgroundImg, setIncludeBackgroundImg] = useState(true);
 
@@ -95,11 +96,14 @@ const CardsGeneration = (): JSX.Element => {
     setCardPaths([]);
 
     const formData = new FormData();
-    if (body.bgImg)
+    if (body.bgImg) {
       formData.append("file", body.bgImg);
+      if (body.includeCenterArtwork !== undefined)
+        formData.append("includeCenterArtwork", body.includeCenterArtwork.toString());
+    } else if (body.includeBackgroundImg !== undefined)
+      formData.append("includeBackgroundImg", body.includeBackgroundImg.toString());
     formData.append("cardMetaname", body.cardMetaname);
     formData.append("generateOutro", body.generateOutro.toString());
-    formData.append("includeBackgroundImg", body.includeBackgroundImg.toString());
 
     sendRequest("POST", BACKEND_URL + API.CARDS_GENERATION.GENERATE_CARDS, formData).then((response: CardsGenerationResponse) => {
       if (!is2xxSuccessful(response.status)) {
@@ -151,7 +155,7 @@ const CardsGeneration = (): JSX.Element => {
 
       <h1>{TITLE.CARDS_GENERATION}</h1>
 
-      <form id="settings" onSubmit={(e) => handleGenerateCards(e, {cardMetaname, bgImg, generateOutro, includeBackgroundImg})}>
+      <form id="settings" onSubmit={(e) => handleGenerateCards(e, {cardMetaname, bgImg, includeCenterArtwork, generateOutro, includeBackgroundImg})}>
         <div id="text-fields" className="settings flexbox flex-row">
           <input autoComplete="off"
             type="text" name="metaname" placeholder="if empty, the card metaname will be inferred"
@@ -160,10 +164,18 @@ const CardsGeneration = (): JSX.Element => {
           />
         </div>
         <div id="file-upload" className="settings flexbox flex-row">
-          <p>{"Enforce background image?"}</p>
-          <FileUploader id="background-image" label="Select image" accept="image/*" setter={setBgImg} />
+          <FileUploader id="background-image" label="Select image" caption="Enforce background image?" accept="image/*" setter={setBgImg} />
         </div>
         <div id="selectors" className="settings flexbox flex-row">
+          { bgImg &&
+            <label className="checkbox" htmlFor="include_center_artwork">
+              <input
+                type="checkbox" name="include_center_artwork" id="include_center_artwork" defaultChecked
+                onChange={(e) => setIncludeCenterArtwork(e.target.checked)}
+              />
+              <p className="checkbox-label italic">Include center artwork</p>
+            </label>
+          }
           <label className="checkbox" htmlFor="generate_outro">
             <input
               type="checkbox" name="generate_outro" id="generate_outro" defaultChecked

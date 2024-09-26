@@ -13,6 +13,7 @@ from uuid import uuid4
 import src.constants as const
 from src.logger import log
 from src.routes.lyrics import genius
+from src.routes.processed_images import generateCoverArt
 from src.statistics import updateStats
 from src.typing import CardsContents, CardMetadata, RGBAColor, SongMetadata
 from src.utils.soft_utils import doesFileExist, getCardsContentsFromFile, getNowStamp, snakeToCamelCase, writeCardsContentsToFile
@@ -154,7 +155,7 @@ def generateCard(output_path: str, lyrics: list[str], card_metadata: CardMetadat
     card.save(f"{const.FRONT_PROCESSED_CARDS_DIR}{card_name}")
     log.info(f"  Card {card_name} generated successfully.")
 
-def getCardsMetadata(song_data: SongMetadata, enforce_background_image: bool, include_bg_img: bool) -> CardMetadata:
+def getCardsMetadata(song_data: SongMetadata, include_bg_img: bool) -> CardMetadata:
     """ Extracts the metadata needed for card generation from the song data.
     :param song_data: [dict] The data of the song.
     :param include_bg_img: [bool] True if the background image should be included, False otherwise.
@@ -162,7 +163,7 @@ def getCardsMetadata(song_data: SongMetadata, enforce_background_image: bool, in
     """
     bg_path = f"{const.PROCESSED_DIR}{session[const.SessionFields.user_folder.value]}{const.SLASH}" + \
         f"{const.AvailableCacheElemType.images.value}{const.SLASH}" + \
-        f"{'uploaded_image.png' if enforce_background_image else const.PROCESSED_ARTWORK_FILENAME}"
+        f"{const.PROCESSED_ARTWORK_FILENAME}"
     log.debug(f"  Background image path: {bg_path}")
     if not doesFileExist(bg_path):
         raise FileNotFoundError("Background image missing.")
@@ -212,7 +213,6 @@ def generateCards(cards_contents: CardsContents, song_data: SongMetadata, settin
     :param settings: [dict] The settings for card generation.
     :return: [Response] The response to the request.
     """
-    enforce_background_image = settings.get(const.SessionFields.enforce_background_image.value)
     gen_outro = settings.get(const.SessionFields.gen_outro.value)
     include_bg_img = settings.get(const.SessionFields.include_bg_img.value)
 
@@ -222,7 +222,7 @@ def generateCards(cards_contents: CardsContents, song_data: SongMetadata, settin
 
     log.info("Deducing cards metadata...")
     try:
-        card_metadata = getCardsMetadata(song_data, enforce_background_image, include_bg_img)
+        card_metadata = getCardsMetadata(song_data, include_bg_img)
     except FileNotFoundError as e:
         log.error(f"Error while deducing cards metadata: {e}")
         return createApiResponse(const.HttpStatus.PRECONDITION_FAILED.value, const.ERR_CARDS_BACKGROUND_NOT_FOUND)
@@ -287,7 +287,7 @@ def getSongMetadata(cards_contents: CardsContents, card_metaname: str | None) ->
 
     return song_data
 
-def saveEnforcedBackgroundImage(file: FileStorage) -> None:
+def saveEnforcedBackgroundImage(file: FileStorage, include_center_artwork: bool) -> None:
     if const.SessionFields.user_folder.value not in session:
         log.debug(const.WARN_NO_USER_FOLDER)
         session[const.SessionFields.user_folder.value] = str(uuid4())
@@ -298,6 +298,12 @@ def saveEnforcedBackgroundImage(file: FileStorage) -> None:
     image_path = path.join(user_processed_path, "uploaded_image.png")
     log.debug(f"Saving uploaded image to {image_path}")
     file.save(image_path)
+    output_bg = path.join(user_processed_path, const.PROCESSED_ARTWORK_FILENAME)
+    generateCoverArt(image_path, output_bg, include_center_artwork)
+
+def areCardgenParametersInvalid(enforce_background_image: bool, include_center_artwork: bool, include_bg_img: bool) -> bool:
+    return (enforce_background_image and include_center_artwork is None) \
+        or (not enforce_background_image and include_bg_img is None)
 
 @bp_cards_generation.route(api_prefix + "/generate", methods=["POST"])
 @cross_origin()
@@ -310,14 +316,17 @@ def postGenerateCards() -> Response:
         log.error(const.ERR_CARDS_CONTENTS_NOT_FOUND)
         return createApiResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_CARDS_CONTENTS_NOT_FOUND)
 
-    enforce_background_image: Optional[bool] = None
-    if "file" in request.files:
-        enforce_background_image = True
-        saveEnforcedBackgroundImage(request.files["file"])
-
+    enforce_background_image = "file" in request.files
+    include_center_artwork: Optional[bool] = None
     gen_outro: Optional[str] = request.form[snakeToCamelCase(const.SessionFields.gen_outro.value)]
-    include_bg_img: Optional[str] = request.form[snakeToCamelCase(const.SessionFields.include_bg_img.value)]
-    if include_bg_img is None or (not enforce_background_image and gen_outro is None):
+    include_bg_img: Optional[str] = "true"
+    if enforce_background_image:
+        include_center_artwork = \
+            request.form[snakeToCamelCase(const.SessionFields.include_center_artwork.value)] == "true"
+        saveEnforcedBackgroundImage(request.files["file"], include_center_artwork)
+    else:
+        include_bg_img = request.form[snakeToCamelCase(const.SessionFields.include_bg_img.value)]
+    if areCardgenParametersInvalid(enforce_background_image, include_center_artwork, include_bg_img):
         log.error(const.ERR_CARDS_GEN_PARAMS_NOT_FOUND)
         return createApiResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_CARDS_GEN_PARAMS_NOT_FOUND)
     card_metaname: Optional[str] = request.form[snakeToCamelCase(const.SessionFields.card_metaname.value)]
@@ -339,7 +348,6 @@ def postGenerateCards() -> Response:
     log.info("Cards contents retrieved successfully.")
 
     settings = {
-        const.SessionFields.enforce_background_image.value: enforce_background_image,
         const.SessionFields.gen_outro.value: eval(gen_outro.capitalize()),
         const.SessionFields.include_bg_img.value: include_bg_img,
     }

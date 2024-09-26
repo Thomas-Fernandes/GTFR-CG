@@ -3,13 +3,14 @@ import React, { useState } from "react";
 type Props = {
   id: string;
   label: string;
+  caption?: string;
   accept?: string;
   labelClassName?: string;
   captionClassName?: string;
   setter: React.Dispatch<React.SetStateAction<File | undefined>>;
 };
 
-const FileUploader: React.FC<Props> = ({ id, label, accept, labelClassName, captionClassName, setter }) => {
+const FileUploader: React.FC<Props> = ({ id, label, caption, accept, labelClassName, captionClassName, setter }) => {
   const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,7 +36,7 @@ const FileUploader: React.FC<Props> = ({ id, label, accept, labelClassName, capt
         {label}
       </label>
       <p className={captionClassName} style={selectedFileName ? {} : { fontStyle: "italic" }}>
-        {selectedFileName ?? "No file selected."}
+        {selectedFileName ?? (caption ?? "No file selected.")}
       </p>
     </div>
   );

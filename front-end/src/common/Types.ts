@@ -11,8 +11,9 @@ export type CardsGenerationResponse = ApiResponse & {
 export type CardsGenerationRequest = {
   cardMetaname: string;
   bgImg: File | undefined;
+  includeCenterArtwork?: boolean;
   generateOutro: boolean;
-  includeBackgroundImg: boolean;
+  includeBackgroundImg?: boolean;
 };
 
 export type SongPartsCards = string[][];

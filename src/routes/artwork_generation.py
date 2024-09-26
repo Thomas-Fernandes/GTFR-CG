@@ -84,8 +84,7 @@ def useLocalImage() -> Response:
     log.debug(f"Image filename is valid: {file.filename}")
 
     include_center_artwork: bool = \
-        snakeToCamelCase(const.SessionFields.include_center_artwork.value) in request.form \
-        and request.form[snakeToCamelCase(const.SessionFields.include_center_artwork.value)] == "true"
+        request.form[snakeToCamelCase(const.SessionFields.include_center_artwork.value)] == "true"
     user_processed_path = path.join(const.PROCESSED_DIR, user_folder)
     log.info(f"Creating user processed path: {user_processed_path}")
     makedirs(user_processed_path, exist_ok=True)
