@@ -43,6 +43,8 @@ export const TOAST: Record<string, string> = {
 
   // Cards Generation
     NO_CARDS: "No cards were generated.",
+    UNAUTHORIZED_OUTRO: "The outro card cannot be generated\n"
+      + "since the card creation was manual.",
 };
 
 export const RESPONSE_STATUS: Record<string, ResponseStatus> = {

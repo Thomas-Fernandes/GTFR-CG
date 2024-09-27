@@ -1,4 +1,4 @@
-import { FormEvent, JSX, useEffect, useState } from "react";
+import { FormEvent, JSX, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import FileUploader from "../../common/components/FileUploader";
@@ -8,24 +8,24 @@ import { hideSpinner, showSpinner } from "../../common/Spinner";
 import { sendToast } from "../../common/Toast";
 import { ApiResponse, CardsGenerationRequest, CardsGenerationResponse, ImageDownloadRequest } from "../../common/Types";
 import useTitle from "../../common/UseTitle";
+import { isFileExtensionAccepted } from "../../common/utils/FileUtils";
+import { FILE_UPLOAD } from "../../constants/ArtworkGeneration";
 import { PROCESSED_CARDS_PATH } from "../../constants/CardsGeneration";
 import { API, BACKEND_URL, HTTP_STATUS, PATHS, SPINNER_ID, TITLE, TOAST, TOAST_TYPE } from "../../constants/Common";
 
-import { isFileExtensionAccepted } from "../../common/utils/FileUtils";
-import { FILE_UPLOAD } from "../../constants/ArtworkGeneration";
 import "./CardsGeneration.css";
 
 const CardsGeneration = (): JSX.Element => {
   useTitle(TITLE.CARDS_GENERATION);
 
-  const [isElementLoading, setIsElementLoading] = useState(true);
-
   const navigate = useNavigate();
 
-  const [cardMetaname, setCardMetaname] = useState("");
+  const cardMetaname = sessionStorage.getItem("cardMetaname") ?? "";
+  const cardMethod = sessionStorage.getItem("cardMethod") ?? "";
+
   const [bgImg, setBgImg] = useState<File>();
   const [includeCenterArtwork, setIncludeCenterArtwork] = useState(true);
-  const [generateOutro, setGenerateOutro] = useState(true);
+  const [generateOutro, setGenerateOutro] = useState(cardMethod === "auto");
   const [includeBackgroundImg, setIncludeBackgroundImg] = useState(true);
 
   const [generationInProgress, setGenerationInProgress] = useState(false);
@@ -129,12 +129,10 @@ const CardsGeneration = (): JSX.Element => {
     });
   };
 
-  useEffect(() => {
-    if (isElementLoading) {
-      setCardMetaname(sessionStorage.getItem("cardMeta") ?? "");
-      setIsElementLoading(false);
-    }
-  }, [isElementLoading]);
+  const handleUnauthorizedCheckbox = () => {
+    if (cardMethod === "manual")
+      sendToast(TOAST.UNAUTHORIZED_OUTRO, TOAST_TYPE.WARN);
+  };
 
   return (
     <div id="cards-generation">
@@ -176,13 +174,16 @@ const CardsGeneration = (): JSX.Element => {
               <p className="checkbox-label italic">Include center artwork</p>
             </label>
           }
-          <label className="checkbox" htmlFor="generate_outro">
-            <input
-              type="checkbox" name="generate_outro" id="generate_outro" defaultChecked
-              onChange={(e) => setGenerateOutro(e.target.checked)}
-            />
+          <div onClick={handleUnauthorizedCheckbox}>
+            <label className="checkbox" htmlFor="generate_outro">
+              <input
+                type="checkbox" name="generate_outro" id="generate_outro" defaultChecked={cardMethod === "auto"}
+                disabled={cardMethod === "manual"}
+                onChange={(e) => setGenerateOutro(e.target.checked)}
+              />
             <p className="checkbox-label italic">Generate outro image</p>
           </label>
+          </div>
           { !bgImg &&
             <label className="checkbox" htmlFor="include_background">
               <input

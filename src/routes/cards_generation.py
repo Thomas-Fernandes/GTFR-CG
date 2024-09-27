@@ -48,7 +48,7 @@ def generateOutroCard(output_path: str, contributor_logins: list[str]) -> None:
         else:
             contributors_str += contributor_logins[0]
         return contributors_str
-    contributors_str = getContributorsString(contributor_logins)
+    contributors_str = "" if contributor_logins == [] else getContributorsString(contributor_logins)
 
     draw = ImageDraw.Draw(image)
     _, _, w, _ = draw.textbbox((0, 0), contributors_str, font=const.FONT_OUTRO) # deduce the width of the text to center it
@@ -265,6 +265,9 @@ def getSongMetadata(cards_contents: CardsContents, card_metaname: str | None) ->
         song_id = song_data.get("id", -1)
         if song_id == -1:
             raise ValueError("Song ID not found in metadata.")
+        elif song_id == "manual":
+            song_data["contributors"] = []
+            return
         song_contributors = None
         try:
             with log.redirect_stdout_stderr() as (stdout, stderr): # type: ignore

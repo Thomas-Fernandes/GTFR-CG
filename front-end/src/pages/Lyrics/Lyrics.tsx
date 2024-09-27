@@ -53,8 +53,9 @@ const Lyrics = (): JSX.Element => {
 
       const cardArtist = pageMetadata.artist.toLowerCase().startsWith("genius") ? pageMetadata.title.split(" - ")[0] : pageMetadata.artist;
       const cardSongName = pageMetadata.artist.toLowerCase().startsWith("genius") ? pageMetadata.title.split(" - ")[1].split(" (")[0] : pageMetadata.title;
-      const cardMeta = `${cardArtist.trim().toUpperCase()}, “${cardSongName.trim().toUpperCase()}”`;
-      sessionStorage.setItem("cardMeta", cardMeta);
+      const cardMetaname = `${cardArtist.trim().toUpperCase()}, “${cardSongName.trim().toUpperCase()}”`;
+      sessionStorage.setItem("cardMetaname", cardMetaname);
+      sessionStorage.setItem("cardMethod", isManual ? "manual" : "auto");
       navigate(PATHS.cardsGeneration);
     }).catch((error: ApiResponse) => {
       sendToast(error.message, TOAST_TYPE.ERROR);
