@@ -179,8 +179,6 @@ const Lyrics = (): JSX.Element => {
             onChange={(e) => setSongName(e.target.value)}
           />
         </div>
-        <>
-        </>
       </div> : <form className="search-form flexbox" onSubmit={(e) => handleLyricsSearchSubmit(e, {artist, songName})}>
         <div id="search-bar" className="flex-row g-1">
           <input required
@@ -197,15 +195,24 @@ const Lyrics = (): JSX.Element => {
         </div>
       </form>}
 
-      { !isFetching && lyricsParts.length === 0
-      ?
-        <button type="button" className="mode-flipper" onClick={() => setIsManual(!isManual)}>
+      { !isFetching &&
+        <button type="button" className="mode-flipper"
+          onClick={() => {
+            if (!isManual)
+              setLyricsParts([{section: "Manual Card Creation", lyrics: ""}]);
+            else
+              setLyricsParts([]);
+            setIsManual(!isManual);
+          }}
+        >
           {isManual ? "Generate cards automatically" : "Generate cards manually instead"}
         </button>
-      : !isFetching && <>
+      }
+
+      { !isFetching && lyricsParts.length > 0 && <>
         <hr />
 
-        <form className="lyrics-form flexbox" onSubmit={(e) => handleLyricsSaveSubmit(e, convertToCardContents(lyricsParts))}>
+        <form className="lyrics-form flexbox" style={{ marginTop: isManual? "1%" : "2%"}} onSubmit={(e) => handleLyricsSaveSubmit(e, convertToCardContents(lyricsParts))}>
           { lyricsParts.map((part, idx) => (
             <div key={idx} className="lyrics-part">
               <label>{part.section}</label>
