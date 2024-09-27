@@ -27,6 +27,8 @@ const Lyrics = (): JSX.Element => {
   const [pageMetadata, setPageMetadata] = useState({} as Dict);
   const [lyricsParts, setLyricsParts] = useState([] as LyricsPart[]);
 
+  const [isManual, setIsManual] = useState(false);
+
   // Lyrics
   const handleLyricsSaveSubmit = (e: FormEvent<HTMLFormElement>, body: SongPartsCards) => {
     e.preventDefault();
@@ -165,8 +167,22 @@ const Lyrics = (): JSX.Element => {
 
       <h1>Lyrics</h1>
 
-      <form className="search-form flexbox" onSubmit={(e) => handleLyricsSearchSubmit(e, {artist, songName})}>
-        <div className="search-bar flex-row">
+      { isManual
+      ? <div className="flexbox">
+        <div id="metadata-bar" className="flex-row g-1">
+          <input required
+            type="text" name="artist" placeholder="Enter artist name"
+            onChange={(e) => setArtist(e.target.value)}
+          />
+          <input required
+            type="text" name="songName" placeholder="Enter song name"
+            onChange={(e) => setSongName(e.target.value)}
+          />
+        </div>
+        <>
+        </>
+      </div> : <form className="search-form flexbox" onSubmit={(e) => handleLyricsSearchSubmit(e, {artist, songName})}>
+        <div id="search-bar" className="flex-row g-1">
           <input required
             type="text" name="artist" placeholder="Enter artist name"
             onChange={(e) => setArtist(e.target.value)}
@@ -179,28 +195,32 @@ const Lyrics = (): JSX.Element => {
             <input type="submit" value="SEARCH" className="action-button search-button" />
           </div>
         </div>
-      </form>
+      </form>}
 
-      { lyricsParts.length > 0 &&
-        <>
-          <hr />
+      { !isFetching && lyricsParts.length === 0
+      ?
+        <button type="button" className="mode-flipper" onClick={() => setIsManual(!isManual)}>
+          {isManual ? "Generate cards automatically" : "Generate cards manually instead"}
+        </button>
+      : !isFetching && <>
+        <hr />
 
-          <form className="lyrics-form flexbox" onSubmit={(e) => handleLyricsSaveSubmit(e, convertToCardContents(lyricsParts))}>
-            { lyricsParts.map((part, idx) => (
-              <div key={idx} className="lyrics-part">
-                <label>{part.section}</label>
-                <AutoResizeTextarea
-                  name={`lyrics_part_${idx}`} rows={5} cols={80}
-                  value={part.lyrics} onChange={(e) => handleSetLyricsParts(e.target.value, idx)}
-                />
-                <hr className="w-66 mv-0" />
-              </div>
-            ))}
-            <div className="action-button" id={SPINNER_ID.LYRICS_SAVE}>
-              <input type="submit" value="CONVERT TO CARDS" className="action-button save-button" />
+        <form className="lyrics-form flexbox" onSubmit={(e) => handleLyricsSaveSubmit(e, convertToCardContents(lyricsParts))}>
+          { lyricsParts.map((part, idx) => (
+            <div key={idx} className="lyrics-part">
+              <label>{part.section}</label>
+              <AutoResizeTextarea
+                name={`lyrics_part_${idx}`} rows={5} cols={80}
+                value={part.lyrics} onChange={(e) => handleSetLyricsParts(e.target.value, idx)}
+              />
+              <hr className="w-66 mv-0" />
             </div>
-          </form>
-        </>
+          ))}
+          <div className="action-button" id={SPINNER_ID.LYRICS_SAVE}>
+            <input type="submit" value="CONVERT TO CARDS" className="action-button save-button" />
+          </div>
+        </form>
+      </>
       }
     </div>
   )
