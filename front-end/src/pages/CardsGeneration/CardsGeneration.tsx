@@ -10,7 +10,7 @@ import { ApiResponse, CardsGenerationRequest, CardsGenerationResponse, ImageDown
 import useTitle from "../../common/UseTitle";
 import { isFileExtensionAccepted } from "../../common/utils/FileUtils";
 import { FILE_UPLOAD } from "../../constants/ArtworkGeneration";
-import { PROCESSED_CARDS_PATH } from "../../constants/CardsGeneration";
+import { PROCESSED_CARDS_PATH, SESSION_STORAGE } from "../../constants/CardsGeneration";
 import { API, BACKEND_URL, HTTP_STATUS, PATHS, SPINNER_ID, TITLE, TOAST, TOAST_TYPE } from "../../constants/Common";
 
 import "./CardsGeneration.css";
@@ -20,8 +20,8 @@ const CardsGeneration = (): JSX.Element => {
 
   const navigate = useNavigate();
 
-  const cardMetaname = sessionStorage.getItem("cardMetaname") ?? "";
-  const cardMethod = sessionStorage.getItem("cardMethod") ?? "";
+  const cardMetaname = sessionStorage.getItem(SESSION_STORAGE.CARD_METANAME) ?? "";
+  const cardMethod = sessionStorage.getItem(SESSION_STORAGE.CARD_METHOD) ?? "";
 
   const [bgImg, setBgImg] = useState<File>();
   const [includeCenterArtwork, setIncludeCenterArtwork] = useState(true);

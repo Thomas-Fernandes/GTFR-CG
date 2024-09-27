@@ -7,6 +7,7 @@ import { hideSpinner, showSpinner } from "../../common/Spinner";
 import { sendToast } from "../../common/Toast";
 import { ApiResponse, Dict, LyricsPart, LyricsRequest, LyricsResponse, SongPartsCards } from "../../common/Types";
 import useTitle from "../../common/UseTitle";
+import { SESSION_STORAGE } from "../../constants/CardsGeneration";
 import { API, BACKEND_URL, PATHS, SPINNER_ID, TITLE, TOAST, TOAST_TYPE } from "../../constants/Common";
 
 import "./Lyrics.css";
@@ -26,6 +27,7 @@ const Lyrics = (): JSX.Element => {
 
   const [pageMetadata, setPageMetadata] = useState({} as Dict);
   const [lyricsParts, setLyricsParts] = useState([] as LyricsPart[]);
+  const [lastGeneration, setLastGeneration] = useState({pageMetadata: {} as Dict, lyricsParts: [] as LyricsPart[]});
 
   const [isManual, setIsManual] = useState(false);
 
@@ -54,8 +56,9 @@ const Lyrics = (): JSX.Element => {
       const cardArtist = pageMetadata.artist.toLowerCase().startsWith("genius") ? pageMetadata.title.split(" - ")[0] : pageMetadata.artist;
       const cardSongName = pageMetadata.artist.toLowerCase().startsWith("genius") ? pageMetadata.title.split(" - ")[1].split(" (")[0] : pageMetadata.title;
       const cardMetaname = `${cardArtist.trim().toUpperCase()}, “${cardSongName.trim().toUpperCase()}”`;
-      sessionStorage.setItem("cardMetaname", cardMetaname);
-      sessionStorage.setItem("cardMethod", isManual ? "manual" : "auto");
+      sessionStorage.setItem(SESSION_STORAGE.CARD_METANAME, cardMetaname);
+      sessionStorage.setItem(SESSION_STORAGE.CARD_METHOD, isManual ? "manual" : "auto");
+      sessionStorage.setItem(SESSION_STORAGE.LATEST_CARD_GENERATION, JSON.stringify({ pageMetadata, lyricsParts }));
       navigate(PATHS.cardsGeneration);
     }).catch((error: ApiResponse) => {
       sendToast(error.message, TOAST_TYPE.ERROR);
@@ -142,10 +145,12 @@ const Lyrics = (): JSX.Element => {
     };
 
     isTokenSet().then((isSet) => {
-      if (!isSet)
+      if (!isSet) {
         navigate(`${PATHS.redirect}?redirect_to=${PATHS.home}&error_text=${TOAST.NO_GENIUS_TOKEN}`);
-      else
+      } else {
         setIsGeniusTokenSet(true);
+        setLastGeneration(JSON.parse(sessionStorage.getItem(SESSION_STORAGE.LATEST_CARD_GENERATION) ?? "{{}, []}"));
+      }
     });
   });
 
@@ -167,6 +172,15 @@ const Lyrics = (): JSX.Element => {
       </div>
 
       <h1>Lyrics</h1>
+
+      <button type="button" className="last-generation"
+        onClick={() => {
+          setLyricsParts(lastGeneration.lyricsParts);
+          setPageMetadata(lastGeneration.pageMetadata);
+        }}
+      >
+        {"Load last generation"}
+      </button>
 
       { isManual
       ? <div className="flexbox">

@@ -30,7 +30,7 @@
         }
     }
 
-    button.mode-flipper {
+    button.mode-flipper, button.last-generation {
         background-color: #8fbc8f;
         margin-bottom: 1rem;
         width: 32%;
@@ -44,5 +44,9 @@
             cursor: pointer;
             background-color: #0056b3;
         }
+    }
+
+    button.last-generation {
+        width: 20%;
     }
 }
