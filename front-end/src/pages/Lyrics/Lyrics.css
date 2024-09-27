@@ -28,6 +28,32 @@
                     );
             }
         }
+
+        .lyrics-part--header {
+            button {
+                min-width: 16%;
+                font-size: smaller;
+
+                &.restore {
+                    margin-bottom: 1.75rem;
+                }
+
+                &.red {
+                    background-color: #7f0000;
+
+                    &:hover {
+                        background-color: #0056b3;
+                    }
+                }
+                &.green {
+                    background-color: #007f00;
+
+                    &:hover {
+                        background-color: #0056b3;
+                    }
+                }
+            }
+        }
     }
 
     button.mode-flipper, button.last-generation {
