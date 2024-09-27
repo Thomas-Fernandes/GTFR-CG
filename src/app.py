@@ -96,7 +96,7 @@ def main(host: str = const.HOST_HOME, port: int = const.DEFAULT_PORT) -> None:
                     removedirs(cache_dir_path)
         if nb_eliminated_entries != 0:
             pluralMarks = ["s", "were"] if nb_eliminated_entries != 1 else ["", "was"]
-            log.info(f"{nb_eliminated_entries} cached file{pluralMarks[0]} {pluralMarks[1]} " \
+            log.info(f"  {nb_eliminated_entries} cached file{pluralMarks[0]} {pluralMarks[1]} " \
                 f"removed in {folder + cache_type}.")
         return nb_eliminated_entries
 

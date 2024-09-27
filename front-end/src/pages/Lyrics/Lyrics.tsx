@@ -27,6 +27,8 @@ const Lyrics = (): JSX.Element => {
   const [pageMetadata, setPageMetadata] = useState({} as Dict);
   const [lyricsParts, setLyricsParts] = useState([] as LyricsPart[]);
 
+  const [dismissedParts, setDismissedParts] = useState(new Set<number>());
+
   // Lyrics
   const handleLyricsSaveSubmit = (e: FormEvent<HTMLFormElement>, body: SongPartsCards) => {
     e.preventDefault();
@@ -62,11 +64,11 @@ const Lyrics = (): JSX.Element => {
     });
   };
 
-  const convertToCardContents = (lyricsParts: LyricsPart[]): SongPartsCards => {
+  const convertToCardContents = (lyricsParts: LyricsPart[], dismissedParts: Set<number>): SongPartsCards => {
     // Input: [{section: "Verse 1", lyrics: "The whole lyrics\nOf the section\nAre here as is\nTotally disorganized"}, ...]
     // Output: [["The whole lyrics\nOf the section", "Are here as is\nTotally disorganized"], ...]
     //   -> Each inner array is a section, each string is a card
-    return lyricsParts.map(part => part.lyrics.split("\n\n"));
+    return lyricsParts.filter((_, idx) => !dismissedParts.has(idx)).map(part => part.lyrics.split("\n\n"));
   };
 
   const handleSetLyricsParts = (lyrics: string, idx: number) => {
@@ -76,6 +78,34 @@ const Lyrics = (): JSX.Element => {
   };
 
   // Search
+  const renderLyricsPart = (part: LyricsPart, idx: number): JSX.Element => {
+    return (
+      <div key={"part_" + idx} className="lyrics-part">
+        { dismissedParts.has(idx)
+        ? <div className="lyrics-part--header flexbox flex-row g-2">
+          <button type="button" className="restore" onClick={() => { const n = new Set(dismissedParts); n.delete(idx); setDismissedParts(n)}}>
+            {`Restore ${part.section}`}
+          </button>
+        </div> : <>
+        <div className="lyrics-part--header flexbox flex-row g-2">
+          <button type="button" className="red" onClick={() => setDismissedParts(new Set(dismissedParts).add(idx))}>
+            {"Remove"}
+          </button>
+          <label>{part.section}</label>
+          <button type="button" className="green" onClick={() => handleSetLyricsParts("", idx)}>
+            {"Clear"}
+          </button>
+          </div>
+          <AutoResizeTextarea
+            name={`lyrics-part_${idx}`} rows={5} cols={80}
+            value={part.lyrics} onChange={(e) => handleSetLyricsParts(e.target.value, idx)}
+          />
+        </>}
+        <hr className="w-66 mv-0" />
+      </div>
+    );
+  };
+
   const handleLyricsSearchSubmit = (e: FormEvent<HTMLFormElement>, body: LyricsRequest) => {
     e.preventDefault();
 
@@ -185,17 +215,10 @@ const Lyrics = (): JSX.Element => {
         <>
           <hr />
 
-          <form className="lyrics-form flexbox" onSubmit={(e) => handleLyricsSaveSubmit(e, convertToCardContents(lyricsParts))}>
-            { lyricsParts.map((part, idx) => (
-              <div key={idx} className="lyrics-part">
-                <label>{part.section}</label>
-                <AutoResizeTextarea
-                  name={`lyrics_part_${idx}`} rows={5} cols={80}
-                  value={part.lyrics} onChange={(e) => handleSetLyricsParts(e.target.value, idx)}
-                />
-                <hr className="w-66 mv-0" />
-              </div>
-            ))}
+          <form className="lyrics-form flexbox" onSubmit={(e) => handleLyricsSaveSubmit(e, convertToCardContents(lyricsParts, dismissedParts))}>
+            { lyricsParts.map((part, idx) =>
+              renderLyricsPart(part, idx))
+            }
             <div className="action-button" id={SPINNER_ID.LYRICS_SAVE}>
               <input type="submit" value="CONVERT TO CARDS" className="action-button save-button" />
             </div>
