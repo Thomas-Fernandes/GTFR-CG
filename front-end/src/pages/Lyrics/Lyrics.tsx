@@ -51,9 +51,9 @@ const Lyrics = (): JSX.Element => {
         throw new Error(response.message);
       }
 
-      const cardArtist = pageMetadata.artist.startsWith("Genius") ? pageMetadata.title.split(" - ")[0] : pageMetadata.artist;
-      const cardSongName = pageMetadata.artist.startsWith("Genius") ? pageMetadata.title.split(" - ")[1].split(" (")[0] : pageMetadata.title;
-      const cardMeta = `${cardArtist.toUpperCase()}, “${cardSongName.toUpperCase()}”`;
+      const cardArtist = pageMetadata.artist.toLowerCase().startsWith("genius") ? pageMetadata.title.split(" - ")[0] : pageMetadata.artist;
+      const cardSongName = pageMetadata.artist.toLowerCase().startsWith("genius") ? pageMetadata.title.split(" - ")[1].split(" (")[0] : pageMetadata.title;
+      const cardMeta = `${cardArtist.trim().toUpperCase()}, “${cardSongName.trim().toUpperCase()}”`;
       sessionStorage.setItem("cardMeta", cardMeta);
       navigate(PATHS.cardsGeneration);
     }).catch((error: ApiResponse) => {
@@ -172,11 +172,11 @@ const Lyrics = (): JSX.Element => {
         <div id="metadata-bar" className="flex-row g-1">
           <input required
             type="text" name="artist" placeholder="Enter artist name"
-            onChange={(e) => setArtist(e.target.value)}
+            onChange={(e) => { setArtist(e.target.value); setPageMetadata({...pageMetadata, artist: e.target.value}); }}
           />
           <input required
             type="text" name="songName" placeholder="Enter song name"
-            onChange={(e) => setSongName(e.target.value)}
+            onChange={(e) => { setSongName(e.target.value); setPageMetadata({...pageMetadata, title: e.target.value}); }}
           />
         </div>
       </div> : <form className="search-form flexbox" onSubmit={(e) => handleLyricsSearchSubmit(e, {artist, songName})}>
@@ -198,10 +198,13 @@ const Lyrics = (): JSX.Element => {
       { !isFetching &&
         <button type="button" className="mode-flipper"
           onClick={() => {
-            if (!isManual)
+            if (!isManual) {
               setLyricsParts([{section: "Manual Card Creation", lyrics: ""}]);
-            else
+              setPageMetadata({id: "manual", artist: artist, title: songName});
+            } else {
               setLyricsParts([]);
+              setPageMetadata({});
+            }
             setIsManual(!isManual);
           }}
         >
