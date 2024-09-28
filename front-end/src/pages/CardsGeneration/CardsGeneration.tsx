@@ -1,4 +1,4 @@
-import { FormEvent, JSX, useState } from "react";
+import { FormEvent, JSX, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import FileUploader from "../../common/components/FileUploader";
@@ -18,9 +18,11 @@ import "./CardsGeneration.css";
 const CardsGeneration = (): JSX.Element => {
   useTitle(TITLE.CARDS_GENERATION);
 
+  const [isComponentMounted, setIsComponentMounted] = useState(false);
+
   const navigate = useNavigate();
 
-  const cardMetaname = sessionStorage.getItem(SESSION_STORAGE.CARD_METANAME) ?? "";
+  const [cardMetaname, setCardMetaname] = useState("");
   const cardMethod = sessionStorage.getItem(SESSION_STORAGE.CARD_METHOD) ?? "";
 
   const [bgImg, setBgImg] = useState<File>();
@@ -95,15 +97,16 @@ const CardsGeneration = (): JSX.Element => {
     showSpinner(SPINNER_ID.CARDS_GENERATE);
     setCardPaths([]);
 
+    console.log(body)
     const formData = new FormData();
     if (body.bgImg) {
       formData.append("file", body.bgImg);
       if (body.includeCenterArtwork !== undefined)
         formData.append("includeCenterArtwork", body.includeCenterArtwork.toString());
-    } else if (body.includeBackgroundImg !== undefined)
-      formData.append("includeBackgroundImg", body.includeBackgroundImg.toString());
+    }
     formData.append("cardMetaname", body.cardMetaname);
     formData.append("generateOutro", body.generateOutro.toString());
+    formData.append("includeBackgroundImg", body.includeBackgroundImg.toString());
 
     sendRequest("POST", BACKEND_URL + API.CARDS_GENERATION.GENERATE_CARDS, formData).then((response: CardsGenerationResponse) => {
       if (!is2xxSuccessful(response.status)) {
@@ -133,6 +136,14 @@ const CardsGeneration = (): JSX.Element => {
     if (cardMethod === "manual")
       sendToast(TOAST.UNAUTHORIZED_OUTRO, TOAST_TYPE.WARN);
   };
+
+  useEffect(() => {
+    if (isComponentMounted) {
+      return;
+    }
+    setCardMetaname(sessionStorage.getItem(SESSION_STORAGE.CARD_METANAME) ?? "");
+    setIsComponentMounted(true);
+  }, [isComponentMounted]);
 
   return (
     <div id="cards-generation">
@@ -184,15 +195,13 @@ const CardsGeneration = (): JSX.Element => {
             <p className="checkbox-label italic">Generate outro image</p>
           </label>
           </div>
-          { !bgImg &&
-            <label className="checkbox" htmlFor="include_background">
-              <input
-                type="checkbox" name="include_background" id="include_background" defaultChecked
-                onChange={(e) => setIncludeBackgroundImg(e.target.checked)}
-              />
-              <p className="checkbox-label italic">Include background image</p>
-            </label>
-          }
+          <label className="checkbox" htmlFor="include_background">
+            <input
+              type="checkbox" name="include_background" id="include_background" defaultChecked
+              onChange={(e) => setIncludeBackgroundImg(e.target.checked)}
+            />
+            <p className="checkbox-label italic">Include background image</p>
+          </label>
         </div>
 
         <div className="action-button" id={SPINNER_ID.CARDS_GENERATE}>

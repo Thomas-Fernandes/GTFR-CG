@@ -13,7 +13,7 @@ export type CardsGenerationRequest = {
   bgImg: File | undefined;
   includeCenterArtwork?: boolean;
   generateOutro: boolean;
-  includeBackgroundImg?: boolean;
+  includeBackgroundImg: boolean;
 };
 
 export type SongPartsCards = string[][];
