@@ -161,6 +161,15 @@ const Lyrics = (): JSX.Element => {
     });
   };
 
+  const handleLoadLastGeneration = () => {
+    if (lastGeneration.pageMetadata.id === undefined) {
+      sendToast(TOAST.NO_LAST_GENERATION, TOAST_TYPE.WARN);
+      return;
+    }
+    setLyricsParts(lastGeneration.lyricsParts);
+    setPageMetadata(lastGeneration.pageMetadata);
+  };
+
   useEffect(() => {
     if (isGeniusTokenSet)
       return;
@@ -203,12 +212,7 @@ const Lyrics = (): JSX.Element => {
 
       <h1>Lyrics</h1>
 
-      <button type="button" className="last-generation"
-        onClick={() => {
-          setLyricsParts(lastGeneration.lyricsParts);
-          setPageMetadata(lastGeneration.pageMetadata);
-        }}
-      >
+      <button type="button" className="last-generation"onClick={handleLoadLastGeneration}>
         {"Load last generation"}
       </button>
 
@@ -254,43 +258,20 @@ const Lyrics = (): JSX.Element => {
           }}
         >
           {isManual ? "Generate cards automatically" : "Generate cards manually instead"}
-        </button>
-      }
+        </button>}
 
       { !isFetching && lyricsParts.length > 0 && <>
         <hr />
 
-        <form className="lyrics-form flexbox" style={{ marginTop: isManual? "1%" : "2%"}} onSubmit={(e) => handleLyricsSaveSubmit(e, convertToCardContents(lyricsParts))}>
-          { lyricsParts.map((part, idx) => (
-            <div key={idx} className="lyrics-part">
-              <label>{part.section}</label>
-              <AutoResizeTextarea
-                name={`lyrics_part_${idx}`} rows={5} cols={80}
-                value={part.lyrics} onChange={(e) => handleSetLyricsParts(e.target.value, idx)}
-              />
-              <hr className="w-66 mv-0" />
-        </form>
-      </>
-      }
-
-      { !isFetching && lyricsParts.length > 0 && <>
-        <>
-          <hr />
-
-          <form className="lyrics-form flexbox" onSubmit={(e) => handleLyricsSaveSubmit(e, convertToCardContents(lyricsParts, dismissedParts))}>
-            { lyricsParts.map((part, idx) =>
-              renderLyricsPart(part, idx))
-            }
-            <div className="action-button" id={SPINNER_ID.LYRICS_SAVE}>
-              <input type="submit" value="CONVERT TO CARDS" className="action-button save-button" />
-            </div>
-          ))}
+        <form className="lyrics-form flexbox" onSubmit={(e) => handleLyricsSaveSubmit(e, convertToCardContents(lyricsParts, dismissedParts))}>
+          { lyricsParts.map((part, idx) =>
+            renderLyricsPart(part, idx))
+          }
           <div className="action-button" id={SPINNER_ID.LYRICS_SAVE}>
             <input type="submit" value="CONVERT TO CARDS" className="action-button save-button" />
           </div>
         </form>
-      </>
-      }
+      </>}
     </div>
   )
 };

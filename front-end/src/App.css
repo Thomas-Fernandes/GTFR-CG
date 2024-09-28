@@ -375,45 +375,22 @@ input[type="file"] {
     align-items: center;
     flex-wrap: wrap;
 }
-.flex-col {
-    flex-direction: column;
-}
-.flex-row {
-    flex-direction: row;
-}
-.g-2 {
-    gap: 2rem;
-}
+.flex-col { flex-direction: column; }
+.flex-row { flex-direction: row; }
+.g-1 { gap: 1rem; }
+.g-2 { gap: 2rem; }
 
-.hidden {
-    display: none;
-}
+.hidden { display: none; }
 
-.mv-0 {
-    margin-top: 0;
-    margin-bottom: 0;
-}
-.mv-1 {
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-}
+.mv-0 { margin-top: 0; margin-bottom: 0; }
+.mv-1 { margin-top: 1rem; margin-bottom: 1rem; }
 
-.italic {
-    font-style: italic;
-}
-.bold {
-    font-weight: bold;
-}
+.italic { font-style: italic; }
+.bold { font-weight: bold; }
 
-.t-green {
-    color: #007f00;
-}
-.t-yellow {
-    color: #7f7f00;
-}
-.t-red {
-    color: #7f0000;
-}
+.t-green { color: #007f00; }
+.t-yellow { color: #7f7f00; }
+.t-red { color: #7f0000; }
 
 .file-upload-component {
     align-self: center;
