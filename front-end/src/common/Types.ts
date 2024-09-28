@@ -20,6 +20,18 @@ export type SongPartsCards = string[][];
 
 /**************** LYRICS *****************/
 
+export type LyricsContents = {
+  pageMetadata: PageMetadata;
+  lyricsParts: LyricsPart[];
+  dismissedParts: number[];
+};
+
+export type PageMetadata = {
+  artist: string;
+  title: string;
+  id: string;
+  url?: string;
+};
 export type LyricsPart = {
   section: string;
   lyrics: string;

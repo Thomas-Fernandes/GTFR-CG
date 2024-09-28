@@ -5,7 +5,7 @@ import { AutoResizeTextarea } from "../../common/components/AutoResizeTextarea";
 import { is2xxSuccessful, sendRequest } from "../../common/Requests";
 import { hideSpinner, showSpinner } from "../../common/Spinner";
 import { sendToast } from "../../common/Toast";
-import { ApiResponse, Dict, LyricsPart, LyricsRequest, LyricsResponse, SongPartsCards } from "../../common/Types";
+import { ApiResponse, Dict, LyricsContents, LyricsPart, LyricsRequest, LyricsResponse, PageMetadata, SongPartsCards } from "../../common/Types";
 import useTitle from "../../common/UseTitle";
 import { SESSION_STORAGE } from "../../constants/CardsGeneration";
 import { API, BACKEND_URL, PATHS, SPINNER_ID, TITLE, TOAST, TOAST_TYPE } from "../../constants/Common";
@@ -25,9 +25,9 @@ const Lyrics = (): JSX.Element => {
   const [artist, setArtist] = useState("");
   const [songName, setSongName] = useState("");
 
-  const [pageMetadata, setPageMetadata] = useState({} as Dict);
+  const [pageMetadata, setPageMetadata] = useState({} as PageMetadata);
   const [lyricsParts, setLyricsParts] = useState([] as LyricsPart[]);
-  const [lastGeneration, setLastGeneration] = useState({pageMetadata: {} as Dict, lyricsParts: [] as LyricsPart[]});
+  const [lastContents, setLastContents] = useState({} as LyricsContents);
 
   const [isManual, setIsManual] = useState(false);
 
@@ -58,9 +58,10 @@ const Lyrics = (): JSX.Element => {
       const cardArtist = pageMetadata.artist.toLowerCase().startsWith("genius") ? pageMetadata.title.split(" - ")[0] : pageMetadata.artist;
       const cardSongName = pageMetadata.artist.toLowerCase().startsWith("genius") ? pageMetadata.title.split(" - ")[1].split(" (")[0] : pageMetadata.title;
       const cardMetaname = `${cardArtist.trim().toUpperCase()}, “${cardSongName.trim().toUpperCase()}”`;
+      const dismissedPartsList = Array.from(dismissedParts);
       sessionStorage.setItem(SESSION_STORAGE.CARD_METANAME, cardMetaname);
       sessionStorage.setItem(SESSION_STORAGE.CARD_METHOD, isManual ? "manual" : "auto");
-      sessionStorage.setItem(SESSION_STORAGE.LATEST_CARD_GENERATION, JSON.stringify({ pageMetadata, lyricsParts }));
+      sessionStorage.setItem(SESSION_STORAGE.LATEST_CARD_GENERATION, JSON.stringify({ pageMetadata, lyricsParts, dismissedParts: dismissedPartsList }));
       navigate(PATHS.cardsGeneration);
     }).catch((error: ApiResponse) => {
       sendToast(error.message, TOAST_TYPE.ERROR);
@@ -74,7 +75,7 @@ const Lyrics = (): JSX.Element => {
     // Input: [{section: "Verse 1", lyrics: "The whole lyrics\nOf the section\nAre here as is\nTotally disorganized"}, ...]
     // Output: [["The whole lyrics\nOf the section", "Are here as is\nTotally disorganized"], ...]
     //   -> Each inner array is a section, each string is a card
-    return lyricsParts.filter((_, idx) => !dismissedParts.has(idx)).map(part => part.lyrics.split("\n\n"));
+    return lyricsParts.filter((_, idx) => !dismissedParts.has(idx)).map(part => part.lyrics.trim().split("\n\n"));
   };
 
   const handleSetLyricsParts = (lyrics: string, idx: number) => {
@@ -142,11 +143,11 @@ const Lyrics = (): JSX.Element => {
         setLyricsParts([]);
       } else {
         const metadata = response.data.lyricsParts.find(part => part.section === "[Metadata]")?.lyrics.split("\n") ?? [];
-        const metadataObj = metadata.reduce((acc: Dict, curr) => {
+        const metadataObj = metadata.reduce((acc: PageMetadata, curr) => {
           const [key, value] = curr.split(": ");
-          acc[key] = value;
+          (acc as Dict)[key] = value;
           return acc;
-        }, {} as Dict);
+        }, {} as PageMetadata);
         setPageMetadata(metadataObj);
 
         const lyricsParts = response.data.lyricsParts.filter(part => part.section !== "[Metadata]");
@@ -161,13 +162,14 @@ const Lyrics = (): JSX.Element => {
     });
   };
 
-  const handleLoadLastGeneration = () => {
-    if (lastGeneration.pageMetadata.id === undefined) {
+  const handleLoadLastContents = () => {
+    if (lastContents.pageMetadata.id === undefined) {
       sendToast(TOAST.NO_LAST_GENERATION, TOAST_TYPE.WARN);
       return;
     }
-    setLyricsParts(lastGeneration.lyricsParts);
-    setPageMetadata(lastGeneration.pageMetadata);
+    setPageMetadata(lastContents.pageMetadata);
+    setLyricsParts(lastContents.lyricsParts);
+    setDismissedParts(new Set(lastContents.dismissedParts));
   };
 
   useEffect(() => {
@@ -188,7 +190,7 @@ const Lyrics = (): JSX.Element => {
         navigate(`${PATHS.redirect}?redirect_to=${PATHS.home}&error_text=${TOAST.NO_GENIUS_TOKEN}`);
       } else {
         setIsGeniusTokenSet(true);
-        setLastGeneration(JSON.parse(sessionStorage.getItem(SESSION_STORAGE.LATEST_CARD_GENERATION) ?? "{{}, []}"));
+        setLastContents(JSON.parse(sessionStorage.getItem(SESSION_STORAGE.LATEST_CARD_GENERATION) ?? "{{}, [], []}"));
       }
     });
   });
@@ -212,8 +214,8 @@ const Lyrics = (): JSX.Element => {
 
       <h1>Lyrics</h1>
 
-      <button type="button" className="last-generation"onClick={handleLoadLastGeneration}>
-        {"Load last generation"}
+      <button type="button" className="last-generation" onClick={handleLoadLastContents}>
+        {"Load last contents"}
       </button>
 
       { isManual
@@ -251,8 +253,8 @@ const Lyrics = (): JSX.Element => {
               setLyricsParts([{section: "Manual Card Creation", lyrics: ""}]);
               setPageMetadata({id: "manual", artist: artist, title: songName});
             } else {
-              setLyricsParts([]);
-              setPageMetadata({});
+              setLyricsParts([] as LyricsPart[]);
+              setPageMetadata({} as PageMetadata);
             }
             setIsManual(!isManual);
           }}
