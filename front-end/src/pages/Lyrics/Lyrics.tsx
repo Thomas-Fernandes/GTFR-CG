@@ -11,6 +11,9 @@ import { API, BACKEND_URL, PATHS, SPINNER_ID, TITLE, TOAST, TOAST_TYPE } from ".
 
 import "./Lyrics.css";
 
+const MAX_CONSECUTIVE_LINES_WARNING = 6;
+const MAX_CONSECUTIVE_LINES_ERROR = 7;
+
 const Lyrics = (): JSX.Element => {
   useTitle(TITLE.LYRICS);
 
@@ -28,6 +31,61 @@ const Lyrics = (): JSX.Element => {
   const [lyricsParts, setLyricsParts] = useState([] as LyricsPart[]);
 
   const [dismissedParts, setDismissedParts] = useState(new Set<number>());
+  const [hasYellowToastBeenSent, setHasYellowToastBeenSent] = useState(false);
+
+  const detectLongSections = (lyrics: string): number => {
+    const lines = lyrics.split("\n");
+    let consecutiveLines = 0;
+    let maxConsecutiveLines = 0;
+    
+    for (const line of lines) {
+      if (line.trim() !== "") {
+        consecutiveLines += 1;
+        if (consecutiveLines > maxConsecutiveLines) {
+          maxConsecutiveLines = consecutiveLines;
+        }
+      } else {
+        consecutiveLines = 0;
+      }
+    }
+
+    return maxConsecutiveLines;
+  };
+
+  const validateLyricsOnConvert = (lyricsParts: LyricsPart[]): boolean => {
+    let isValid = true;
+    let hasYellowToast = false;
+
+    for (const part of lyricsParts) {
+      const maxConsecutiveLines = detectLongSections(part.lyrics);
+
+      if (maxConsecutiveLines >= MAX_CONSECUTIVE_LINES_ERROR) {
+        sendToast(
+          `A section has more than ${MAX_CONSECUTIVE_LINES_ERROR} consecutive lines. Please add line breaks.`,
+          TOAST_TYPE.ERROR
+        );
+        isValid = false;
+        break;      }
+
+      if (maxConsecutiveLines >= 5 && maxConsecutiveLines <= MAX_CONSECUTIVE_LINES_WARNING) {
+        sendToast(
+          `A section has ${maxConsecutiveLines} consecutive lines. Consider adding line breaks.`,
+          TOAST_TYPE.WARN
+        );
+        hasYellowToast = true;
+        isValid = false;
+        break;
+      }
+    }
+
+    if (hasYellowToast && !hasYellowToastBeenSent) {
+      setHasYellowToastBeenSent(true);
+    } else if (hasYellowToast && hasYellowToastBeenSent) {
+      isValid = true;
+    }
+
+    return isValid;
+  };
 
   // Lyrics
   const handleLyricsSaveSubmit = (e: FormEvent<HTMLFormElement>, body: SongPartsCards) => {
@@ -35,6 +93,10 @@ const Lyrics = (): JSX.Element => {
 
     if (isSavingCardsContent) {
       sendToast(TOAST.PROCESSING_IN_PROGRESS, TOAST_TYPE.WARN);
+      return;
+    }
+
+    if (!validateLyricsOnConvert(lyricsParts)) {
       return;
     }
 
@@ -55,6 +117,7 @@ const Lyrics = (): JSX.Element => {
       const cardSongName = pageMetadata.artist.startsWith("Genius") ? pageMetadata.title.split(" - ")[1].split(" (")[0] : pageMetadata.title;
       const cardMeta = `${cardArtist.toUpperCase()}, “${cardSongName.toUpperCase()}”`;
       sessionStorage.setItem("cardMeta", cardMeta);
+      setHasYellowToastBeenSent(false);
       navigate(PATHS.cardsGeneration);
     }).catch((error: ApiResponse) => {
       sendToast(error.message, TOAST_TYPE.ERROR);
