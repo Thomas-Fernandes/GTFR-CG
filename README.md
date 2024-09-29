@@ -16,9 +16,6 @@
 
   <img title="Python" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/1028px-Python-logo-notext.svg.png" width="28px" alt="Python" />
   <img title="Flask" src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files/flask.svg" width="28px" alt="Flask" />
-  <!-- <img title="HTML" src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/html/html.png" width="28px" alt="HTML" /> -->
-  <!-- <img title="CSS" src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/css/css.png" width="28px" alt="CSS" /> -->
-  <!-- <img title="JavaScript" src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files/js.svg" width="28px" alt="JS" /> -->
   <img title="React.js" src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files/react.svg" width="28px" alt="React" />
   <img title="Vite" src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files/vite.svg" width="28px" alt="Vite" />
   <img title="TypeScript" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Typescript_logo_2020.svg/2048px-Typescript_logo_2020.svg.png" width="28px" alt="TScript" />
@@ -46,12 +43,12 @@
 
 ## :memo: Description
 
-**GTFR-CG** is a React-Python web application that generates content serving the creation of [**Genius traductions françaises**](https://www.youtube.com/c/geniustraductionsfrancaises) videos.  
+**GTFR-CG** is a React-Python web application that generates content serving the creation of [**Genius traductions françaises**](https://www.youtube.com/c/geniustraductionsfrancaises) YouTube videos.  
 Generate artwork and lyrics cards that can then be edited into **translation videos**.  
 Save time by interacting with the APIs of **iTunes** and **Genius** to automate parts of the edition process!  
 One day, maybe one day, this application maybe even be able to generate whole videos by itself...
 
-**Disclaimer: the creators of this application do not claim any rights on the Genius brand. All rights belong to their respective owners.**
+**Disclaimer: the creators of this application do not claim any rights on the Genius, iTunes or YouTube brand. All rights belong to their respective owners.**
 
 &#xa0;
 
@@ -59,7 +56,7 @@ One day, maybe one day, this application maybe even be able to generate whole vi
 
 This application was tested on, and designed for **Windows 11** and **Ubuntu 22.04**.  
 All the required back end modules are listed in [the requirements file](./requirements.txt). They will be installed upon launch of the back end.  
-All the required front end software and modules can be installed by running [the installer file](./installer.py) with Python 3.10.
+All the required front end software and modules can be installed by running [the installer file](./installer.py) with Python.
 
 > [!CAUTION]
 > **GTFR-CG**'s back end is written in **Python 3.10**. It is compatible with later versions, but **not with anterior versions**.  
@@ -108,7 +105,7 @@ cd front-end/ && npm run dev # will launch the front end of the application
   - [x] **Artwork Generation**: the page where you can generate artwork from a local file or an iTunes search.
     - [x] **Processed Images**: the page where you can download a background image and a YouTube thumbnail.
   - [x] **Lyrics**: the page where you can fetch lyrics from Genius and convert them to lyrics blocks.
-    - [x] **Cards**: the page where cards are generated from text blocks.
+    - [x] **Cards Generation**: the page where cards are generated from the Lyrics text blocks.
 - You can navigate between pages using the navigation buttons at the top of each page.
 - The application features a [toast notification system](https://web.dev/articles/building/a-toast-component) that will give you feedback on your unsuccessful actions.
 - Most of the application's back end actions and reactions will be logged in the terminal *via* Python.
@@ -141,8 +138,10 @@ cd front-end/ && npm run dev # will launch the front end of the application
     - the logger system is reinforced to log more actions and be customizable
 - ***[1.3.0]** Aug 19 2024*: **Lyrics Fetch** — Project now supports lyrics fetching from Genius and their conversion to lyrics blocks. [#089](https://github.com/Thomas-Fernandes/GTFR-CG/pull/89)
   - ***[1.3.1]** Aug 19 2024*: Project's front end is fully migrated to **React Typescript with Vite**. [#088](https://github.com/Thomas-Fernandes/GTFR-CG/pull/88)
-  - ***[1.3.2]** Sep 14 2024*: Project now has a unit test page, better .env handling with a tutorial file. [#092](https://github.com/Thomas-Fernandes/GTFR-CG/pull/92)
-- ***[1.4.0]** Sep 17 2024*: **Lyrics Cards** — Project now support automatic cards generation from text blocks. [#093](https://github.com/Thomas-Fernandes/GTFR-CG/pull/93)
+  - ***[1.3.2]** Sep 14 2024*: Project now has a unit tests page, better .env handling with a tutorial file. [#092](https://github.com/Thomas-Fernandes/GTFR-CG/pull/92)
+- ***[1.4.0]** Sep 17 2024*: **Lyrics Cards** — Project now supports automatic cards generation from text blocks. [#093](https://github.com/Thomas-Fernandes/GTFR-CG/pull/93)
+  - ***[1.4.1]** Sep ?? 2024*: Cards can now be generated manually, improved QoL in card content creation. [#???](#card_file_box-changelog)
+  - ***[1.4.2]** Oct ?? 2024*: Cards can now be generated using a manual background and/or customized color palette. [#???](#card_file_box-changelog)
 - ***[1.5.0]** Coming later...*: **Boost!** — Project will see its existing functionalities sharpened. [#???](#card_file_box-changelog)
 - ***[1.6.0]** Coming later...*: **Koh-Lanta** — Project will be unified in an all-in-one application. [#???](#card_file_box-changelog)
 - ***[2.0.0]** Coming later...*: **Endgame** — Project will feature automated video edition with AI sync. [#???](#card_file_box-changelog)
