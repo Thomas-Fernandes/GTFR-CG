@@ -35,7 +35,7 @@ const Lyrics = (): JSX.Element => {
   const [dismissedParts, setDismissedParts] = useState(new Set<number>());
   const [hasYellowToastBeenSent, setHasYellowToastBeenSent] = useState(false);
 
-  const detectLongSections = (lyrics: string): number => {
+  const countMaxConsecutiveNonEmptyLines = (lyrics: string): number => {
     const lines = lyrics.split("\n");
     let consecutiveLines = 0;
     let maxConsecutiveLines = 0;
@@ -54,19 +54,19 @@ const Lyrics = (): JSX.Element => {
     return maxConsecutiveLines;
   };
 
-  const validateLyricsOnConvert = (lyricsParts: LyricsPart[]): boolean => {
-    let isValid = true;
+  const areLyricsValidForConversion = (lyricsParts: LyricsPart[]): boolean => {
+    let hasInvalidPart = false;
     let hasYellowToast = false;
 
     for (const part of lyricsParts) {
-      const maxConsecutiveLines = detectLongSections(part.lyrics);
+      const maxConsecutiveLines = countMaxConsecutiveNonEmptyLines(part.lyrics);
 
       if (maxConsecutiveLines >= CONSECUTIVE_LINES_THRESHOLD.ERROR) {
         sendToast(
           `A section has more than ${CONSECUTIVE_LINES_THRESHOLD.ERROR} consecutive lines. Please add line breaks.`,
           TOAST_TYPE.ERROR
         );
-        isValid = false;
+        hasInvalidPart  = true;
         break;
       }
       
@@ -76,7 +76,7 @@ const Lyrics = (): JSX.Element => {
           TOAST_TYPE.WARN
         );
         hasYellowToast = true;
-        isValid = false;
+        hasInvalidPart  = true;
         break;
       }
     }
@@ -84,10 +84,10 @@ const Lyrics = (): JSX.Element => {
     if (hasYellowToast && !hasYellowToastBeenSent) {
       setHasYellowToastBeenSent(true);
     } else if (hasYellowToast && hasYellowToastBeenSent) {
-      isValid = true;
+      hasInvalidPart  = false;
     }
 
-    return isValid;
+    return hasInvalidPart ;
   };
 
   // Lyrics
@@ -99,7 +99,7 @@ const Lyrics = (): JSX.Element => {
       return;
     }
 
-    if (!validateLyricsOnConvert(lyricsParts)) {
+    if (!areLyricsValidForConversion(lyricsParts)) {
       return;
     }
 
