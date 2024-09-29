@@ -104,7 +104,7 @@ def generateCard(output_path: str, lyrics: list[str], card_metadata: CardMetadat
     """ Generates a card using the provided lyrics and metadata.
     :param output_path: [string] The path to save the card to.
     :param lyrics: [list[str]] The lyrics to display on the card.
-    :param cards_metadata: [dict] The metadata of the card.
+    :param card_metadata: [CardMetadata] The metadata of the card.
     """
     card_name = output_path.split(const.SLASH)[-1]
     log.info(f"  Generating card {card_name}...")
@@ -137,6 +137,14 @@ def generateCard(output_path: str, lyrics: list[str], card_metadata: CardMetadat
     drawMetaname(draw, card_metadata.card_metaname, card_metadata.text_meta_color)
 
     log.debug(f"    Card contents: {lyrics}")
+
+    for lyric_line in lyrics:
+        lyric_px_length = draw.textlength(lyric_line, font=const.FONT_LYRICS)
+        if lyric_px_length > const.MAX_LYRICS_LINE_WIDTH:
+            log.error("One or more lines exceed the card's maximum width")
+            raise ValueError("One or more lines exceed the card's maximum width")
+
+
     start_lyrics_from = const.Y_BOTTOM_LYRICS - (len(lyrics) * const.LYRIC_HEIGHT + (len(lyrics) - 1) * const.LYRIC_SPACING)
     for lyric_line in lyrics:
         lyric_px_length = draw.textlength(lyric_line, font=const.FONT_LYRICS)
@@ -232,15 +240,20 @@ def generateCards(cards_contents: CardsContents, song_data: SongMetadata, settin
     user_folder = str(session[const.SessionFields.user_folder.value]) + const.SLASH + const.AvailableCacheElemType.cards.value
     user_processed_path = path.join(const.PROCESSED_DIR, user_folder)
     image_output_path = f"{user_processed_path}{const.SLASH}00.png"
-    generateCard(image_output_path, [], card_metadata)
-    cards_contents = cards_contents[1:] # remove the metadata from the cards contents
-    for idx, card in enumerate(cards_contents, start=1):
-        padding = '0' if idx < 10 else ''
-        image_output_path = f"{user_processed_path}{const.SLASH}{padding}{idx}.png"
-        generateCard(image_output_path, card, card_metadata)
-    if gen_outro:
-        image_output_path = f"{user_processed_path}{const.SLASH}{const.PROCESSED_OUTRO_FILENAME}"
-        generateOutroCard(image_output_path, song_data.get("contributors", []))
+    try:
+        generateCard(image_output_path, [], card_metadata)
+        cards_contents = cards_contents[1:] # remove the metadata from the cards contents
+        for idx, card in enumerate(cards_contents, start=1):
+            padding = '0' if idx < 10 else ''
+            image_output_path = f"{user_processed_path}{const.SLASH}{padding}{idx}.png"
+            generateCard(image_output_path, card, card_metadata)
+        if gen_outro:
+            image_output_path = f"{user_processed_path}{const.SLASH}{const.PROCESSED_OUTRO_FILENAME}"
+            generateOutroCard(image_output_path, song_data.get("contributors", []))
+    except ValueError as e:
+        log.error(f"Error during card generation: {e}")
+        return createApiResponse(const.HttpStatus.BAD_REQUEST.value, str(e))
+
     number_of_generated_cards = len(cards_contents) + (2 if gen_outro else 1) # lyrics + empty + outro card
     log.log(f"Generated {number_of_generated_cards} card{'s' if number_of_generated_cards > 1 else ''} successfully.")
     updateStats(to_increment=const.AvailableStats.cardsGenerated.value, increment=number_of_generated_cards)

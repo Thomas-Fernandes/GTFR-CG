@@ -9,6 +9,7 @@ import { ApiResponse, Dict, LyricsContents, LyricsPart, LyricsRequest, LyricsRes
 import useTitle from "../../common/UseTitle";
 import { SESSION_STORAGE } from "../../constants/CardsGeneration";
 import { API, BACKEND_URL, PATHS, SPINNER_ID, TITLE, TOAST, TOAST_TYPE } from "../../constants/Common";
+import { CONSECUTIVE_LINES_THRESHOLD } from "../../constants/Lyrics";
 
 import "./Lyrics.css";
 
@@ -32,6 +33,62 @@ const Lyrics = (): JSX.Element => {
   const [isManual, setIsManual] = useState(false);
 
   const [dismissedParts, setDismissedParts] = useState(new Set<number>());
+  const [hasYellowToastBeenSent, setHasYellowToastBeenSent] = useState(false);
+
+  const countMaxConsecutiveNonEmptyLines = (lyrics: string): number => {
+    const lines = lyrics.split("\n");
+    let consecutiveLines = 0;
+    let maxConsecutiveLines = 0;
+    
+    for (const line of lines) {
+      if (line.trim() !== "") {
+        consecutiveLines += 1;
+        if (consecutiveLines > maxConsecutiveLines) {
+          maxConsecutiveLines = consecutiveLines;
+        }
+      } else {
+        consecutiveLines = 0;
+      }
+    }
+
+    return maxConsecutiveLines;
+  };
+
+  const areLyricsValidForConversion = (lyricsParts: LyricsPart[]): boolean => {
+    let hasInvalidPart = false;
+    let hasYellowToast = false;
+
+    for (const part of lyricsParts) {
+      const maxConsecutiveLines = countMaxConsecutiveNonEmptyLines(part.lyrics);
+
+      if (maxConsecutiveLines >= CONSECUTIVE_LINES_THRESHOLD.ERROR) {
+        sendToast(
+          `A section has more than ${CONSECUTIVE_LINES_THRESHOLD.ERROR} consecutive lines. Please add line breaks.`,
+          TOAST_TYPE.ERROR
+        );
+        hasInvalidPart  = true;
+        break;
+      }
+      
+      if (maxConsecutiveLines >= CONSECUTIVE_LINES_THRESHOLD.WARNING && maxConsecutiveLines < CONSECUTIVE_LINES_THRESHOLD.ERROR) {
+        sendToast(
+          `A section has ${maxConsecutiveLines} consecutive lines. Consider adding line breaks.`,
+          TOAST_TYPE.WARN
+        );
+        hasYellowToast = true;
+        hasInvalidPart  = true;
+        break;
+      }
+    }
+
+    if (hasYellowToast && !hasYellowToastBeenSent) {
+      setHasYellowToastBeenSent(true);
+    } else if (hasYellowToast && hasYellowToastBeenSent) {
+      hasInvalidPart  = false;
+    }
+
+    return hasInvalidPart ;
+  };
 
   // Lyrics
   const handleLyricsSaveSubmit = (e: FormEvent<HTMLFormElement>, body: SongPartsCards) => {
@@ -39,6 +96,10 @@ const Lyrics = (): JSX.Element => {
 
     if (isSavingCardsContent) {
       sendToast(TOAST.PROCESSING_IN_PROGRESS, TOAST_TYPE.WARN);
+      return;
+    }
+
+    if (!areLyricsValidForConversion(lyricsParts)) {
       return;
     }
 
@@ -62,6 +123,7 @@ const Lyrics = (): JSX.Element => {
       sessionStorage.setItem(SESSION_STORAGE.CARD_METANAME, cardMetaname);
       sessionStorage.setItem(SESSION_STORAGE.CARD_METHOD, isManual ? "manual" : "auto");
       sessionStorage.setItem(SESSION_STORAGE.LATEST_CARD_GENERATION, JSON.stringify({ pageMetadata, lyricsParts, dismissedParts: dismissedPartsList }));
+      setHasYellowToastBeenSent(false);
       navigate(PATHS.cardsGeneration);
     }).catch((error: ApiResponse) => {
       sendToast(error.message, TOAST_TYPE.ERROR);
