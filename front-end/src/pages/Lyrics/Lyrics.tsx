@@ -8,11 +8,9 @@ import { sendToast } from "../../common/Toast";
 import { ApiResponse, Dict, LyricsPart, LyricsRequest, LyricsResponse, SongPartsCards } from "../../common/Types";
 import useTitle from "../../common/UseTitle";
 import { API, BACKEND_URL, PATHS, SPINNER_ID, TITLE, TOAST, TOAST_TYPE } from "../../constants/Common";
+import { CONSECUTIVE_LINES_THRESHOLD } from "../../constants/Lyrics";
 
 import "./Lyrics.css";
-
-const MAX_CONSECUTIVE_LINES_WARNING = 6;
-const MAX_CONSECUTIVE_LINES_ERROR = 7;
 
 const Lyrics = (): JSX.Element => {
   useTitle(TITLE.LYRICS);
@@ -59,15 +57,16 @@ const Lyrics = (): JSX.Element => {
     for (const part of lyricsParts) {
       const maxConsecutiveLines = detectLongSections(part.lyrics);
 
-      if (maxConsecutiveLines >= MAX_CONSECUTIVE_LINES_ERROR) {
+      if (maxConsecutiveLines >= CONSECUTIVE_LINES_THRESHOLD.ERROR) {
         sendToast(
-          `A section has more than ${MAX_CONSECUTIVE_LINES_ERROR} consecutive lines. Please add line breaks.`,
+          `A section has more than ${CONSECUTIVE_LINES_THRESHOLD.ERROR} consecutive lines. Please add line breaks.`,
           TOAST_TYPE.ERROR
         );
         isValid = false;
-        break;      }
-
-      if (maxConsecutiveLines >= 5 && maxConsecutiveLines <= MAX_CONSECUTIVE_LINES_WARNING) {
+        break;
+      }
+      
+      if (maxConsecutiveLines >= CONSECUTIVE_LINES_THRESHOLD.WARNING && maxConsecutiveLines < CONSECUTIVE_LINES_THRESHOLD.ERROR) {
         sendToast(
           `A section has ${maxConsecutiveLines} consecutive lines. Consider adding line breaks.`,
           TOAST_TYPE.WARN

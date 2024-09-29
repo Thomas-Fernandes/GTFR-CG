@@ -1,0 +1,4 @@
+export const CONSECUTIVE_LINES_THRESHOLD = {
+    WARNING: 5,
+    ERROR: 7
+};
