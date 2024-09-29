@@ -13,13 +13,25 @@ export type CardsGenerationRequest = {
   bgImg: File | undefined;
   includeCenterArtwork?: boolean;
   generateOutro: boolean;
-  includeBackgroundImg?: boolean;
+  includeBackgroundImg: boolean;
 };
 
 export type SongPartsCards = string[][];
 
 /**************** LYRICS *****************/
 
+export type LyricsContents = {
+  pageMetadata: PageMetadata;
+  lyricsParts: LyricsPart[];
+  dismissedParts: number[];
+};
+
+export type PageMetadata = {
+  artist: string;
+  title: string;
+  id: string;
+  url?: string;
+};
 export type LyricsPart = {
   section: string;
   lyrics: string;

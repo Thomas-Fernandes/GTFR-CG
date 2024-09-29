@@ -48,7 +48,7 @@ def generateOutroCard(output_path: str, contributor_logins: list[str]) -> None:
         else:
             contributors_str += contributor_logins[0]
         return contributors_str
-    contributors_str = getContributorsString(contributor_logins)
+    contributors_str = "" if contributor_logins == [] else getContributorsString(contributor_logins)
 
     draw = ImageDraw.Draw(image)
     _, _, w, _ = draw.textbbox((0, 0), contributors_str, font=const.FONT_OUTRO) # deduce the width of the text to center it
@@ -278,6 +278,9 @@ def getSongMetadata(cards_contents: CardsContents, card_metaname: str | None) ->
         song_id = song_data.get("id", -1)
         if song_id == -1:
             raise ValueError("Song ID not found in metadata.")
+        elif song_id == "manual":
+            song_data["contributors"] = []
+            return
         song_contributors = None
         try:
             with log.redirect_stdout_stderr() as (stdout, stderr): # type: ignore
@@ -332,13 +335,11 @@ def postGenerateCards() -> Response:
     enforce_background_image = "file" in request.files
     include_center_artwork: Optional[bool] = None
     gen_outro: Optional[str] = request.form[snakeToCamelCase(const.SessionFields.gen_outro.value)]
-    include_bg_img: Optional[str] = "true"
+    include_bg_img: Optional[str] = request.form[snakeToCamelCase(const.SessionFields.include_bg_img.value)]
     if enforce_background_image:
         include_center_artwork = \
             request.form[snakeToCamelCase(const.SessionFields.include_center_artwork.value)] == "true"
         saveEnforcedBackgroundImage(request.files["file"], include_center_artwork)
-    else:
-        include_bg_img = request.form[snakeToCamelCase(const.SessionFields.include_bg_img.value)]
     if areCardgenParametersInvalid(enforce_background_image, include_center_artwork, include_bg_img):
         log.error(const.ERR_CARDS_GEN_PARAMS_NOT_FOUND)
         return createApiResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_CARDS_GEN_PARAMS_NOT_FOUND)

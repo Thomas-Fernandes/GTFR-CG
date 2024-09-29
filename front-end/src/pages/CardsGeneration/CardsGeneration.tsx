@@ -8,24 +8,26 @@ import { hideSpinner, showSpinner } from "../../common/Spinner";
 import { sendToast } from "../../common/Toast";
 import { ApiResponse, CardsGenerationRequest, CardsGenerationResponse, ImageDownloadRequest } from "../../common/Types";
 import useTitle from "../../common/UseTitle";
-import { PROCESSED_CARDS_PATH } from "../../constants/CardsGeneration";
-import { API, BACKEND_URL, HTTP_STATUS, PATHS, SPINNER_ID, TITLE, TOAST, TOAST_TYPE } from "../../constants/Common";
-
 import { isFileExtensionAccepted } from "../../common/utils/FileUtils";
 import { FILE_UPLOAD } from "../../constants/ArtworkGeneration";
+import { PROCESSED_CARDS_PATH, SESSION_STORAGE } from "../../constants/CardsGeneration";
+import { API, BACKEND_URL, HTTP_STATUS, PATHS, SPINNER_ID, TITLE, TOAST, TOAST_TYPE } from "../../constants/Common";
+
 import "./CardsGeneration.css";
 
 const CardsGeneration = (): JSX.Element => {
   useTitle(TITLE.CARDS_GENERATION);
 
-  const [isElementLoading, setIsElementLoading] = useState(true);
+  const [isComponentMounted, setIsComponentMounted] = useState(false);
 
   const navigate = useNavigate();
 
   const [cardMetaname, setCardMetaname] = useState("");
+  const cardMethod = sessionStorage.getItem(SESSION_STORAGE.CARD_METHOD) ?? "";
+
   const [bgImg, setBgImg] = useState<File>();
   const [includeCenterArtwork, setIncludeCenterArtwork] = useState(true);
-  const [generateOutro, setGenerateOutro] = useState(true);
+  const [generateOutro, setGenerateOutro] = useState(cardMethod === "auto");
   const [includeBackgroundImg, setIncludeBackgroundImg] = useState(true);
 
   const [generationInProgress, setGenerationInProgress] = useState(false);
@@ -95,15 +97,16 @@ const CardsGeneration = (): JSX.Element => {
     showSpinner(SPINNER_ID.CARDS_GENERATE);
     setCardPaths([]);
 
+    console.log(body)
     const formData = new FormData();
     if (body.bgImg) {
       formData.append("file", body.bgImg);
       if (body.includeCenterArtwork !== undefined)
         formData.append("includeCenterArtwork", body.includeCenterArtwork.toString());
-    } else if (body.includeBackgroundImg !== undefined)
-      formData.append("includeBackgroundImg", body.includeBackgroundImg.toString());
+    }
     formData.append("cardMetaname", body.cardMetaname);
     formData.append("generateOutro", body.generateOutro.toString());
+    formData.append("includeBackgroundImg", body.includeBackgroundImg.toString());
 
     sendRequest("POST", BACKEND_URL + API.CARDS_GENERATION.GENERATE_CARDS, formData).then((response: CardsGenerationResponse) => {
       if (!is2xxSuccessful(response.status)) {
@@ -129,12 +132,18 @@ const CardsGeneration = (): JSX.Element => {
     });
   };
 
+  const handleUnauthorizedCheckbox = () => {
+    if (cardMethod === "manual")
+      sendToast(TOAST.UNAUTHORIZED_OUTRO, TOAST_TYPE.WARN);
+  };
+
   useEffect(() => {
-    if (isElementLoading) {
-      setCardMetaname(sessionStorage.getItem("cardMeta") ?? "");
-      setIsElementLoading(false);
+    if (isComponentMounted) {
+      return;
     }
-  }, [isElementLoading]);
+    setCardMetaname(sessionStorage.getItem(SESSION_STORAGE.CARD_METANAME) ?? "");
+    setIsComponentMounted(true);
+  }, [isComponentMounted]);
 
   return (
     <div id="cards-generation">
@@ -176,22 +185,23 @@ const CardsGeneration = (): JSX.Element => {
               <p className="checkbox-label italic">Include center artwork</p>
             </label>
           }
-          <label className="checkbox" htmlFor="generate_outro">
-            <input
-              type="checkbox" name="generate_outro" id="generate_outro" defaultChecked
-              onChange={(e) => setGenerateOutro(e.target.checked)}
-            />
+          <div onClick={handleUnauthorizedCheckbox}>
+            <label className="checkbox" htmlFor="generate_outro">
+              <input
+                type="checkbox" name="generate_outro" id="generate_outro" defaultChecked={cardMethod === "auto"}
+                disabled={cardMethod === "manual"}
+                onChange={(e) => setGenerateOutro(e.target.checked)}
+              />
             <p className="checkbox-label italic">Generate outro image</p>
           </label>
-          { !bgImg &&
-            <label className="checkbox" htmlFor="include_background">
-              <input
-                type="checkbox" name="include_background" id="include_background" defaultChecked
-                onChange={(e) => setIncludeBackgroundImg(e.target.checked)}
-              />
-              <p className="checkbox-label italic">Include background image</p>
-            </label>
-          }
+          </div>
+          <label className="checkbox" htmlFor="include_background">
+            <input
+              type="checkbox" name="include_background" id="include_background" defaultChecked
+              onChange={(e) => setIncludeBackgroundImg(e.target.checked)}
+            />
+            <p className="checkbox-label italic">Include background image</p>
+          </label>
         </div>
 
         <div className="action-button" id={SPINNER_ID.CARDS_GENERATE}>
