@@ -1,7 +1,9 @@
 import { FormEvent, JSX, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import ColorPicker from "../../common/components/ColorPicker";
 import FileUploader from "../../common/components/FileUploader";
+import VerticalRule from "../../common/components/VerticalRule";
 import ZipDownloadButton from "../../common/components/ZipDownloadButton";
 import { is2xxSuccessful, sendRequest } from "../../common/Requests";
 import { hideSpinner, showSpinner } from "../../common/Spinner";
@@ -26,6 +28,7 @@ const CardsGeneration = (): JSX.Element => {
   const cardMethod = sessionStorage.getItem(SESSION_STORAGE.CARD_METHOD) ?? "";
 
   const [bgImg, setBgImg] = useState<File>();
+  const [colorPick, setColorPick] = useState<string>("");
   const [includeCenterArtwork, setIncludeCenterArtwork] = useState(true);
   const [generateOutro, setGenerateOutro] = useState(cardMethod === "auto");
   const [includeBackgroundImg, setIncludeBackgroundImg] = useState(true);
@@ -172,8 +175,10 @@ const CardsGeneration = (): JSX.Element => {
             style={!cardMetaname ? { fontStyle: "italic", fontSize: ".75rem" } : {}}
           />
         </div>
-        <div id="file-upload" className="settings flexbox flex-row">
+        <div id="enforcers" className="settings flexbox flex-row">
           <FileUploader id="background-image" label="Select image" caption="Enforce background image?" accept="image/*" setter={setBgImg} />
+          <VerticalRule />
+          <ColorPicker id="bottom-bar" label="Enforce bottom color?" setter={setColorPick} />
         </div>
         <div id="selectors" className="settings flexbox flex-row">
           { bgImg &&
