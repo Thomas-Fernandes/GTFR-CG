@@ -54,8 +54,10 @@ class SessionFields(Enum):
     # Cards generation
     cards_contents = "cards_contents"
     song_data = "song_data"
+    enforce_background_image = "enforce_background_image"
     gen_outro = "generate_outro"
     include_bg_img = "include_background_img"
+    card_metaname = "card_metaname"
 
 # Routes
 API_ROUTE = "/api"
@@ -135,6 +137,7 @@ CARDS_BOTTOM_B = f"{CARDS_DIR}bottom_black.png"
 CARDS_BOTTOM_W = f"{CARDS_DIR}bottom_white.png"
 
 # Error messages
+WARN_NO_USER_FOLDER = "User folder not found in session. Creating a new one."
 ERR_USER_FOLDER_NOT_FOUND = "User folder not found."
 ERR_NO_FILE = "Invalid file: No file selected."
 ERR_NO_IMG = "No image was selected or uploaded."
@@ -172,6 +175,7 @@ REGEX_YOUTUBE_URL = [
 ]
 
 # Cards processing
+ATTRIBUTION_PERCENTAGE_TOLERANCE = 5 # if user_attr < ATTRIBUTION_TOLERANCE, don't display them on outro card
 TRANSLATION_TABLE = {
     ord('\u2005'): ' ', # Replace four-per-em space with normal space
     ord('\u200b'): '', # Replace zero-width space with nothing
@@ -179,10 +183,16 @@ TRANSLATION_TABLE = {
 }
 METADATA_IDENTIFIER = "Metadata | "
 METADATA_SEP = " ;;; "
-FONT_PROGRAMME = "programme-light.ttf"
 CARDS_FONT_SMALL_SIZE = 36
 CARDS_FONT_MEDIUM_SIZE = 43
 CARDS_FONT_BIG_SIZE = 64
+from PIL import ImageFont
+FONT_ASCII_ABSPATH = f"{FONTS_DIR}{'programme-light.ttf'}"
+FONT_LYRICS = ImageFont.truetype(FONT_ASCII_ABSPATH, CARDS_FONT_BIG_SIZE)
+FONT_METANAME = ImageFont.truetype(FONT_ASCII_ABSPATH, CARDS_FONT_MEDIUM_SIZE)
+FONT_OUTRO = ImageFont.truetype(FONT_ASCII_ABSPATH, CARDS_FONT_SMALL_SIZE)
+FONT_METANAME_EUROPEAN = ImageFont.truetype(f"{FONTS_DIR}{'noto-sans-regular.ttf'}", 40)
+FONT_METANAME_FALLBACK = ImageFont.truetype(f"{FONTS_DIR}{'arial.ttf'}", 40)
 OUTRO_TEXT_COLOR = (246, 240, 104) #f6f068
 X_META_LYRIC = 90
 Y_METADATA = 964

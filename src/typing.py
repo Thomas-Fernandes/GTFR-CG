@@ -1,4 +1,4 @@
-from PIL import Image, ImageFont
+from PIL import Image
 
 from dataclasses import dataclass
 from typing import Literal, Optional, TypeAlias
@@ -66,23 +66,19 @@ class CardMetadata:
     """ Dataclass to store the card's metadata.
 
     Attributes:
-        song_author: [string] The author of the song.
-        song_title: [string] The title of the song.
+        card_metaname: [string] The author and title of the song.
         include_bg_img: [bool] Whether to include the background image.
         bg: [Image.Image] The background image of the card.
         dominant_color: [RGBColor] The average color of the background image.
         text_lyrics_color: [RGBColor] The background color for the text of the card.
         text_meta_color: [RGBColor] The text color of the metadata of the card.
-        text_fonts: [list[FreeTypeFont]] The font of the text.
     """
-    song_author: str
-    song_title: str
+    card_metaname: str
     include_bg_img: bool
     bg: Image.Image
     dominant_color: RGBAColor
     text_lyrics_color: RGBColor
     text_meta_color: RGBColor
-    text_fonts: list[ImageFont.FreeTypeFont]
 
     def __repr__(self) -> str:
         """ Returns the CardMetadata dataclass as a string
@@ -93,7 +89,10 @@ class CardMetadata:
             if value is not None:
                 if key == "bg" or key == "text_fonts":
                     continue
-                content += f"{key}={value}, "
+                if isinstance(value, str):
+                    content += f"{key}='{value}', "
+                else:
+                    content += f"{key}={value}, "
         return f"CardMetadata({content[:-2]})"
 # CardMetadata: TypeAlias = dict[str, str | bool | RGBAColor]
 

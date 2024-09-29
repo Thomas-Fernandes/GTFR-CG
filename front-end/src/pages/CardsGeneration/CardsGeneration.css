@@ -4,6 +4,22 @@
             justify-content: center;
             gap: 2rem;
             margin-bottom: 1rem;
+
+            &#text-fields {
+                input {
+                    height: 1rem;
+                    margin: 0;
+                }
+            }
+
+            &#file-upload {
+                gap: 1rem;
+
+                >p {
+                    font-size: larger;
+                    font-weight: bold;
+                }
+            }
         }
 
         .action-button {

@@ -9,6 +9,9 @@ export type CardsGenerationResponse = ApiResponse & {
 };
 
 export type CardsGenerationRequest = {
+  cardMetaname: string;
+  bgImg: File | undefined;
+  includeCenterArtwork?: boolean;
   generateOutro: boolean;
   includeBackgroundImg: boolean;
 };
@@ -17,6 +20,18 @@ export type SongPartsCards = string[][];
 
 /**************** LYRICS *****************/
 
+export type LyricsContents = {
+  pageMetadata: PageMetadata;
+  lyricsParts: LyricsPart[];
+  dismissedParts: number[];
+};
+
+export type PageMetadata = {
+  artist: string;
+  title: string;
+  id: string;
+  url?: string;
+};
 export type LyricsPart = {
   section: string;
   lyrics: string;
@@ -24,7 +39,7 @@ export type LyricsPart = {
 
 export type LyricsResponse = ApiResponse & {
   data: {
-    lyrics_parts: LyricsPart[];
+    lyricsParts: LyricsPart[];
   };
 };
 export type LyricsRequest = {
@@ -51,7 +66,7 @@ export type YoutubeRequest = {
 };
 
 export type FileUploadRequest = {
-  file?: File;
+  localFile: File | undefined;
   includeCenterArtwork: boolean;
 };
 
@@ -96,3 +111,5 @@ export type ResponseStatus = "info" | "success" | "warn" | "error";
 export type ToastType = "info" | "success" | "warn" | "error";
 
 export type StateSetter<T> = Dispatch<SetStateAction<T>>;
+
+export type Dict = { [key: string]: string };

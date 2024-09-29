@@ -4,7 +4,7 @@ from flask_cors import cross_origin
 import src.constants as const
 from src.logger import log
 from src.statistics import getJsonStatsFromFile
-from src.web_utils import createApiResponse
+from src.utils.web_utils import createApiResponse
 
 from src.app import app
 bp_home = Blueprint(const.ROUTES.home.bp_name, __name__.split('.')[-1])

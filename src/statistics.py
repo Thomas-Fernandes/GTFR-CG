@@ -61,7 +61,7 @@ class Stats:
 
 from json import loads, dumps, JSONDecodeError
 
-from src.soft_utils import getNowEpoch
+from src.utils.soft_utils import getNowEpoch
 
 def getJsonStatsFromFile(path: str = const.STATS_FILE_PATH) -> JsonDict:
     f""" Returns the statistics contained in a JSON statistics file.
@@ -109,7 +109,7 @@ def updateStats(path: str = const.STATS_FILE_PATH, to_increment: Optional[str] =
 
     try:
         with open(path, "w") as file:
-            log.debug(f"Writing stats to file: {path}")
+            log.debug(f"  Writing stats to file: {path}...")
             file.write(dumps(new_stats))
     except FileNotFoundError:
         log.warn(f"Error when writing to stats file ({path}). Initializing new stats file...")

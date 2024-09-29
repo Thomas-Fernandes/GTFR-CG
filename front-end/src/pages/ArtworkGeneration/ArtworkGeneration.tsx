@@ -1,11 +1,14 @@
 import { FormEvent, JSX, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import FileUploader from "../../common/components/FileUploader";
+import ImgButton from "../../common/components/ImgButton";
 import { is2xxSuccessful, objectToQueryString, sendRequest } from "../../common/Requests";
 import { hideSpinner, showSpinner } from "../../common/Spinner";
 import { sendToast } from "../../common/Toast";
 import { ApiResponse, FileUploadRequest, ItunesRequest, ItunesResponse, ItunesResult, YoutubeRequest } from "../../common/Types";
 import useTitle from "../../common/UseTitle";
+import { isFileExtensionAccepted } from "../../common/utils/FileUtils";
 import { FILE_UPLOAD, ITUNES, YOUTUBE } from "../../constants/ArtworkGeneration";
 import { API, BACKEND_URL, ITUNES_URL, PATHS, SPINNER_ID, TITLE, TOAST, TOAST_TYPE } from "../../constants/Common";
 
@@ -22,7 +25,7 @@ const ArtworkGeneration = (): JSX.Element => {
   const [country, setCountry] = useState("fr");
   const [itunesResults, setItunesResults] = useState([] as ItunesResult[]);
 
-  const [file, setFile] = useState<File>();
+  const [localFile, setLocalFile] = useState<File>();
   const [includeCenterArtwork, setIncludeCenterArtwork] = useState(true);
 
   const [youtubeUrl, setYoutubeUrl] = useState("");
@@ -64,12 +67,9 @@ const ArtworkGeneration = (): JSX.Element => {
   const renderItunesResult = (item: ItunesResult, key: number): JSX.Element => {
     return (
       <div className="result-item" key={"result" + key.toString()}>
-        <img src={item.artworkUrl100} className="result-image" alt={item.collectionName || item.trackName} />
-        <p className="centered bold italic">{item.artistName} - {item.collectionName.replace(" - Single", "")}</p>
+        <ImgButton src={item.artworkUrl100} className="result-image" alt={item.collectionName || item.trackName} onClick={() => handleSubmitItunesResult(item, key)} />
+        <p className="result-text centered bold italic">{item.artistName} - {item.collectionName.replace(" - Single", "")}</p>
         <div className="flex-row" id={SPINNER_ID.ITUNES_OPTION + key.toString()}>
-          <button onClick={() => handleSubmitItunesResult(item, key)}>
-            Use this image
-          </button>
         </div>
       </div>
     );
@@ -136,9 +136,6 @@ const ArtworkGeneration = (): JSX.Element => {
   };
 
   // File upload
-  const isFileExtensionAccepted = (fileName: string, acceptedExtensions: string[]): boolean => {
-    return acceptedExtensions.includes(fileName.split(".").slice(-1)[0].toLowerCase());
-  };
   const handleSubmitFileUpload = (e: FormEvent<HTMLFormElement>, body: FileUploadRequest) => {
     e.preventDefault();
 
@@ -147,20 +144,16 @@ const ArtworkGeneration = (): JSX.Element => {
       return;
     }
 
-    if (!body.file) {
+    if (!body.localFile) {
       sendToast(TOAST.NO_IMG, TOAST_TYPE.WARN);
       return;
     }
 
     const formData = new FormData();
-    formData.append("file", new FormData(e.currentTarget).get("file") as File);
+    formData.append("file", body.localFile);
     formData.append("includeCenterArtwork", body.includeCenterArtwork.toString());
-    const data = {
-      ...body,
-      file: new FormData(e.currentTarget).get("file") as File,
-    };
 
-    const fileExtensionIsAccepted = isFileExtensionAccepted(data.file.name, FILE_UPLOAD.ACCEPTED_IMG_EXTENSIONS);
+    const fileExtensionIsAccepted = isFileExtensionAccepted(body.localFile.name, FILE_UPLOAD.ACCEPTED_IMG_EXTENSIONS);
     if (!fileExtensionIsAccepted) {
       sendToast(
         TOAST.INVALID_FILE_TYPE + "\n" +
@@ -251,19 +244,19 @@ const ArtworkGeneration = (): JSX.Element => {
       </div>
 
       <h1>Search for cover art on iTunes</h1>
-      <form onSubmit={(e) => handleSubmitItunesSearch(e, {term, country})}>
+      <form id="itunes" onSubmit={(e) => handleSubmitItunesSearch(e, {term, country})}>
         <div className="flexbox">
-          <input type="text" placeholder="Search on iTunes"
+          <input id="itunes-text" type="text" placeholder="Search on iTunes"
             onChange={(e) => setTerm(e.target.value)}
           />
-          <select aria-label="Country"
-            defaultValue="fr" onChange={(e) => setCountry(e.target.value)}
-          >
-            <option value="fr">France</option>
-            <option value="us">United States</option>
-            <option value="nz">New Zealand</option>
-          </select>
-          <div className="action-button" id={SPINNER_ID.ITUNES}>
+          <div id={SPINNER_ID.ITUNES} className="itunes-search">
+            <select aria-label="Country"
+              defaultValue="fr" onChange={(e) => setCountry(e.target.value)}
+            >
+              <option value="fr">France</option>
+              <option value="us">United States</option>
+              <option value="nz">New Zealand</option>
+            </select>
             <input type="submit" value="SEARCH" className="action-button" />
           </div>
         </div>
@@ -280,11 +273,9 @@ const ArtworkGeneration = (): JSX.Element => {
       <hr />
 
       <h1>...or upload your image</h1>
-      <form onSubmit={(e) => handleSubmitFileUpload(e, {file, includeCenterArtwork})} encType="multipart/form-data">
+      <form id="local" onSubmit={(e) => handleSubmitFileUpload(e, {localFile, includeCenterArtwork})} encType="multipart/form-data">
         <div className="flexbox">
-          <input type="file" name="file" className="file"
-            onChange={(e) => setFile(e.target.files ? e.target.files[0] : undefined)}
-          />
+          <FileUploader id="background-image" label="Select background image" accept="image/*" setter={setLocalFile} />
           <label className="checkbox" htmlFor="include_center_artwork">
             <input
               type="checkbox" name="include_center_artwork" id="include_center_artwork" defaultChecked
@@ -301,7 +292,7 @@ const ArtworkGeneration = (): JSX.Element => {
       <hr />
 
       <h1>...or use a YouTube video thumbnail</h1>
-      <form onSubmit={(e) => handleSubmitYoutubeUrl(e, {url: youtubeUrl})}>
+      <form id="youtube" onSubmit={(e) => handleSubmitYoutubeUrl(e, {url: youtubeUrl})}>
         <div className="flexbox">
           <input type="text" placeholder="Paste YouTube video URL here"
             onChange={(e) => setYoutubeUrl(e.target.value)}

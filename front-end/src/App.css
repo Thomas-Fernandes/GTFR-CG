@@ -343,7 +343,9 @@ input[type="file"] {
     }
 }
 .checkbox {
+    align-items: center;
     flex-direction: row;
+    gap: .5rem;
 
     &:hover {
         cursor: pointer;
@@ -351,7 +353,7 @@ input[type="file"] {
     }
 
     input[type="checkbox"] {
-        margin: 0 10px 0 0;
+        margin: 0 auto;
         transform: scale(1.5);
         accent-color: #007BFF;
         transition: 0.5s;
@@ -369,43 +371,69 @@ input[type="file"] {
 }
 
 .flexbox {
+    justify-content: center;
     align-items: center;
-    align-content: center;
     flex-wrap: wrap;
 }
-.flex-col {
-    flex-direction: column;
-}
-.flex-row {
-    flex-direction: row;
-}
+.flex-col { flex-direction: column; }
+.flex-row { flex-direction: row; }
+.g-1 { gap: 1rem; }
+.g-2 { gap: 2rem; }
 
-.hidden {
-    display: none;
-}
+.hidden { display: none; }
 
-.mv-0 {
-    margin-top: 0;
-    margin-bottom: 0;
-}
-.mv-1 {
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-}
+.mv-0 { margin-top: 0; margin-bottom: 0; }
+.mv-1 { margin-top: 1rem; margin-bottom: 1rem; }
 
-.italic {
-    font-style: italic;
-}
-.bold {
-    font-weight: bold;
-}
+.italic { font-style: italic; }
+.bold { font-weight: bold; }
 
-.t-green {
-    color: #007f00;
+.t-green { color: #007f00; }
+.t-yellow { color: #7f7f00; }
+.t-red { color: #7f0000; }
+
+.file-upload-component {
+    align-self: center;
+    cursor: pointer;
+    width: 32rem;
+    border: 2px solid #dddddd;
+    padding: .5rem;
+
+    * {
+        cursor: pointer;
+        margin: 0 .5rem;
+    }
+
+    label {
+        padding: .5rem 1rem;
+
+        background-color: #007bff;
+        color: #ffffff;
+        border-radius: .25rem;
+    }
+
+    p {
+        margin-right: 0;
+    }
+
+    div, button {
+        margin: 0;
+    }
 }
-.t-yellow {
-    color: #7f7f00;
-}
-.t-red {
-    color: #7f0000;
+.btn-remove {
+    cursor: pointer;
+    padding: .25rem;
+    border: none;
+
+    background: none;
+    box-shadow: none;
+
+    color: #ffffff;
+    font-size: larger;
+    transition: all .01s;
+
+    &:hover {
+        color: #ff0000;
+        background: none;
+    }
 }

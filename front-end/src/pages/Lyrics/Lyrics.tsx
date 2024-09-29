@@ -5,8 +5,9 @@ import { AutoResizeTextarea } from "../../common/components/AutoResizeTextarea";
 import { is2xxSuccessful, sendRequest } from "../../common/Requests";
 import { hideSpinner, showSpinner } from "../../common/Spinner";
 import { sendToast } from "../../common/Toast";
-import { ApiResponse, LyricsPart, LyricsRequest, LyricsResponse, SongPartsCards } from "../../common/Types";
+import { ApiResponse, Dict, LyricsContents, LyricsPart, LyricsRequest, LyricsResponse, PageMetadata, SongPartsCards } from "../../common/Types";
 import useTitle from "../../common/UseTitle";
+import { SESSION_STORAGE } from "../../constants/CardsGeneration";
 import { API, BACKEND_URL, PATHS, SPINNER_ID, TITLE, TOAST, TOAST_TYPE } from "../../constants/Common";
 
 import "./Lyrics.css";
@@ -24,8 +25,13 @@ const Lyrics = (): JSX.Element => {
   const [artist, setArtist] = useState("");
   const [songName, setSongName] = useState("");
 
-  const [pageMetadata, setPageMetadata] = useState({});
+  const [pageMetadata, setPageMetadata] = useState({} as PageMetadata);
   const [lyricsParts, setLyricsParts] = useState([] as LyricsPart[]);
+  const [lastContents, setLastContents] = useState({} as LyricsContents);
+
+  const [isManual, setIsManual] = useState(false);
+
+  const [dismissedParts, setDismissedParts] = useState(new Set<number>());
 
   // Lyrics
   const handleLyricsSaveSubmit = (e: FormEvent<HTMLFormElement>, body: SongPartsCards) => {
@@ -41,7 +47,7 @@ const Lyrics = (): JSX.Element => {
 
     const metadata = "Metadata | " + Object.entries(pageMetadata).map(([key, value]) => `${key}: ${value}`).join(" ;;; ");
     const data = {
-      cards_contents: [[metadata]].concat(body),
+      cardsContents: [[metadata]].concat(body),
     };
 
     sendRequest("POST", BACKEND_URL + API.CARDS_GENERATION.SAVE_CARDS_CONTENTS, data).then((response: ApiResponse) => {
@@ -49,6 +55,13 @@ const Lyrics = (): JSX.Element => {
         throw new Error(response.message);
       }
 
+      const cardArtist = pageMetadata.artist.toLowerCase().startsWith("genius") ? pageMetadata.title.split(" - ")[0] : pageMetadata.artist;
+      const cardSongName = pageMetadata.artist.toLowerCase().startsWith("genius") ? pageMetadata.title.split(" - ")[1].split(" (")[0] : pageMetadata.title;
+      const cardMetaname = `${cardArtist.trim().toUpperCase()}, “${cardSongName.trim().toUpperCase()}”`;
+      const dismissedPartsList = Array.from(dismissedParts);
+      sessionStorage.setItem(SESSION_STORAGE.CARD_METANAME, cardMetaname);
+      sessionStorage.setItem(SESSION_STORAGE.CARD_METHOD, isManual ? "manual" : "auto");
+      sessionStorage.setItem(SESSION_STORAGE.LATEST_CARD_GENERATION, JSON.stringify({ pageMetadata, lyricsParts, dismissedParts: dismissedPartsList }));
       navigate(PATHS.cardsGeneration);
     }).catch((error: ApiResponse) => {
       sendToast(error.message, TOAST_TYPE.ERROR);
@@ -58,11 +71,11 @@ const Lyrics = (): JSX.Element => {
     });
   };
 
-  const convertToCardContents = (lyricsParts: LyricsPart[]): SongPartsCards => {
+  const convertToCardContents = (lyricsParts: LyricsPart[], dismissedParts: Set<number>): SongPartsCards => {
     // Input: [{section: "Verse 1", lyrics: "The whole lyrics\nOf the section\nAre here as is\nTotally disorganized"}, ...]
     // Output: [["The whole lyrics\nOf the section", "Are here as is\nTotally disorganized"], ...]
     //   -> Each inner array is a section, each string is a card
-    return lyricsParts.map(part => part.lyrics.split("\n\n"));
+    return lyricsParts.filter((_, idx) => !dismissedParts.has(idx)).map(part => part.lyrics.trim().split("\n\n"));
   };
 
   const handleSetLyricsParts = (lyrics: string, idx: number) => {
@@ -72,6 +85,34 @@ const Lyrics = (): JSX.Element => {
   };
 
   // Search
+  const renderLyricsPart = (part: LyricsPart, idx: number): JSX.Element => {
+    return (
+      <div key={"part_" + idx} className="lyrics-part">
+        { dismissedParts.has(idx)
+        ? <div className="lyrics-part--header flexbox flex-row g-2">
+          <button type="button" className="restore" onClick={() => { const n = new Set(dismissedParts); n.delete(idx); setDismissedParts(n)}}>
+            {`Restore ${part.section}`}
+          </button>
+        </div> : <>
+        <div className="lyrics-part--header flexbox flex-row g-2">
+          <button type="button" className="red" onClick={() => setDismissedParts(new Set(dismissedParts).add(idx))}>
+            {"Remove"}
+          </button>
+          <label>{part.section}</label>
+          <button type="button" className="green" onClick={() => handleSetLyricsParts("", idx)}>
+            {"Clear"}
+          </button>
+          </div>
+          <AutoResizeTextarea
+            name={`lyrics-part_${idx}`} rows={5} cols={80}
+            value={part.lyrics} onChange={(e) => handleSetLyricsParts(e.target.value, idx)}
+          />
+        </>}
+        <hr className="w-66 mv-0" />
+      </div>
+    );
+  };
+
   const handleLyricsSearchSubmit = (e: FormEvent<HTMLFormElement>, body: LyricsRequest) => {
     e.preventDefault();
 
@@ -93,23 +134,23 @@ const Lyrics = (): JSX.Element => {
         throw new Error(response.message);
       }
 
-      const responseFirstSection = response.data.lyrics_parts[0].section;
+      const responseFirstSection = response.data.lyricsParts[0].section;
       if (["error", "warn"].includes(responseFirstSection)) {
         sendToast(
-          response.data.lyrics_parts[0].lyrics,
+          response.data.lyricsParts[0].lyrics,
           responseFirstSection === "error" ? TOAST_TYPE.ERROR : TOAST_TYPE.WARN
         );
         setLyricsParts([]);
       } else {
-        const metadata = response.data.lyrics_parts.find(part => part.section === "[Metadata]")?.lyrics.split("\n") ?? [];
-        const metadataObj = metadata.reduce((acc: { [key: string]: string }, curr) => {
+        const metadata = response.data.lyricsParts.find(part => part.section === "[Metadata]")?.lyrics.split("\n") ?? [];
+        const metadataObj = metadata.reduce((acc: PageMetadata, curr) => {
           const [key, value] = curr.split(": ");
-          acc[key] = value;
+          (acc as Dict)[key] = value;
           return acc;
-        }, {} as { [key: string]: string });
+        }, {} as PageMetadata);
         setPageMetadata(metadataObj);
 
-        const lyricsParts = response.data.lyrics_parts.filter(part => part.section !== "[Metadata]");
+        const lyricsParts = response.data.lyricsParts.filter(part => part.section !== "[Metadata]");
         setLyricsParts(lyricsParts);
       }
     }).catch((error: ApiResponse) => {
@@ -119,6 +160,16 @@ const Lyrics = (): JSX.Element => {
       hideSpinner(SPINNER_ID.LYRICS_SEARCH);
       setIsFetching(false);
     });
+  };
+
+  const handleLoadLastContents = () => {
+    if (lastContents.pageMetadata.id === undefined) {
+      sendToast(TOAST.NO_LAST_GENERATION, TOAST_TYPE.WARN);
+      return;
+    }
+    setPageMetadata(lastContents.pageMetadata);
+    setLyricsParts(lastContents.lyricsParts);
+    setDismissedParts(new Set(lastContents.dismissedParts));
   };
 
   useEffect(() => {
@@ -134,7 +185,14 @@ const Lyrics = (): JSX.Element => {
       });
     };
 
-    isTokenSet().then((isSet) => { setIsGeniusTokenSet(isSet); });
+    isTokenSet().then((isSet) => {
+      if (!isSet) {
+        navigate(`${PATHS.redirect}?redirect_to=${PATHS.home}&error_text=${TOAST.NO_GENIUS_TOKEN}`);
+      } else {
+        setIsGeniusTokenSet(true);
+        setLastContents(JSON.parse(sessionStorage.getItem(SESSION_STORAGE.LATEST_CARD_GENERATION) ?? "{{}, [], []}"));
+      }
+    });
   });
 
   return (
@@ -156,8 +214,24 @@ const Lyrics = (): JSX.Element => {
 
       <h1>Lyrics</h1>
 
-      <form className="search-form flexbox" onSubmit={(e) => handleLyricsSearchSubmit(e, {artist, songName})}>
-        <div className="search-bar flex-row">
+      <button type="button" className="last-generation" onClick={handleLoadLastContents}>
+        {"Load last contents"}
+      </button>
+
+      { isManual
+      ? <div className="flexbox">
+        <div id="metadata-bar" className="flex-row g-1">
+          <input required
+            type="text" name="artist" placeholder="Enter artist name"
+            onChange={(e) => { setArtist(e.target.value); setPageMetadata({...pageMetadata, artist: e.target.value}); }}
+          />
+          <input required
+            type="text" name="songName" placeholder="Enter song name"
+            onChange={(e) => { setSongName(e.target.value); setPageMetadata({...pageMetadata, title: e.target.value}); }}
+          />
+        </div>
+      </div> : <form className="search-form flexbox" onSubmit={(e) => handleLyricsSearchSubmit(e, {artist, songName})}>
+        <div id="search-bar" className="flex-row g-1">
           <input required
             type="text" name="artist" placeholder="Enter artist name"
             onChange={(e) => setArtist(e.target.value)}
@@ -170,29 +244,36 @@ const Lyrics = (): JSX.Element => {
             <input type="submit" value="SEARCH" className="action-button search-button" />
           </div>
         </div>
-      </form>
+      </form>}
 
-      { lyricsParts.length > 0 &&
-        <>
-          <hr />
+      { !isFetching &&
+        <button type="button" className="mode-flipper"
+          onClick={() => {
+            if (!isManual) {
+              setLyricsParts([{section: "Manual Card Creation", lyrics: ""}]);
+              setPageMetadata({id: "manual", artist: artist, title: songName});
+            } else {
+              setLyricsParts([] as LyricsPart[]);
+              setPageMetadata({} as PageMetadata);
+            }
+            setIsManual(!isManual);
+          }}
+        >
+          {isManual ? "Generate cards automatically" : "Generate cards manually instead"}
+        </button>}
 
-          <form className="lyrics-form flexbox" onSubmit={(e) => handleLyricsSaveSubmit(e, convertToCardContents(lyricsParts))}>
-            { lyricsParts.map((part, idx) => (
-              <div key={idx} className="lyrics-part">
-                <label>{part.section}</label>
-                <AutoResizeTextarea
-                  name={`lyrics_part_${idx}`} rows={5} cols={80}
-                  value={part.lyrics} onChange={(e) => handleSetLyricsParts(e.target.value, idx)}
-                />
-                <hr className="w-66 mv-0" />
-              </div>
-            ))}
-            <div className="action-button" id={SPINNER_ID.LYRICS_SAVE}>
-              <input type="submit" value="CONVERT TO CARDS" className="action-button save-button" />
-            </div>
-          </form>
-        </>
-      }
+      { !isFetching && lyricsParts.length > 0 && <>
+        <hr />
+
+        <form className="lyrics-form flexbox" onSubmit={(e) => handleLyricsSaveSubmit(e, convertToCardContents(lyricsParts, dismissedParts))}>
+          { lyricsParts.map((part, idx) =>
+            renderLyricsPart(part, idx))
+          }
+          <div className="action-button" id={SPINNER_ID.LYRICS_SAVE}>
+            <input type="submit" value="CONVERT TO CARDS" className="action-button save-button" />
+          </div>
+        </form>
+      </>}
     </div>
   )
 };
