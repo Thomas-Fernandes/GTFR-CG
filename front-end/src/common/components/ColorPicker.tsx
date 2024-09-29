@@ -1,15 +1,18 @@
 import React, { useState } from "react";
 
+import { TOAST, TOAST_TYPE } from "../../constants/Common";
+import { sendToast } from "../Toast";
+
 type Props = {
   id: string;
-  defaultColor?: string;
+  latest?: string;
   label?: string;
   labelClassName?: string;
   setter: (color: string) => void;
 };
 
-const ColorPicker: React.FC<Props> = ({ id, defaultColor, label, labelClassName, setter }) => {
-  const [selectedColor, setSelectedColor] = useState<string>(defaultColor ?? ""); // Default to black color
+const ColorPicker: React.FC<Props> = ({ id, latest, label, labelClassName, setter }) => {
+  const [selectedColor, setSelectedColor] = useState<string>(""); // Default to black color
 
   const calculateLuminance = (hex: string) => {
     const hexColor = hex.replace("#", "");
@@ -27,6 +30,15 @@ const ColorPicker: React.FC<Props> = ({ id, defaultColor, label, labelClassName,
     }
     setSelectedColor(e.target.value);
     setter(e.target.value);
+  };
+
+  const handleLoadLatest = () => {
+    if (!latest){
+      sendToast(TOAST.NO_LATEST_COLOR, TOAST_TYPE.WARN);
+      return;
+    }
+    setSelectedColor(latest);
+    setter(latest);
   };
 
   return (
@@ -48,10 +60,18 @@ const ColorPicker: React.FC<Props> = ({ id, defaultColor, label, labelClassName,
             {selectedColor}
           </label>
         }
-        <input
-          type="color" name="color-picker" className={selectedColor !== "" ? "hidden" : ""}
-          value={selectedColor} onChange={handleColorChange}
-        />
+        <div className={selectedColor !== "" ? "hidden" : "flexbox flex-row g-p5"}>
+          <input
+            type="color" name="color-picker"
+            value={selectedColor !== "" ? selectedColor : "#000000"} onChange={handleColorChange}
+          />
+          <button
+            type="button" className="color-picker--load-latest"
+            onClick={handleLoadLatest}
+          >
+            {"Load latest"}
+          </button>
+        </div>
       </div>
       { selectedColor !== "" &&
         <button type="button" className="btn-remove"

@@ -440,6 +440,20 @@ input[type="file"] {
         border-radius: .5rem;
         text-align: center;
     }
+
+    .color-picker--load-latest {
+        cursor: pointer;
+        min-width: 16%;
+        font-size: smaller;
+
+        background-color: #8fbc8f;
+        color: #ffffff;
+        border-radius: .25rem;
+
+        &:hover {
+            background-color: #0056b3;
+        }
+    }
 }
 .btn-remove {
     cursor: pointer;
