@@ -103,10 +103,11 @@ const CardsGeneration = (): JSX.Element => {
 
     const formData = new FormData();
     if (body.bgImg) {
-      formData.append("file", body.bgImg);
-      if (body.includeCenterArtwork !== undefined)
-        formData.append("includeCenterArtwork", body.includeCenterArtwork.toString());
+      formData.append("enforceBackgroundImage", body.bgImg);
+      formData.append("includeCenterArtwork", (body.includeCenterArtwork ?? "").toString());
     }
+    if (body.colorPick !== "")
+      formData.append("enforceBottomColor", body.colorPick);
     formData.append("cardMetaname", body.cardMetaname);
     formData.append("generateOutro", body.generateOutro.toString());
     formData.append("includeBackgroundImg", body.includeBackgroundImg.toString());
