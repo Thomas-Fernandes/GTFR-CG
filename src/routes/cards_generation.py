@@ -394,7 +394,7 @@ def saveCardsContents(cards_contents: CardsContents) -> Response:
 
     session[const.SessionFields.cards_contents.value] = filepath
     log.log(f"Cards contents saved to {filepath}.")
-    return createApiResponse(const.HttpStatus.OK.value, "Cards contents saved successfully.")
+    return createApiResponse(const.HttpStatus.CREATED.value, "Cards contents saved successfully.")
 
 @bp_cards_generation.route(api_prefix + "/save-contents", methods=["POST"])
 @cross_origin()
