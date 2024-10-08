@@ -1,6 +1,5 @@
 from colorthief import ColorThief
 from flask import Blueprint, Response, request
-from flask_cors import cross_origin
 from PIL import Image, ImageDraw
 from werkzeug.datastructures import FileStorage
 
@@ -309,7 +308,6 @@ def areCardgenParametersInvalid(enforce_background_image: bool, include_center_a
         or (not enforce_background_image and include_bg_img is None)
 
 @bp_cards_generation.route(api_prefix + "/generate", methods=["POST"])
-@cross_origin()
 def postGenerateCards() -> Response:
     """ Generates cards using the contents previously saved.
     :return: [Response] The response to the request.
@@ -397,7 +395,6 @@ def saveCardsContents(cards_contents: CardsContents) -> Response:
     return createApiResponse(const.HttpStatus.CREATED.value, "Cards contents saved successfully.")
 
 @bp_cards_generation.route(api_prefix + "/save-contents", methods=["POST"])
-@cross_origin()
 def postCardsContents() -> Response:
     """ Saves the cards contents to the user's folder.
     :return: [Response] The response to the request.
