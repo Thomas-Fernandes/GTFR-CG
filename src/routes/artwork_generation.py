@@ -1,5 +1,4 @@
 from flask import Blueprint, Response, request
-from flask_cors import cross_origin
 from requests import get as requestsGet
 from werkzeug.datastructures import FileStorage
 
@@ -19,7 +18,6 @@ session = app.config
 api_prefix = const.API_ROUTE + const.ROUTES.art_gen.path
 
 @bp_artwork_generation.route(api_prefix + "/use-itunes-image", methods=["POST"])
-@cross_origin()
 def useItunesImage() -> Response:
     """ Interprets the fetched iTunes URL and saves the image to the user's folder.
     :return: [Response] The response to the request.
@@ -58,7 +56,6 @@ def useItunesImage() -> Response:
     return createApiResponse(const.HttpStatus.OK.value, "iTunes image processed successfully.")
 
 @bp_artwork_generation.route(api_prefix + "/use-local-image", methods=["POST"])
-@cross_origin()
 def useLocalImage() -> Response:
     """ Saves the uploaded image to the user's folder.
     :return: [Response] The response to the request.
@@ -138,7 +135,6 @@ def processYoutubeThumbnail(thumbnail_url: str) -> Response:
     return createApiResponse(const.HttpStatus.OK.value, "YouTube thumbnail processed successfully.")
 
 @bp_artwork_generation.route(api_prefix + "/use-youtube-thumbnail", methods=["POST"])
-@cross_origin()
 def useYoutubeThumbnail() -> Response:
     """ Handles the extraction and processing of a YouTube thumbnail from a given URL.
     :return: [Response] The response to the request.

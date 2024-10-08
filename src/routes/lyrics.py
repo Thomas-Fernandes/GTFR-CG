@@ -1,5 +1,4 @@
 from flask import Blueprint, request, Response
-from flask_cors import cross_origin
 from lyricsgenius import Genius
 
 from ast import literal_eval
@@ -90,7 +89,6 @@ def fetchLyricsFromGenius(song_title: str, artist_name: str) -> list[dict[str, s
     return lyrics_parts
 
 @bp_lyrics.route(api_prefix + "/get-genius-lyrics", methods=["POST"])
-@cross_origin()
 def getGeniusLyrics() -> Response:
     """ Fetches the lyrics of a song from Genius.com.
     :return: [Response] The response to the request.

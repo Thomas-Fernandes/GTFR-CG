@@ -11,6 +11,9 @@ class HttpStatus(Enum):
     """ Enum for HTTP status codes.
     """
     OK = 200
+    CREATED = 201
+    ACCEPTED = 202
+    NO_CONTENT = 204
     BAD_REQUEST = 400
     PRECONDITION_FAILED = 412
     UNSUPPORTED_MEDIA_TYPE = 415
