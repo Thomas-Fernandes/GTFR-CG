@@ -1,7 +1,9 @@
 import { FormEvent, JSX, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import ColorPicker from "../../common/components/ColorPicker";
 import FileUploader from "../../common/components/FileUploader";
+import VerticalRule from "../../common/components/VerticalRule";
 import ZipDownloadButton from "../../common/components/ZipDownloadButton";
 import { is2xxSuccessful, sendRequest } from "../../common/Requests";
 import { hideSpinner, showSpinner } from "../../common/Spinner";
@@ -23,9 +25,11 @@ const CardsGeneration = (): JSX.Element => {
   const navigate = useNavigate();
 
   const [cardMetaname, setCardMetaname] = useState("");
-  const cardMethod = sessionStorage.getItem(SESSION_STORAGE.CARD_METHOD) ?? "";
+  const cardMethod = sessionStorage.getItem(SESSION_STORAGE.CARD_METHOD) ?? "auto";
+  const cardBottomColor = sessionStorage.getItem(SESSION_STORAGE.CARD_BOTTOM_COLOR) ?? "";
 
   const [bgImg, setBgImg] = useState<File>();
+  const [colorPick, setColorPick] = useState<string>("");
   const [includeCenterArtwork, setIncludeCenterArtwork] = useState(true);
   const [generateOutro, setGenerateOutro] = useState(cardMethod === "auto");
   const [includeBackgroundImg, setIncludeBackgroundImg] = useState(true);
@@ -97,13 +101,13 @@ const CardsGeneration = (): JSX.Element => {
     showSpinner(SPINNER_ID.CARDS_GENERATE);
     setCardPaths([]);
 
-    console.log(body)
     const formData = new FormData();
     if (body.bgImg) {
-      formData.append("file", body.bgImg);
-      if (body.includeCenterArtwork !== undefined)
-        formData.append("includeCenterArtwork", body.includeCenterArtwork.toString());
+      formData.append("enforceBackgroundImage", body.bgImg);
+      formData.append("includeCenterArtwork", (body.includeCenterArtwork ?? "").toString());
     }
+    if (body.colorPick !== "")
+      formData.append("enforceBottomColor", body.colorPick);
     formData.append("cardMetaname", body.cardMetaname);
     formData.append("generateOutro", body.generateOutro.toString());
     formData.append("includeBackgroundImg", body.includeBackgroundImg.toString());
@@ -121,6 +125,7 @@ const CardsGeneration = (): JSX.Element => {
         cardPaths.push(`${PROCESSED_CARDS_PATH}/outro.png`);
       const pathsWithCacheBuster = cardPaths.map((path) => `${path}?t=${Date.now()}`);
       setCardPaths(pathsWithCacheBuster);
+      sendToast(TOAST.CARDS_GENERATED, TOAST_TYPE.SUCCESS);
     }).catch((error: ApiResponse) => {
       if (error.status === HTTP_STATUS.PRECONDITION_FAILED)
         sendToast(TOAST.NO_CARDS_CONTENTS, TOAST_TYPE.ERROR);
@@ -129,6 +134,8 @@ const CardsGeneration = (): JSX.Element => {
     }).finally(() => {
       hideSpinner(SPINNER_ID.CARDS_GENERATE);
       setGenerationInProgress(false);
+      sessionStorage.setItem(SESSION_STORAGE.CARD_METANAME, body.cardMetaname);
+      sessionStorage.setItem(SESSION_STORAGE.CARD_BOTTOM_COLOR, body.colorPick);
     });
   };
 
@@ -143,7 +150,7 @@ const CardsGeneration = (): JSX.Element => {
     }
     setCardMetaname(sessionStorage.getItem(SESSION_STORAGE.CARD_METANAME) ?? "");
     setIsComponentMounted(true);
-  }, [isComponentMounted]);
+  }, [isComponentMounted, colorPick]);
 
   return (
     <div id="cards-generation">
@@ -164,7 +171,7 @@ const CardsGeneration = (): JSX.Element => {
 
       <h1>{TITLE.CARDS_GENERATION}</h1>
 
-      <form id="settings" onSubmit={(e) => handleGenerateCards(e, {cardMetaname, bgImg, includeCenterArtwork, generateOutro, includeBackgroundImg})}>
+      <form id="settings" onSubmit={(e) => handleGenerateCards(e, {cardMetaname, bgImg, colorPick, includeCenterArtwork, generateOutro, includeBackgroundImg})}>
         <div id="text-fields" className="settings flexbox flex-row">
           <input autoComplete="off"
             type="text" name="metaname" placeholder="if empty, the card metaname will be inferred"
@@ -172,8 +179,10 @@ const CardsGeneration = (): JSX.Element => {
             style={!cardMetaname ? { fontStyle: "italic", fontSize: ".75rem" } : {}}
           />
         </div>
-        <div id="file-upload" className="settings flexbox flex-row">
+        <div id="enforcers" className="settings flexbox flex-row">
           <FileUploader id="background-image" label="Select image" caption="Enforce background image?" accept="image/*" setter={setBgImg} />
+          <VerticalRule />
+          <ColorPicker id="bottom-bar" label="Enforce bottom color?" latest={cardBottomColor} setter={setColorPick} />
         </div>
         <div id="selectors" className="settings flexbox flex-row">
           { bgImg &&

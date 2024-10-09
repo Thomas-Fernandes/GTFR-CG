@@ -163,7 +163,7 @@ const Lyrics = (): JSX.Element => {
   };
 
   const handleLoadLastContents = () => {
-    if (lastContents.pageMetadata.id === undefined) {
+    if (lastContents?.pageMetadata?.id === undefined) {
       sendToast(TOAST.NO_LAST_GENERATION, TOAST_TYPE.WARN);
       return;
     }
@@ -190,7 +190,10 @@ const Lyrics = (): JSX.Element => {
         navigate(`${PATHS.redirect}?redirect_to=${PATHS.home}&error_text=${TOAST.NO_GENIUS_TOKEN}`);
       } else {
         setIsGeniusTokenSet(true);
-        setLastContents(JSON.parse(sessionStorage.getItem(SESSION_STORAGE.LATEST_CARD_GENERATION) ?? "{{}, [], []}"));
+        const latestCardGeneration = sessionStorage.getItem(SESSION_STORAGE.LATEST_CARD_GENERATION);
+        setLastContents(latestCardGeneration !== null
+          ? JSON.parse(latestCardGeneration) : "{{}, [], []}"
+        );
       }
     });
   });
