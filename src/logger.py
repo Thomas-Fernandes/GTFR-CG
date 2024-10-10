@@ -143,7 +143,7 @@ class Logger:
         """ Returns the severity level of the logger.
         :return: [LogSeverity] The severity level of the logger.
         """
-        self.debug(f"Returning severity level: {self.__severity}")
+        self.debug(f"Returning severity level: {self.__severity.name}")
         return self.__severity
 
     def __init__(
