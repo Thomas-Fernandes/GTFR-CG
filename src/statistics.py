@@ -1,8 +1,9 @@
 from dataclasses import dataclass
+from time import time
 from typing import Optional
 
 import src.constants as const
-from src.logger import log
+from src.logger import log, LogSeverity
 from src.typing import JsonDict
 
 ############# CLASS #############
@@ -124,6 +125,7 @@ def initStats() -> JsonDict:
     :return: [dict] The statistics from the statistics file.
     """
     log.debug("Initializing statistics...")
+    start = time()
     stats: JsonDict = {}
     for stat in const.AvailableStats:
         stats.setdefault(stat.value, const.EMPTY_STATS[stat.value])
@@ -132,7 +134,7 @@ def initStats() -> JsonDict:
         log.debug(f"  Stats file created @ {const.STATS_FILE_PATH}")
         file.write(dumps(stats))
 
-    log.info("Statistics initialization complete.")
+    log.info("Statistics initialization complete.").time(LogSeverity.INFO, time() - start)
     return loads(str(stats).replace("'", '"'))
 
 def onLaunch() -> None:
