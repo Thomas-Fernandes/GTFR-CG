@@ -4,6 +4,7 @@ from io import StringIO
 from re import Match
 import sys # The whole module must be imported for output redirection to work
 from typing import Iterator, Optional
+from typing_extensions import Self
 
 import src.constants as const
 from src.utils.soft_utils import getNowEpoch
@@ -57,12 +58,12 @@ class Logger:
         __severity: [LogSeverity] The severity level of the logger.
         __log_file: [string] The path of the file to write logs to.
     """
-    def critical(self, msg: str) -> None: self.send(msg, LogSeverity.CRITICAL)
-    def error(self,    msg: str) -> None: self.send(msg, LogSeverity.ERROR)
-    def warn(self,     msg: str) -> None: self.send(msg, LogSeverity.WARN)
-    def log(self,      msg: str) -> None: self.send(msg, LogSeverity.LOG)
-    def info(self,     msg: str) -> None: self.send(msg, LogSeverity.INFO)
-    def debug(self,    msg: str) -> None: self.send(msg, LogSeverity.DEBUG)
+    def critical(self, msg: str) -> Self: return self.send(msg, LogSeverity.CRITICAL)
+    def error(self,    msg: str) -> Self: return self.send(msg, LogSeverity.ERROR)
+    def warn(self,     msg: str) -> Self: return self.send(msg, LogSeverity.WARN)
+    def log(self,      msg: str) -> Self: return self.send(msg, LogSeverity.LOG)
+    def info(self,     msg: str) -> Self: return self.send(msg, LogSeverity.INFO)
+    def debug(self,    msg: str) -> Self: return self.send(msg, LogSeverity.DEBUG)
 
     @contextmanager
     def redirect_stdout_stderr(self) -> Iterator[tuple[StringIO, StringIO]]:
@@ -108,12 +109,13 @@ class Logger:
                     processed_line = process_message(line)
                     self.error(processed_line)
 
-    def send(self, msg: str, severity: LogSeverity = LogSeverity.LOG) -> None:
+    def send(self, msg: str, severity: LogSeverity = LogSeverity.LOG) -> Self:
         """ Sends a message to log.
         :param msg: [string] The message to log.
         :param severity: [LogSeverity?] The severity of the message. (default: None)
+        :return: [Logger] The logger instance. (for chaining)
         """
-        if severity.value < self.__severity.value: return
+        if severity.value < self.__severity.value: return self
 
         message_to_log = getFormattedMessage(msg, severity)
         if self.__log_file is not None and self.__log_file.strip() != "":
@@ -123,6 +125,7 @@ class Logger:
                 file.write(message_to_log + '\n')
         else:
             print(message_to_log)
+        return self
 
     def getSeverity(self) -> LogSeverity:
         """ Returns the severity level of the logger.
