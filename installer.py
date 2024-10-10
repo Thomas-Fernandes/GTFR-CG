@@ -1,6 +1,9 @@
+
 from os import chdir, environ, name as osName, pathsep, system
 from subprocess import CalledProcessError, CompletedProcess, Popen, run
 from typing import Optional
+
+result = run(["pip", "install", "-r", "requirements.txt"], capture_output=True, text=True) # needs to be run before importing logger
 
 from src.logger import log, LogSeverity
 
@@ -128,12 +131,10 @@ def installReactReq() -> None:
     installNodePackages()
     log.log("React requirements installation complete.\n")
 
-def installPythonReq(req_path: str = "requirements.txt") -> None:
+def installPythonReq() -> None:
     """ Installs the packages required by the application, from the requirements file.
-    :param req_path: [string] The path to the requirements file. (default: "requirements.txt")
     """
     log.log("Installing Python requirements...")
-    result = run(["pip", "install", "-r", req_path], capture_output=True, text=True)
 
     installed_packages: list[str] = []
 
