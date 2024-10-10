@@ -3,7 +3,7 @@ from time import time
 from typing import Optional
 
 import src.constants as const
-from src.logger import log
+from src.logger import log, LogSeverity
 from src.typing import JsonDict
 
 ############# CLASS #############
@@ -134,7 +134,7 @@ def initStats() -> JsonDict:
         log.debug(f"  Stats file created @ {const.STATS_FILE_PATH}")
         file.write(dumps(stats))
 
-    log.info("Statistics initialization complete.").time(time() - start)
+    log.info("Statistics initialization complete.").time(LogSeverity.INFO, time() - start)
     return loads(str(stats).replace("'", '"'))
 
 def onLaunch() -> None:

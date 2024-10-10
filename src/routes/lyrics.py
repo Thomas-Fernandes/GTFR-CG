@@ -9,7 +9,7 @@ from time import time
 from typing import Optional
 
 import src.constants as const
-from src.logger import log
+from src.logger import log, LogSeverity
 from src.statistics import updateStats
 from src.utils.web_utils import createApiResponse
 
@@ -89,7 +89,7 @@ def fetchLyricsFromGenius(song_title: str, artist_name: str) -> list[dict[str, s
     log.debug("Lyrics split into parts successfully.")
     updateStats(to_increment=const.AvailableStats.lyricsFetches.value)
 
-    log.log(f"Lyrics fetch for {artist_name} - \"{song_title}\" complete.").time(time() - start)
+    log.log(f"Lyrics fetch for {artist_name} - \"{song_title}\" complete.").time(LogSeverity.LOG, time() - start)
     return lyrics_parts
 
 @bp_lyrics.route(api_prefix + "/get-genius-lyrics", methods=["POST"])
