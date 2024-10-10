@@ -129,7 +129,7 @@ def installReactReq() -> None:
     installNode()
     installNvm()
     installNodePackages()
-    log.log("React requirements installation complete.\n")
+    log.log("React requirements installation complete.")
 
 def installPythonReq() -> None:
     """ Installs the packages required by the application, from the requirements file.
