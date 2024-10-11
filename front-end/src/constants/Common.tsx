@@ -78,7 +78,7 @@ export const SPINNER_ID = {
 
   // Lyrics
     LYRICS_SEARCH: "lyrics_search",
-    LYRICS_SAVE: "lyrics_save",
+    LYRICS_CONVERT: "lyrics_convert",
 
   // Cards Generation
     CARDS_GENERATE: "cards-generation_generate",

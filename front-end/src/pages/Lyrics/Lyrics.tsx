@@ -43,7 +43,7 @@ const Lyrics = (): JSX.Element => {
     }
 
     setIsSavingCardsContent(true);
-    showSpinner(SPINNER_ID.LYRICS_SAVE);
+    showSpinner(SPINNER_ID.LYRICS_CONVERT);
 
     const metadata = "Metadata | " + Object.entries(pageMetadata).map(([key, value]) => `${key}: ${value}`).join(" ;;; ");
     const data = {
@@ -66,7 +66,7 @@ const Lyrics = (): JSX.Element => {
     }).catch((error: ApiResponse) => {
       sendToast(error.message, TOAST_TYPE.ERROR);
     }).finally(() => {
-      hideSpinner(SPINNER_ID.LYRICS_SAVE);
+      hideSpinner(SPINNER_ID.LYRICS_CONVERT);
       setIsSavingCardsContent(false);
     });
   };
@@ -269,8 +269,8 @@ const Lyrics = (): JSX.Element => {
           { lyricsParts.map((part, idx) =>
             renderLyricsPart(part, idx))
           }
-          <div className="action-button" id={SPINNER_ID.LYRICS_SAVE}>
-            <input type="submit" value="CONVERT TO CARDS" className="action-button save-button" />
+          <div className="action-button" id={SPINNER_ID.LYRICS_CONVERT}>
+            <input type="submit" value="CONVERT TO CARDS" className="action-button convert-button" />
           </div>
         </form>
       </>}

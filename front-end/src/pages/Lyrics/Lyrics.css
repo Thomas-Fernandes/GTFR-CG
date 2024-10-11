@@ -6,9 +6,12 @@
             margin-top: 2%;
 
             &> div {
-                width: 60%;
+                width: 100%;
                 margin-bottom: 20px;
-                text-align: center;
+
+                &#lyrics_convert {
+                    width: 60%;
+                }
             }
 
             label {
@@ -17,8 +20,10 @@
             }
 
             textarea {
-                width: 100%;
+                width: 60%;
                 padding: 10px;
+                align-self: center;
+                text-wrap: nowrap;
                 background-image:
                     linear-gradient(to right,
                         transparent calc(0.92ch * 62),
@@ -30,6 +35,8 @@
         }
 
         .lyrics-part--header {
+            margin-top: .25rem;
+
             button {
                 min-width: 16%;
                 font-size: smaller;
