@@ -1,12 +1,12 @@
 import { FormEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { AutoResizeTextarea } from "../../common/components/AutoResizeTextarea";
 import { is2xxSuccessful, sendRequest } from "../../common/Requests";
 import { hideSpinner, showSpinner } from "../../common/Spinner";
 import { sendToast } from "../../common/Toast";
 import { ApiResponse, Dict, LyricsContents, LyricsPart, LyricsRequest, LyricsResponse, PageMetadata, SongPartsCards } from "../../common/Types";
 import useTitle from "../../common/UseTitle";
+import { AutoResizeTextarea } from "../../components/AutoResizeTextarea";
 import { SESSION_STORAGE } from "../../constants/CardsGeneration";
 import { API, BACKEND_URL, PATHS, SPINNER_ID, TITLE, TOAST, TOAST_TYPE } from "../../constants/Common";
 

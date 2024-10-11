@@ -1,14 +1,14 @@
 import { FormEvent, JSX, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import FileUploader from "../../common/components/FileUploader";
-import ZipDownloadButton from "../../common/components/ZipDownloadButton";
 import { is2xxSuccessful, sendRequest } from "../../common/Requests";
 import { hideSpinner, showSpinner } from "../../common/Spinner";
 import { sendToast } from "../../common/Toast";
 import { ApiResponse, CardsGenerationRequest, CardsGenerationResponse, ImageDownloadRequest } from "../../common/Types";
 import useTitle from "../../common/UseTitle";
 import { isFileExtensionAccepted } from "../../common/utils/FileUtils";
+import FileUploader from "../../components/FileUploader";
+import ZipDownloadButton from "../../components/ZipDownloadButton";
 import { FILE_UPLOAD } from "../../constants/ArtworkGeneration";
 import { PROCESSED_CARDS_PATH, SESSION_STORAGE } from "../../constants/CardsGeneration";
 import { API, BACKEND_URL, HTTP_STATUS, PATHS, SPINNER_ID, TITLE, TOAST, TOAST_TYPE } from "../../constants/Common";

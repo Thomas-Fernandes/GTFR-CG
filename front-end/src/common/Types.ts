@@ -96,6 +96,13 @@ export type Statistics = {
   lyricsFetches: number;
   cardsGenerated: number;
 };
+export type DisplayedStatistics = {
+  dateFirstOperation: string;
+  dateLastOperation: string;
+  artworkGenerations: string;
+  lyricsFetches: string;
+  cardsGenerated: string;
+};
 
 /**************** GENERIC ****************/
 
