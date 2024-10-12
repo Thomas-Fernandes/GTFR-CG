@@ -5,6 +5,7 @@ import { Dispatch, SetStateAction } from "react";
 export type CardsGenerationResponse = ApiResponse & {
   data: {
     generated: number;
+    bgColor: string;
   };
 };
 
@@ -14,6 +15,11 @@ export type CardsGenerationRequest = {
   includeCenterArtwork?: boolean;
   generateOutro: boolean;
   includeBackgroundImg: boolean;
+};
+export type SingleCardGenerationRequest = CardsGenerationRequest & {
+  bgColor: string;
+  cardsContents: string[];
+  cardFilename: string;
 };
 
 export type SongPartsCards = string[][];

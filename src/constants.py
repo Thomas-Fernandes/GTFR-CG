@@ -58,6 +58,7 @@ class SessionFields(Enum):
     gen_outro = "generate_outro"
     include_bg_img = "include_background_img"
     card_metaname = "card_metaname"
+    bg_color = "background_color"
     card_filename = "card_filename"
 
 # Routes
@@ -152,8 +153,11 @@ ERR_CARDS_CONTENTS_NOT_FOUND = "No cards contents provided."
 ERR_CARDS_CONTENTS_INVALID = "Invalid cards contents provided."
 ERR_CARDS_CONTENTS_SAVE_FAILED = "Failed to save cards contents."
 ERR_CARDS_CONTENTS_READ_FAILED = "Failed to read cards contents."
-ERR_CARDS_GEN_PARAMS_NOT_FOUND = "Required parameters not found for cards generation."
-ERR_CARDS_BACKGROUND_NOT_FOUND = "No background image provided for cards generation."
+ERR_CARDS_METANAME_NOT_FOUND = "No card metaname provided."
+ERR_CARDS_CENTER_ARTWORK_NOT_FOUND = "No center artwork flipper provided."
+ERR_CARDS_BACKGROUND_NOT_FOUND = "No background image provided."
+ERR_CARDS_COLOR_NOT_FOUND = "No background color provided."
+ERR_CARDS_FILENAME_NOT_FOUND = "No filename provided."
 
 # .env contents
 load_dotenv()

@@ -76,7 +76,7 @@ class CardMetadata:
     card_metaname: str
     include_bg_img: bool
     bg: Image.Image
-    dominant_color: RGBAColor
+    dominant_color: RGBColor
     text_lyrics_color: RGBColor
     text_meta_color: RGBColor
 
