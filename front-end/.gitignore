@@ -39,3 +39,6 @@ Thumbs.db
 *.njsproj
 *.sln
 *.sw?
+
+# Vite
+vite*timestamp*.mjs
