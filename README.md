@@ -28,7 +28,7 @@
 &#xa0;
 
 <div align="center">
-    <a href="#top"><img alt="Python version" src="https://img.shields.io/badge/Python-3.10+-blue?logo=python" /></a>
+    <a href="#top"><img alt="Python version" src="https://img.shields.io/badge/Python-3.11+-blue?logo=python" /></a>
     <a href="#card_file_box-changelog"><img alt="Last version released" src="https://img.shields.io/badge/release-v1.2.4-blue?logo=windows-terminal" /></a>
     <a href="https://github.com/Thomas-Fernandes/GTFR/commits/main"><img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/Thomas-Fernandes/GTFR?color=blueviolet&logo=clarifai" /></a>
 </div>
@@ -59,7 +59,7 @@ All the required back end modules are listed in [the requirements file](./requir
 All the required front end software and modules can be installed by running [the installer file](./installer.py) with Python.
 
 > [!CAUTION]
-> **GTFR-CG**'s back end is written in **Python 3.10**. It is compatible with later versions, but **not with anterior versions**.  
+> **GTFR-CG**'s back end is written in **Python 3.11**. It is compatible with later versions, but **not with anterior versions**.  
 > You can check your Python version by running `python --version` in your terminal.
 </blockquote>
 
