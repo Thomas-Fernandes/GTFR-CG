@@ -94,7 +94,8 @@ class CardMetadata:
                 else:
                     content += f"{key}={value}, "
         return f"CardMetadata({content[:-2]})"
-# CardMetadata: TypeAlias = dict[str, str | bool | RGBAColor]
+
+CardgenSettings: TypeAlias = dict[str, bool | str]
 
 CardsContents: TypeAlias = list[list[str]]
 

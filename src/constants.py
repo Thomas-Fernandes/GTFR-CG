@@ -58,6 +58,7 @@ class SessionFields(Enum):
     gen_outro = "generate_outro"
     include_bg_img = "include_background_img"
     card_metaname = "card_metaname"
+    card_filename = "card_filename"
 
 # Routes
 API_ROUTE = "/api"
