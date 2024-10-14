@@ -12,6 +12,8 @@ type Props = {
 };
 
 const ColorPicker: React.FC<Props> = ({ id, latest, label, labelClassName, setter }) => {
+  const trueLabelClassName = labelClassName ? (" " + labelClassName) : "";
+
   const [selectedColor, setSelectedColor] = useState<string>(""); // Default to black color
 
   const calculateLuminance = (hex: string) => {
@@ -42,44 +44,50 @@ const ColorPicker: React.FC<Props> = ({ id, latest, label, labelClassName, sette
   };
 
   return (
-    <div id={id} className="color-picker">
-      <div className="flexbox g-p5">
+    <div id={id} className="color-picker flex-row"> {/* flex-row stays for the color result label height calculation */}
+      <div className={"flexbox" + (selectedColor === "" ? " g-p5" : "")}>
         { selectedColor === ""
-        ? <label htmlFor="color-picker"
-            className={"italic " + (label ? labelClassName : "hidden")}
-          >
+        ? <><p className={"m-0 italic" + (label ? trueLabelClassName : " hidden")}>
             {label}
-          </label>
-        : <label htmlFor="color-picker"
-            className="color-picker--color"
-            style={{
-              backgroundColor: selectedColor,
-              color: calculateLuminance(selectedColor) > 128 ? "#000000" : "#ffffff",
-            }}
-          >
-            {selectedColor}
-          </label>
+          </p>
+          <div className="flex-row">
+            {/* if input has class hidden, element not found so picking tab is displayed at the top-left corner of the window */}
+            <input
+              type="color" name="color-picker" id="color-picker" className="hidden-h"
+              value={selectedColor !== "" ? selectedColor : "#000000"} onChange={handleColorChange}
+            />
+            <label htmlFor="color-picker" className="color-picker--img">
+              <img src="/img/color-dropper-42.png" alt="color-picker" />
+            </label>
+            <button
+              type="button" className="color-picker--load-latest"
+              onClick={handleLoadLatest}
+            >
+              {"Load latest"}
+            </button>
+          </div></>
+        : <><p className="m-0 italic hidden-v">
+            {/* (hidden) this is so that the div keeps the same width when a color is picked */}
+            {label}
+          </p>
+          <div className="flex-row g-p5">
+            <p
+              className="color-picker--color"
+              style={{
+                backgroundColor: selectedColor,
+                color: calculateLuminance(selectedColor) > 128 ? "#000000" : "#ffffff"
+              }}
+            >
+              {selectedColor}
+            </p>
+            <button type="button" className="btn-remove"
+              onClick={() => handleColorChange(null)}
+            >
+              <span className="btn-remove--cross">{"✖"}</span>
+            </button>
+          </div></>
         }
-        <div className={selectedColor !== "" ? "hidden" : "flexbox flex-row g-p5"}>
-          <input
-            type="color" name="color-picker"
-            value={selectedColor !== "" ? selectedColor : "#000000"} onChange={handleColorChange}
-          />
-          <button
-            type="button" className="color-picker--load-latest"
-            onClick={handleLoadLatest}
-          >
-            {"Load latest"}
-          </button>
-        </div>
       </div>
-      { selectedColor !== "" &&
-        <button type="button" className="btn-remove"
-          onClick={() => handleColorChange(null)}
-        >
-          <span className="btn-remove--cross">{"✖"}</span>
-        </button>
-      }
     </div>
   );
 };

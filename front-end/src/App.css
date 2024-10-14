@@ -383,11 +383,14 @@ input[type="file"] {
 .flex-col { flex-direction: column; }
 .flex-row { flex-direction: row; }
 .g-p5 { gap: .5rem; }
-.g-1 { gap: 1rem; }
-.g-2 { gap: 2rem; }
+.g-1  { gap: 1rem; }
+.g-2  { gap: 2rem; }
 
-.hidden { display: none; }
+.hidden   { display: none; }
+.hidden-h { visibility: hidden; width: 0; }
+.hidden-v { visibility: hidden; height: 0; }
 
+.m-0  { margin: 0; }
 .mv-0 { margin-top: 0; margin-bottom: 0; }
 .mv-1 { margin-top: 1rem; margin-bottom: 1rem; }
 
@@ -428,22 +431,26 @@ input[type="file"] {
     }
 }
 .color-picker {
-    input[type="color"] {
+    .color-picker--img {
+        margin-right: 1rem;
         cursor: pointer;
-        border: 2px solid #dddddd;
-        border-radius: .25rem;
     }
 
     .color-picker--color {
-        width: 5rem;
+        width: 8rem;
+        height: 100%;
+        justify-content: center;
+
+        margin: 0 auto;
         border: 2px solid #dddddd;
         border-radius: .5rem;
+
         text-align: center;
+        letter-spacing: 0.2rem;
     }
 
     .color-picker--load-latest {
         cursor: pointer;
-        min-width: 16%;
         font-size: smaller;
 
         background-color: #8fbc8f;
@@ -458,6 +465,7 @@ input[type="file"] {
 .btn-remove {
     cursor: pointer;
     padding: .25rem;
+    margin-bottom: .2rem;
     border: none;
 
     background: none;

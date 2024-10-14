@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 
 import ColorPicker from "../../common/components/ColorPicker";
 import FileUploader from "../../common/components/FileUploader";
-import VerticalRule from "../../common/components/VerticalRule";
 import ZipDownloadButton from "../../common/components/ZipDownloadButton";
 import { is2xxSuccessful, sendRequest } from "../../common/Requests";
 import { hideSpinner, showSpinner } from "../../common/Spinner";
@@ -181,7 +180,6 @@ const CardsGeneration = (): JSX.Element => {
         </div>
         <div id="enforcers" className="settings flexbox flex-row">
           <FileUploader id="background-image" label="Select image" caption="Enforce background image?" accept="image/*" setter={setBgImg} />
-          <VerticalRule />
           <ColorPicker id="bottom-bar" label="Enforce bottom color?" latest={cardBottomColor} setter={setColorPick} />
         </div>
         <div id="selectors" className="settings flexbox flex-row">
