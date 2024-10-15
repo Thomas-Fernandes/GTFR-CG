@@ -7,11 +7,12 @@ from werkzeug.datastructures import FileStorage
 from ast import literal_eval
 from os import path, makedirs
 from requests.exceptions import ReadTimeout as ReadTimeoutException
+from time import time
 from typing import Optional
 from uuid import uuid4
 
 import src.constants as const
-from src.logger import log
+from src.logger import log, LogSeverity
 from src.routes.lyrics import genius
 from src.routes.processed_images import generateCoverArt
 from src.statistics import updateStats
@@ -181,6 +182,7 @@ def getCardsMetadata(song_data: SongMetadata, enforce_bottom_color: str | None, 
     else:
         bg = Image.open(bg_path)
 
+    start = time()
     if enforce_bottom_color is not None:
         log.debug("  Enforcing bottom color...")
         def colorHexStringToTuple(color: str) -> tuple[int, int, int]:
@@ -208,6 +210,8 @@ def getCardsMetadata(song_data: SongMetadata, enforce_bottom_color: str | None, 
         log.debug(f"  Deducted luminance={round(luminance, 2)}, rgb=({round(0.3 * r, 2)}, {round(0.6 * g, 2)}, {round(0.1 * b, 2)})")
         return int(luminance)
     dominant_color_luminance = getLuminance(dominant_color)
+    if enforce_bottom_color is None:
+        log.time(LogSeverity.INFO, time() - start, padding=2)
     text_meta_color = (0,0,0) if dominant_color_luminance > 128 else (255,255,255)
     text_lyrics_color = (255,255,255) if dominant_color_luminance > 220 else (0,0,0)
 
@@ -243,6 +247,7 @@ def generateCards(cards_contents: CardsContents, song_data: SongMetadata, settin
     log.info("Cards metadata calculated successfully.")
 
     log.info("Generating cards...")
+    start = time()
     user_folder = str(session[const.SessionFields.user_folder.value]) + const.SLASH + const.AvailableCacheElemType.cards.value
     user_processed_path = path.join(const.PROCESSED_DIR, user_folder)
     image_output_path = f"{user_processed_path}{const.SLASH}00.png"
@@ -255,9 +260,11 @@ def generateCards(cards_contents: CardsContents, song_data: SongMetadata, settin
     if gen_outro:
         image_output_path = f"{user_processed_path}{const.SLASH}{const.PROCESSED_OUTRO_FILENAME}"
         generateOutroCard(image_output_path, song_data.get("contributors", []))
+
     number_of_generated_cards = len(cards_contents) + (2 if gen_outro else 1) # lyrics + empty + outro card
-    log.log(f"Generated {number_of_generated_cards} card{'s' if number_of_generated_cards > 1 else ''} successfully.")
     updateStats(to_increment=const.AvailableStats.cardsGenerated.value, increment=number_of_generated_cards)
+    log.log(f"Generated {number_of_generated_cards} card{'s' if number_of_generated_cards > 1 else ''} successfully.") \
+        .time(LogSeverity.LOG, time() - start)
 
     return createApiResponse(const.HttpStatus.OK.value, "Cards generated successfully.", {"generated": len(cards_contents) + 1})
 
@@ -346,6 +353,7 @@ def postGenerateCards() -> Response:
     :return: [Response] The response to the request.
     """
     log.debug("POST - Generating cards...")
+    start = time()
     if const.SessionFields.cards_contents.value not in session:
         log.error(const.ERR_CARDS_CONTENTS_NOT_FOUND)
         return createApiResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_CARDS_CONTENTS_NOT_FOUND)
@@ -383,7 +391,7 @@ def postGenerateCards() -> Response:
     log.debug("  Cards contents:\n")
     for card in cards_contents:
         log.debug(f"    {card}")
-    log.info("Cards contents retrieved successfully.")
+    log.info("Cards contents retrieved successfully.").time(LogSeverity.INFO, time() - start)
 
     settings = {
         const.SessionFields.enforce_bottom_color.value: enforce_bottom_color,
@@ -411,6 +419,7 @@ def saveCardsContents(cards_contents: CardsContents) -> Response:
     :param cards_contents: [list[list[str]]] The contents of the cards.
     :return: [Response] The response to the request.
     """
+    start = time()
     if const.SessionFields.user_folder.value not in session:
         log.debug(const.WARN_NO_USER_FOLDER)
         session[const.SessionFields.user_folder.value] = str(uuid4())
@@ -431,7 +440,7 @@ def saveCardsContents(cards_contents: CardsContents) -> Response:
         return createApiResponse(const.HttpStatus.INTERNAL_SERVER_ERROR.value, const.ERR_CARDS_CONTENTS_SAVE_FAILED)
 
     session[const.SessionFields.cards_contents.value] = filepath
-    log.log(f"Cards contents saved to {filepath}.")
+    log.log(f"Cards contents saved to {filepath}.").time(LogSeverity.INFO, time() - start)
     return createApiResponse(const.HttpStatus.OK.value, "Cards contents saved successfully.")
 
 @bp_cards_generation.route(api_prefix + "/save-contents", methods=["POST"])

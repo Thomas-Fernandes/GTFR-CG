@@ -3,9 +3,10 @@ from flask_cors import cross_origin
 from PIL import Image, ImageFilter, ImageDraw
 
 from os import path
+from time import time
 
 import src.constants as const
-from src.logger import log
+from src.logger import log, LogSeverity
 from src.statistics import updateStats
 from src.utils.web_utils import createApiResponse
 
@@ -117,10 +118,11 @@ def processArtwork() -> Response:
     include_center_artwork = session.get(const.SessionFields.include_center_artwork.value, True)
     output_bg = path.join(user_processed_path, const.PROCESSED_ARTWORK_FILENAME)
 
+    start = time()
     generateCoverArt(generated_artwork_path, output_bg, include_center_artwork)
     generateThumbnails(output_bg, user_processed_path)
     center_mark = "with" if include_center_artwork else "without"
-    log.log(f"Images generation ({center_mark} center artwork) complete.")
+    log.log(f"Images generation ({center_mark} center artwork) complete.").time(LogSeverity.LOG, time() - start)
     updateStats(to_increment=const.AvailableStats.artworkGenerations.value)
 
     return createApiResponse(const.HttpStatus.OK.value, "Processed images path retrieved successfully.")
