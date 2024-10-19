@@ -19,7 +19,6 @@ class Stats:
         lyrics_fetches: [int?] The number of lyrics fetches. (default: None)
         cards_generations: [int?] The number of cards generations. (default: None)
     """
-
     date_first_operation: Optional[str] = None
     date_last_operation: Optional[str] = None
     artwork_generations: Optional[int] = None

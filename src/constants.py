@@ -1,13 +1,13 @@
 from dotenv import load_dotenv
 
-from enum import Enum
+from enum import IntEnum, StrEnum
 from os import getenv, name as osName
 from re import compile
 from typing import Optional
 
 from src.typing import JsonDict, Route, Routes
 
-class HttpStatus(Enum):
+class HttpStatus(IntEnum):
     """ Enum for HTTP status codes.
     """
     OK = 200
@@ -19,7 +19,7 @@ class HttpStatus(Enum):
     UNSUPPORTED_MEDIA_TYPE = 415
     INTERNAL_SERVER_ERROR = 500
 
-class TimeInSeconds(Enum):
+class TimeInSeconds(IntEnum):
     """ Enum for time units, converted to seconds.
     """
     SECOND = 1
@@ -30,7 +30,7 @@ class TimeInSeconds(Enum):
     MONTH  = int(30.44 * DAY)
     YEAR   = int(365.256 * DAY)
 
-class AvailableCacheElemType(Enum):
+class AvailableCacheElemType(StrEnum):
     """ Enum for the available cache elements.
     """
     sessions = "sessions"
@@ -41,7 +41,7 @@ class AvailableCacheElemType(Enum):
 HOST_HOME = "0.0.0.0"
 DEFAULT_PORT = 8000
 
-class SessionFields(Enum):
+class SessionFields(StrEnum):
     """ Enum for the fields in the session object.
     """
     # Application
@@ -99,7 +99,7 @@ ROUTES = Routes(
 DATE_FORMAT_STAMP = "%Y%m%d_%H%M%S"
 DATE_FORMAT_FULL = "%Y-%m-%d %H:%M:%S"
 STATS_FILE_PATH = "stats.json"
-class AvailableStats(Enum):
+class AvailableStats(StrEnum):
     """ Enum for the available statistics.
     """
     dateFirstOperation = "dateFirstOperation"

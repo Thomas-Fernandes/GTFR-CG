@@ -1,6 +1,7 @@
 # Installed libraries
 from flask import Flask
 from flask_cors import CORS
+from flask_restx import Api
 from flask_session import Session
 from waitress import serve
 
@@ -15,8 +16,10 @@ from src.utils.soft_utils import getExpirationTimestamp
 from src.statistics import onLaunch as printInitStatistics
 
 # Application initialization
-global app
+global app, api
 app = Flask(__name__.split('.')[-1]) # so that the app name is app, not {dirpath}.app
+api = Api(app, doc="/docs", version="1.0", title="API Documentation",
+          description="Swagger API Documentation for GTFR-CG")
 CORS(app)
 def initApp() -> None:
     """ Initializes the Flask app: declares config and session, assigns blueprints.
