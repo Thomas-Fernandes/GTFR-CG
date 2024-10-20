@@ -18,12 +18,12 @@ from src.statistics import onLaunch as printInitStatistics
 # Application initialization
 global app, api
 app = Flask(__name__.split('.')[-1]) # so that the app name is app, not {dirpath}.app
-api = Api(app, doc="/docs", version="1.0", title="API Documentation",
+api = Api(app, doc="/docs", version="1.0", title="GTFR-CG API Documentation",
           description="Swagger API Documentation for GTFR-CG")
 CORS(app)
+
 def initApp() -> None:
-    """ Initializes the Flask app: declares config and session, assigns blueprints.
-    """
+    """ Initializes the Flask app: declares config and session, assigns blueprints. """
     log.debug("Initializing app...")
     app.config["SESSION_PERMANENT"] = False
     app.config["SESSION_TYPE"] = "filesystem"

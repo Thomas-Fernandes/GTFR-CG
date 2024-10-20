@@ -42,8 +42,7 @@ HOST_HOME = "0.0.0.0"
 DEFAULT_PORT = 8000
 
 class SessionFields(StrEnum):
-    """ Enum for the fields in the session object.
-    """
+    """ Enum for the fields in the session object. """
     # Application
     user_folder = "user_folder"
 
@@ -143,12 +142,13 @@ CARDS_BOTTOM_W = f"{CARDS_DIR}bottom_white.png"
 # Error messages
 WARN_NO_USER_FOLDER = "User folder not found in session. Creating a new one."
 ERR_USER_FOLDER_NOT_FOUND = "User folder not found."
+ERR_GENIUS_TOKEN_NOT_FOUND = "Genius API token not found."
+ERR_STATS_FILETYPE = "The stats file must be a JSON file."
 ERR_NO_FILE = "Invalid file: No file selected."
 ERR_NO_IMG = "No image was selected or uploaded."
-ERR_INVALID_FILE_TYPE = "Invalid file type. Only PNG and JPG files are allowed."
+ERR_IMG_INVALID_FILETYPE = "Invalid file type. Only PNG and JPG files are allowed."
 ERR_NO_IMG_URL = "No image URL provided."
 ERR_FAIL_DOWNLOAD = "Failed to download image."
-ERR_GENIUS_TOKEN = "Genius API token not found."
 ERR_LYRICS_MISSING_PARAMS = "Missing parameters for lyrics fetching."
 ERR_LYRICS_NOT_FOUND = "Lyrics not found."
 ERR_CARDS_CONTENTS_NOT_FOUND = "No cards contents provided."
@@ -157,6 +157,11 @@ ERR_CARDS_CONTENTS_SAVE_FAILED = "Failed to save cards contents."
 ERR_CARDS_CONTENTS_READ_FAILED = "Failed to read cards contents."
 ERR_CARDS_GEN_PARAMS_NOT_FOUND = "Required parameters not found for cards generation."
 ERR_CARDS_BACKGROUND_NOT_FOUND = "No background image provided for cards generation."
+
+# Response messages
+MSG_GENIUS_TOKEN_FETCHED = "Genius API token fetched successfully."
+MSG_STATS_FETCHED = "Statistics fetched successfully."
+MSG_STATS_CREATED = "Statistics created successfully."
 
 # .env contents
 load_dotenv()

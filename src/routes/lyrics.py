@@ -34,7 +34,7 @@ def fetchLyricsFromGenius(song_title: str, artist_name: str) -> list[dict[str, s
     log.debug(f"Fetching lyrics for {artist_name} - \"{song_title}\"...")
     start = time()
     if genius is None:
-        return [{"section": "error", "lyrics": const.ERR_GENIUS_TOKEN}]
+        return [{"section": "error", "lyrics": const.ERR_GENIUS_TOKEN_NOT_FOUND}]
 
     song: Optional[Genius.Song] = None
     try:
