@@ -6,16 +6,16 @@ from os import path
 from time import time
 
 import src.constants as const
-from src.docs import models, ns_processed_images
+from src.docs import models, ns_artwork_processing
 from src.logger import log, LogSeverity
 from src.statistics import updateStats
 from src.utils.web_utils import createApiResponse
 
 from src.app import api, app
-bp_processed_images = Blueprint(const.ROUTES.proc_img.bp_name, __name__.split('.')[-1])
+bp_processed_images = Blueprint(const.ROUTES.art_proc.bp_name, __name__.split('.')[-1])
 session = app.config
-api_prefix = const.API_ROUTE + const.ROUTES.proc_img.path
-api.add_namespace(ns_processed_images, path=api_prefix)
+api_prefix = const.API_ROUTE + const.ROUTES.art_proc.path
+api.add_namespace(ns_artwork_processing, path=api_prefix)
 
 def generateCoverArt(input_path: str, output_path: str, include_center_artwork: bool = True) -> None:
     """ Generates the cover art for the given input image and saves it to the output path.
@@ -104,11 +104,11 @@ def generateThumbnails(bg_path: str, output_folder: str) -> None:
         final_image.save(f"{const.FRONT_PROCESSED_IMAGES_DIR}thumbnail_{position}.png")
         log.debug(f"  Thumbnail saved: {output_path}")
 
-@ns_processed_images.route("/process-images")
+@ns_artwork_processing.route("/process-images")
 class ProcessArtworkResource(Resource):
-    @ns_processed_images.doc("post_process_images")
-    @ns_processed_images.response(const.HttpStatus.CREATED.value, const.MSG_PROCESSED_IMAGES_SUCCESS, models["process-images"])
-    @ns_processed_images.response(const.HttpStatus.BAD_REQUEST.value, const.ERR_NO_IMG)
+    @ns_artwork_processing.doc("post_process_images")
+    @ns_artwork_processing.response(const.HttpStatus.CREATED.value, const.MSG_PROCESSED_IMAGES_SUCCESS, models[const.ROUTES.art_proc.bp_name]["process-images"])
+    @ns_artwork_processing.response(const.HttpStatus.BAD_REQUEST.value, const.ERR_NO_IMG)
     def post(self) -> Response:
         """ Renders the processed background image and thumbnails. """
         if const.SessionFields.generated_artwork_path.value not in session:

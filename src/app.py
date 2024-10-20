@@ -20,18 +20,14 @@ global app, api
 app = Flask(__name__.split('.')[-1]) # so that the app name is app, not {dirpath}.app
 api = Api(app, doc="/docs", version="1.0", title="GTFR-CG API Documentation",
           description="Swagger API Documentation for GTFR-CG")
-CORS(app)
 
 def initApp() -> None:
     """ Initializes the Flask app: declares config and session, assigns blueprints. """
     log.debug("Initializing app...")
-    app.config["SESSION_PERMANENT"] = False
-    app.config["SESSION_TYPE"] = "filesystem"
-    app.config["SESSION_FILE_DIR"] = const.SESSION_DIR
+    CORS(app)
 
     def initBlueprints() -> None:
-        """ Initializes the blueprints for the app.
-        """
+        """ Initializes the blueprints for the app. """
         log.debug("  Initializing blueprints...")
         from src.routes.artwork_generation import bp_artwork_generation
         from src.routes.cards_generation import bp_cards_generation
@@ -46,11 +42,14 @@ def initApp() -> None:
             bp_processed_images,
         ]
         for blueprint in blueprints:
-            app.register_blueprint(blueprint)
+            app.register_blueprint(blueprint) # practically useless, but "unused import" if removed
         log.debug("  Blueprints initialized.")
     initBlueprints()
     makedirs(const.FRONT_PROCESSED_IMAGES_DIR, exist_ok=True)
     makedirs(const.FRONT_PROCESSED_CARDS_DIR, exist_ok=True)
+    app.config["SESSION_PERMANENT"] = False
+    app.config["SESSION_TYPE"] = "filesystem"
+    app.config["SESSION_FILE_DIR"] = const.SESSION_DIR
     Session(app)
     log.debug("App initialized.")
 

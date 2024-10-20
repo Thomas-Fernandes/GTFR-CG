@@ -23,7 +23,7 @@ api.add_namespace(ns_artwork_generation, path=api_prefix)
 @ns_artwork_generation.route("/use-itunes-image")
 class ItunesImageResource(Resource):
     @ns_artwork_generation.doc("post_use_itunes_image")
-    @ns_artwork_generation.response(const.HttpStatus.CREATED.value, const.MSG_ITUNES_IMAGE_UPLOADED, models["use-itunes-image"])
+    @ns_artwork_generation.response(const.HttpStatus.CREATED.value, const.MSG_ITUNES_IMAGE_UPLOADED, models[const.ROUTES.art_gen.bp_name]["use-itunes-image"])
     @ns_artwork_generation.response(const.HttpStatus.BAD_REQUEST.value, const.ERR_NO_IMG_URL)
     @ns_artwork_generation.response(const.HttpStatus.INTERNAL_SERVER_ERROR.value, const.ERR_FAIL_DOWNLOAD)
     def post(self) -> Response:
@@ -64,7 +64,7 @@ class ItunesImageResource(Resource):
 @ns_artwork_generation.route("/use-local-image")
 class LocalImageResource(Resource):
     @ns_artwork_generation.doc("post_use_local_image")
-    @ns_artwork_generation.response(const.HttpStatus.CREATED.value, const.MSG_LOCAL_IMAGE_UPLOADED, models["use-local-image"])
+    @ns_artwork_generation.response(const.HttpStatus.CREATED.value, const.MSG_LOCAL_IMAGE_UPLOADED, models[const.ROUTES.art_gen.bp_name]["use-local-image"])
     @ns_artwork_generation.response(const.HttpStatus.BAD_REQUEST.value, "\n".join([const.ERR_NO_FILE, const.ERR_IMG_INVALID_FILETYPE]))
     @ns_artwork_generation.response(const.HttpStatus.INTERNAL_SERVER_ERROR.value, const.ERR_FAIL_DOWNLOAD)
     def post(self) -> Response:
@@ -146,7 +146,7 @@ def processYoutubeThumbnail(thumbnail_url: str) -> Response:
 @ns_artwork_generation.route("/use-youtube-thumbnail")
 class YoutubeThumbnailResource(Resource):
     @ns_artwork_generation.doc("post_use_youtube_thumbnail")
-    @ns_artwork_generation.response(const.HttpStatus.CREATED.value, const.MSG_YOUTUBE_IMAGE_UPLOADED, models["use-youtube-thumbnail"])
+    @ns_artwork_generation.response(const.HttpStatus.CREATED.value, const.MSG_YOUTUBE_IMAGE_UPLOADED, models[const.ROUTES.art_gen.bp_name]["use-youtube-thumbnail"])
     @ns_artwork_generation.response(const.HttpStatus.BAD_REQUEST.value, "\n".join([const.ERR_NO_IMG_URL, const.ERR_INVALID_YT_URL]))
     @ns_artwork_generation.response(const.HttpStatus.INTERNAL_SERVER_ERROR.value, const.ERR_FAIL_DOWNLOAD)
     def post(self) -> Response:

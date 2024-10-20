@@ -15,7 +15,7 @@ api.add_namespace(ns_home, path=const.API_ROUTE)
 @ns_home.route("/genius-token")
 class GeniusTokenResource(Resource):
     @ns_home.doc("get_genius_token")
-    @ns_home.response(const.HttpStatus.OK.value, const.MSG_GENIUS_TOKEN_FETCHED, models["genius-token"])
+    @ns_home.response(const.HttpStatus.OK.value, const.MSG_GENIUS_TOKEN_FETCHED, models[const.ROUTES.home.bp_name]["genius-token"])
     def get(self) -> Response:
         """ Returns the Genius API token. """
         log.log("GET - Fetching Genius API token...")
@@ -27,8 +27,8 @@ class GeniusTokenResource(Resource):
 @ns_home.route("/statistics")
 class StatisticsResource(Resource):
     @ns_home.doc("get_statistics")
-    @ns_home.response(const.HttpStatus.OK.value, const.MSG_STATS_FETCHED, models["statistics"])
-    @ns_home.response(const.HttpStatus.CREATED.value, const.MSG_STATS_CREATED, models["statistics"])
+    @ns_home.response(const.HttpStatus.OK.value, const.MSG_STATS_FETCHED, models[const.ROUTES.home.bp_name]["statistics"])
+    @ns_home.response(const.HttpStatus.CREATED.value, const.MSG_STATS_CREATED, models[const.ROUTES.home.bp_name]["statistics"])
     @ns_home.response(const.HttpStatus.BAD_REQUEST.value, const.ERR_STATS_FILETYPE)
     def get(self) -> Response:
         """ Returns the statistics as a JSON object. """

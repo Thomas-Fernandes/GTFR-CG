@@ -78,11 +78,11 @@ ROUTES = Routes(
     ),
     art_gen = Route(
         path="/artwork-generation",
-        bp_name="art-gen",
+        bp_name="artwork-generation",
     ),
-    proc_img = Route(
+    art_proc = Route(
         path="/processed-images",
-        bp_name="processed-images",
+        bp_name="artwork-processing",
     ),
     lyrics = Route(
         path="/lyrics",
@@ -90,7 +90,7 @@ ROUTES = Routes(
     ),
     cards_gen = Route(
         path="/cards-generation",
-        bp_name="cards-gen",
+        bp_name="cards-generation",
     ),
 )
 

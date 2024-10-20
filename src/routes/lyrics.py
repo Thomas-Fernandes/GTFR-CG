@@ -97,7 +97,7 @@ def fetchLyricsFromGenius(song_title: str, artist_name: str) -> list[dict[str, s
 @ns_lyrics.route("/get-genius-lyrics")
 class GeniusLyricsResource(Resource):
     @ns_lyrics.doc("post_get_genius_lyrics")
-    @ns_lyrics.response(const.HttpStatus.OK.value, const.MSG_LYRICS_FETCH_SUCCESS, models["get-genius-lyrics"])
+    @ns_lyrics.response(const.HttpStatus.OK.value, const.MSG_LYRICS_FETCH_SUCCESS, models[const.ROUTES.lyrics.bp_name]["get-genius-lyrics"])
     @ns_lyrics.response(const.HttpStatus.BAD_REQUEST.value, const.ERR_LYRICS_MISSING_PARAMS)
     def post(self) -> Response:
         """ Fetches the lyrics of a song from Genius.com. """
