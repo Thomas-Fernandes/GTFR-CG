@@ -167,6 +167,7 @@ MSG_ITUNES_IMAGE_UPLOADED = "iTunes image uploaded successfully."
 MSG_LOCAL_IMAGE_UPLOADED = "Local image uploaded successfully."
 MSG_YOUTUBE_IMAGE_UPLOADED = "YouTube thumbnail uploaded successfully."
 MSG_PROCESSED_IMAGES_SUCCESS = "Processed images path retrieved successfully."
+MSG_LYRICS_FETCH_SUCCESS = "Lyrics fetched successfully."
 MSG_CARDS_CONTENTS_SAVED = "Cards contents saved successfully."
 MSG_CARDS_GENERATED = "Cards generated successfully."
 

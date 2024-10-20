@@ -5,6 +5,7 @@ import src.constants as const
 ns_home = Namespace((const.ROUTES.home.bp_name or "?"), description="Home related routes")
 ns_artwork_generation = Namespace((const.ROUTES.art_gen.bp_name or "?"), description="Artwork generation related routes")
 ns_processed_images = Namespace((const.ROUTES.proc_img.bp_name or "?"), description="Images processing related routes")
+ns_lyrics = Namespace((const.ROUTES.lyrics.bp_name or "?"), description="Lyrics related routes")
 ns_cards_generation = Namespace((const.ROUTES.cards_gen.bp_name or "?"), description="Cards generation related routes")
 
 models = {
@@ -37,13 +38,17 @@ models = {
         "include_center_artwork": fields.Boolean(description="[INFERRED] Whether to include the center artwork in the cover art"),
     }),
 
+    # Lyrics
+    "get-genius-lyrics": ns_lyrics.model("Lyrics - Get Genius Lyrics", {
+        "songName": fields.String(description="Title of the song"),
+        "artist": fields.String(description="Name of the artist"),
+    }),
+
     # Cards generation
     "save-contents": ns_cards_generation.model("Cards generation - Save Lyrics Contents", {
         "song_metadata": fields.Nested(ns_cards_generation.model("Song Metadata", {
             "title": fields.String(description="Title of the song"),
             "artist": fields.String(description="Artist of the song"),
-            "album": fields.String(description="Album of the song"),
-            "release_date": fields.String(description="Release date of the song"),
             "lyrics": fields.String(description="Lyrics of the song"),
         })),
         "card_metadata": fields.Nested(ns_cards_generation.model("Card Metadata", {
