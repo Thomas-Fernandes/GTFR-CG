@@ -162,6 +162,7 @@ ERR_CARDS_BACKGROUND_NOT_FOUND = "No background image provided for cards generat
 MSG_GENIUS_TOKEN_FETCHED = "Genius API token fetched successfully."
 MSG_STATS_FETCHED = "Statistics fetched successfully."
 MSG_STATS_CREATED = "Statistics created successfully."
+MSG_PROCESSED_IMAGES_SUCCESS = "Processed images path retrieved successfully."
 MSG_CARDS_CONTENTS_SAVED = "Cards contents saved successfully."
 MSG_CARDS_GENERATED = "Cards generated successfully."
 

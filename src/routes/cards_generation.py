@@ -25,7 +25,7 @@ from src.app import api, app
 bp_cards_generation = Blueprint(const.ROUTES.cards_gen.bp_name, __name__.split('.')[-1])
 session = app.config
 api_prefix = const.API_ROUTE + const.ROUTES.cards_gen.path
-api.add_namespace(ns_cards_generation, path=const.API_ROUTE + const.ROUTES.cards_gen.path)
+api.add_namespace(ns_cards_generation, path=api_prefix)
 
 def generateOutroCard(output_path: str, contributor_logins: list[str]) -> None:
     """ Generates the outro card mentioning the transcription contributors.

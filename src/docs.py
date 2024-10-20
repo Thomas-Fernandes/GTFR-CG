@@ -3,6 +3,7 @@ from flask_restx import fields, Namespace
 import src.constants as const
 
 ns_home = Namespace((const.ROUTES.home.bp_name or "?"), description="Home related routes")
+ns_processed_images = Namespace((const.ROUTES.proc_img.bp_name or "?"), description="Images processing related routes")
 ns_cards_generation = Namespace((const.ROUTES.cards_gen.bp_name or "?"), description="Cards generation related routes")
 
 models = {
@@ -16,6 +17,12 @@ models = {
         "artwork_generations": fields.Integer(description="Number of artwork generations"),
         "lyrics_fetches": fields.Integer(description="Number of lyrics fetches"),
         "cards_generated": fields.Integer(description="Number of cards generated"),
+    }),
+
+    # Images processing
+    "process-images": ns_processed_images.model("Process Images", {
+        "generated_artwork_path": fields.String(description="[INFERRED] Path to the input image"),
+        "include_center_artwork": fields.Boolean(description="[INFERRED] Whether to include the center artwork in the cover art"),
     }),
 
     # Cards generation
