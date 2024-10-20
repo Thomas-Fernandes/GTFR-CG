@@ -29,7 +29,7 @@
 
 <div align="center">
     <a href="#top"><img alt="Python version" src="https://img.shields.io/badge/Python-3.11+-blue?logo=python" /></a>
-    <a href="#card_file_box-changelog"><img alt="Last version released" src="https://img.shields.io/badge/release-v1.2.4-blue?logo=windows-terminal" /></a>
+    <a href="#card_file_box-changelog"><img alt="Last version released" src="https://img.shields.io/badge/release-v1.4.1-blue?logo=windows-terminal" /></a>
     <a href="https://github.com/Thomas-Fernandes/GTFR/commits/main"><img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/Thomas-Fernandes/GTFR?color=blueviolet&logo=clarifai" /></a>
 </div>
 <div align="center">
@@ -98,7 +98,8 @@ cd front-end/ && npm run dev # will launch the front end of the application
 
 &nbsp;&nbsp; :bookmark_tabs:&nbsp; **General Information**
 
-- By default, the application runs locally on ports 8000 (back) and 4242 (front). Access it @ [**http://localhost:4242**](http://localhost:4242).
+- By default, the application runs locally on ports 8000 (back) and 4242 (front). Access the latter @ [**http://localhost:4242**](http://localhost:4242).
+  - The API's documentation can be accessed @ [**http://localhost:8000/docs**](http://localhost:8000/docs).
 - The application features 6 major pages:
   - [x] **Home**: the main page, where your statistics are displayed and you can navigate to **Artwork Generation** and **Lyrics**.
   - [x] **Tests** : the unit tests page, to check the application's integrity.
@@ -140,8 +141,9 @@ cd front-end/ && npm run dev # will launch the front end of the application
   - ***[1.3.1]** Aug 19 2024*: Project's front end is fully migrated to **React Typescript with Vite**. [#088](https://github.com/Thomas-Fernandes/GTFR-CG/pull/88)
   - ***[1.3.2]** Sep 14 2024*: Project now has a unit tests page, better .env handling with a tutorial file. [#092](https://github.com/Thomas-Fernandes/GTFR-CG/pull/92)
 - ***[1.4.0]** Sep 17 2024*: **Lyrics Cards** — Project now supports automatic cards generation from text blocks. [#093](https://github.com/Thomas-Fernandes/GTFR-CG/pull/93)
-  - ***[1.4.1]** Sep ?? 2024*: Cards can now be generated manually, improved QoL in card content creation. [#???](#card_file_box-changelog)
-  - ***[1.4.2]** Oct ?? 2024*: Cards can now be generated using a manual background and/or customized color palette. [#???](#card_file_box-changelog)
+  - ***[1.4.1]** Sep 29 2024*: Cards can now be generated manually, improved QoL in card content creation. [#120](https://github.com/Thomas-Fernandes/GTFR-CG/pull/120)
+  - ***[1.4.2]** Oct ?? 2024*: The API is now fully documented with Flask-RESTx & Swagger. [#139](https://github.com/Thomas-Fernandes/GTFR-CG/pull/139)
+  - ***[1.4.3]** Oct ?? 2024*: Cards can now be generated using a manual background and/or customized color palette. [#???](#card_file_box-changelog)
 - ***[1.5.0]** Coming later...*: **Boost!** — Project will see its existing functionalities sharpened. [#???](#card_file_box-changelog)
 - ***[1.6.0]** Coming later...*: **Koh-Lanta** — Project will be unified in an all-in-one application. [#???](#card_file_box-changelog)
 - ***[2.0.0]** Coming later...*: **Endgame** — Project will feature automated video edition with AI sync. [#???](#card_file_box-changelog)

@@ -34,15 +34,15 @@ class Routes:
         root: [Route] The root route.
         redirect: [Route] The redirect route.
         home: [Route] The home route.
-        art_gen: [Route] The artwork generation route.
-        proc_img: [Route] The processed images route.
+        art_proc: [Route] The artwork generation route.
+        proc_art: [Route] The artwork processing route.
         lyrics: [Route] The lyrics route.
     """
     root: Route
     redirect: Route
     home: Route
     art_gen: Route
-    proc_img: Route
+    art_proc: Route
     lyrics: Route
     cards_gen: Route
 

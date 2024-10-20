@@ -130,7 +130,7 @@ export const API = {
   },
 
   CARDS_GENERATION: {
-    SAVE_CARDS_CONTENTS: PATHS.cardsGeneration + "/save-contents",
+    SAVE_CARDS_CONTENTS: PATHS.cardsGeneration + "/save-cards-contents",
     GENERATE_CARDS: PATHS.cardsGeneration + "/generate",
   },
 };
