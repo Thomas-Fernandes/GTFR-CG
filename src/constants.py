@@ -151,8 +151,8 @@ ERR_NO_IMG_URL = "No image URL provided."
 ERR_FAIL_DOWNLOAD = "Failed to download image."
 ERR_LYRICS_MISSING_PARAMS = "Missing parameters for lyrics fetching."
 ERR_LYRICS_NOT_FOUND = "Lyrics not found."
-ERR_CARDS_CONTENTS_NOT_FOUND = "No cards contents provided."
-ERR_CARDS_CONTENTS_INVALID = "Invalid cards contents provided."
+ERR_CARDS_CONTENTS_NOT_FOUND = "No cards contents were generated."
+ERR_CARDS_CONTENTS_INVALID = "Invalid provided cards contents."
 ERR_CARDS_CONTENTS_SAVE_FAILED = "Failed to save cards contents."
 ERR_CARDS_CONTENTS_READ_FAILED = "Failed to read cards contents."
 ERR_CARDS_GEN_PARAMS_NOT_FOUND = "Required parameters not found for cards generation."
@@ -162,6 +162,8 @@ ERR_CARDS_BACKGROUND_NOT_FOUND = "No background image provided for cards generat
 MSG_GENIUS_TOKEN_FETCHED = "Genius API token fetched successfully."
 MSG_STATS_FETCHED = "Statistics fetched successfully."
 MSG_STATS_CREATED = "Statistics created successfully."
+MSG_CARDS_CONTENTS_SAVED = "Cards contents saved successfully."
+MSG_CARDS_GENERATED = "Cards generated successfully."
 
 # .env contents
 load_dotenv()

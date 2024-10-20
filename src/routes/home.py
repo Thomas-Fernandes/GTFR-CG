@@ -39,6 +39,6 @@ class StatisticsResource(Resource):
         except ValueError as e:
             return createApiResponse(const.HttpStatus.BAD_REQUEST.value, str(e))
 
-        if stats[const.AvailableStats.dateFirstOperation.value] == "N/A":
+        if stats[const.AvailableStats.dateFirstOperation.value] == const.EMPTY_STATS[const.AvailableStats.dateFirstOperation.value]:
             return createApiResponse(const.HttpStatus.CREATED.value, const.MSG_STATS_CREATED, stats)
         return createApiResponse(const.HttpStatus.OK.value, const.MSG_STATS_FETCHED, stats)
