@@ -22,12 +22,12 @@ api = Api(app, doc="/docs", version="1.0", title="GTFR-CG API Documentation",
           description="Swagger API Documentation for GTFR-CG")
 
 def initApp() -> None:
-    """ Initializes the Flask app: declares config and session, assigns blueprints. """
+    """ Initializes the Flask app: declares config and session, assigns blueprints """
     log.debug("Initializing app...")
     CORS(app)
 
     def initBlueprints() -> None:
-        """ Initializes the blueprints for the app. """
+        """ Initializes the blueprints for the app """
         log.debug("  Initializing blueprints...")
         from src.routes.artwork_generation import bp_artwork_generation
         from src.routes.cards_generation import bp_cards_generation

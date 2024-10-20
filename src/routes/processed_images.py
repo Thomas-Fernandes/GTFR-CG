@@ -107,10 +107,11 @@ def generateThumbnails(bg_path: str, output_folder: str) -> None:
 @ns_artwork_processing.route("/process-images")
 class ProcessArtworkResource(Resource):
     @ns_artwork_processing.doc("post_process_images")
-    @ns_artwork_processing.response(const.HttpStatus.CREATED.value, const.MSG_PROCESSED_IMAGES_SUCCESS, models[const.ROUTES.art_proc.bp_name]["process-images"])
+    @ns_artwork_processing.expect(models[const.ROUTES.art_proc.bp_name]["process-images"]["payload"])
+    @ns_artwork_processing.response(const.HttpStatus.CREATED.value, const.MSG_PROCESSED_IMAGES_SUCCESS)
     @ns_artwork_processing.response(const.HttpStatus.BAD_REQUEST.value, const.ERR_NO_IMG)
     def post(self) -> Response:
-        """ Renders the processed background image and thumbnails. """
+        """ Renders the processed background image and thumbnails """
         if const.SessionFields.generated_artwork_path.value not in session:
             log.error(const.ERR_NO_IMG)
             return createApiResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_NO_IMG)

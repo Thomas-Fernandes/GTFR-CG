@@ -352,12 +352,13 @@ def checkCardgenParametersInvalid(
 @ns_cards_generation.route("/generate")
 class CardsGenerationResource(Resource):
     @ns_cards_generation.doc("post_generate_cards")
-    @ns_cards_generation.response(const.HttpStatus.CREATED.value, const.MSG_CARDS_GENERATED, models[const.ROUTES.cards_gen.bp_name]["generate"])
+    @ns_cards_generation.expect(models[const.ROUTES.cards_gen.bp_name]["generate"]["payload"])
+    @ns_cards_generation.response(const.HttpStatus.CREATED.value, const.MSG_CARDS_GENERATED)
     @ns_cards_generation.response(const.HttpStatus.BAD_REQUEST.value, const.ERR_CARDS_GEN_PARAMS_NOT_FOUND)
     @ns_cards_generation.response(const.HttpStatus.PRECONDITION_FAILED.value, "\n".join([const.ERR_CARDS_CONTENTS_NOT_FOUND, const.ERR_CARDS_BACKGROUND_NOT_FOUND]))
     @ns_cards_generation.response(const.HttpStatus.INTERNAL_SERVER_ERROR.value, "\n".join([const.ERR_CARDS_CONTENTS_READ_FAILED, const.ERR_USER_FOLDER_NOT_FOUND]))
     def post(self) -> Response:
-        """ Generates cards using the contents previously saved. """
+        """ Generates cards using the contents previously saved """
         log.debug("POST - Generating cards...")
         start = time()
         if const.SessionFields.cards_contents.value not in session:
@@ -452,11 +453,12 @@ def saveCardsContents(cards_contents: CardsContents) -> Response:
 @ns_cards_generation.route("/save-cards-contents")
 class CardsContentsResource(Resource):
     @ns_cards_generation.doc("post_save_cards_contents")
-    @ns_cards_generation.response(const.HttpStatus.CREATED.value, const.MSG_CARDS_CONTENTS_SAVED, models[const.ROUTES.cards_gen.bp_name]["save-cards-contents"])
+    @ns_cards_generation.expect(models[const.ROUTES.cards_gen.bp_name]["save-cards-contents"]["payload"])
+    @ns_cards_generation.response(const.HttpStatus.CREATED.value, const.MSG_CARDS_CONTENTS_SAVED)
     @ns_cards_generation.response(const.HttpStatus.BAD_REQUEST.value, "\n".join([const.ERR_CARDS_CONTENTS_NOT_FOUND, const.ERR_CARDS_CONTENTS_INVALID]))
     @ns_cards_generation.response(const.HttpStatus.INTERNAL_SERVER_ERROR.value, const.ERR_CARDS_CONTENTS_SAVE_FAILED)
     def post(self) -> Response:
-        """ Saves the cards contents to the user's folder. """
+        """ Saves the cards contents to the user's folder """
         log.debug("POST - Saving cards contents...")
 
         body = literal_eval(request.get_data(as_text=True))

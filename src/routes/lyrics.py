@@ -29,7 +29,7 @@ except TypeError as e:
               "Lyrics fetching will not work.")
 
 def fetchLyricsFromGenius(song_title: str, artist_name: str) -> list[dict[str, str]]:
-    """ Tries to fetch the lyrics of a song from Genius.com.
+    """ Tries to fetch the lyrics of a song from Genius dot com.
     :param song_title: [string] The title of the song.
     :param artist_name: [string] The name of the artist.
     :return: [list] A list of tuples with section names and lyrics.
@@ -97,10 +97,11 @@ def fetchLyricsFromGenius(song_title: str, artist_name: str) -> list[dict[str, s
 @ns_lyrics.route("/get-genius-lyrics")
 class GeniusLyricsResource(Resource):
     @ns_lyrics.doc("post_get_genius_lyrics")
-    @ns_lyrics.response(const.HttpStatus.OK.value, const.MSG_LYRICS_FETCH_SUCCESS, models[const.ROUTES.lyrics.bp_name]["get-genius-lyrics"])
+    @ns_lyrics.expect(models[const.ROUTES.lyrics.bp_name]["get-genius-lyrics"]["payload"])
+    @ns_lyrics.response(const.HttpStatus.OK.value, const.MSG_LYRICS_FETCH_SUCCESS, models[const.ROUTES.lyrics.bp_name]["get-genius-lyrics"]["response"])
     @ns_lyrics.response(const.HttpStatus.BAD_REQUEST.value, const.ERR_LYRICS_MISSING_PARAMS)
     def post(self) -> Response:
-        """ Fetches the lyrics of a song from Genius.com. """
+        """ Fetches the lyrics of a song from Genius dot com """
         log.log("POST - Fetching lyrics from Genius...")
 
         body = literal_eval(request.get_data(as_text=True))

@@ -42,7 +42,7 @@ HOST_HOME = "0.0.0.0"
 DEFAULT_PORT = 8000
 
 class SessionFields(StrEnum):
-    """ Enum for the fields in the session object. """
+    """ Enum for the fields in the session object """
     # Application
     user_folder = "user_folder"
 
