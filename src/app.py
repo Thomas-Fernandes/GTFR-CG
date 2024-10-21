@@ -1,5 +1,6 @@
 # Installed libraries
 from flask import Flask
+from flask_cors import CORS
 from flask_session import Session
 from waitress import serve
 
@@ -16,6 +17,7 @@ from src.statistics import onLaunch as printInitStatistics
 # Application initialization
 global app
 app = Flask(__name__.split('.')[-1]) # so that the app name is app, not {dirpath}.app
+CORS(app)
 def initApp() -> None:
     """ Initializes the Flask app: declares config and session, assigns blueprints.
     """

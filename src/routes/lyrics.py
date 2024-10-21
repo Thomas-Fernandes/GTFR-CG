@@ -1,14 +1,14 @@
 from flask import Blueprint, request, Response
-from flask_cors import cross_origin
 from lyricsgenius import Genius
 
 from ast import literal_eval
 from re import sub, split
 from requests.exceptions import ReadTimeout as ReadTimeoutException
+from time import time
 from typing import Optional
 
 import src.constants as const
-from src.logger import log
+from src.logger import log, LogSeverity
 from src.statistics import updateStats
 from src.utils.web_utils import createApiResponse
 
@@ -31,6 +31,8 @@ def fetchLyricsFromGenius(song_title: str, artist_name: str) -> list[dict[str, s
     :param artist_name: [string] The name of the artist.
     :return: [list] A list of tuples with section names and lyrics.
     """
+    log.debug(f"Fetching lyrics for {artist_name} - \"{song_title}\"...")
+    start = time()
     if genius is None:
         return [{"section": "error", "lyrics": const.ERR_GENIUS_TOKEN}]
 
@@ -86,11 +88,10 @@ def fetchLyricsFromGenius(song_title: str, artist_name: str) -> list[dict[str, s
     log.debug("Lyrics split into parts successfully.")
     updateStats(to_increment=const.AvailableStats.lyricsFetches.value)
 
-    log.info(f"Lyrics fetch for {artist_name} - \"{song_title}\" complete.")
+    log.log(f"Lyrics fetch for {artist_name} - \"{song_title}\" complete.").time(LogSeverity.LOG, time() - start)
     return lyrics_parts
 
 @bp_lyrics.route(api_prefix + "/get-genius-lyrics", methods=["POST"])
-@cross_origin()
 def getGeniusLyrics() -> Response:
     """ Fetches the lyrics of a song from Genius.com.
     :return: [Response] The response to the request.

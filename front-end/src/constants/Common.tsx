@@ -10,6 +10,7 @@ export const TOAST: Record<string, string> = {
   NO_SPINNER_ID: "HTML Spinner id is required.",
   NO_SPINNER_CONTAINER: "Spinner container not found.",
   PROCESSING_IN_PROGRESS: "Processing already in progress.",
+  NO_LATEST_COLOR: "No latest color found.",
 
   // Redirect
     NO_PROCESSED_IMAGE: "No processed image found.",
@@ -46,6 +47,7 @@ export const TOAST: Record<string, string> = {
     NO_CARDS: "No cards were generated.",
     UNAUTHORIZED_OUTRO: "The outro card cannot be generated\n"
       + "since the card creation was manual.",
+    CARDS_GENERATED: "Cards generated successfully.",
 };
 
 export const RESPONSE_STATUS: Record<string, ResponseStatus> = {

@@ -1,17 +1,17 @@
 from colorthief import ColorThief
 from flask import Blueprint, Response, request
-from flask_cors import cross_origin
 from PIL import Image, ImageDraw
 from werkzeug.datastructures import FileStorage
 
 from ast import literal_eval
 from os import path, makedirs
 from requests.exceptions import ReadTimeout as ReadTimeoutException
+from time import time
 from typing import Optional
 from uuid import uuid4
 
 import src.constants as const
-from src.logger import log
+from src.logger import log, LogSeverity
 from src.routes.lyrics import genius
 from src.routes.processed_images import generateCoverArt
 from src.statistics import updateStats
@@ -155,20 +155,13 @@ def generateCard(output_path: str, lyrics: list[str], card_metadata: CardMetadat
     card.save(f"{const.FRONT_PROCESSED_CARDS_DIR}{card_name}")
     log.info(f"  Card {card_name} generated successfully.")
 
-def getCardMetadata(song_data: SongMetadata, include_bg_img: bool) -> CardMetadata:
+def getCardMetadata(song_data: SongMetadata, enforce_bottom_color: str | None, include_bg_img: bool) -> CardMetadata:
     """ Extracts the metadata needed for card generation from the song data.
     :param song_data: [dict] The data of the song.
+    :param enforce_bottom_color: [str] The color to enforce at the bottom of the card.
     :param include_bg_img: [bool] True if the background image should be included, False otherwise.
     :return: [dict] The metadata of related cards.
     """
-    bg_path = f"{const.PROCESSED_DIR}{session[const.SessionFields.user_folder.value]}{const.SLASH}" + \
-        f"{const.AvailableCacheElemType.images.value}{const.SLASH}" + \
-        f"{const.PROCESSED_ARTWORK_FILENAME}"
-    log.debug(f"  Background image path: {bg_path}")
-    if not doesFileExist(bg_path):
-        raise FileNotFoundError("Background image missing.")
-    bg = Image.open(bg_path)
-
     card_metaname = song_data.get("card_metaname", "").upper()
     if card_metaname == "":
         if song_data.get("artist", "???").startswith("Genius"):
@@ -179,11 +172,32 @@ def getCardMetadata(song_data: SongMetadata, include_bg_img: bool) -> CardMetada
             song_title = song_data.get("title", "???").upper()
         card_metaname = f"{song_author}, “{song_title}”"
 
-    log.debug("  Calculating dominant color from background image...")
-    color_thief = ColorThief(bg_path)
-    dominant_color = color_thief.get_color(quality=1)
-    hexed_dominant_color = getHexColorFromRGB(dominant_color)
-    log.info(f"  Dominant color: {dominant_color}={hexed_dominant_color}")
+    bg_path = f"{const.PROCESSED_DIR}{session[const.SessionFields.user_folder.value]}{const.SLASH}" + \
+        f"{const.AvailableCacheElemType.images.value}{const.SLASH}" + \
+        f"{const.PROCESSED_ARTWORK_FILENAME}"
+    bg = None
+    log.debug(f"  Background image path: {bg_path}")
+    if not doesFileExist(bg_path) and include_bg_img == True:
+        raise FileNotFoundError("Background image missing.")
+    else:
+        bg = Image.open(bg_path)
+
+    start = time()
+    if enforce_bottom_color is not None:
+        log.debug("  Enforcing bottom color...")
+        def colorHexStringToTuple(color: str) -> tuple[int, int, int]:
+            """ Converts a color hex string to a tuple.
+            :param color: [str] The color hex string.
+            :return: [tuple] The color tuple.
+            """
+            return (int(color[1:3], 16), int(color[3:5], 16), int(color[5:7], 16))
+        dominant_color = colorHexStringToTuple(enforce_bottom_color)
+        log.info(f"  Bottom color enforced: ({dominant_color})={enforce_bottom_color}")
+    else:
+        log.debug("  Calculating dominant color from background image...")
+        color_thief = ColorThief(bg_path)
+        dominant_color = color_thief.get_color(quality=1)
+        log.info(f"  Dominant color: {dominant_color}=#{hex(dominant_color[0])[2:]}{hex(dominant_color[1])[2:]}{hex(dominant_color[2])[2:]}")
 
     def getLuminance(bg_color: RGBAColor) -> int:
         """ Checks if the text should be black or white, depending on the background color.
@@ -196,12 +210,14 @@ def getCardMetadata(song_data: SongMetadata, include_bg_img: bool) -> CardMetada
         log.debug(f"  Deducted luminance={round(luminance, 2)}, rgb=({round(0.3 * r, 2)}, {round(0.6 * g, 2)}, {round(0.1 * b, 2)})")
         return int(luminance)
     dominant_color_luminance = getLuminance(dominant_color)
+    if enforce_bottom_color is None:
+        log.time(LogSeverity.INFO, time() - start, padding=2)
     text_meta_color = (0,0,0) if dominant_color_luminance > 128 else (255,255,255)
     text_lyrics_color = (255,255,255) if dominant_color_luminance > 220 else (0,0,0)
 
     cards_metadata = CardMetadata(
         card_metaname=card_metaname,
-        include_bg_img=eval(include_bg_img.capitalize()), bg=bg, dominant_color=dominant_color,
+        include_bg_img=include_bg_img, bg=bg, dominant_color=dominant_color,
         text_meta_color=text_meta_color, text_lyrics_color=text_lyrics_color,
     )
     log.debug(f"  {cards_metadata}")
@@ -214,6 +230,7 @@ def generateSingleCard(cards_contents: CardsContents, song_data: SongMetadata, s
     :param settings: [dict] The settings for card generation.
     :return: [Response] The response to the request.
     """
+    enforce_bottom_color = settings.get(const.SessionFields.enforce_bottom_color.value)
     include_bg_img = settings.get(const.SessionFields.include_bg_img.value)
 
     if const.SessionFields.user_folder.value not in session:
@@ -222,7 +239,7 @@ def generateSingleCard(cards_contents: CardsContents, song_data: SongMetadata, s
 
     log.info("Deducing card metadata...")
     try:
-        card_metadata = getCardMetadata(song_data, include_bg_img)
+        card_metadata = getCardMetadata(song_data, enforce_bottom_color, include_bg_img)
     except FileNotFoundError as e:
         log.error(f"Error while deducing card metadata: {e}")
         return createApiResponse(const.HttpStatus.PRECONDITION_FAILED.value, const.ERR_CARDS_BACKGROUND_NOT_FOUND)
@@ -245,6 +262,7 @@ def generateCards(cards_contents: CardsContents, song_data: SongMetadata, settin
     :param settings: [dict] The settings for card generation.
     :return: [Response] The response to the request.
     """
+    enforce_bottom_color = settings.get(const.SessionFields.enforce_bottom_color.value)
     gen_outro = settings.get(const.SessionFields.gen_outro.value)
     include_bg_img = settings.get(const.SessionFields.include_bg_img.value)
 
@@ -254,13 +272,17 @@ def generateCards(cards_contents: CardsContents, song_data: SongMetadata, settin
 
     log.info("Deducing cards metadata...")
     try:
-        card_metadata = getCardMetadata(song_data, include_bg_img)
+        card_metadata = getCardMetadata(song_data, enforce_bottom_color, include_bg_img)
+        print("\n\n\n")
+        print(card_metadata)
+        print("\n\n\n")
     except FileNotFoundError as e:
         log.error(f"Error while deducing cards metadata: {e}")
         return createApiResponse(const.HttpStatus.PRECONDITION_FAILED.value, const.ERR_CARDS_BACKGROUND_NOT_FOUND)
     log.info("Cards metadata calculated successfully.")
 
     log.info("Generating cards...")
+    start = time()
     user_folder = str(session[const.SessionFields.user_folder.value]) + const.SLASH + const.AvailableCacheElemType.cards.value
     user_processed_path = path.join(const.PROCESSED_DIR, user_folder)
     image_output_path = f"{user_processed_path}{const.SLASH}00.png"
@@ -273,9 +295,11 @@ def generateCards(cards_contents: CardsContents, song_data: SongMetadata, settin
     if gen_outro:
         image_output_path = f"{user_processed_path}{const.SLASH}{const.PROCESSED_OUTRO_FILENAME}"
         generateOutroCard(image_output_path, song_data.get("contributors", []))
+
     number_of_generated_cards = len(cards_contents) + (2 if gen_outro else 1) # lyrics + empty + outro card
-    log.log(f"Generated {number_of_generated_cards} card{'s' if number_of_generated_cards > 1 else ''} successfully.")
     updateStats(to_increment=const.AvailableStats.cardsGenerated.value, increment=number_of_generated_cards)
+    log.log(f"Generated {number_of_generated_cards} card{'s' if number_of_generated_cards > 1 else ''} successfully.") \
+        .time(LogSeverity.LOG, time() - start)
 
     return createApiResponse(
         const.HttpStatus.OK.value,
@@ -336,17 +360,34 @@ def saveEnforcedBackgroundImage(file: FileStorage, include_center_artwork: bool)
     log.info(f"Creating user processed path directory: {user_processed_path}")
     makedirs(user_processed_path, exist_ok=True)
     image_path = path.join(user_processed_path, "uploaded_image.png")
+
     log.debug(f"Saving uploaded image to {image_path}")
     file.save(image_path)
+
     output_bg = path.join(user_processed_path, const.PROCESSED_ARTWORK_FILENAME)
     generateCoverArt(image_path, output_bg, include_center_artwork)
-    center_mark = "with" if include_center_artwork else "without"
-    log.log(f"Images generation ({center_mark} center artwork) complete.")
-    updateStats(to_increment=const.AvailableStats.artworkGenerations.value)
-    log.log(f"Saved enforced background image to {output_bg}.")
+
+def checkCardgenParametersInvalid(
+    enforce_background_image: bool, enforce_bottom_color: Optional[str], include_center_artwork: Optional[bool], include_bg_img: Optional[str]
+) -> Optional[str]:
+    bg_path = f"{const.PROCESSED_DIR}{session[const.SessionFields.user_folder.value]}{const.SLASH}" + \
+        f"{const.AvailableCacheElemType.images.value}{const.SLASH}" + \
+        f"{const.PROCESSED_ARTWORK_FILENAME}"
+    bg_exists = doesFileExist(bg_path)
+    if include_bg_img is None:
+        return "Missing parameter: Include background image"
+    if enforce_background_image and include_center_artwork is None:
+        return "Missing parameter: Include center artwork"
+    if enforce_bottom_color is None and bg_exists != True:
+        if include_bg_img != "true":
+            return "Missing parameter: Enforced bottom color"
+        else:
+            return "Missing element: Background image"
+    return None
 
 def getBaseCardgenSettings(*, is_singular_card: bool = False) -> CardgenSettings:
     enforce_bg_image = "file" in request.files
+    enforce_bottom_color: Optional[str] = None
     include_center_artwork: Optional[bool] = None
     gen_outro: Optional[str] = request.form[snakeToCamelCase(const.SessionFields.gen_outro.value)]
     include_bg_img: Optional[str] = request.form[snakeToCamelCase(const.SessionFields.include_bg_img.value)]
@@ -357,7 +398,10 @@ def getBaseCardgenSettings(*, is_singular_card: bool = False) -> CardgenSettings
             request.form[snakeToCamelCase(const.SessionFields.include_center_artwork.value)] == "true"
         saveEnforcedBackgroundImage(request.files["file"], include_center_artwork)
 
-    def checkCardgenParametersValidity(card_metaname: str, enforce_bg_image: bool, include_center_artwork: bool, include_bg_img: bool) -> Optional[str]:
+    if "enforceBottomColor" in request.form:
+        enforce_bottom_color = request.form[snakeToCamelCase(const.SessionFields.enforce_bottom_color.value)]
+
+    def checkCardgenParametersValidity(card_metaname: str, enforce_bg_image: bool, include_center_artwork: bool, include_bg_img: str) -> Optional[str]:
         if card_metaname is None: return const.ERR_CARDS_METANAME_NOT_FOUND
         if enforce_bg_image and include_center_artwork is None: return const.ERR_CARDS_CENTER_ARTWORK_NOT_FOUND
         if not enforce_bg_image and include_bg_img is None: return const.ERR_CARDS_BACKGROUND_NOT_FOUND
@@ -368,8 +412,9 @@ def getBaseCardgenSettings(*, is_singular_card: bool = False) -> CardgenSettings
         raise ValueError(err)
 
     base_settings = {
+        const.SessionFields.enforce_bottom_color.value: enforce_bottom_color,
         const.SessionFields.gen_outro.value: eval(gen_outro.capitalize()),
-        const.SessionFields.include_bg_img.value: include_bg_img,
+        const.SessionFields.include_bg_img.value: eval(include_bg_img.capitalize()),
         const.SessionFields.card_metaname.value: card_metaname,
     }
 
@@ -394,7 +439,6 @@ def getBaseCardgenSettings(*, is_singular_card: bool = False) -> CardgenSettings
     return base_settings
 
 @bp_cards_generation.route(api_prefix + "/generate-single", methods=["POST"])
-@cross_origin()
 def postGenerateSingleCard() -> Response:
     """ Generates a single card again using custom contents.
     :return: [Response] The response to the request.
@@ -431,12 +475,12 @@ def postGenerateSingleCard() -> Response:
     return generateSingleCard(card_contents, song_data, cardgen_settings)
 
 @bp_cards_generation.route(api_prefix + "/generate", methods=["POST"])
-@cross_origin()
 def postGenerateCards() -> Response:
     """ Generates cards using the contents previously saved.
     :return: [Response] The response to the request.
     """
     log.debug("POST - Generating cards...")
+    start = time()
     if const.SessionFields.cards_contents.value not in session:
         log.error(const.ERR_CARDS_CONTENTS_NOT_FOUND)
         return createApiResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_CARDS_CONTENTS_NOT_FOUND)
@@ -462,7 +506,7 @@ def postGenerateCards() -> Response:
     log.debug("  Cards contents:")
     for card in cards_contents:
         log.debug(f"    {card}")
-    log.info("Cards contents retrieved successfully.")
+    log.info("Cards contents retrieved successfully.").time(LogSeverity.INFO, time() - start)
 
     return generateCards(cards_contents, song_data, cardgen_settings)
 
@@ -485,6 +529,7 @@ def saveCardsContents(cards_contents: CardsContents) -> Response:
     :param cards_contents: [list[list[str]]] The contents of the cards.
     :return: [Response] The response to the request.
     """
+    start = time()
     if const.SessionFields.user_folder.value not in session:
         log.debug(const.WARN_NO_USER_FOLDER)
         session[const.SessionFields.user_folder.value] = str(uuid4())
@@ -505,11 +550,10 @@ def saveCardsContents(cards_contents: CardsContents) -> Response:
         return createApiResponse(const.HttpStatus.INTERNAL_SERVER_ERROR.value, const.ERR_CARDS_CONTENTS_SAVE_FAILED)
 
     session[const.SessionFields.cards_contents.value] = filepath
-    log.log(f"Cards contents saved to {filepath}.")
-    return createApiResponse(const.HttpStatus.OK.value, "Cards contents saved successfully.")
+    log.log(f"Cards contents saved to {filepath}.").time(LogSeverity.INFO, time() - start)
+    return createApiResponse(const.HttpStatus.CREATED.value, "Cards contents saved successfully.")
 
 @bp_cards_generation.route(api_prefix + "/save-contents", methods=["POST"])
-@cross_origin()
 def postCardsContents() -> Response:
     """ Saves the cards contents to the user's folder.
     :return: [Response] The response to the request.

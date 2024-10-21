@@ -11,6 +11,9 @@ class HttpStatus(Enum):
     """ Enum for HTTP status codes.
     """
     OK = 200
+    CREATED = 201
+    ACCEPTED = 202
+    NO_CONTENT = 204
     BAD_REQUEST = 400
     PRECONDITION_FAILED = 412
     UNSUPPORTED_MEDIA_TYPE = 415
@@ -55,6 +58,7 @@ class SessionFields(Enum):
     cards_contents = "cards_contents"
     song_data = "song_data"
     enforce_background_image = "enforce_background_image"
+    enforce_bottom_color = "enforce_bottom_color"
     gen_outro = "generate_outro"
     include_bg_img = "include_background_img"
     card_metaname = "card_metaname"
