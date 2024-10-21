@@ -14,6 +14,7 @@ import { FILE_UPLOAD } from "../../constants/ArtworkGeneration";
 import { PROCESSED_CARDS_PATH, SESSION_STORAGE } from "../../constants/CardsGeneration";
 import { API, BACKEND_URL, HTTP_STATUS, PATHS, SPINNER_ID, TITLE, TOAST, TOAST_TYPE } from "../../constants/Common";
 
+import CardsGallery, { CardData } from "../../components/CardsGallery";
 import "./CardsGeneration.css";
 
 const CardsGeneration = (): JSX.Element => {
@@ -36,6 +37,7 @@ const CardsGeneration = (): JSX.Element => {
   const [generationInProgress, setGenerationInProgress] = useState(false);
 
   const [cardPaths, setCardPaths] = useState([] as string[]);
+  const [cards, setCards] = useState([] as CardData[]);
 
   const handleSubmitDownloadCard = (e: FormEvent<HTMLFormElement> | undefined, body: ImageDownloadRequest) => {
     if (e)
@@ -124,6 +126,8 @@ const CardsGeneration = (): JSX.Element => {
         cardPaths.push(`${PROCESSED_CARDS_PATH}/outro.png`);
       const pathsWithCacheBuster = cardPaths.map((path) => `${path}?t=${Date.now()}`);
       setCardPaths(pathsWithCacheBuster);
+      const cards = pathsWithCacheBuster.map((path, idx) => ({ id: idx, src: path, lyrics: "???" }));
+      setCards(cards);
       sendToast(TOAST.CARDS_GENERATED, TOAST_TYPE.SUCCESS);
     }).catch((error: ApiResponse) => {
       if (error.status === HTTP_STATUS.PRECONDITION_FAILED)
@@ -144,9 +148,9 @@ const CardsGeneration = (): JSX.Element => {
   };
 
   useEffect(() => {
-    if (isComponentMounted) {
+    if (isComponentMounted)
       return;
-    }
+
     setCardMetaname(sessionStorage.getItem(SESSION_STORAGE.CARD_METANAME) ?? "");
     setIsComponentMounted(true);
   }, [isComponentMounted, colorPick]);
@@ -221,11 +225,12 @@ const CardsGeneration = (): JSX.Element => {
           <hr className="mv-1" />
 
           <ZipDownloadButton type="button" id="download-all" paths={cardPaths} output={"cards.zip"} />
-          <div id="cards">
+          <CardsGallery id="cards" initialCards={cards} downloadFn={handleSubmitDownloadCard} />
+          {/* <div id="cards">
             { cardPaths.map((cardPath, idx) =>
               renderCard(cardPath, idx + 1))
             }
-          </div>
+          </div> */}
         </>
       }
 
