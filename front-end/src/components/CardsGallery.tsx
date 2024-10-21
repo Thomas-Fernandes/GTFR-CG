@@ -2,7 +2,7 @@ import React, { FormEvent, useRef, useState } from "react";
 
 import { sendRequest } from "../common/Requests";
 import { sendToast } from "../common/Toast";
-import { ApiResponse, ImageDownloadRequest, SingleCardGenerationRequest, StateSetter } from "../common/Types";
+import { ApiResponse, ImageDownloadRequest, SingleCardGenerationRequest } from "../common/Types";
 
 import { API, BACKEND_URL, HTTP_STATUS, TOAST, TOAST_TYPE } from "../constants/Common";
 
@@ -24,10 +24,7 @@ type GenerationProps = {
   generateOutro: boolean;
   includeBackgroundImg: boolean;
 
-  bgColor: string;
-
-  cardPaths: string[];
-  setCardPaths: StateSetter<string[]>;
+  cardBottomColor: string;
 };
 
 type Props = {
@@ -48,6 +45,22 @@ const CardsGallery: React.FC<Props> = ({
   const [newLyrics, setNewLyrics] = useState("");
 
   const closeModal = () => { setIsModalOpen(false); };
+
+  const generateFormData = (body: SingleCardGenerationRequest, formData: FormData): void => {
+    if (body.bgImg) {
+      formData.append("enforceBackgroundImage", body.bgImg);
+      formData.append("includeCenterArtwork", (body.includeCenterArtwork ?? "").toString());
+    }
+    if (body.colorPick !== "")
+      formData.append("enforceBottomColor", body.colorPick);
+    formData.append("cardMetaname", body.cardMetaname);
+    formData.append("generateOutro", body.generateOutro.toString());
+    formData.append("includeBackgroundImg", body.includeBackgroundImg.toString());
+    formData.append("cardBottomColor", body.cardBottomColor);
+    formData.append("cardsContents", JSON.stringify(body.cardsContents));
+    formData.append("cardFilename", body.cardFilename);
+  };
+
   const saveText = async () => {
     if (currentCard === null) {
       sendToast(TOAST.CARD_EDIT_FAILED, TOAST_TYPE.ERROR);
@@ -61,23 +74,11 @@ const CardsGallery: React.FC<Props> = ({
     const body: SingleCardGenerationRequest = {
       ...generationProps,
 
-      cardsContents: currentCard.lyrics.split("\n"),
+      cardsContents: newLyrics.split("\n"),
       cardFilename: cardFilename,
     }
-
     const formData = new FormData();
-    if (body.bgImg) {
-      formData.append("enforceBackgroundImage", body.bgImg);
-      formData.append("includeCenterArtwork", (body.includeCenterArtwork ?? "").toString());
-    }
-    if (body.colorPick !== "")
-      formData.append("enforceBottomColor", body.colorPick);
-    formData.append("cardMetaname", body.cardMetaname);
-    formData.append("generateOutro", body.generateOutro.toString());
-    formData.append("includeBackgroundImg", body.includeBackgroundImg.toString());
-    formData.append("backgroundColor", body.bgColor);
-    formData.append("cardsContents", JSON.stringify(body.cardsContents));
-    formData.append("cardFilename", body.cardFilename);
+    generateFormData(body, formData);
 
     await sendRequest("POST", BACKEND_URL + API.CARDS_GENERATION.GENERATE_SINGLE_CARD, formData).then((response: ApiResponse) => {
       if (response.status !== HTTP_STATUS.OK) {
@@ -85,9 +86,13 @@ const CardsGallery: React.FC<Props> = ({
         sendToast(response.message, TOAST_TYPE.ERROR);
         return;
       }
-      const newCardPaths = [...generationProps.cardPaths];
-      newCardPaths[currentCard.id] = `${cardFilename}?t=${Date.now()}`;
-      generationProps.setCardPaths(newCardPaths);
+      setCards((prevCards) =>
+        prevCards.map((img) =>
+          img.id === currentCard.id ? {
+            id: img.id, lyrics: newLyrics, src: `${cardFilename}?t=${Date.now()}` // busting cached image with the same name thanks to timestamp
+          } : img
+        )
+      );
       sendToast(TOAST.CARD_EDITED, TOAST_TYPE.SUCCESS);
     }).catch((error) => {
       console.error("Failed to upload text:", error);

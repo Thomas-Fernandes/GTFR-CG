@@ -62,7 +62,7 @@ class SessionFields(Enum):
     gen_outro = "generate_outro"
     include_bg_img = "include_background_img"
     card_metaname = "card_metaname"
-    bg_color = "background_color"
+    bottom_color = "card_bottom_color"
     card_filename = "card_filename"
 
 # Routes

@@ -208,9 +208,9 @@ def generateSingleCard(cards_contents: CardsContents, song_data: SongMetadata, s
         return createApiResponse(const.HttpStatus.PRECONDITION_FAILED.value, const.ERR_CARDS_BACKGROUND_NOT_FOUND)
     log.info("Card metadata calculated successfully.")
 
-    log.info("Generating card...")
     user_folder = str(session[const.SessionFields.user_folder.value]) + const.SLASH + const.AvailableCacheElemType.cards.value
     user_processed_path = path.join(const.PROCESSED_DIR, user_folder)
+    log.info(f"Generating card... ({user_processed_path + const.SLASH}...)")
     image_output_path = f"{user_processed_path}{const.SLASH}{settings[const.SessionFields.card_filename.value].split('/')[-1]}"
     generateCard(image_output_path, literal_eval(cards_contents[1][0]), card_metadata)
     log.log("Generated new card successfully.")
@@ -241,10 +241,10 @@ def generateCards(cards_contents: CardsContents, song_data: SongMetadata, settin
         return createApiResponse(const.HttpStatus.PRECONDITION_FAILED.value, const.ERR_CARDS_BACKGROUND_NOT_FOUND)
     log.info("Cards metadata calculated successfully.")
 
-    log.info("Generating cards...")
     start = time()
     user_folder = str(session[const.SessionFields.user_folder.value]) + const.SLASH + const.AvailableCacheElemType.cards.value
     user_processed_path = path.join(const.PROCESSED_DIR, user_folder)
+    log.info(f"Generating cards... ({user_processed_path + const.SLASH}...)")
     image_output_path = f"{user_processed_path}{const.SLASH}00.png"
     generateCard(image_output_path, [], card_metadata)
     cards_contents = cards_contents[1:] # remove the metadata from the cards contents
@@ -266,7 +266,7 @@ def generateCards(cards_contents: CardsContents, song_data: SongMetadata, settin
         "Cards generated successfully.",
         {
             "cardsLyrics": cards_contents,
-            "bgColor": getHexColorFromRGB(card_metadata.dominant_color),
+            "cardBottomColor": getHexColorFromRGB(card_metadata.dominant_color),
         }
     )
 
@@ -382,16 +382,16 @@ def getBaseCardgenSettings(*, is_singular_card: bool = False) -> CardgenSettings
     }
 
     if is_singular_card:
-        bg_color: Optional[str] = request.form[snakeToCamelCase(const.SessionFields.bg_color.value)]
+        bottom_color: Optional[str] = request.form[snakeToCamelCase(const.SessionFields.bottom_color.value)]
         card_content: Optional[str] = request.form[snakeToCamelCase(const.SessionFields.cards_contents.value)]
         card_filename: Optional[str] = request.form[snakeToCamelCase(const.SessionFields.card_filename.value)]
 
-        def checkSingularCardgenParametersValidity(card_content: str, card_filename: str, bg_color: str) -> Optional[str]:
-            if bg_color is None: return const.ERR_CARDS_COLOR_NOT_FOUND
+        def checkSingularCardgenParametersValidity(card_content: str, card_filename: str, bottom_color: str) -> Optional[str]:
+            if bottom_color is None: return const.ERR_CARDS_COLOR_NOT_FOUND
             if card_content is None: return const.ERR_CARDS_CONTENTS_NOT_FOUND
             if card_filename is None: return const.ERR_CARDS_FILENAME_NOT_FOUND
             return None
-        err = checkSingularCardgenParametersValidity(card_content, card_filename, bg_color)
+        err = checkSingularCardgenParametersValidity(card_content, card_filename, bottom_color)
         if err is not None:
             log.error(err)
             raise ValueError(err)

@@ -67,6 +67,18 @@ const CardsGeneration = (): JSX.Element => {
     }
   };
 
+  const generateFormData = (body: CardsGenerationRequest, formData: FormData): void => {
+    if (body.bgImg) {
+      formData.append("enforceBackgroundImage", body.bgImg);
+      formData.append("includeCenterArtwork", (body.includeCenterArtwork ?? "").toString());
+    }
+    if (body.colorPick !== "")
+      formData.append("enforceBottomColor", body.colorPick);
+    formData.append("cardMetaname", body.cardMetaname);
+    formData.append("generateOutro", body.generateOutro.toString());
+    formData.append("includeBackgroundImg", body.includeBackgroundImg.toString());
+  };
+
   const handleGenerateCards = (e: FormEvent<HTMLFormElement>, body: CardsGenerationRequest) => {
     e.preventDefault();
 
@@ -92,15 +104,7 @@ const CardsGeneration = (): JSX.Element => {
     setCardPaths([]);
 
     const formData = new FormData();
-    if (body.bgImg) {
-      formData.append("enforceBackgroundImage", body.bgImg);
-      formData.append("includeCenterArtwork", (body.includeCenterArtwork ?? "").toString());
-    }
-    if (body.colorPick !== "")
-      formData.append("enforceBottomColor", body.colorPick);
-    formData.append("cardMetaname", body.cardMetaname);
-    formData.append("generateOutro", body.generateOutro.toString());
-    formData.append("includeBackgroundImg", body.includeBackgroundImg.toString());
+    generateFormData(body, formData);
 
     sendRequest("POST", BACKEND_URL + API.CARDS_GENERATION.GENERATE_CARDS, formData).then((response: CardsGenerationResponse) => {
       if (!is2xxSuccessful(response.status)) {
@@ -220,9 +224,7 @@ const CardsGeneration = (): JSX.Element => {
           <CardsGallery
             id="cards" initialCards={cards} downloadFn={handleSubmitDownloadCard}
             generationProps={{
-              cardMetaname, bgImg, colorPick, includeCenterArtwork, generateOutro, includeBackgroundImg,
-              bgColor: cardBottomColor,
-              cardPaths, setCardPaths
+              cardMetaname, bgImg, colorPick, includeCenterArtwork, generateOutro, includeBackgroundImg, cardBottomColor,
             }}
           />
         </>
