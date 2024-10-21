@@ -49,6 +49,8 @@ export const TOAST: Record<string, string> = {
       + "since the card creation was manual.",
     CARDS_GENERATED: "Cards generated successfully.",
     CARD_NOT_EDITABLE: "The contents of this card cannot be edited.",
+    CARD_EDIT_FAILED: "Failed to edit card.",
+    CARD_EDITED: "Card edited successfully.",
 };
 
 export const RESPONSE_STATUS: Record<string, ResponseStatus> = {
@@ -133,6 +135,7 @@ export const API = {
   CARDS_GENERATION: {
     SAVE_CARDS_CONTENTS: PATHS.cardsGeneration + "/save-contents",
     GENERATE_CARDS: PATHS.cardsGeneration + "/generate",
+    GENERATE_SINGLE_CARD: PATHS.cardsGeneration + "/generate-single",
   },
 };
 

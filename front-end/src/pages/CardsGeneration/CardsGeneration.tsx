@@ -217,7 +217,14 @@ const CardsGeneration = (): JSX.Element => {
           <hr className="mv-1" />
 
           <ZipDownloadButton type="button" id="download-all" paths={cardPaths} output={"cards.zip"} />
-          <CardsGallery id="cards" initialCards={cards} downloadFn={handleSubmitDownloadCard} />
+          <CardsGallery
+            id="cards" initialCards={cards} downloadFn={handleSubmitDownloadCard}
+            generationProps={{
+              cardMetaname, bgImg, colorPick, includeCenterArtwork, generateOutro, includeBackgroundImg,
+              bgColor: cardBottomColor,
+              cardPaths, setCardPaths
+            }}
+          />
         </>
       }
 

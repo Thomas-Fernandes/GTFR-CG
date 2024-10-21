@@ -62,43 +62,6 @@ def getCharScript(char: str) -> str:
     if char.isascii(): return "latin"
     if char.isalpha(): return "cyrillic"
     else: return "!unhandled"
-    # if char >= '\u4e00' and char <= '\u9fff': return "chinese"
-    # if char >= '\u3040' and char <= '\u30ff': return "japanese"
-    # if char >= '\u1100' and char <= '\u11ff': return "korean"
-    # if char >= '\u0e00' and char <= '\u0e7f': return "thai"
-    # if char >= '\u0590' and char <= '\u05ff': return "hebrew"
-    # if char >= '\u0600' and char <= '\u06ff': return "arabic"
-    # if char >= '\u0900' and char <= '\u097f': return "devanagari"
-    # if char >= '\u0980' and char <= '\u09ff': return "bengali"
-    # if char >= '\u0b80' and char <= '\u0bff': return "tamil"
-    # if char >= '\u0c00' and char <= '\u0c7f': return "telugu"
-    # if char >= '\u0c80' and char <= '\u0cff': return "kannada"
-    # if char >= '\u0d00' and char <= '\u0d7f': return "malayalam"
-    # if char >= '\u0d80' and char <= '\u0dff': return "sinhala"
-    # if char >= '\u10a0' and char <= '\u10ff': return "georgian"
-    # if char >= '\uac00' and char <= '\ud7af': return "hangul"
-    # if char >= '\u1200' and char <= '\u137f': return "ethiopic"
-    # if char >= '\u13a0' and char <= '\u13ff': return "cherokee"
-    # if char >= '\u1400' and char <= '\u167f': return "canadian_aboriginal"
-    # if char >= '\u1680' and char <= '\u169f': return "ogham"
-    # if char >= '\u16a0' and char <= '\u16ff': return "runic"
-    # if char >= '\u1700' and char <= '\u171f': return "tagalog"
-    # if char >= '\u1720' and char <= '\u173f': return "hanunoo"
-    # if char >= '\u1740' and char <= '\u175f': return "buhid"
-    # if char >= '\u1760' and char <= '\u177f': return "tagbanwa"
-    # if char >= '\u1780' and char <= '\u17ff': return "khmer"
-    # if char >= '\u1800' and char <= '\u18af': return "mongolian"
-    # if char >= '\u1900' and char <= '\u194f': return "limbu"
-    # if char >= '\u1950' and char <= '\u197f': return "tai_le"
-    # if char >= '\u1980' and char <= '\u19df': return "new_tai_lue"
-    # if char >= '\u19e0' and char <= '\u19ff': return "khmer_symbols"
-    # if char >= '\u1a00' and char <= '\u1a1f': return "buginese"
-    # if char >= '\u1a20' and char <= '\u1aaf': return "tai_tham"
-    # if char >= '\u1b00' and char <= '\u1b7f': return "balinese"
-    # if char >= '\u1b80' and char <= '\u1bbf': return "sundanese"
-    # if char >= '\u1c00' and char <= '\u1c4f': return "lepcha"
-    # if char >= '\u1c50' and char <= '\u1c7f': return "ol_chiki"
-    # else: return "emoji"
 
 def generateCard(output_path: str, lyrics: list[str], card_metadata: CardMetadata) -> None:
     """ Generates a card using the provided lyrics and metadata.
@@ -248,12 +211,12 @@ def generateSingleCard(cards_contents: CardsContents, song_data: SongMetadata, s
     log.info("Generating card...")
     user_folder = str(session[const.SessionFields.user_folder.value]) + const.SLASH + const.AvailableCacheElemType.cards.value
     user_processed_path = path.join(const.PROCESSED_DIR, user_folder)
-    image_output_path = f"{user_processed_path}{const.SLASH}{settings[const.SessionFields.card_filename.value]}"
-    generateCard(image_output_path, cards_contents[1], card_metadata)
+    image_output_path = f"{user_processed_path}{const.SLASH}{settings[const.SessionFields.card_filename.value].split('/')[-1]}"
+    generateCard(image_output_path, literal_eval(cards_contents[1][0]), card_metadata)
     log.log("Generated new card successfully.")
     updateStats(to_increment=const.AvailableStats.cardsGenerated.value)
 
-    return createApiResponse(const.HttpStatus.OK.value, "Card generated successfully.", {"generated": 1})
+    return createApiResponse(const.HttpStatus.OK.value, "Card generated successfully.")
 
 def generateCards(cards_contents: CardsContents, song_data: SongMetadata, settings: CardgenSettings) -> Response:
     """ Generates cards using the contents provided.
@@ -273,9 +236,6 @@ def generateCards(cards_contents: CardsContents, song_data: SongMetadata, settin
     log.info("Deducing cards metadata...")
     try:
         card_metadata = getCardMetadata(song_data, enforce_bottom_color, include_bg_img)
-        print("\n\n\n")
-        print(card_metadata)
-        print("\n\n\n")
     except FileNotFoundError as e:
         log.error(f"Error while deducing cards metadata: {e}")
         return createApiResponse(const.HttpStatus.PRECONDITION_FAILED.value, const.ERR_CARDS_BACKGROUND_NOT_FOUND)
@@ -389,7 +349,7 @@ def checkCardgenParametersInvalid(
     return None
 
 def getBaseCardgenSettings(*, is_singular_card: bool = False) -> CardgenSettings:
-    enforce_bg_image = "file" in request.files
+    enforce_bg_image: bool = snakeToCamelCase(const.SessionFields.enforce_background_image.value) in request.files
     enforce_bottom_color: Optional[str] = None
     include_center_artwork: Optional[bool] = None
     gen_outro: Optional[str] = request.form[snakeToCamelCase(const.SessionFields.gen_outro.value)]
@@ -399,7 +359,7 @@ def getBaseCardgenSettings(*, is_singular_card: bool = False) -> CardgenSettings
     if enforce_bg_image:
         include_center_artwork = \
             request.form[snakeToCamelCase(const.SessionFields.include_center_artwork.value)] == "true"
-        saveEnforcedBackgroundImage(request.files["file"], include_center_artwork)
+        saveEnforcedBackgroundImage(request.files[snakeToCamelCase(const.SessionFields.enforce_background_image.value)], include_center_artwork)
 
     if snakeToCamelCase(const.SessionFields.enforce_bottom_color.value) in request.form:
         enforce_bottom_color = request.form[snakeToCamelCase(const.SessionFields.enforce_bottom_color.value)]
@@ -446,7 +406,7 @@ def postGenerateSingleCard() -> Response:
     """ Generates a single card again using custom contents.
     :return: [Response] The response to the request.
     """
-    log.debug("POST - Generating a singular card again...")
+    log.debug("POST - Generating a singular card...")
     if const.SessionFields.cards_contents.value not in session:
         log.error(const.ERR_CARDS_CONTENTS_NOT_FOUND)
         return createApiResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_CARDS_CONTENTS_NOT_FOUND)
@@ -464,7 +424,7 @@ def postGenerateSingleCard() -> Response:
             raise ValueError("Invalid card contents.")
 
         card_contents = card_contents[:1] # keep only the metadata
-        card_contents[1] = [c.strip() for c in cardgen_settings[const.SessionFields.cards_contents.value].split("\n")]
+        card_contents += [[c.strip() for c in cardgen_settings[const.SessionFields.cards_contents.value].split("\n")]]
 
         song_data = getSongMetadata(card_contents, cardgen_settings[const.SessionFields.card_metaname.value])
     except Exception as e:
