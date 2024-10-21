@@ -15,12 +15,6 @@
   }
 }
 
-/* .card-text {
-  margin-top: 8px;
-  font-size: 16px;
-  color: #333;
-} */
-
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -39,7 +33,7 @@
 
 .modal-content {
   position: relative;
-  width: 60%;
+  width: 70%;
   padding: 2rem;
   background-color: #fff;
   border-radius: .4rem;

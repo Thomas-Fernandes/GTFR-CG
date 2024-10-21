@@ -304,7 +304,10 @@ def generateCards(cards_contents: CardsContents, song_data: SongMetadata, settin
     return createApiResponse(
         const.HttpStatus.OK.value,
         "Cards generated successfully.",
-        {"generated": len(cards_contents) + 1, "bgColor": getHexColorFromRGB(card_metadata.dominant_color)}
+        {
+            "cardsLyrics": cards_contents,
+            "bgColor": getHexColorFromRGB(card_metadata.dominant_color),
+        }
     )
 
 def getSongMetadata(cards_contents: CardsContents, card_metaname: str | None) -> dict[str, str]:

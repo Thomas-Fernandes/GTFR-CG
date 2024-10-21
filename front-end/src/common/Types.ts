@@ -4,7 +4,7 @@ import { Dispatch, SetStateAction } from "react";
 
 export type CardsGenerationResponse = ApiResponse & {
   data: {
-    generated: number;
+    cardsLyrics: SongPartsCards;
     bgColor: string;
   };
 };

@@ -67,19 +67,6 @@ const CardsGeneration = (): JSX.Element => {
     }
   };
 
-  // const renderCard = (cardPath: string, nb: number): JSX.Element => {
-  //   const cardFileName = (cardPath.split('/').pop() ?? "").split('?')[0] ?? "card";
-  //   const alt = "card" + "-" + nb.toString() + "_" + cardFileName;
-  //   return (
-  //     <div className="card" key={alt}>
-  //       <img src={cardPath} alt={alt} />
-  //       <form onSubmit={(e) => handleSubmitDownloadCard(e, {selectedImage: cardPath})}>
-  //         <input type="submit" value={"Download " + cardFileName.replace(".png", "")} className="button" />
-  //       </form>
-  //     </div>
-  //   );
-  // };
-
   const handleGenerateCards = (e: FormEvent<HTMLFormElement>, body: CardsGenerationRequest) => {
     e.preventDefault();
 
@@ -120,15 +107,18 @@ const CardsGeneration = (): JSX.Element => {
         throw new Error(response.message);
       }
 
-      const nbGenerated = response.data.generated;
+      const nbGenerated = response.data.cardsLyrics.length + 1;
       const cardPaths = [];
       for (let i = 0; i < nbGenerated; i++)
-        cardPaths.push(`${PROCESSED_CARDS_PATH}/${i.toString().padStart(2, "0")}.png`);
-      if (body.generateOutro)
+        cardPaths.push(`${PROCESSED_CARDS_PATH}/${i.toString().padStart(2, "0")}.png`); // 00.png, 01.png, ..., 09.png, 10.png, ...
+      if (body.generateOutro === true)
         cardPaths.push(`${PROCESSED_CARDS_PATH}/outro.png`);
-      const pathsWithCacheBuster = cardPaths.map((path) => `${path}?t=${Date.now()}`);
+      const pathsWithCacheBuster = cardPaths.map((path) => `${path}?t=${Date.now()}`); // busting cached images with the same name thanks to timestamp
       setCardPaths(pathsWithCacheBuster);
-      const cards = pathsWithCacheBuster.map((path, idx) => ({ id: idx, src: path, lyrics: "???" }));
+      const cards = pathsWithCacheBuster.map((path, idx) => ({
+        id: idx, src: path,
+        lyrics: idx === 0 ? "" : response.data.cardsLyrics[idx - 1].join("\n") // card 00 has no lyrics
+      }));
       setCards(cards);
       sendToast(TOAST.CARDS_GENERATED, TOAST_TYPE.SUCCESS);
     }).catch((error: ApiResponse) => {
@@ -228,11 +218,6 @@ const CardsGeneration = (): JSX.Element => {
 
           <ZipDownloadButton type="button" id="download-all" paths={cardPaths} output={"cards.zip"} />
           <CardsGallery id="cards" initialCards={cards} downloadFn={handleSubmitDownloadCard} />
-          {/* <div id="cards">
-            { cardPaths.map((cardPath, idx) =>
-              renderCard(cardPath, idx + 1))
-            }
-          </div> */}
         </>
       }
 
