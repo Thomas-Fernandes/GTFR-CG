@@ -398,7 +398,7 @@ def getBaseCardgenSettings(*, is_singular_card: bool = False) -> CardgenSettings
             request.form[snakeToCamelCase(const.SessionFields.include_center_artwork.value)] == "true"
         saveEnforcedBackgroundImage(request.files["file"], include_center_artwork)
 
-    if "enforceBottomColor" in request.form:
+    if snakeToCamelCase(const.SessionFields.enforce_bottom_color.value) in request.form:
         enforce_bottom_color = request.form[snakeToCamelCase(const.SessionFields.enforce_bottom_color.value)]
 
     def checkCardgenParametersValidity(card_metaname: str, enforce_bg_image: bool, include_center_artwork: bool, include_bg_img: str) -> Optional[str]:
