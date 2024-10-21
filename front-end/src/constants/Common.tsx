@@ -49,8 +49,9 @@ export const TOAST: Record<string, string> = {
       + "since the card creation was manual.",
     CARDS_GENERATED: "Cards generated successfully.",
     CARD_NOT_EDITABLE: "The contents of this card cannot be edited.",
+    CARD_EDIT_IN_PROGRESS: "Card edit already in progress.",
     CARD_EDIT_FAILED: "Failed to edit card.",
-    CARD_EDITED: "Card edited successfully.",
+    CARD_EDITED: "Card edited successfully", // no full stop on purpose
 };
 
 export const RESPONSE_STATUS: Record<string, ResponseStatus> = {
@@ -87,6 +88,7 @@ export const SPINNER_ID = {
 
   // Cards Generation
     CARDS_GENERATE: "cards-generation_generate",
+    CARDS_GENERATE_SINGLE: "cards-generation_generate-single",
 }
 
 /***************** CONFIG ****************/

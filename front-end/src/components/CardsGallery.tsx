@@ -1,10 +1,11 @@
 import React, { FormEvent, useRef, useState } from "react";
 
 import { sendRequest } from "../common/Requests";
+import { hideSpinner, showSpinner } from "../common/Spinner";
 import { sendToast } from "../common/Toast";
 import { ApiResponse, ImageDownloadRequest, SingleCardGenerationRequest } from "../common/Types";
 
-import { API, BACKEND_URL, HTTP_STATUS, TOAST, TOAST_TYPE } from "../constants/Common";
+import { API, BACKEND_URL, HTTP_STATUS, SPINNER_ID, TOAST, TOAST_TYPE } from "../constants/Common";
 
 import { AutoResizeTextarea } from "./AutoResizeTextarea";
 
@@ -30,13 +31,11 @@ type GenerationProps = {
 type Props = {
   id: string;
   initialCards: CardData[];
-  downloadFn: (e: FormEvent<HTMLFormElement> | undefined, body: ImageDownloadRequest) => void;
+  handleDownloadCard: (e: FormEvent<HTMLFormElement> | undefined, body: ImageDownloadRequest) => void;
   generationProps: GenerationProps;
 };
 
-const CardsGallery: React.FC<Props> = ({
-  id, initialCards, downloadFn, generationProps
-}) => {
+const CardsGallery: React.FC<Props> = ({ id, initialCards, handleDownloadCard, generationProps }) => {
   const [cards, setCards] = useState<CardData[]>(initialCards);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -44,7 +43,7 @@ const CardsGallery: React.FC<Props> = ({
   const [currentCard, setCurrentCard] = useState<CardData | null>(null);
   const [newLyrics, setNewLyrics] = useState("");
 
-  const closeModal = () => { setIsModalOpen(false); };
+  const closeModal = () => { setIsModalOpen(false); setIsModalSaving(false); };
 
   const generateFormData = (body: SingleCardGenerationRequest, formData: FormData): void => {
     if (body.bgImg) {
@@ -61,55 +60,59 @@ const CardsGallery: React.FC<Props> = ({
     formData.append("cardFilename", body.cardFilename);
   };
 
-  const saveText = async () => {
+  const updateCard = (currentCard: CardData, cardFilename: string) => {
+    setCards((prevCards) =>
+      prevCards.map((img) => img.id === currentCard.id // update only the card that was edited
+        ? {
+          id: img.id,
+          lyrics: newLyrics,
+          src: `${cardFilename}?t=${Date.now()}` // busting cached image with the same name thanks to timestamp
+        } : img
+      )
+    );
+  };
+  const saveText = () => {
     if (currentCard === null) {
       sendToast(TOAST.CARD_EDIT_FAILED, TOAST_TYPE.ERROR);
       return;
     }
 
+    if (isModalSaving) {
+      sendToast(TOAST.CARD_EDIT_IN_PROGRESS, TOAST_TYPE.WARN);
+      return;
+    }
+
     setIsModalSaving(true);
-    // TODO showSpinner(SPINNER_ID.CARDS_GENERATE);
+    showSpinner(SPINNER_ID.CARDS_GENERATE_SINGLE);
 
     const cardFilename = currentCard.src.split('?')[0] ?? "card";
     const body: SingleCardGenerationRequest = {
       ...generationProps,
-
       cardsContents: newLyrics.split("\n"),
       cardFilename: cardFilename,
     }
     const formData = new FormData();
     generateFormData(body, formData);
 
-    await sendRequest("POST", BACKEND_URL + API.CARDS_GENERATION.GENERATE_SINGLE_CARD, formData).then((response: ApiResponse) => {
+    sendRequest("POST", BACKEND_URL + API.CARDS_GENERATION.GENERATE_SINGLE_CARD, formData).then((response: ApiResponse) => {
       if (response.status !== HTTP_STATUS.OK) {
         console.error(response.message);
         sendToast(response.message, TOAST_TYPE.ERROR);
         return;
       }
-      setCards((prevCards) =>
-        prevCards.map((img) =>
-          img.id === currentCard.id ? {
-            id: img.id, lyrics: newLyrics, src: `${cardFilename}?t=${Date.now()}` // busting cached image with the same name thanks to timestamp
-          } : img
-        )
-      );
-      sendToast(TOAST.CARD_EDITED, TOAST_TYPE.SUCCESS);
+
+      updateCard(currentCard, cardFilename);
+
+      const toastMsg = TOAST.CARD_EDITED + ": " + (currentCard.id < 10 ? "0" : "") + currentCard.id;
+      sendToast(toastMsg, TOAST_TYPE.SUCCESS);
     }).catch((error) => {
       console.error("Failed to upload text:", error);
       sendToast(TOAST.CARD_EDIT_FAILED, TOAST_TYPE.ERROR);
     }).finally(() => {
+      hideSpinner(SPINNER_ID.CARDS_GENERATE_SINGLE);
       setIsModalSaving(false);
+      closeModal();
     });
-
-    if (currentCard !== null) {
-      setCards((prevCards) =>
-        prevCards.map((img) =>
-          img.id === currentCard.id ? { ...img, lyrics: newLyrics } : img
-        )
-      );
-    }
-
-    closeModal();
   };
   const openModal = (card: CardData, cardFileName: string) => {
     if (cardFileName === "00" || cardFileName === "outro") {
@@ -130,7 +133,7 @@ const CardsGallery: React.FC<Props> = ({
     isMouseDownRef.current = true;
 
     const modalContent = document.querySelector('.modal-content');
-    clickedInsideModalRef.current = modalContent?.contains(e.target as Node) ?? false; // Mouse down inside modal
+    clickedInsideModalRef.current = modalContent?.contains(e.target as Node) ?? false; // click inside modal?
   };
   const handleMouseUp = () => { isMouseDownRef.current = false; };
   const handleOverlayClick = () => { !clickedInsideModalRef.current && closeModal() };
@@ -139,12 +142,13 @@ const CardsGallery: React.FC<Props> = ({
     const cardFileName = (card.src.split('/').pop() ?? "").split('?')[0] ?? "card";
     const shortCardFileName = cardFileName.replace(".png", "");
     const alt = "card" + "-" + nb.toString() + "_" + cardFileName;
+
     return (
       <div key={alt} className="card card-container">
         <div onClick={() => openModal(card, shortCardFileName)}>
           <img src={card.src} alt={card.lyrics} className="gallery-card" />
         </div>
-        <form onSubmit={(e) => downloadFn(e, {selectedImage: card.src})}>
+        <form onSubmit={(e) => handleDownloadCard(e, {selectedImage: card.src})}>
           <input type="submit" value={"Download " + shortCardFileName} className="button" />
         </form>
       </div>
@@ -158,19 +162,25 @@ const CardsGallery: React.FC<Props> = ({
       }
 
       { isModalOpen && currentCard && (
-        <div className="modal-overlay" onClick={handleOverlayClick}>
+        <div className="modal-overlay flexbox" onClick={handleOverlayClick}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <h3 className="mv-0">
               {`Edit Lyrics of Card ${currentCard.id < 10 ? "0" : ""}${currentCard.id}`}
             </h3>
-            <AutoResizeTextarea value={newLyrics} onChange={(e) => setNewLyrics(e.target.value)}
-              name={"card-edit"} style={{ width: "100%" }}
+
+            <AutoResizeTextarea title={"card-edit"} disabled={isModalSaving}
+              value={newLyrics} onChange={(e) => setNewLyrics(e.target.value)}
+              style={{ width: "100%" }}
             />
+
             <div className="modal-actions flex-row g-1">
-              <button onClick={saveText} disabled={isModalSaving}>
-                {"Save"}
+              <button type="button" onClick={saveText} disabled={isModalSaving}>
+                {isModalSaving ? "Saving..." : "Save"}
               </button>
-              <button onClick={closeModal} disabled={isModalSaving}>
+
+              <div id={SPINNER_ID.CARDS_GENERATE_SINGLE} />
+
+              <button type="button" onClick={closeModal} disabled={isModalSaving}>
                 {"Cancel"}
               </button>
             </div>

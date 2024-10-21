@@ -6,7 +6,9 @@ import { hideSpinner, showSpinner } from "../../common/Spinner";
 import { sendToast } from "../../common/Toast";
 import { ApiResponse, Dict, LyricsContents, LyricsPart, LyricsRequest, LyricsResponse, PageMetadata, SongPartsCards } from "../../common/Types";
 import useTitle from "../../common/UseTitle";
+
 import { AutoResizeTextarea } from "../../components/AutoResizeTextarea";
+
 import { SESSION_STORAGE } from "../../constants/CardsGeneration";
 import { API, BACKEND_URL, PATHS, SPINNER_ID, TITLE, TOAST, TOAST_TYPE } from "../../constants/Common";
 
@@ -103,8 +105,7 @@ const Lyrics = (): JSX.Element => {
             {"Clear"}
           </button>
           </div>
-          <AutoResizeTextarea
-            name={`lyrics-part_${idx}`}
+          <AutoResizeTextarea title={`lyrics-part_${idx}`}
             value={part.lyrics} onChange={(e) => handleSetLyricsParts(e.target.value, idx)}
           />
         </>}
@@ -192,7 +193,8 @@ const Lyrics = (): JSX.Element => {
         setIsGeniusTokenSet(true);
         const latestCardGeneration = sessionStorage.getItem(SESSION_STORAGE.LATEST_CARD_GENERATION);
         setLastContents(latestCardGeneration !== null
-          ? JSON.parse(latestCardGeneration) : "{{}, [], []}"
+          ? JSON.parse(latestCardGeneration)
+          : "{{}, [], []}"
         );
       }
     });

@@ -222,7 +222,7 @@ const CardsGeneration = (): JSX.Element => {
 
           <ZipDownloadButton type="button" id="download-all" paths={cardPaths} output={"cards.zip"} />
           <CardsGallery
-            id="cards" initialCards={cards} downloadFn={handleSubmitDownloadCard}
+            id="cards" initialCards={cards} handleDownloadCard={handleSubmitDownloadCard}
             generationProps={{
               cardMetaname, bgImg, colorPick, includeCenterArtwork, generateOutro, includeBackgroundImg, cardBottomColor,
             }}
