@@ -7,14 +7,16 @@ import { sendToast } from "../../common/Toast";
 import { ApiResponse, CardsGenerationRequest, CardsGenerationResponse, ImageDownloadRequest } from "../../common/Types";
 import useTitle from "../../common/UseTitle";
 import { isFileExtensionAccepted } from "../../common/utils/FileUtils";
+
+import CardsGallery, { CardData } from "../../components/CardsGallery";
 import ColorPicker from "../../components/ColorPicker";
 import FileUploader from "../../components/FileUploader";
 import ZipDownloadButton from "../../components/ZipDownloadButton";
+
 import { FILE_UPLOAD } from "../../constants/ArtworkGeneration";
 import { PROCESSED_CARDS_PATH, SESSION_STORAGE } from "../../constants/CardsGeneration";
 import { API, BACKEND_URL, HTTP_STATUS, PATHS, SPINNER_ID, TITLE, TOAST, TOAST_TYPE } from "../../constants/Common";
 
-import CardsGallery, { CardData } from "../../components/CardsGallery";
 import "./CardsGeneration.css";
 
 const CardsGeneration = (): JSX.Element => {
@@ -65,18 +67,18 @@ const CardsGeneration = (): JSX.Element => {
     }
   };
 
-  const renderCard = (cardPath: string, nb: number): JSX.Element => {
-    const cardFileName = (cardPath.split('/').pop() ?? "").split('?')[0] ?? "card";
-    const alt = "card" + "-" + nb.toString() + "_" + cardFileName;
-    return (
-      <div className="card" key={alt}>
-        <img src={cardPath} alt={alt} />
-        <form onSubmit={(e) => handleSubmitDownloadCard(e, {selectedImage: cardPath})}>
-          <input type="submit" value={"Download " + cardFileName.replace(".png", "")} className="button" />
-        </form>
-      </div>
-    );
-  };
+  // const renderCard = (cardPath: string, nb: number): JSX.Element => {
+  //   const cardFileName = (cardPath.split('/').pop() ?? "").split('?')[0] ?? "card";
+  //   const alt = "card" + "-" + nb.toString() + "_" + cardFileName;
+  //   return (
+  //     <div className="card" key={alt}>
+  //       <img src={cardPath} alt={alt} />
+  //       <form onSubmit={(e) => handleSubmitDownloadCard(e, {selectedImage: cardPath})}>
+  //         <input type="submit" value={"Download " + cardFileName.replace(".png", "")} className="button" />
+  //       </form>
+  //     </div>
+  //   );
+  // };
 
   const handleGenerateCards = (e: FormEvent<HTMLFormElement>, body: CardsGenerationRequest) => {
     e.preventDefault();

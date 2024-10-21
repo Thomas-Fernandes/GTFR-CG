@@ -48,6 +48,7 @@ export const TOAST: Record<string, string> = {
     UNAUTHORIZED_OUTRO: "The outro card cannot be generated\n"
       + "since the card creation was manual.",
     CARDS_GENERATED: "Cards generated successfully.",
+    CARD_NOT_EDITABLE: "The contents of this card cannot be edited.",
 };
 
 export const RESPONSE_STATUS: Record<string, ResponseStatus> = {

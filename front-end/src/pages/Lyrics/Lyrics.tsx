@@ -104,7 +104,7 @@ const Lyrics = (): JSX.Element => {
           </button>
           </div>
           <AutoResizeTextarea
-            name={`lyrics-part_${idx}`} rows={5} cols={80}
+            name={`lyrics-part_${idx}`}
             value={part.lyrics} onChange={(e) => handleSetLyricsParts(e.target.value, idx)}
           />
         </>}
