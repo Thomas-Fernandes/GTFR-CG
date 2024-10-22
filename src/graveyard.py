@@ -4,7 +4,7 @@ from PIL import Image
 from contextlib import redirect_stdout, redirect_stderr
 from io import StringIO
 
-from src.typing import RGBAColor, RGBColor
+from src.typing_gtfr import RGBAColor, RGBColor
 
 def convertHexToRgba(hex_color: str) -> RGBAColor:
     """ Converts a hex color to an RGBA tuple.

@@ -6,7 +6,7 @@ from time import time
 from typing import Optional
 
 import src.constants as const
-from src.typing import CachedElemType, CardsContents
+from src.typing_gtfr import CachedElemType, CardsContents
 
 def snakeToCamelCase(snake_str: str) -> str:
     """ Converts a snake_case string to a camelCase string.

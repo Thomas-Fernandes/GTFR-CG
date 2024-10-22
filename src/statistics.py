@@ -3,7 +3,7 @@ from typing import Optional
 
 import src.constants as const
 from src.logger import log
-from src.typing import JsonDict
+from src.typing_gtfr import JsonDict
 
 ############# CLASS #############
 

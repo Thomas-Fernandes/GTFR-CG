@@ -15,7 +15,7 @@ from src.logger import log
 from src.routes.lyrics import genius
 from src.routes.processed_images import generateCoverArt
 from src.statistics import updateStats
-from src.typing import CardsContents, CardMetadata, RGBAColor, SongMetadata
+from src.typing_gtfr import CardsContents, CardMetadata, RGBAColor, SongMetadata
 from src.utils.soft_utils import doesFileExist, getCardsContentsFromFile, getNowStamp, snakeToCamelCase, writeCardsContentsToFile
 from src.utils.web_utils import createApiResponse
 
