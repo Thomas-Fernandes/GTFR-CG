@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { is2xxSuccessful, sendRequest } from "../../common/Requests";
 import { hideSpinner, showSpinner } from "../../common/Spinner";
 import { sendToast } from "../../common/Toast";
-import { ApiResponse, CardsGenerationRequest, CardsGenerationResponse, ImageDownloadRequest } from "../../common/Types";
+import { ApiResponse, CardsGenerationRequest, CardsGenerationResponse, ImageDownloadRequest, SongPartsCards } from "../../common/Types";
 import useTitle from "../../common/UseTitle";
 import { isFileExtensionAccepted } from "../../common/utils/FileUtils";
 
@@ -40,6 +40,15 @@ const CardsGeneration = (): JSX.Element => {
 
   const [cardPaths, setCardPaths] = useState([] as string[]);
   const [cards, setCards] = useState([] as CardData[]);
+
+  const deduceNewCards = (paths: string[], cardsLyrics: SongPartsCards, hasOutro: boolean): CardData[] => {
+    return paths.map((path, idx) => ({
+      id: idx, src: path,
+      lyrics: idx === 0 || (hasOutro && idx === paths.length - 1) // card 00 and outro card have no lyrics
+        ? ""
+        : cardsLyrics[idx - 1].join("\n")
+    }));
+  };
 
   const handleSubmitDownloadCard = (e: FormEvent<HTMLFormElement> | undefined, body: ImageDownloadRequest) => {
     if (e)
@@ -119,11 +128,8 @@ const CardsGeneration = (): JSX.Element => {
         cardPaths.push(`${PROCESSED_CARDS_PATH}/outro.png`);
       const pathsWithCacheBuster = cardPaths.map((path) => `${path}?t=${Date.now()}`); // busting cached images with the same name thanks to timestamp
       setCardPaths(pathsWithCacheBuster);
-      const cards = pathsWithCacheBuster.map((path, idx) => ({
-        id: idx, src: path,
-        lyrics: idx === 0 ? "" : response.data.cardsLyrics[idx - 1].join("\n") // card 00 has no lyrics
-      }));
-      setCards(cards);
+      const newCards = deduceNewCards(pathsWithCacheBuster, response.data.cardsLyrics, body.generateOutro);
+      setCards(newCards);
       sendToast(TOAST.CARDS_GENERATED, TOAST_TYPE.SUCCESS);
     }).catch((error: ApiResponse) => {
       if (error.status === HTTP_STATUS.PRECONDITION_FAILED)
