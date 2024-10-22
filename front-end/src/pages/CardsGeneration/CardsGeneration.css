@@ -12,7 +12,8 @@
                 }
             }
 
-            &#file-upload {
+            &#enforcers {
+                min-height: 4rem;
                 gap: 1rem;
 
                 >p {

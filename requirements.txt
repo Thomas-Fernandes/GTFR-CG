@@ -1,18 +1,18 @@
 # Server
-Flask==3.0.3
-Flask-Session==0.8.0
-flask_cors==5.0.0
-waitress==3.0.0 # 'serve' command
+Flask>=3.0.3
+Flask-Session>=0.8.0
+flask_cors>=5.0.0
+waitress>=3.0.0 # 'serve' command
 
 # API
-requests==2.32.3 # for inner API calls
-lyricsgenius==3.0.1 # for Genius API calls
+requests>=2.32.3 # for inner API calls
+lyricsgenius>=3.0.1 # for Genius API calls
 
 # Local
-python-dotenv==1.0.1 # for environment variables
+python-dotenv>=1.0.1 # for environment variables
 
 # Software
-pillow==10.4.0 # Image processing
+pillow>=10.4.0 # Image processing
 colorthief==0.2.1 # deducing dominant colors from images
 
 #########
@@ -22,5 +22,5 @@ colorthief==0.2.1 # deducing dominant colors from images
 #########
 
 # Unused...
-numpy==2.1.1 # Machine Learning: deducing dominant colors from images
-scikit-learn==1.5.2 # ^ same
+# numpy>=2.1.1 # Machine Learning: deducing dominant colors from images
+# scikit-learn>=1.5.2 # ^ same
