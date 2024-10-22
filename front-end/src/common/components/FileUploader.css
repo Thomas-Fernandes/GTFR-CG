@@ -3,8 +3,18 @@
     cursor: pointer;
     min-width: 32rem;
     max-width: max-content;
-    border: 2px solid #dddddd;
+    border: .1rem solid #dddddd;
     padding: .5rem;
+    transition: border-color 0.25s ease;
+
+    &.dragging {
+        border: .1rem dashed #007bff;
+        background-color: #f0f8ffcc;
+
+        label {
+            opacity: 0.5;
+        }
+    }
 
     * {
         cursor: pointer;
