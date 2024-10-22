@@ -43,7 +43,7 @@ def getDominantColor(image_path: str, n_clusters: int = 4, random_state: int = 7
     print("  Dominant color deduced successfully.")
     return dominant_colors[0]
 
-def getAverageColor(image_path: str) -> str: # FIXME unused, initially used for the background color of the generated cards
+def getAverageColor(image_path: str) -> str: # initially used for the background color of the generated cards
     """ Gets the average color of an image.
     :param image_path: [string] The path to the image.
     :return: [string] The hex color of the average color.
@@ -70,7 +70,7 @@ def getAverageColor(image_path: str) -> str: # FIXME unused, initially used for 
     avg_hex = f"{avg_r:02x}{avg_g:02x}{avg_b:02x}"
     return avg_hex
 
-def getNormalizedFilename(name: str) -> str: # FIXME unused, initially used for the filename of the generated cards
+def getNormalizedFilename(name: str) -> str: # initially used for the filename of the generated cards
     """ Formats the name of the song for the filename.
     :param name: [string] The name of the song.
     :return: [string] The formatted name of the song.

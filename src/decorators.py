@@ -2,11 +2,11 @@ from collections.abc import Callable
 from time import sleep
 from typing import Any, Optional
 
-def retry(*, condition: Optional[Callable[[Any], bool]] = None, times: int = 1, back_off: float = 125) -> Callable[..., Any]:
+def retry(*, condition: Optional[Callable[[Any], bool]] = None, times: int = 1, back_off: float = 0) -> Callable[..., Any]:
     """ Decorator to retry a function until a condition is met.
     :param condition: [callable] A lambda expression for the boolean condition to meet. (default: None)
     :param times: [int] The number of times to retry. (default: 1)
-    :param back_off: [float] The time to wait between retries, in m-seconds; grows exponentially. (default: 125)
+    :param back_off: [float] The time to wait between retries, in m-seconds; grows exponentially. (default: 0)
     """
     def decorator(func: Callable[..., Any]) -> Callable[..., Any]:
         if not callable(func):
