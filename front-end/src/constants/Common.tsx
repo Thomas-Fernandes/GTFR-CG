@@ -48,6 +48,10 @@ export const TOAST: Record<string, string> = {
     UNAUTHORIZED_OUTRO: "The outro card cannot be generated\n"
       + "since the card creation was manual.",
     CARDS_GENERATED: "Cards generated successfully.",
+    CARD_NOT_EDITABLE: "The contents of this card cannot be edited.",
+    CARD_EDIT_IN_PROGRESS: "Card edit already in progress.",
+    CARD_EDIT_FAILED: "Failed to edit card.",
+    CARD_EDITED: "Card edited successfully", // no full stop on purpose
 };
 
 export const RESPONSE_STATUS: Record<string, ResponseStatus> = {
@@ -80,10 +84,11 @@ export const SPINNER_ID = {
 
   // Lyrics
     LYRICS_SEARCH: "lyrics_search",
-    LYRICS_SAVE: "lyrics_save",
+    LYRICS_CONVERT: "lyrics_convert",
 
   // Cards Generation
     CARDS_GENERATE: "cards-generation_generate",
+    CARDS_GENERATE_SINGLE: "cards-generation_generate-single",
 }
 
 /***************** CONFIG ****************/
@@ -132,6 +137,7 @@ export const API = {
   CARDS_GENERATION: {
     SAVE_CARDS_CONTENTS: PATHS.cardsGeneration + "/save-cards-contents",
     GENERATE_CARDS: PATHS.cardsGeneration + "/generate",
+    GENERATE_SINGLE_CARD: PATHS.cardsGeneration + "/generate-single",
   },
 };
 

@@ -6,7 +6,7 @@ import { API, BACKEND_URL, PATHS, SPINNER_ID, TITLE, TOAST, TOAST_TYPE } from ".
 
 import { hideSpinner, showSpinner } from "../../common/Spinner";
 import { sendToast } from "../../common/Toast";
-import { Statistics } from "../../common/Types";
+import { DisplayedStatistics, Statistics } from "../../common/Types";
 import useTitle from "../../common/UseTitle";
 import { STAT_NAME } from "../../constants/Home";
 
@@ -18,7 +18,7 @@ const Home = (): JSX.Element => {
   const navigate = useNavigate();
 
   const [geniusToken, setGeniusToken] = useState("");
-  const [stats, setStats] = useState<Statistics>({} as Statistics);
+  const [stats, setStats] = useState<DisplayedStatistics>({} as DisplayedStatistics);
 
   const fetchStatistics = () => {
     sendRequest("GET", BACKEND_URL + API.STATISTICS).then((response) => {
@@ -27,7 +27,14 @@ const Home = (): JSX.Element => {
         return;
       }
 
-      setStats(response.data as Statistics);
+      const stats = response.data as Statistics;
+      setStats({
+        dateFirstOperation: new Date(stats.dateFirstOperation).toLocaleString(),
+        dateLastOperation: new Date(stats.dateLastOperation).toLocaleString(),
+        artworkGenerations: stats.artworkGenerations.toLocaleString(),
+        lyricsFetches: stats.lyricsFetches.toLocaleString(),
+        cardsGenerated: stats.cardsGenerated.toLocaleString(),
+      });
     }).catch((error) => {
       sendToast(error.message, TOAST_TYPE.ERROR);
     });

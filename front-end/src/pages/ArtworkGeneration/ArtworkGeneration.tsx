@@ -1,14 +1,14 @@
 import { FormEvent, JSX, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import FileUploader from "../../common/components/FileUploader";
-import ImgButton from "../../common/components/ImgButton";
 import { is2xxSuccessful, objectToQueryString, sendRequest } from "../../common/Requests";
 import { hideSpinner, showSpinner } from "../../common/Spinner";
 import { sendToast } from "../../common/Toast";
 import { ApiResponse, FileUploadRequest, ItunesRequest, ItunesResponse, ItunesResult, YoutubeRequest } from "../../common/Types";
 import useTitle from "../../common/UseTitle";
 import { isFileExtensionAccepted } from "../../common/utils/FileUtils";
+import FileUploader from "../../components/FileUploader";
+import ImgButton from "../../components/ImgButton";
 import { FILE_UPLOAD, ITUNES, YOUTUBE } from "../../constants/ArtworkGeneration";
 import { API, BACKEND_URL, ITUNES_URL, PATHS, SPINNER_ID, TITLE, TOAST, TOAST_TYPE } from "../../constants/Common";
 

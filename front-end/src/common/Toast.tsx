@@ -23,8 +23,10 @@ export const sendToast = (
   type: ToastType = TOAST_TYPE.ERROR,
   duration: number = DEFAULT_EVENT_DURATION.SECONDS_TOAST
 ) => {
-  if (type === TOAST_TYPE.WARN || type === TOAST_TYPE.ERROR)
+  if (type === TOAST_TYPE.ERROR)
     console.error(`Toast: ${type} - ${flattenMessage(message)}`);
+  else if (type === TOAST_TYPE.WARN)
+    console.log(`Toast: ${type} - ${flattenMessage(message)}`);
 
   const toast = document.createElement("div");
   toast.className = "toast " + type.trim().toLowerCase();
