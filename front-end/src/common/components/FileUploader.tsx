@@ -1,5 +1,9 @@
 import React, { useState } from "react";
 
+import { StateSetter } from "../Types";
+
+import "./FileUploader.css";
+
 type Props = {
   id: string;
   label: string;
@@ -7,11 +11,12 @@ type Props = {
   accept?: string;
   labelClassName?: string;
   captionClassName?: string;
-  setter: React.Dispatch<React.SetStateAction<File | undefined>>;
+  setter: StateSetter<File | undefined>;
 };
 
 const FileUploader: React.FC<Props> = ({ id, label, caption, accept, labelClassName, captionClassName, setter }) => {
   const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
+  const [isDragging, setIsDragging] = useState<boolean>(false);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement> | null) => {
     if (e?.target?.files?.length && e.target.files.length > 0) {
@@ -25,9 +30,28 @@ const FileUploader: React.FC<Props> = ({ id, label, caption, accept, labelClassN
     }
   };
 
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(true); // Highlight the component
+  };
+  const handleDragLeave = () => {
+    setIsDragging(false); // Remove highlight when leaving the component
+  };
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(false); // Remove highlight
+
+    if (e.dataTransfer.files.length > 0) {
+      handleFileChange({ target: { files: e.dataTransfer.files } } as React.ChangeEvent<HTMLInputElement>);
+    }
+  };
+
   return (
-    <div className="file-upload-component flexbox flex-row">
-      <div className="flexbox flex-row" onClick={() => document.getElementById(id)?.click()}>
+    <div className={`file-upload-component flexbox flex-row ${isDragging ? "dragging" : ""}`}>
+      <div className="flexbox flex-row"
+        onClick={() => document.getElementById(id)?.click()}
+        onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop}
+      >
         <input
           type="file" name="file-upload" accept={accept}
           id={id} className="hidden"
