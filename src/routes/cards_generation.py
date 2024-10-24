@@ -1,5 +1,6 @@
 from colorthief import ColorThief
 from flask import Blueprint, Response, request
+from flask_restx import Resource
 from PIL import Image, ImageDraw
 from werkzeug.datastructures import FileStorage
 
@@ -7,10 +8,11 @@ from ast import literal_eval
 from os import path, makedirs
 from requests.exceptions import ReadTimeout as ReadTimeoutException
 from time import time
-from typing import Optional
+from typing import Any, Optional
 from uuid import uuid4
 
 import src.constants as const
+from src.docs import models, ns_cards_generation
 from src.logger import log, LogSeverity
 from src.routes.lyrics import genius
 from src.routes.processed_images import generateCoverArt
@@ -19,10 +21,11 @@ from src.typing import CardgenSettings, CardsContents, CardMetadata, RGBAColor, 
 from src.utils.soft_utils import doesFileExist, getCardsContentsFromFile, getHexColorFromRGB, getNowStamp, snakeToCamelCase, writeCardsContentsToFile
 from src.utils.web_utils import createApiResponse
 
-from src.app import app
+from src.app import api, app
 bp_cards_generation = Blueprint(const.ROUTES.cards_gen.bp_name, __name__.split('.')[-1])
 session = app.config
 api_prefix = const.API_ROUTE + const.ROUTES.cards_gen.path
+api.add_namespace(ns_cards_generation, path=api_prefix)
 
 def generateOutroCard(output_path: str, contributor_logins: list[str]) -> None:
     """ Generates the outro card mentioning the transcription contributors.
@@ -437,43 +440,53 @@ def postGenerateSingleCard() -> Response:
 
     return generateSingleCard(card_contents, song_data, cardgen_settings)
 
-@bp_cards_generation.route(api_prefix + "/generate", methods=["POST"])
-def postGenerateCards() -> Response:
-    """ Generates cards using the contents previously saved.
-    :return: [Response] The response to the request.
-    """
-    log.debug("POST - Generating cards...")
-    start = time()
-    if const.SessionFields.cards_contents.value not in session:
-        log.error(const.ERR_CARDS_CONTENTS_NOT_FOUND)
-        return createApiResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_CARDS_CONTENTS_NOT_FOUND)
+@ns_cards_generation.route("/generate")
+class CardsGenerationResource(Resource):
+    @ns_cards_generation.doc("post_generate_cards")
+    @ns_cards_generation.expect(models[const.ROUTES.cards_gen.bp_name]["generate"]["payload"])
+    @ns_cards_generation.response(const.HttpStatus.CREATED.value, const.MSG_CARDS_GENERATED)
+    @ns_cards_generation.response(const.HttpStatus.BAD_REQUEST.value, const.ERR_CARDS_GEN_PARAMS_NOT_FOUND)
+    @ns_cards_generation.response(const.HttpStatus.PRECONDITION_FAILED.value, "\n".join([const.ERR_CARDS_CONTENTS_NOT_FOUND, const.ERR_CARDS_BACKGROUND_NOT_FOUND]))
+    @ns_cards_generation.response(const.HttpStatus.INTERNAL_SERVER_ERROR.value, "\n".join([const.ERR_CARDS_CONTENTS_READ_FAILED, const.ERR_USER_FOLDER_NOT_FOUND]))
+    def post(self) -> Response:
+        """ Generates cards using the contents previously saved """
+        log.debug("POST - Generating cards...")
+        start = time()
+        if const.SessionFields.cards_contents.value not in session:
+            log.error(const.ERR_CARDS_CONTENTS_NOT_FOUND)
+            return createApiResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_CARDS_CONTENTS_NOT_FOUND)
 
-    try:
-        cardgen_settings: CardgenSettings = getBaseCardgenSettings()
-    except ValueError as e:
-        return createApiResponse(const.HttpStatus.BAD_REQUEST.value, e)
+        try:
+            cardgen_settings: CardgenSettings = getBaseCardgenSettings()
+        except ValueError as e:
+            return createApiResponse(const.HttpStatus.BAD_REQUEST.value, e)
 
-    log.info("Getting cards contents from savefile...")
-    try:
-        cards_contents: CardsContents = getCardsContentsFromFile(session[const.SessionFields.cards_contents.value])
+        log.info("Getting cards contents from savefile...")
+        try:
+            cards_contents: CardsContents = getCardsContentsFromFile(session[const.SessionFields.cards_contents.value])
 
-        if len(cards_contents) == 0 or not cards_contents[0][0].startswith(const.METADATA_IDENTIFIER):
-            raise ValueError("Invalid cards contents.")
+            if len(cards_contents) == 0 or not cards_contents[0][0].startswith(const.METADATA_IDENTIFIER):
+                raise ValueError("Invalid cards contents.")
 
-        cards_contents = [[line.strip() for line in card] for card in cards_contents]
+            cards_contents = [[line.strip() for line in card] for card in cards_contents]
 
-        song_data = getSongMetadata(cards_contents, cardgen_settings[const.SessionFields.card_metaname.value])
-    except Exception as e:
-        log.error(f"Error while getting cards contents: {e}")
-        return createApiResponse(const.HttpStatus.INTERNAL_SERVER_ERROR.value, const.ERR_CARDS_CONTENTS_READ_FAILED)
-    log.debug("  Cards contents:")
-    for card in cards_contents:
-        log.debug(f"    {card}")
-    log.info("Cards contents retrieved successfully.").time(LogSeverity.INFO, time() - start)
+            song_data = getSongMetadata(cards_contents, cardgen_settings[const.SessionFields.card_metaname.value])
+        except Exception as e:
+            log.error(f"Error while getting cards contents: {e}")
+            return createApiResponse(const.HttpStatus.INTERNAL_SERVER_ERROR.value, const.ERR_CARDS_CONTENTS_READ_FAILED)
+        log.debug("  Cards contents:\n")
+        for card in cards_contents:
+            log.debug(f"    {card}")
+        log.info("Cards contents retrieved successfully.").time(LogSeverity.INFO, time() - start)
 
-    return generateCards(cards_contents, song_data, cardgen_settings)
+        settings = {
+            const.SessionFields.enforce_bottom_color.value: enforce_bottom_color,
+            const.SessionFields.gen_outro.value: eval(gen_outro.capitalize()),
+            const.SessionFields.include_bg_img.value: eval(include_bg_img.capitalize()) if include_bg_img is not None else None,
+        }
+        return generateCards(cards_contents, song_data, cardgen_settings)
 
-def isListListStr(obj) -> bool: # type: ignore
+def isListListStr(obj: list[list[str]] | Any) -> bool:
     """ Checks if the object is a list of lists of strings.
     :param obj: [list[list[str]]?] The object to check.
     :return: [bool] True if the object is a list of lists of strings, False otherwise.
@@ -514,17 +527,24 @@ def saveCardsContents(cards_contents: CardsContents) -> Response:
 
     session[const.SessionFields.cards_contents.value] = filepath
     log.log(f"Cards contents saved to {filepath}.").time(LogSeverity.INFO, time() - start)
-    return createApiResponse(const.HttpStatus.CREATED.value, "Cards contents saved successfully.")
+    return createApiResponse(const.HttpStatus.CREATED.value, const.MSG_CARDS_CONTENTS_SAVED)
 
-@bp_cards_generation.route(api_prefix + "/save-contents", methods=["POST"])
-def postCardsContents() -> Response:
-    """ Saves the cards contents to the user's folder.
-    :return: [Response] The response to the request.
-    """
-    log.debug("POST - Saving cards contents...")
-    body = literal_eval(request.get_data(as_text=True))
-    cards_contents: Optional[list[list[str]]] = body.get("cardsContents")
-    if cards_contents is None:
-        log.error(const.ERR_CARDS_CONTENTS_NOT_FOUND)
-        return createApiResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_CARDS_CONTENTS_NOT_FOUND)
-    return saveCardsContents(cards_contents)
+@ns_cards_generation.route("/save-cards-contents")
+class CardsContentsResource(Resource):
+    @ns_cards_generation.doc("post_save_cards_contents")
+    @ns_cards_generation.expect(models[const.ROUTES.cards_gen.bp_name]["save-cards-contents"]["payload"])
+    @ns_cards_generation.response(const.HttpStatus.CREATED.value, const.MSG_CARDS_CONTENTS_SAVED)
+    @ns_cards_generation.response(const.HttpStatus.BAD_REQUEST.value, "\n".join([const.ERR_CARDS_CONTENTS_NOT_FOUND, const.ERR_CARDS_CONTENTS_INVALID]))
+    @ns_cards_generation.response(const.HttpStatus.INTERNAL_SERVER_ERROR.value, const.ERR_CARDS_CONTENTS_SAVE_FAILED)
+    def post(self) -> Response:
+        """ Saves the cards contents to the user's folder """
+        log.debug("POST - Saving cards contents...")
+
+        body = literal_eval(request.get_data(as_text=True))
+        cards_contents: Optional[list[list[str]]] = body.get("cardsContents")
+
+        if cards_contents is None:
+            log.error(const.ERR_CARDS_CONTENTS_NOT_FOUND)
+            return createApiResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_CARDS_CONTENTS_NOT_FOUND)
+
+        return saveCardsContents(cards_contents)

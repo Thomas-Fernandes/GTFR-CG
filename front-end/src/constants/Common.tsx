@@ -135,7 +135,7 @@ export const API = {
   },
 
   CARDS_GENERATION: {
-    SAVE_CARDS_CONTENTS: PATHS.cardsGeneration + "/save-contents",
+    SAVE_CARDS_CONTENTS: PATHS.cardsGeneration + "/save-cards-contents",
     GENERATE_CARDS: PATHS.cardsGeneration + "/generate",
     GENERATE_SINGLE_CARD: PATHS.cardsGeneration + "/generate-single",
   },

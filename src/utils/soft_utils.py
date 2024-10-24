@@ -59,7 +59,7 @@ def checkImageFilenameValid(filename: str | None) -> Optional[str]:
     if filename == None or filename.strip() == "":
         return const.ERR_NO_FILE
     if not('.' in filename and filename.rsplit('.', 1)[1].lower() in ["png", "jpg", "jpeg"]):
-        return const.ERR_INVALID_FILE_TYPE
+        return const.ERR_IMG_INVALID_FILETYPE
     return None
 
 def getNowStamp() -> str: # as YY-MM-DD_HH-MM-SS
