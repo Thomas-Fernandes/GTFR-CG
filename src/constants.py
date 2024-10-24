@@ -1,13 +1,13 @@
 from dotenv import load_dotenv
 
-from enum import Enum
+from enum import IntEnum, StrEnum
 from os import getenv, name as osName
 from re import compile
 from typing import Optional
 
 from src.typing_gtfr import JsonDict, Route, Routes
 
-class HttpStatus(Enum):
+class HttpStatus(IntEnum):
     """ Enum for HTTP status codes.
     """
     OK = 200
@@ -19,7 +19,7 @@ class HttpStatus(Enum):
     UNSUPPORTED_MEDIA_TYPE = 415
     INTERNAL_SERVER_ERROR = 500
 
-class TimeInSeconds(Enum):
+class TimeInSeconds(IntEnum):
     """ Enum for time units, converted to seconds.
     """
     SECOND = 1
@@ -30,7 +30,7 @@ class TimeInSeconds(Enum):
     MONTH  = int(30.44 * DAY)
     YEAR   = int(365.256 * DAY)
 
-class AvailableCacheElemType(Enum):
+class AvailableCacheElemType(StrEnum):
     """ Enum for the available cache elements.
     """
     sessions = "sessions"
@@ -41,9 +41,8 @@ class AvailableCacheElemType(Enum):
 HOST_HOME = "0.0.0.0"
 DEFAULT_PORT = 8000
 
-class SessionFields(Enum):
-    """ Enum for the fields in the session object.
-    """
+class SessionFields(StrEnum):
+    """ Enum for the fields in the session object """
     # Application
     user_folder = "user_folder"
 
@@ -79,11 +78,11 @@ ROUTES = Routes(
     ),
     art_gen = Route(
         path="/artwork-generation",
-        bp_name="art-gen",
+        bp_name="artwork-generation",
     ),
-    proc_img = Route(
+    art_proc = Route(
         path="/processed-images",
-        bp_name="processed-images",
+        bp_name="artwork-processing",
     ),
     lyrics = Route(
         path="/lyrics",
@@ -91,7 +90,7 @@ ROUTES = Routes(
     ),
     cards_gen = Route(
         path="/cards-generation",
-        bp_name="cards-gen",
+        bp_name="cards-generation",
     ),
 )
 
@@ -99,7 +98,7 @@ ROUTES = Routes(
 DATE_FORMAT_STAMP = "%Y%m%d_%H%M%S"
 DATE_FORMAT_FULL = "%Y-%m-%d %H:%M:%S"
 STATS_FILE_PATH = "stats.json"
-class AvailableStats(Enum):
+class AvailableStats(StrEnum):
     """ Enum for the available statistics.
     """
     dateFirstOperation = "dateFirstOperation"
@@ -143,20 +142,34 @@ CARDS_BOTTOM_W = f"{CARDS_DIR}bottom_white.png"
 # Error messages
 WARN_NO_USER_FOLDER = "User folder not found in session. Creating a new one."
 ERR_USER_FOLDER_NOT_FOUND = "User folder not found."
+ERR_GENIUS_TOKEN_NOT_FOUND = "Genius API token not found."
+ERR_STATS_FILETYPE = "The stats file must be a JSON file."
 ERR_NO_FILE = "Invalid file: No file selected."
 ERR_NO_IMG = "No image was selected or uploaded."
-ERR_INVALID_FILE_TYPE = "Invalid file type. Only PNG and JPG files are allowed."
+ERR_IMG_INVALID_FILETYPE = "Invalid file type. Only PNG and JPG files are allowed."
 ERR_NO_IMG_URL = "No image URL provided."
+ERR_INVALID_YT_URL = "Invalid YouTube URL."
 ERR_FAIL_DOWNLOAD = "Failed to download image."
-ERR_GENIUS_TOKEN = "Genius API token not found."
 ERR_LYRICS_MISSING_PARAMS = "Missing parameters for lyrics fetching."
 ERR_LYRICS_NOT_FOUND = "Lyrics not found."
-ERR_CARDS_CONTENTS_NOT_FOUND = "No cards contents provided."
-ERR_CARDS_CONTENTS_INVALID = "Invalid cards contents provided."
+ERR_CARDS_CONTENTS_NOT_FOUND = "No cards contents were generated."
+ERR_CARDS_CONTENTS_INVALID = "Invalid provided cards contents."
 ERR_CARDS_CONTENTS_SAVE_FAILED = "Failed to save cards contents."
 ERR_CARDS_CONTENTS_READ_FAILED = "Failed to read cards contents."
 ERR_CARDS_GEN_PARAMS_NOT_FOUND = "Required parameters not found for cards generation."
 ERR_CARDS_BACKGROUND_NOT_FOUND = "No background image provided for cards generation."
+
+# Response messages
+MSG_GENIUS_TOKEN_FETCHED = "Genius API token fetched successfully."
+MSG_STATS_FETCHED = "Statistics fetched successfully."
+MSG_STATS_CREATED = "Statistics created successfully."
+MSG_ITUNES_IMAGE_UPLOADED = "iTunes image uploaded successfully."
+MSG_LOCAL_IMAGE_UPLOADED = "Local image uploaded successfully."
+MSG_YOUTUBE_IMAGE_UPLOADED = "YouTube thumbnail uploaded successfully."
+MSG_PROCESSED_IMAGES_SUCCESS = "Processed images path retrieved successfully."
+MSG_LYRICS_FETCH_SUCCESS = "Lyrics fetched successfully."
+MSG_CARDS_CONTENTS_SAVED = "Cards contents saved successfully."
+MSG_CARDS_GENERATED = "Cards generated successfully."
 
 # .env contents
 load_dotenv()
