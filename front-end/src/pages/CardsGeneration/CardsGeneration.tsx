@@ -1,15 +1,18 @@
 import { FormEvent, JSX, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import ColorPicker from "../../common/components/ColorPicker";
-import FileUploader from "../../common/components/FileUploader";
-import ZipDownloadButton from "../../common/components/ZipDownloadButton";
 import { is2xxSuccessful, sendRequest } from "../../common/Requests";
 import { hideSpinner, showSpinner } from "../../common/Spinner";
 import { sendToast } from "../../common/Toast";
-import { ApiResponse, CardsGenerationRequest, CardsGenerationResponse, ImageDownloadRequest } from "../../common/Types";
+import { ApiResponse, CardsGenerationRequest, CardsGenerationResponse, ImageDownloadRequest, SongPartsCards } from "../../common/Types";
 import useTitle from "../../common/UseTitle";
 import { isFileExtensionAccepted } from "../../common/utils/FileUtils";
+
+import CardsGallery, { CardData } from "../../components/CardsGallery";
+import ColorPicker from "../../components/ColorPicker";
+import FileUploader from "../../components/FileUploader";
+import ZipDownloadButton from "../../components/ZipDownloadButton";
+
 import { FILE_UPLOAD } from "../../constants/ArtworkGeneration";
 import { PROCESSED_CARDS_PATH, SESSION_STORAGE } from "../../constants/CardsGeneration";
 import { API, BACKEND_URL, HTTP_STATUS, PATHS, SPINNER_ID, TITLE, TOAST, TOAST_TYPE } from "../../constants/Common";
@@ -36,6 +39,16 @@ const CardsGeneration = (): JSX.Element => {
   const [generationInProgress, setGenerationInProgress] = useState(false);
 
   const [cardPaths, setCardPaths] = useState([] as string[]);
+  const [cards, setCards] = useState([] as CardData[]);
+
+  const deduceNewCards = (paths: string[], cardsLyrics: SongPartsCards, hasOutro: boolean): CardData[] => {
+    return paths.map((path, idx) => ({
+      id: idx, src: path,
+      lyrics: idx === 0 || (hasOutro && idx === paths.length - 1) // card 00 and outro card have no lyrics
+        ? ""
+        : cardsLyrics[idx - 1].join("\n")
+    }));
+  };
 
   const handleSubmitDownloadCard = (e: FormEvent<HTMLFormElement> | undefined, body: ImageDownloadRequest) => {
     if (e)
@@ -63,17 +76,16 @@ const CardsGeneration = (): JSX.Element => {
     }
   };
 
-  const renderCard = (cardPath: string, nb: number): JSX.Element => {
-    const cardFileName = (cardPath.split('/').pop() ?? "").split('?')[0] ?? "card";
-    const alt = "card" + "-" + nb.toString() + "_" + cardFileName;
-    return (
-      <div className="card" key={alt}>
-        <img src={cardPath} alt={alt} />
-        <form onSubmit={(e) => handleSubmitDownloadCard(e, {selectedImage: cardPath})}>
-          <input type="submit" value={"Download " + cardFileName.replace(".png", "")} className="button" />
-        </form>
-      </div>
-    );
+  const generateFormData = (body: CardsGenerationRequest, formData: FormData): void => {
+    if (body.bgImg) {
+      formData.append("enforceBackgroundImage", body.bgImg);
+      formData.append("includeCenterArtwork", (body.includeCenterArtwork ?? "").toString());
+    }
+    if (body.colorPick !== "")
+      formData.append("enforceBottomColor", body.colorPick);
+    formData.append("cardMetaname", body.cardMetaname);
+    formData.append("generateOutro", body.generateOutro.toString());
+    formData.append("includeBackgroundImg", body.includeBackgroundImg.toString());
   };
 
   const handleGenerateCards = (e: FormEvent<HTMLFormElement>, body: CardsGenerationRequest) => {
@@ -101,29 +113,24 @@ const CardsGeneration = (): JSX.Element => {
     setCardPaths([]);
 
     const formData = new FormData();
-    if (body.bgImg) {
-      formData.append("enforceBackgroundImage", body.bgImg);
-      formData.append("includeCenterArtwork", (body.includeCenterArtwork ?? "").toString());
-    }
-    if (body.colorPick !== "")
-      formData.append("enforceBottomColor", body.colorPick);
-    formData.append("cardMetaname", body.cardMetaname);
-    formData.append("generateOutro", body.generateOutro.toString());
-    formData.append("includeBackgroundImg", body.includeBackgroundImg.toString());
+    generateFormData(body, formData);
 
     sendRequest("POST", BACKEND_URL + API.CARDS_GENERATION.GENERATE_CARDS, formData).then((response: CardsGenerationResponse) => {
       if (!is2xxSuccessful(response.status)) {
         throw new Error(response.message);
       }
 
-      const nbGenerated = response.data.generated;
+      const nbGenerated = response.data.cardsLyrics.length + 1;
       const cardPaths = [];
       for (let i = 0; i < nbGenerated; i++)
-        cardPaths.push(`${PROCESSED_CARDS_PATH}/${i.toString().padStart(2, "0")}.png`);
-      if (body.generateOutro)
+        cardPaths.push(`${PROCESSED_CARDS_PATH}/${i.toString().padStart(2, "0")}.png`); // 00.png, 01.png, ..., 09.png, 10.png, ...
+      if (body.generateOutro === true)
         cardPaths.push(`${PROCESSED_CARDS_PATH}/outro.png`);
-      const pathsWithCacheBuster = cardPaths.map((path) => `${path}?t=${Date.now()}`);
+      const pathsWithCacheBuster = cardPaths.map((path) => `${path}?t=${Date.now()}`); // busting cached images with the same name thanks to timestamp
       setCardPaths(pathsWithCacheBuster);
+      const newCards = deduceNewCards(pathsWithCacheBuster, response.data.cardsLyrics, body.generateOutro);
+      setCards(newCards);
+      setColorPick(response.data.cardBottomColor);
       sendToast(TOAST.CARDS_GENERATED, TOAST_TYPE.SUCCESS);
     }).catch((error: ApiResponse) => {
       if (error.status === HTTP_STATUS.PRECONDITION_FAILED)
@@ -144,9 +151,9 @@ const CardsGeneration = (): JSX.Element => {
   };
 
   useEffect(() => {
-    if (isComponentMounted) {
+    if (isComponentMounted)
       return;
-    }
+
     setCardMetaname(sessionStorage.getItem(SESSION_STORAGE.CARD_METANAME) ?? "");
     setIsComponentMounted(true);
   }, [isComponentMounted, colorPick]);
@@ -221,11 +228,12 @@ const CardsGeneration = (): JSX.Element => {
           <hr className="mv-1" />
 
           <ZipDownloadButton type="button" id="download-all" paths={cardPaths} output={"cards.zip"} />
-          <div id="cards">
-            { cardPaths.map((cardPath, idx) =>
-              renderCard(cardPath, idx + 1))
-            }
-          </div>
+          <CardsGallery
+            id="cards" initialCards={cards} handleDownloadCard={handleSubmitDownloadCard}
+            generationProps={{
+              cardMetaname, bgImg, colorPick, includeCenterArtwork, generateOutro, includeBackgroundImg, cardBottomColor,
+            }}
+          />
         </>
       }
 

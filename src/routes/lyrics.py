@@ -1,4 +1,5 @@
 from flask import Blueprint, request, Response
+from flask_restx import Resource
 from lyricsgenius import Genius
 
 from ast import literal_eval
@@ -8,14 +9,16 @@ from time import time
 from typing import Optional
 
 import src.constants as const
+from src.docs import models, ns_lyrics
 from src.logger import log, LogSeverity
 from src.statistics import updateStats
 from src.utils.web_utils import createApiResponse
 
-from src.app import app
+from src.app import api, app
 bp_lyrics = Blueprint(const.ROUTES.lyrics.bp_name, __name__.split('.')[-1])
 session = app.config
 api_prefix = const.API_ROUTE + const.ROUTES.lyrics.path
+api.add_namespace(ns_lyrics, path=api_prefix)
 
 genius = None
 try:
@@ -26,7 +29,7 @@ except TypeError as e:
               "Lyrics fetching will not work.")
 
 def fetchLyricsFromGenius(song_title: str, artist_name: str) -> list[dict[str, str]]:
-    """ Tries to fetch the lyrics of a song from Genius.com.
+    """ Tries to fetch the lyrics of a song from Genius dot com.
     :param song_title: [string] The title of the song.
     :param artist_name: [string] The name of the artist.
     :return: [list] A list of tuples with section names and lyrics.
@@ -34,7 +37,7 @@ def fetchLyricsFromGenius(song_title: str, artist_name: str) -> list[dict[str, s
     log.debug(f"Fetching lyrics for {artist_name} - \"{song_title}\"...")
     start = time()
     if genius is None:
-        return [{"section": "error", "lyrics": const.ERR_GENIUS_TOKEN}]
+        return [{"section": "error", "lyrics": const.ERR_GENIUS_TOKEN_NOT_FOUND}]
 
     song: Optional[Genius.Song] = None
     try:
@@ -51,7 +54,6 @@ def fetchLyricsFromGenius(song_title: str, artist_name: str) -> list[dict[str, s
     lyrics = sub(r"^.*Lyrics\[", '[', lyrics).strip()
     lyrics = sub(r"Embed\s*\d*\s*$", '', lyrics).strip()
     lyrics = sub(r"\d+\s*$", '', lyrics).strip()
-    log.debug(lyrics)
 
     # Removing "You might also like" advertising's legend
     lyrics = lyrics.replace("You might also like", '\n')
@@ -91,18 +93,23 @@ def fetchLyricsFromGenius(song_title: str, artist_name: str) -> list[dict[str, s
     log.log(f"Lyrics fetch for {artist_name} - \"{song_title}\" complete.").time(LogSeverity.LOG, time() - start)
     return lyrics_parts
 
-@bp_lyrics.route(api_prefix + "/get-genius-lyrics", methods=["POST"])
-def getGeniusLyrics() -> Response:
-    """ Fetches the lyrics of a song from Genius.com.
-    :return: [Response] The response to the request.
-    """
-    log.log("POST - Fetching lyrics from Genius...")
-    body = literal_eval(request.get_data(as_text=True))
-    song_name: Optional[str] = body.get("songName")
-    artist: Optional[str] = body.get("artist")
-    if song_name is None or artist is None:
-        log.error(const.ERR_LYRICS_MISSING_PARAMS)
-        return createApiResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_LYRICS_MISSING_PARAMS)
+@ns_lyrics.route("/get-genius-lyrics")
+class GeniusLyricsResource(Resource):
+    @ns_lyrics.doc("post_get_genius_lyrics")
+    @ns_lyrics.expect(models[const.ROUTES.lyrics.bp_name]["get-genius-lyrics"]["payload"])
+    @ns_lyrics.response(const.HttpStatus.OK.value, const.MSG_LYRICS_FETCH_SUCCESS, models[const.ROUTES.lyrics.bp_name]["get-genius-lyrics"]["response"])
+    @ns_lyrics.response(const.HttpStatus.BAD_REQUEST.value, const.ERR_LYRICS_MISSING_PARAMS)
+    def post(self) -> Response:
+        """ Fetches the lyrics of a song from Genius dot com """
+        log.log("POST - Fetching lyrics from Genius...")
 
-    lyrics_parts = fetchLyricsFromGenius(song_name, artist)
-    return createApiResponse(const.HttpStatus.OK.value, "Lyrics fetched successfully.", {"lyricsParts": lyrics_parts})
+        body = literal_eval(request.get_data(as_text=True))
+        song_name: Optional[str] = body.get("songName")
+        artist: Optional[str] = body.get("artist")
+
+        if song_name is None or artist is None:
+            log.error(const.ERR_LYRICS_MISSING_PARAMS)
+            return createApiResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_LYRICS_MISSING_PARAMS)
+
+        lyrics_parts = fetchLyricsFromGenius(song_name, artist)
+        return createApiResponse(const.HttpStatus.OK.value, const.MSG_LYRICS_FETCH_SUCCESS, {"lyricsParts": lyrics_parts})

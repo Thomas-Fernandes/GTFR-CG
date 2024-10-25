@@ -1,12 +1,14 @@
 import { FormEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { AutoResizeTextarea } from "../../common/components/AutoResizeTextarea";
 import { is2xxSuccessful, sendRequest } from "../../common/Requests";
 import { hideSpinner, showSpinner } from "../../common/Spinner";
 import { sendToast } from "../../common/Toast";
 import { ApiResponse, Dict, LyricsContents, LyricsPart, LyricsRequest, LyricsResponse, PageMetadata, SongPartsCards } from "../../common/Types";
 import useTitle from "../../common/UseTitle";
+
+import { AutoResizeTextarea } from "../../components/AutoResizeTextarea";
+
 import { SESSION_STORAGE } from "../../constants/CardsGeneration";
 import { API, BACKEND_URL, PATHS, SPINNER_ID, TITLE, TOAST, TOAST_TYPE } from "../../constants/Common";
 
@@ -43,7 +45,7 @@ const Lyrics = (): JSX.Element => {
     }
 
     setIsSavingCardsContent(true);
-    showSpinner(SPINNER_ID.LYRICS_SAVE);
+    showSpinner(SPINNER_ID.LYRICS_CONVERT);
 
     const metadata = "Metadata | " + Object.entries(pageMetadata).map(([key, value]) => `${key}: ${value}`).join(" ;;; ");
     const data = {
@@ -66,7 +68,7 @@ const Lyrics = (): JSX.Element => {
     }).catch((error: ApiResponse) => {
       sendToast(error.message, TOAST_TYPE.ERROR);
     }).finally(() => {
-      hideSpinner(SPINNER_ID.LYRICS_SAVE);
+      hideSpinner(SPINNER_ID.LYRICS_CONVERT);
       setIsSavingCardsContent(false);
     });
   };
@@ -103,8 +105,7 @@ const Lyrics = (): JSX.Element => {
             {"Clear"}
           </button>
           </div>
-          <AutoResizeTextarea
-            name={`lyrics-part_${idx}`} rows={5} cols={80}
+          <AutoResizeTextarea title={`lyrics-part_${idx}`}
             value={part.lyrics} onChange={(e) => handleSetLyricsParts(e.target.value, idx)}
           />
         </>}
@@ -192,7 +193,8 @@ const Lyrics = (): JSX.Element => {
         setIsGeniusTokenSet(true);
         const latestCardGeneration = sessionStorage.getItem(SESSION_STORAGE.LATEST_CARD_GENERATION);
         setLastContents(latestCardGeneration !== null
-          ? JSON.parse(latestCardGeneration) : "{{}, [], []}"
+          ? JSON.parse(latestCardGeneration)
+          : "{{}, [], []}"
         );
       }
     });
@@ -272,8 +274,8 @@ const Lyrics = (): JSX.Element => {
           { lyricsParts.map((part, idx) =>
             renderLyricsPart(part, idx))
           }
-          <div className="action-button" id={SPINNER_ID.LYRICS_SAVE}>
-            <input type="submit" value="CONVERT TO CARDS" className="action-button save-button" />
+          <div className="action-button" id={SPINNER_ID.LYRICS_CONVERT}>
+            <input type="submit" value="CONVERT TO CARDS" className="action-button convert-button" />
           </div>
         </form>
       </>}

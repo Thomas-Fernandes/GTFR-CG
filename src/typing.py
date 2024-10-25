@@ -34,15 +34,15 @@ class Routes:
         root: [Route] The root route.
         redirect: [Route] The redirect route.
         home: [Route] The home route.
-        art_gen: [Route] The artwork generation route.
-        proc_img: [Route] The processed images route.
+        art_proc: [Route] The artwork generation route.
+        proc_art: [Route] The artwork processing route.
         lyrics: [Route] The lyrics route.
     """
     root: Route
     redirect: Route
     home: Route
     art_gen: Route
-    proc_img: Route
+    art_proc: Route
     lyrics: Route
     cards_gen: Route
 
@@ -76,7 +76,7 @@ class CardMetadata:
     card_metaname: str
     include_bg_img: bool
     bg: Image.Image
-    dominant_color: RGBAColor
+    dominant_color: RGBColor
     text_lyrics_color: RGBColor
     text_meta_color: RGBColor
 
@@ -94,7 +94,8 @@ class CardMetadata:
                 else:
                     content += f"{key}={value}, "
         return f"CardMetadata({content[:-2]})"
-# CardMetadata: TypeAlias = dict[str, str | bool | RGBAColor]
+
+CardgenSettings: TypeAlias = dict[str, bool | str]
 
 CardsContents: TypeAlias = list[list[str]]
 
