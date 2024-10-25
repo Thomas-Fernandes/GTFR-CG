@@ -1,6 +1,6 @@
 from flask import Blueprint, Response, request
 from flask_restx import Resource
-from requests import get as requestsGet
+from requests import get as requestsGet, Response as RequestsResponse
 from werkzeug.datastructures import FileStorage
 
 from ast import literal_eval
@@ -10,6 +10,7 @@ from typing import Optional
 from uuid import uuid4
 
 import src.constants as const
+from src.decorators import retry
 from src.docs import models, ns_artwork_generation
 from src.logger import log, LogSeverity
 from src.utils.soft_utils import checkImageFilenameValid, snakeToCamelCase
@@ -63,6 +64,10 @@ class ItunesImageResource(Resource):
         log.log(f"Found iTunes image and saved it to {image_path}")
         return createApiResponse(const.HttpStatus.CREATED.value, const.MSG_ITUNES_IMAGE_UPLOADED)
 
+@retry(condition=(lambda x: x.status_code == const.HttpStatus.OK.value), times=3)
+def makeItunesRequest(url_to_hit: str) -> RequestsResponse:
+    return requestsGet(url_to_hit)
+
 def checkItunesParametersValidity(term: str, country: str) -> Optional[str]:
     """ Checks the validity of the provided iTunes parameters.
     :param term: [str] The search term to be used in the iTunes API request.
@@ -100,8 +105,8 @@ class ItunesSearchResource(Resource):
 
         log.info(f"Searching {limit} iTunes images for term: {term}, country: {country}...")
         start = time()
-        itunes_url = f"https://itunes.apple.com/search?term={term}&country={country}&entity={entity}&limit={limit}"
-        response = requestsGet(itunes_url)
+        url_to_hit = f"https://itunes.apple.com/search?term={term}&country={country}&entity={entity}&limit={limit}"
+        response = makeItunesRequest(url_to_hit)
         log.info(f"iTunes search complete with status code: {response.status_code}") \
             .time(LogSeverity.INFO, time() - start)
 
