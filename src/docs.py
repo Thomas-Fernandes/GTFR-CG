@@ -88,5 +88,18 @@ models = {
                 "[INFERRED] cardMetaname": fields.String(description="Card metaname"),
             }),
         },
+        "generate-single": {
+            "payload": ns_cards_generation.model("Cards Generation - Generate Single Card - payload", {
+                "enforceBackgroundImage": fields.Raw(description="[OPTIONAL] Background image to enforce"),
+                "includeCenterArtwork": fields.Boolean(description="[OPTIONAL] Whether to include the center artwork in the cover art"),
+                "cardBottomColor": fields.Boolean(description="[OPTIONAL] Bottom color to enforce"),
+                "genOutro": fields.Boolean(description="Whether to generate the outro card"),
+                "includeBgImg": fields.Boolean(description="Whether to include the background image in the card"),
+                "[INFERRED] cardMetaname": fields.String(description="Card metaname"),
+
+                "cardsContents": fields.List(fields.List(fields.String(description="New content of the card"))),
+                "cardFilename": fields.List(fields.List(fields.String(description="Name of the file of the card to edit"))),
+            }),
+        },
     },
 }

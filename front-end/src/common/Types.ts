@@ -18,7 +18,6 @@ export type CardsGenerationRequest = {
   includeBackgroundImg: boolean;
 };
 export type SingleCardGenerationRequest = CardsGenerationRequest & {
-  cardBottomColor: string;
   cardsContents: string[];
   cardFilename: string;
 };

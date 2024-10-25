@@ -130,6 +130,7 @@ const CardsGeneration = (): JSX.Element => {
       setCardPaths(pathsWithCacheBuster);
       const newCards = deduceNewCards(pathsWithCacheBuster, response.data.cardsLyrics, body.generateOutro);
       setCards(newCards);
+      setColorPick(response.data.cardBottomColor);
       sendToast(TOAST.CARDS_GENERATED, TOAST_TYPE.SUCCESS);
     }).catch((error: ApiResponse) => {
       if (error.status === HTTP_STATUS.PRECONDITION_FAILED)

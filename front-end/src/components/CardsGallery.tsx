@@ -1,11 +1,11 @@
 import React, { FormEvent, useRef, useState } from "react";
 
-import { sendRequest } from "../common/Requests";
+import { is2xxSuccessful, sendRequest } from "../common/Requests";
 import { hideSpinner, showSpinner } from "../common/Spinner";
 import { sendToast } from "../common/Toast";
 import { ApiResponse, ImageDownloadRequest, SingleCardGenerationRequest } from "../common/Types";
 
-import { API, BACKEND_URL, HTTP_STATUS, SPINNER_ID, TOAST, TOAST_TYPE } from "../constants/Common";
+import { API, BACKEND_URL, SPINNER_ID, TOAST, TOAST_TYPE } from "../constants/Common";
 
 import { AutoResizeTextarea } from "./AutoResizeTextarea";
 
@@ -55,7 +55,6 @@ const CardsGallery: React.FC<Props> = ({ id, initialCards, handleDownloadCard, g
     formData.append("cardMetaname", body.cardMetaname);
     formData.append("generateOutro", body.generateOutro.toString());
     formData.append("includeBackgroundImg", body.includeBackgroundImg.toString());
-    formData.append("cardBottomColor", body.cardBottomColor);
     formData.append("cardsContents", JSON.stringify(body.cardsContents));
     formData.append("cardFilename", body.cardFilename);
   };
@@ -95,7 +94,7 @@ const CardsGallery: React.FC<Props> = ({ id, initialCards, handleDownloadCard, g
     generateFormData(body, formData);
 
     sendRequest("POST", BACKEND_URL + API.CARDS_GENERATION.GENERATE_SINGLE_CARD, formData).then((response: ApiResponse) => {
-      if (response.status !== HTTP_STATUS.OK) {
+      if (!is2xxSuccessful(response.status)) {
         console.error(response.message);
         sendToast(response.message, TOAST_TYPE.ERROR);
         return;
@@ -103,7 +102,7 @@ const CardsGallery: React.FC<Props> = ({ id, initialCards, handleDownloadCard, g
 
       updateCard(currentCard, cardFilename);
 
-      const toastMsg = TOAST.CARD_EDITED + ": " + (currentCard.id < 10 ? "0" : "") + currentCard.id;
+      const toastMsg = TOAST.CARD_EDITED + `: ${(currentCard.id < 10 ? "0" : "")}${currentCard.id}.png`;
       sendToast(toastMsg, TOAST_TYPE.SUCCESS);
     }).catch((error) => {
       console.error("Failed to upload text:", error);

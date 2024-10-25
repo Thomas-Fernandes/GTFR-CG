@@ -219,7 +219,7 @@ def generateSingleCard(cards_contents: CardsContents, song_data: SongMetadata, s
     log.log("Generated new card successfully.")
     updateStats(to_increment=const.AvailableStats.cardsGenerated.value)
 
-    return createApiResponse(const.HttpStatus.OK.value, "Card generated successfully.")
+    return createApiResponse(const.HttpStatus.CREATED.value, const.MSG_CARD_GENERATED)
 
 def generateCards(cards_contents: CardsContents, song_data: SongMetadata, settings: CardgenSettings) -> Response:
     """ Generates cards using the contents provided.
@@ -385,7 +385,6 @@ def getBaseCardgenSettings(*, is_singular_card: bool = False) -> CardgenSettings
     }
 
     if is_singular_card:
-        bottom_color: Optional[str] = request.form[snakeToCamelCase(const.SessionFields.bottom_color.value)]
         card_content: Optional[str] = request.form[snakeToCamelCase(const.SessionFields.cards_contents.value)]
         card_filename: Optional[str] = request.form[snakeToCamelCase(const.SessionFields.card_filename.value)]
 
@@ -394,7 +393,7 @@ def getBaseCardgenSettings(*, is_singular_card: bool = False) -> CardgenSettings
             if card_content is None: return const.ERR_CARDS_CONTENTS_NOT_FOUND
             if card_filename is None: return const.ERR_CARDS_FILENAME_NOT_FOUND
             return None
-        err = checkSingularCardgenParametersValidity(card_content, card_filename, bottom_color)
+        err = checkSingularCardgenParametersValidity(card_content, card_filename, enforce_bottom_color)
         if err is not None:
             log.error(err)
             raise ValueError(err)
@@ -404,48 +403,55 @@ def getBaseCardgenSettings(*, is_singular_card: bool = False) -> CardgenSettings
 
     return base_settings
 
-@bp_cards_generation.route(api_prefix + "/generate-single", methods=["POST"])
-def postGenerateSingleCard() -> Response:
-    """ Generates a single card again using custom contents.
-    :return: [Response] The response to the request.
-    """
-    log.debug("POST - Generating a singular card...")
-    if const.SessionFields.cards_contents.value not in session:
-        log.error(const.ERR_CARDS_CONTENTS_NOT_FOUND)
-        return createApiResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_CARDS_CONTENTS_NOT_FOUND)
+@ns_cards_generation.route("/generate-single")
+class SingleCardGenerationResource(Resource):
+    @ns_cards_generation.doc("post_generate_single_card")
+    @ns_cards_generation.expect(models[const.ROUTES.cards_gen.bp_name]["generate-single"]["payload"])
+    @ns_cards_generation.response(const.HttpStatus.CREATED.value, const.MSG_CARD_GENERATED)
+    @ns_cards_generation.response(const.HttpStatus.BAD_REQUEST.value, const.ERR_CARDS_PARAMS_NOT_FOUND)
+    @ns_cards_generation.response(const.HttpStatus.PRECONDITION_FAILED.value, "\n".join([const.ERR_CARDS_CONTENTS_NOT_FOUND, const.ERR_CARDS_BACKGROUND_NOT_FOUND]))
+    @ns_cards_generation.response(const.HttpStatus.INTERNAL_SERVER_ERROR.value, "\n".join([const.ERR_CARDS_CONTENTS_READ_FAILED, const.ERR_USER_FOLDER_NOT_FOUND]))
+    def post(self) -> Response:
+        """ Generates a single card again using custom contents. """
+        log.debug("POST - Generating a singular card...")
+        start = time()
+        if const.SessionFields.cards_contents.value not in session:
+            log.error(const.ERR_CARDS_CONTENTS_NOT_FOUND)
+            return createApiResponse(const.HttpStatus.PRECONDITION_FAILED.value, const.ERR_CARDS_CONTENTS_NOT_FOUND)
 
-    try:
-        cardgen_settings: CardgenSettings = getBaseCardgenSettings(is_singular_card=True)
-    except ValueError as e:
-        return createApiResponse(const.HttpStatus.BAD_REQUEST.value, e)
+        try:
+            cardgen_settings: CardgenSettings = getBaseCardgenSettings(is_singular_card=True)
+            log.debug(f"  Cardgen settings: {cardgen_settings}")
+        except ValueError as e:
+            return createApiResponse(const.HttpStatus.BAD_REQUEST.value, e)
 
-    log.info("Getting card contents from request...")
-    try:
-        card_contents: CardsContents = getCardsContentsFromFile(session[const.SessionFields.cards_contents.value])
+        log.info("Getting card contents from request...")
+        try:
+            card_contents: CardsContents = getCardsContentsFromFile(session[const.SessionFields.cards_contents.value])
 
-        if len(card_contents) == 0 or not card_contents[0][0].startswith(const.METADATA_IDENTIFIER):
-            raise ValueError("Invalid card contents.")
+            if len(card_contents) == 0 or not card_contents[0][0].startswith(const.METADATA_IDENTIFIER):
+                raise ValueError("Invalid card contents.")
 
-        card_contents = card_contents[:1] # keep only the metadata
-        card_contents += [[c.strip() for c in cardgen_settings[const.SessionFields.cards_contents.value].split("\n")]]
+            card_contents = card_contents[:1] # keep only the metadata
+            card_contents += [[c.strip() for c in cardgen_settings[const.SessionFields.cards_contents.value].split("\n")]]
 
-        song_data = getSongMetadata(card_contents, cardgen_settings[const.SessionFields.card_metaname.value])
-    except Exception as e:
-        log.error(f"Error while getting card contents: {e}")
-        return createApiResponse(const.HttpStatus.INTERNAL_SERVER_ERROR.value, const.ERR_CARDS_CONTENTS_READ_FAILED)
-    log.debug("  Card contents:")
-    for card in card_contents:
-        log.debug(f"    {card}")
-    log.info("Card contents retrieved successfully.")
+            song_data = getSongMetadata(card_contents, cardgen_settings[const.SessionFields.card_metaname.value])
+        except Exception as e:
+            log.error(f"Error while getting card contents: {e}")
+            return createApiResponse(const.HttpStatus.INTERNAL_SERVER_ERROR.value, const.ERR_CARDS_CONTENTS_READ_FAILED)
+        log.debug("  Card contents:")
+        for card in card_contents:
+            log.debug(f"    {card}")
+        log.info("Card contents retrieved successfully.").time(LogSeverity.INFO, time() - start)
 
-    return generateSingleCard(card_contents, song_data, cardgen_settings)
+        return generateSingleCard(card_contents, song_data, cardgen_settings)
 
 @ns_cards_generation.route("/generate")
 class CardsGenerationResource(Resource):
     @ns_cards_generation.doc("post_generate_cards")
     @ns_cards_generation.expect(models[const.ROUTES.cards_gen.bp_name]["generate"]["payload"])
     @ns_cards_generation.response(const.HttpStatus.CREATED.value, const.MSG_CARDS_GENERATED)
-    @ns_cards_generation.response(const.HttpStatus.BAD_REQUEST.value, const.ERR_CARDS_GEN_PARAMS_NOT_FOUND)
+    @ns_cards_generation.response(const.HttpStatus.BAD_REQUEST.value, const.ERR_CARDS_PARAMS_NOT_FOUND)
     @ns_cards_generation.response(const.HttpStatus.PRECONDITION_FAILED.value, "\n".join([const.ERR_CARDS_CONTENTS_NOT_FOUND, const.ERR_CARDS_BACKGROUND_NOT_FOUND]))
     @ns_cards_generation.response(const.HttpStatus.INTERNAL_SERVER_ERROR.value, "\n".join([const.ERR_CARDS_CONTENTS_READ_FAILED, const.ERR_USER_FOLDER_NOT_FOUND]))
     def post(self) -> Response:
@@ -479,11 +485,6 @@ class CardsGenerationResource(Resource):
             log.debug(f"    {card}")
         log.info("Cards contents retrieved successfully.").time(LogSeverity.INFO, time() - start)
 
-        settings = {
-            const.SessionFields.enforce_bottom_color.value: enforce_bottom_color,
-            const.SessionFields.gen_outro.value: eval(gen_outro.capitalize()),
-            const.SessionFields.include_bg_img.value: eval(include_bg_img.capitalize()) if include_bg_img is not None else None,
-        }
         return generateCards(cards_contents, song_data, cardgen_settings)
 
 def isListListStr(obj: list[list[str]] | Any) -> bool:
