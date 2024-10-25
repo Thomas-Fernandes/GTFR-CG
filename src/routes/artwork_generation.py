@@ -80,7 +80,7 @@ def checkItunesParametersValidity(term: str, country: str) -> Optional[str]:
 @ns_artwork_generation.route("/search-itunes")
 class ItunesSearchResource(Resource):
     @ns_artwork_generation.doc("post_search_itunes")
-    # @ns_artwork_generation.expect(models[const.ROUTES.art_gen.bp_name]["search-itunes"]["payload"])
+    @ns_artwork_generation.expect(models[const.ROUTES.art_gen.bp_name]["search-itunes"]["payload"])
     @ns_artwork_generation.response(const.HttpStatus.OK.value, const.MSG_ITUNES_FETCH_COMPLETE)
     @ns_artwork_generation.response(const.HttpStatus.BAD_REQUEST.value, "\n".join([const.ERR_ITUNES_MISSING_PARAMS, const.ERR_ITUNES_INVALID_COUNTRY]))
     def post(self) -> Response:

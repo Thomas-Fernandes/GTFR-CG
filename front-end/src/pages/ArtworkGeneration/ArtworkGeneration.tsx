@@ -64,16 +64,23 @@ const ArtworkGeneration = (): JSX.Element => {
       setIsProcessingLoading(false);
     });
   };
+
   const renderItunesResult = (item: ItunesResult, key: number): JSX.Element => {
+    const resultLabel = (item.collectionName || item.trackName).replace(" - Single", "");
+
     return (
       <div className="result-item" key={"result" + key.toString()}>
-        <ImgButton src={item.artworkUrl100} className="result-image" alt={item.collectionName || item.trackName} onClick={() => handleSubmitItunesResult(item, key)} />
-        <p className="result-text centered bold italic">{item.artistName} - {item.collectionName.replace(" - Single", "")}</p>
-        <div className="flex-row" id={SPINNER_ID.ITUNES_OPTION + key.toString()}>
-        </div>
+        <ImgButton
+          src={item.artworkUrl100} alt={resultLabel}
+          onClick={() => handleSubmitItunesResult(item, key)}
+          className="result-image"
+        />
+        <p className="result-text centered bold italic">{item.artistName} - {resultLabel}</p>
+        <div className="flex-row" id={SPINNER_ID.ITUNES_OPTION + key.toString()} />
       </div>
     );
   };
+
   const getTitleWithAdjustedLength = (title: string): string => {
     title = title.slice(0, ITUNES.MAX_TITLE_LENGTH - 3);
 
@@ -84,21 +91,14 @@ const ArtworkGeneration = (): JSX.Element => {
     end = ITUNES.MAX_TITLE_LENGTH - end > ITUNES.MAX_CROP_LENGTH ? title.length : end;
     return title.slice(0, end) + "...";
   };
-
   const handleSubmitItunesSearch = (e: FormEvent<HTMLFormElement>, body: ItunesRequest) => {
     e.preventDefault();
 
     showSpinner(SPINNER_ID.ITUNES);
 
-    const data = {
-      ...body,
-      entity: body.entity ?? "album", // album by default, but can be "song", "movie", "tv-show"...
-      limit: body.limit ?? 6,
-    };
-
     const resultItems: ItunesResult[] = [];
 
-    sendRequest("POST", BACKEND_URL + API.ARTWORK_GENERATION.ITUNES_SEARCH, data).then((response: ItunesResponse) => {
+    sendRequest("POST", BACKEND_URL + API.ARTWORK_GENERATION.ITUNES_SEARCH, body).then((response: ItunesResponse) => {
       if (!is2xxSuccessful(response.status)) {
         throw new Error(response.message);
       }
