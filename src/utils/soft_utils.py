@@ -8,6 +8,13 @@ from typing import Optional
 import src.constants as const
 from src.typing_gtfr import CachedElemType, CardsContents
 
+def getHexColorFromRGB(rgb: tuple[int, int, int]) -> str:
+    """ Converts an RGB color to a hex color.
+    :param rgb: [tuple] The RGB color.
+    :return: [string] The hex color.
+    """
+    return "#{:02x}{:02x}{:02x}".format(*rgb)
+
 def snakeToCamelCase(snake_str: str) -> str:
     """ Converts a snake_case string to a camelCase string.
     :param snake_str: [string] The snake_case string.

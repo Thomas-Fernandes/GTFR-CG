@@ -64,7 +64,6 @@ def fetchLyricsFromGenius(song_title: str, artist_name: str) -> list[dict[str, s
     lyrics = sub(r"^.*Lyrics\[", '[', lyrics).strip()
     lyrics = sub(r"Embed\s*\d*\s*$", '', lyrics).strip()
     lyrics = sub(r"\d+\s*$", '', lyrics).strip()
-    log.debug(lyrics)
 
     # Removing "You might also like" advertising's legend
     lyrics = lyrics.replace("You might also like", '\n')

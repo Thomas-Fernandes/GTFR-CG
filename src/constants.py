@@ -61,6 +61,8 @@ class SessionFields(StrEnum):
     gen_outro = "generate_outro"
     include_bg_img = "include_background_img"
     card_metaname = "card_metaname"
+    bottom_color = "card_bottom_color"
+    card_filename = "card_filename"
 
 # Routes
 API_ROUTE = "/api"
@@ -152,12 +154,16 @@ ERR_INVALID_YT_URL = "Invalid YouTube URL."
 ERR_FAIL_DOWNLOAD = "Failed to download image."
 ERR_LYRICS_MISSING_PARAMS = "Missing parameters for lyrics fetching."
 ERR_LYRICS_NOT_FOUND = "Lyrics not found."
+ERR_CARDS_PARAMS_NOT_FOUND = "Missing parameters for cards generation."
 ERR_CARDS_CONTENTS_NOT_FOUND = "No cards contents were generated."
 ERR_CARDS_CONTENTS_INVALID = "Invalid provided cards contents."
 ERR_CARDS_CONTENTS_SAVE_FAILED = "Failed to save cards contents."
 ERR_CARDS_CONTENTS_READ_FAILED = "Failed to read cards contents."
-ERR_CARDS_GEN_PARAMS_NOT_FOUND = "Required parameters not found for cards generation."
-ERR_CARDS_BACKGROUND_NOT_FOUND = "No background image provided for cards generation."
+ERR_CARDS_METANAME_NOT_FOUND = "No card metaname provided."
+ERR_CARDS_CENTER_ARTWORK_NOT_FOUND = "No center artwork flipper provided."
+ERR_CARDS_BACKGROUND_NOT_FOUND = "No background image provided."
+ERR_CARDS_COLOR_NOT_FOUND = "No background color provided."
+ERR_CARDS_FILENAME_NOT_FOUND = "No filename provided."
 
 # Response messages
 MSG_GENIUS_TOKEN_FETCHED = "Genius API token fetched successfully."
@@ -170,6 +176,7 @@ MSG_PROCESSED_IMAGES_SUCCESS = "Processed images path retrieved successfully."
 MSG_LYRICS_FETCH_SUCCESS = "Lyrics fetched successfully."
 MSG_CARDS_CONTENTS_SAVED = "Cards contents saved successfully."
 MSG_CARDS_GENERATED = "Cards generated successfully."
+MSG_CARD_GENERATED = "Card generated successfully."
 
 # .env contents
 load_dotenv()
