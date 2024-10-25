@@ -9,7 +9,9 @@ from time import time
 from typing import Optional
 
 import src.constants as const
+from src.decorators import retry
 from src.docs import models, ns_lyrics
+from src.logger import log
 from src.logger import log, LogSeverity
 from src.statistics import updateStats
 from src.utils.web_utils import createApiResponse
@@ -28,6 +30,14 @@ except TypeError as e:
     log.error(f"Error while creating Genius object: {e}. "
               "Lyrics fetching will not work.")
 
+def areLyricsNotFound(lyrics: list[dict[str, str]]) -> bool:
+    """ Checks if the lyrics are not found.
+    :param lyrics: [list] The lyrics to check.
+    :return: [bool] True if the lyrics are not found, False otherwise.
+    """
+    return len(lyrics) == 1 and lyrics[0]["section"] == "warn" and lyrics[0]["lyrics"] == const.ERR_LYRICS_NOT_FOUND
+
+@retry(condition=lambda x: not areLyricsNotFound(x), times=3)
 def fetchLyricsFromGenius(song_title: str, artist_name: str) -> list[dict[str, str]]:
     """ Tries to fetch the lyrics of a song from Genius dot com.
     :param song_title: [string] The title of the song.
