@@ -82,9 +82,11 @@ export type ItunesResult = {
   trackName: string;
   artworkUrl100: string;
 };
-export type ItunesResponse = {
-  resultCount: number;
-  results: ItunesResult[];
+export type ItunesResponse = ApiResponse & {
+  data: {
+    resultCount: number;
+    results: ItunesResult[];
+  }
 };
 export type ItunesRequest = {
   term: string;

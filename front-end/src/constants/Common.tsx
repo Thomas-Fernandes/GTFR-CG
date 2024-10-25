@@ -121,6 +121,7 @@ export const API = {
   GENIUS_TOKEN: "/genius-token",
 
   ARTWORK_GENERATION: {
+    ITUNES_SEARCH: PATHS.artworkGeneration + "/search-itunes",
     ITUNES: PATHS.artworkGeneration + "/use-itunes-image",
     FILE_UPLOAD: PATHS.artworkGeneration + "/use-local-image",
     YOUTUBE_THUMBNAIL: PATHS.artworkGeneration + "/use-youtube-thumbnail",

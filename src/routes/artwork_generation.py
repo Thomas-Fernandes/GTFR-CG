@@ -5,12 +5,13 @@ from werkzeug.datastructures import FileStorage
 
 from ast import literal_eval
 from os import path, makedirs
+from time import time
 from typing import Optional
 from uuid import uuid4
 
 import src.constants as const
 from src.docs import models, ns_artwork_generation
-from src.logger import log
+from src.logger import log, LogSeverity
 from src.utils.soft_utils import checkImageFilenameValid, snakeToCamelCase
 from src.utils.web_utils import createApiResponse
 
@@ -62,6 +63,50 @@ class ItunesImageResource(Resource):
         log.log(f"Found iTunes image and saved it to {image_path}")
         return createApiResponse(const.HttpStatus.CREATED.value, const.MSG_ITUNES_IMAGE_UPLOADED)
 
+def checkItunesParametersValidity(term: str, country: str) -> Optional[str]:
+    """ Checks the validity of the provided iTunes parameters.
+    :param term: [str] The search term to be used in the iTunes API request.
+    :param country: [str] The country code to be used in the iTunes API request.
+    :return: [str | None] An error message if the parameters are invalid, or None if they are valid.
+    """
+    if term is None or country is None or len(term.strip()) == 0 or len(country.strip()) == 0:
+        return const.ERR_ITUNES_MISSING_PARAMS
+    if not (len(country) == 2 and country.isalpha()):
+        return const.ERR_ITUNES_INVALID_COUNTRY
+    return None
+
+# iTunes reference: https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/iTuneSearchAPI/Searching.html#//apple_ref/doc/uid/TP40017632-CH5-SW1
+# Ben Dodson's iTunes artwork finder which we mimic: https://github.com/bendodson/itunes-artwork-finder
+@ns_artwork_generation.route("/search-itunes")
+class ItunesSearchResource(Resource):
+    @ns_artwork_generation.doc("post_search_itunes")
+    # @ns_artwork_generation.expect(models[const.ROUTES.art_gen.bp_name]["search-itunes"]["payload"])
+    @ns_artwork_generation.response(const.HttpStatus.OK.value, const.MSG_ITUNES_FETCH_COMPLETE)
+    @ns_artwork_generation.response(const.HttpStatus.BAD_REQUEST.value, "\n".join([const.ERR_ITUNES_MISSING_PARAMS, const.ERR_ITUNES_INVALID_COUNTRY]))
+    def post(self) -> Response:
+        """ Handles the request to the iTunes API to fetch possible images """
+        log.log("POST - Searching images on iTunes...")
+
+        body = literal_eval(request.get_data(as_text=True))
+        term: Optional[str] = body.get("term")
+        country: Optional[str] = body.get("country")
+        entity = "album" # album by default, but can be "song", "movie", "tv-show"...
+        limit = 6 # arbitrary limit for now
+
+        err = checkItunesParametersValidity(term, country)
+        if err is not None:
+            log.error(err)
+            return createApiResponse(const.HttpStatus.BAD_REQUEST.value, err)
+
+        log.info(f"Searching {limit} iTunes images for term: {term}, country: {country}...")
+        start = time()
+        itunes_url = f"https://itunes.apple.com/search?term={term}&country={country}&entity={entity}&limit={limit}"
+        response = requestsGet(itunes_url)
+        log.info(f"iTunes search complete with status code: {response.status_code}") \
+            .time(LogSeverity.INFO, time() - start)
+
+        return createApiResponse(response.status_code, const.MSG_ITUNES_FETCH_COMPLETE, response.json())
+
 @ns_artwork_generation.route("/use-local-image")
 class LocalImageResource(Resource):
     @ns_artwork_generation.doc("post_use_local_image")
@@ -72,6 +117,7 @@ class LocalImageResource(Resource):
     def post(self) -> Response:
         """ Saves the uploaded image to the user's folder """
         log.log("POST - Generating artwork using a local image...")
+
         if "file" not in request.files:
             log.error(const.ERR_NO_FILE)
             return createApiResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_NO_FILE)
@@ -155,8 +201,10 @@ class YoutubeThumbnailResource(Resource):
     def post(self) -> Response:
         """ Handles the extraction and processing of a YouTube thumbnail from a given URL """
         log.log("POST - Generating artwork using a YouTube thumbnail...")
+
         body = literal_eval(request.get_data(as_text=True))
         youtube_url: Optional[str] = body.get("url")
+
         if youtube_url is None:
             log.error(const.ERR_NO_IMG_URL)
             return createApiResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_NO_IMG_URL)
