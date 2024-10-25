@@ -4,7 +4,8 @@ import { Dispatch, SetStateAction } from "react";
 
 export type CardsGenerationResponse = ApiResponse & {
   data: {
-    generated: number;
+    cardsLyrics: SongPartsCards;
+    cardBottomColor: string;
   };
 };
 
@@ -15,6 +16,10 @@ export type CardsGenerationRequest = {
   includeCenterArtwork?: boolean;
   generateOutro: boolean;
   includeBackgroundImg: boolean;
+};
+export type SingleCardGenerationRequest = CardsGenerationRequest & {
+  cardsContents: string[];
+  cardFilename: string;
 };
 
 export type SongPartsCards = string[][];
@@ -96,6 +101,13 @@ export type Statistics = {
   artworkGenerations: number;
   lyricsFetches: number;
   cardsGenerated: number;
+};
+export type DisplayedStatistics = {
+  dateFirstOperation: string;
+  dateLastOperation: string;
+  artworkGenerations: string;
+  lyricsFetches: string;
+  cardsGenerated: string;
 };
 
 /**************** GENERIC ****************/
