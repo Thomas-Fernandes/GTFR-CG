@@ -45,7 +45,7 @@ def generateOutroCard(output_path: str, contributor_logins: list[str]) -> None:
         log.debug(f"  Contributors: {contributor_logins}")
         contributors_str = "Traduit par : "
         if len(contributor_logins) != 1:
-            contributors_str += ", ".join(contributor_logins[:-1]) + (" & " + contributor_logins[-1] if len(contributor_logins) > 2 else " & " + contributor_logins[0])
+            contributors_str += ", ".join(contributor_logins[:-1]) + " & " + contributor_logins[-1]
         else:
             contributors_str += contributor_logins[0]
         return contributors_str

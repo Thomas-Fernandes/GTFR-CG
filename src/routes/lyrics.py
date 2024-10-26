@@ -31,7 +31,6 @@ except TypeError as e:
     log.error(f"Error while creating Genius object: {e}. "
               "Lyrics fetching will not work.")
 
-
 def getSongContributors(song_id: Union[int, Literal["manual"]] = -1) -> list[str]:
     """ Adds the contributors to the song data.
     :param song_id: [int | str] The ID of the song or "manual".
@@ -68,7 +67,9 @@ def areLyricsNotFound(lyrics: list[dict[str, str]]) -> bool:
     :param lyrics: [list] The lyrics to check.
     :return: [bool] True if the lyrics are not found, False otherwise.
     """
-    return len(lyrics) == 1 and lyrics[0]["section"] == "warn" and lyrics[0]["lyrics"] == const.ERR_LYRICS_NOT_FOUND
+    return len(lyrics) == 1 \
+        and lyrics[0]["section"] == "warn" \
+        and lyrics[0]["lyrics"] == const.ERR_LYRICS_NOT_FOUND
 
 @retry(condition=(lambda x: not areLyricsNotFound(x)), times=3)
 def fetchLyricsFromGenius(song_title: str, artist_name: str) -> list[dict[str, str]]:

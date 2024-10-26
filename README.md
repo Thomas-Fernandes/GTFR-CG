@@ -43,12 +43,13 @@
 
 ## :memo: Description
 
-**GTFR-CG** is a React-Python web application that generates content serving the creation of [**Genius traductions françaises**](https://www.youtube.com/c/geniustraductionsfrancaises) YouTube videos.  
-Generate artwork and lyrics cards that can then be edited into **translation videos**.  
-Save time by interacting with the APIs of **iTunes** and **Genius** to automate parts of the edition process!  
-One day, maybe one day, this application maybe even be able to generate whole videos by itself...
+**GTFR-CG** is a React-Python web application that generates content serving the creation and publication of [**Genius traductions françaises**](https://www.youtube.com/c/geniustraductionsfrancaises) YouTube videos.  
 
-**Disclaimer: the creators of this application do not claim any rights on the Genius, iTunes or YouTube brand. All rights belong to their respective owners.**
+- Generate artwork, lyrics cards and YouTube descriptions that can then be edited into **translation videos**.  
+- Save time by interacting with the APIs of **iTunes** and **Genius** to automate parts of the edition process!  
+- One day, maybe one day, this application maybe even be able to generate whole videos by itself...
+
+**Disclaimer: the creators of this application do not claim any rights on the brands at play. All rights belong to their respective owners.**
 
 &#xa0;
 
@@ -98,7 +99,7 @@ cd front-end/ && npm run dev # will launch the front end of the application
 
 &nbsp;&nbsp; :bookmark_tabs:&nbsp; **General Information**
 
-- By default, the application runs locally on ports 8000 (back) and 4242 (front). Access the latter @ [**http://localhost:4242**](http://localhost:4242).
+- By default, the application runs locally on ports [**8000**](http://localhost:8000) (back) and [**4242**](http://localhost:4242) (front).
   - The API's documentation can be accessed @ [**http://localhost:8000/docs**](http://localhost:8000/docs).
 - The application features 6 major pages:
   - [x] **Home**: the main page, where your statistics are displayed and you can navigate to **Artwork Generation** and **Lyrics**.
@@ -107,8 +108,7 @@ cd front-end/ && npm run dev # will launch the front end of the application
     - [x] **Processed Images**: the page where you can download a background image and a YouTube thumbnail.
   - [x] **Lyrics**: the page where you can fetch lyrics from Genius and convert them to lyrics blocks.
     - [x] **Cards Generation**: the page where cards are generated from the Lyrics text blocks.
-- You can navigate between pages using the navigation buttons at the top of each page.
-- The application features a [toast notification system](https://web.dev/articles/building/a-toast-component) that will give you feedback on your unsuccessful actions.
+- The application features a [toast notification system](https://web.dev/articles/building/a-toast-component) that will give you feedback upon actions.
 - Most of the application's back end actions and reactions will be logged in the terminal *via* Python.
   - You can define a minimum severity level in the `.env` file, choosing the logger verbosity's. Check out [`.env.example`](./.env.example) for more information.
 - Your user statistics are stored at the root of the repository in a file named `stats.json`.
@@ -142,8 +142,8 @@ cd front-end/ && npm run dev # will launch the front end of the application
   - ***[1.3.2]** Sep 14 2024*: Project now has a unit tests page, better .env handling with a tutorial file. [#092](https://github.com/Thomas-Fernandes/GTFR-CG/pull/92)
 - ***[1.4.0]** Sep 17 2024*: **Lyrics Cards** — Project now supports automatic cards generation from text blocks. [#093](https://github.com/Thomas-Fernandes/GTFR-CG/pull/93)
   - ***[1.4.1]** Sep 29 2024*: Cards can now be generated manually, improved QoL in card content creation. [#120](https://github.com/Thomas-Fernandes/GTFR-CG/pull/120)
-  - ***[1.4.2]** Oct ?? 2024*: The API is now fully documented with Flask-RESTx & Swagger. [#139](https://github.com/Thomas-Fernandes/GTFR-CG/pull/139)
-  - ***[1.4.3]** Oct ?? 2024*: Cards can now be generated using a manual background and/or customized color palette. [#???](#card_file_box-changelog)
+  - ***[1.4.2]** Oct 24 2024*: The API is now fully documented with Flask-RESTx & Swagger. [#139](https://github.com/Thomas-Fernandes/GTFR-CG/pull/139)
+  - ***[1.4.3]** Oct 26 2024*: Cards can now be generated with full customization and edited in real time. [#140](https://github.com/Thomas-Fernandes/GTFR-CG/pull/140)
 - ***[1.5.0]** Coming later...*: **Boost!** — Project will see its existing functionalities sharpened. [#???](#card_file_box-changelog)
 - ***[1.6.0]** Coming later...*: **Koh-Lanta** — Project will be unified in an all-in-one application. [#???](#card_file_box-changelog)
 - ***[2.0.0]** Coming later...*: **Endgame** — Project will feature automated video edition with AI sync. [#???](#card_file_box-changelog)

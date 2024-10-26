@@ -62,7 +62,7 @@ const Lyrics = (): JSX.Element => {
       const cardMetaname = `${cardArtist.trim().toUpperCase()}, “${cardSongName.trim().toUpperCase()}”`;
       sessionStorage.setItem(SESSION_STORAGE.CARD_METANAME, cardMetaname);
       sessionStorage.setItem(SESSION_STORAGE.CARD_METHOD, isManual ? "manual" : "auto");
-      sessionStorage.setItem(SESSION_STORAGE.OUTRO_CONTRIBUTORS, (pageMetadata.contributors ?? "").toString());
+      sessionStorage.setItem(SESSION_STORAGE.OUTRO_CONTRIBUTORS, (pageMetadata.contributors ?? []).toString());
       sessionStorage.setItem(SESSION_STORAGE.LATEST_CARD_GENERATION, JSON.stringify({
         pageMetadata, lyricsParts, dismissedParts: Array.from(dismissedParts)
       }));
