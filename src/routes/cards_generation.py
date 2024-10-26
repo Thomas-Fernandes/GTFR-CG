@@ -6,7 +6,6 @@ from werkzeug.datastructures import FileStorage
 
 from ast import literal_eval
 from os import path, makedirs
-from requests.exceptions import ReadTimeout as ReadTimeoutException
 from time import time
 from typing import Any, Optional
 from uuid import uuid4
@@ -14,7 +13,6 @@ from uuid import uuid4
 import src.constants as const
 from src.docs import models, ns_cards_generation
 from src.logger import log, LogSeverity
-from src.routes.lyrics import genius
 from src.routes.processed_images import generateCoverArt
 from src.statistics import updateStats
 from src.typing_gtfr import CardgenSettings, CardsContents, CardMetadata, RGBAColor, SongMetadata
@@ -257,7 +255,9 @@ def generateCards(cards_contents: CardsContents, song_data: SongMetadata, settin
         generateCard(image_output_path, card, card_metadata)
     if gen_outro:
         image_output_path = f"{user_processed_path}{const.SLASH}{const.PROCESSED_OUTRO_FILENAME}"
-        generateOutroCard(image_output_path, song_data.get("contributors", []))
+        outro_contributors = settings.get(const.SessionFields.outro_contributors.value, "").split(", ")
+        outro_contributors = [c for c in outro_contributors if c != ""] # remove empty strings
+        generateOutroCard(image_output_path, outro_contributors)
 
     number_of_generated_cards = len(cards_contents) + (2 if gen_outro else 1) # lyrics + empty + outro card
     updateStats(to_increment=const.AvailableStats.cardsGenerated.value, increment=number_of_generated_cards)
@@ -283,37 +283,6 @@ def getSongMetadata(cards_contents: CardsContents, card_metaname: str | None) ->
     for datum in metadata:
         key, value = datum.split(": ")
         song_data[key] = value
-
-    def addSongContributors(song_data: dict[str, str]) -> None:
-        """ Adds the contributors to the song data.
-        :param song_data: [dict] The song data.
-        """
-        song_id = song_data.get("id", -1)
-        if song_id == -1:
-            raise ValueError("Song ID not found in metadata.")
-        elif song_id == "manual":
-            song_data["contributors"] = []
-            return
-        song_contributors = None
-        try:
-            with log.redirect_stdout_stderr() as (stdout, stderr): # type: ignore
-                song_contributors = genius.song_contributors(song_id)
-        except ReadTimeoutException as e:
-            log.error(f"Lyrics fetch failed: {e}")
-        if song_contributors is None:
-            raise ValueError("Song contributors not found.")
-        contributors = []
-        for scribe in song_contributors["contributors"]["transcribers"]:
-            if scribe["attribution"] * 100 > const.ATTRIBUTION_PERCENTAGE_TOLERANCE: # ignore contributors with less
-                contributors.append({
-                    "login": scribe["user"]["login"],
-                    "attribution": str(int(scribe["attribution"] * 100)) + "%", # may be useful later
-                })
-            else:
-                log.debug(f"  Ignoring {scribe['user']['login']} with {round(scribe['attribution'] * 100, 2)}% attribution.")
-        song_data["contributors"] = [c["login"] for c in contributors[:3]]
-    addSongContributors(song_data)
-
     return song_data
 
 def saveEnforcedBackgroundImage(file: FileStorage, include_center_artwork: bool) -> None:
@@ -367,6 +336,10 @@ def getBaseCardgenSettings(*, is_singular_card: bool = False) -> CardgenSettings
     if snakeToCamelCase(const.SessionFields.enforce_bottom_color.value) in request.form:
         enforce_bottom_color = request.form[snakeToCamelCase(const.SessionFields.enforce_bottom_color.value)]
 
+    outro_contributors = None
+    if eval(gen_outro.capitalize()) == True:
+        outro_contributors: Optional[str] = request.form[snakeToCamelCase(const.SessionFields.outro_contributors.value)]
+
     def checkCardgenParametersValidity(card_metaname: str, enforce_bg_image: bool, include_center_artwork: bool, include_bg_img: str) -> Optional[str]:
         if card_metaname is None: return const.ERR_CARDS_METANAME_NOT_FOUND
         if enforce_bg_image and include_center_artwork is None: return const.ERR_CARDS_CENTER_ARTWORK_NOT_FOUND
@@ -382,6 +355,7 @@ def getBaseCardgenSettings(*, is_singular_card: bool = False) -> CardgenSettings
         const.SessionFields.gen_outro.value: eval(gen_outro.capitalize()),
         const.SessionFields.include_bg_img.value: eval(include_bg_img.capitalize()),
         const.SessionFields.card_metaname.value: card_metaname,
+        const.SessionFields.outro_contributors.value: outro_contributors,
     }
 
     if is_singular_card:
@@ -423,6 +397,7 @@ class SingleCardGenerationResource(Resource):
             cardgen_settings: CardgenSettings = getBaseCardgenSettings(is_singular_card=True)
             log.debug(f"  Cardgen settings: {cardgen_settings}")
         except ValueError as e:
+            log.error(e)
             return createApiResponse(const.HttpStatus.BAD_REQUEST.value, e)
 
         log.info("Getting card contents from request...")
@@ -465,6 +440,7 @@ class CardsGenerationResource(Resource):
         try:
             cardgen_settings: CardgenSettings = getBaseCardgenSettings()
         except ValueError as e:
+            log.error(e)
             return createApiResponse(const.HttpStatus.BAD_REQUEST.value, e)
 
         log.info("Getting cards contents from savefile...")

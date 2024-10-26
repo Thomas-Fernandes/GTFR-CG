@@ -85,6 +85,8 @@ const CardsGeneration = (): JSX.Element => {
     if (body.colorPick !== "")
       formData.append("enforceBottomColor", body.colorPick);
     formData.append("cardMetaname", body.cardMetaname);
+    if (body.generateOutro)
+      formData.append("outroContributors", body.outroContributors);
     formData.append("generateOutro", body.generateOutro.toString());
     formData.append("includeBackgroundImg", body.includeBackgroundImg.toString());
   };
@@ -180,14 +182,14 @@ const CardsGeneration = (): JSX.Element => {
 
       <h1>{TITLE.CARDS_GENERATION}</h1>
 
-      <form id="settings" onSubmit={(e) => handleGenerateCards(e, {cardMetaname, bgImg, colorPick, includeCenterArtwork, generateOutro, includeBackgroundImg})}>
+      <form id="settings" onSubmit={(e) => handleGenerateCards(e, {cardMetaname, outroContributors, bgImg, colorPick, includeCenterArtwork, generateOutro, includeBackgroundImg})}>
         <div id="text-fields" className="settings flexbox">
           <input autoComplete="off"
             type="text" name="metaname" placeholder="if empty, the card metaname will be inferred"
             value={cardMetaname} onChange={(e) => setCardMetaname(e.target.value)}
             className={!cardMetaname ? "empty-text" : ""}
           />
-          {generateOutro &&
+          { generateOutro &&
             <input autoComplete="off"
               type="text" name="contributors" placeholder="contributors (comma-separated)"
               value={(outroContributors && "by: ") + outroContributors} onChange={(e) => setOutroContributors(e.target.value.replace("by: ", ""))}

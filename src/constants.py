@@ -58,6 +58,7 @@ class SessionFields(StrEnum):
     song_data = "song_data"
     enforce_background_image = "enforce_background_image"
     enforce_bottom_color = "enforce_bottom_color"
+    outro_contributors = "outro_contributors"
     gen_outro = "generate_outro"
     include_bg_img = "include_background_img"
     card_metaname = "card_metaname"

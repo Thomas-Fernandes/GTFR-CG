@@ -11,6 +11,7 @@ export type CardsGenerationResponse = ApiResponse & {
 
 export type CardsGenerationRequest = {
   cardMetaname: string;
+  outroContributors: string;
   bgImg: File | undefined;
   colorPick: string;
   includeCenterArtwork?: boolean;
