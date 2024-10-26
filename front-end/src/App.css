@@ -331,6 +331,11 @@ input[type="text"], textarea {
 
     border: 2px solid #ddd;
     border-radius: 0.2rem;
+
+    &.empty-text {
+        font-style: italic;
+        font-size: .75rem;
+    }
 }
 input[type="file"] {
     text-align-last: center;

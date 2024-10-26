@@ -27,6 +27,7 @@ const CardsGeneration = (): JSX.Element => {
   const navigate = useNavigate();
 
   const [cardMetaname, setCardMetaname] = useState("");
+  const [outroContributors, setOutroContributors] = useState("");
   const cardMethod = sessionStorage.getItem(SESSION_STORAGE.CARD_METHOD) ?? "auto";
   const cardBottomColor = sessionStorage.getItem(SESSION_STORAGE.CARD_BOTTOM_COLOR) ?? "";
 
@@ -155,6 +156,8 @@ const CardsGeneration = (): JSX.Element => {
       return;
 
     setCardMetaname(sessionStorage.getItem(SESSION_STORAGE.CARD_METANAME) ?? "");
+    const storedOutroContributors = sessionStorage.getItem(SESSION_STORAGE.OUTRO_CONTRIBUTORS);
+    setOutroContributors(storedOutroContributors ? JSON.parse(storedOutroContributors).join(", ") : "");
     setIsComponentMounted(true);
   }, [isComponentMounted, colorPick]);
 
@@ -178,12 +181,19 @@ const CardsGeneration = (): JSX.Element => {
       <h1>{TITLE.CARDS_GENERATION}</h1>
 
       <form id="settings" onSubmit={(e) => handleGenerateCards(e, {cardMetaname, bgImg, colorPick, includeCenterArtwork, generateOutro, includeBackgroundImg})}>
-        <div id="text-fields" className="settings flexbox flex-row">
+        <div id="text-fields" className="settings flexbox">
           <input autoComplete="off"
             type="text" name="metaname" placeholder="if empty, the card metaname will be inferred"
             value={cardMetaname} onChange={(e) => setCardMetaname(e.target.value)}
-            style={!cardMetaname ? { fontStyle: "italic", fontSize: ".75rem" } : {}}
+            className={!cardMetaname ? "empty-text" : ""}
           />
+          {generateOutro &&
+            <input autoComplete="off"
+              type="text" name="contributors" placeholder="contributors (comma-separated)"
+              value={(outroContributors && "by: ") + outroContributors} onChange={(e) => setOutroContributors(e.target.value.replace("by: ", ""))}
+              className={"contributors" + (!outroContributors ? " empty-text" : "")}
+            />
+          }
         </div>
         <div id="enforcers" className="settings flexbox flex-row">
           <FileUploader id="background-image" label="Select image" caption="Enforce background image?" accept="image/*" setter={setBgImg} />

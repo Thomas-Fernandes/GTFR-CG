@@ -36,7 +36,7 @@ export type PageMetadata = {
   artist: string;
   title: string;
   id: string;
-  url?: string;
+  contributors: string[];
 };
 export type LyricsPart = {
   section: string;
@@ -127,4 +127,4 @@ export type ToastType = "info" | "success" | "warn" | "error";
 
 export type StateSetter<T> = Dispatch<SetStateAction<T>>;
 
-export type Dict = { [key: string]: string };
+export type Dict = { [key: string]: unknown };
