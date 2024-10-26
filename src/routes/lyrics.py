@@ -37,7 +37,7 @@ def areLyricsNotFound(lyrics: list[dict[str, str]]) -> bool:
     """
     return len(lyrics) == 1 and lyrics[0]["section"] == "warn" and lyrics[0]["lyrics"] == const.ERR_LYRICS_NOT_FOUND
 
-@retry(condition=lambda x: not areLyricsNotFound(x), times=3)
+@retry(condition=(lambda x: not areLyricsNotFound(x)), times=3)
 def fetchLyricsFromGenius(song_title: str, artist_name: str) -> list[dict[str, str]]:
     """ Tries to fetch the lyrics of a song from Genius dot com.
     :param song_title: [string] The title of the song.

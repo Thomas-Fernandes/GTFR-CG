@@ -1,7 +1,7 @@
 import { FormEvent, JSX, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { is2xxSuccessful, objectToQueryString, sendRequest } from "../../common/Requests";
+import { is2xxSuccessful, sendRequest } from "../../common/Requests";
 import { hideSpinner, showSpinner } from "../../common/Spinner";
 import { sendToast } from "../../common/Toast";
 import { ApiResponse, FileUploadRequest, ItunesRequest, ItunesResponse, ItunesResult, YoutubeRequest } from "../../common/Types";
@@ -10,7 +10,7 @@ import { isFileExtensionAccepted } from "../../common/utils/FileUtils";
 import FileUploader from "../../components/FileUploader";
 import ImgButton from "../../components/ImgButton";
 import { FILE_UPLOAD, ITUNES, YOUTUBE } from "../../constants/ArtworkGeneration";
-import { API, BACKEND_URL, ITUNES_URL, PATHS, SPINNER_ID, TITLE, TOAST, TOAST_TYPE } from "../../constants/Common";
+import { API, BACKEND_URL, PATHS, SPINNER_ID, TITLE, TOAST, TOAST_TYPE } from "../../constants/Common";
 
 import "./ArtworkGeneration.css";
 
@@ -64,16 +64,23 @@ const ArtworkGeneration = (): JSX.Element => {
       setIsProcessingLoading(false);
     });
   };
+
   const renderItunesResult = (item: ItunesResult, key: number): JSX.Element => {
+    const resultLabel = (item.collectionName || item.trackName).replace(" - Single", "");
+
     return (
       <div className="result-item" key={"result" + key.toString()}>
-        <ImgButton src={item.artworkUrl100} className="result-image" alt={item.collectionName || item.trackName} onClick={() => handleSubmitItunesResult(item, key)} />
-        <p className="result-text centered bold italic">{item.artistName} - {item.collectionName.replace(" - Single", "")}</p>
-        <div className="flex-row" id={SPINNER_ID.ITUNES_OPTION + key.toString()}>
-        </div>
+        <ImgButton
+          src={item.artworkUrl100} alt={resultLabel}
+          onClick={() => handleSubmitItunesResult(item, key)}
+          className="result-image"
+        />
+        <p className="result-text centered bold italic">{item.artistName} - {resultLabel}</p>
+        <div className="flex-row" id={SPINNER_ID.ITUNES_OPTION + key.toString()} />
       </div>
     );
   };
+
   const getTitleWithAdjustedLength = (title: string): string => {
     title = title.slice(0, ITUNES.MAX_TITLE_LENGTH - 3);
 
@@ -84,34 +91,20 @@ const ArtworkGeneration = (): JSX.Element => {
     end = ITUNES.MAX_TITLE_LENGTH - end > ITUNES.MAX_CROP_LENGTH ? title.length : end;
     return title.slice(0, end) + "...";
   };
-  // iTunes reference: https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/iTuneSearchAPI/Searching.html#//apple_ref/doc/uid/TP40017632-CH5-SW1
-  // Ben Dodson's iTunes artwork finder which we mimic: https://github.com/bendodson/itunes-artwork-finder
   const handleSubmitItunesSearch = (e: FormEvent<HTMLFormElement>, body: ItunesRequest) => {
     e.preventDefault();
 
     showSpinner(SPINNER_ID.ITUNES);
 
-    const data = {
-      ...body,
-      entity: body.entity ?? "album", // album by default, but can be "song", "movie", "tv-show"...
-      limit: body.limit ?? 6,
-    };
-    const queryString = objectToQueryString(data);
-
     const resultItems: ItunesResult[] = [];
-    sendRequest("POST", ITUNES_URL + "/search" + queryString).then((response: ItunesResponse) => {
-      const result = {
-        status: 200,
-        message: "Success",
-        data: response,
-      };
 
-      if (!is2xxSuccessful(result.status)) {
-        throw new Error(result.message);
+    sendRequest("POST", BACKEND_URL + API.ARTWORK_GENERATION.ITUNES_SEARCH, body).then((response: ItunesResponse) => {
+      if (!is2xxSuccessful(response.status)) {
+        throw new Error(response.message);
       }
 
-      if (result.data.resultCount > 0) {
-        result.data.results.forEach((result) => {
+      if (response.data.resultCount > 0) {
+        response.data.results.forEach((result) => {
           if (result.artistName?.length > ITUNES.MAX_TITLE_LENGTH)
             result.artistName = getTitleWithAdjustedLength(result.artistName);
           if (result.collectionName?.length > ITUNES.MAX_TITLE_LENGTH)

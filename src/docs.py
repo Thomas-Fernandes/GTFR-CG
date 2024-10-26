@@ -33,6 +33,21 @@ models = {
     },
 
     const.ROUTES.art_gen.bp_name: {
+        "search-itunes": {
+            "payload": ns_artwork_generation.model("Artwork Generation - Search iTunes - payload", {
+                "term": fields.String(description="Search term"),
+                "country": fields.String(description="Country code (i.e. 'fr', 'nz'...)"),
+            }),
+            "response": ns_artwork_generation.model("Artwork Generation - Search iTunes - response", {
+                "resultCount": fields.Integer(description="Number of images found"),
+                "results": fields.Nested(ns_artwork_generation.model("Artwork Generation - Search iTunes - result", {
+                    "artistName": fields.String(description="Name of the artist"),
+                    "collectionName": fields.String(description="Name of the collection"),
+                    "trackName": fields.String(description="Name of the track"),
+                    "artworkUrl100": fields.String(description="URL of the artwork (100x100)"),
+                })),
+            }),
+        },
         "use-itunes-image": {
             "payload": ns_artwork_generation.model("Artwork Generation - iTunes Image - payload", {
                 "url": fields.String(description="URL of the iTunes image"),
