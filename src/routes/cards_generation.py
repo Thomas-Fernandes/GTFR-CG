@@ -61,10 +61,36 @@ def generateOutroCard(output_path: str, contributor_logins: list[str]) -> None:
     image.save(f"{const.FRONT_PROCESSED_CARDS_DIR}{const.PROCESSED_OUTRO_FILENAME}")
     log.info("  Outro card generated successfully.")
 
-def getCharScript(char: str) -> str:
-    if char.isascii(): return "latin"
-    if char.isalpha(): return "cyrillic"
-    else: return "!unhandled"
+def getVerticalOffset(font_type: str) -> int:
+    match font_type:
+        case const.MetanameFontTypes.latin.value: return 0
+        case const.MetanameFontTypes.european.value: return 5
+        case const.MetanameFontTypes.s_chinese.value: return -10
+        case const.MetanameFontTypes.t_chinese.value: return -10
+        case const.MetanameFontTypes.japanese.value: return -10
+        case const.MetanameFontTypes.korean.value: return -10
+        case _ : return 0
+    return 0
+def getCharFontType(char: str) -> str:
+    if char.isascii():
+        return const.MetanameFontTypes.latin.value
+    if 0x0080 <= ord(char) <= 0x00FF or 0x0100 <= ord(char) <= 0x017F or 0x0180 <= ord(char) <= 0x024F:
+        return const.MetanameFontTypes.european.value
+    if 0x4E00 <= ord(char) <= 0x9FFF:
+        return const.MetanameFontTypes.s_chinese.value
+    if 0x3400 <= ord(char) <= 0x4DBF or 0x20000 <= ord(char) <= 0x2A6DF:
+        return const.MetanameFontTypes.t_chinese.value
+    if 0x3040 <= ord(char) <= 0x309F or 0x30A0 <= ord(char) <= 0x30FF or 0x31F0 <= ord(char) <= 0x31FF \
+        or 0x3300 <= ord(char) <= 0x33FF or 0x2F00 <= ord(char) <= 0x2FDF or 0xFE30 <= ord(char) <= 0xFE4F \
+        or 0xF900 <= ord(char) <= 0xFAFF or 0x2F800 <= ord(char) <= 0x2FA1F or 0x2E80 <= ord(char) <= 0x2EFF \
+        or 0x3000 <= ord(char) <= 0x303F or 0x31C0 <= ord(char) <= 0x31EF or 0x4E00 <= ord(char) <= 0x9FFF \
+        or 0x20000 <= ord(char) <= 0x2A6D6 or 0x2A700 <= ord(char) <= 0x2B73F or 0x2B740 <= ord(char) <= 0x2B81F \
+        or 0x3200 <= ord(char) <= 0x32FF or 0x2FF0 <= ord(char) <= 0x2FFF:
+            return const.MetanameFontTypes.japanese.value
+    if 0xAC00 <= ord(char) <= 0xD7A3 or 0x1100 <= ord(char) <= 0x11FF or 0x3130 <= ord(char) <= 0x318F \
+        or 0xA960 <= ord(char) <= 0xA97F or 0xD7B0 <= ord(char) <= 0xD7FF:
+            return const.MetanameFontTypes.korean.value
+    else: return const.MetanameFontTypes.fallback.value
 
 def generateCard(output_path: str, lyrics: list[str], card_metadata: CardMetadata) -> None:
     """ Generates a card using the provided lyrics and metadata.
@@ -94,12 +120,10 @@ def generateCard(output_path: str, lyrics: list[str], card_metadata: CardMetadat
         """
         cursor = 0
         for char in metaname:
-            if getCharScript(char) == "latin":
-                draw.text((const.X_META_LYRIC + cursor, const.Y_METADATA), char, font=const.FONT_METANAME, fill=color)
-                cursor += draw.textlength(char, font=const.FONT_METANAME)
-            else:
-                draw.text((const.X_META_LYRIC + cursor, const.Y_METADATA - 7), char, font=const.FONT_METANAME_EUROPEAN, fill=color)
-                cursor += draw.textlength(char, font=const.FONT_METANAME_EUROPEAN)
+            font_type = getCharFontType(char)
+            vertical_offset = getVerticalOffset(font_type)
+            draw.text((const.X_META_LYRIC + cursor, const.Y_METADATA + vertical_offset), char, font=const.FONTS_METANAME[font_type], fill=color)
+            cursor += draw.textlength(char, font=const.FONTS_METANAME[font_type])
     drawMetaname(draw, card_metadata.card_metaname, card_metadata.text_meta_color)
 
     log.debug(f"    Card contents: {lyrics}")

@@ -210,16 +210,35 @@ TRANSLATION_TABLE = {
 }
 METADATA_IDENTIFIER = "Metadata | "
 METADATA_SEP = " ;;; "
-CARDS_FONT_SMALL_SIZE = 36
-CARDS_FONT_MEDIUM_SIZE = 43
-CARDS_FONT_BIG_SIZE = 64
+CARDS_FONT_OUTRO_SIZE = 36
+CARDS_FONT_METANAME_SIZE = 43
+CARDS_FONT_METANAME_SIZE_NON_LATIN = 40
+CARDS_FONT_LYRICS_SIZE = 64
+
 from PIL import ImageFont
 FONT_ASCII_ABSPATH = f"{FONTS_DIR}{'programme-light.ttf'}"
-FONT_LYRICS = ImageFont.truetype(FONT_ASCII_ABSPATH, CARDS_FONT_BIG_SIZE)
-FONT_METANAME = ImageFont.truetype(FONT_ASCII_ABSPATH, CARDS_FONT_MEDIUM_SIZE)
-FONT_OUTRO = ImageFont.truetype(FONT_ASCII_ABSPATH, CARDS_FONT_SMALL_SIZE)
-FONT_METANAME_EUROPEAN = ImageFont.truetype(f"{FONTS_DIR}{'noto-sans-regular.ttf'}", 40)
-FONT_METANAME_FALLBACK = ImageFont.truetype(f"{FONTS_DIR}{'arial.ttf'}", 40)
+FONT_LYRICS = ImageFont.truetype(FONT_ASCII_ABSPATH, CARDS_FONT_LYRICS_SIZE)
+FONT_METANAME = ImageFont.truetype(FONT_ASCII_ABSPATH, CARDS_FONT_METANAME_SIZE)
+FONT_OUTRO = ImageFont.truetype(FONT_ASCII_ABSPATH, CARDS_FONT_OUTRO_SIZE)
+class MetanameFontTypes(StrEnum):
+    """ Enum for the available font types """
+    latin = "FONT_METANAME_LATIN"
+    european = "FONT_METANAME_EUROPEAN"
+    s_chinese = "FONT_METANAME_S_CHINESE"
+    t_chinese = "FONT_METANAME_T_CHINESE"
+    japanese = "FONT_METANAME_JAPANESE"
+    korean = "FONT_METANAME_KOREAN"
+    fallback = "FONT_METANAME_FALLBACK"
+FONTS_METANAME = {
+    MetanameFontTypes.latin: ImageFont.truetype(FONT_ASCII_ABSPATH, CARDS_FONT_METANAME_SIZE),
+    MetanameFontTypes.european: ImageFont.truetype(f"{FONTS_DIR}{'noto-sans-regular.ttf'}", CARDS_FONT_METANAME_SIZE_NON_LATIN),
+    MetanameFontTypes.s_chinese: ImageFont.truetype(f"{FONTS_DIR}{'noto-serif-sc-regular.ttf'}", CARDS_FONT_METANAME_SIZE_NON_LATIN),
+    MetanameFontTypes.t_chinese: ImageFont.truetype(f"{FONTS_DIR}{'noto-serif-tc-regular.ttf'}", CARDS_FONT_METANAME_SIZE_NON_LATIN),
+    MetanameFontTypes.japanese: ImageFont.truetype(f"{FONTS_DIR}{'noto-serif-jp-regular.ttf'}", CARDS_FONT_METANAME_SIZE_NON_LATIN),
+    MetanameFontTypes.korean: ImageFont.truetype(f"{FONTS_DIR}{'noto-serif-kr-regular.ttf'}", CARDS_FONT_METANAME_SIZE_NON_LATIN),
+    MetanameFontTypes.fallback: ImageFont.truetype(f"{FONTS_DIR}{'arial.ttf'}", CARDS_FONT_METANAME_SIZE_NON_LATIN),
+}
+
 OUTRO_TEXT_COLOR = (246, 240, 104) #f6f068
 X_META_LYRIC = 90
 Y_METADATA = 964
