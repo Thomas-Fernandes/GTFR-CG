@@ -72,23 +72,23 @@ def getVerticalOffset(font_type: str) -> int:
         case _ : return 0
     return 0
 def getCharFontType(char: str) -> str:
-    if char.isascii():
+    o = ord(char)
+    if char.isascii() or char in "‘’“”":
         return const.MetanameFontTypes.latin.value
-    if 0x0080 <= ord(char) <= 0x00FF or 0x0100 <= ord(char) <= 0x017F or 0x0180 <= ord(char) <= 0x024F:
+    if 0x0080 <= o <= 0x00FF or 0x0100 <= o <= 0x017F or 0x0180 <= o <= 0x024F:
         return const.MetanameFontTypes.european.value
-    if 0x4E00 <= ord(char) <= 0x9FFF:
+    if 0x4E00 <= o <= 0x9FFF:
         return const.MetanameFontTypes.s_chinese.value
-    if 0x3400 <= ord(char) <= 0x4DBF or 0x20000 <= ord(char) <= 0x2A6DF:
+    if 0x3400 <= o <= 0x4DBF or 0x20000 <= o <= 0x2A6DF:
         return const.MetanameFontTypes.t_chinese.value
-    if 0x3040 <= ord(char) <= 0x309F or 0x30A0 <= ord(char) <= 0x30FF or 0x31F0 <= ord(char) <= 0x31FF \
-        or 0x3300 <= ord(char) <= 0x33FF or 0x2F00 <= ord(char) <= 0x2FDF or 0xFE30 <= ord(char) <= 0xFE4F \
-        or 0xF900 <= ord(char) <= 0xFAFF or 0x2F800 <= ord(char) <= 0x2FA1F or 0x2E80 <= ord(char) <= 0x2EFF \
-        or 0x3000 <= ord(char) <= 0x303F or 0x31C0 <= ord(char) <= 0x31EF or 0x4E00 <= ord(char) <= 0x9FFF \
-        or 0x20000 <= ord(char) <= 0x2A6D6 or 0x2A700 <= ord(char) <= 0x2B73F or 0x2B740 <= ord(char) <= 0x2B81F \
-        or 0x3200 <= ord(char) <= 0x32FF or 0x2FF0 <= ord(char) <= 0x2FFF:
+    if 0x3040 <= o <= 0x309F or 0x30A0 <= o <= 0x30FF or 0x31F0 <= o <= 0x31FF or 0x3300 <= o <= 0x33FF \
+        or 0x2F00 <= o <= 0x2FDF or 0xFE30 <= o <= 0xFE4F or 0xF900 <= o <= 0xFAFF or 0x2F800 <= o <= 0x2FA1F \
+        or 0x2E80 <= o <= 0x2EFF or 0x3000 <= o <= 0x303F or 0x31C0 <= o <= 0x31EF or 0x4E00 <= o <= 0x9FFF \
+        or 0x20000 <= o <= 0x2A6D6 or 0x2A700 <= o <= 0x2B73F or 0x2B740 <= o <= 0x2B81F \
+        or 0x3200 <= o <= 0x32FF or 0x2FF0 <= o <= 0x2FFF:
             return const.MetanameFontTypes.japanese.value
-    if 0xAC00 <= ord(char) <= 0xD7A3 or 0x1100 <= ord(char) <= 0x11FF or 0x3130 <= ord(char) <= 0x318F \
-        or 0xA960 <= ord(char) <= 0xA97F or 0xD7B0 <= ord(char) <= 0xD7FF:
+    if 0xAC00 <= o <= 0xD7A3 or 0x1100 <= o <= 0x11FF or 0x3130 <= o <= 0x318F \
+        or 0xA960 <= o <= 0xA97F or 0xD7B0 <= o <= 0xD7FF:
             return const.MetanameFontTypes.korean.value
     else: return const.MetanameFontTypes.fallback.value
 
