@@ -223,7 +223,6 @@ FONT_OUTRO = ImageFont.truetype(FONT_ASCII_ABSPATH, CARDS_FONT_OUTRO_SIZE)
 class MetanameFontTypes(StrEnum):
     """ Enum for the available font types """
     latin = "FONT_METANAME_LATIN"
-    european = "FONT_METANAME_EUROPEAN"
     s_chinese = "FONT_METANAME_S_CHINESE"
     t_chinese = "FONT_METANAME_T_CHINESE"
     japanese = "FONT_METANAME_JAPANESE"
@@ -231,7 +230,6 @@ class MetanameFontTypes(StrEnum):
     fallback = "FONT_METANAME_FALLBACK"
 FONTS_METANAME = {
     MetanameFontTypes.latin: ImageFont.truetype(FONT_ASCII_ABSPATH, CARDS_FONT_METANAME_SIZE),
-    MetanameFontTypes.european: ImageFont.truetype(f"{FONTS_DIR}{'noto-sans-regular.ttf'}", CARDS_FONT_METANAME_SIZE_NON_LATIN),
     MetanameFontTypes.s_chinese: ImageFont.truetype(f"{FONTS_DIR}{'noto-serif-sc-regular.ttf'}", CARDS_FONT_METANAME_SIZE_NON_LATIN),
     MetanameFontTypes.t_chinese: ImageFont.truetype(f"{FONTS_DIR}{'noto-serif-tc-regular.ttf'}", CARDS_FONT_METANAME_SIZE_NON_LATIN),
     MetanameFontTypes.japanese: ImageFont.truetype(f"{FONTS_DIR}{'noto-serif-jp-regular.ttf'}", CARDS_FONT_METANAME_SIZE_NON_LATIN),

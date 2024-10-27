@@ -64,19 +64,17 @@ def generateOutroCard(output_path: str, contributor_logins: list[str]) -> None:
 def getVerticalOffset(font_type: str) -> int:
     match font_type:
         case const.MetanameFontTypes.latin.value: return 0
-        case const.MetanameFontTypes.european.value: return 5
         case const.MetanameFontTypes.s_chinese.value: return -10
         case const.MetanameFontTypes.t_chinese.value: return -10
         case const.MetanameFontTypes.japanese.value: return -10
         case const.MetanameFontTypes.korean.value: return -10
-        case _ : return 0
+        case _ : return -1 # fallback
     return 0
 def getCharFontType(char: str) -> str:
     o = ord(char)
-    if char.isascii() or char in "‘’“”":
-        return const.MetanameFontTypes.latin.value
-    if 0x0080 <= o <= 0x00FF or 0x0100 <= o <= 0x017F or 0x0180 <= o <= 0x024F:
-        return const.MetanameFontTypes.european.value
+    if char.isascii() or char in "‘’“”" \
+        or 0x0080 <= o <= 0x00FF or 0x0100 <= o <= 0x017F or 0x0180 <= o <= 0x024F:
+            return const.MetanameFontTypes.latin.value
     if 0x4E00 <= o <= 0x9FFF:
         return const.MetanameFontTypes.s_chinese.value
     if 0x3400 <= o <= 0x4DBF or 0x20000 <= o <= 0x2A6DF:
