@@ -66,7 +66,7 @@ def getVerticalOffset(font_type: str) -> int:
         case const.MetanameFontTypes.latin.value: return 0
         case const.MetanameFontTypes.s_chinese.value: return -10
         case const.MetanameFontTypes.t_chinese.value: return -10
-        case const.MetanameFontTypes.japanese.value: return -10
+        case const.MetanameFontTypes.japanese.value: return -11
         case const.MetanameFontTypes.korean.value: return -10
         case _ : return -1 # fallback
     return 0
