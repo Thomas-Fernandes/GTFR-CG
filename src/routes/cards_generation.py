@@ -71,22 +71,22 @@ def getVerticalOffset(font_type: str) -> int:
         case _ : return -1 # fallback
     return 0
 def getCharFontType(char: str) -> str:
-    o = ord(char)
+    c = ord(char) # get the Unicode code point of the character
     if char.isascii() or char in "‘’“”" \
-        or 0x0080 <= o <= 0x00FF or 0x0100 <= o <= 0x017F or 0x0180 <= o <= 0x024F:
+        or 0x0080 <= c <= 0x00FF or 0x0100 <= c <= 0x017F or 0x0180 <= c <= 0x024F:
             return const.MetanameFontTypes.latin.value
-    if 0x4E00 <= o <= 0x9FFF:
+    if 0x4E00 <= c <= 0x9FFF:
         return const.MetanameFontTypes.s_chinese.value
-    if 0x3400 <= o <= 0x4DBF or 0x20000 <= o <= 0x2A6DF:
+    if 0x3400 <= c <= 0x4DBF or 0x20000 <= c <= 0x2A6DF:
         return const.MetanameFontTypes.t_chinese.value
-    if 0x3040 <= o <= 0x309F or 0x30A0 <= o <= 0x30FF or 0x31F0 <= o <= 0x31FF or 0x3300 <= o <= 0x33FF \
-        or 0x2F00 <= o <= 0x2FDF or 0xFE30 <= o <= 0xFE4F or 0xF900 <= o <= 0xFAFF or 0x2F800 <= o <= 0x2FA1F \
-        or 0x2E80 <= o <= 0x2EFF or 0x3000 <= o <= 0x303F or 0x31C0 <= o <= 0x31EF or 0x4E00 <= o <= 0x9FFF \
-        or 0x20000 <= o <= 0x2A6D6 or 0x2A700 <= o <= 0x2B73F or 0x2B740 <= o <= 0x2B81F \
-        or 0x3200 <= o <= 0x32FF or 0x2FF0 <= o <= 0x2FFF:
+    if 0x3040 <= c <= 0x309F or 0x30A0 <= c <= 0x30FF or 0x31F0 <= c <= 0x31FF or 0x3300 <= c <= 0x33FF \
+        or 0x2F00 <= c <= 0x2FDF or 0xFE30 <= c <= 0xFE4F or 0xF900 <= c <= 0xFAFF or 0x2F800 <= c <= 0x2FA1F \
+        or 0x2E80 <= c <= 0x2EFF or 0x3000 <= c <= 0x303F or 0x31C0 <= c <= 0x31EF or 0x4E00 <= c <= 0x9FFF \
+        or 0x20000 <= c <= 0x2A6D6 or 0x2A700 <= c <= 0x2B73F or 0x2B740 <= c <= 0x2B81F \
+        or 0x3200 <= c <= 0x32FF or 0x2FF0 <= c <= 0x2FFF:
             return const.MetanameFontTypes.japanese.value
-    if 0xAC00 <= o <= 0xD7A3 or 0x1100 <= o <= 0x11FF or 0x3130 <= o <= 0x318F \
-        or 0xA960 <= o <= 0xA97F or 0xD7B0 <= o <= 0xD7FF:
+    if 0xAC00 <= c <= 0xD7A3 or 0x1100 <= c <= 0x11FF or 0x3130 <= c <= 0x318F \
+        or 0xA960 <= c <= 0xA97F or 0xD7B0 <= c <= 0xD7FF:
             return const.MetanameFontTypes.korean.value
     else: return const.MetanameFontTypes.fallback.value
 
@@ -120,7 +120,8 @@ def generateCard(output_path: str, lyrics: list[str], card_metadata: CardMetadat
         for char in metaname:
             font_type = getCharFontType(char)
             vertical_offset = getVerticalOffset(font_type)
-            draw.text((const.X_META_LYRIC + cursor, const.Y_METADATA + vertical_offset), char, font=const.FONTS_METANAME[font_type], fill=color)
+            metaname_position = (const.X_META_LYRIC + cursor, const.Y_METADATA + vertical_offset)
+            draw.text(metaname_position, char, font=const.FONTS_METANAME[font_type], fill=color)
             cursor += draw.textlength(char, font=const.FONTS_METANAME[font_type])
     drawMetaname(draw, card_metadata.card_metaname, card_metadata.text_meta_color)
 
