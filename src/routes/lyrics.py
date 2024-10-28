@@ -119,13 +119,13 @@ def fetchLyricsFromGenius(song_title: str, artist_name: str) -> list[dict[str, s
 
     # Split lyrics into blocks based on sections, e.g. "[Chorus]"
     parts = split(r"(\[.*?\])", lyrics)
-    json_contributors = dumps(getSongContributors(song.id))
+    jsonified_contributors = dumps(getSongContributors(song.id))
     lyrics_parts = [{ # the first part is metadata
         "section": "[Metadata]",
         "lyrics": f"id: {song.id}" + "\n"
             f"artist: {song.artist}" + "\n"
             f"title: {song.title}" + "\n"
-            f"contributors: {json_contributors}"
+            f"contributors: {jsonified_contributors}"
     }]
     # other available metadata: '_body', '_client', 'url', 'primary_artist', 'stats', 'api_path', 'path',
     #   'full_title', 'header_image_thumbnail_url', 'header_image_url', 'lyrics_owner_id', 'lyrics_state',

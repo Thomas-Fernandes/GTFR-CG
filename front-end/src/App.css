@@ -334,7 +334,7 @@ input[type="text"], textarea {
 
     &.empty-text {
         font-style: italic;
-        font-size: .75rem;
+        font-size: .75rem !important;
     }
 }
 input[type="file"] {

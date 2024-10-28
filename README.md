@@ -144,6 +144,7 @@ cd front-end/ && npm run dev # will launch the front end of the application
   - ***[1.4.1]** Sep 29 2024*: Cards can now be generated manually, improved QoL in card content creation. [#120](https://github.com/Thomas-Fernandes/GTFR-CG/pull/120)
   - ***[1.4.2]** Oct 24 2024*: The API is now fully documented with Flask-RESTx & Swagger. [#139](https://github.com/Thomas-Fernandes/GTFR-CG/pull/139)
   - ***[1.4.3]** Oct 26 2024*: Cards can now be generated with full customization and edited in real time. [#140](https://github.com/Thomas-Fernandes/GTFR-CG/pull/140)
+  - ***[1.4.4]** Oct ?? 2024*: All major European and Asian fonts are now handled, back end functional logic is reinforced. [#???](#card_file_box-changelog)
 - ***[1.5.0]** Coming later...*: **Boost!** — Project will see its existing functionalities sharpened. [#???](#card_file_box-changelog)
 - ***[1.6.0]** Coming later...*: **Koh-Lanta** — Project will be unified in an all-in-one application. [#???](#card_file_box-changelog)
 - ***[2.0.0]** Coming later...*: **Endgame** — Project will feature automated video edition with AI sync. [#???](#card_file_box-changelog)

@@ -347,7 +347,6 @@ def getBaseCardgenSettings(*, is_singular_card: bool = False) -> CardgenSettings
         return None
     err = checkCardgenParametersValidity(card_metaname, enforce_bg_image, include_center_artwork, include_bg_img)
     if err is not None:
-        log.error(err)
         raise ValueError(err)
 
     base_settings = {
@@ -369,7 +368,6 @@ def getBaseCardgenSettings(*, is_singular_card: bool = False) -> CardgenSettings
             return None
         err = checkSingularCardgenParametersValidity(card_content, card_filename, enforce_bottom_color)
         if err is not None:
-            log.error(err)
             raise ValueError(err)
 
         base_settings[const.SessionFields.cards_contents.value] = card_content
