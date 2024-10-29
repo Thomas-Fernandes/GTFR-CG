@@ -6,7 +6,14 @@ from time import time
 from typing import Optional
 
 import src.constants as const
-from src.typing import CachedElemType, CardsContents
+from src.typing_gtfr import CachedElemType, CardsContents
+
+def getHexColorFromRGB(rgb: tuple[int, int, int]) -> str:
+    """ Converts an RGB color to a hex color.
+    :param rgb: [tuple] The RGB color.
+    :return: [string] The hex color.
+    """
+    return "#{:02x}{:02x}{:02x}".format(*rgb)
 
 def snakeToCamelCase(snake_str: str) -> str:
     """ Converts a snake_case string to a camelCase string.
@@ -52,7 +59,7 @@ def checkImageFilenameValid(filename: str | None) -> Optional[str]:
     if filename == None or filename.strip() == "":
         return const.ERR_NO_FILE
     if not('.' in filename and filename.rsplit('.', 1)[1].lower() in ["png", "jpg", "jpeg"]):
-        return const.ERR_INVALID_FILE_TYPE
+        return const.ERR_IMG_INVALID_FILETYPE
     return None
 
 def getNowStamp() -> str: # as YY-MM-DD_HH-MM-SS

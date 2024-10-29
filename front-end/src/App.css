@@ -129,6 +129,11 @@ hr {
         content: "\00a0"; /* Prevent margin collapse */
     }
 }
+.vertical-rule {
+    border-top: 4vw solid #000000;
+    height: 100%;
+    box-shadow: 0 0 2px .2px #000000;
+}
 
 #toast-container {
     position: fixed;
@@ -326,6 +331,11 @@ input[type="text"], textarea {
 
     border: 2px solid #ddd;
     border-radius: 0.2rem;
+
+    &.empty-text {
+        font-style: italic;
+        font-size: .75rem !important;
+    }
 }
 input[type="file"] {
     text-align-last: center;
@@ -377,11 +387,15 @@ input[type="file"] {
 }
 .flex-col { flex-direction: column; }
 .flex-row { flex-direction: row; }
-.g-1 { gap: 1rem; }
-.g-2 { gap: 2rem; }
+.g-p5 { gap: .5rem; }
+.g-1  { gap: 1rem; }
+.g-2  { gap: 2rem; }
 
-.hidden { display: none; }
+.hidden   { display: none; }
+.hidden-h { visibility: hidden; width: 0; }
+.hidden-v { visibility: hidden; height: 0; }
 
+.m-0  { margin: 0; }
 .mv-0 { margin-top: 0; margin-bottom: 0; }
 .mv-1 { margin-top: 1rem; margin-bottom: 1rem; }
 
@@ -392,37 +406,42 @@ input[type="file"] {
 .t-yellow { color: #7f7f00; }
 .t-red { color: #7f0000; }
 
-.file-upload-component {
-    align-self: center;
-    cursor: pointer;
-    width: 32rem;
-    border: 2px solid #dddddd;
-    padding: .5rem;
-
-    * {
+.color-picker {
+    .color-picker--img {
+        margin-right: 1rem;
         cursor: pointer;
-        margin: 0 .5rem;
     }
 
-    label {
-        padding: .5rem 1rem;
+    .color-picker--color {
+        width: 8rem;
+        height: 100%;
+        justify-content: center;
 
-        background-color: #007bff;
+        margin: 0 auto;
+        border: 2px solid #dddddd;
+        border-radius: .5rem;
+
+        text-align: center;
+        letter-spacing: 0.2rem;
+    }
+
+    .color-picker--load-latest {
+        cursor: pointer;
+        font-size: smaller;
+
+        background-color: #8fbc8f;
         color: #ffffff;
         border-radius: .25rem;
-    }
 
-    p {
-        margin-right: 0;
-    }
-
-    div, button {
-        margin: 0;
+        &:hover {
+            background-color: #0056b3;
+        }
     }
 }
 .btn-remove {
     cursor: pointer;
     padding: .25rem;
+    margin-bottom: .2rem;
     border: none;
 
     background: none;

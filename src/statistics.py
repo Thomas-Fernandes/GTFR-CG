@@ -1,9 +1,10 @@
 from dataclasses import dataclass
+from time import time
 from typing import Optional
 
 import src.constants as const
-from src.logger import log
-from src.typing import JsonDict
+from src.logger import log, LogSeverity
+from src.typing_gtfr import JsonDict
 
 ############# CLASS #############
 
@@ -18,7 +19,6 @@ class Stats:
         lyrics_fetches: [int?] The number of lyrics fetches. (default: None)
         cards_generations: [int?] The number of cards generations. (default: None)
     """
-
     date_first_operation: Optional[str] = None
     date_last_operation: Optional[str] = None
     artwork_generations: Optional[int] = None
@@ -71,7 +71,7 @@ def getJsonStatsFromFile(path: str = const.STATS_FILE_PATH) -> JsonDict:
     log.debug(f"Getting stats from file: {path}...")
     try:
         if not path.endswith(".json"):
-            raise ValueError("The stats file must be a JSON file.")
+            raise ValueError(const.ERR_STATS_FILETYPE)
         with open(path, "r") as file:
             log.debug(f"Loaded stats from file {path}.")
             return loads(file.read()) # <- read stats from stats file
@@ -124,6 +124,7 @@ def initStats() -> JsonDict:
     :return: [dict] The statistics from the statistics file.
     """
     log.debug("Initializing statistics...")
+    start = time()
     stats: JsonDict = {}
     for stat in const.AvailableStats:
         stats.setdefault(stat.value, const.EMPTY_STATS[stat.value])
@@ -132,7 +133,7 @@ def initStats() -> JsonDict:
         log.debug(f"  Stats file created @ {const.STATS_FILE_PATH}")
         file.write(dumps(stats))
 
-    log.info("Statistics initialization complete.")
+    log.info("Statistics initialization complete.").time(LogSeverity.INFO, time() - start)
     return loads(str(stats).replace("'", '"'))
 
 def onLaunch() -> None:

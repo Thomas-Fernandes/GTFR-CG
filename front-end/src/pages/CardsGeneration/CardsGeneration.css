@@ -6,13 +6,27 @@
             margin-bottom: 1rem;
 
             &#text-fields {
+                width: 50%;
+                gap: .25rem;
+                align-self: center;
+
                 input {
+                    width: 100%;
                     height: 1rem;
                     margin: 0;
+
+                    &.contributors {
+                        width: 60%;
+                        padding: .75rem;
+                        align-self: end;
+                        font-size: smaller;
+                        text-align: end;
+                    }
                 }
             }
 
-            &#file-upload {
+            &#enforcers {
+                min-height: 4rem;
                 gap: 1rem;
 
                 >p {

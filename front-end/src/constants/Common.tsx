@@ -10,6 +10,7 @@ export const TOAST: Record<string, string> = {
   NO_SPINNER_ID: "HTML Spinner id is required.",
   NO_SPINNER_CONTAINER: "Spinner container not found.",
   PROCESSING_IN_PROGRESS: "Processing already in progress.",
+  NO_LATEST_COLOR: "No latest color found.",
 
   // Redirect
     NO_PROCESSED_IMAGE: "No processed image found.",
@@ -46,6 +47,11 @@ export const TOAST: Record<string, string> = {
     NO_CARDS: "No cards were generated.",
     UNAUTHORIZED_OUTRO: "The outro card cannot be generated\n"
       + "since the card creation was manual.",
+    CARDS_GENERATED: "Cards generated successfully.",
+    CARD_NOT_EDITABLE: "The contents of this card cannot be edited.",
+    CARD_EDIT_IN_PROGRESS: "Card edit already in progress.",
+    CARD_EDIT_FAILED: "Failed to edit card.",
+    CARD_EDITED: "Card edited successfully", // no full stop on purpose
 };
 
 export const RESPONSE_STATUS: Record<string, ResponseStatus> = {
@@ -78,10 +84,11 @@ export const SPINNER_ID = {
 
   // Lyrics
     LYRICS_SEARCH: "lyrics_search",
-    LYRICS_SAVE: "lyrics_save",
+    LYRICS_CONVERT: "lyrics_convert",
 
   // Cards Generation
     CARDS_GENERATE: "cards-generation_generate",
+    CARDS_GENERATE_SINGLE: "cards-generation_generate-single",
 }
 
 /***************** CONFIG ****************/
@@ -114,6 +121,7 @@ export const API = {
   GENIUS_TOKEN: "/genius-token",
 
   ARTWORK_GENERATION: {
+    ITUNES_SEARCH: PATHS.artworkGeneration + "/search-itunes",
     ITUNES: PATHS.artworkGeneration + "/use-itunes-image",
     FILE_UPLOAD: PATHS.artworkGeneration + "/use-local-image",
     YOUTUBE_THUMBNAIL: PATHS.artworkGeneration + "/use-youtube-thumbnail",
@@ -128,8 +136,9 @@ export const API = {
   },
 
   CARDS_GENERATION: {
-    SAVE_CARDS_CONTENTS: PATHS.cardsGeneration + "/save-contents",
+    SAVE_CARDS_CONTENTS: PATHS.cardsGeneration + "/save-cards-contents",
     GENERATE_CARDS: PATHS.cardsGeneration + "/generate",
+    GENERATE_SINGLE_CARD: PATHS.cardsGeneration + "/generate-single",
   },
 };
 

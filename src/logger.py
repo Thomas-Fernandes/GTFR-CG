@@ -1,33 +1,29 @@
 from contextlib import contextmanager
-from enum import Enum
+from enum import IntEnum, StrEnum
 from io import StringIO
 from re import Match
 import sys # The whole module must be imported for output redirection to work
-from typing import Iterator, Optional
+from typing import Iterator, Optional, Self
 
 import src.constants as const
 from src.utils.soft_utils import getNowEpoch
 
-class LogSeverity(Enum):
+class LogSeverity(IntEnum):
     """ Enum for severity levels.
     """
-    DEBUG    = 0x100
-    INFO     = 0x200
-    LOG      = 0x201
-    WARN     = 0x300
-    ERROR    = 0x400
-    CRITICAL = 0x500
+    TIME     = 000
+    DEBUG    = 100
+    INFO     = 200
+    LOG      = 201
+    WARN     = 300
+    ERROR    = 400
+    CRITICAL = 500
 
-    def __lt__(self, other: 'LogSeverity') -> bool: return self.value <  other.value
-    def __le__(self, other: 'LogSeverity') -> bool: return self.value <= other.value
-    def __eq__(self, other: 'LogSeverity') -> bool: return self.value == other.value
-    def __ne__(self, other: 'LogSeverity') -> bool: return self.value != other.value
-    def __ge__(self, other: 'LogSeverity') -> bool: return self.value >= other.value
-    def __gt__(self, other: 'LogSeverity') -> bool: return self.value  > other.value
 
-class SeverityPrefix(Enum):
+class SeverityPrefix(StrEnum):
     """ Enum for severity prefixes.
     """
+    TIME     = "TIME:"
     DEBUG    = "DEBUG"
     INFO     = "INFO."
     LOG      = "LOG.."
@@ -44,7 +40,7 @@ def getFormattedMessage(msg: str, severity: Optional[LogSeverity] = None) -> str
     prefix: str
     now: str = getNowEpoch()
     try:
-        prefix = SeverityPrefix["" if (not severity) else severity.name].value
+        prefix = SeverityPrefix["" if (severity is None) else severity.name].value
     except KeyError:
         print(f"[{SeverityPrefix.CRITICAL.value} | {now}] Invalid severity level: {severity}")
         sys.exit(1)
@@ -57,12 +53,30 @@ class Logger:
         __severity: [LogSeverity] The severity level of the logger.
         __log_file: [string] The path of the file to write logs to.
     """
-    def critical(self, msg: str) -> None: self.send(msg, LogSeverity.CRITICAL)
-    def error(self,    msg: str) -> None: self.send(msg, LogSeverity.ERROR)
-    def warn(self,     msg: str) -> None: self.send(msg, LogSeverity.WARN)
-    def log(self,      msg: str) -> None: self.send(msg, LogSeverity.LOG)
-    def info(self,     msg: str) -> None: self.send(msg, LogSeverity.INFO)
-    def debug(self,    msg: str) -> None: self.send(msg, LogSeverity.DEBUG)
+    def critical(self, msg: str) -> Self: return self.send(msg, LogSeverity.CRITICAL)
+    def error(self,    msg: str) -> Self: return self.send(msg, LogSeverity.ERROR)
+    def warn(self,     msg: str) -> Self: return self.send(msg, LogSeverity.WARN)
+    def log(self,      msg: str) -> Self: return self.send(msg, LogSeverity.LOG)
+    def info(self,     msg: str) -> Self: return self.send(msg, LogSeverity.INFO)
+    def debug(self,    msg: str) -> Self: return self.send(msg, LogSeverity.DEBUG)
+
+    def time(self, sev: LogSeverity, duration: float, *, padding: int = 0) -> Self:
+        """ Logs a message with a timestamp.
+        :param start: [float] The start time.
+        :param end: [float] The end time.
+        :return: [Logger] The logger instance. (for chaining)
+        """
+        if padding < 0: raise ValueError("Padding must be a non-negative integer.")
+
+        if sev < self.__severity: return self
+
+        if duration < 1:
+            if duration * 1_000 < 1:
+                display_duration = f"{round(duration * 1_000_000)} µ-seconds"
+            else:
+                display_duration = f"{round(duration * 1_000)} m-seconds"
+        else: display_duration = f"{round(duration, 2)} seconds"
+        return self.send(f"{' ' * padding}^ took {display_duration}", LogSeverity.TIME)
 
     @contextmanager
     def redirect_stdout_stderr(self) -> Iterator[tuple[StringIO, StringIO]]:
@@ -108,13 +122,13 @@ class Logger:
                     processed_line = process_message(line)
                     self.error(processed_line)
 
-    def send(self, msg: str, severity: LogSeverity = LogSeverity.LOG) -> None:
+    def send(self, msg: str, severity: LogSeverity) -> Self:
         """ Sends a message to log.
         :param msg: [string] The message to log.
-        :param severity: [LogSeverity?] The severity of the message. (default: None)
+        :param severity: [LogSeverity?] The severity of the message.
+        :return: [Logger] The logger instance. (for chaining)
         """
-        if severity.value < self.__severity.value: return
-
+        if severity != LogSeverity.TIME and severity < self.__severity: return self
         message_to_log = getFormattedMessage(msg, severity)
         if self.__log_file is not None and self.__log_file.strip() != "":
             if self.__severity <= LogSeverity.DEBUG:
@@ -123,12 +137,13 @@ class Logger:
                 file.write(message_to_log + '\n')
         else:
             print(message_to_log)
+        return self
 
     def getSeverity(self) -> LogSeverity:
         """ Returns the severity level of the logger.
         :return: [LogSeverity] The severity level of the logger.
         """
-        self.debug(f"Returning severity level: {self.__severity}")
+        self.debug(f"Returning severity level: {self.__severity.name}")
         return self.__severity
 
     def __init__(

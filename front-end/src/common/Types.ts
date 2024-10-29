@@ -4,16 +4,23 @@ import { Dispatch, SetStateAction } from "react";
 
 export type CardsGenerationResponse = ApiResponse & {
   data: {
-    generated: number;
+    cardsLyrics: SongPartsCards;
+    cardBottomColor: string;
   };
 };
 
 export type CardsGenerationRequest = {
   cardMetaname: string;
+  outroContributors: string;
   bgImg: File | undefined;
+  colorPick: string;
   includeCenterArtwork?: boolean;
   generateOutro: boolean;
   includeBackgroundImg: boolean;
+};
+export type SingleCardGenerationRequest = CardsGenerationRequest & {
+  cardsContents: string[];
+  cardFilename: string;
 };
 
 export type SongPartsCards = string[][];
@@ -30,7 +37,7 @@ export type PageMetadata = {
   artist: string;
   title: string;
   id: string;
-  url?: string;
+  contributors: string[];
 };
 export type LyricsPart = {
   section: string;
@@ -76,9 +83,11 @@ export type ItunesResult = {
   trackName: string;
   artworkUrl100: string;
 };
-export type ItunesResponse = {
-  resultCount: number;
-  results: ItunesResult[];
+export type ItunesResponse = ApiResponse & {
+  data: {
+    resultCount: number;
+    results: ItunesResult[];
+  }
 };
 export type ItunesRequest = {
   term: string;
@@ -96,6 +105,13 @@ export type Statistics = {
   lyricsFetches: number;
   cardsGenerated: number;
 };
+export type DisplayedStatistics = {
+  dateFirstOperation: string;
+  dateLastOperation: string;
+  artworkGenerations: string;
+  lyricsFetches: string;
+  cardsGenerated: string;
+};
 
 /**************** GENERIC ****************/
 
@@ -112,4 +128,4 @@ export type ToastType = "info" | "success" | "warn" | "error";
 
 export type StateSetter<T> = Dispatch<SetStateAction<T>>;
 
-export type Dict = { [key: string]: string };
+export type Dict = { [key: string]: unknown };
