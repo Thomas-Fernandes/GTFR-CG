@@ -9,14 +9,14 @@ from time import time
 from typing import Optional
 from uuid import uuid4
 
-import src.constants as const
-from src.decorators import retry
-from src.docs import models, ns_artwork_generation
-from src.logger import log, LogSeverity
-from src.utils.soft_utils import checkImageFilenameValid, snakeToCamelCase
-from src.utils.web_utils import createApiResponse
+import server.src.constants as const
+from server.src.decorators import retry
+from server.src.docs import models, ns_artwork_generation
+from server.src.logger import log, LogSeverity
+from server.src.utils.soft_utils import checkImageFilenameValid, snakeToCamelCase
+from server.src.utils.web_utils import createApiResponse
 
-from src.app import api, app
+from server.src.app import api, app
 bp_artwork_generation = Blueprint(const.ROUTES.art_gen.bp_name, __name__.split('.')[-1])
 session = app.config
 api_prefix = const.API_ROUTE + const.ROUTES.art_gen.path

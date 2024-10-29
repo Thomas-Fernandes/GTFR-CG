@@ -9,15 +9,15 @@ from requests.exceptions import ReadTimeout as ReadTimeoutException
 from time import time
 from typing import Literal, Optional, Union
 
-import src.constants as const
-from src.decorators import retry
-from src.docs import models, ns_lyrics
-from src.logger import log
-from src.logger import log, LogSeverity
-from src.statistics import updateStats
-from src.utils.web_utils import createApiResponse
+import server.src.constants as const
+from server.src.decorators import retry
+from server.src.docs import models, ns_lyrics
+from server.src.logger import log
+from server.src.logger import log, LogSeverity
+from server.src.statistics import updateStats
+from server.src.utils.web_utils import createApiResponse
 
-from src.app import api, app
+from server.src.app import api, app
 bp_lyrics = Blueprint(const.ROUTES.lyrics.bp_name, __name__.split('.')[-1])
 session = app.config
 api_prefix = const.API_ROUTE + const.ROUTES.lyrics.path

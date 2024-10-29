@@ -1,6 +1,6 @@
 from flask_restx import fields, Namespace
 
-import src.constants as const
+import server.src.constants as const
 
 ns_home = Namespace((const.ROUTES.home.bp_name or "?"), description="Home related routes")
 ns_artwork_generation = Namespace((const.ROUTES.art_gen.bp_name or "?"), description="Artwork generation related routes")

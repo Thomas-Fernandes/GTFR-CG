@@ -5,7 +5,7 @@ from os import getenv, name as osName
 from re import compile
 from typing import Optional
 
-from src.typing_gtfr import JsonDict, Route, Routes
+from server.src.typing_gtfr import JsonDict, Route, Routes
 
 class HttpStatus(IntEnum):
     """ Enum for HTTP status codes.

@@ -10,10 +10,10 @@ from os import listdir, makedirs, path, remove, removedirs
 from sys import exit
 
 # Local modules
-import src.constants as const
-from src.logger import log
-from src.utils.soft_utils import getExpirationTimestamp
-from src.statistics import onLaunch as printInitStatistics
+import server.src.constants as const
+from server.src.logger import log
+from server.src.utils.soft_utils import getExpirationTimestamp
+from server.src.statistics import onLaunch as printInitStatistics
 
 # Application initialization
 global app, api
@@ -29,11 +29,11 @@ def initApp() -> None:
     def initBlueprints() -> None:
         """ Initializes the blueprints for the app """
         log.debug("  Initializing blueprints...")
-        from src.routes.artwork_generation import bp_artwork_generation
-        from src.routes.cards_generation import bp_cards_generation
-        from src.routes.home import bp_home
-        from src.routes.lyrics import bp_lyrics
-        from src.routes.processed_images import bp_processed_images
+        from server.src.routes.artwork_generation import bp_artwork_generation
+        from server.src.routes.cards_generation import bp_cards_generation
+        from server.src.routes.home import bp_home
+        from server.src.routes.lyrics import bp_lyrics
+        from server.src.routes.processed_images import bp_processed_images
         blueprints = [
             bp_artwork_generation,
             bp_cards_generation,

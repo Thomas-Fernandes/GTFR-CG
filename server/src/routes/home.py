@@ -1,13 +1,13 @@
 from flask import Blueprint, Response
 from flask_restx import Resource
 
-import src.constants as const
-from src.docs import models, ns_home
-from src.logger import log
-from src.statistics import getJsonStatsFromFile
-from src.utils.web_utils import createApiResponse
+import server.src.constants as const
+from server.src.docs import models, ns_home
+from server.src.logger import log
+from server.src.statistics import getJsonStatsFromFile
+from server.src.utils.web_utils import createApiResponse
 
-from src.app import api, app
+from server.src.app import api, app
 session = app.config
 bp_home = Blueprint(const.ROUTES.home.bp_name, __name__.split('.')[-1])
 api.add_namespace(ns_home, path=const.API_ROUTE)

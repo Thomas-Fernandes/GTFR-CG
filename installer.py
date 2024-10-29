@@ -3,12 +3,12 @@ from os import chdir, environ, name as osName, pathsep, system
 from subprocess import CalledProcessError, CompletedProcess, Popen, run
 from typing import Optional
 
-result = run(["pip", "install", "-r", "requirements.txt"], capture_output=True, text=True) # needs to be run before importing logger
+result = run(["pip", "install", "-r", "server/requirements.txt"], capture_output=True, text=True) # needs to be run before importing logger
 
-from src.logger import log, LogSeverity
+from server.src.logger import log, LogSeverity
 
 def quitIfError(result: CompletedProcess[bytes]) -> None:
-    """ Quits the installation if an error occurred.
+    """ Quits the installation if an error occurred
     :param result: [CompletedProcess] The result of the subprocess.
     """
     if result.returncode not in [0, 2316632107]: # package installed, or already installed
@@ -16,12 +16,11 @@ def quitIfError(result: CompletedProcess[bytes]) -> None:
         exit(1)
 
 def installNodePackages() -> None:
-    """ Installs the Node packages required by the front-end application.
-    """
+    """ Installs the Node packages required by the front end application """
     log.log("  Installing Node packages...")
 
     def launchNodePackagesInstallation() -> None:
-        chdir("front-end")
+        chdir("client")
         if osName == "nt":
             system("npm install --silent")
         else:
@@ -32,11 +31,10 @@ def installNodePackages() -> None:
     launchNodePackagesInstallation()
 
 def installNvm() -> None:
-    """ Installs Nvm, needed for Node
-    """
+    """ Installs Nvm, needed for Node """
 
     def getNvmVersion() -> Optional[str]:
-        """ Checks if Nvm is installed.
+        """ Checks if Nvm is installed
         :return: [str] The version of Nvm if it is installed, None otherwise.
         """
         try:
@@ -77,10 +75,9 @@ def installNvm() -> None:
     launchNvmInstallation()
 
 def installNode() -> None:
-    """ Installs Node.js, needed for React.
-    """
+    """ Installs NodeJs, needed for React """
     def getNodeVersion() -> Optional[str]:
-        """ Checks if Node.js is installed.
+        """ Checks if NodeJs is installed
         :return: [str] The version of Node.js if it is installed, None otherwise.
         """
         try:
@@ -123,8 +120,7 @@ def installNode() -> None:
     launchNodeJsInstallation()
 
 def installReactReq() -> None:
-    """ Installs the software required by the front-end application.
-    """
+    """ Installs the software required by the front end application """
     log.log("Installing React requirements...")
     installNode()
     installNvm()
@@ -132,8 +128,7 @@ def installReactReq() -> None:
     log.log("React requirements installation complete.")
 
 def installPythonReq() -> None:
-    """ Installs the packages required by the application, from the requirements file.
-    """
+    """ Installs the packages required by the application, from the requirements file """
     log.log("Installing Python requirements...")
 
     installed_packages: list[str] = []

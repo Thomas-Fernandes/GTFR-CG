@@ -2,9 +2,9 @@ from dataclasses import dataclass
 from time import time
 from typing import Optional
 
-import src.constants as const
-from src.logger import log, LogSeverity
-from src.typing_gtfr import JsonDict
+import server.src.constants as const
+from server.src.logger import log, LogSeverity
+from server.src.typing_gtfr import JsonDict
 
 ############# CLASS #############
 
@@ -61,7 +61,7 @@ class Stats:
 
 from json import loads, dumps, JSONDecodeError
 
-from src.utils.soft_utils import getNowEpoch
+from server.src.utils.soft_utils import getNowEpoch
 
 def getJsonStatsFromFile(path: str = const.STATS_FILE_PATH) -> JsonDict:
     f""" Returns the statistics contained in a JSON statistics file.

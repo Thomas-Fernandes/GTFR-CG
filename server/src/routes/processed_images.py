@@ -5,13 +5,13 @@ from PIL import Image, ImageFilter, ImageDraw
 from os import path
 from time import time
 
-import src.constants as const
-from src.docs import models, ns_artwork_processing
-from src.logger import log, LogSeverity
-from src.statistics import updateStats
-from src.utils.web_utils import createApiResponse
+import server.src.constants as const
+from server.src.docs import models, ns_artwork_processing
+from server.src.logger import log, LogSeverity
+from server.src.statistics import updateStats
+from server.src.utils.web_utils import createApiResponse
 
-from src.app import api, app
+from server.src.app import api, app
 bp_processed_images = Blueprint(const.ROUTES.art_proc.bp_name, __name__.split('.')[-1])
 session = app.config
 api_prefix = const.API_ROUTE + const.ROUTES.art_proc.path

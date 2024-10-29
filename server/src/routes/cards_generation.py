@@ -10,16 +10,16 @@ from time import time
 from typing import Any, Optional
 from uuid import uuid4
 
-import src.constants as const
-from src.docs import models, ns_cards_generation
-from src.logger import log, LogSeverity
-from src.routes.processed_images import generateCoverArt
-from src.statistics import updateStats
-from src.typing_gtfr import CardgenSettings, CardsContents, CardMetadata, RGBAColor, SongMetadata
-from src.utils.soft_utils import doesFileExist, getCardsContentsFromFile, getHexColorFromRGB, getNowStamp, snakeToCamelCase, writeCardsContentsToFile
-from src.utils.web_utils import createApiResponse
+import server.src.constants as const
+from server.src.docs import models, ns_cards_generation
+from server.src.logger import log, LogSeverity
+from server.src.routes.processed_images import generateCoverArt
+from server.src.statistics import updateStats
+from server.src.typing_gtfr import CardgenSettings, CardsContents, CardMetadata, RGBAColor, SongMetadata
+from server.src.utils.soft_utils import doesFileExist, getCardsContentsFromFile, getHexColorFromRGB, getNowStamp, snakeToCamelCase, writeCardsContentsToFile
+from server.src.utils.web_utils import createApiResponse
 
-from src.app import api, app
+from server.src.app import api, app
 bp_cards_generation = Blueprint(const.ROUTES.cards_gen.bp_name, __name__.split('.')[-1])
 session = app.config
 api_prefix = const.API_ROUTE + const.ROUTES.cards_gen.path

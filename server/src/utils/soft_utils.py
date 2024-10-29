@@ -5,8 +5,8 @@ from os import path
 from time import time
 from typing import Optional
 
-import src.constants as const
-from src.typing_gtfr import CachedElemType, CardsContents
+import server.src.constants as const
+from server.src.typing_gtfr import CachedElemType, CardsContents
 
 def getHexColorFromRGB(rgb: tuple[int, int, int]) -> str:
     """ Converts an RGB color to a hex color.
