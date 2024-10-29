@@ -53,7 +53,6 @@ const CardsGallery: React.FC<Props> = ({ id, initialCards, handleDownloadCard, g
     if (body.colorPick !== "")
       formData.append("enforceBottomColor", body.colorPick);
     formData.append("cardMetaname", body.cardMetaname);
-    formData.append("generateOutro", body.generateOutro.toString());
     formData.append("includeBackgroundImg", body.includeBackgroundImg.toString());
     formData.append("cardsContents", JSON.stringify(body.cardsContents));
     formData.append("cardFilename", body.cardFilename);

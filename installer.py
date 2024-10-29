@@ -54,7 +54,7 @@ def installNvm() -> None:
         log.log("  Installing Nvm...")
         try:
             if osName == "nt":
-                chdir("front-end")
+                chdir("client")
                 Popen(r'explorer /select,"install-nvm.ps1"')
                 chdir("..")
                 input("Please install Nvm by running 'install-nvm.ps1' with PowerShell.\n"

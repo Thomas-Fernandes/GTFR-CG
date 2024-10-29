@@ -85,9 +85,9 @@ const CardsGeneration = (): JSX.Element => {
     if (body.colorPick !== "")
       formData.append("enforceBottomColor", body.colorPick);
     formData.append("cardMetaname", body.cardMetaname);
-    if (body.generateOutro)
-      formData.append("outroContributors", body.outroContributors);
-    formData.append("generateOutro", body.generateOutro.toString());
+    formData.append("generateOutro", (body.generateOutro ?? false).toString());
+    if (body.generateOutro === true)
+      formData.append("outroContributors", body.outroContributors ?? "");
     formData.append("includeBackgroundImg", body.includeBackgroundImg.toString());
   };
 
@@ -131,7 +131,7 @@ const CardsGeneration = (): JSX.Element => {
         cardPaths.push(`${PROCESSED_CARDS_PATH}/outro.png`);
       const pathsWithCacheBuster = cardPaths.map((path) => `${path}?t=${Date.now()}`); // busting cached images with the same name thanks to timestamp
       setCardPaths(pathsWithCacheBuster);
-      const newCards = deduceNewCards(pathsWithCacheBuster, response.data.cardsLyrics, body.generateOutro);
+      const newCards = deduceNewCards(pathsWithCacheBuster, response.data.cardsLyrics, body.generateOutro ?? false);
       setCards(newCards);
       setColorPick(response.data.cardBottomColor);
       sendToast(TOAST.CARDS_GENERATED, TOAST_TYPE.SUCCESS);

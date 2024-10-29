@@ -347,7 +347,9 @@ def getBaseCardgenSettings(*, is_singular_card: bool = False) -> CardgenSettings
     enforce_bg_image: bool = snakeToCamelCase(const.SessionFields.enforce_background_image.value) in request.files
     enforce_bottom_color: Optional[str] = None
     include_center_artwork: Optional[bool] = None
-    gen_outro: Optional[str] = request.form[snakeToCamelCase(const.SessionFields.gen_outro.value)]
+    gen_outro: Optional[str] = None
+    if not is_singular_card:
+        gen_outro = request.form[snakeToCamelCase(const.SessionFields.gen_outro.value)]
     include_bg_img: Optional[str] = request.form[snakeToCamelCase(const.SessionFields.include_bg_img.value)]
     card_metaname: Optional[str] = request.form[snakeToCamelCase(const.SessionFields.card_metaname.value)]
 
@@ -360,7 +362,9 @@ def getBaseCardgenSettings(*, is_singular_card: bool = False) -> CardgenSettings
         enforce_bottom_color = request.form[snakeToCamelCase(const.SessionFields.enforce_bottom_color.value)]
 
     outro_contributors = None
-    if eval(gen_outro.capitalize()) == True:
+    if gen_outro is not None and eval(gen_outro.capitalize()) == True:
+        print(str(dict(request.form).keys()), snakeToCamelCase(const.SessionFields.outro_contributors.value) in request.form)
+        print(request.form[snakeToCamelCase(const.SessionFields.outro_contributors.value)])
         outro_contributors: Optional[str] = request.form[snakeToCamelCase(const.SessionFields.outro_contributors.value)]
 
     def checkCardgenParametersValidity(card_metaname: str, enforce_bg_image: bool, include_center_artwork: bool, include_bg_img: str) -> Optional[str]:
@@ -374,15 +378,18 @@ def getBaseCardgenSettings(*, is_singular_card: bool = False) -> CardgenSettings
 
     base_settings = {
         const.SessionFields.enforce_bottom_color.value: enforce_bottom_color,
-        const.SessionFields.gen_outro.value: eval(gen_outro.capitalize()),
+        const.SessionFields.gen_outro.value: gen_outro is not None and eval(gen_outro.capitalize()),
         const.SessionFields.include_bg_img.value: eval(include_bg_img.capitalize()),
         const.SessionFields.card_metaname.value: card_metaname,
         const.SessionFields.outro_contributors.value: outro_contributors,
     }
 
     if is_singular_card:
+        print("7")
         card_content: Optional[str] = request.form[snakeToCamelCase(const.SessionFields.cards_contents.value)]
+        print("8")
         card_filename: Optional[str] = request.form[snakeToCamelCase(const.SessionFields.card_filename.value)]
+        print("9")
 
         def checkSingularCardgenParametersValidity(card_content: str, card_filename: str, bottom_color: str) -> Optional[str]:
             if bottom_color is None: return const.ERR_CARDS_COLOR_NOT_FOUND

@@ -72,7 +72,7 @@ def generateCoverArt(input_path: str, output_path: str, include_center_artwork: 
         final_image.paste(center_image, (top_left_x, top_left_y))
 
     final_image.save(output_path)
-    final_image.save(f"./front-end/public/processed-images/{const.PROCESSED_ARTWORK_FILENAME}")
+    final_image.save(f"{const.FRONT_PROCESSED_IMAGES_DIR}{const.PROCESSED_ARTWORK_FILENAME}")
     log.debug(f"Cover art saved: {output_path}")
 
 def generateThumbnails(bg_path: str, output_folder: str) -> None:

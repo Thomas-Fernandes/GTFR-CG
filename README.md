@@ -89,13 +89,13 @@ python installer.py # will install back end modules, front end software & module
 **Back end:**
 
 ``` bash
-python launcher.py # will check needed modules and install, then launch the application
+cd server/ && python launcher.py # will check needed modules and install, then launch the application
 ```
 
 **Front end:**
 
 ``` bash
-cd front-end/ && npm run dev # will launch the front end of the application
+cd client/ && npm run dev # will launch the front end of the application
 ```
 
 &#xa0;
