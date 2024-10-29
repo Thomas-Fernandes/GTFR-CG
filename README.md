@@ -29,7 +29,7 @@
 
 <div align="center">
     <a href="#top"><img alt="Python version" src="https://img.shields.io/badge/Python-3.11+-blue?logo=python" /></a>
-    <a href="#card_file_box-changelog"><img alt="Last version released" src="https://img.shields.io/badge/release-v1.4.1-blue?logo=windows-terminal" /></a>
+    <a href="#card_file_box-changelog"><img alt="Last version released" src="https://img.shields.io/badge/release-v1.4.4-blue?logo=windows-terminal" /></a>
     <a href="https://github.com/Thomas-Fernandes/GTFR/commits/main"><img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/Thomas-Fernandes/GTFR?color=blueviolet&logo=clarifai" /></a>
 </div>
 <div align="center">
@@ -48,6 +48,9 @@
 - Generate artwork, lyrics cards and YouTube descriptions that can then be edited into **translation videos**.  
 - Save time by interacting with the APIs of **iTunes** and **Genius** to automate parts of the edition process!  
 - One day, maybe one day, this application maybe even be able to generate whole videos by itself...
+
+<a href="https://github.com/QuentindiMeo"><img src="https://i.imgur.com/w8SH3M7.png" alt="qdm" width="100" align="right" /></a><a href="https://github.com/Thomas-Fernandes"><img src="https://i.imgur.com/MsvdW4y.png" alt="tf" width="100" align="right" /></a>
+The application was thought, designed, programmed and crafted by Frenchmen 🇫🇷 [**@Thomas-Fernandes**](https://github.com/Thomas-Fernandes) and [**@QuentindiMeo**](https://github.com/QuentindiMeo).
 
 **Disclaimer: the creators of this application do not claim any rights on the brands at play. All rights belong to their respective owners.**
 
@@ -144,7 +147,7 @@ cd front-end/ && npm run dev # will launch the front end of the application
   - ***[1.4.1]** Sep 29 2024*: Cards can now be generated manually, improved QoL in card content creation. [#120](https://github.com/Thomas-Fernandes/GTFR-CG/pull/120)
   - ***[1.4.2]** Oct 24 2024*: The API is now fully documented with Flask-RESTx & Swagger. [#139](https://github.com/Thomas-Fernandes/GTFR-CG/pull/139)
   - ***[1.4.3]** Oct 26 2024*: Cards can now be generated with full customization and edited in real time. [#140](https://github.com/Thomas-Fernandes/GTFR-CG/pull/140)
-  - ***[1.4.4]** Oct ?? 2024*: All major European and Asian fonts are now handled, back end functional logic is reinforced. [#???](#card_file_box-changelog)
+  - ***[1.4.4]** Oct 29 2024*: All major European and Asian fonts are now handled, back end functional logic is reinforced. [#152](https://github.com/Thomas-Fernandes/GTFR-CG/pull/152)
 - ***[1.5.0]** Coming later...*: **Boost!** — Project will see its existing functionalities sharpened. [#???](#card_file_box-changelog)
 - ***[1.6.0]** Coming later...*: **Koh-Lanta** — Project will be unified in an all-in-one application. [#???](#card_file_box-changelog)
 - ***[2.0.0]** Coming later...*: **Endgame** — Project will feature automated video edition with AI sync. [#???](#card_file_box-changelog)
