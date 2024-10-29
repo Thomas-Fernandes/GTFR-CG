@@ -60,10 +60,12 @@ const Lyrics = (): JSX.Element => {
       const cardArtist = pageMetadata.artist.toLowerCase().startsWith("genius") ? pageMetadata.title.split(" - ")[0] : pageMetadata.artist;
       const cardSongName = pageMetadata.artist.toLowerCase().startsWith("genius") ? pageMetadata.title.split(" - ")[1].split(" (")[0] : pageMetadata.title;
       const cardMetaname = `${cardArtist.trim().toUpperCase()}, “${cardSongName.trim().toUpperCase()}”`;
-      const dismissedPartsList = Array.from(dismissedParts);
       sessionStorage.setItem(SESSION_STORAGE.CARD_METANAME, cardMetaname);
       sessionStorage.setItem(SESSION_STORAGE.CARD_METHOD, isManual ? "manual" : "auto");
-      sessionStorage.setItem(SESSION_STORAGE.LATEST_CARD_GENERATION, JSON.stringify({ pageMetadata, lyricsParts, dismissedParts: dismissedPartsList }));
+      sessionStorage.setItem(SESSION_STORAGE.OUTRO_CONTRIBUTORS, (pageMetadata.contributors ?? []).toString());
+      sessionStorage.setItem(SESSION_STORAGE.LATEST_CARD_GENERATION, JSON.stringify({
+        pageMetadata, lyricsParts, dismissedParts: Array.from(dismissedParts)
+      }));
       navigate(PATHS.cardsGeneration);
     }).catch((error: ApiResponse) => {
       sendToast(error.message, TOAST_TYPE.ERROR);
@@ -194,7 +196,7 @@ const Lyrics = (): JSX.Element => {
         const latestCardGeneration = sessionStorage.getItem(SESSION_STORAGE.LATEST_CARD_GENERATION);
         setLastContents(latestCardGeneration !== null
           ? JSON.parse(latestCardGeneration)
-          : "{{}, [], []}"
+          : "{{}, [], [], []}"
         );
       }
     });
@@ -256,7 +258,7 @@ const Lyrics = (): JSX.Element => {
           onClick={() => {
             if (!isManual) {
               setLyricsParts([{section: "Manual Card Creation", lyrics: ""}]);
-              setPageMetadata({id: "manual", artist: artist, title: songName});
+              setPageMetadata({id: "manual", artist: artist, title: songName, contributors: []});
             } else {
               setLyricsParts([] as LyricsPart[]);
               setPageMetadata({} as PageMetadata);
