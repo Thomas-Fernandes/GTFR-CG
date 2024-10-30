@@ -34,4 +34,22 @@ const ItunesImageResult: React.FC<ItunesImageResultProps> = ({item, key, itemId,
   );
 };
 
-export default ItunesImageResult;
+type ItunesImageGalleryProps = {
+  items: ItunesResult[];
+  handleSubmitItunesResult: (item: ItunesResult, key: number) => void;
+};
+
+const ItunesImageGallery: React.FC<ItunesImageGalleryProps> = ({items, handleSubmitItunesResult}): JSX.Element => {
+  return (
+    <div id="results" className="result-container">
+      { items.map((item, index) => (
+        <ItunesImageResult
+          item={item} key={index} itemId={index}
+          handleSubmitItunesResult={handleSubmitItunesResult}
+        />
+      ))}
+    </div>
+  )
+};
+
+export default ItunesImageGallery;

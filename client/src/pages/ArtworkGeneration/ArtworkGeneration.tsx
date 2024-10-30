@@ -17,7 +17,7 @@ import { SPINNER_ID } from "../../constants/Spinner";
 import { TOAST, TOAST_TYPE } from "../../constants/Toast";
 
 import "./ArtworkGeneration.css";
-import ItunesImageResult from "./ItunesImageResult";
+import ItunesImageGallery from "./ItunesImageGallery";
 
 const ArtworkGeneration = (): JSX.Element => {
   useTitle(TITLE.ARTWORK_GENERATION);
@@ -255,11 +255,7 @@ const ArtworkGeneration = (): JSX.Element => {
         { itunesResults.length > 0 &&
           <button id="clear" onClick={() => setItunesResults([])}>Clear results</button>
         }
-        <div id="results" className="result-container">
-          { itunesResults.map((item) =>
-            <ItunesImageResult key={item.resultId} itemId={item.resultId} item={item} handleSubmitItunesResult={handleSubmitItunesResult} />
-          )}
-        </div>
+        <ItunesImageGallery items={itunesResults} handleSubmitItunesResult={handleSubmitItunesResult} />
       </div>
 
       <hr />
