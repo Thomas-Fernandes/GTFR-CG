@@ -21,5 +21,8 @@ export const AutoResizeTextarea = forwardRef<HTMLTextAreaElement, AutoResizeText
       };
     }
   }, [value]);
-  return <textarea ref={combinedRef} value={value} {...props} className="lyrics-textarea" />;
+
+  return (
+    <textarea ref={combinedRef} value={value} {...props} className="lyrics-textarea" />
+  );
 });

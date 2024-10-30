@@ -12,14 +12,14 @@ const ImgButton: React.FC<Props> = ({ src, alt, className, onClick }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <div>
+    <div className="img-button">
       <button
         ref={buttonRef}
         style={{
           border: "none",
           background: "none",
           padding: isHovered ? "5px" : "0",
-          cursor: "pointer"
+          cursor: "pointer",
         }}
         onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}
         onClick={onClick}

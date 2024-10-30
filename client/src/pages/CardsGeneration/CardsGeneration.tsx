@@ -8,7 +8,7 @@ import { ApiResponse, CardsGenerationRequest, CardsGenerationResponse, ImageDown
 import useTitle from "../../common/UseTitle";
 import { isFileExtensionAccepted } from "../../common/utils/FileUtils";
 
-import CardsGallery, { CardData } from "../../components/CardsGallery";
+import CardsGallery, { CardData } from "../../components/CardsGallery/CardsGallery";
 import ColorPicker from "../../components/ColorPicker";
 import FileUploader from "../../components/FileUploader";
 import ZipDownloadButton from "../../components/ZipDownloadButton";

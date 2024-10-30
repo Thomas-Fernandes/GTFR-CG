@@ -52,7 +52,7 @@ const ColorPicker: React.FC<Props> = ({ id, latest, label, labelClassName, sette
             {label}
           </p>
           <div className="flex-row">
-            {/* if input has class hidden, element not found so picking tab is displayed at the top-left corner of the window */}
+            {/* if input had class 'hidden', element not found so picking tab is displayed at the top-left corner of the window */}
             <input
               type="color" name="color-picker" id="color-picker" className="hidden-h"
               value={selectedColor !== "" ? selectedColor : "#000000"} onChange={handleColorChange}
@@ -68,7 +68,7 @@ const ColorPicker: React.FC<Props> = ({ id, latest, label, labelClassName, sette
             </button>
           </div></>
         : <><p className="m-0 italic hidden-v">
-            {/* (hidden) this is so that the div keeps the same width when a color is picked */}
+            {/* hidden; is here so that the div keeps the same width when a color is picked */}
             {label}
           </p>
           <div className="flex-row g-p5">
