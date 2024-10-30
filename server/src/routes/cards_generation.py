@@ -385,11 +385,8 @@ def getBaseCardgenSettings(*, is_singular_card: bool = False) -> CardgenSettings
     }
 
     if is_singular_card:
-        print("7")
         card_content: Optional[str] = request.form[snakeToCamelCase(const.SessionFields.cards_contents.value)]
-        print("8")
         card_filename: Optional[str] = request.form[snakeToCamelCase(const.SessionFields.card_filename.value)]
-        print("9")
 
         def checkSingularCardgenParametersValidity(card_content: str, card_filename: str, bottom_color: str) -> Optional[str]:
             if bottom_color is None: return const.ERR_CARDS_COLOR_NOT_FOUND

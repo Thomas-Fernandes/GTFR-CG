@@ -4,10 +4,11 @@ type Props = {
   src: string;
   alt: string;
   className?: string;
+  onLoad?: () => void;
   onClick?: () => void;
 };
 
-const ImgButton: React.FC<Props> = ({ src, alt, className, onClick }) => {
+const ImgButton: React.FC<Props> = ({ src, alt, className, onLoad, onClick }) => {
   const buttonRef = useRef<HTMLButtonElement>(null);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -22,6 +23,7 @@ const ImgButton: React.FC<Props> = ({ src, alt, className, onClick }) => {
           cursor: "pointer",
         }}
         onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}
+        onLoad={onLoad}
         onClick={onClick}
       >
         <img

@@ -9,7 +9,6 @@ import useTitle from "../../common/UseTitle";
 import { isFileExtensionAccepted } from "../../common/utils/FileUtils";
 
 import FileUploader from "../../components/FileUploader";
-import ImgButton from "../../components/ImgButton";
 
 import { FILE_UPLOAD, ITUNES, YOUTUBE } from "../../constants/ArtworkGeneration";
 import { TITLE } from "../../constants/Common";
@@ -18,6 +17,7 @@ import { SPINNER_ID } from "../../constants/Spinner";
 import { TOAST, TOAST_TYPE } from "../../constants/Toast";
 
 import "./ArtworkGeneration.css";
+import ItunesImageResult from "./ItunesImageResult";
 
 const ArtworkGeneration = (): JSX.Element => {
   useTitle(TITLE.ARTWORK_GENERATION);
@@ -71,22 +71,6 @@ const ArtworkGeneration = (): JSX.Element => {
     });
   };
 
-  const renderItunesResult = (item: ItunesResult, key: number): JSX.Element => {
-    const resultLabel = (item.collectionName || item.trackName).replace(" - Single", "");
-
-    return (
-      <div className="result-item" key={"result" + key.toString()}>
-        <ImgButton
-          src={item.artworkUrl100} alt={resultLabel}
-          onClick={() => handleSubmitItunesResult(item, key)}
-          className="result-image"
-        />
-        <p className="result-text centered bold italic">{item.artistName} - {resultLabel}</p>
-        <div className="flex-row" id={SPINNER_ID.ITUNES_OPTION + key.toString()} />
-      </div>
-    );
-  };
-
   const getTitleWithAdjustedLength = (title: string): string => {
     title = title.slice(0, ITUNES.MAX_TITLE_LENGTH - 3);
 
@@ -116,6 +100,7 @@ const ArtworkGeneration = (): JSX.Element => {
           if (result.collectionName?.length > ITUNES.MAX_TITLE_LENGTH)
             result.collectionName = getTitleWithAdjustedLength(result.collectionName);
           resultItems.push({
+            resultId: resultItems.length,
             artistName: result.artistName,
             collectionName: result.collectionName,
             trackName: result.trackName,
@@ -271,7 +256,9 @@ const ArtworkGeneration = (): JSX.Element => {
           <button id="clear" onClick={() => setItunesResults([])}>Clear results</button>
         }
         <div id="results" className="result-container">
-          { itunesResults.map((item, key) => renderItunesResult(item, key)) }
+          { itunesResults.map((item) =>
+            <ItunesImageResult key={item.resultId} itemId={item.resultId} item={item} handleSubmitItunesResult={handleSubmitItunesResult} />
+          )}
         </div>
       </div>
 

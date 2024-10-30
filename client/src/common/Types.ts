@@ -80,6 +80,7 @@ export type FileUploadRequest = {
 };
 
 export type ItunesResult = {
+  resultId: number;
   artistName: string;
   collectionName: string;
   trackName: string;
