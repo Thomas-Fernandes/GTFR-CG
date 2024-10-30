@@ -1,4 +1,5 @@
-import { TOAST, TOAST_TYPE } from "../constants/Common";
+import { TOAST, TOAST_TYPE } from "../constants/Toast";
+
 import { sendToast } from "./Toast";
 
 export const showSpinner = (name: string) => {

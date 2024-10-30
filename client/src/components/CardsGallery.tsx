@@ -5,7 +5,9 @@ import { hideSpinner, showSpinner } from "../common/Spinner";
 import { sendToast } from "../common/Toast";
 import { ApiResponse, ImageDownloadRequest, SingleCardGenerationRequest } from "../common/Types";
 
-import { API, BACKEND_URL, SPINNER_ID, TOAST, TOAST_TYPE } from "../constants/Common";
+import { API, BACKEND_URL } from "../constants/Paths";
+import { SPINNER_ID } from "../constants/Spinner";
+import { TOAST, TOAST_TYPE } from "../constants/Toast";
 
 import { AutoResizeTextarea } from "./AutoResizeTextarea";
 

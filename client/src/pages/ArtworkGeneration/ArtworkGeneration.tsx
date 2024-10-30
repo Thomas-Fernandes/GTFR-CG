@@ -7,10 +7,15 @@ import { sendToast } from "../../common/Toast";
 import { ApiResponse, FileUploadRequest, ItunesRequest, ItunesResponse, ItunesResult, YoutubeRequest } from "../../common/Types";
 import useTitle from "../../common/UseTitle";
 import { isFileExtensionAccepted } from "../../common/utils/FileUtils";
+
 import FileUploader from "../../components/FileUploader";
 import ImgButton from "../../components/ImgButton";
+
 import { FILE_UPLOAD, ITUNES, YOUTUBE } from "../../constants/ArtworkGeneration";
-import { API, BACKEND_URL, PATHS, SPINNER_ID, TITLE, TOAST, TOAST_TYPE } from "../../constants/Common";
+import { TITLE } from "../../constants/Common";
+import { API, BACKEND_URL, VIEW_PATHS } from "../../constants/Paths";
+import { SPINNER_ID } from "../../constants/Spinner";
+import { TOAST, TOAST_TYPE } from "../../constants/Toast";
 
 import "./ArtworkGeneration.css";
 
@@ -51,7 +56,7 @@ const ArtworkGeneration = (): JSX.Element => {
       }
 
       sendRequest("POST", BACKEND_URL + API.PROCESSED_IMAGES.PROCESS_IMAGES).then(() => {
-        navigate(PATHS.processedImages);
+        navigate(VIEW_PATHS.processedImages);
       }).catch((error: ApiResponse) => {
         sendToast(error.message, TOAST_TYPE.ERROR);
       }).finally(() => {
@@ -165,7 +170,7 @@ const ArtworkGeneration = (): JSX.Element => {
       }
 
       sendRequest("POST", BACKEND_URL + API.PROCESSED_IMAGES.PROCESS_IMAGES).then(() => {
-        navigate(PATHS.processedImages);
+        navigate(VIEW_PATHS.processedImages);
       }).catch((error: ApiResponse) => {
         sendToast(error.message, TOAST_TYPE.ERROR);
       }).finally(() => {
@@ -205,7 +210,7 @@ const ArtworkGeneration = (): JSX.Element => {
         }
 
         sendRequest("POST", BACKEND_URL + API.PROCESSED_IMAGES.PROCESS_IMAGES).then(() => {
-          navigate(PATHS.processedImages);
+          navigate(VIEW_PATHS.processedImages);
         }).catch((error: ApiResponse) => {
           sendToast(error.message, TOAST_TYPE.ERROR);
         }).finally(() => {
@@ -225,13 +230,13 @@ const ArtworkGeneration = (): JSX.Element => {
       <span className="top-bot-spacer" />
 
       <div className="navbar">
-        <button type="button" onClick={() => navigate(PATHS.home)}>
+        <button type="button" onClick={() => navigate(VIEW_PATHS.home)}>
           <span className="left">{TITLE.HOME}</span>
         </button>
-        <button type="button" onClick={() => navigate(PATHS.lyrics)}>
+        <button type="button" onClick={() => navigate(VIEW_PATHS.lyrics)}>
           <span className="right">{TITLE.LYRICS}</span>
         </button>
-        <button type="button" onClick={() => navigate(PATHS.cardsGeneration)}>
+        <button type="button" onClick={() => navigate(VIEW_PATHS.cardsGeneration)}>
           <span className="right">{TITLE.CARDS_GENERATION}</span>
         </button>
       </div>

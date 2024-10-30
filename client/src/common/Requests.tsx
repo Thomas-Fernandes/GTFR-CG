@@ -1,4 +1,6 @@
-import { HTTP_STATUS, TOAST } from "../constants/Common";
+import { HTTP_STATUS } from "../constants/Requests";
+import { TOAST } from "../constants/Toast";
+
 import { HttpMethod } from "./Types";
 
 export const isErrorCode = (status: number): boolean => {

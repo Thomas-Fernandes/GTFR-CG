@@ -2,13 +2,16 @@ import { JSX, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { is2xxSuccessful, sendRequest } from "../../common/Requests";
-import { API, BACKEND_URL, PATHS, SPINNER_ID, TITLE, TOAST, TOAST_TYPE } from "../../constants/Common";
-
 import { hideSpinner, showSpinner } from "../../common/Spinner";
 import { sendToast } from "../../common/Toast";
 import { DisplayedStatistics, Statistics } from "../../common/Types";
 import useTitle from "../../common/UseTitle";
+
+import { TITLE } from "../../constants/Common";
 import { STAT_NAME } from "../../constants/Home";
+import { API, BACKEND_URL, VIEW_PATHS } from "../../constants/Paths";
+import { SPINNER_ID } from "../../constants/Spinner";
+import { TOAST, TOAST_TYPE } from "../../constants/Toast";
 
 import "./Home.css";
 
@@ -70,8 +73,8 @@ const Home = (): JSX.Element => {
 
   useEffect(() => {
     const fetchAndSetData = () => {
-      if (!window.location.href.endsWith(PATHS.home)) {
-        navigate(PATHS.home);
+      if (!window.location.href.endsWith(VIEW_PATHS.home)) {
+        navigate(VIEW_PATHS.home);
         return;
       }
 
@@ -100,15 +103,15 @@ const Home = (): JSX.Element => {
 
       <div className="home navbar">
         <div className="navbar-row">
-          <button type="button" onClick={() => navigate(PATHS.artworkGeneration)}>
+          <button type="button" onClick={() => navigate(VIEW_PATHS.artworkGeneration)}>
             <span className="right">{TITLE.ARTWORK_GENERATION}</span>
           </button>
-          <button type="button" onClick={() => navigate(PATHS.lyrics)}>
+          <button type="button" onClick={() => navigate(VIEW_PATHS.lyrics)}>
             <span className="right">{TITLE.LYRICS}</span>
           </button>
         </div>
         <div className="navbar-row">
-          <button type="button" onClick={() => navigate(PATHS.cardsGeneration)}>
+          <button type="button" onClick={() => navigate(VIEW_PATHS.cardsGeneration)}>
             <span className="right">{TITLE.CARDS_GENERATION}</span>
           </button>
         </div>
@@ -160,7 +163,7 @@ const Home = (): JSX.Element => {
       </div>
 
       <div className="tests navbar">
-        <button type="button" onClick={() => navigate(PATHS.tests)}>
+        <button type="button" onClick={() => navigate(VIEW_PATHS.tests)}>
           <span className="right">{TITLE.TESTS}</span>
         </button>
       </div>

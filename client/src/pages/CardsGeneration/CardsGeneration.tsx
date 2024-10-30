@@ -14,8 +14,11 @@ import FileUploader from "../../components/FileUploader";
 import ZipDownloadButton from "../../components/ZipDownloadButton";
 
 import { FILE_UPLOAD } from "../../constants/ArtworkGeneration";
-import { PROCESSED_CARDS_PATH, SESSION_STORAGE } from "../../constants/CardsGeneration";
-import { API, BACKEND_URL, HTTP_STATUS, PATHS, SPINNER_ID, TITLE, TOAST, TOAST_TYPE } from "../../constants/Common";
+import { SESSION_STORAGE, TITLE } from "../../constants/Common";
+import { API, BACKEND_URL, PROCESSED_CARDS_PATH, VIEW_PATHS } from "../../constants/Paths";
+import { HTTP_STATUS } from "../../constants/Requests";
+import { SPINNER_ID } from "../../constants/Spinner";
+import { TOAST, TOAST_TYPE } from "../../constants/Toast";
 
 import "./CardsGeneration.css";
 
@@ -169,13 +172,13 @@ const CardsGeneration = (): JSX.Element => {
       <span className="top-bot-spacer" />
 
       <div className="navbar">
-        <button type="button" onClick={() => navigate(PATHS.home)}>
+        <button type="button" onClick={() => navigate(VIEW_PATHS.home)}>
           <span className="left">{TITLE.HOME}</span>
         </button>
-        <button type="button" onClick={() => navigate(PATHS.artworkGeneration)}>
+        <button type="button" onClick={() => navigate(VIEW_PATHS.artworkGeneration)}>
           <span className="left">{TITLE.ARTWORK_GENERATION}</span>
         </button>
-        <button type="button" onClick={() => navigate(PATHS.lyrics)}>
+        <button type="button" onClick={() => navigate(VIEW_PATHS.lyrics)}>
           <span className="left">{TITLE.LYRICS}</span>
         </button>
       </div>

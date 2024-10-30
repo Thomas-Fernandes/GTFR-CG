@@ -9,8 +9,10 @@ import useTitle from "../../common/UseTitle";
 
 import { AutoResizeTextarea } from "../../components/AutoResizeTextarea";
 
-import { SESSION_STORAGE } from "../../constants/CardsGeneration";
-import { API, BACKEND_URL, PATHS, SPINNER_ID, TITLE, TOAST, TOAST_TYPE } from "../../constants/Common";
+import { SESSION_STORAGE, TITLE } from "../../constants/Common";
+import { API, BACKEND_URL, VIEW_PATHS } from "../../constants/Paths";
+import { SPINNER_ID } from "../../constants/Spinner";
+import { TOAST, TOAST_TYPE } from "../../constants/Toast";
 
 import "./Lyrics.css";
 
@@ -66,7 +68,7 @@ const Lyrics = (): JSX.Element => {
       sessionStorage.setItem(SESSION_STORAGE.LATEST_CARD_GENERATION, JSON.stringify({
         pageMetadata, lyricsParts, dismissedParts: Array.from(dismissedParts)
       }));
-      navigate(PATHS.cardsGeneration);
+      navigate(VIEW_PATHS.cardsGeneration);
     }).catch((error: ApiResponse) => {
       sendToast(error.message, TOAST_TYPE.ERROR);
     }).finally(() => {
@@ -190,7 +192,7 @@ const Lyrics = (): JSX.Element => {
 
     isTokenSet().then((isSet) => {
       if (!isSet) {
-        navigate(`${PATHS.redirect}?redirect_to=${PATHS.home}&error_text=${TOAST.NO_GENIUS_TOKEN}`);
+        navigate(`${VIEW_PATHS.redirect}?redirect_to=${VIEW_PATHS.home}&error_text=${TOAST.NO_GENIUS_TOKEN}`);
       } else {
         setIsGeniusTokenSet(true);
         const latestCardGeneration = sessionStorage.getItem(SESSION_STORAGE.LATEST_CARD_GENERATION);
@@ -208,13 +210,13 @@ const Lyrics = (): JSX.Element => {
       <span className="top-bot-spacer" />
 
       <div className="navbar">
-        <button type="button" onClick={() => navigate(PATHS.home)}>
+        <button type="button" onClick={() => navigate(VIEW_PATHS.home)}>
           <span className="left">{TITLE.HOME}</span>
         </button>
-        <button type="button" onClick={() => navigate(PATHS.artworkGeneration)}>
+        <button type="button" onClick={() => navigate(VIEW_PATHS.artworkGeneration)}>
           <span className="left">{TITLE.ARTWORK_GENERATION}</span>
         </button>
-        <button type="button" onClick={() => navigate(PATHS.cardsGeneration)}>
+        <button type="button" onClick={() => navigate(VIEW_PATHS.cardsGeneration)}>
           <span className="right">{TITLE.CARDS_GENERATION}</span>
         </button>
       </div>

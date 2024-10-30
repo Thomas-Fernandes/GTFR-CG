@@ -5,8 +5,11 @@ import { sendToast } from "../../common/Toast";
 import { ImageDownloadRequest } from "../../common/Types";
 import useTitle from "../../common/UseTitle";
 import { doesFileExist } from "../../common/utils/FileUtils";
-import { PATHS, TITLE, TOAST, TOAST_TYPE } from "../../constants/Common";
-import { COVER_ART_FILENAME, DEFAULT_SELECTED_POSITION, LOGO_POSITIONS, PROCESSED_IMAGES_PATH } from "../../constants/ProcessedImages";
+
+import { TITLE } from "../../constants/Common";
+import { COVER_ART_FILENAME, PROCESSED_IMAGES_PATH, VIEW_PATHS } from "../../constants/Paths";
+import { DEFAULT_SELECTED_POSITION, LOGO_POSITIONS } from "../../constants/ProcessedImages";
+import { TOAST, TOAST_TYPE } from "../../constants/Toast";
 
 import "./ProcessedImages.css";
 
@@ -64,7 +67,7 @@ const ProcessedImages = (): JSX.Element => {
   useEffect(() => {
     doesFileExist(PROCESSED_IMAGES_PATH + "/" + COVER_ART_FILENAME).then((anyProcessedImageExists: boolean) => {
       if (!anyProcessedImageExists) {
-        navigate(`${PATHS.redirect}?redirect_to=${PATHS.artworkGeneration}&error_text=${TOAST.NO_PROCESSED_IMAGE}`);
+        navigate(`${VIEW_PATHS.redirect}?redirect_to=${VIEW_PATHS.artworkGeneration}&error_text=${TOAST.NO_PROCESSED_IMAGE}`);
       }
     });
   });
@@ -75,16 +78,16 @@ const ProcessedImages = (): JSX.Element => {
     <span className="top-bot-spacer" />
 
     <div className="navbar">
-      <button type="button" onClick={() => navigate(PATHS.home)}>
+      <button type="button" onClick={() => navigate(VIEW_PATHS.home)}>
         <span className="left">{TITLE.HOME}</span>
       </button>
-      <button type="button" onClick={() => navigate(PATHS.artworkGeneration)}>
+      <button type="button" onClick={() => navigate(VIEW_PATHS.artworkGeneration)}>
         <span className="left">{TITLE.ARTWORK_GENERATION}</span>
       </button>
-      <button type="button" onClick={() => navigate(PATHS.lyrics)}>
+      <button type="button" onClick={() => navigate(VIEW_PATHS.lyrics)}>
         <span className="right">{TITLE.LYRICS}</span>
       </button>
-      <button type="button" onClick={() => navigate(PATHS.cardsGeneration)}>
+      <button type="button" onClick={() => navigate(VIEW_PATHS.cardsGeneration)}>
         <span className="right">{TITLE.CARDS_GENERATION}</span>
       </button>
     </div>

@@ -5,7 +5,10 @@ import { is2xxSuccessful, objectToQueryString, sendRequest } from "../../common/
 import { dismissToast, sendToast } from "../../common/Toast";
 import { ItunesResponse, LyricsResponse, StateSetter } from "../../common/Types";
 import useTitle from "../../common/UseTitle";
-import { API, BACKEND_URL, ITUNES_URL, PATHS, TITLE, TOAST_TYPE } from "../../constants/Common";
+
+import { TITLE } from "../../constants/Common";
+import { API, BACKEND_URL, ITUNES_URL, VIEW_PATHS } from "../../constants/Paths";
+import { TOAST_TYPE } from "../../constants/Toast";
 
 import { TestResult } from "./Test";
 import { TestsBoard } from "./TestsBoard";
@@ -124,7 +127,7 @@ const Tests = (): JSX.Element => {
       <span className="top-bot-spacer" />
 
       <div className="navbar">
-        <button type="button" onClick={() => navigate(PATHS.home)}>
+        <button type="button" onClick={() => navigate(VIEW_PATHS.home)}>
           <span className="left">{TITLE.HOME}</span>
         </button>
       </div>
