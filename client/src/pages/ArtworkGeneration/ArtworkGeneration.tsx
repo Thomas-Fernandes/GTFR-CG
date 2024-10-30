@@ -1,4 +1,4 @@
-import { FormEvent, JSX, useState } from "react";
+import { FormEvent, JSX, useState, useTransition } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { is2xxSuccessful, sendRequest } from "../../common/Requests";
@@ -28,6 +28,7 @@ const ArtworkGeneration = (): JSX.Element => {
 
   const [term, setTerm] = useState("");
   const [country, setCountry] = useState("fr");
+  const [, startItunesSearch] = useTransition();
   const [itunesResults, setItunesResults] = useState([] as ItunesResult[]);
 
   const [localFile, setLocalFile] = useState<File>();
@@ -130,6 +131,12 @@ const ArtworkGeneration = (): JSX.Element => {
       sendToast(error.message, TOAST_TYPE.ERROR);
     }).finally(() => {
       hideSpinner(SPINNER_ID.ITUNES);
+    });
+  };
+  const handleChangeTerm = (value: string) => {
+    setTerm(value);
+    startItunesSearch(() => {
+      value && handleSubmitItunesSearch({preventDefault: () => {}} as FormEvent<HTMLFormElement>, {term: value, country});
     });
   };
 
@@ -245,7 +252,7 @@ const ArtworkGeneration = (): JSX.Element => {
       <form id="itunes" onSubmit={(e) => handleSubmitItunesSearch(e, {term, country})}>
         <div className="flexbox">
           <input id="itunes-text" type="text" placeholder="Search on iTunes"
-            onChange={(e) => setTerm(e.target.value)}
+            onChange={(e) => handleChangeTerm(e.target.value)}
           />
           <div id={SPINNER_ID.ITUNES} className="itunes-search">
             <select aria-label="Country"
