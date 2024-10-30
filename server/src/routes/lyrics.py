@@ -25,6 +25,20 @@ api.add_namespace(ns_lyrics, path=api_prefix)
 
 genius = None
 try:
+    def checkGeniusTokenIntegrity() -> Optional[str]:
+        """ Checks the integrity of the Genius API token.
+        :return: [str] The error message if the token is invalid, None otherwise.
+        """
+        if const.GENIUS_API_TOKEN is None or const.GENIUS_API_TOKEN == "":
+            return "Genius API token not found."
+        if len(const.GENIUS_API_TOKEN) != 64 or \
+            const.GENIUS_API_TOKEN_PATTERN.match(const.GENIUS_API_TOKEN) is None:
+                return "Invalid Genius API token."
+        return None
+    err = checkGeniusTokenIntegrity()
+    if err:
+        raise ValueError(err)
+
     genius = Genius(access_token=const.GENIUS_API_TOKEN, retries=3)
     session[const.SessionFields.genius_token.value] = const.GENIUS_API_TOKEN
 except TypeError as e:
