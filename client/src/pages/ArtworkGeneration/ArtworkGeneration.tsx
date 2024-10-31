@@ -1,23 +1,18 @@
-import { FormEvent, JSX, useState, useTransition } from "react";
+import { JSX, useState, useTransition } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { is2xxSuccessful, sendRequest } from "../../common/Requests";
-import { hideSpinner, showSpinner } from "../../common/Spinner";
-import { sendToast } from "../../common/Toast";
-import { ApiResponse, FileUploadRequest, ItunesRequest, ItunesResponse, ItunesResult, YoutubeRequest } from "../../common/Types";
+import { ItunesResult } from "../../common/Types";
 import useTitle from "../../common/UseTitle";
-import { isFileExtensionAccepted } from "../../common/utils/FileUtils";
 
 import FileUploader from "../../components/FileUploader";
 
-import { FILE_UPLOAD, ITUNES, YOUTUBE } from "../../constants/ArtworkGeneration";
 import { TITLE } from "../../constants/Common";
-import { API, BACKEND_URL, VIEW_PATHS } from "../../constants/Paths";
+import { VIEW_PATHS } from "../../constants/Paths";
 import { SPINNER_ID } from "../../constants/Spinner";
-import { TOAST, TOAST_TYPE } from "../../constants/Toast";
 
 import "./ArtworkGeneration.css";
 import ItunesImageGallery from "./ItunesImageGallery";
+import { handleChangeTerm, handleSubmitFileUpload, handleSubmitItunesResult, handleSubmitItunesSearch, handleSubmitYoutubeUrl } from "./handlers";
 
 const ArtworkGeneration = (): JSX.Element => {
   useTitle(TITLE.ARTWORK_GENERATION);
@@ -35,186 +30,6 @@ const ArtworkGeneration = (): JSX.Element => {
   const [includeCenterArtwork, setIncludeCenterArtwork] = useState(true);
 
   const [youtubeUrl, setYoutubeUrl] = useState("");
-
-  // iTunes search
-  const handleSubmitItunesResult = (item: ItunesResult, key: number) => {
-    if (isProcessingLoading) {
-      sendToast(TOAST.PROCESSING_IN_PROGRESS, TOAST_TYPE.WARN);
-      return;
-    }
-
-    const data = {
-      url: item.artworkUrl100,
-    };
-
-    setIsProcessingLoading(true);
-    const spinnerKey = SPINNER_ID.ITUNES_OPTION + key.toString();
-    showSpinner(spinnerKey);
-
-    sendRequest("POST", BACKEND_URL + API.ARTWORK_GENERATION.ITUNES, data).then((response: ApiResponse) => {
-      if (!is2xxSuccessful(response.status)) {
-        throw new Error(response.message);
-      }
-
-      sendRequest("POST", BACKEND_URL + API.PROCESSED_IMAGES.PROCESS_IMAGES).then(() => {
-        navigate(VIEW_PATHS.processedImages);
-      }).catch((error: ApiResponse) => {
-        sendToast(error.message, TOAST_TYPE.ERROR);
-      }).finally(() => {
-        hideSpinner(spinnerKey);
-        setIsProcessingLoading(false);
-      });
-    }).catch((error: ApiResponse) => {
-      sendToast(error.message, TOAST_TYPE.ERROR);
-      hideSpinner(spinnerKey);
-      setIsProcessingLoading(false);
-    });
-  };
-
-  const getTitleWithAdjustedLength = (title: string): string => {
-    title = title.slice(0, ITUNES.MAX_TITLE_LENGTH - 3);
-
-    // find the first space before the max length to cut the string there
-    let end = title[title.length - 1].endsWith(" ") ? title.length - 1 : title.lastIndexOf(" ", ITUNES.MAX_TITLE_LENGTH);
-
-    // if the space-determined crop is too intense, just cut the string at the max length
-    end = ITUNES.MAX_TITLE_LENGTH - end > ITUNES.MAX_CROP_LENGTH ? title.length : end;
-    return title.slice(0, end) + "...";
-  };
-  const handleSubmitItunesSearch = (e: FormEvent<HTMLFormElement>, body: ItunesRequest) => {
-    e.preventDefault();
-
-    showSpinner(SPINNER_ID.ITUNES);
-
-    const resultItems: ItunesResult[] = [];
-
-    sendRequest("POST", BACKEND_URL + API.ARTWORK_GENERATION.ITUNES_SEARCH, body).then((response: ItunesResponse) => {
-      if (!is2xxSuccessful(response.status)) {
-        throw new Error(response.message);
-      }
-
-      if (response.data.resultCount > 0) {
-        response.data.results.forEach((result) => {
-          if (result.artistName?.length > ITUNES.MAX_TITLE_LENGTH)
-            result.artistName = getTitleWithAdjustedLength(result.artistName);
-          if (result.collectionName?.length > ITUNES.MAX_TITLE_LENGTH)
-            result.collectionName = getTitleWithAdjustedLength(result.collectionName);
-          resultItems.push({
-            resultId: resultItems.length,
-            artistName: result.artistName,
-            collectionName: result.collectionName,
-            trackName: result.trackName,
-            artworkUrl100: result.artworkUrl100.replace("100x100", "3000x3000"), // itunes max image size is 3000x3000
-          });
-        });
-        setItunesResults(resultItems);
-      } else {
-        sendToast(TOAST.NO_RESULTS_FOUND, TOAST_TYPE.WARN);
-      }
-    }).catch((error: ApiResponse) => {
-      setItunesResults(resultItems);
-      sendToast(error.message, TOAST_TYPE.ERROR);
-    }).finally(() => {
-      hideSpinner(SPINNER_ID.ITUNES);
-    });
-  };
-  const handleChangeTerm = (value: string) => {
-    setTerm(value);
-    startItunesSearch(() => {
-      value && handleSubmitItunesSearch({preventDefault: () => {}} as FormEvent<HTMLFormElement>, {term: value, country});
-    });
-  };
-
-  // File upload
-  const handleSubmitFileUpload = (e: FormEvent<HTMLFormElement>, body: FileUploadRequest) => {
-    e.preventDefault();
-
-    if (isProcessingLoading) {
-      sendToast(TOAST.PROCESSING_IN_PROGRESS, TOAST_TYPE.WARN);
-      return;
-    }
-
-    if (!body.localFile) {
-      sendToast(TOAST.NO_IMG, TOAST_TYPE.WARN);
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append("file", body.localFile);
-    formData.append("includeCenterArtwork", body.includeCenterArtwork.toString());
-
-    const fileExtensionIsAccepted = isFileExtensionAccepted(body.localFile.name, FILE_UPLOAD.ACCEPTED_IMG_EXTENSIONS);
-    if (!fileExtensionIsAccepted) {
-      sendToast(
-        TOAST.INVALID_FILE_TYPE + "\n" +
-          "Accepted file extensions: " + FILE_UPLOAD.ACCEPTED_IMG_EXTENSIONS.join(", ") + ".",
-        TOAST_TYPE.ERROR
-      );
-      return;
-    }
-
-    setIsProcessingLoading(true);
-    showSpinner(SPINNER_ID.FILE_UPLOAD);
-
-    sendRequest("POST", BACKEND_URL + API.ARTWORK_GENERATION.FILE_UPLOAD, formData).then((response: ApiResponse) => {
-      if (!is2xxSuccessful(response.status)) {
-        throw new Error(response.message);
-      }
-
-      sendRequest("POST", BACKEND_URL + API.PROCESSED_IMAGES.PROCESS_IMAGES).then(() => {
-        navigate(VIEW_PATHS.processedImages);
-      }).catch((error: ApiResponse) => {
-        sendToast(error.message, TOAST_TYPE.ERROR);
-      }).finally(() => {
-        hideSpinner(SPINNER_ID.FILE_UPLOAD);
-        setIsProcessingLoading(false);
-      });
-    }).catch((error: ApiResponse) => {
-      sendToast(error.message, TOAST_TYPE.ERROR);
-      hideSpinner(SPINNER_ID.FILE_UPLOAD);
-      setIsProcessingLoading(false);
-    });
-  };
-
-  // YouTube thumbnail
-  const isValidYoutubeUrl = (url: string): boolean => {
-    return YOUTUBE.REGEX_YOUTUBE_URL.some((pattern: RegExp) => pattern.test(url));
-  };
-  const handleSubmitYoutubeUrl = (e: FormEvent<HTMLFormElement>, body: YoutubeRequest) => {
-      e.preventDefault();
-
-      if (isProcessingLoading) {
-        sendToast(TOAST.PROCESSING_IN_PROGRESS, TOAST_TYPE.WARN);
-        return;
-      }
-
-      if (!isValidYoutubeUrl(body.url)) {
-        sendToast(TOAST.INVALID_URL, TOAST_TYPE.ERROR);
-        return;
-      }
-
-      setIsProcessingLoading(true);
-      showSpinner(SPINNER_ID.YOUTUBE_URL);
-
-      sendRequest("POST", BACKEND_URL + API.ARTWORK_GENERATION.YOUTUBE_THUMBNAIL, body).then((response: ApiResponse) => {
-        if (!is2xxSuccessful(response.status)) {
-          throw new Error(response.message);
-        }
-
-        sendRequest("POST", BACKEND_URL + API.PROCESSED_IMAGES.PROCESS_IMAGES).then(() => {
-          navigate(VIEW_PATHS.processedImages);
-        }).catch((error: ApiResponse) => {
-          sendToast(error.message, TOAST_TYPE.ERROR);
-        }).finally(() => {
-          hideSpinner(SPINNER_ID.YOUTUBE_URL);
-          setIsProcessingLoading(false);
-        });
-      }).catch((error: ApiResponse) => {
-        sendToast(error.message, TOAST_TYPE.ERROR);
-        hideSpinner(SPINNER_ID.YOUTUBE_URL);
-        setIsProcessingLoading(false);
-      });
-  };
 
   return (
     <div id="artwork-generation">
@@ -234,10 +49,10 @@ const ArtworkGeneration = (): JSX.Element => {
       </div>
 
       <h1>Search for cover art on iTunes</h1>
-      <form id="itunes" onSubmit={(e) => handleSubmitItunesSearch(e, {term, country})}>
+      <form id="itunes" onSubmit={(e) => handleSubmitItunesSearch(e, {term, country}, setItunesResults)}>
         <div className="flexbox">
           <input id="itunes-text" type="text" placeholder="Search on iTunes"
-            onChange={(e) => handleChangeTerm(e.target.value)}
+            onChange={(e) => handleChangeTerm(e.target.value, country, setTerm, startItunesSearch, setItunesResults)}
           />
           <div id={SPINNER_ID.ITUNES} className="itunes-search">
             <select aria-label="Country"
@@ -255,13 +70,15 @@ const ArtworkGeneration = (): JSX.Element => {
         { itunesResults.length > 0 &&
           <button id="clear" onClick={() => setItunesResults([])}>Clear results</button>
         }
-        <ItunesImageGallery items={itunesResults} handleSubmitItunesResult={handleSubmitItunesResult} />
+        <ItunesImageGallery items={itunesResults}
+          processingLoadingState={[isProcessingLoading, setIsProcessingLoading]} navigate={navigate} handleSubmitItunesResult={handleSubmitItunesResult}
+        />
       </div>
 
       <hr />
 
       <h1>...or upload your image</h1>
-      <form id="local" onSubmit={(e) => handleSubmitFileUpload(e, {localFile, includeCenterArtwork})} encType="multipart/form-data">
+      <form id="local" onSubmit={(e) => handleSubmitFileUpload(e, {localFile, includeCenterArtwork}, [isProcessingLoading, setIsProcessingLoading], navigate)} encType="multipart/form-data">
         <div className="flexbox">
           <FileUploader id="background-image" label="Select background image" accept="image/*" setter={setLocalFile} />
           <label className="checkbox" htmlFor="include_center_artwork">
@@ -280,7 +97,7 @@ const ArtworkGeneration = (): JSX.Element => {
       <hr />
 
       <h1>...or use a YouTube video thumbnail</h1>
-      <form id="youtube" onSubmit={(e) => handleSubmitYoutubeUrl(e, {url: youtubeUrl})}>
+      <form id="youtube" onSubmit={(e) => handleSubmitYoutubeUrl(e, {url: youtubeUrl}, [isProcessingLoading, setIsProcessingLoading], navigate)}>
         <div className="flexbox">
           <input type="text" placeholder="Paste YouTube video URL here"
             onChange={(e) => setYoutubeUrl(e.target.value)}

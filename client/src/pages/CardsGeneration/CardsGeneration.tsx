@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { is2xxSuccessful, sendRequest } from "../../common/Requests";
 import { hideSpinner, showSpinner } from "../../common/Spinner";
 import { sendToast } from "../../common/Toast";
-import { ApiResponse, CardsGenerationRequest, CardsGenerationResponse, ImageDownloadRequest, SongPartsCards } from "../../common/Types";
+import { ApiResponse, CardsGenerationRequest, CardsGenerationResponse, ImageDownloadRequest } from "../../common/Types";
 import useTitle from "../../common/UseTitle";
 import { isFileExtensionAccepted } from "../../common/utils/FileUtils";
 
@@ -19,6 +19,8 @@ import { API, BACKEND_URL, PROCESSED_CARDS_PATH, VIEW_PATHS } from "../../consta
 import { HTTP_STATUS } from "../../constants/Requests";
 import { SPINNER_ID } from "../../constants/Spinner";
 import { TOAST, TOAST_TYPE } from "../../constants/Toast";
+
+import { deduceNewCards, generateFormData } from "./utils";
 
 import "./CardsGeneration.css";
 
@@ -45,15 +47,6 @@ const CardsGeneration = (): JSX.Element => {
   const [cardPaths, setCardPaths] = useState([] as string[]);
   const [cards, setCards] = useState([] as CardData[]);
 
-  const deduceNewCards = (paths: string[], cardsLyrics: SongPartsCards, hasOutro: boolean): CardData[] => {
-    return paths.map((path, idx) => ({
-      id: idx, src: path,
-      lyrics: idx === 0 || (hasOutro && idx === paths.length - 1) // card 00 and outro card have no lyrics
-        ? ""
-        : cardsLyrics[idx - 1].join("\n")
-    }));
-  };
-
   const handleSubmitDownloadCard = (e: FormEvent<HTMLFormElement> | undefined, body: ImageDownloadRequest) => {
     if (e)
       e.preventDefault();
@@ -78,20 +71,6 @@ const CardsGeneration = (): JSX.Element => {
     } finally {
       document.body.removeChild(link);
     }
-  };
-
-  const generateFormData = (body: CardsGenerationRequest, formData: FormData): void => {
-    if (body.bgImg) {
-      formData.append("enforceBackgroundImage", body.bgImg);
-      formData.append("includeCenterArtwork", (body.includeCenterArtwork ?? "").toString());
-    }
-    if (body.colorPick !== "")
-      formData.append("enforceBottomColor", body.colorPick);
-    formData.append("cardMetaname", body.cardMetaname);
-    formData.append("generateOutro", (body.generateOutro ?? false).toString());
-    if (body.generateOutro === true)
-      formData.append("outroContributors", body.outroContributors ?? "");
-    formData.append("includeBackgroundImg", body.includeBackgroundImg.toString());
   };
 
   const handleGenerateCards = (e: FormEvent<HTMLFormElement>, body: CardsGenerationRequest) => {

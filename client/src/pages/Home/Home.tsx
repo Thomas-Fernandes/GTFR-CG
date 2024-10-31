@@ -1,17 +1,16 @@
 import { JSX, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { is2xxSuccessful, sendRequest } from "../../common/Requests";
-import { hideSpinner, showSpinner } from "../../common/Spinner";
-import { sendToast } from "../../common/Toast";
-import { DisplayedStatistics, Statistics } from "../../common/Types";
+import { DisplayedStatistics } from "../../common/Types";
 import useTitle from "../../common/UseTitle";
 
 import { TITLE } from "../../constants/Common";
 import { STAT_NAME } from "../../constants/Home";
-import { API, BACKEND_URL, VIEW_PATHS } from "../../constants/Paths";
+import { VIEW_PATHS } from "../../constants/Paths";
 import { SPINNER_ID } from "../../constants/Spinner";
-import { TOAST, TOAST_TYPE } from "../../constants/Toast";
+
+import { fetchGeniusToken, fetchStatistics } from "./requests";
+import { hideAllStatsSpinners, showAllStatsSpinners } from "./spinners";
 
 import "./Home.css";
 
@@ -22,54 +21,6 @@ const Home = (): JSX.Element => {
 
   const [geniusToken, setGeniusToken] = useState("");
   const [stats, setStats] = useState<DisplayedStatistics>({} as DisplayedStatistics);
-
-  const fetchStatistics = () => {
-    sendRequest("GET", BACKEND_URL + API.STATISTICS).then((response) => {
-      if (!is2xxSuccessful(response.status)) {
-        sendToast(response.message, TOAST_TYPE.ERROR);
-        return;
-      }
-
-      const stats = response.data as Statistics;
-      setStats({
-        dateFirstOperation: new Date(stats.dateFirstOperation).toLocaleString(),
-        dateLastOperation: new Date(stats.dateLastOperation).toLocaleString(),
-        artworkGenerations: stats.artworkGenerations.toLocaleString(),
-        lyricsFetches: stats.lyricsFetches.toLocaleString(),
-        cardsGenerated: stats.cardsGenerated.toLocaleString(),
-      });
-    }).catch((error) => {
-      sendToast(error.message, TOAST_TYPE.ERROR);
-    });
-  };
-
-  const fetchGeniusToken = () => {
-    sendRequest("GET", BACKEND_URL + API.GENIUS_TOKEN).then((response) => {
-      if (!is2xxSuccessful(response.status) || response.data.token === "") {
-        sendToast(response.message, TOAST_TYPE.ERROR, 10);
-        sendToast(TOAST.ADD_GENIUS_TOKEN, TOAST_TYPE.WARN, 20);
-        return;
-      }
-
-      sendToast(TOAST.WELCOME, TOAST_TYPE.SUCCESS, 5);
-      setGeniusToken(response.data.token);
-    }).catch((error) => {
-      sendToast(error.message, TOAST_TYPE.ERROR);
-    });
-  };
-
-  const hideAllStatsSpinners = () => {
-    hideSpinner(SPINNER_ID.STATISTICS_FIRST_OPERATION);
-    hideSpinner(SPINNER_ID.STATISTICS_LAST_OPERATION);
-    hideSpinner(SPINNER_ID.STATISTICS_ARTWORK_GENERATION);
-    hideSpinner(SPINNER_ID.STATISTICS_LYRICS_FETCHES);
-  };
-  const showAllStatsSpinners = () => {
-    showSpinner(SPINNER_ID.STATISTICS_FIRST_OPERATION);
-    showSpinner(SPINNER_ID.STATISTICS_LAST_OPERATION);
-    showSpinner(SPINNER_ID.STATISTICS_ARTWORK_GENERATION);
-    showSpinner(SPINNER_ID.STATISTICS_LYRICS_FETCHES);
-  };
 
   useEffect(() => {
     const fetchAndSetData = () => {
@@ -82,11 +33,11 @@ const Home = (): JSX.Element => {
       const hasVisited = sessionStorage.getItem(routeKey);
 
       showAllStatsSpinners();
-      fetchStatistics();
+      fetchStatistics(setStats);
       hideAllStatsSpinners();
 
       if (!hasVisited) {
-        fetchGeniusToken();
+        fetchGeniusToken(setGeniusToken);
         sessionStorage.setItem(routeKey, "visited");
       }
     };
