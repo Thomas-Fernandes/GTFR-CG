@@ -1,7 +1,7 @@
 from dotenv import load_dotenv
 
 from enum import IntEnum, StrEnum
-from os import getenv, name as osName
+from os import getenv, name as osName, path
 from re import compile
 from typing import Optional
 
@@ -137,8 +137,9 @@ LOGO_POSITIONS = [
     "center-left", "center-center", "center-right",
     "bottom-left", "bottom-center", "bottom-right"
 ]
-FONTS_DIR = f"assets{SLASH}fonts{SLASH}"
-CARDS_DIR = f"assets{SLASH}cards{SLASH}"
+path_prefix = "" if path.isfile("requirements.txt") else f"server{SLASH}" # for running from installer.py
+FONTS_DIR = f"{path_prefix}assets{SLASH}fonts{SLASH}"
+CARDS_DIR = f"{path_prefix}assets{SLASH}cards{SLASH}"
 CARDS_BOTTOM_B = f"{CARDS_DIR}bottom_black.png"
 CARDS_BOTTOM_W = f"{CARDS_DIR}bottom_white.png"
 

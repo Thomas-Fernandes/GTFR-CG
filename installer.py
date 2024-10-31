@@ -1,9 +1,10 @@
 
-from os import chdir, environ, name as osName, pathsep, system
+from os import chdir, environ, name as osName, path, pathsep, system
 from subprocess import CalledProcessError, CompletedProcess, Popen, run
 from typing import Optional
 
-result = run(["pip", "install", "-r", "server/requirements.txt"], capture_output=True, text=True) # needs to be run before importing logger
+requirements_path = "requirements.txt" if path.isfile("requirements.txt") else "server/requirements.txt"
+result = run(["pip", "install", "-r", requirements_path], capture_output=True, text=True) # needs to be run before importing logger
 
 from server.src.logger import log, LogSeverity
 
