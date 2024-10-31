@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { is2xxSuccessful, sendRequest } from "../../common/Requests";
@@ -12,6 +12,7 @@ import { API, BACKEND_URL, VIEW_PATHS } from "../../constants/Paths";
 import { SPINNER_ID } from "../../constants/Spinner";
 import { TOAST, TOAST_TYPE } from "../../constants/Toast";
 
+import { LyricsContext } from "./context";
 import LyricsParts from "./LyricsPart";
 import { convertToCardContents } from "./utils";
 
@@ -83,6 +84,8 @@ const Lyrics = (): JSX.Element => {
     updatedLyricsParts[idx].lyrics = lyrics;
     setLyricsParts(updatedLyricsParts);
   };
+
+  const contextValue = useMemo(() => ({ dismissedParts, setDismissedParts }), [dismissedParts, setDismissedParts]);
 
   // Search
   const handleLyricsSearchSubmit = (e: FormEvent<HTMLFormElement>, body: LyricsRequest) => {
@@ -172,83 +175,85 @@ const Lyrics = (): JSX.Element => {
   });
 
   return (
-    <div id="lyrics">
-      <div id="toast-container"></div>
-      <span className="top-bot-spacer" />
+    <LyricsContext.Provider value={contextValue}>
+      <div id="lyrics">
+        <div id="toast-container"></div>
+        <span className="top-bot-spacer" />
 
-      <div className="navbar">
-        <button type="button" onClick={() => navigate(VIEW_PATHS.home)}>
-          <span className="left">{TITLE.HOME}</span>
+        <div className="navbar">
+          <button type="button" onClick={() => navigate(VIEW_PATHS.home)}>
+            <span className="left">{TITLE.HOME}</span>
+          </button>
+          <button type="button" onClick={() => navigate(VIEW_PATHS.artworkGeneration)}>
+            <span className="left">{TITLE.ARTWORK_GENERATION}</span>
+          </button>
+          <button type="button" onClick={() => navigate(VIEW_PATHS.cardsGeneration)}>
+            <span className="right">{TITLE.CARDS_GENERATION}</span>
+          </button>
+        </div>
+
+        <h1>Lyrics</h1>
+
+        <button type="button" className="last-generation" onClick={handleLoadLastContents}>
+          {"Load last contents"}
         </button>
-        <button type="button" onClick={() => navigate(VIEW_PATHS.artworkGeneration)}>
-          <span className="left">{TITLE.ARTWORK_GENERATION}</span>
-        </button>
-        <button type="button" onClick={() => navigate(VIEW_PATHS.cardsGeneration)}>
-          <span className="right">{TITLE.CARDS_GENERATION}</span>
-        </button>
+
+        { isManual
+        ? <div className="flexbox">
+          <div id="metadata-bar" className="flex-row g-1">
+            <input required
+              type="text" name="artist" placeholder="Enter artist name"
+              onChange={(e) => { setArtist(e.target.value); setPageMetadata({...pageMetadata, artist: e.target.value}); }}
+            />
+            <input required
+              type="text" name="songName" placeholder="Enter song name"
+              onChange={(e) => { setSongName(e.target.value); setPageMetadata({...pageMetadata, title: e.target.value}); }}
+            />
+          </div>
+        </div> : <form className="search-form flexbox" onSubmit={(e) => handleLyricsSearchSubmit(e, {artist, songName})}>
+          <div id="search-bar" className="flex-row g-1">
+            <input required
+              type="text" name="artist" placeholder="Enter artist name"
+              onChange={(e) => setArtist(e.target.value)}
+            />
+            <input required
+              type="text" name="songName" placeholder="Enter song name"
+              onChange={(e) => setSongName(e.target.value)}
+            />
+            <div className="action-button" id={SPINNER_ID.LYRICS_SEARCH}>
+              <input type="submit" value="SEARCH" className="action-button search-button" />
+            </div>
+          </div>
+        </form>}
+
+        { !isFetching &&
+          <button type="button" className="mode-flipper"
+            onClick={() => {
+              if (!isManual) {
+                setLyricsParts([{section: "Manual Card Creation", lyrics: ""}]);
+                setPageMetadata({id: "manual", artist: artist, title: songName, contributors: []});
+              } else {
+                setLyricsParts([] as LyricsPart[]);
+                setPageMetadata({} as PageMetadata);
+              }
+              setIsManual(!isManual);
+            }}
+          >
+            {isManual ? "Generate cards automatically" : "Generate cards manually instead"}
+          </button>}
+
+        { !isFetching && lyricsParts.length > 0 && <>
+          <hr />
+
+          <form className="lyrics-form flexbox" onSubmit={(e) => handleLyricsSaveSubmit(e, convertToCardContents(lyricsParts, dismissedParts))}>
+            <LyricsParts lyricsParts={lyricsParts} handleSetLyricsParts={handleSetLyricsParts} />
+            <div className="action-button" id={SPINNER_ID.LYRICS_CONVERT}>
+              <input type="submit" value="CONVERT TO CARDS" className="action-button convert-button" />
+            </div>
+          </form>
+        </>}
       </div>
-
-      <h1>Lyrics</h1>
-
-      <button type="button" className="last-generation" onClick={handleLoadLastContents}>
-        {"Load last contents"}
-      </button>
-
-      { isManual
-      ? <div className="flexbox">
-        <div id="metadata-bar" className="flex-row g-1">
-          <input required
-            type="text" name="artist" placeholder="Enter artist name"
-            onChange={(e) => { setArtist(e.target.value); setPageMetadata({...pageMetadata, artist: e.target.value}); }}
-          />
-          <input required
-            type="text" name="songName" placeholder="Enter song name"
-            onChange={(e) => { setSongName(e.target.value); setPageMetadata({...pageMetadata, title: e.target.value}); }}
-          />
-        </div>
-      </div> : <form className="search-form flexbox" onSubmit={(e) => handleLyricsSearchSubmit(e, {artist, songName})}>
-        <div id="search-bar" className="flex-row g-1">
-          <input required
-            type="text" name="artist" placeholder="Enter artist name"
-            onChange={(e) => setArtist(e.target.value)}
-          />
-          <input required
-            type="text" name="songName" placeholder="Enter song name"
-            onChange={(e) => setSongName(e.target.value)}
-          />
-          <div className="action-button" id={SPINNER_ID.LYRICS_SEARCH}>
-            <input type="submit" value="SEARCH" className="action-button search-button" />
-          </div>
-        </div>
-      </form>}
-
-      { !isFetching &&
-        <button type="button" className="mode-flipper"
-          onClick={() => {
-            if (!isManual) {
-              setLyricsParts([{section: "Manual Card Creation", lyrics: ""}]);
-              setPageMetadata({id: "manual", artist: artist, title: songName, contributors: []});
-            } else {
-              setLyricsParts([] as LyricsPart[]);
-              setPageMetadata({} as PageMetadata);
-            }
-            setIsManual(!isManual);
-          }}
-        >
-          {isManual ? "Generate cards automatically" : "Generate cards manually instead"}
-        </button>}
-
-      { !isFetching && lyricsParts.length > 0 && <>
-        <hr />
-
-        <form className="lyrics-form flexbox" onSubmit={(e) => handleLyricsSaveSubmit(e, convertToCardContents(lyricsParts, dismissedParts))}>
-          <LyricsParts lyricsParts={lyricsParts} dismissedPartsState={[dismissedParts, setDismissedParts]} handleSetLyricsParts={handleSetLyricsParts} />
-          <div className="action-button" id={SPINNER_ID.LYRICS_CONVERT}>
-            <input type="submit" value="CONVERT TO CARDS" className="action-button convert-button" />
-          </div>
-        </form>
-      </>}
-    </div>
+    </LyricsContext.Provider>
   )
 };
 

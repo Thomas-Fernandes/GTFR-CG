@@ -1,6 +1,5 @@
 import { JSX } from "react";
 
-
 import { PROCESSED_IMAGES_PATH } from "../../constants/Paths";
 import { DEFAULT_SELECTED_POSITION, LOGO_POSITIONS } from "../../constants/ProcessedImages";
 

@@ -1,6 +1,6 @@
 import { LyricsPart } from "../../common/Types";
 import { AutoResizeTextarea } from "../../components/AutoResizeTextarea";
-import { StateHook } from "../ArtworkGeneration/handlers";
+import { useLyricsContext } from "./context";
 
 import "./Lyrics.css";
 
@@ -8,12 +8,11 @@ type LyricsPartViewProps = {
   key?: number;
   part: LyricsPart;
   idx: number;
-  dismissedPartsState: StateHook<Set<number>>;
   handleSetLyricsParts: (lyrics: string, idx: number) => void;
 };
 
-const LyricsPartView: React.FC<LyricsPartViewProps> = ({key, part, idx, dismissedPartsState, handleSetLyricsParts}): JSX.Element => {
-  const [dismissedParts, setDismissedParts] = dismissedPartsState;
+const LyricsPartView: React.FC<LyricsPartViewProps> = ({key, part, idx, handleSetLyricsParts}): JSX.Element => {
+  const { dismissedParts, setDismissedParts } = useLyricsContext();
   key?.valueOf(); // unused
 
   return (
@@ -44,15 +43,14 @@ const LyricsPartView: React.FC<LyricsPartViewProps> = ({key, part, idx, dismisse
 
 type LyricsPartsProps = {
   lyricsParts: LyricsPart[];
-  dismissedPartsState: StateHook<Set<number>>;
   handleSetLyricsParts: (lyrics: string, idx: number) => void;
 };
 
-const LyricsParts: React.FC<LyricsPartsProps> = ({lyricsParts, dismissedPartsState, handleSetLyricsParts}): JSX.Element => {
+const LyricsParts: React.FC<LyricsPartsProps> = ({lyricsParts, handleSetLyricsParts}): JSX.Element => {
   return (
     <>
       { lyricsParts.map((part, idx) =>
-        <LyricsPartView key={idx} part={part} idx={idx} dismissedPartsState={dismissedPartsState} handleSetLyricsParts={handleSetLyricsParts} />
+        <LyricsPartView key={idx} part={part} idx={idx} handleSetLyricsParts={handleSetLyricsParts} />
       )}
     </>
   );

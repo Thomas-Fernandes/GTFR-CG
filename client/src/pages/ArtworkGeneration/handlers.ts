@@ -11,7 +11,6 @@ import { FILE_UPLOAD, ITUNES } from "../../constants/ArtworkGeneration";
 import { API, BACKEND_URL, VIEW_PATHS } from "../../constants/Paths";
 import { SPINNER_ID } from "../../constants/Spinner";
 import { TOAST, TOAST_TYPE } from "../../constants/Toast";
-
 import { getTitleWithAdjustedLength, isValidYoutubeUrl } from "./utils";
 
 export type StateHook<T> = [T, (value: T) => void];

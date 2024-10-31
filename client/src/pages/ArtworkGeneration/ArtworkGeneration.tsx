@@ -1,4 +1,4 @@
-import { JSX, useState, useTransition } from "react";
+import { JSX, useMemo, useState, useTransition } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { ItunesResult } from "../../common/Types";
@@ -10,9 +10,11 @@ import { TITLE } from "../../constants/Common";
 import { VIEW_PATHS } from "../../constants/Paths";
 import { SPINNER_ID } from "../../constants/Spinner";
 
-import "./ArtworkGeneration.css";
 import ItunesImageGallery from "./ItunesImageGallery";
+import { ArtworkGenerationContext } from "./context";
 import { handleChangeTerm, handleSubmitFileUpload, handleSubmitItunesResult, handleSubmitItunesSearch, handleSubmitYoutubeUrl } from "./handlers";
+
+import "./ArtworkGeneration.css";
 
 const ArtworkGeneration = (): JSX.Element => {
   useTitle(TITLE.ARTWORK_GENERATION);
@@ -31,7 +33,10 @@ const ArtworkGeneration = (): JSX.Element => {
 
   const [youtubeUrl, setYoutubeUrl] = useState("");
 
+  const contextValue = useMemo(() => ({ isProcessingLoading, setIsProcessingLoading, navigate }), [isProcessingLoading, setIsProcessingLoading, navigate]);
+
   return (
+    <ArtworkGenerationContext.Provider value={contextValue}>
     <div id="artwork-generation">
       <div id="toast-container"></div>
       <span className="top-bot-spacer" />
@@ -70,9 +75,7 @@ const ArtworkGeneration = (): JSX.Element => {
         { itunesResults.length > 0 &&
           <button id="clear" onClick={() => setItunesResults([])}>Clear results</button>
         }
-        <ItunesImageGallery items={itunesResults}
-          processingLoadingState={[isProcessingLoading, setIsProcessingLoading]} navigate={navigate} handleSubmitItunesResult={handleSubmitItunesResult}
-        />
+        <ItunesImageGallery items={itunesResults} handleSubmitItunesResult={handleSubmitItunesResult} />
       </div>
 
       <hr />
@@ -110,6 +113,7 @@ const ArtworkGeneration = (): JSX.Element => {
 
       <span className="top-bot-spacer" />
     </div>
+    </ArtworkGenerationContext.Provider>
   );
 };
 

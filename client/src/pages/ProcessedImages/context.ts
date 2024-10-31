@@ -7,5 +7,5 @@ export interface ProcessedImagesContextType {
 }
 
 const { context: ProcessedImagesContext, useContext: useProcessedImagesContext } = createNewContext<ProcessedImagesContextType>();
-export { ProcessedImagesContext, useProcessedImagesContext };
 
+export { ProcessedImagesContext, useProcessedImagesContext };

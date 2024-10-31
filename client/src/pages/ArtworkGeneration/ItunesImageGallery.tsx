@@ -7,20 +7,21 @@ import ImgButton from "../../components/ImgButton";
 
 import { SPINNER_ID } from "../../constants/Spinner";
 
-import { StateHook } from "./handlers";
-
 import "./ArtworkGeneration.css";
+import { useArtworkGenerationContext } from "./context";
+import { StateHook } from "./handlers";
 
 type ItunesImageResultProps = {
   key?: number;
   item: ItunesResult;
   itemId: number;
-  processingLoadingState: StateHook<boolean>;
-  navigate: NavigateFunction;
   handleSubmitItunesResult: (item: ItunesResult, idx: number, processingLoadingState: StateHook<boolean>, navigate: NavigateFunction) => void;
 };
 
-const ItunesImageResult: React.FC<ItunesImageResultProps> = ({key, item, itemId, processingLoadingState, navigate, handleSubmitItunesResult}): JSX.Element => {
+const ItunesImageResult: React.FC<ItunesImageResultProps> = ({key, item, itemId, handleSubmitItunesResult}): JSX.Element => {
+  const { isProcessingLoading, setIsProcessingLoading, navigate } = useArtworkGenerationContext();
+  const processLoadingState = [isProcessingLoading, setIsProcessingLoading] as StateHook<boolean>;
+
   const resultLabel = (item.collectionName || item.trackName).replace(" - Single", "");
   const [itemLabel, setItemLabel] = useState("");
   key?.toString(); // unused
@@ -30,7 +31,7 @@ const ItunesImageResult: React.FC<ItunesImageResultProps> = ({key, item, itemId,
       <ImgButton
         src={item.artworkUrl100} alt={resultLabel}
         onLoad={() => setItemLabel(`${item.artistName} - ${resultLabel}`)}
-        onClick={() => handleSubmitItunesResult(item, itemId, processingLoadingState, navigate)}
+        onClick={() => handleSubmitItunesResult(item, itemId, processLoadingState, navigate)}
         className="result-image"
       />
       <p className="result-text centered bold italic">{itemLabel}</p>
@@ -41,18 +42,16 @@ const ItunesImageResult: React.FC<ItunesImageResultProps> = ({key, item, itemId,
 
 type ItunesImageGalleryProps = {
   items: ItunesResult[];
-  processingLoadingState: StateHook<boolean>;
-  navigate: NavigateFunction;
   handleSubmitItunesResult: (item: ItunesResult, idx: number, processingLoadingState: StateHook<boolean>, navigate: NavigateFunction) => void;
 };
 
-const ItunesImageGallery: React.FC<ItunesImageGalleryProps> = ({items, processingLoadingState, navigate, handleSubmitItunesResult}): JSX.Element => {
+const ItunesImageGallery: React.FC<ItunesImageGalleryProps> = ({items, handleSubmitItunesResult}): JSX.Element => {
   return (
     <div id="results" className="result-container">
       { items.map((item, index) => (
-        <ItunesImageResult key={index}
-          item={item} itemId={index}
-          processingLoadingState={processingLoadingState} navigate={navigate} handleSubmitItunesResult={handleSubmitItunesResult}
+        <ItunesImageResult
+          key={index} item={item} itemId={index}
+          handleSubmitItunesResult={handleSubmitItunesResult}
         />
       ))}
     </div>
