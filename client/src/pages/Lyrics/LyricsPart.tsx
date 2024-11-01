@@ -1,11 +1,11 @@
 import { LyricsPart } from "@common/types";
 
-import { AutoResizeTextarea } from "@components/AutoResizeTextarea";
+import { AutoResizeTextarea } from "@components/AutoResizeTextarea/AutoResizeTextarea";
 
 import { useLyricsContext } from "./context";
 import { HandleSetLyricsPartsProps } from "./handlers";
 
-import "./Lyrics.css";
+import "./LyricsPart.css";
 
 type LyricsPartViewProps = {
   key?: number;

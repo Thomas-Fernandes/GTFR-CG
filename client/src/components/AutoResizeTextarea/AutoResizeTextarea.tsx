@@ -1,5 +1,7 @@
 import { forwardRef, useEffect, useRef } from "react";
 
+import "./AutoResizeTextarea.css";
+
 type AutoResizeTextareaProps = React.ComponentPropsWithoutRef<"textarea"> & { value: string };
 
 export const AutoResizeTextarea = forwardRef<HTMLTextAreaElement, AutoResizeTextareaProps>(({ value, ...props }, ref) => {

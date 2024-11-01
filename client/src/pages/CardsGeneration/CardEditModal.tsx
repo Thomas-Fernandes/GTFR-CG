@@ -9,10 +9,10 @@ import { API, BACKEND_URL } from "@constants/paths";
 import { SPINNER_ID } from "@constants/spinners";
 import { TOAST, TOAST_TYPE } from "@constants/toasts";
 
-import { AutoResizeTextarea } from "@components/AutoResizeTextarea";
+import { AutoResizeTextarea } from "@components/AutoResizeTextarea/AutoResizeTextarea";
 
-import { CardData } from "./CardsGallery";
 import { useCardsGalleryContext } from "./context";
+import { CardData } from "./interfaces";
 import { handleOverlayClick } from "./mouse";
 import { generateFormData } from "./utils";
 

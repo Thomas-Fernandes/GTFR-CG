@@ -5,12 +5,11 @@ import JSZip from "jszip";
 
 type Props = {
   id?: string;
-  type?: "button" | "submit" | "reset";
   paths: string[];
   output: string;
 };
 
-const ZipDownloadButton: React.FC<Props> = ({ id, type, paths, output }) => {
+const ZipDownloadButton: React.FC<Props> = ({ id, paths, output }) => {
   const handleDownloadButtonClick = async () => {
     const zip = new JSZip();
 
@@ -39,8 +38,8 @@ const ZipDownloadButton: React.FC<Props> = ({ id, type, paths, output }) => {
   };
 
   return (
-    <button type={type} id={id} onClick={handleDownloadButtonClick}>
-      Download All as Zip
+    <button type="button" id={id} onClick={handleDownloadButtonClick}>
+      {"Download All as Zip"}
     </button>
   );
 };

@@ -2,18 +2,19 @@ import { JSX, useEffect, useState } from "react";
 
 import { useTitle } from "@common/useTitle";
 
-import ColorPicker from "@components/ColorPicker";
-import FileUploader from "@components/FileUploader";
+import ToastContainer from "@/components/ToastContainer/ToastContainer";
+import ColorPicker from "@components/ColorPicker/ColorPicker";
+import FileUploader from "@components/FileUploader/FileUploader";
 import NavButton from "@components/NavButton";
-import ToastContainer from "@components/ToastContainer";
 import ZipDownloadButton from "@components/ZipDownloadButton";
 
 import { SESSION_STORAGE, TITLE } from "@constants/Common";
 import { VIEW_PATHS } from "@constants/paths";
 import { SPINNER_ID } from "@constants/spinners";
 
-import CardsGallery, { CardData } from "./CardsGallery";
+import CardsGallery from "./CardsGallery";
 import { handleGenerateCards, handleSubmitDownloadCard, handleUnauthorizedCheckbox } from "./handlers";
+import { CardData } from "./interfaces";
 
 import "./CardsGeneration.css";
 
@@ -123,7 +124,7 @@ const CardsGeneration = (): JSX.Element => {
         <>
           <hr className="mv-1" />
 
-          <ZipDownloadButton type="button" id="download-all" paths={cardPaths} output={"cards.zip"} />
+          <ZipDownloadButton id="download-all" paths={cardPaths} output={"cards.zip"} />
           <CardsGallery
             id="cards" initialCards={cards} handleDownloadCard={handleSubmitDownloadCard}
             generationProps={{

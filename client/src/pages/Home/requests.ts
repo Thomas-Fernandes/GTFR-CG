@@ -1,21 +1,21 @@
 
 import { is2xxSuccessful, sendRequest } from "@common/requests";
 import { sendToast } from "@common/toast";
-import { DisplayedStatistics, StateSetter, Statistics } from "@common/types";
+import { StateSetter, Statistics, StatisticsResponse } from "@common/types";
 
 import { API, BACKEND_URL } from "@constants/paths";
 import { TOAST, TOAST_TYPE } from "@constants/toasts";
 
 import "./Home.css";
 
-export const getStatistics = (setStats: StateSetter<DisplayedStatistics>) => {
+export const getStatistics = (setStats: StateSetter<Statistics>) => {
   sendRequest("GET", BACKEND_URL + API.STATISTICS).then((response) => {
     if (!is2xxSuccessful(response.status)) {
       sendToast(response.message, TOAST_TYPE.ERROR);
       return;
     }
 
-    const stats = response.data as Statistics;
+    const stats = response.data as StatisticsResponse;
     setStats({
       dateFirstOperation: new Date(stats.dateFirstOperation).toLocaleString(),
       dateLastOperation: new Date(stats.dateLastOperation).toLocaleString(),

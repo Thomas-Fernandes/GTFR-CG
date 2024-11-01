@@ -1,19 +1,18 @@
 import { JSX, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { DisplayedStatistics } from "@common/types";
+import { Statistics } from "@common/types";
 import { useTitle } from "@common/useTitle";
 
+import ToastContainer from "@/components/ToastContainer/ToastContainer";
 import NavButton from "@components/NavButton";
-import ToastContainer from "@components/ToastContainer";
 
 import { TITLE } from "@constants/Common";
 import { VIEW_PATHS } from "@constants/paths";
-import { SPINNER_ID } from "@constants/spinners";
-import { STAT_NAME } from "@constants/statistics";
 
 import { getGeniusToken, getStatistics } from "./requests";
 import { hideAllStatsSpinners, showAllStatsSpinners } from "./spinners";
+import StatisticsBoard from "./StatisticsBoard";
 
 import "./Home.css";
 
@@ -23,7 +22,7 @@ const Home = (): JSX.Element => {
   const navigate = useNavigate();
 
   const [geniusToken, setGeniusToken] = useState("");
-  const [stats, setStats] = useState<DisplayedStatistics>({} as DisplayedStatistics);
+  const [stats, setStats] = useState<Statistics>({} as Statistics);
 
   useEffect(() => {
     const fetchAndSetData = () => {
@@ -65,50 +64,7 @@ const Home = (): JSX.Element => {
         </div>
       </div>
 
-      <div className="stats-board">
-        <div className="stats-entry">
-          <h3 className="stat-title">{STAT_NAME.DATE_FIRST_OPERATION}</h3>
-          <p className="stat-text" id={SPINNER_ID.STATISTICS_FIRST_OPERATION}>
-            {stats.dateFirstOperation}
-          </p>
-        </div>
-
-        <hr />
-
-        <div className="stats-entry">
-          <h3 className="stat-title">{STAT_NAME.DATE_LAST_OPERATION}</h3>
-          <p className="stat-text" id={SPINNER_ID.STATISTICS_LAST_OPERATION}>
-            {stats.dateLastOperation}
-          </p>
-        </div>
-
-        <hr />
-
-        <div className="stats-entry">
-          <h3 className="stat-title">{STAT_NAME.ARTWORK_GENERATIONS}</h3>
-          <p className="stat-text" id={SPINNER_ID.STATISTICS_ARTWORK_GENERATION}>
-            {stats.artworkGenerations}
-          </p>
-        </div>
-
-        <hr />
-
-        <div className="stats-entry">
-          <h3 className="stat-title">{STAT_NAME.LYRICS_FETCHES}</h3>
-          <p className="stat-text" id={SPINNER_ID.STATISTICS_LYRICS_FETCHES}>
-            {stats.lyricsFetches}
-          </p>
-        </div>
-
-        <hr />
-
-        <div className="stats-entry">
-          <h3 className="stat-title">{STAT_NAME.CARDS_GENERATED}</h3>
-          <p className="stat-text" id={SPINNER_ID.STATISTICS_CARDS_GENERATION}>
-            {stats.cardsGenerated}
-          </p>
-        </div>
-      </div>
+      <StatisticsBoard stats={stats} />
 
       <div className="tests navbar">
         <button type="button" onClick={() => navigate(VIEW_PATHS.tests)}>

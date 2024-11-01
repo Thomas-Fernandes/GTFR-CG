@@ -11,9 +11,7 @@ const NavButton = ({ to, label, side }: NavButtonProps) => {
 
   return (
     <button type="button" onClick={() => navigate(to)}>
-      <span className={side}>
-        {label}
-      </span>
+      <span className={side}>{label}</span>
     </button>
   );
 };

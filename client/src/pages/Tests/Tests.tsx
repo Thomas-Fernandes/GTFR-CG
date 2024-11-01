@@ -70,7 +70,7 @@ const Tests = (): JSX.Element => {
     const queryString = objectToQueryString(data);
 
     await sendRequest("POST", ITUNES_URL + "/search" + queryString).then((response: ItunesResponse) => {
-      setter({ successful: response.resultCount > 0, prompt: "iTunes API test successful", duration: Date.now() - start });
+      setter({ successful: response.data.resultCount > 0, prompt: "iTunes API test successful", duration: Date.now() - start });
     }).catch((error) => {
       setter({ successful: false, prompt: error.message, duration: Date.now() - start });
     });

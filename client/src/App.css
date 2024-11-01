@@ -129,78 +129,6 @@ hr {
         content: "\00a0"; /* Prevent margin collapse */
     }
 }
-.vertical-rule {
-    border-top: 4vw solid #000000;
-    height: 100%;
-    box-shadow: 0 0 2px .2px #000000;
-}
-
-#toast-container {
-    position: fixed;
-    top: 2%;
-    right: 2%;
-    z-index: 999;
-
-    .toast {
-        min-width: 250px;
-
-        margin-top: 10px;
-        padding: 16px;
-
-        background-color: #007f00;
-        border-radius: 4px;
-        opacity: 0;
-
-        color: #ffffff;
-        font-size: 14px;
-
-        animation: fade-in 0.5s;
-        transition: margin 0.2s ease, transform 0.5s ease, opacity 0.5s ease;
-
-        cursor: pointer;
-
-        &.show { opacity: 1; transform: translateX(0);    }
-        &.hide { opacity: 0; transform: translateX(100%); }
-
-        &.warn  { background-color: #7f7f00; }
-        &.error { background-color: #7f0000; }
-
-        .toast-progress {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-
-            height: 4px;
-            width: 100%;
-
-            background-color: #00ff004d;
-            border-radius: 4px;
-
-            &.warn  { background-color: #ffff004d; }
-            &.error { background-color: #ff00004d; }
-
-            .toast-progress-fill {
-                height: 100%;
-
-                background-color: #00ff00;
-                border-radius: 4px;
-
-                transition: width linear;
-
-                &.warn  { background-color: #ffff00; }
-                &.error { background-color: #ff0000; }
-            }
-        }
-    }
-}
-@keyframes fade-in {
-    from { opacity: 0; transform: translateX(100%); }
-    to   { opacity: 1; transform: translateX(0);    }
-}
-@keyframes fade-out {
-    from { opacity: 1; transform: translateX(0);    }
-    to   { opacity: 0; transform: translateX(100%); }
-}
 
 button {
     padding: 10px 20px;
@@ -406,38 +334,6 @@ input[type="file"] {
 .t-yellow { color: #7f7f00; }
 .t-red { color: #7f0000; }
 
-.color-picker {
-    .color-picker--img {
-        margin-right: 1rem;
-        cursor: pointer;
-    }
-
-    .color-picker--color {
-        width: 8rem;
-        height: 100%;
-        justify-content: center;
-
-        margin: 0 auto;
-        border: 2px solid #dddddd;
-        border-radius: .5rem;
-
-        text-align: center;
-        letter-spacing: 0.2rem;
-    }
-
-    .color-picker--load-latest {
-        cursor: pointer;
-        font-size: smaller;
-
-        background-color: #8fbc8f;
-        color: #ffffff;
-        border-radius: .25rem;
-
-        &:hover {
-            background-color: #0056b3;
-        }
-    }
-}
 .btn-remove {
     cursor: pointer;
     padding: .25rem;

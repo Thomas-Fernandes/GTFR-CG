@@ -3,13 +3,13 @@ import { NavigateFunction } from "react-router-dom";
 
 import { ItunesResult } from "@common/types";
 
-import ImgButton from "@components/ImgButton";
+import ImgButton from "@components/ImgButton/ImgButton";
 
 import { SPINNER_ID } from "@constants/spinners";
 import { useArtworkGenerationContext } from "./context";
 import { StateHook } from "./handlers";
 
-import "./ArtworkGeneration.css";
+import "./ItunesImageGallery.css";
 
 type ItunesImageResultProps = {
   key?: number;

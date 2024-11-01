@@ -4,15 +4,15 @@ import { useNavigate } from "react-router-dom";
 import { useTitle } from "@common/useTitle";
 import { doesFileExist } from "@common/utils/fileUtils";
 
+import ToastContainer from "@/components/ToastContainer/ToastContainer";
 import NavButton from "@components/NavButton";
-import ToastContainer from "@components/ToastContainer";
 
 import { TITLE } from "@constants/Common";
 import { COVER_ART_FILENAME, PROCESSED_IMAGES_PATH, VIEW_PATHS } from "@constants/paths";
 import { DEFAULT_SELECTED_POSITION } from "@constants/ProcessedArtworks";
 import { TOAST } from "@constants/toasts";
 
-import { ProcessedImagesContext } from "./context";
+import { ProcessedArtworksContext } from "./context";
 import { handleSubmitDownloadImage } from "./handlers";
 import ThumbnailGallery from "./ThumbnailGallery";
 import { processImageName } from "./utils";
@@ -52,23 +52,23 @@ const ProcessedArtworks = (): JSX.Element => {
 
       <h1>{TITLE.PROCESSED_ARTWORKS}</h1>
 
-      <ProcessedImagesContext.Provider value={contextValue}>
-        <div id="image-panels">
-          <div id="image-container">
-            <img src={PROCESSED_IMAGES_PATH + "/" + COVER_ART_FILENAME} alt="background thumbnail" />
-            <form onSubmit={(e) => handleSubmitDownloadImage(e, {selectedImage: COVER_ART_FILENAME})}>
-              <input type="submit" value="Download" className="button" />
-            </form>
-          </div>
+      <div id="image-panels">
+        <div id="image-container">
+          <img src={PROCESSED_IMAGES_PATH + "/" + COVER_ART_FILENAME} alt="background thumbnail" />
+          <form onSubmit={(e) => handleSubmitDownloadImage(e, {selectedImage: COVER_ART_FILENAME})}>
+            <input type="submit" value="Download" className="button" />
+          </form>
+        </div>
 
+        <ProcessedArtworksContext.Provider value={contextValue}>
           <div id="thumbnails">
             <form onSubmit={(e) => handleSubmitDownloadImage(e, {selectedImage: processImageName(selectedThumbnail)})}>
               <ThumbnailGallery />
               <input type="submit" value="Download" className="button" />
             </form>
           </div>
-        </div>
-      </ProcessedImagesContext.Provider>
+        </ProcessedArtworksContext.Provider>
+      </div>
 
       <span className="top-bot-spacer" />
     </div>

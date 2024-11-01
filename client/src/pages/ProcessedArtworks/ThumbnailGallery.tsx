@@ -1,12 +1,12 @@
 import { JSX } from "react";
 
-import { DEFAULT_SELECTED_POSITION, LOGO_POSITIONS } from "@/constants/ProcessedArtworks";
+import { DEFAULT_SELECTED_POSITION, LOGO_POSITIONS } from "@constants/ProcessedArtworks";
 import { PROCESSED_IMAGES_PATH } from "@constants/paths";
 
-import { useProcessedImagesContext } from "./context";
+import { useProcessedArtworksContext } from "./context";
 import { processImageName } from "./utils";
 
-import "./ProcessedArtworks.css";
+import "./ThumbnailGallery.css";
 
 export type ThumbnailOptionProps = {
   key: number;
@@ -15,7 +15,7 @@ export type ThumbnailOptionProps = {
 };
 
 const ThumbnailOption: React.FC<ThumbnailOptionProps> = ({key, logoPosition, idx}): JSX.Element => {
-  const { setSelectedThumbnail } = useProcessedImagesContext();
+  const { setSelectedThumbnail } = useProcessedArtworksContext();
   key?.valueOf(); // unused
 
   return (

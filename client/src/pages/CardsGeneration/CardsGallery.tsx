@@ -7,15 +7,10 @@ import { TOAST, TOAST_TYPE } from "@constants/toasts";
 
 import CardEditModal from "./CardEditModal";
 import { CardsGalleryContext } from "./context";
+import { CardData } from "./interfaces";
 import { handleMouseDown, handleMouseUp } from "./mouse";
 
 import "./CardsGallery.css";
-
-export interface CardData {
-  id: number;
-  lyrics: string;
-  src: string; // Img source path
-}
 
 type GenerationProps = {
   cardMetaname: string;

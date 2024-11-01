@@ -1,5 +1,7 @@
 import React from "react";
 
+import "./VerticalRule.css";
+
 type Props = {
   className?: string;
 };

@@ -6,8 +6,8 @@ import { sendToast } from "@common/toast";
 import { LyricsContents, LyricsPart, PageMetadata } from "@common/types";
 import { useTitle } from "@common/useTitle";
 
+import ToastContainer from "@/components/ToastContainer/ToastContainer";
 import NavButton from "@components/NavButton";
-import ToastContainer from "@components/ToastContainer";
 
 import { SESSION_STORAGE, TITLE } from "@constants/Common";
 import { API, BACKEND_URL, VIEW_PATHS } from "@constants/paths";
@@ -87,8 +87,7 @@ const Lyrics = (): JSX.Element => {
 
       <h1>{TITLE.LYRICS}</h1>
 
-      <LyricsContext.Provider value={contextValue}>
-        <button type="button" className="last-generation"
+        <button type="button" className="last-generation mv-0"
           onClick={() => handleLoadLastContents({lastContents, setPageMetadata, setLyricsParts, setDismissedParts})}
         >
           {"Load last contents"}
@@ -96,33 +95,35 @@ const Lyrics = (): JSX.Element => {
 
         { isManual
         ? <div className="flexbox">
-          <div id="metadata-bar" className="flex-row g-1">
-            <input required
-              type="text" name="artist" placeholder="Enter artist name"
-              onChange={(e) => { setArtist(e.target.value); setPageMetadata({...pageMetadata, artist: e.target.value}); }}
-            />
-            <input required
-              type="text" name="songName" placeholder="Enter song name"
-              onChange={(e) => { setSongName(e.target.value); setPageMetadata({...pageMetadata, title: e.target.value}); }}
-            />
-          </div>
-        </div> : <form className="search-form flexbox"
-          onSubmit={(e) => handleLyricsSearchSubmit(e, {artist, songName}, {isFetching, setIsFetching, setLyricsParts, setPageMetadata})}
-        >
-          <div id="search-bar" className="flex-row g-1">
-            <input required
-              type="text" name="artist" placeholder="Enter artist name"
-              onChange={(e) => setArtist(e.target.value)}
-            />
-            <input required
-              type="text" name="songName" placeholder="Enter song name"
-              onChange={(e) => setSongName(e.target.value)}
-            />
-            <div className="action-button" id={SPINNER_ID.LYRICS_SEARCH}>
-              <input type="submit" value="SEARCH" className="action-button search-button" />
+            <div id="metadata-bar" className="flex-row g-1">
+              <input required
+                type="text" name="artist" placeholder="Enter artist name"
+                onChange={(e) => { setArtist(e.target.value); setPageMetadata({...pageMetadata, artist: e.target.value}); }}
+              />
+              <input required
+                type="text" name="songName" placeholder="Enter song name"
+                onChange={(e) => { setSongName(e.target.value); setPageMetadata({...pageMetadata, title: e.target.value}); }}
+              />
             </div>
           </div>
-        </form>}
+        : <form className="search-form flexbox"
+            onSubmit={(e) => handleLyricsSearchSubmit(e, {artist, songName}, {isFetching, setIsFetching, setLyricsParts, setPageMetadata})}
+          >
+            <div id="search-bar" className="flex-row g-1">
+              <input required
+                type="text" name="artist" placeholder="Enter artist name"
+                onChange={(e) => setArtist(e.target.value)}
+              />
+              <input required
+                type="text" name="songName" placeholder="Enter song name"
+                onChange={(e) => setSongName(e.target.value)}
+              />
+              <div className="action-button" id={SPINNER_ID.LYRICS_SEARCH}>
+                <input type="submit" value="SEARCH" className="action-button search-button" />
+              </div>
+            </div>
+          </form>
+        }
 
         { !isFetching &&
           <button type="button" className="mode-flipper"
@@ -138,8 +139,10 @@ const Lyrics = (): JSX.Element => {
             }}
           >
             {isManual ? "Generate cards automatically" : "Generate cards manually instead"}
-          </button>}
+          </button>
+        }
 
+      <LyricsContext.Provider value={contextValue}>
         { !isFetching && lyricsParts.length > 0 && <>
           <hr />
 

@@ -104,14 +104,14 @@ export type ItunesRequest = {
 
 /***************** HOME ******************/
 
-export type Statistics = {
+export type StatisticsResponse = {
   dateFirstOperation: string;
   dateLastOperation: string;
   artworkGenerations: number;
   lyricsFetches: number;
   cardsGenerated: number;
 };
-export type DisplayedStatistics = {
+export type Statistics = {
   dateFirstOperation: string;
   dateLastOperation: string;
   artworkGenerations: string;

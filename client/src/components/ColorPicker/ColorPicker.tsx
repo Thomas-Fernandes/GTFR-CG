@@ -4,6 +4,8 @@ import { sendToast } from "@common/toast";
 
 import { TOAST, TOAST_TYPE } from "@constants/toasts";
 
+import "./ColorPicker.css";
+
 type Props = {
   id: string;
   latest?: string;
@@ -13,8 +15,6 @@ type Props = {
 };
 
 const ColorPicker: React.FC<Props> = ({ id, latest, label, labelClassName, setter }) => {
-  const trueLabelClassName = labelClassName ? (" " + labelClassName) : "";
-
   const [selectedColor, setSelectedColor] = useState<string>(""); // Default to black color
 
   const calculateLuminance = (hex: string) => {
@@ -48,7 +48,7 @@ const ColorPicker: React.FC<Props> = ({ id, latest, label, labelClassName, sette
     <div id={id} className="color-picker flex-row"> {/* flex-row stays for the color result label height calculation */}
       <div className={"flexbox" + (selectedColor === "" ? " g-p5" : "")}>
         { selectedColor === ""
-        ? <><p className={"m-0 italic" + (label ? trueLabelClassName : " hidden")}>
+        ? <><p className={"m-0 italic " + (label ? (labelClassName ?? "") : "hidden")}>
             {label}
           </p>
           <div className="flex-row">

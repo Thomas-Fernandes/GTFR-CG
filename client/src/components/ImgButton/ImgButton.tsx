@@ -1,4 +1,6 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
+
+import "./ImgButton.css";
 
 type Props = {
   src: string;
@@ -9,27 +11,20 @@ type Props = {
 };
 
 const ImgButton: React.FC<Props> = ({ src, alt, className, onLoad, onClick }) => {
-  const buttonRef = useRef<HTMLButtonElement>(null);
   const [isHovered, setIsHovered] = useState(false);
 
   return (
     <div className="img-button">
       <button
-        ref={buttonRef}
         style={{
-          border: "none",
-          background: "none",
           padding: isHovered ? "5px" : "0",
-          cursor: "pointer",
         }}
-        onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}
-        onLoad={onLoad}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
         onClick={onClick}
       >
         <img
-          src={src}
-          alt={alt}
-          style={{ display: 'block' }}
+          src={src} alt={alt} onLoad={onLoad}
           className={className}
         />
       </button>
