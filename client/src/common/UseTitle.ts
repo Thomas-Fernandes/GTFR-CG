@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 
 import { TITLE } from "@constants/Common";
 
-const useTitle = (title: string) => {
+export const useTitle = (title: string) => {
   const documentIsDefined = document !== undefined;
   const originalTitle = useRef(documentIsDefined ? document.title : null);
 
@@ -20,5 +20,3 @@ const useTitle = (title: string) => {
     };
   }, [documentIsDefined, title]);
 };
-
-export default useTitle;

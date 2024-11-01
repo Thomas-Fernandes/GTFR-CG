@@ -2,9 +2,10 @@ import { JSX, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { DisplayedStatistics } from "@common/types";
-import useTitle from "@common/useTitle";
+import { useTitle } from "@common/useTitle";
 
 import NavButton from "@components/NavButton";
+import ToastContainer from "@components/ToastContainer";
 
 import { TITLE } from "@constants/Common";
 import { VIEW_PATHS } from "@constants/paths";
@@ -49,7 +50,7 @@ const Home = (): JSX.Element => {
 
   return (
     <div id="home">
-      <div id="toast-container" />
+      <ToastContainer />
       <span className="top-bot-spacer" />
 
       <h1>{TITLE.HOME}</h1>

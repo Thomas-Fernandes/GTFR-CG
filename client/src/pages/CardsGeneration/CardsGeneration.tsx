@@ -1,10 +1,11 @@
 import { JSX, useEffect, useState } from "react";
 
-import useTitle from "@common/useTitle";
+import { useTitle } from "@common/useTitle";
 
 import ColorPicker from "@components/ColorPicker";
 import FileUploader from "@components/FileUploader";
 import NavButton from "@components/NavButton";
+import ToastContainer from "@components/ToastContainer";
 import ZipDownloadButton from "@components/ZipDownloadButton";
 
 import { SESSION_STORAGE, TITLE } from "@constants/Common";
@@ -49,7 +50,7 @@ const CardsGeneration = (): JSX.Element => {
 
   return (
     <div id="cards-generation">
-      <div id="toast-container" />
+      <ToastContainer />
       <span className="top-bot-spacer" />
 
       <div className="navbar">

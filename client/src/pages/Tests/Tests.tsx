@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { is2xxSuccessful, objectToQueryString, sendRequest } from "@common/requests";
 import { dismissToast, sendToast } from "@common/toast";
 import { ItunesResponse, LyricsResponse, StateSetter } from "@common/types";
-import useTitle from "@common/useTitle";
+import { useTitle } from "@common/useTitle";
 
 import { TITLE } from "@constants/Common";
 import { API, BACKEND_URL, ITUNES_URL, VIEW_PATHS } from "@constants/paths";
@@ -123,7 +123,6 @@ const Tests = (): JSX.Element => {
 
   return (
     <div id="tests">
-      <div id="toast-container" />
       <span className="top-bot-spacer" />
 
       <div className="navbar">

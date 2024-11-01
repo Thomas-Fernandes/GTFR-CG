@@ -2,10 +2,11 @@ import { JSX, useMemo, useState, useTransition } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { ItunesResult } from "@common/types";
-import useTitle from "@common/useTitle";
+import { useTitle } from "@common/useTitle";
 
 import FileUploader from "@components/FileUploader";
 import NavButton from "@components/NavButton";
+import ToastContainer from "@components/ToastContainer";
 
 import { TITLE } from "@constants/Common";
 import { VIEW_PATHS } from "@constants/paths";
@@ -41,7 +42,7 @@ const ArtworkGeneration = (): JSX.Element => {
 
   return (
     <div id="artwork-generation">
-      <div id="toast-container" />
+      <ToastContainer />
       <span className="top-bot-spacer" />
 
       <div className="navbar">

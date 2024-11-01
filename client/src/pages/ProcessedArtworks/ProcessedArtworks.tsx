@@ -1,10 +1,11 @@
 import { JSX, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import useTitle from "@common/useTitle";
+import { useTitle } from "@common/useTitle";
 import { doesFileExist } from "@common/utils/fileUtils";
 
 import NavButton from "@components/NavButton";
+import ToastContainer from "@components/ToastContainer";
 
 import { TITLE } from "@constants/Common";
 import { COVER_ART_FILENAME, PROCESSED_IMAGES_PATH, VIEW_PATHS } from "@constants/paths";
@@ -39,7 +40,7 @@ const ProcessedArtworks = (): JSX.Element => {
 
   return (
     <div id="processed-images">
-      <div id="toast-container" />
+      <ToastContainer />
       <span className="top-bot-spacer" />
 
       <div className="navbar">

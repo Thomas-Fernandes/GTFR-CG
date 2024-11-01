@@ -4,9 +4,10 @@ import { useNavigate } from "react-router-dom";
 import { is2xxSuccessful, sendRequest } from "@common/requests";
 import { sendToast } from "@common/toast";
 import { LyricsContents, LyricsPart, PageMetadata } from "@common/types";
-import useTitle from "@common/useTitle";
+import { useTitle } from "@common/useTitle";
 
 import NavButton from "@components/NavButton";
+import ToastContainer from "@components/ToastContainer";
 
 import { SESSION_STORAGE, TITLE } from "@constants/Common";
 import { API, BACKEND_URL, VIEW_PATHS } from "@constants/paths";
@@ -75,7 +76,7 @@ const Lyrics = (): JSX.Element => {
 
   return (
     <div id="lyrics">
-      <div id="toast-container" />
+      <ToastContainer />
       <span className="top-bot-spacer" />
 
       <div className="navbar">
