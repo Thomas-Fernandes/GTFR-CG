@@ -1,14 +1,14 @@
 import { JSX, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { is2xxSuccessful, objectToQueryString, sendRequest } from "@/common/requests";
-import { dismissToast, sendToast } from "@/common/toast";
-import { ItunesResponse, LyricsResponse, StateSetter } from "@/common/types";
-import useTitle from "@/common/useTitle";
+import { is2xxSuccessful, objectToQueryString, sendRequest } from "@common/requests";
+import { dismissToast, sendToast } from "@common/toast";
+import { ItunesResponse, LyricsResponse, StateSetter } from "@common/types";
+import useTitle from "@common/useTitle";
 
 import { TITLE } from "@constants/Common";
-import { API, BACKEND_URL, ITUNES_URL, VIEW_PATHS } from "@constants/Paths";
-import { TOAST_TYPE } from "@constants/Toast";
+import { API, BACKEND_URL, ITUNES_URL, VIEW_PATHS } from "@constants/paths";
+import { TOAST_TYPE } from "@constants/toasts";
 
 import { TestResult } from "./Test";
 import { TestsBoard } from "./TestsBoard";
@@ -123,7 +123,7 @@ const Tests = (): JSX.Element => {
 
   return (
     <div id="tests">
-      <div id="toast-container"></div>
+      <div id="toast-container" />
       <span className="top-bot-spacer" />
 
       <div className="navbar">

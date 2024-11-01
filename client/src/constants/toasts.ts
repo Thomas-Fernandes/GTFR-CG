@@ -1,4 +1,4 @@
-import { RESPONSE_STATUS } from "./Requests";
+import { RESPONSE_STATUS } from "./requests";
 
 export const TOAST: Record<string, string> = {
   DEFAULT: "An unknown error occurred.\n"

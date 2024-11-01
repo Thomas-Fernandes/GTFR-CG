@@ -1,15 +1,15 @@
 import { JSX, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 
-import useTitle from "@/common/useTitle";
+import useTitle from "@common/useTitle";
 
 import ColorPicker from "@components/ColorPicker";
 import FileUploader from "@components/FileUploader";
+import NavButton from "@components/NavButton";
 import ZipDownloadButton from "@components/ZipDownloadButton";
 
 import { SESSION_STORAGE, TITLE } from "@constants/Common";
-import { VIEW_PATHS } from "@constants/Paths";
-import { SPINNER_ID } from "@constants/Spinner";
+import { VIEW_PATHS } from "@constants/paths";
+import { SPINNER_ID } from "@constants/spinners";
 
 import CardsGallery, { CardData } from "./CardsGallery";
 import { handleGenerateCards, handleSubmitDownloadCard, handleUnauthorizedCheckbox } from "./handlers";
@@ -20,8 +20,6 @@ const CardsGeneration = (): JSX.Element => {
   useTitle(TITLE.CARDS_GENERATION);
 
   const [isComponentMounted, setIsComponentMounted] = useState(false);
-
-  const navigate = useNavigate();
 
   const [cardMetaname, setCardMetaname] = useState("");
   const [outroContributors, setOutroContributors] = useState("");
@@ -51,19 +49,13 @@ const CardsGeneration = (): JSX.Element => {
 
   return (
     <div id="cards-generation">
-      <div id="toast-container"></div>
+      <div id="toast-container" />
       <span className="top-bot-spacer" />
 
       <div className="navbar">
-        <button type="button" onClick={() => navigate(VIEW_PATHS.home)}>
-          <span className="left">{TITLE.HOME}</span>
-        </button>
-        <button type="button" onClick={() => navigate(VIEW_PATHS.artworkGeneration)}>
-          <span className="left">{TITLE.ARTWORK_GENERATION}</span>
-        </button>
-        <button type="button" onClick={() => navigate(VIEW_PATHS.lyrics)}>
-          <span className="left">{TITLE.LYRICS}</span>
-        </button>
+        <NavButton to={VIEW_PATHS.home} label={TITLE.HOME} side="left" />
+        <NavButton to={VIEW_PATHS.artworkGeneration} label={TITLE.ARTWORK_GENERATION} side="left" />
+        <NavButton to={VIEW_PATHS.lyrics} label={TITLE.LYRICS} side="left" />
       </div>
 
       <h1>{TITLE.CARDS_GENERATION}</h1>

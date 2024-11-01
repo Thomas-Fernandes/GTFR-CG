@@ -1,12 +1,12 @@
 import { JSX } from "react";
 
-import { PROCESSED_IMAGES_PATH } from "@constants/Paths";
-import { DEFAULT_SELECTED_POSITION, LOGO_POSITIONS } from "@constants/ProcessedImages";
+import { DEFAULT_SELECTED_POSITION, LOGO_POSITIONS } from "@/constants/ProcessedArtworks";
+import { PROCESSED_IMAGES_PATH } from "@constants/paths";
 
 import { useProcessedImagesContext } from "./context";
 import { processImageName } from "./utils";
 
-import "./ProcessedImages.css";
+import "./ProcessedArtworks.css";
 
 export type ThumbnailOptionProps = {
   key: number;

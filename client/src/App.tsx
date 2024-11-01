@@ -1,13 +1,13 @@
 import { JSX } from "react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
-import { VIEW_PATHS } from "@constants/Paths";
+import { VIEW_PATHS } from "@constants/paths";
 
 import ArtworkGeneration from "@pages/ArtworkGeneration/ArtworkGeneration";
 import CardsGeneration from "@pages/CardsGeneration/CardsGeneration";
 import Home from "@pages/Home/Home";
 import Lyrics from "@pages/Lyrics/Lyrics";
-import ProcessedImages from "@pages/ProcessedImages/ProcessedImages";
+import ProcessedArtworks from "@pages/ProcessedArtworks/ProcessedArtworks";
 import Redirect from "@pages/Redirect/Redirect";
 import Tests from "@pages/Tests/Tests";
 
@@ -19,7 +19,7 @@ const App = (): JSX.Element => {
       <Routes>
         <Route path={VIEW_PATHS.cardsGeneration} element={<CardsGeneration />} />
         <Route path={VIEW_PATHS.lyrics} element={<Lyrics />} />
-        <Route path={VIEW_PATHS.processedImages} element={<ProcessedImages />} />
+        <Route path={VIEW_PATHS.processedImages} element={<ProcessedArtworks />} />
         <Route path={VIEW_PATHS.artworkGeneration} element={<ArtworkGeneration />} />
         <Route path={VIEW_PATHS.redirect} element={<Redirect />} />
         <Route path={VIEW_PATHS.tests} element={<Tests />} />

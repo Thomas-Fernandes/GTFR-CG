@@ -5,7 +5,7 @@ import JSZip from "jszip";
 
 type Props = {
   id?: string;
-  type?: "button" | "submit" | "reset" | undefined;
+  type?: "button" | "submit" | "reset";
   paths: string[];
   output: string;
 };

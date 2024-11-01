@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 
-import { sendToast } from "@/common/toast";
+import { sendToast } from "@common/toast";
 
-import { TOAST, TOAST_TYPE } from "@constants/Toast";
+import { TOAST, TOAST_TYPE } from "@constants/toasts";
 
 type Props = {
   id: string;

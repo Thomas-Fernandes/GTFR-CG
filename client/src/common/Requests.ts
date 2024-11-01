@@ -1,5 +1,5 @@
-import { HTTP_STATUS } from "@constants/Requests";
-import { TOAST } from "@constants/Toast";
+import { HTTP_STATUS } from "@constants/requests";
+import { TOAST } from "@constants/toasts";
 
 import { HttpMethod } from "./types";
 

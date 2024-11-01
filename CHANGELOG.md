@@ -4,7 +4,7 @@
 
 - ***[1.6.0]** Coming later...*: **Koh-Lanta** — Project will be unified in an all-in-one application. [#???](#card_file_box-changelog)
 
-- ***[1.5.0]** Coming later...*: **Boost!** — Project will see its existing functionalities sharpened. [#???](#card_file_box-changelog)
+- ***[1.5.0]** Coming later...*: **Boost!** — Project will see its existing codebase and functionalities sharpened. [#???](#card_file_box-changelog)
 
   - ***[1.4.4]** Oct 29 2024*: All major European and Asian fonts are now handled, back end functional logic is reinforced. [#152](https://github.com/Thomas-Fernandes/GTFR-CG/pull/152)
   - ***[1.4.3]** Oct 26 2024*: Cards can now be generated with full customization and edited in real time. [#140](https://github.com/Thomas-Fernandes/GTFR-CG/pull/140)

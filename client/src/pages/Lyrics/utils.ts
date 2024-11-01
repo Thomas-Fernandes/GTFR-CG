@@ -1,4 +1,4 @@
-import { LyricsPart, SongPartsCards } from "@/common/types";
+import { LyricsPart, SongPartsCards } from "@common/types";
 
 export const convertToCardContents = (lyricsParts: LyricsPart[], dismissedParts: Set<number>): SongPartsCards => {
   // Input: [{section: "Verse 1", lyrics: "The whole lyrics\nOf the section\nAre here as is\nTotally disorganized"}, ...]

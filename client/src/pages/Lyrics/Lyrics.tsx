@@ -1,15 +1,17 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { is2xxSuccessful, sendRequest } from "@/common/requests";
-import { LyricsContents, LyricsPart, PageMetadata } from "@/common/types";
-import useTitle from "@/common/useTitle";
-import { sendToast } from "@/common/toast";
+import { is2xxSuccessful, sendRequest } from "@common/requests";
+import { sendToast } from "@common/toast";
+import { LyricsContents, LyricsPart, PageMetadata } from "@common/types";
+import useTitle from "@common/useTitle";
+
+import NavButton from "@components/NavButton";
 
 import { SESSION_STORAGE, TITLE } from "@constants/Common";
-import { API, BACKEND_URL, VIEW_PATHS } from "@constants/Paths";
-import { SPINNER_ID } from "@constants/Spinner";
-import { TOAST, TOAST_TYPE } from "@constants/Toast";
+import { API, BACKEND_URL, VIEW_PATHS } from "@constants/paths";
+import { SPINNER_ID } from "@constants/spinners";
+import { TOAST, TOAST_TYPE } from "@constants/toasts";
 
 import { LyricsContext } from "./context";
 import { handleLoadLastContents, handleLyricsSaveSubmit, handleLyricsSearchSubmit, handleSetLyricsParts } from "./handlers";
@@ -72,25 +74,19 @@ const Lyrics = (): JSX.Element => {
   });
 
   return (
-    <LyricsContext.Provider value={contextValue}>
-      <div id="lyrics">
-        <div id="toast-container"></div>
-        <span className="top-bot-spacer" />
+    <div id="lyrics">
+      <div id="toast-container" />
+      <span className="top-bot-spacer" />
 
-        <div className="navbar">
-          <button type="button" onClick={() => navigate(VIEW_PATHS.home)}>
-            <span className="left">{TITLE.HOME}</span>
-          </button>
-          <button type="button" onClick={() => navigate(VIEW_PATHS.artworkGeneration)}>
-            <span className="left">{TITLE.ARTWORK_GENERATION}</span>
-          </button>
-          <button type="button" onClick={() => navigate(VIEW_PATHS.cardsGeneration)}>
-            <span className="right">{TITLE.CARDS_GENERATION}</span>
-          </button>
-        </div>
+      <div className="navbar">
+        <NavButton to={VIEW_PATHS.home} label={TITLE.HOME} side="left" />
+        <NavButton to={VIEW_PATHS.artworkGeneration} label={TITLE.ARTWORK_GENERATION} side="left" />
+        <NavButton to={VIEW_PATHS.cardsGeneration} label={TITLE.CARDS_GENERATION} side="right" />
+      </div>
 
-        <h1>Lyrics</h1>
+      <h1>{TITLE.LYRICS}</h1>
 
+      <LyricsContext.Provider value={contextValue}>
         <button type="button" className="last-generation"
           onClick={() => handleLoadLastContents({lastContents, setPageMetadata, setLyricsParts, setDismissedParts})}
         >
@@ -157,8 +153,10 @@ const Lyrics = (): JSX.Element => {
             </div>
           </form>
         </>}
-      </div>
-    </LyricsContext.Provider>
+      </LyricsContext.Provider>
+
+      <span className="top-bot-spacer" />
+    </div>
   )
 };
 

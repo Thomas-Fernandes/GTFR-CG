@@ -1,23 +1,25 @@
 import { JSX, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import useTitle from "@/common/useTitle";
-import { doesFileExist } from "@/common/utils/fileUtils";
+import useTitle from "@common/useTitle";
+import { doesFileExist } from "@common/utils/fileUtils";
+
+import NavButton from "@components/NavButton";
 
 import { TITLE } from "@constants/Common";
-import { COVER_ART_FILENAME, PROCESSED_IMAGES_PATH, VIEW_PATHS } from "@constants/Paths";
-import { DEFAULT_SELECTED_POSITION } from "@constants/ProcessedImages";
-import { TOAST } from "@constants/Toast";
+import { COVER_ART_FILENAME, PROCESSED_IMAGES_PATH, VIEW_PATHS } from "@constants/paths";
+import { DEFAULT_SELECTED_POSITION } from "@constants/ProcessedArtworks";
+import { TOAST } from "@constants/toasts";
 
 import { ProcessedImagesContext } from "./context";
 import { handleSubmitDownloadImage } from "./handlers";
 import ThumbnailGallery from "./ThumbnailGallery";
 import { processImageName } from "./utils";
 
-import "./ProcessedImages.css";
+import "./ProcessedArtworks.css";
 
-const ProcessedImages = (): JSX.Element => {
-  useTitle(TITLE.PROCESSED_IMAGES);
+const ProcessedArtworks = (): JSX.Element => {
+  useTitle(TITLE.PROCESSED_ARTWORKS);
 
   const navigate = useNavigate();
 
@@ -36,28 +38,20 @@ const ProcessedImages = (): JSX.Element => {
   });
 
   return (
-    <ProcessedImagesContext.Provider value={contextValue}>
-      <div id="processed-images">
-        <div id="toast-container"></div>
-        <span className="top-bot-spacer" />
+    <div id="processed-images">
+      <div id="toast-container" />
+      <span className="top-bot-spacer" />
 
-        <div className="navbar">
-          <button type="button" onClick={() => navigate(VIEW_PATHS.home)}>
-            <span className="left">{TITLE.HOME}</span>
-          </button>
-          <button type="button" onClick={() => navigate(VIEW_PATHS.artworkGeneration)}>
-            <span className="left">{TITLE.ARTWORK_GENERATION}</span>
-          </button>
-          <button type="button" onClick={() => navigate(VIEW_PATHS.lyrics)}>
-            <span className="right">{TITLE.LYRICS}</span>
-          </button>
-          <button type="button" onClick={() => navigate(VIEW_PATHS.cardsGeneration)}>
-            <span className="right">{TITLE.CARDS_GENERATION}</span>
-          </button>
-        </div>
+      <div className="navbar">
+        <NavButton to={VIEW_PATHS.home} label={TITLE.HOME} side="left" />
+        <NavButton to={VIEW_PATHS.artworkGeneration} label={TITLE.ARTWORK_GENERATION} side="right" />
+        <NavButton to={VIEW_PATHS.lyrics} label={TITLE.LYRICS} side="right" />
+        <NavButton to={VIEW_PATHS.cardsGeneration} label={TITLE.CARDS_GENERATION} side="right" />
+      </div>
 
-        <h1>Processed Artworks</h1>
+      <h1>{TITLE.PROCESSED_ARTWORKS}</h1>
 
+      <ProcessedImagesContext.Provider value={contextValue}>
         <div id="image-panels">
           <div id="image-container">
             <img src={PROCESSED_IMAGES_PATH + "/" + COVER_ART_FILENAME} alt="background thumbnail" />
@@ -73,11 +67,11 @@ const ProcessedImages = (): JSX.Element => {
             </form>
           </div>
         </div>
+      </ProcessedImagesContext.Provider>
 
-        <span className="top-bot-spacer" />
-      </div>
-    </ProcessedImagesContext.Provider>
+      <span className="top-bot-spacer" />
+    </div>
   )
 };
 
-export default ProcessedImages;
+export default ProcessedArtworks;

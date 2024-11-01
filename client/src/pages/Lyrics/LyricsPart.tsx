@@ -1,5 +1,7 @@
-import { LyricsPart } from "@/common/types";
+import { LyricsPart } from "@common/types";
+
 import { AutoResizeTextarea } from "@components/AutoResizeTextarea";
+
 import { useLyricsContext } from "./context";
 import { HandleSetLyricsPartsProps } from "./handlers";
 
@@ -37,6 +39,7 @@ const LyricsPartView: React.FC<LyricsPartViewProps> = ({key, part, idx, handleSe
           value={part.lyrics} onChange={(e) => handleSetLyricsParts(e.target.value, idx, {lyricsParts, setLyricsParts})}
         />
       </>}
+
       <hr className="w-66 mv-0" />
     </div>
   );

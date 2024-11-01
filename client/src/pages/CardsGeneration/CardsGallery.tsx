@@ -1,9 +1,9 @@
 import React, { FormEvent, useMemo, useRef, useState } from "react";
 
-import { sendToast } from "@/common/toast";
-import { ImageDownloadRequest } from "@/common/types";
+import { sendToast } from "@common/toast";
+import { ImageDownloadRequest } from "@common/types";
 
-import { TOAST, TOAST_TYPE } from "@constants/Toast";
+import { TOAST, TOAST_TYPE } from "@constants/toasts";
 
 import CardEditModal from "./CardEditModal";
 import { CardsGalleryContext } from "./context";

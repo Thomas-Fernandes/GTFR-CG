@@ -1,13 +1,15 @@
 import { JSX, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { DisplayedStatistics } from "@/common/types";
-import useTitle from "@/common/useTitle";
+import { DisplayedStatistics } from "@common/types";
+import useTitle from "@common/useTitle";
+
+import NavButton from "@components/NavButton";
 
 import { TITLE } from "@constants/Common";
-import { STAT_NAME } from "@constants/Home";
-import { VIEW_PATHS } from "@constants/Paths";
-import { SPINNER_ID } from "@constants/Spinner";
+import { VIEW_PATHS } from "@constants/paths";
+import { SPINNER_ID } from "@constants/spinners";
+import { STAT_NAME } from "@constants/statistics";
 
 import { getGeniusToken, getStatistics } from "./requests";
 import { hideAllStatsSpinners, showAllStatsSpinners } from "./spinners";
@@ -47,24 +49,18 @@ const Home = (): JSX.Element => {
 
   return (
     <div id="home">
-      <div id="toast-container"></div>
+      <div id="toast-container" />
       <span className="top-bot-spacer" />
 
-      <h1>Home</h1>
+      <h1>{TITLE.HOME}</h1>
 
       <div className="home navbar">
         <div className="navbar-row">
-          <button type="button" onClick={() => navigate(VIEW_PATHS.artworkGeneration)}>
-            <span className="right">{TITLE.ARTWORK_GENERATION}</span>
-          </button>
-          <button type="button" onClick={() => navigate(VIEW_PATHS.lyrics)}>
-            <span className="right">{TITLE.LYRICS}</span>
-          </button>
+          <NavButton to={VIEW_PATHS.artworkGeneration} label={TITLE.ARTWORK_GENERATION} side="right" />
+          <NavButton to={VIEW_PATHS.lyrics} label={TITLE.LYRICS} side="right" />
         </div>
         <div className="navbar-row">
-          <button type="button" onClick={() => navigate(VIEW_PATHS.cardsGeneration)}>
-            <span className="right">{TITLE.CARDS_GENERATION}</span>
-          </button>
+          <NavButton to={VIEW_PATHS.cardsGeneration} label={TITLE.CARDS_GENERATION} side="right" />
         </div>
       </div>
 

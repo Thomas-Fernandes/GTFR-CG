@@ -1,13 +1,13 @@
 import React, { useRef, useState } from "react";
 
-import { is2xxSuccessful, sendRequest } from "@/common/requests";
-import { hideSpinner, showSpinner } from "@/common/spinner";
-import { sendToast } from "@/common/toast";
-import { ApiResponse, SingleCardGenerationRequest } from "@/common/types";
+import { is2xxSuccessful, sendRequest } from "@common/requests";
+import { hideSpinner, showSpinner } from "@common/spinner";
+import { sendToast } from "@common/toast";
+import { ApiResponse, SingleCardGenerationRequest } from "@common/types";
 
-import { API, BACKEND_URL } from "@constants/Paths";
-import { SPINNER_ID } from "@constants/Spinner";
-import { TOAST, TOAST_TYPE } from "@constants/Toast";
+import { API, BACKEND_URL } from "@constants/paths";
+import { SPINNER_ID } from "@constants/spinners";
+import { TOAST, TOAST_TYPE } from "@constants/toasts";
 
 import { AutoResizeTextarea } from "@components/AutoResizeTextarea";
 

@@ -13,7 +13,7 @@ export const TITLE = {
   TESTS: "Tests",
   HOME: "Home",
   ARTWORK_GENERATION: "Artwork Generation",
-  PROCESSED_IMAGES: "Processed Images",
+  PROCESSED_ARTWORKS: "Processed Artworks",
   LYRICS: "Lyrics",
   CARDS_GENERATION: "Cards Generation",
 };

@@ -1,11 +1,11 @@
 import { JSX, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-import useTitle from "@/common/useTitle";
+import useTitle from "@common/useTitle";
 
 import { TITLE } from "@constants/Common";
-import { DEFAULT_REDIRECTION } from "@constants/Redirection";
-import { DEFAULT_EVENT_DURATION } from "@constants/Toast";
+import { DEFAULT_REDIRECTION } from "@constants/redirection";
+import { DEFAULT_EVENT_DURATION } from "@constants/toasts";
 
 import "./Redirect.css";
 
@@ -40,13 +40,13 @@ const Redirect = (): JSX.Element => {
     <div id="redirect">
       <span className="top-bot-spacer" />
 
-      <h1>Redirection page</h1>
+      <h1>{"Redirection page"}</h1>
 
       <div className="board">
-        <h3 className="title">You are being redirected after an error was met...</h3>
+        <h3 className="title">{"You are being redirected after an error was met..."}</h3>
         <p className="err">{ errorText.current }</p>
         <p className="counter">
-          You will be redirected to&nbsp;{redirectTo.current}&nbsp;in&nbsp;{countdown}&nbsp;second{plural}.
+          {"You will be redirected to"}&nbsp;{redirectTo.current}&nbsp;{"in"}&nbsp;{countdown}&nbsp;{"second"}{plural}.
         </p>
       </div>
 

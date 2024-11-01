@@ -1,7 +1,7 @@
 
-import { hideSpinner, showSpinner } from "@/common/spinner";
+import { hideSpinner, showSpinner } from "@common/spinner";
 
-import { SPINNER_ID } from "@constants/Spinner";
+import { SPINNER_ID } from "@constants/spinners";
 
 import "./Home.css";
 

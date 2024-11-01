@@ -1,15 +1,15 @@
 import { JSX, useState } from "react";
 import { NavigateFunction } from "react-router-dom";
 
-import { ItunesResult } from "@/common/types";
+import { ItunesResult } from "@common/types";
 
 import ImgButton from "@components/ImgButton";
 
-import { SPINNER_ID } from "@constants/Spinner";
-
-import "./ArtworkGeneration.css";
+import { SPINNER_ID } from "@constants/spinners";
 import { useArtworkGenerationContext } from "./context";
 import { StateHook } from "./handlers";
+
+import "./ArtworkGeneration.css";
 
 type ItunesImageResultProps = {
   key?: number;

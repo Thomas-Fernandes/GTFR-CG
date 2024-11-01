@@ -1,15 +1,15 @@
 import { FormEvent } from "react";
 
-import { showSpinner } from "@/common/spinner";
-import { sendToast } from "@/common/toast";
-import { CardsGenerationRequest, ImageDownloadRequest, StateSetter } from "@/common/types";
-import { isFileExtensionAccepted } from "@/common/utils/fileUtils";
-
-import { CardData } from "@/pages/CardsGeneration/CardsGallery";
+import { showSpinner } from "@common/spinner";
+import { sendToast } from "@common/toast";
+import { CardsGenerationRequest, ImageDownloadRequest, StateSetter } from "@common/types";
+import { isFileExtensionAccepted } from "@common/utils/fileUtils";
 
 import { FILE_UPLOAD } from "@constants/ArtworkGeneration";
-import { SPINNER_ID } from "@constants/Spinner";
-import { TOAST, TOAST_TYPE } from "@constants/Toast";
+import { SPINNER_ID } from "@constants/spinners";
+import { TOAST, TOAST_TYPE } from "@constants/toasts";
+
+import { CardData } from "@pages/CardsGeneration/CardsGallery";
 
 import { postGenerateCards } from "./requests";
 import { generateFormData } from "./utils";

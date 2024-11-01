@@ -1,10 +1,11 @@
 import { FormEvent } from "react";
 import { NavigateFunction } from "react-router-dom";
 
-import { sendToast } from "@/common/toast";
-import { LyricsContents, LyricsPart, LyricsRequest, PageMetadata, SongPartsCards, StateSetter } from "@/common/types";
+import { sendToast } from "@common/toast";
+import { LyricsContents, LyricsPart, LyricsRequest, PageMetadata, SongPartsCards, StateSetter } from "@common/types";
 
-import { TOAST, TOAST_TYPE } from "@constants/Toast";
+import { TOAST, TOAST_TYPE } from "@constants/toasts";
+
 import { postLyricsSave, postLyricsSearch } from "./requests";
 
 type HandleLyricsSaveSubmitProps = {

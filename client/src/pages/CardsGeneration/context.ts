@@ -1,5 +1,5 @@
-import { createNewContext } from "@/common/contextProvider";
-import { StateSetter } from "@/common/types";
+import { createNewContext } from "@common/contextProvider";
+import { StateSetter } from "@common/types";
 
 import { CardData } from "./CardsGallery";
 
