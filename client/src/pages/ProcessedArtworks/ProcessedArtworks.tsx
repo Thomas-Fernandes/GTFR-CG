@@ -4,11 +4,11 @@ import { useNavigate } from "react-router-dom";
 import { useTitle } from "@common/useTitle";
 import { doesFileExist } from "@common/utils/fileUtils";
 
-import ToastContainer from "@/components/ToastContainer/ToastContainer";
 import NavButton from "@components/NavButton";
+import ToastContainer from "@components/ToastContainer/ToastContainer";
 
 import { TITLE } from "@constants/Common";
-import { COVER_ART_FILENAME, PROCESSED_IMAGES_PATH, VIEW_PATHS } from "@constants/paths";
+import { COVER_ART_FILENAME, PROCESSED_ARTWORKS_PATH, VIEW_PATHS } from "@constants/paths";
 import { DEFAULT_SELECTED_POSITION } from "@constants/ProcessedArtworks";
 import { TOAST } from "@constants/toasts";
 
@@ -31,7 +31,7 @@ const ProcessedArtworks = (): JSX.Element => {
   );
 
   useEffect(() => {
-    doesFileExist(PROCESSED_IMAGES_PATH + "/" + COVER_ART_FILENAME).then((anyProcessedImageExists: boolean) => {
+    doesFileExist(PROCESSED_ARTWORKS_PATH + "/" + COVER_ART_FILENAME).then((anyProcessedImageExists: boolean) => {
       if (!anyProcessedImageExists) {
         navigate(`${VIEW_PATHS.redirect}?redirect_to=${VIEW_PATHS.artworkGeneration}&error_text=${TOAST.NO_PROCESSED_IMAGE}`);
       }
@@ -39,13 +39,13 @@ const ProcessedArtworks = (): JSX.Element => {
   });
 
   return (
-    <div id="processed-images">
+    <div id="processed-artworks">
       <ToastContainer />
       <span className="top-bot-spacer" />
 
       <div className="navbar">
         <NavButton to={VIEW_PATHS.home} label={TITLE.HOME} side="left" />
-        <NavButton to={VIEW_PATHS.artworkGeneration} label={TITLE.ARTWORK_GENERATION} side="right" />
+        <NavButton to={VIEW_PATHS.artworkGeneration} label={TITLE.ARTWORK_GENERATION} side="left" />
         <NavButton to={VIEW_PATHS.lyrics} label={TITLE.LYRICS} side="right" />
         <NavButton to={VIEW_PATHS.cardsGeneration} label={TITLE.CARDS_GENERATION} side="right" />
       </div>
@@ -54,7 +54,7 @@ const ProcessedArtworks = (): JSX.Element => {
 
       <div id="image-panels">
         <div id="image-container">
-          <img src={PROCESSED_IMAGES_PATH + "/" + COVER_ART_FILENAME} alt="background thumbnail" />
+          <img src={PROCESSED_ARTWORKS_PATH + "/" + COVER_ART_FILENAME} alt="background thumbnail" />
           <form onSubmit={(e) => handleSubmitDownloadImage(e, {selectedImage: COVER_ART_FILENAME})}>
             <input type="submit" value="Download" className="button" />
           </form>

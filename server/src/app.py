@@ -33,19 +33,19 @@ def initApp() -> None:
         from server.src.routes.cards_generation import bp_cards_generation
         from server.src.routes.home import bp_home
         from server.src.routes.lyrics import bp_lyrics
-        from server.src.routes.processed_images import bp_processed_images
+        from server.src.routes.artwork_processing import bp_artwork_processing
         blueprints = [
             bp_artwork_generation,
             bp_cards_generation,
             bp_home,
             bp_lyrics,
-            bp_processed_images,
+            bp_artwork_processing,
         ]
         for blueprint in blueprints:
             app.register_blueprint(blueprint) # practically useless, but "unused import" if removed
         log.debug("  Blueprints initialized.")
     initBlueprints()
-    makedirs(const.FRONT_PROCESSED_IMAGES_DIR, exist_ok=True)
+    makedirs(const.FRONT_PROCESSED_ARTWORKS_DIR, exist_ok=True)
     makedirs(const.FRONT_PROCESSED_CARDS_DIR, exist_ok=True)
     app.config["SESSION_PERMANENT"] = False
     app.config["SESSION_TYPE"] = "filesystem"
@@ -111,7 +111,7 @@ def main(host: str = const.HOST_HOME, port: int = const.DEFAULT_PORT) -> None:
 
         log.debug("Cleaning up cache...")
         nb_eliminated_entries += removeExpiredCache(const.SESSION_DIR, const.AvailableCacheElemType.sessions.value)
-        nb_eliminated_entries += removeExpiredCache(const.PROCESSED_DIR, const.AvailableCacheElemType.images.value)
+        nb_eliminated_entries += removeExpiredCache(const.PROCESSED_DIR, const.AvailableCacheElemType.artworks.value)
         nb_eliminated_entries += removeExpiredCache(const.PROCESSED_DIR, const.AvailableCacheElemType.cards.value)
 
         if nb_eliminated_entries == 0:

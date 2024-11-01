@@ -42,7 +42,7 @@ class ItunesImageResource(Resource):
             log.debug(const.WARN_NO_USER_FOLDER)
             session[const.SessionFields.user_folder.value] = str(uuid4())
 
-        user_folder = str(session[const.SessionFields.user_folder.value]) + const.SLASH + const.AvailableCacheElemType.images.value + const.SLASH
+        user_folder = str(session[const.SessionFields.user_folder.value]) + const.SLASH + const.AvailableCacheElemType.artworks.value + const.SLASH
         user_processed_path = path.join(const.PROCESSED_DIR, user_folder)
         log.info(f"Creating user processed path: {user_processed_path}")
         makedirs(user_processed_path, exist_ok=True)
@@ -131,7 +131,7 @@ class LocalImageResource(Resource):
         if const.SessionFields.user_folder.value not in session:
             log.debug(const.WARN_NO_USER_FOLDER)
             session[const.SessionFields.user_folder.value] = str(uuid4())
-        user_folder = str(session[const.SessionFields.user_folder.value]) + const.SLASH + const.AvailableCacheElemType.images.value + const.SLASH
+        user_folder = str(session[const.SessionFields.user_folder.value]) + const.SLASH + const.AvailableCacheElemType.artworks.value + const.SLASH
 
         error = checkImageFilenameValid(file.filename)
         if error is not None:
@@ -178,7 +178,7 @@ def processYoutubeThumbnail(thumbnail_url: str) -> Response:
         log.debug(const.WARN_NO_USER_FOLDER)
         session[const.SessionFields.user_folder.value] = str(uuid4())
 
-    user_folder = str(session[const.SessionFields.user_folder.value]) + const.SLASH + const.AvailableCacheElemType.images.value + const.SLASH
+    user_folder = str(session[const.SessionFields.user_folder.value]) + const.SLASH + const.AvailableCacheElemType.artworks.value + const.SLASH
     user_processed_path = path.join(const.PROCESSED_DIR, user_folder)
     makedirs(user_processed_path, exist_ok=True)
 

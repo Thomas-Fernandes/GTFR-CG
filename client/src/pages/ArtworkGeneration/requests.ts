@@ -27,8 +27,8 @@ export const postItunesResult = (
       throw new Error(response.message);
     }
 
-    sendRequest("POST", BACKEND_URL + API.PROCESSED_IMAGES.PROCESS_IMAGES).then(() => {
-      navigate(VIEW_PATHS.processedImages);
+    sendRequest("POST", BACKEND_URL + API.ARTWORK_PROCESSING.PROCESS_ARTWORKS).then(() => {
+      navigate(VIEW_PATHS.artworkProcessing);
     }).catch((error: ApiResponse) => {
       sendToast(error.message, TOAST_TYPE.ERROR);
     }).finally(() => {
@@ -97,8 +97,8 @@ export const postFileUpload = (
       throw new Error(response.message);
     }
 
-    sendRequest("POST", BACKEND_URL + API.PROCESSED_IMAGES.PROCESS_IMAGES).then(() => {
-      navigate(VIEW_PATHS.processedImages);
+    sendRequest("POST", BACKEND_URL + API.ARTWORK_PROCESSING.PROCESS_ARTWORKS).then(() => {
+      navigate(VIEW_PATHS.artworkProcessing);
     }).catch((error: ApiResponse) => {
       sendToast(error.message, TOAST_TYPE.ERROR);
     }).finally(() => {
@@ -126,8 +126,8 @@ export const postYoutubeUrl = (
       throw new Error(response.message);
     }
 
-    sendRequest("POST", BACKEND_URL + API.PROCESSED_IMAGES.PROCESS_IMAGES).then(() => {
-      navigate(VIEW_PATHS.processedImages);
+    sendRequest("POST", BACKEND_URL + API.ARTWORK_PROCESSING.PROCESS_ARTWORKS).then(() => {
+      navigate(VIEW_PATHS.artworkProcessing);
     }).catch((error: ApiResponse) => {
       sendToast(error.message, TOAST_TYPE.ERROR);
     }).finally(() => {

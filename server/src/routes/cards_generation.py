@@ -13,7 +13,7 @@ from uuid import uuid4
 import server.src.constants as const
 from server.src.docs import models, ns_cards_generation
 from server.src.logger import log, LogSeverity
-from server.src.routes.processed_images import generateCoverArt
+from server.src.routes.artwork_processing import generateCoverArt
 from server.src.statistics import updateStats
 from server.src.typing_gtfr import CardgenSettings, CardsContents, CardMetadata, RGBAColor, SongMetadata
 from server.src.utils.soft_utils import doesFileExist, getCardsContentsFromFile, getHexColorFromRGB, getNowStamp, snakeToCamelCase, writeCardsContentsToFile
@@ -160,7 +160,7 @@ def getCardMetadata(song_data: SongMetadata, enforce_bottom_color: str | None, i
         card_metaname = f"{song_author}, “{song_title}”"
 
     bg_path = f"{const.PROCESSED_DIR}{session[const.SessionFields.user_folder.value]}{const.SLASH}" + \
-        f"{const.AvailableCacheElemType.images.value}{const.SLASH}" + \
+        f"{const.AvailableCacheElemType.artworks.value}{const.SLASH}" + \
         f"{const.PROCESSED_ARTWORK_FILENAME}"
     bg = None
     log.debug(f"  Background image path: {bg_path}")
@@ -313,7 +313,7 @@ def saveEnforcedBackgroundImage(file: FileStorage, include_center_artwork: bool)
         log.debug(const.WARN_NO_USER_FOLDER)
         session[const.SessionFields.user_folder.value] = str(uuid4())
 
-    user_folder = str(session[const.SessionFields.user_folder.value]) + const.SLASH + const.AvailableCacheElemType.images.value + const.SLASH
+    user_folder = str(session[const.SessionFields.user_folder.value]) + const.SLASH + const.AvailableCacheElemType.artworks.value + const.SLASH
     user_processed_path = path.join(const.PROCESSED_DIR, user_folder)
     log.info(f"Creating user processed path directory: {user_processed_path}")
     makedirs(user_processed_path, exist_ok=True)
@@ -329,7 +329,7 @@ def checkCardgenParametersInvalid(
     enforce_background_image: bool, enforce_bottom_color: Optional[str], include_center_artwork: Optional[bool], include_bg_img: Optional[str]
 ) -> Optional[str]:
     bg_path = f"{const.PROCESSED_DIR}{session[const.SessionFields.user_folder.value]}{const.SLASH}" + \
-        f"{const.AvailableCacheElemType.images.value}{const.SLASH}" + \
+        f"{const.AvailableCacheElemType.artworks.value}{const.SLASH}" + \
         f"{const.PROCESSED_ARTWORK_FILENAME}"
     bg_exists = doesFileExist(bg_path)
     if include_bg_img is None:

@@ -34,7 +34,7 @@ class AvailableCacheElemType(StrEnum):
     """ Enum for the available cache elements.
     """
     sessions = "sessions"
-    images = "images"
+    artworks = "artworks"
     cards = "cards"
 
 # Server config
@@ -84,7 +84,7 @@ ROUTES = Routes(
         bp_name="artwork-generation",
     ),
     art_proc = Route(
-        path="/processed-images",
+        path="/artwork-processing",
         bp_name="artwork-processing",
     ),
     lyrics = Route(
@@ -129,7 +129,7 @@ PROCESSED_DIR = "processed" + SLASH
 PROCESSED_ARTWORK_FILENAME = "ProcessedArtwork.png"
 PROCESSED_OUTRO_FILENAME = "outro.png"
 FRONT_PROCESSED = f"..{SLASH}client{SLASH}public{SLASH}"
-FRONT_PROCESSED_IMAGES_DIR = f"{FRONT_PROCESSED}processed-{AvailableCacheElemType.images.value}{SLASH}"
+FRONT_PROCESSED_ARTWORKS_DIR = f"{FRONT_PROCESSED}processed-{AvailableCacheElemType.artworks.value}{SLASH}"
 FRONT_PROCESSED_CARDS_DIR = f"{FRONT_PROCESSED}processed-{AvailableCacheElemType.cards.value}{SLASH}"
 THUMBNAILS_DIR = f"assets{SLASH}thumbnails{SLASH}"
 LOGO_POSITIONS = [

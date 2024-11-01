@@ -4,9 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { ItunesResult } from "@common/types";
 import { useTitle } from "@common/useTitle";
 
-import ToastContainer from "@/components/ToastContainer/ToastContainer";
 import FileUploader from "@components/FileUploader/FileUploader";
 import NavButton from "@components/NavButton";
+import ToastContainer from "@components/ToastContainer/ToastContainer";
 
 import { TITLE } from "@constants/Common";
 import { VIEW_PATHS } from "@constants/paths";

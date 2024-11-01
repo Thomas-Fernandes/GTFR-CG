@@ -6,8 +6,8 @@ import { sendToast } from "@common/toast";
 import { LyricsContents, LyricsPart, PageMetadata } from "@common/types";
 import { useTitle } from "@common/useTitle";
 
-import ToastContainer from "@/components/ToastContainer/ToastContainer";
 import NavButton from "@components/NavButton";
+import ToastContainer from "@components/ToastContainer/ToastContainer";
 
 import { SESSION_STORAGE, TITLE } from "@constants/Common";
 import { API, BACKEND_URL, VIEW_PATHS } from "@constants/paths";

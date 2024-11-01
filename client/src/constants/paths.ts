@@ -1,4 +1,4 @@
-export const PROCESSED_IMAGES_PATH = "./processed-images";
+export const PROCESSED_ARTWORKS_PATH = "./processed-artworks";
 export const COVER_ART_FILENAME = "ProcessedArtwork.png";
 export const OUTRO_FILENAME = "outro.png";
 export const PROCESSED_CARDS_PATH = "./processed-cards";
@@ -8,7 +8,7 @@ export const VIEW_PATHS = {
   home: "/home",
   tests: "/tests",
   artworkGeneration: "/artwork-generation",
-  processedImages: "/processed-images",
+  artworkProcessing: "/artwork-processing",
   lyrics: "/lyrics",
   cardsGeneration: "/cards-generation",
   processedCards: "/processed-cards",
@@ -25,8 +25,8 @@ export const API = {
     YOUTUBE_THUMBNAIL: VIEW_PATHS.artworkGeneration + "/use-youtube-thumbnail",
   },
 
-  PROCESSED_IMAGES: {
-    PROCESS_IMAGES: VIEW_PATHS.processedImages + "/process-images",
+  ARTWORK_PROCESSING: {
+    PROCESS_ARTWORKS: VIEW_PATHS.artworkProcessing + "/process-artworks",
   },
 
   LYRICS: {

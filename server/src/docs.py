@@ -66,8 +66,8 @@ models = {
     },
 
     const.ROUTES.art_proc.bp_name: {
-        "process-images": {
-            "payload": ns_artwork_processing.model("Artwork Processing - Process Images - payload", {
+        "process-artworks": {
+            "payload": ns_artwork_processing.model("Artwork Processing - Process Artworks - payload", {
                 "[INFERRED] generatedArtworkPath": fields.String(description="Path to the input image"),
                 "[INFERRED] includeCenterArtwork": fields.Boolean(description="Whether to include the center artwork in the cover art"),
             }),

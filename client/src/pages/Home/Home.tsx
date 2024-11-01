@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { Statistics } from "@common/types";
 import { useTitle } from "@common/useTitle";
 
-import ToastContainer from "@/components/ToastContainer/ToastContainer";
 import NavButton from "@components/NavButton";
+import ToastContainer from "@components/ToastContainer/ToastContainer";
 
 import { TITLE } from "@constants/Common";
 import { VIEW_PATHS } from "@constants/paths";

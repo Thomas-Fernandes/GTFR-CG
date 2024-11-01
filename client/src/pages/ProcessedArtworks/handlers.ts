@@ -3,7 +3,7 @@ import { FormEvent } from "react";
 import { sendToast } from "@common/toast";
 import { ImageDownloadRequest } from "@common/types";
 
-import { COVER_ART_FILENAME, PROCESSED_IMAGES_PATH } from "@constants/paths";
+import { COVER_ART_FILENAME, PROCESSED_ARTWORKS_PATH } from "@constants/paths";
 import { TOAST, TOAST_TYPE } from "@constants/toasts";
 
 export const handleSubmitDownloadImage = (e: FormEvent<HTMLFormElement>, body: ImageDownloadRequest) => {
@@ -14,7 +14,7 @@ export const handleSubmitDownloadImage = (e: FormEvent<HTMLFormElement>, body: I
     return;
   }
 
-  const filepath = `${PROCESSED_IMAGES_PATH}/${body.selectedImage}`;
+  const filepath = `${PROCESSED_ARTWORKS_PATH}/${body.selectedImage}`;
   const filename = filepath.split('/').pop();
   const outputFilename = filename === COVER_ART_FILENAME ? "background.png" : filename;
 
