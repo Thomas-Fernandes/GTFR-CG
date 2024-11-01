@@ -1,13 +1,13 @@
 import { JSX, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import useTitle from "../../common/UseTitle";
-import { doesFileExist } from "../../common/utils/FileUtils";
+import useTitle from "@common/UseTitle";
+import { doesFileExist } from "@common/utils/FileUtils";
 
-import { TITLE } from "../../constants/Common";
-import { COVER_ART_FILENAME, PROCESSED_IMAGES_PATH, VIEW_PATHS } from "../../constants/Paths";
-import { DEFAULT_SELECTED_POSITION } from "../../constants/ProcessedImages";
-import { TOAST } from "../../constants/Toast";
+import { TITLE } from "@constants/Common";
+import { COVER_ART_FILENAME, PROCESSED_IMAGES_PATH, VIEW_PATHS } from "@constants/Paths";
+import { DEFAULT_SELECTED_POSITION } from "@constants/ProcessedImages";
+import { TOAST } from "@constants/Toast";
 
 import { ProcessedImagesContext } from "./context";
 import { handleSubmitDownloadImage } from "./handlers";

@@ -1,15 +1,15 @@
 import React, { FormEvent, useRef, useState } from "react";
 
-import { is2xxSuccessful, sendRequest } from "../../common/Requests";
-import { hideSpinner, showSpinner } from "../../common/Spinner";
-import { sendToast } from "../../common/Toast";
-import { ApiResponse, ImageDownloadRequest, SingleCardGenerationRequest } from "../../common/Types";
+import { is2xxSuccessful, sendRequest } from "@common/Requests";
+import { hideSpinner, showSpinner } from "@common/Spinner";
+import { sendToast } from "@common/Toast";
+import { ApiResponse, ImageDownloadRequest, SingleCardGenerationRequest } from "@common/Types";
 
-import { API, BACKEND_URL } from "../../constants/Paths";
-import { SPINNER_ID } from "../../constants/Spinner";
-import { TOAST, TOAST_TYPE } from "../../constants/Toast";
+import { API, BACKEND_URL } from "@constants/Paths";
+import { SPINNER_ID } from "@constants/Spinner";
+import { TOAST, TOAST_TYPE } from "@constants/Toast";
 
-import { AutoResizeTextarea } from "../AutoResizeTextarea";
+import { AutoResizeTextarea } from "@components/AutoResizeTextarea";
 
 import "./CardsGallery.css";
 

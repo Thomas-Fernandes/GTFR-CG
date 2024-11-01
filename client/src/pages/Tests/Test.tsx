@@ -1,7 +1,7 @@
 import { RefObject, useState } from "react";
 
-import { StateSetter } from "../../common/Types";
-import { isEmpty } from "../../common/utils/ObjUtils";
+import { StateSetter } from "@common/Types";
+import { isEmpty } from "@common/utils/ObjUtils";
 
 export type TestResult = {
   successful: boolean;

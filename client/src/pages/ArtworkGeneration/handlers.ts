@@ -1,12 +1,12 @@
 import { FormEvent, TransitionStartFunction } from "react";
 import { NavigateFunction } from "react-router-dom";
 
-import { sendToast } from "../../common/Toast";
-import { FileUploadRequest, ItunesRequest, ItunesResult, StateSetter, YoutubeRequest } from "../../common/Types";
-import { isFileExtensionAccepted } from "../../common/utils/FileUtils";
+import { sendToast } from "@common/Toast";
+import { FileUploadRequest, ItunesRequest, ItunesResult, StateSetter, YoutubeRequest } from "@common/Types";
+import { isFileExtensionAccepted } from "@common/utils/FileUtils";
 
-import { FILE_UPLOAD } from "../../constants/ArtworkGeneration";
-import { TOAST, TOAST_TYPE } from "../../constants/Toast";
+import { FILE_UPLOAD } from "@constants/ArtworkGeneration";
+import { TOAST, TOAST_TYPE } from "@constants/Toast";
 import { postFileUpload, postItunesResult, postItunesSearch, postYoutubeUrl } from "./requests";
 import { isValidYoutubeUrl } from "./utils";
 

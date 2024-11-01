@@ -1,10 +1,10 @@
 
-import { is2xxSuccessful, sendRequest } from "../../common/Requests";
-import { sendToast } from "../../common/Toast";
-import { DisplayedStatistics, StateSetter, Statistics } from "../../common/Types";
+import { is2xxSuccessful, sendRequest } from "@common/Requests";
+import { sendToast } from "@common/Toast";
+import { DisplayedStatistics, StateSetter, Statistics } from "@common/Types";
 
-import { API, BACKEND_URL } from "../../constants/Paths";
-import { TOAST, TOAST_TYPE } from "../../constants/Toast";
+import { API, BACKEND_URL } from "@constants/Paths";
+import { TOAST, TOAST_TYPE } from "@constants/Toast";
 
 import "./Home.css";
 

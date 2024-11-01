@@ -1,4 +1,4 @@
-import { TOAST, TOAST_TYPE } from "../constants/Toast";
+import { TOAST, TOAST_TYPE } from "@constants/Toast";
 
 import { sendToast } from "./Toast";
 

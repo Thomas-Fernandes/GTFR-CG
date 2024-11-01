@@ -1,4 +1,4 @@
-import { HTTP_STATUS } from "../../constants/Requests";
+import { HTTP_STATUS } from "@constants/Requests";
 
 export const isFileExtensionAccepted = (fileName: string, acceptedExtensions: string[]): boolean => {
   return acceptedExtensions.includes(fileName.split(".").slice(-1)[0].toLowerCase());

@@ -1,7 +1,7 @@
 import { NavigateFunction } from "react-router-dom";
 
-import { createNewContext } from "../../common/ContextProvider";
-import { StateSetter } from "../../common/Types";
+import { createNewContext } from "@common/ContextProvider";
+import { StateSetter } from "@common/Types";
 
 export interface ArtworkGenerationContextType {
   isProcessingLoading: boolean;

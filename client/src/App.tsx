@@ -1,14 +1,15 @@
 import { JSX } from "react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
-import { VIEW_PATHS } from "./constants/Paths";
-import ArtworkGeneration from "./pages/ArtworkGeneration/ArtworkGeneration";
-import CardsGeneration from "./pages/CardsGeneration/CardsGeneration";
-import Home from "./pages/Home/Home";
-import Lyrics from "./pages/Lyrics/Lyrics";
-import ProcessedImages from "./pages/ProcessedImages/ProcessedImages";
-import Redirect from "./pages/Redirect/Redirect";
-import Tests from "./pages/Tests/Tests";
+import { VIEW_PATHS } from "@constants/Paths";
+
+import ArtworkGeneration from "@pages/ArtworkGeneration/ArtworkGeneration";
+import CardsGeneration from "@pages/CardsGeneration/CardsGeneration";
+import Home from "@pages/Home/Home";
+import Lyrics from "@pages/Lyrics/Lyrics";
+import ProcessedImages from "@pages/ProcessedImages/ProcessedImages";
+import Redirect from "@pages/Redirect/Redirect";
+import Tests from "@pages/Tests/Tests";
 
 import "./App.css";
 

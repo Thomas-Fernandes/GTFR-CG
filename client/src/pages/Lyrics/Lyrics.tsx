@@ -1,15 +1,15 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { is2xxSuccessful, sendRequest } from "../../common/Requests";
-import { sendToast } from "../../common/Toast";
-import { LyricsContents, LyricsPart, PageMetadata } from "../../common/Types";
-import useTitle from "../../common/UseTitle";
+import { is2xxSuccessful, sendRequest } from "@common/Requests";
+import { sendToast } from "@common/Toast";
+import { LyricsContents, LyricsPart, PageMetadata } from "@common/Types";
+import useTitle from "@common/UseTitle";
 
-import { SESSION_STORAGE, TITLE } from "../../constants/Common";
-import { API, BACKEND_URL, VIEW_PATHS } from "../../constants/Paths";
-import { SPINNER_ID } from "../../constants/Spinner";
-import { TOAST, TOAST_TYPE } from "../../constants/Toast";
+import { SESSION_STORAGE, TITLE } from "@constants/Common";
+import { API, BACKEND_URL, VIEW_PATHS } from "@constants/Paths";
+import { SPINNER_ID } from "@constants/Spinner";
+import { TOAST, TOAST_TYPE } from "@constants/Toast";
 
 import { LyricsContext } from "./context";
 import { handleLoadLastContents, handleLyricsSaveSubmit, handleLyricsSearchSubmit, handleSetLyricsParts } from "./handlers";

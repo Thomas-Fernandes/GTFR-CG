@@ -1,11 +1,11 @@
 import { JSX, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-import useTitle from "../../common/UseTitle";
+import useTitle from "@common/UseTitle";
 
-import { TITLE } from "../../constants/Common";
-import { DEFAULT_REDIRECTION } from "../../constants/Redirection";
-import { DEFAULT_EVENT_DURATION } from "../../constants/Toast";
+import { TITLE } from "@constants/Common";
+import { DEFAULT_REDIRECTION } from "@constants/Redirection";
+import { DEFAULT_EVENT_DURATION } from "@constants/Toast";
 
 import "./Redirect.css";
 

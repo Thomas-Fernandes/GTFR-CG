@@ -1,5 +1,5 @@
-import { createNewContext } from "../../common/ContextProvider";
-import { LyricsPart, StateSetter } from "../../common/Types";
+import { createNewContext } from "@common/ContextProvider";
+import { LyricsPart, StateSetter } from "@common/Types";
 
 export interface LyricsContextType {
   lyricsParts: LyricsPart[];

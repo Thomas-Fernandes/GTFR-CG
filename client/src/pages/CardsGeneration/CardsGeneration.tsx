@@ -1,16 +1,16 @@
 import { JSX, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import useTitle from "../../common/UseTitle";
+import useTitle from "@common/UseTitle";
 
-import CardsGallery, { CardData } from "../../components/CardsGallery/CardsGallery";
-import ColorPicker from "../../components/ColorPicker";
-import FileUploader from "../../components/FileUploader";
-import ZipDownloadButton from "../../components/ZipDownloadButton";
+import CardsGallery, { CardData } from "@components/CardsGallery/CardsGallery";
+import ColorPicker from "@components/ColorPicker";
+import FileUploader from "@components/FileUploader";
+import ZipDownloadButton from "@components/ZipDownloadButton";
 
-import { SESSION_STORAGE, TITLE } from "../../constants/Common";
-import { VIEW_PATHS } from "../../constants/Paths";
-import { SPINNER_ID } from "../../constants/Spinner";
+import { SESSION_STORAGE, TITLE } from "@constants/Common";
+import { VIEW_PATHS } from "@constants/Paths";
+import { SPINNER_ID } from "@constants/Spinner";
 
 import { handleGenerateCards, handleSubmitDownloadCard, handleUnauthorizedCheckbox } from "./handlers";
 

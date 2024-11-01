@@ -1,4 +1,4 @@
-import { ITUNES, YOUTUBE } from "../../constants/ArtworkGeneration";
+import { ITUNES, YOUTUBE } from "@constants/ArtworkGeneration";
 
 export const getTitleWithAdjustedLength = (title: string): string => {
   title = title.slice(0, ITUNES.MAX_TITLE_LENGTH - 3);

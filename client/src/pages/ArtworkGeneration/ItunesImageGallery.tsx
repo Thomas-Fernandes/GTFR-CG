@@ -1,11 +1,11 @@
 import { JSX, useState } from "react";
 import { NavigateFunction } from "react-router-dom";
 
-import { ItunesResult } from "../../common/Types";
+import { ItunesResult } from "@common/Types";
 
-import ImgButton from "../../components/ImgButton";
+import ImgButton from "@components/ImgButton";
 
-import { SPINNER_ID } from "../../constants/Spinner";
+import { SPINNER_ID } from "@constants/Spinner";
 
 import "./ArtworkGeneration.css";
 import { useArtworkGenerationContext } from "./context";

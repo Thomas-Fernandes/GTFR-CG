@@ -1,14 +1,14 @@
-import { is2xxSuccessful, sendRequest } from "../../common/Requests";
-import { hideSpinner, showSpinner } from "../../common/Spinner";
-import { sendToast } from "../../common/Toast";
-import { ApiResponse, CardsGenerationRequest, CardsGenerationResponse, StateSetter } from "../../common/Types";
-import { CardData } from "../../components/CardsGallery/CardsGallery";
+import { is2xxSuccessful, sendRequest } from "@common/Requests";
+import { hideSpinner, showSpinner } from "@common/Spinner";
+import { sendToast } from "@common/Toast";
+import { ApiResponse, CardsGenerationRequest, CardsGenerationResponse, StateSetter } from "@common/Types";
+import { CardData } from "@components/CardsGallery/CardsGallery";
 
-import { SESSION_STORAGE } from "../../constants/Common";
-import { API, BACKEND_URL, PROCESSED_CARDS_PATH } from "../../constants/Paths";
-import { HTTP_STATUS } from "../../constants/Requests";
-import { SPINNER_ID } from "../../constants/Spinner";
-import { TOAST, TOAST_TYPE } from "../../constants/Toast";
+import { SESSION_STORAGE } from "@constants/Common";
+import { API, BACKEND_URL, PROCESSED_CARDS_PATH } from "@constants/Paths";
+import { HTTP_STATUS } from "@constants/Requests";
+import { SPINNER_ID } from "@constants/Spinner";
+import { TOAST, TOAST_TYPE } from "@constants/Toast";
 
 import { deduceNewCards } from "./utils";
 

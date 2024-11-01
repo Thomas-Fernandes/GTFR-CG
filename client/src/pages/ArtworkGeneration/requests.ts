@@ -1,14 +1,14 @@
 import { NavigateFunction } from "react-router-dom";
 
-import { is2xxSuccessful, sendRequest } from "../../common/Requests";
-import { hideSpinner, showSpinner } from "../../common/Spinner";
-import { sendToast } from "../../common/Toast";
-import { ApiResponse, ItunesImageRequest, ItunesRequest, ItunesResponse, ItunesResult, StateSetter, YoutubeRequest } from "../../common/Types";
+import { is2xxSuccessful, sendRequest } from "@common/Requests";
+import { hideSpinner, showSpinner } from "@common/Spinner";
+import { sendToast } from "@common/Toast";
+import { ApiResponse, ItunesImageRequest, ItunesRequest, ItunesResponse, ItunesResult, StateSetter, YoutubeRequest } from "@common/Types";
 
-import { ITUNES } from "../../constants/ArtworkGeneration";
-import { API, BACKEND_URL, VIEW_PATHS } from "../../constants/Paths";
-import { SPINNER_ID } from "../../constants/Spinner";
-import { TOAST, TOAST_TYPE } from "../../constants/Toast";
+import { ITUNES } from "@constants/ArtworkGeneration";
+import { API, BACKEND_URL, VIEW_PATHS } from "@constants/Paths";
+import { SPINNER_ID } from "@constants/Spinner";
+import { TOAST, TOAST_TYPE } from "@constants/Toast";
 import { getTitleWithAdjustedLength } from "./utils";
 
 export const postItunesResult = (

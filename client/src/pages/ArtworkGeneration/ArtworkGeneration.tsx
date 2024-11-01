@@ -1,14 +1,14 @@
 import { JSX, useMemo, useState, useTransition } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { ItunesResult } from "../../common/Types";
-import useTitle from "../../common/UseTitle";
+import { ItunesResult } from "@common/Types";
+import useTitle from "@common/UseTitle";
 
-import FileUploader from "../../components/FileUploader";
+import FileUploader from "@components/FileUploader";
 
-import { TITLE } from "../../constants/Common";
-import { VIEW_PATHS } from "../../constants/Paths";
-import { SPINNER_ID } from "../../constants/Spinner";
+import { TITLE } from "@constants/Common";
+import { VIEW_PATHS } from "@constants/Paths";
+import { SPINNER_ID } from "@constants/Spinner";
 
 import ItunesImageGallery from "./ItunesImageGallery";
 import { ArtworkGenerationContext } from "./context";

@@ -1,4 +1,4 @@
-import { DEFAULT_EVENT_DURATION, TOAST_TYPE } from "../constants/Toast";
+import { DEFAULT_EVENT_DURATION, TOAST_TYPE } from "@constants/Toast";
 
 import { ToastType } from "./Types";
 

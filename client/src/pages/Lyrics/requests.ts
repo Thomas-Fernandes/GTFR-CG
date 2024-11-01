@@ -1,13 +1,13 @@
-import { is2xxSuccessful, sendRequest } from "../../common/Requests";
-import { hideSpinner, showSpinner } from "../../common/Spinner";
-import { sendToast } from "../../common/Toast";
-import { ApiResponse, Dict, LyricsPart, LyricsResponse, PageMetadata, StateSetter } from "../../common/Types";
+import { is2xxSuccessful, sendRequest } from "@common/Requests";
+import { hideSpinner, showSpinner } from "@common/Spinner";
+import { sendToast } from "@common/Toast";
+import { ApiResponse, Dict, LyricsPart, LyricsResponse, PageMetadata, StateSetter } from "@common/Types";
 
 import { NavigateFunction } from "react-router-dom";
-import { SESSION_STORAGE } from "../../constants/Common";
-import { API, BACKEND_URL, VIEW_PATHS } from "../../constants/Paths";
-import { SPINNER_ID } from "../../constants/Spinner";
-import { TOAST_TYPE } from "../../constants/Toast";
+import { SESSION_STORAGE } from "@constants/Common";
+import { API, BACKEND_URL, VIEW_PATHS } from "@constants/Paths";
+import { SPINNER_ID } from "@constants/Spinner";
+import { TOAST_TYPE } from "@constants/Toast";
 
 type LyricsSaveProps = {
   pageMetadata: PageMetadata;

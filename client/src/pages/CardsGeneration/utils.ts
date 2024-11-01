@@ -1,6 +1,6 @@
-import { CardsGenerationRequest, SingleCardGenerationRequest, SongPartsCards } from "../../common/Types";
+import { CardsGenerationRequest, SingleCardGenerationRequest, SongPartsCards } from "@common/Types";
 
-import { CardData } from "../../components/CardsGallery/CardsGallery";
+import { CardData } from "@components/CardsGallery/CardsGallery";
 
 export const deduceNewCards = (paths: string[], cardsLyrics: SongPartsCards, hasOutro: boolean): CardData[] => {
   return paths.map((path, idx) => ({
