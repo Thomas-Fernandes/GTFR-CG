@@ -73,6 +73,10 @@ export type YoutubeRequest = {
   url: string;
 };
 
+export type ItunesImageRequest = {
+  url: string;
+};
+
 export type FileUploadRequest = {
   localFile: File | undefined;
   includeCenterArtwork: boolean;

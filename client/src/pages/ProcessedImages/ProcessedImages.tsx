@@ -1,17 +1,16 @@
-import { FormEvent, JSX, useEffect, useMemo, useState } from "react";
+import { JSX, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { sendToast } from "../../common/Toast";
-import { ImageDownloadRequest } from "../../common/Types";
 import useTitle from "../../common/UseTitle";
 import { doesFileExist } from "../../common/utils/FileUtils";
 
 import { TITLE } from "../../constants/Common";
 import { COVER_ART_FILENAME, PROCESSED_IMAGES_PATH, VIEW_PATHS } from "../../constants/Paths";
 import { DEFAULT_SELECTED_POSITION } from "../../constants/ProcessedImages";
-import { TOAST, TOAST_TYPE } from "../../constants/Toast";
+import { TOAST } from "../../constants/Toast";
 
 import { ProcessedImagesContext } from "./context";
+import { handleSubmitDownloadImage } from "./handlers";
 import ThumbnailGallery from "./ThumbnailGallery";
 import { processImageName } from "./utils";
 
@@ -24,32 +23,6 @@ const ProcessedImages = (): JSX.Element => {
 
   const [selectedThumbnail, setSelectedThumbnail] = useState(DEFAULT_SELECTED_POSITION);
   const contextValue = useMemo(() => ({ selectedThumbnail, setSelectedThumbnail }), [selectedThumbnail, setSelectedThumbnail]);
-
-  const handleSubmitDownloadImage = (e: FormEvent<HTMLFormElement>, body: ImageDownloadRequest) => {
-    e.preventDefault();
-
-    if (!body.selectedImage) {
-      sendToast(TOAST.NO_IMG_SELECTION, TOAST_TYPE.ERROR);
-      return;
-    }
-
-    const filepath = `${PROCESSED_IMAGES_PATH}/${body.selectedImage}`;
-    const filename = filepath.split('/').pop();
-    const outputFilename = filename === COVER_ART_FILENAME ? "background.png" : filename;
-
-    const link = document.createElement("a");
-    link.download = outputFilename ?? "download.png";
-    link.href = filepath;
-    document.body.appendChild(link);
-
-    try {
-      link.click();
-    } catch (err) {
-      sendToast((err as Error).message, TOAST_TYPE.ERROR);
-    } finally {
-      document.body.removeChild(link);
-    }
-  };
 
   useEffect(() => {
     doesFileExist(PROCESSED_IMAGES_PATH + "/" + COVER_ART_FILENAME).then((anyProcessedImageExists: boolean) => {

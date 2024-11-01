@@ -1,26 +1,18 @@
-import { FormEvent, JSX, useEffect, useState } from "react";
+import { JSX, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { is2xxSuccessful, sendRequest } from "../../common/Requests";
-import { hideSpinner, showSpinner } from "../../common/Spinner";
-import { sendToast } from "../../common/Toast";
-import { ApiResponse, CardsGenerationRequest, CardsGenerationResponse, ImageDownloadRequest } from "../../common/Types";
 import useTitle from "../../common/UseTitle";
-import { isFileExtensionAccepted } from "../../common/utils/FileUtils";
 
 import CardsGallery, { CardData } from "../../components/CardsGallery/CardsGallery";
 import ColorPicker from "../../components/ColorPicker";
 import FileUploader from "../../components/FileUploader";
 import ZipDownloadButton from "../../components/ZipDownloadButton";
 
-import { FILE_UPLOAD } from "../../constants/ArtworkGeneration";
 import { SESSION_STORAGE, TITLE } from "../../constants/Common";
-import { API, BACKEND_URL, PROCESSED_CARDS_PATH, VIEW_PATHS } from "../../constants/Paths";
-import { HTTP_STATUS } from "../../constants/Requests";
+import { VIEW_PATHS } from "../../constants/Paths";
 import { SPINNER_ID } from "../../constants/Spinner";
-import { TOAST, TOAST_TYPE } from "../../constants/Toast";
 
-import { deduceNewCards, generateFormData } from "./utils";
+import { handleGenerateCards, handleSubmitDownloadCard, handleUnauthorizedCheckbox } from "./handlers";
 
 import "./CardsGeneration.css";
 
@@ -46,94 +38,6 @@ const CardsGeneration = (): JSX.Element => {
 
   const [cardPaths, setCardPaths] = useState([] as string[]);
   const [cards, setCards] = useState([] as CardData[]);
-
-  const handleSubmitDownloadCard = (e: FormEvent<HTMLFormElement> | undefined, body: ImageDownloadRequest) => {
-    if (e)
-      e.preventDefault();
-
-    if (!body.selectedImage) {
-      sendToast(TOAST.NO_IMG_SELECTION, TOAST_TYPE.ERROR);
-      return;
-    }
-
-    const filename = body.selectedImage.split('/').pop();
-
-    const link = document.createElement("a");
-    link.download = filename ? filename.split("?")[0] : "card.png";
-    link.href = body.selectedImage;
-    document.body.appendChild(link);
-
-    try {
-      console.log("Downloading", body.selectedImage);
-      link.click();
-    } catch (err) {
-      sendToast((err as Error).message, TOAST_TYPE.ERROR);
-    } finally {
-      document.body.removeChild(link);
-    }
-  };
-
-  const handleGenerateCards = (e: FormEvent<HTMLFormElement>, body: CardsGenerationRequest) => {
-    e.preventDefault();
-
-    if (generationInProgress) {
-      sendToast(TOAST.PROCESSING_IN_PROGRESS, TOAST_TYPE.WARN);
-      return;
-    }
-
-    if (body.bgImg) {
-      const fileExtensionIsAccepted = isFileExtensionAccepted(body.bgImg.name, FILE_UPLOAD.ACCEPTED_IMG_EXTENSIONS);
-      if (!fileExtensionIsAccepted) {
-        sendToast(
-          TOAST.INVALID_FILE_TYPE + "\n" +
-            "Accepted file extensions: " + FILE_UPLOAD.ACCEPTED_IMG_EXTENSIONS.join(", ") + ".",
-          TOAST_TYPE.ERROR
-        );
-        return;
-      }
-    }
-
-    setGenerationInProgress(true);
-    showSpinner(SPINNER_ID.CARDS_GENERATE);
-    setCardPaths([]);
-
-    const formData = new FormData();
-    generateFormData(body, formData);
-
-    sendRequest("POST", BACKEND_URL + API.CARDS_GENERATION.GENERATE_CARDS, formData).then((response: CardsGenerationResponse) => {
-      if (!is2xxSuccessful(response.status)) {
-        throw new Error(response.message);
-      }
-
-      const nbGenerated = response.data.cardsLyrics.length + 1;
-      const cardPaths = [];
-      for (let i = 0; i < nbGenerated; i++)
-        cardPaths.push(`${PROCESSED_CARDS_PATH}/${i.toString().padStart(2, "0")}.png`); // 00.png, 01.png, ..., 09.png, 10.png, ...
-      if (body.generateOutro === true)
-        cardPaths.push(`${PROCESSED_CARDS_PATH}/outro.png`);
-      const pathsWithCacheBuster = cardPaths.map((path) => `${path}?t=${Date.now()}`); // busting cached images with the same name thanks to timestamp
-      setCardPaths(pathsWithCacheBuster);
-      const newCards = deduceNewCards(pathsWithCacheBuster, response.data.cardsLyrics, body.generateOutro ?? false);
-      setCards(newCards);
-      setColorPick(response.data.cardBottomColor);
-      sendToast(TOAST.CARDS_GENERATED, TOAST_TYPE.SUCCESS);
-    }).catch((error: ApiResponse) => {
-      if (error.status === HTTP_STATUS.PRECONDITION_FAILED)
-        sendToast(TOAST.NO_CARDS_CONTENTS, TOAST_TYPE.ERROR);
-      else
-        sendToast(error.message, TOAST_TYPE.ERROR);
-    }).finally(() => {
-      hideSpinner(SPINNER_ID.CARDS_GENERATE);
-      setGenerationInProgress(false);
-      sessionStorage.setItem(SESSION_STORAGE.CARD_METANAME, body.cardMetaname);
-      sessionStorage.setItem(SESSION_STORAGE.CARD_BOTTOM_COLOR, body.colorPick);
-    });
-  };
-
-  const handleUnauthorizedCheckbox = () => {
-    if (cardMethod === "manual")
-      sendToast(TOAST.UNAUTHORIZED_OUTRO, TOAST_TYPE.WARN);
-  };
 
   useEffect(() => {
     if (isComponentMounted)
@@ -164,7 +68,12 @@ const CardsGeneration = (): JSX.Element => {
 
       <h1>{TITLE.CARDS_GENERATION}</h1>
 
-      <form id="settings" onSubmit={(e) => handleGenerateCards(e, {cardMetaname, outroContributors, bgImg, colorPick, includeCenterArtwork, generateOutro, includeBackgroundImg})}>
+      <form id="settings"
+        onSubmit={(e) => handleGenerateCards(e,
+          {cardMetaname, outroContributors, bgImg, colorPick, includeCenterArtwork, generateOutro, includeBackgroundImg},
+          {generationInProgress, setGenerationInProgress, setCardPaths, setCards, setColorPick}
+        )}
+      >
         <div id="text-fields" className="settings flexbox">
           <input autoComplete="off"
             type="text" name="metaname" placeholder="if empty, the card metaname will be inferred"
@@ -193,7 +102,7 @@ const CardsGeneration = (): JSX.Element => {
               <p className="checkbox-label italic">Include center artwork</p>
             </label>
           }
-          <div onClick={handleUnauthorizedCheckbox}>
+          <div onClick={() => handleUnauthorizedCheckbox(cardMethod)}>
             <label className="checkbox" htmlFor="generate_outro">
               <input
                 type="checkbox" name="generate_outro" id="generate_outro" defaultChecked={cardMethod === "auto"}

@@ -9,7 +9,7 @@ import { STAT_NAME } from "../../constants/Home";
 import { VIEW_PATHS } from "../../constants/Paths";
 import { SPINNER_ID } from "../../constants/Spinner";
 
-import { fetchGeniusToken, fetchStatistics } from "./requests";
+import { getGeniusToken, getStatistics } from "./requests";
 import { hideAllStatsSpinners, showAllStatsSpinners } from "./spinners";
 
 import "./Home.css";
@@ -33,11 +33,11 @@ const Home = (): JSX.Element => {
       const hasVisited = sessionStorage.getItem(routeKey);
 
       showAllStatsSpinners();
-      fetchStatistics(setStats);
+      getStatistics(setStats);
       hideAllStatsSpinners();
 
       if (!hasVisited) {
-        fetchGeniusToken(setGeniusToken);
+        getGeniusToken(setGeniusToken);
         sessionStorage.setItem(routeKey, "visited");
       }
     };

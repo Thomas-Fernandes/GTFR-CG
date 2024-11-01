@@ -12,7 +12,7 @@ import { SPINNER_ID } from "../../constants/Spinner";
 
 import ItunesImageGallery from "./ItunesImageGallery";
 import { ArtworkGenerationContext } from "./context";
-import { handleChangeTerm, handleSubmitFileUpload, handleSubmitItunesResult, handleSubmitItunesSearch, handleSubmitYoutubeUrl } from "./handlers";
+import { handleChangeTerm, handleSubmitFileUpload, handleSubmitItunesImage, handleSubmitItunesSearch, handleSubmitYoutubeUrl } from "./handlers";
 
 import "./ArtworkGeneration.css";
 
@@ -75,7 +75,7 @@ const ArtworkGeneration = (): JSX.Element => {
         { itunesResults.length > 0 &&
           <button id="clear" onClick={() => setItunesResults([])}>Clear results</button>
         }
-        <ItunesImageGallery items={itunesResults} handleSubmitItunesResult={handleSubmitItunesResult} />
+        <ItunesImageGallery items={itunesResults} handleSubmitItunesResult={handleSubmitItunesImage} />
       </div>
 
       <hr />

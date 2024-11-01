@@ -8,7 +8,7 @@ import { TOAST, TOAST_TYPE } from "../../constants/Toast";
 
 import "./Home.css";
 
-export const fetchStatistics = (setStats: StateSetter<DisplayedStatistics>) => {
+export const getStatistics = (setStats: StateSetter<DisplayedStatistics>) => {
   sendRequest("GET", BACKEND_URL + API.STATISTICS).then((response) => {
     if (!is2xxSuccessful(response.status)) {
       sendToast(response.message, TOAST_TYPE.ERROR);
@@ -28,7 +28,7 @@ export const fetchStatistics = (setStats: StateSetter<DisplayedStatistics>) => {
   });
 };
 
-export const fetchGeniusToken = (setGeniusToken: StateSetter<string>) => {
+export const getGeniusToken = (setGeniusToken: StateSetter<string>) => {
   sendRequest("GET", BACKEND_URL + API.GENIUS_TOKEN).then((response) => {
     if (!is2xxSuccessful(response.status) || response.data.token === "") {
       sendToast(response.message, TOAST_TYPE.ERROR, 10);

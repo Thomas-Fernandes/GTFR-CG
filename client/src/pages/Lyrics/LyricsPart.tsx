@@ -1,6 +1,7 @@
 import { LyricsPart } from "../../common/Types";
 import { AutoResizeTextarea } from "../../components/AutoResizeTextarea";
 import { useLyricsContext } from "./context";
+import { HandleSetLyricsPartsProps } from "./handlers";
 
 import "./Lyrics.css";
 
@@ -8,11 +9,11 @@ type LyricsPartViewProps = {
   key?: number;
   part: LyricsPart;
   idx: number;
-  handleSetLyricsParts: (lyrics: string, idx: number) => void;
+  handleSetLyricsParts: (lyrics: string, idx: number, props: HandleSetLyricsPartsProps) => void;
 };
 
 const LyricsPartView: React.FC<LyricsPartViewProps> = ({key, part, idx, handleSetLyricsParts}): JSX.Element => {
-  const { dismissedParts, setDismissedParts } = useLyricsContext();
+  const { lyricsParts, setLyricsParts, dismissedParts, setDismissedParts } = useLyricsContext();
   key?.valueOf(); // unused
 
   return (
@@ -28,12 +29,12 @@ const LyricsPartView: React.FC<LyricsPartViewProps> = ({key, part, idx, handleSe
           {"Remove"}
         </button>
         <label>{part.section}</label>
-        <button type="button" className="green" onClick={() => handleSetLyricsParts("", idx)}>
+        <button type="button" className="green" onClick={() => handleSetLyricsParts("", idx, {lyricsParts, setLyricsParts})}>
           {"Clear"}
         </button>
         </div>
         <AutoResizeTextarea title={`lyrics-part_${idx}`}
-          value={part.lyrics} onChange={(e) => handleSetLyricsParts(e.target.value, idx)}
+          value={part.lyrics} onChange={(e) => handleSetLyricsParts(e.target.value, idx, {lyricsParts, setLyricsParts})}
         />
       </>}
       <hr className="w-66 mv-0" />
@@ -43,7 +44,7 @@ const LyricsPartView: React.FC<LyricsPartViewProps> = ({key, part, idx, handleSe
 
 type LyricsPartsProps = {
   lyricsParts: LyricsPart[];
-  handleSetLyricsParts: (lyrics: string, idx: number) => void;
+  handleSetLyricsParts: (lyrics: string, idx: number, props: HandleSetLyricsPartsProps) => void;
 };
 
 const LyricsParts: React.FC<LyricsPartsProps> = ({lyricsParts, handleSetLyricsParts}): JSX.Element => {

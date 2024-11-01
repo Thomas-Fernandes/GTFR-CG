@@ -1,7 +1,9 @@
 import { createNewContext } from "../../common/ContextProvider";
-import { StateSetter } from "../../common/Types";
+import { LyricsPart, StateSetter } from "../../common/Types";
 
 export interface LyricsContextType {
+  lyricsParts: LyricsPart[];
+  setLyricsParts: StateSetter<LyricsPart[]>;
   dismissedParts: Set<number>;
   setDismissedParts: StateSetter<Set<number>>;
 }
