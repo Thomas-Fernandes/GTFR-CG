@@ -22,7 +22,10 @@ const ProcessedImages = (): JSX.Element => {
   const navigate = useNavigate();
 
   const [selectedThumbnail, setSelectedThumbnail] = useState(DEFAULT_SELECTED_POSITION);
-  const contextValue = useMemo(() => ({ selectedThumbnail, setSelectedThumbnail }), [selectedThumbnail, setSelectedThumbnail]);
+  const contextValue = useMemo(
+    () => ({ selectedThumbnail, setSelectedThumbnail }),
+    [selectedThumbnail, setSelectedThumbnail]
+  );
 
   useEffect(() => {
     doesFileExist(PROCESSED_IMAGES_PATH + "/" + COVER_ART_FILENAME).then((anyProcessedImageExists: boolean) => {

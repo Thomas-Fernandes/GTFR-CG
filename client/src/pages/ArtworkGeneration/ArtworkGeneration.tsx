@@ -33,7 +33,10 @@ const ArtworkGeneration = (): JSX.Element => {
 
   const [youtubeUrl, setYoutubeUrl] = useState("");
 
-  const contextValue = useMemo(() => ({ isProcessingLoading, setIsProcessingLoading, navigate }), [isProcessingLoading, setIsProcessingLoading, navigate]);
+  const contextValue = useMemo(
+    () => ({ isProcessingLoading, setIsProcessingLoading, navigate }),
+    [isProcessingLoading, setIsProcessingLoading, navigate]
+  );
 
   return (
     <ArtworkGenerationContext.Provider value={contextValue}>
