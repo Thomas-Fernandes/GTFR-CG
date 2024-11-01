@@ -1,7 +1,7 @@
 
-import { is2xxSuccessful, sendRequest } from "@common/Requests";
-import { sendToast } from "@common/Toast";
-import { DisplayedStatistics, StateSetter, Statistics } from "@common/Types";
+import { is2xxSuccessful, sendRequest } from "@/common/requests";
+import { DisplayedStatistics, StateSetter, Statistics } from "@/common/types";
+import { sendToast } from "@/common/toast";
 
 import { API, BACKEND_URL } from "@constants/Paths";
 import { TOAST, TOAST_TYPE } from "@constants/Toast";

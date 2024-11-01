@@ -1,7 +1,7 @@
 import { JSX, useState } from "react";
 import { NavigateFunction } from "react-router-dom";
 
-import { ItunesResult } from "@common/Types";
+import { ItunesResult } from "@/common/types";
 
 import ImgButton from "@components/ImgButton";
 

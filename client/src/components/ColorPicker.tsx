@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { sendToast } from "@common/Toast";
+import { sendToast } from "@/common/toast";
 
 import { TOAST, TOAST_TYPE } from "@constants/Toast";
 

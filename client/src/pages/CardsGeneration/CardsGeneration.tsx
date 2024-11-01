@@ -1,7 +1,7 @@
 import { JSX, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import useTitle from "@common/UseTitle";
+import useTitle from "@/common/useTitle";
 
 import ColorPicker from "@components/ColorPicker";
 import FileUploader from "@components/FileUploader";

@@ -1,7 +1,7 @@
 import { HTTP_STATUS } from "@constants/Requests";
 import { TOAST } from "@constants/Toast";
 
-import { HttpMethod } from "./Types";
+import { HttpMethod } from "./types";
 
 export const isErrorCode = (status: number): boolean => {
   return status >= HTTP_STATUS.BAD_REQUEST && status < 600;

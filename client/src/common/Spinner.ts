@@ -1,6 +1,6 @@
 import { TOAST, TOAST_TYPE } from "@constants/Toast";
 
-import { sendToast } from "./Toast";
+import { sendToast } from "./toast";
 
 export const showSpinner = (name: string) => {
   if (!name) {

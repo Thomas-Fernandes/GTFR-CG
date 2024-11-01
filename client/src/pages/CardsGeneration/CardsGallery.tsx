@@ -1,7 +1,7 @@
 import React, { FormEvent, useMemo, useRef, useState } from "react";
 
-import { sendToast } from "@common/Toast";
-import { ImageDownloadRequest } from "@common/Types";
+import { sendToast } from "@/common/toast";
+import { ImageDownloadRequest } from "@/common/types";
 
 import { TOAST, TOAST_TYPE } from "@constants/Toast";
 

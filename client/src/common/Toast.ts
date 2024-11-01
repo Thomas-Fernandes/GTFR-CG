@@ -1,6 +1,6 @@
 import { DEFAULT_EVENT_DURATION, TOAST_TYPE } from "@constants/Toast";
 
-import { ToastType } from "./Types";
+import { ToastType } from "./types";
 
 const convertToHtmlMessage = (message: string) => {
   return message.trim()

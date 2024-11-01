@@ -1,7 +1,7 @@
 import { FormEvent } from "react";
 
-import { sendToast } from "@common/Toast";
-import { ImageDownloadRequest } from "@common/Types";
+import { sendToast } from "@/common/toast";
+import { ImageDownloadRequest } from "@/common/types";
 
 import { COVER_ART_FILENAME, PROCESSED_IMAGES_PATH } from "@constants/Paths";
 import { TOAST, TOAST_TYPE } from "@constants/Toast";

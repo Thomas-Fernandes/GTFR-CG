@@ -1,5 +1,5 @@
 
-import { hideSpinner, showSpinner } from "@common/Spinner";
+import { hideSpinner, showSpinner } from "@/common/spinner";
 
 import { SPINNER_ID } from "@constants/Spinner";
 

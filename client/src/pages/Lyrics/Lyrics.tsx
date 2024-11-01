@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { is2xxSuccessful, sendRequest } from "@common/Requests";
-import { sendToast } from "@common/Toast";
-import { LyricsContents, LyricsPart, PageMetadata } from "@common/Types";
-import useTitle from "@common/UseTitle";
+import { is2xxSuccessful, sendRequest } from "@/common/requests";
+import { LyricsContents, LyricsPart, PageMetadata } from "@/common/types";
+import useTitle from "@/common/useTitle";
+import { sendToast } from "@/common/toast";
 
 import { SESSION_STORAGE, TITLE } from "@constants/Common";
 import { API, BACKEND_URL, VIEW_PATHS } from "@constants/Paths";

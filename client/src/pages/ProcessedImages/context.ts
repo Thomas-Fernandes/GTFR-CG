@@ -1,5 +1,5 @@
-import { createNewContext } from "@common/ContextProvider";
-import { StateSetter } from "@common/Types";
+import { createNewContext } from "@/common/contextProvider";
+import { StateSetter } from "@/common/types";
 
 export interface ProcessedImagesContextType {
   selectedThumbnail: string;
@@ -9,3 +9,4 @@ export interface ProcessedImagesContextType {
 const { context: ProcessedImagesContext, useContext: useProcessedImagesContext } = createNewContext<ProcessedImagesContextType>();
 
 export { ProcessedImagesContext, useProcessedImagesContext };
+

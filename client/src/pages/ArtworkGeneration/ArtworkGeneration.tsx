@@ -1,8 +1,8 @@
 import { JSX, useMemo, useState, useTransition } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { ItunesResult } from "@common/Types";
-import useTitle from "@common/UseTitle";
+import { ItunesResult } from "@/common/types";
+import useTitle from "@/common/useTitle";
 
 import FileUploader from "@components/FileUploader";
 

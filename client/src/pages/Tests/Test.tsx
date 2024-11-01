@@ -1,6 +1,6 @@
 import { RefObject, useState } from "react";
 
-import { StateSetter } from "@common/Types";
+import { StateSetter } from "@/common/types";
 import { isEmpty } from "@common/utils/ObjUtils";
 
 export type TestResult = {

@@ -1,8 +1,8 @@
 import { JSX, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { DisplayedStatistics } from "@common/Types";
-import useTitle from "@common/UseTitle";
+import { DisplayedStatistics } from "@/common/types";
+import useTitle from "@/common/useTitle";
 
 import { TITLE } from "@constants/Common";
 import { STAT_NAME } from "@constants/Home";

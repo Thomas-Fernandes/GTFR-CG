@@ -1,4 +1,4 @@
-import { LyricsPart } from "@common/Types";
+import { LyricsPart } from "@/common/types";
 import { AutoResizeTextarea } from "@components/AutoResizeTextarea";
 import { useLyricsContext } from "./context";
 import { HandleSetLyricsPartsProps } from "./handlers";

@@ -1,8 +1,8 @@
-import { is2xxSuccessful, sendRequest } from "@common/Requests";
-import { hideSpinner, showSpinner } from "@common/Spinner";
-import { sendToast } from "@common/Toast";
-import { ApiResponse, CardsGenerationRequest, CardsGenerationResponse, StateSetter } from "@common/Types";
-import { CardData } from "@components/CardsGallery/CardsGallery";
+import { is2xxSuccessful, sendRequest } from "@/common/requests";
+import { hideSpinner, showSpinner } from "@/common/spinner";
+import { sendToast } from "@/common/toast";
+import { ApiResponse, CardsGenerationRequest, CardsGenerationResponse, StateSetter } from "@/common/types";
+import { CardData } from "@/pages/CardsGeneration/CardsGallery";
 
 import { SESSION_STORAGE } from "@constants/Common";
 import { API, BACKEND_URL, PROCESSED_CARDS_PATH } from "@constants/Paths";
