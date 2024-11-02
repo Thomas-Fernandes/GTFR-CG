@@ -1,24 +1,6 @@
 #lyrics {
     form {
         justify-content: center;
-
-        &.lyrics-form {
-            margin-top: 2%;
-
-            &> div {
-                width: 100%;
-                margin-bottom: 20px;
-
-                &#lyrics_convert {
-                    width: 60%;
-                }
-            }
-
-            label {
-                font-weight: bold;
-                text-align: center;
-            }
-        }
     }
 
     button.mode-flipper, button.last-generation {

@@ -30,7 +30,7 @@ export type SongPartsCards = string[][];
 
 export type LyricsContents = {
   pageMetadata: PageMetadata;
-  lyricsParts: LyricsPart[];
+  lyricsParts: LyricsPartType[];
   dismissedParts: number[];
 };
 
@@ -40,14 +40,14 @@ export type PageMetadata = {
   id: string;
   contributors: string[];
 };
-export type LyricsPart = {
+export type LyricsPartType = {
   section: string;
   lyrics: string;
 };
 
 export type LyricsResponse = ApiResponse & {
   data: {
-    lyricsParts: LyricsPart[];
+    lyricsParts: LyricsPartType[];
   };
 };
 export type LyricsRequest = {

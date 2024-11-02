@@ -2,7 +2,7 @@ import { FormEvent } from "react";
 import { NavigateFunction } from "react-router-dom";
 
 import { sendToast } from "@common/toast";
-import { LyricsContents, LyricsPart, LyricsRequest, PageMetadata, SongPartsCards, StateSetter } from "@common/types";
+import { LyricsContents, LyricsPartType, LyricsRequest, PageMetadata, SongPartsCards, StateSetter } from "@common/types";
 
 import { TOAST, TOAST_TYPE } from "@constants/toasts";
 
@@ -13,7 +13,7 @@ type HandleLyricsSaveSubmitProps = {
   setIsSavingCardsContent: StateSetter<boolean>;
   pageMetadata: PageMetadata;
   isManual: boolean;
-  lyricsParts: LyricsPart[];
+  lyricsParts: LyricsPartType[];
   dismissedParts: Set<number>;
   navigate: NavigateFunction;
 };
@@ -39,8 +39,8 @@ export const handleLyricsSaveSubmit = (
 };
 
 export type HandleSetLyricsPartsProps = {
-  lyricsParts: LyricsPart[];
-  setLyricsParts: StateSetter<LyricsPart[]>;
+  lyricsParts: LyricsPartType[];
+  setLyricsParts: StateSetter<LyricsPartType[]>;
 };
 export const handleSetLyricsParts = (
   lyrics: string, idx: number,
@@ -55,7 +55,7 @@ export const handleSetLyricsParts = (
 type HandleLyricsSearchSubmitProps = {
   isFetching: boolean;
   setIsFetching: StateSetter<boolean>;
-  setLyricsParts: StateSetter<LyricsPart[]>;
+  setLyricsParts: StateSetter<LyricsPartType[]>;
   setPageMetadata: StateSetter<PageMetadata>;
 };
 export const handleLyricsSearchSubmit = (
@@ -82,7 +82,7 @@ export const handleLyricsSearchSubmit = (
 type HandleLoadLastContentsProps = {
   lastContents: LyricsContents;
   setPageMetadata: StateSetter<PageMetadata>;
-  setLyricsParts: StateSetter<LyricsPart[]>;
+  setLyricsParts: StateSetter<LyricsPartType[]>;
   setDismissedParts: StateSetter<Set<number>>;
 };
 export const handleLoadLastContents = (

@@ -7,15 +7,14 @@ import { doesFileExist } from "@common/utils/fileUtils";
 import NavButton from "@components/NavButton";
 import ToastContainer from "@components/ToastContainer/ToastContainer";
 
-import { TITLE } from "@constants/Common";
+import { TITLE } from "@constants/browser";
 import { COVER_ART_FILENAME, PROCESSED_ARTWORKS_PATH, VIEW_PATHS } from "@constants/paths";
-import { DEFAULT_SELECTED_POSITION } from "@constants/ProcessedArtworks";
+import { DEFAULT_SELECTED_POSITION } from "@constants/thumbnails";
 import { TOAST } from "@constants/toasts";
 
+import BackgroundImageDisplay from "./BackgroundImageDisplay";
 import { ProcessedArtworksContext } from "./context";
-import { handleSubmitDownloadImage } from "./handlers";
 import ThumbnailGallery from "./ThumbnailGallery";
-import { processImageName } from "./utils";
 
 import "./ProcessedArtworks.css";
 
@@ -53,20 +52,10 @@ const ProcessedArtworks = (): JSX.Element => {
       <h1>{TITLE.PROCESSED_ARTWORKS}</h1>
 
       <div id="image-panels">
-        <div id="image-container">
-          <img src={PROCESSED_ARTWORKS_PATH + "/" + COVER_ART_FILENAME} alt="background thumbnail" />
-          <form onSubmit={(e) => handleSubmitDownloadImage(e, {selectedImage: COVER_ART_FILENAME})}>
-            <input type="submit" value="Download" className="button" />
-          </form>
-        </div>
+        <BackgroundImageDisplay />
 
         <ProcessedArtworksContext.Provider value={contextValue}>
-          <div id="thumbnails">
-            <form onSubmit={(e) => handleSubmitDownloadImage(e, {selectedImage: processImageName(selectedThumbnail)})}>
-              <ThumbnailGallery />
-              <input type="submit" value="Download" className="button" />
-            </form>
-          </div>
+          <ThumbnailGallery />
         </ProcessedArtworksContext.Provider>
       </div>
 

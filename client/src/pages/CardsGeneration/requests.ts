@@ -3,7 +3,7 @@ import { hideSpinner, showSpinner } from "@common/spinner";
 import { sendToast } from "@common/toast";
 import { ApiResponse, CardsGenerationRequest, CardsGenerationResponse, StateSetter } from "@common/types";
 
-import { SESSION_STORAGE } from "@constants/Common";
+import { SESSION_STORAGE } from "@constants/browser";
 import { API, BACKEND_URL, PROCESSED_CARDS_PATH } from "@constants/paths";
 import { HTTP_STATUS } from "@constants/requests";
 import { SPINNER_ID } from "@constants/spinners";

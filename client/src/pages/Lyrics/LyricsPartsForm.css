@@ -1,0 +1,45 @@
+#lyrics {
+    form.lyrics-form {
+        &> div {
+            width: 100%;
+            margin-bottom: 1.25rem;
+
+            &#lyrics_convert {
+                width: 60%;
+            }
+        }
+
+        label {
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .lyrics-part--header {
+            margin-top: .25rem;
+
+            button {
+                min-width: 16%;
+                font-size: smaller;
+
+                &.restore {
+                    margin-bottom: 1.75rem;
+                }
+
+                &.red {
+                    background-color: #7f0000;
+
+                    &:hover {
+                        background-color: #0056b3;
+                    }
+                }
+                &.green {
+                    background-color: #007f00;
+
+                    &:hover {
+                        background-color: #0056b3;
+                    }
+                }
+            }
+        }
+    }
+}

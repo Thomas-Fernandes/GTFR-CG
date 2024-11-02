@@ -1,16 +1,32 @@
 #processed-artworks {
-    #thumbnail-grid {
-        height: 80%;
+    #thumbnails {
+        width: 45%;
+        padding: 20px;
 
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 10px;
+        background: #ffffff;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
 
-        .thumbnail-item {
-            img {
-                max-width: 100%;
-                height: auto;
-                cursor: pointer;
+        form {
+            input[type="radio"] {
+                padding: 0;
+                margin: 10px;
+                border: none;
+            }
+        }
+
+        #thumbnail-grid {
+            height: 80%;
+
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+
+            .thumbnail-item {
+                img {
+                    max-width: 100%;
+                    height: auto;
+                    cursor: pointer;
+                }
             }
         }
     }

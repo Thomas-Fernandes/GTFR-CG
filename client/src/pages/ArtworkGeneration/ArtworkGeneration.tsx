@@ -8,7 +8,7 @@ import FileUploader from "@components/FileUploader/FileUploader";
 import NavButton from "@components/NavButton";
 import ToastContainer from "@components/ToastContainer/ToastContainer";
 
-import { TITLE } from "@constants/Common";
+import { TITLE } from "@constants/browser";
 import { VIEW_PATHS } from "@constants/paths";
 import { SPINNER_ID } from "@constants/spinners";
 

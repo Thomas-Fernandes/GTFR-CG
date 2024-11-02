@@ -8,7 +8,7 @@ import NavButton from "@components/NavButton";
 import ToastContainer from "@components/ToastContainer/ToastContainer";
 import ZipDownloadButton from "@components/ZipDownloadButton";
 
-import { SESSION_STORAGE, TITLE } from "@constants/Common";
+import { SESSION_STORAGE, TITLE } from "@constants/browser";
 import { VIEW_PATHS } from "@constants/paths";
 import { SPINNER_ID } from "@constants/spinners";
 

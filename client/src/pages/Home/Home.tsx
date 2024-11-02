@@ -7,7 +7,7 @@ import { useTitle } from "@common/useTitle";
 import NavButton from "@components/NavButton";
 import ToastContainer from "@components/ToastContainer/ToastContainer";
 
-import { TITLE } from "@constants/Common";
+import { TITLE } from "@constants/browser";
 import { VIEW_PATHS } from "@constants/paths";
 
 import { getGeniusToken, getStatistics } from "./requests";

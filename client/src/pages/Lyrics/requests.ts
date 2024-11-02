@@ -3,9 +3,9 @@ import { NavigateFunction } from "react-router-dom";
 import { is2xxSuccessful, sendRequest } from "@common/requests";
 import { hideSpinner, showSpinner } from "@common/spinner";
 import { sendToast } from "@common/toast";
-import { ApiResponse, Dict, LyricsPart, LyricsResponse, PageMetadata, StateSetter } from "@common/types";
+import { ApiResponse, Dict, LyricsPartType, LyricsResponse, PageMetadata, StateSetter } from "@common/types";
 
-import { SESSION_STORAGE } from "@constants/Common";
+import { SESSION_STORAGE } from "@constants/browser";
 import { API, BACKEND_URL, VIEW_PATHS } from "@constants/paths";
 import { SPINNER_ID } from "@constants/spinners";
 import { TOAST_TYPE } from "@constants/toasts";
@@ -13,7 +13,7 @@ import { TOAST_TYPE } from "@constants/toasts";
 type LyricsSaveProps = {
   pageMetadata: PageMetadata;
   isManual: boolean;
-  lyricsParts: LyricsPart[];
+  lyricsParts: LyricsPartType[];
   dismissedParts: Set<number>;
   navigate: NavigateFunction;
   setIsSavingCardsContent: StateSetter<boolean>;
@@ -49,7 +49,7 @@ export const postLyricsSave = (body: unknown, props: LyricsSaveProps) => {
 
 type LyricsSearchProps = {
   setIsFetching: StateSetter<boolean>;
-  setLyricsParts: StateSetter<LyricsPart[]>;
+  setLyricsParts: StateSetter<LyricsPartType[]>;
   setPageMetadata: StateSetter<PageMetadata>;
 };
 export const postLyricsSearch = (body: unknown, props: LyricsSearchProps) => {
@@ -88,5 +88,14 @@ export const postLyricsSearch = (body: unknown, props: LyricsSearchProps) => {
   }).finally(() => {
     hideSpinner(SPINNER_ID.LYRICS_SEARCH);
     setIsFetching(false);
+  });
+};
+
+export const isTokenSet = async (): Promise<boolean> => {
+  return sendRequest("GET", BACKEND_URL + API.GENIUS_TOKEN).then((response) => {
+    return is2xxSuccessful(response.status) && response.data.token !== "";
+  }).catch((error) => {
+    sendToast(error.message, TOAST_TYPE.ERROR);
+    return false;
   });
 };

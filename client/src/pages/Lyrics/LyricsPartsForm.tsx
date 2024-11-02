@@ -1,20 +1,24 @@
-import { LyricsPart } from "@common/types";
+import { useState } from "react";
+
+import { LyricsPartType } from "@common/types";
 
 import { AutoResizeTextarea } from "@components/AutoResizeTextarea/AutoResizeTextarea";
 
+import { SPINNER_ID } from "@constants/spinners";
+
 import { useLyricsContext } from "./context";
-import { HandleSetLyricsPartsProps } from "./handlers";
+import { handleLyricsSaveSubmit, handleSetLyricsParts } from "./handlers";
+import { convertToCardContents } from "./utils";
 
-import "./LyricsPart.css";
+import "./LyricsPartsForm.css";
 
-type LyricsPartViewProps = {
+type LyricsPartProps = {
   key?: number;
-  part: LyricsPart;
+  part: LyricsPartType;
   idx: number;
-  handleSetLyricsParts: (lyrics: string, idx: number, props: HandleSetLyricsPartsProps) => void;
 };
 
-const LyricsPartView: React.FC<LyricsPartViewProps> = ({key, part, idx, handleSetLyricsParts}): JSX.Element => {
+const LyricsPart: React.FC<LyricsPartProps> = ({key, part, idx}): JSX.Element => {
   const { lyricsParts, setLyricsParts, dismissedParts, setDismissedParts } = useLyricsContext();
   key?.valueOf(); // unused
 
@@ -45,19 +49,29 @@ const LyricsPartView: React.FC<LyricsPartViewProps> = ({key, part, idx, handleSe
   );
 };
 
-type LyricsPartsProps = {
-  lyricsParts: LyricsPart[];
-  handleSetLyricsParts: (lyrics: string, idx: number, props: HandleSetLyricsPartsProps) => void;
+type LyricsPartsFormProps = {
+  lyricsParts: LyricsPartType[];
 };
 
-const LyricsParts: React.FC<LyricsPartsProps> = ({lyricsParts, handleSetLyricsParts}): JSX.Element => {
+const LyricsPartsForm: React.FC<LyricsPartsFormProps> = ({lyricsParts}): JSX.Element => {
+  const { dismissedParts, pageMetadata, isManual, navigate } = useLyricsContext();
+
+  const [isSavingCardsContent, setIsSavingCardsContent] = useState(false);
+
   return (
-    <>
-      { lyricsParts.map((part, idx) =>
-        <LyricsPartView key={idx} part={part} idx={idx} handleSetLyricsParts={handleSetLyricsParts} />
+    <form className="lyrics-form flexbox"
+      onSubmit={(e) => handleLyricsSaveSubmit(e, convertToCardContents(lyricsParts, dismissedParts),
+        {isSavingCardsContent, setIsSavingCardsContent, pageMetadata, isManual, lyricsParts, dismissedParts, navigate}
       )}
-    </>
+    >
+      { lyricsParts.map((part, idx) =>
+        <LyricsPart key={idx} part={part} idx={idx} />
+      )}
+      <div className="action-button" id={SPINNER_ID.LYRICS_CONVERT}>
+        <input type="submit" value="CONVERT TO CARDS" className="action-button convert-button" />
+      </div>
+    </form>
   );
 };
 
-export default LyricsParts;
+export default LyricsPartsForm;

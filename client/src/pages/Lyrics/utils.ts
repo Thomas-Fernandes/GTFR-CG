@@ -1,6 +1,6 @@
-import { LyricsPart, SongPartsCards } from "@common/types";
+import { LyricsPartType, SongPartsCards } from "@common/types";
 
-export const convertToCardContents = (lyricsParts: LyricsPart[], dismissedParts: Set<number>): SongPartsCards => {
+export const convertToCardContents = (lyricsParts: LyricsPartType[], dismissedParts: Set<number>): SongPartsCards => {
   // Input: [{section: "Verse 1", lyrics: "The whole lyrics\nOf the section\nAre here as is\nTotally disorganized"}, ...]
   // Output: [["The whole lyrics\nOf the section", "Are here as is\nTotally disorganized"], ...]
   //   -> Each inner array is a section, each string is a card

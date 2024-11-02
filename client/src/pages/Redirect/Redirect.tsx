@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 import { useTitle } from "@common/useTitle";
 
-import { TITLE } from "@constants/Common";
+import { TITLE } from "@constants/browser";
 import { DEFAULT_REDIRECTION } from "@constants/redirection";
 import { DEFAULT_EVENT_DURATION } from "@constants/toasts";
 

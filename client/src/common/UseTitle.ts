@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-import { TITLE } from "@constants/Common";
+import { TITLE } from "@constants/browser";
 
 export const useTitle = (title: string) => {
   const documentIsDefined = document !== undefined;

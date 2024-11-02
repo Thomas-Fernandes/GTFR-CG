@@ -3,29 +3,5 @@
         justify-content: space-around;
         align-items: center;
         flex-direction: row;
-
-        #image-container {
-            width: 45%;
-            padding: 20px;
-
-            background: #ffffff;
-            box-shadow: 0 0 10px #0000001a;
-        }
-
-        #thumbnails {
-            width: 45%;
-            padding: 20px;
-
-            background: #ffffff;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-
-            form {
-                input[type="radio"] {
-                    padding: 0;
-                    margin: 10px;
-                    border: none;
-                }
-            }
-        }
     }
 }

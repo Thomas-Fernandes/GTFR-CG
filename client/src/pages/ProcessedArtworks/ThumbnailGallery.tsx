@@ -1,9 +1,10 @@
 import { JSX } from "react";
 
-import { DEFAULT_SELECTED_POSITION, LOGO_POSITIONS } from "@constants/ProcessedArtworks";
 import { PROCESSED_ARTWORKS_PATH } from "@constants/paths";
+import { DEFAULT_SELECTED_POSITION, LOGO_POSITIONS } from "@constants/thumbnails";
 
 import { useProcessedArtworksContext } from "./context";
+import { handleSubmitDownloadImage } from "./handlers";
 import { processImageName } from "./utils";
 
 import "./ThumbnailGallery.css";
@@ -33,11 +34,18 @@ const ThumbnailOption: React.FC<ThumbnailOptionProps> = ({key, logoPosition, idx
 };
 
 const ThumbnailGallery = (): JSX.Element => {
+  const { selectedThumbnail } = useProcessedArtworksContext();
+
   return (
-    <div id="thumbnail-grid">
-      { LOGO_POSITIONS.map((logoPosition, idx) =>
-        <ThumbnailOption key={idx} logoPosition={logoPosition} idx={idx} />
-      )}
+    <div id="thumbnails">
+      <form onSubmit={(e) => handleSubmitDownloadImage(e, {selectedImage: processImageName(selectedThumbnail)})}>
+        <div id="thumbnail-grid">
+          { LOGO_POSITIONS.map((logoPosition, idx) =>
+            <ThumbnailOption key={idx} logoPosition={logoPosition} idx={idx} />
+          )}
+        </div>
+        <input type="submit" value="Download" className="button" />
+      </form>
     </div>
   );
 };

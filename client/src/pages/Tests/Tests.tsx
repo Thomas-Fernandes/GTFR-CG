@@ -6,7 +6,7 @@ import { dismissToast, sendToast } from "@common/toast";
 import { ItunesResponse, LyricsResponse, StateSetter } from "@common/types";
 import { useTitle } from "@common/useTitle";
 
-import { TITLE } from "@constants/Common";
+import { TITLE } from "@constants/browser";
 import { API, BACKEND_URL, ITUNES_URL, VIEW_PATHS } from "@constants/paths";
 import { TOAST_TYPE } from "@constants/toasts";
 
