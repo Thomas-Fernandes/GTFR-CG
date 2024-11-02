@@ -25,7 +25,7 @@ type CardsGalleryProps = {
   generationProps: GenerationProps;
 };
 
-const CardsGallery: React.FC<CardsGalleryProps> = ({ id, initialCards, generationProps }) => {
+const CardsGallery: React.FC<CardsGalleryProps> = ({ id, initialCards, generationProps }): JSX.Element => {
   const [cards, setCards] = useState<CardData[]>(initialCards);
 
   const [isModalOpen, setIsModalOpen] = useState(false);

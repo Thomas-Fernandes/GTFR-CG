@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { StateSetter } from "@common/types";
+import { StateSetter } from "@common/types/cardsGenerationTypes";
 
 import "./FileUploader.css";
 

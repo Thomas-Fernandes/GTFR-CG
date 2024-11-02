@@ -1,8 +1,8 @@
 import { JSX, useMemo, useState, useTransition } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { ItunesResult } from "@common/types";
-import { useTitle } from "@common/useTitle";
+import { useTitle } from "@common/hooks/useTitle";
+import { ItunesResult } from "@pages/ArtworkGeneration/types";
 
 import FileUploader from "@components/FileUploader/FileUploader";
 import NavButton from "@components/NavButton";
@@ -53,10 +53,10 @@ const ArtworkGeneration = (): JSX.Element => {
 
       <ArtworkGenerationContext.Provider value={contextValue}>
         <h1>{"Search for cover artwork on iTunes"}</h1>
-        <form id="itunes" onSubmit={(e) => handleSubmitItunesSearch(e, {term, country}, setItunesResults)}>
+        <form id="itunes" onSubmit={(e) => handleSubmitItunesSearch(e, { term, country }, { setItunesResults })}>
           <div className="flexbox">
             <input id="itunes-text" type="text" placeholder="Search on iTunes"
-              onChange={(e) => handleChangeTerm(e.target.value, country, setTerm, startItunesSearch, setItunesResults)}
+              onChange={(e) => handleChangeTerm(e.target.value, country, { setTerm, startItunesSearch, setItunesResults })}
             />
             <div id={SPINNER_ID.ITUNES} className="itunes-search">
               <select aria-label="Country"
@@ -74,13 +74,15 @@ const ArtworkGeneration = (): JSX.Element => {
           { itunesResults.length > 0 &&
             <button id="clear" onClick={() => setItunesResults([])}>Clear results</button>
           }
-          <ItunesImageGallery items={itunesResults} handleSubmitItunesResult={handleSubmitItunesImage} />
+          <ItunesImageGallery items={itunesResults} handleSubmitItunesImage={handleSubmitItunesImage} />
         </div>
 
         <hr />
 
         <h1>{"Upload your image"}</h1>
-        <form id="local" onSubmit={(e) => handleSubmitFileUpload(e, {localFile, includeCenterArtwork}, [isProcessingLoading, setIsProcessingLoading], navigate)} encType="multipart/form-data">
+        <form id="local" encType="multipart/form-data"
+          onSubmit={(e) => handleSubmitFileUpload(e, { localFile, includeCenterArtwork }, { isProcessingLoading, setIsProcessingLoading, navigate })}
+        >
           <div className="flexbox">
             <FileUploader id="background-image" label="Select background image" accept="image/*" setter={setLocalFile} />
             <label className="checkbox" htmlFor="include_center_artwork">
@@ -99,7 +101,7 @@ const ArtworkGeneration = (): JSX.Element => {
         <hr />
 
         <h1>{"Use a YouTube video thumbnail"}</h1>
-        <form id="youtube" onSubmit={(e) => handleSubmitYoutubeUrl(e, {url: youtubeUrl}, [isProcessingLoading, setIsProcessingLoading], navigate)}>
+        <form id="youtube" onSubmit={(e) => handleSubmitYoutubeUrl(e, { url: youtubeUrl }, { isProcessingLoading, setIsProcessingLoading, navigate })}>
           <div className="flexbox">
             <input type="text" placeholder="Paste YouTube video URL here"
               onChange={(e) => setYoutubeUrl(e.target.value)}

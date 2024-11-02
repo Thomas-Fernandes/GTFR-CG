@@ -15,7 +15,7 @@ type CardEditModalProps = {
   generationProps: GenerationProps;
 };
 
-const CardEditModal: React.FC<CardEditModalProps> = ({ generationProps }) => {
+const CardEditModal: React.FC<CardEditModalProps> = ({ generationProps }): JSX.Element => {
   const { setIsModalOpen, currentCard, newLyrics, setNewLyrics, setCards } = useCardsGalleryContext();
   const cardIdPadding = currentCard && currentCard.id < 10 ? "0" : "";
 

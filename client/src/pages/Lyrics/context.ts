@@ -1,7 +1,7 @@
 import { NavigateFunction } from "react-router-dom";
 
 import { createNewContext } from "@common/contextProvider";
-import { LyricsPartType, PageMetadata, StateSetter } from "@common/types";
+import { LyricsPartType, PageMetadata, StateSetter } from "@common/types/cardsGenerationTypes";
 
 export interface LyricsContextType {
   isFetching: boolean;

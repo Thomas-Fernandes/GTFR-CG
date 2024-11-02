@@ -1,7 +1,7 @@
 import { is2xxSuccessful, sendRequest } from "@common/requests";
 import { hideSpinner, showSpinner } from "@common/spinner";
 import { sendToast } from "@common/toast";
-import { ApiResponse, CardsGenerationRequest, CardsGenerationResponse, SingleCardGenerationRequest, StateSetter } from "@common/types";
+import { ApiResponse, StateSetter } from "@common/types";
 
 import { SESSION_STORAGE } from "@constants/browser";
 import { API, BACKEND_URL, PROCESSED_CARDS_PATH } from "@constants/paths";
@@ -10,6 +10,7 @@ import { SPINNER_ID } from "@constants/spinners";
 import { TOAST, TOAST_TYPE } from "@constants/toasts";
 
 import { CardData } from "./interfaces";
+import { CardsGenerationRequest, CardsGenerationResponse, SingleCardGenerationRequest } from "./types";
 import { deduceNewCards, generateFormData, updateCard } from "./utils";
 
 type GenerateSingleCardProps = {

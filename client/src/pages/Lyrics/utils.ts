@@ -1,4 +1,6 @@
-import { LyricsPartType, SongPartsCards } from "@common/types";
+import { SongPartsCards } from "@pages/CardsGeneration/types";
+
+import { LyricsPartType } from "./types";
 
 export const convertToCardContents = (lyricsParts: LyricsPartType[], dismissedParts: Set<number>): SongPartsCards => {
   // Input: [{section: "Verse 1", lyrics: "The whole lyrics\nOf the section\nAre here as is\nTotally disorganized"}, ...]

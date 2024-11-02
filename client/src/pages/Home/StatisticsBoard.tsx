@@ -1,6 +1,6 @@
 import { JSX } from "react";
 
-import { Statistics } from "@common/types";
+import { Statistics } from "@pages/Home/types";
 
 import { SPINNER_ID } from "@constants/spinners";
 import { STAT_NAME } from "@constants/statistics";

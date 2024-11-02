@@ -1,7 +1,7 @@
 import { JSX, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-import { useTitle } from "@common/useTitle";
+import { useTitle } from "@common/hooks/useTitle";
 
 import { TITLE } from "@constants/browser";
 import { DEFAULT_REDIRECTION } from "@constants/redirection";

@@ -1,7 +1,7 @@
 import { JSX, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { useTitle } from "@common/useTitle";
+import { useTitle } from "@common/hooks/useTitle";
 import { doesFileExist } from "@common/utils/fileUtils";
 
 import NavButton from "@components/NavButton";

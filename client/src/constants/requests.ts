@@ -1,4 +1,4 @@
-import { ResponseStatus } from "@common/types";
+import { ResponseStatus } from "@common/types/cardsGenerationTypes";
 
 export const RESPONSE_STATUS: Record<string, ResponseStatus> = {
   INFO: "info",

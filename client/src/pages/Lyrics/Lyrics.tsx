@@ -1,8 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { LyricsContents, LyricsPartType, PageMetadata } from "@common/types";
-import { useTitle } from "@common/useTitle";
+import { useTitle } from "@common/hooks/useTitle";
 
 import NavButton from "@components/NavButton";
 import ToastContainer from "@components/ToastContainer/ToastContainer";
@@ -18,6 +17,7 @@ import LyricsPartsForm from "./LyricsPartsForm";
 import LyricsSearchForm from "./LyricsSearchForm";
 import ManualGenerationInputBar from "./ManualGenerationInputBar";
 import { isTokenSet } from "./requests";
+import { LyricsContents, LyricsPartType, PageMetadata } from "./types";
 
 import "./Lyrics.css";
 

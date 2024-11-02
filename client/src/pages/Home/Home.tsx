@@ -1,8 +1,7 @@
 import { JSX, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { Statistics } from "@common/types";
-import { useTitle } from "@common/useTitle";
+import { useTitle } from "@common/hooks/useTitle";
 
 import NavButton from "@components/NavButton";
 import ToastContainer from "@components/ToastContainer/ToastContainer";
@@ -13,6 +12,7 @@ import { VIEW_PATHS } from "@constants/paths";
 import { getGeniusToken, getStatistics } from "./requests";
 import { hideAllStatsSpinners, showAllStatsSpinners } from "./spinners";
 import StatisticsBoard from "./StatisticsBoard";
+import { Statistics } from "./types";
 
 import "./Home.css";
 

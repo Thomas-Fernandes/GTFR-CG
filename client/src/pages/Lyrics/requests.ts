@@ -3,12 +3,13 @@ import { NavigateFunction } from "react-router-dom";
 import { is2xxSuccessful, sendRequest } from "@common/requests";
 import { hideSpinner, showSpinner } from "@common/spinner";
 import { sendToast } from "@common/toast";
-import { ApiResponse, Dict, LyricsPartType, LyricsResponse, PageMetadata, StateSetter } from "@common/types";
+import { ApiResponse, Dict, StateSetter } from "@common/types";
 
 import { SESSION_STORAGE } from "@constants/browser";
 import { API, BACKEND_URL, VIEW_PATHS } from "@constants/paths";
 import { SPINNER_ID } from "@constants/spinners";
 import { TOAST_TYPE } from "@constants/toasts";
+import { LyricsPartType, LyricsResponse, PageMetadata } from "./types";
 
 type LyricsSaveProps = {
   pageMetadata: PageMetadata;

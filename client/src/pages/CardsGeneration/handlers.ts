@@ -2,7 +2,7 @@ import { FormEvent } from "react";
 
 import { showSpinner } from "@common/spinner";
 import { sendToast } from "@common/toast";
-import { CardsGenerationRequest, ImageDownloadRequest, StateSetter } from "@common/types";
+import { ImageDownloadRequest, StateSetter } from "@common/types";
 import { isFileExtensionAccepted } from "@common/utils/fileUtils";
 
 import { FILE_UPLOAD } from "@constants/ArtworkGeneration";
@@ -12,6 +12,7 @@ import { TOAST, TOAST_TYPE } from "@constants/toasts";
 import { GenerationProps } from "./CardsGallery";
 import { CardData } from "./interfaces";
 import { postGenerateCards, postGenerateSingleCard } from "./requests";
+import { CardsGenerationRequest } from "./types";
 import { generateFormData } from "./utils";
 
 type HandleSaveModalProps = {

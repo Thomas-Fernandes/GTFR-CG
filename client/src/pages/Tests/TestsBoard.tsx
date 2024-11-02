@@ -6,7 +6,7 @@ type TestsBoardProps = {
   tests?: TestProps[];
 };
 
-export const TestsBoard = (props: TestsBoardProps) => {
+export const TestsBoard = (props: TestsBoardProps): JSX.Element => {
   const { id, title, tests } = props;
 
   return (

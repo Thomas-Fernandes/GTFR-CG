@@ -15,7 +15,7 @@ type CardViewProps = {
   cardIdx: number;
 };
 
-const CardView: React.FC<CardViewProps> = ({ card, cardIdx }) => {
+const CardView: React.FC<CardViewProps> = ({ card, cardIdx }): JSX.Element => {
   const { setIsModalOpen, setCurrentCard, setNewLyrics } = useCardsGalleryContext();
 
   const cardFileName = (card.src.split('/').pop() ?? "").split('?')[0] ?? "card";

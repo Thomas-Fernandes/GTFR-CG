@@ -1,7 +1,7 @@
 
 import { is2xxSuccessful, sendRequest } from "@common/requests";
 import { sendToast } from "@common/toast";
-import { StateSetter, Statistics, StatisticsResponse } from "@common/types";
+import { StateSetter, Statistics, StatisticsResponse } from "@common/types/cardsGenerationTypes";
 
 import { API, BACKEND_URL } from "@constants/paths";
 import { TOAST, TOAST_TYPE } from "@constants/toasts";

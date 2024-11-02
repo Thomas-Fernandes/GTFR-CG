@@ -17,7 +17,7 @@ export type TestProps = {
   buttonRef: RefObject<HTMLButtonElement>;
 };
 
-export const Test = (props: TestProps) => {
+export const Test = (props: TestProps): JSX.Element => {
   const { title, func, buttonRef } = props;
 
   const [result, setResult] = useState<TestResult>({} as TestResult);

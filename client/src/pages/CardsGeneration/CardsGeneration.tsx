@@ -1,6 +1,6 @@
 import { JSX, useEffect, useState } from "react";
 
-import { useTitle } from "@common/useTitle";
+import { useTitle } from "@common/hooks/useTitle";
 
 import ColorPicker from "@components/ColorPicker/ColorPicker";
 import FileUploader from "@components/FileUploader/FileUploader";

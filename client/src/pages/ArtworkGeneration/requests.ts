@@ -3,7 +3,8 @@ import { NavigateFunction } from "react-router-dom";
 import { is2xxSuccessful, sendRequest } from "@common/requests";
 import { hideSpinner, showSpinner } from "@common/spinner";
 import { sendToast } from "@common/toast";
-import { ApiResponse, ItunesImageRequest, ItunesRequest, ItunesResponse, ItunesResult, StateSetter, YoutubeRequest } from "@common/types";
+import { ApiResponse, StateSetter } from "@common/types";
+import { ItunesImageRequest, ItunesRequest, ItunesResponse, ItunesResult, YoutubeRequest } from "@pages/ArtworkGeneration/types";
 
 import { ITUNES } from "@constants/ArtworkGeneration";
 import { API, BACKEND_URL, VIEW_PATHS } from "@constants/paths";

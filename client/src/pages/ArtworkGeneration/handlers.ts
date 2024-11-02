@@ -2,8 +2,9 @@ import { FormEvent, TransitionStartFunction } from "react";
 import { NavigateFunction } from "react-router-dom";
 
 import { sendToast } from "@common/toast";
-import { FileUploadRequest, ItunesRequest, ItunesResult, StateSetter, YoutubeRequest } from "@common/types";
+import { StateSetter } from "@common/types";
 import { isFileExtensionAccepted } from "@common/utils/fileUtils";
+import { FileUploadRequest, ItunesRequest, ItunesResult, YoutubeRequest } from "@pages/ArtworkGeneration/types";
 
 import { FILE_UPLOAD } from "@constants/ArtworkGeneration";
 import { TOAST, TOAST_TYPE } from "@constants/toasts";
@@ -11,10 +12,17 @@ import { TOAST, TOAST_TYPE } from "@constants/toasts";
 import { postFileUpload, postItunesResult, postItunesSearch, postYoutubeUrl } from "./requests";
 import { isValidYoutubeUrl } from "./utils";
 
-export type StateHook<T> = [T, StateSetter<T>];
+export type HandleSubmitArtworkGenerationProps = {
+  isProcessingLoading: boolean;
+  setIsProcessingLoading: StateSetter<boolean>;
+  navigate: NavigateFunction;
+};
 
-export const handleSubmitItunesImage = (item: ItunesResult, key: number, processingLoadingState: StateHook<boolean>, navigate: NavigateFunction) => {
-  const [isProcessingLoading, setIsProcessingLoading] = processingLoadingState;
+export const handleSubmitItunesImage = (
+  item: ItunesResult, key: number,
+  props: HandleSubmitArtworkGenerationProps
+) => {
+  const { isProcessingLoading, setIsProcessingLoading, navigate } = props;
 
   if (isProcessingLoading) {
     sendToast(TOAST.PROCESSING_IN_PROGRESS, TOAST_TYPE.WARN);
@@ -28,23 +36,46 @@ export const handleSubmitItunesImage = (item: ItunesResult, key: number, process
   postItunesResult(body, key, {setIsProcessingLoading, navigate});
 };
 
-export const handleSubmitItunesSearch = (e: FormEvent<HTMLFormElement> | undefined, body: ItunesRequest, setItunesResults: StateSetter<ItunesResult[]>) => {
+type HandleSubmitItunesSearchProps = {
+  setItunesResults: StateSetter<ItunesResult[]>;
+};
+
+export const handleSubmitItunesSearch = (
+  e: FormEvent<HTMLFormElement> | undefined, body: ItunesRequest,
+  props: HandleSubmitItunesSearchProps
+) => {
+  const { setItunesResults } = props;
+
   e?.preventDefault();
 
   postItunesSearch(body, {setItunesResults});
 };
 
-export const handleChangeTerm = (value: string, country: string, setTerm: StateSetter<string>, startItunesSearch: TransitionStartFunction, setItunesResults: StateSetter<ItunesResult[]>) => {
+type HandleChangeTermProps = {
+  setTerm: StateSetter<string>;
+  startItunesSearch: TransitionStartFunction;
+  setItunesResults: StateSetter<ItunesResult[]>;
+};
+
+export const handleChangeTerm = (
+  value: string, country: string,
+  props: HandleChangeTermProps
+) => {
+  const { setTerm, startItunesSearch, setItunesResults } = props;
+
   setTerm(value);
 
   if (value && (value.length > 7 || (value?.length > 5 && value?.includes(" "))))
     startItunesSearch(() => {
-      handleSubmitItunesSearch(undefined, {term: value, country}, setItunesResults);
+      handleSubmitItunesSearch(undefined, {term: value, country}, { setItunesResults });
     });
 };
 
-export const handleSubmitFileUpload = (e: FormEvent<HTMLFormElement>, body: FileUploadRequest, processingLoadingState: StateHook<boolean>, navigate: NavigateFunction) => {
-  const [isProcessingLoading, setIsProcessingLoading] = processingLoadingState;
+export const handleSubmitFileUpload = (
+  e: FormEvent<HTMLFormElement>, body: FileUploadRequest,
+  props: HandleSubmitArtworkGenerationProps
+) => {
+  const { isProcessingLoading, setIsProcessingLoading, navigate } = props;
 
   e.preventDefault();
 
@@ -75,8 +106,11 @@ export const handleSubmitFileUpload = (e: FormEvent<HTMLFormElement>, body: File
   postFileUpload(formData, {setIsProcessingLoading, navigate});
 };
 
-export const handleSubmitYoutubeUrl = (e: FormEvent<HTMLFormElement>, body: YoutubeRequest, processingLoadingState: StateHook<boolean>, navigate: NavigateFunction) => {
-  const [isProcessingLoading, setIsProcessingLoading] = processingLoadingState;
+export const handleSubmitYoutubeUrl = (
+  e: FormEvent<HTMLFormElement>, body: YoutubeRequest,
+  props: HandleSubmitArtworkGenerationProps
+) => {
+  const { isProcessingLoading, setIsProcessingLoading, navigate } = props;
 
   e.preventDefault();
 

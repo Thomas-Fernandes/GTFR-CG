@@ -1,13 +1,12 @@
 import { useState } from "react";
 
-import { LyricsPartType } from "@common/types";
-
 import { AutoResizeTextarea } from "@components/AutoResizeTextarea/AutoResizeTextarea";
 
 import { SPINNER_ID } from "@constants/spinners";
 
 import { useLyricsContext } from "./context";
 import { handleLyricsSaveSubmit, handleSetLyricsParts } from "./handlers";
+import { LyricsPartType } from "./types";
 import { convertToCardContents } from "./utils";
 
 import "./LyricsPartsForm.css";

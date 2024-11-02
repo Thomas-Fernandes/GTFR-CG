@@ -1,7 +1,5 @@
-
-import { LyricsPartType, PageMetadata } from "@common/types";
-
 import { useLyricsContext } from "./context";
+import { LyricsPartType, PageMetadata } from "./types";
 
 const GenerationModeFlipper = (): JSX.Element => {
   const { setLyricsParts, setPageMetadata, artist, songName, isManual, setIsManual } = useLyricsContext();

@@ -2,11 +2,14 @@ import { FormEvent } from "react";
 import { NavigateFunction } from "react-router-dom";
 
 import { sendToast } from "@common/toast";
-import { LyricsContents, LyricsPartType, LyricsRequest, PageMetadata, SongPartsCards, StateSetter } from "@common/types";
+import { StateSetter } from "@common/types";
 
 import { TOAST, TOAST_TYPE } from "@constants/toasts";
 
+import { SongPartsCards } from "@pages/CardsGeneration/types";
+
 import { postLyricsSave, postLyricsSearch } from "./requests";
+import { LyricsContents, LyricsPartType, LyricsRequest, PageMetadata } from "./types";
 
 type HandleLyricsSaveSubmitProps = {
   isSavingCardsContent: boolean;

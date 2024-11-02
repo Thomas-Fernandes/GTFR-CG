@@ -1,12 +1,13 @@
 import { JSX, useState } from "react";
 
+import { StateSetter } from "@common/types";
+
 import { PROCESSED_ARTWORKS_PATH } from "@constants/paths";
 import { DEFAULT_SELECTED_POSITION, LOGO_POSITIONS } from "@constants/thumbnails";
 
 import { handleSubmitDownloadImage } from "./handlers";
 import { processImageName } from "./utils";
 
-import { StateSetter } from "@/common/types";
 import "./ThumbnailGallery.css";
 
 export type ThumbnailOptionProps = {

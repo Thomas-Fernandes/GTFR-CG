@@ -1,14 +1,17 @@
 import { JSX, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { useTitle } from "@common/hooks/useTitle";
 import { is2xxSuccessful, objectToQueryString, sendRequest } from "@common/requests";
 import { dismissToast, sendToast } from "@common/toast";
-import { ItunesResponse, LyricsResponse, StateSetter } from "@common/types";
-import { useTitle } from "@common/useTitle";
+import { StateSetter } from "@common/types";
+import { ItunesResponse } from "@pages/ArtworkGeneration/types";
 
 import { TITLE } from "@constants/browser";
 import { API, BACKEND_URL, ITUNES_URL, VIEW_PATHS } from "@constants/paths";
 import { TOAST_TYPE } from "@constants/toasts";
+
+import { LyricsResponse } from "@pages/Lyrics/types";
 
 import { TestResult } from "./Test";
 import { TestsBoard } from "./TestsBoard";
