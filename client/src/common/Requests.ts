@@ -13,9 +13,7 @@ export const is2xxSuccessful = (status: number): boolean => {
 export const sendRequest = async (method: HttpMethod, url: string, body?: unknown) => {
   const requestHeaders = body instanceof FormData
     ? {}
-    : {
-      "Content-Type": "application/json",
-    };
+    : { "Content-Type": "application/json" };
   const requestBody = body instanceof FormData ? body : JSON.stringify(body);
   let response: Response;
 
@@ -46,7 +44,7 @@ export const sendRequest = async (method: HttpMethod, url: string, body?: unknow
   return await response.json();
 }
 
-export const objectToQueryString = (obj: Record<string, unknown>): string => {
+export const objectToQueryString = (obj: Record<string, unknown>): string => { // TODO remove this when backend unit tests are implemented
   const finalObj: Record<string, string> = {};
   for (const key in obj)
     if (obj[key] !== undefined && obj[key] !== null)

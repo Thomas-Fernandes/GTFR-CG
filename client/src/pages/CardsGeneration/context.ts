@@ -1,7 +1,7 @@
 import { createNewContext } from "@common/contextProvider";
 import { StateSetter } from "@common/types";
 
-import { CardData } from "./interfaces";
+import { CardData } from "./types";
 
 export interface CardsGalleryContextType {
   setIsModalOpen: StateSetter<boolean>;

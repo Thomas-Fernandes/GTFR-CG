@@ -16,6 +16,7 @@ import ItunesImageGallery from "./ItunesImageGallery";
 import { ArtworkGenerationContext } from "./context";
 import { handleChangeTerm, handleSubmitFileUpload, handleSubmitItunesImage, handleSubmitItunesSearch, handleSubmitYoutubeUrl } from "./handlers";
 
+import Checkbox from "@/components/Checkbox/Checkbox";
 import "./ArtworkGeneration.css";
 
 const ArtworkGeneration = (): JSX.Element => {
@@ -85,13 +86,11 @@ const ArtworkGeneration = (): JSX.Element => {
         >
           <div className="flexbox">
             <FileUploader id="background-image" label="Select background image" accept="image/*" setter={setLocalFile} />
-            <label className="checkbox" htmlFor="include_center_artwork">
-              <input
-                type="checkbox" name="include_center_artwork" id="include_center_artwork" defaultChecked
-                onChange={(e) => setIncludeCenterArtwork(e.target.checked)}
-              />
-              <p className="checkbox-label italic">Include center artwork</p>
-            </label>
+            <Checkbox
+              id="include_center_artwork" label="Include center artwork"
+              defaultChecked={includeCenterArtwork}
+              onChange={(e) => setIncludeCenterArtwork(e.target.checked)}
+            />
             <div className="action-button" id={SPINNER_ID.FILE_UPLOAD}>
               <input type="submit" value="UPLOAD" className="action-button" />
             </div>

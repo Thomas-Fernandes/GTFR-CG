@@ -270,33 +270,6 @@ input[type="file"] {
         color: #ffffff;
     }
 }
-.checkbox {
-    align-items: center;
-    flex-direction: row;
-    gap: .5rem;
-
-    &:hover {
-        cursor: pointer;
-        font-weight: bold;
-    }
-
-    input[type="checkbox"] {
-        margin: 0 auto;
-        transform: scale(1.5);
-        accent-color: #007BFF;
-        transition: 0.5s;
-
-        &:hover {
-            accent-color: #0056b3;
-            cursor: pointer;
-        }
-    }
-
-    p.checkbox-label {
-        font-size: 14px;
-        margin: 0;
-    }
-}
 
 .flexbox {
     justify-content: center;

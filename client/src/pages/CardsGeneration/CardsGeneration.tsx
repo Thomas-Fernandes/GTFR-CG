@@ -2,6 +2,7 @@ import { JSX, useEffect, useState } from "react";
 
 import { useTitle } from "@common/hooks/useTitle";
 
+import Checkbox from "@/components/Checkbox/Checkbox";
 import ColorPicker from "@components/ColorPicker/ColorPicker";
 import FileUploader from "@components/FileUploader/FileUploader";
 import NavButton from "@components/NavButton";
@@ -14,7 +15,7 @@ import { SPINNER_ID } from "@constants/spinners";
 
 import CardsGallery from "./CardsGallery";
 import { handleGenerateCards, handleUnauthorizedCheckbox } from "./handlers";
-import { CardData } from "./interfaces";
+import { CardData } from "./types";
 
 import "./CardsGeneration.css";
 
@@ -88,31 +89,24 @@ const CardsGeneration = (): JSX.Element => {
         </div>
         <div id="selectors" className="settings flexbox flex-row">
           { bgImg &&
-            <label className="checkbox" htmlFor="include_center_artwork">
-              <input
-                type="checkbox" name="include_center_artwork" id="include_center_artwork" defaultChecked
-                onChange={(e) => setIncludeCenterArtwork(e.target.checked)}
-              />
-              <p className="checkbox-label italic">Include center artwork</p>
-            </label>
-          }
-          <div onClick={() => handleUnauthorizedCheckbox(cardMethod)}>
-            <label className="checkbox" htmlFor="generate_outro">
-              <input
-                type="checkbox" name="generate_outro" id="generate_outro" defaultChecked={cardMethod === "auto"}
-                disabled={cardMethod === "manual"}
-                onChange={(e) => setGenerateOutro(e.target.checked)}
-              />
-            <p className="checkbox-label italic">Generate outro image</p>
-          </label>
-          </div>
-          <label className="checkbox" htmlFor="include_background">
-            <input
-              type="checkbox" name="include_background" id="include_background" defaultChecked
-              onChange={(e) => setIncludeBackgroundImg(e.target.checked)}
+            <Checkbox
+              id="include_center_artwork" label="Include center artwork"
+              defaultChecked={includeCenterArtwork}
+              onChange={(e) => setIncludeCenterArtwork(e.target.checked)}
             />
-            <p className="checkbox-label italic">Include background image</p>
-          </label>
+          }
+          <div onClick={() => cardMethod === "manual" && handleUnauthorizedCheckbox()}>
+            <Checkbox
+              id="generate_outro" label="Generate outro image"
+              defaultChecked={cardMethod === "auto"} disabled={cardMethod === "manual"}
+              onChange={(e) => setGenerateOutro(e.target.checked)}
+            />
+          </div>
+          <Checkbox
+            id="include_background" label="Include background image"
+            defaultChecked={includeBackgroundImg}
+            onChange={(e) => setIncludeBackgroundImg(e.target.checked)}
+          />
         </div>
 
         <div className="action-button" id={SPINNER_ID.CARDS_GENERATE}>

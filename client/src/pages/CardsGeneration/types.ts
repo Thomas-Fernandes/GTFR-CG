@@ -1,7 +1,5 @@
 import { ApiResponse, StateSetter } from "@common/types";
 
-import { CardData } from "./interfaces";
-
 export type GenerationProps = {
   cardMetaname: string;
   bgImg: File | undefined;
@@ -12,6 +10,12 @@ export type GenerationProps = {
 
   cardBottomColor: string;
 };
+
+export type CardData = {
+  id: number;
+  lyrics: string;
+  src: string; // Img source path
+}
 
 export type HandleSaveModalProps = {
   generationProps: GenerationProps;
@@ -57,7 +61,6 @@ export type SingleCardGenerationRequest = CardsGenerationRequest & {
   cardsContents: string[];
   cardFilename: string;
 };
-
 export type GenerateSingleCardProps = {
   currentCard: CardData;
   setCards: StateSetter<CardData[]>;

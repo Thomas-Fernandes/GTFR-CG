@@ -3,9 +3,8 @@ import React, { useMemo, useRef, useState } from "react";
 import CardEditModal from "./CardEditModal";
 import CardView from "./CardView";
 import { CardsGalleryContext } from "./context";
-import { CardData } from "./interfaces";
 import { handleMouseDown, handleMouseUp } from "./mouse";
-import { CardsGalleryProps } from "./types";
+import { CardData, CardsGalleryProps } from "./types";
 
 import "./CardsGallery.css";
 

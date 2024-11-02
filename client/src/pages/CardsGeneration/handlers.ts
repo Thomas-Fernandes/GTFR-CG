@@ -9,9 +9,8 @@ import { FILE_UPLOAD } from "@constants/ArtworkGeneration";
 import { SPINNER_ID } from "@constants/spinners";
 import { TOAST, TOAST_TYPE } from "@constants/toasts";
 
-import { CardData } from "./interfaces";
 import { postGenerateCards, postGenerateSingleCard } from "./requests";
-import { CardsGenerationRequest, HandleGenerateCardsProps, HandleSaveModalProps } from "./types";
+import { CardData, CardsGenerationRequest, HandleGenerateCardsProps, HandleSaveModalProps } from "./types";
 import { generateFormData } from "./utils";
 
 export const handleSaveModal = (
@@ -93,7 +92,6 @@ export const handleGenerateCards = (
   postGenerateCards(body, formData, { setGenerationInProgress, setCardPaths, setCards, setColorPick });
 };
 
-export const handleUnauthorizedCheckbox = (cardMethod: string) => {
-  if (cardMethod === "manual")
-    sendToast(TOAST.UNAUTHORIZED_OUTRO, TOAST_TYPE.WARN);
+export const handleUnauthorizedCheckbox = () => {
+  sendToast(TOAST.UNAUTHORIZED_OUTRO, TOAST_TYPE.WARN);
 };

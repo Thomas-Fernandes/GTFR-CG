@@ -6,8 +6,7 @@ import { TOAST, TOAST_TYPE } from "@constants/toasts";
 
 import { useCardsGalleryContext } from "./context";
 import { handleSubmitDownloadCard } from "./handlers";
-import { CardData } from "./interfaces";
-import { CardViewProps } from "./types";
+import { CardData, CardViewProps } from "./types";
 
 import "./CardView.css";
 
