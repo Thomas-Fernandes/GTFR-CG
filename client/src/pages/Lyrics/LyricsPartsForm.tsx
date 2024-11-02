@@ -53,7 +53,7 @@ type LyricsPartsFormProps = {
   lyricsParts: LyricsPartType[];
 };
 
-const LyricsPartsForm: React.FC<LyricsPartsFormProps> = ({lyricsParts}): JSX.Element => {
+const LyricsPartsForm: React.FC<LyricsPartsFormProps> = ({ lyricsParts }): JSX.Element => {
   const { dismissedParts, pageMetadata, isManual, navigate } = useLyricsContext();
 
   const [isSavingCardsContent, setIsSavingCardsContent] = useState(false);

@@ -11,6 +11,7 @@ import { TOAST, TOAST_TYPE } from "@constants/toasts";
 
 import { AutoResizeTextarea } from "@components/AutoResizeTextarea/AutoResizeTextarea";
 
+import { GenerationProps } from "./CardsGallery";
 import { useCardsGalleryContext } from "./context";
 import { CardData } from "./interfaces";
 import { handleOverlayClick } from "./mouse";
@@ -18,22 +19,11 @@ import { generateFormData } from "./utils";
 
 import "./CardsGallery.css";
 
-type GenerationProps = {
-  cardMetaname: string;
-  bgImg: File | undefined;
-  colorPick: string;
-  includeCenterArtwork: boolean | undefined;
-  generateOutro: boolean;
-  includeBackgroundImg: boolean;
-
-  cardBottomColor: string;
-};
-
-type Props = {
+type CardEditModalProps = {
   generationProps: GenerationProps;
 };
 
-const CardEditModal: React.FC<Props> = ({ generationProps }) => {
+const CardEditModal: React.FC<CardEditModalProps> = ({ generationProps }) => {
   const { setIsModalOpen, currentCard, newLyrics, setNewLyrics, setCards } = useCardsGalleryContext();
 
   const [isModalSaving, setIsModalSaving] = useState(false);

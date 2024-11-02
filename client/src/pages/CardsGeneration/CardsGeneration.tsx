@@ -13,7 +13,7 @@ import { VIEW_PATHS } from "@constants/paths";
 import { SPINNER_ID } from "@constants/spinners";
 
 import CardsGallery from "./CardsGallery";
-import { handleGenerateCards, handleSubmitDownloadCard, handleUnauthorizedCheckbox } from "./handlers";
+import { handleGenerateCards, handleUnauthorizedCheckbox } from "./handlers";
 import { CardData } from "./interfaces";
 
 import "./CardsGeneration.css";
@@ -126,7 +126,7 @@ const CardsGeneration = (): JSX.Element => {
 
           <ZipDownloadButton id="download-all" paths={cardPaths} output={"cards.zip"} />
           <CardsGallery
-            id="cards" initialCards={cards} handleDownloadCard={handleSubmitDownloadCard}
+            id="cards" initialCards={cards}
             generationProps={{
               cardMetaname, bgImg, colorPick, includeCenterArtwork, generateOutro, includeBackgroundImg, cardBottomColor,
             }}

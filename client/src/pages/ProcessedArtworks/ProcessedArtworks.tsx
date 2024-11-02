@@ -1,4 +1,4 @@
-import { JSX, useEffect, useMemo, useState } from "react";
+import { JSX, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useTitle } from "@common/useTitle";
@@ -9,11 +9,9 @@ import ToastContainer from "@components/ToastContainer/ToastContainer";
 
 import { TITLE } from "@constants/browser";
 import { COVER_ART_FILENAME, PROCESSED_ARTWORKS_PATH, VIEW_PATHS } from "@constants/paths";
-import { DEFAULT_SELECTED_POSITION } from "@constants/thumbnails";
 import { TOAST } from "@constants/toasts";
 
 import BackgroundImageDisplay from "./BackgroundImageDisplay";
-import { ProcessedArtworksContext } from "./context";
 import ThumbnailGallery from "./ThumbnailGallery";
 
 import "./ProcessedArtworks.css";
@@ -22,12 +20,6 @@ const ProcessedArtworks = (): JSX.Element => {
   useTitle(TITLE.PROCESSED_ARTWORKS);
 
   const navigate = useNavigate();
-
-  const [selectedThumbnail, setSelectedThumbnail] = useState(DEFAULT_SELECTED_POSITION);
-  const contextValue = useMemo(
-    () => ({ selectedThumbnail, setSelectedThumbnail }),
-    [selectedThumbnail, setSelectedThumbnail]
-  );
 
   useEffect(() => {
     doesFileExist(PROCESSED_ARTWORKS_PATH + "/" + COVER_ART_FILENAME).then((anyProcessedImageExists: boolean) => {
@@ -53,10 +45,7 @@ const ProcessedArtworks = (): JSX.Element => {
 
       <div id="image-panels">
         <BackgroundImageDisplay />
-
-        <ProcessedArtworksContext.Provider value={contextValue}>
-          <ThumbnailGallery />
-        </ProcessedArtworksContext.Provider>
+        <ThumbnailGallery />
       </div>
 
       <span className="top-bot-spacer" />

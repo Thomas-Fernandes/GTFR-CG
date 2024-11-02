@@ -1,18 +1,18 @@
-import React, { FormEvent, useMemo, useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 
 import { sendToast } from "@common/toast";
-import { ImageDownloadRequest } from "@common/types";
 
 import { TOAST, TOAST_TYPE } from "@constants/toasts";
 
 import CardEditModal from "./CardEditModal";
 import { CardsGalleryContext } from "./context";
+import { handleSubmitDownloadCard } from "./handlers";
 import { CardData } from "./interfaces";
 import { handleMouseDown, handleMouseUp } from "./mouse";
 
 import "./CardsGallery.css";
 
-type GenerationProps = {
+export type GenerationProps = {
   cardMetaname: string;
   bgImg: File | undefined;
   colorPick: string;
@@ -23,14 +23,13 @@ type GenerationProps = {
   cardBottomColor: string;
 };
 
-type Props = {
+type CardsGalleryProps = {
   id: string;
   initialCards: CardData[];
-  handleDownloadCard: (e: FormEvent<HTMLFormElement> | undefined, body: ImageDownloadRequest) => void;
   generationProps: GenerationProps;
 };
 
-const CardsGallery: React.FC<Props> = ({ id, initialCards, handleDownloadCard, generationProps }) => {
+const CardsGallery: React.FC<CardsGalleryProps> = ({ id, initialCards, generationProps }) => {
   const [cards, setCards] = useState<CardData[]>(initialCards);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -67,7 +66,7 @@ const CardsGallery: React.FC<Props> = ({ id, initialCards, handleDownloadCard, g
         <div onClick={() => openModal(card, shortCardFileName)}>
           <img src={card.src} alt={card.lyrics} className="gallery-card" />
         </div>
-        <form onSubmit={(e) => handleDownloadCard(e, {selectedImage: card.src})}>
+        <form onSubmit={(e) => handleSubmitDownloadCard(e, {selectedImage: card.src})}>
           <input type="submit" value={"Download " + shortCardFileName} className="button" />
         </form>
       </div>
