@@ -105,21 +105,11 @@ hr {
     width: 80%;
     box-shadow: 0 0 2px 0.1px #000000;
 
-    &.w-80 {
-        width: calc(80% * 4/5);
-    }
-    &.w-66 {
-        width: calc(80% * 2/3);
-    }
-    &.w-50 {
-        width: calc(80% * 1/2);
-    }
-    &.w-33 {
-        width: calc(80% * 1/3);
-    }
-    &.w-25 {
-        width: calc(80% * 1/4);
-    }
+    &.w-80 { width: calc(80% * 4/5); }
+    &.w-66 { width: calc(80% * 2/3); }
+    &.w-50 { width: calc(80% * 1/2); }
+    &.w-33 { width: calc(80% * 1/3); }
+    &.w-25 { width: calc(80% * 1/4); }
 
     @-moz-document url-prefix() { /* Firefox only supports half-pixels */
         box-shadow: 0 0 2px 0.5px #000000; /* significantly thicker */
@@ -334,22 +324,3 @@ input[type="file"] {
 .t-green { color: #007f00; }
 .t-yellow { color: #7f7f00; }
 .t-red { color: #7f0000; }
-
-.btn-remove {
-    cursor: pointer;
-    padding: .25rem;
-    margin-bottom: .2rem;
-    border: none;
-
-    background: none;
-    box-shadow: none;
-
-    color: #ffffff;
-    font-size: larger;
-    transition: all .01s;
-
-    &:hover {
-        color: #ff0000;
-        background: none;
-    }
-}

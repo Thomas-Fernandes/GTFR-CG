@@ -2,6 +2,8 @@ import React, { useState } from "react";
 
 import { sendToast } from "@common/toast";
 
+import ButtonRemove from "@components/ButtonRemove/ButtonRemove";
+
 import { TOAST, TOAST_TYPE } from "@constants/toasts";
 
 import "./ColorPicker.css";
@@ -81,11 +83,7 @@ const ColorPicker: React.FC<Props> = ({ id, latest, label, labelClassName, sette
             >
               {selectedColor}
             </p>
-            <button type="button" className="btn-remove"
-              onClick={() => handleColorChange(null)}
-            >
-              <span className="btn-remove--cross">{"✖"}</span>
-            </button>
+            <ButtonRemove onClick={() => handleColorChange(null)} />
           </div></>
         }
       </div>

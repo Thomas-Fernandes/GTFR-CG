@@ -1,6 +1,6 @@
 import { RefObject } from "react";
 
-import { StateSetter } from "@/common/types";
+import { StateSetter } from "@common/types";
 
 export type TestsBoardProps = {
   id?: string;

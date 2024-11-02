@@ -2,6 +2,8 @@ import React, { useState } from "react";
 
 import { StateSetter } from "@common/types";
 
+import ButtonRemove from "@components/ButtonRemove/ButtonRemove";
+
 import "./FileUploader.css";
 
 type Props = {
@@ -65,11 +67,7 @@ const FileUploader: React.FC<Props> = ({ id, label, caption, accept, labelClassN
         </p>
       </div>
       { selectedFileName &&
-        <button type="button" className="btn-remove"
-          onClick={() => handleFileChange(null)}
-        >
-          <span className="btn-remove--cross">{"✖"}</span>
-        </button>
+        <ButtonRemove onClick={() => handleFileChange(null)} />
       }
     </div>
   );
