@@ -86,9 +86,9 @@ def getExpirationTimestamp(filetype: CachedElemType, session: Config) -> int:
 
     expiration_time: int = 0
     match filetype:
-        case "sessions":
+        case const.AvailableCacheElemType.sessions.value:
             expiration_time = const.TimeInSeconds.DAY.value
-        case "images" | "cards":
+        case const.AvailableCacheElemType.artworks.value | const.AvailableCacheElemType.cards.value:
             if const.SessionFields.user_folder.value in session: # user is still logged in
                 expiration_time = 2 * const.TimeInSeconds.HOUR.value
             else: # user has logged out

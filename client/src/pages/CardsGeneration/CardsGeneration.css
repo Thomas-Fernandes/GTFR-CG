@@ -55,11 +55,11 @@
         .card {
             border: .1rem solid #dddddd;
             border-radius: .5rem;
-            padding: 1rem;
+            padding: .5rem;
 
             input[type="submit"] {
                 margin: auto;
-                margin-top: .5rem;
+                margin-top: .25rem;
                 width: 80%;
             }
         }

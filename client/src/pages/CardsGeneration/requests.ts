@@ -1,7 +1,7 @@
 import { is2xxSuccessful, sendRequest } from "@common/requests";
 import { hideSpinner, showSpinner } from "@common/spinner";
 import { sendToast } from "@common/toast";
-import { ApiResponse, CardsGenerationRequest, CardsGenerationResponse, StateSetter } from "@common/types";
+import { ApiResponse, CardsGenerationRequest, CardsGenerationResponse, SingleCardGenerationRequest, StateSetter } from "@common/types";
 
 import { SESSION_STORAGE } from "@constants/browser";
 import { API, BACKEND_URL, PROCESSED_CARDS_PATH } from "@constants/paths";
@@ -9,9 +9,54 @@ import { HTTP_STATUS } from "@constants/requests";
 import { SPINNER_ID } from "@constants/spinners";
 import { TOAST, TOAST_TYPE } from "@constants/toasts";
 
-import { CardData } from "@pages/CardsGeneration/CardsGallery";
+import { CardData } from "./interfaces";
+import { deduceNewCards, generateFormData, updateCard } from "./utils";
 
-import { deduceNewCards } from "./utils";
+type GenerateSingleCardProps = {
+  currentCard: CardData;
+  setCards: StateSetter<CardData[]>;
+  setIsModalSaving: StateSetter<boolean>;
+  closeModal: () => void;
+};
+
+export const postGenerateSingleCard = (
+  generationProps: CardsGenerationRequest, newLyrics: string,
+  props: GenerateSingleCardProps
+) => {
+  const { setIsModalSaving, currentCard, setCards, closeModal } = props;
+
+  setIsModalSaving(true);
+  showSpinner(SPINNER_ID.CARDS_GENERATE_SINGLE);
+
+  const cardFilename = currentCard.src.split('?')[0] ?? "card";
+  const body: SingleCardGenerationRequest = {
+    ...generationProps,
+    cardsContents: newLyrics.split("\n"),
+    cardFilename: cardFilename,
+  }
+  const formData = new FormData();
+  generateFormData(body, formData);
+
+  sendRequest("POST", BACKEND_URL + API.CARDS_GENERATION.GENERATE_SINGLE_CARD, formData).then((response: ApiResponse) => {
+    if (!is2xxSuccessful(response.status)) {
+      console.error(response.message);
+      sendToast(response.message, TOAST_TYPE.ERROR);
+      return;
+    }
+
+    updateCard(setCards, currentCard, newLyrics, cardFilename);
+
+    const toastMsg = TOAST.CARD_EDITED + `: ${(currentCard.id < 10 ? "0" : "")}${currentCard.id}.png`;
+    sendToast(toastMsg, TOAST_TYPE.SUCCESS);
+  }).catch((error) => {
+    console.error("Failed to upload text:", error);
+    sendToast(TOAST.CARD_EDIT_FAILED, TOAST_TYPE.ERROR);
+  }).finally(() => {
+    hideSpinner(SPINNER_ID.CARDS_GENERATE_SINGLE);
+    setIsModalSaving(false);
+    closeModal();
+  });
+};
 
 type GenerateCardsProps = {
   setGenerationInProgress: StateSetter<boolean>;
@@ -19,6 +64,7 @@ type GenerateCardsProps = {
   setCards: StateSetter<CardData[]>;
   setColorPick: StateSetter<string>;
 };
+
 export const postGenerateCards = (
   body: CardsGenerationRequest, formData: FormData,
   props: GenerateCardsProps

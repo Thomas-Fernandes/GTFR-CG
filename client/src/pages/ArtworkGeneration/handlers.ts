@@ -36,9 +36,11 @@ export const handleSubmitItunesSearch = (e: FormEvent<HTMLFormElement> | undefin
 
 export const handleChangeTerm = (value: string, country: string, setTerm: StateSetter<string>, startItunesSearch: TransitionStartFunction, setItunesResults: StateSetter<ItunesResult[]>) => {
   setTerm(value);
-  startItunesSearch(() => {
-    value && handleSubmitItunesSearch(undefined, {term: value, country}, setItunesResults);
-  });
+
+  if (value && (value.length > 7 || (value?.length > 5 && value?.includes(" "))))
+    startItunesSearch(() => {
+      handleSubmitItunesSearch(undefined, {term: value, country}, setItunesResults);
+    });
 };
 
 export const handleSubmitFileUpload = (e: FormEvent<HTMLFormElement>, body: FileUploadRequest, processingLoadingState: StateHook<boolean>, navigate: NavigateFunction) => {

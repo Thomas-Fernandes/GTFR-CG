@@ -1,6 +1,18 @@
-import { CardsGenerationRequest, SingleCardGenerationRequest, SongPartsCards } from "@common/types";
+import { CardsGenerationRequest, SingleCardGenerationRequest, SongPartsCards, StateSetter } from "@common/types";
 
-import { CardData } from "@pages/CardsGeneration/CardsGallery";
+import { CardData } from "./interfaces";
+
+export const updateCard = (setCards: StateSetter<CardData[]>, currentCard: CardData, newLyrics: string, cardFilename: string) => {
+  setCards((prevCards) =>
+    prevCards.map((img) => img.id === currentCard.id // update only the card that was edited
+      ? {
+        id: img.id,
+        lyrics: newLyrics,
+        src: `${cardFilename}?t=${Date.now()}` // busting cached image with the same name thanks to timestamp
+      } : img
+    )
+  );
+};
 
 export const deduceNewCards = (paths: string[], cardsLyrics: SongPartsCards, hasOutro: boolean): CardData[] => {
   return paths.map((path, idx) => ({

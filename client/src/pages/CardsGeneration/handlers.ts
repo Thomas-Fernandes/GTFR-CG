@@ -9,10 +9,40 @@ import { FILE_UPLOAD } from "@constants/ArtworkGeneration";
 import { SPINNER_ID } from "@constants/spinners";
 import { TOAST, TOAST_TYPE } from "@constants/toasts";
 
-import { CardData } from "@pages/CardsGeneration/CardsGallery";
-
-import { postGenerateCards } from "./requests";
+import { GenerationProps } from "./CardsGallery";
+import { CardData } from "./interfaces";
+import { postGenerateCards, postGenerateSingleCard } from "./requests";
 import { generateFormData } from "./utils";
+
+type HandleSaveModalProps = {
+  generationProps: GenerationProps;
+  newLyrics: string;
+  generateSingleCardProps: {
+    currentCard: CardData;
+    setCards: StateSetter<CardData[]>;
+    setIsModalSaving: StateSetter<boolean>;
+    closeModal: () => void;
+  }
+};
+
+export const handleSaveModal = (
+  currentCard: CardData | null, isModalSaving: boolean,
+  props: HandleSaveModalProps
+) => {
+  const { generationProps, newLyrics, generateSingleCardProps } = props;
+
+  if (currentCard === null) {
+    sendToast(TOAST.CARD_EDIT_FAILED, TOAST_TYPE.ERROR);
+    return;
+  }
+
+  if (isModalSaving) {
+    sendToast(TOAST.CARD_EDIT_IN_PROGRESS, TOAST_TYPE.WARN);
+    return;
+  }
+
+  postGenerateSingleCard(generationProps, newLyrics, generateSingleCardProps);
+};
 
 export const handleSubmitDownloadCard = (e: FormEvent<HTMLFormElement> | undefined, body: ImageDownloadRequest) => {
   e?.preventDefault();

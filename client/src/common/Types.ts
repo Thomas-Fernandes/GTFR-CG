@@ -19,7 +19,6 @@ export type CardsGenerationRequest = {
   includeBackgroundImg: boolean;
 };
 export type SingleCardGenerationRequest = CardsGenerationRequest & {
-  outroContributors?: string;
   cardsContents: string[];
   cardFilename: string;
 };

@@ -67,11 +67,10 @@ const Home = (): JSX.Element => {
       <StatisticsBoard stats={stats} />
 
       <div className="tests navbar">
-        <button type="button" onClick={() => navigate(VIEW_PATHS.tests)}>
-          <span className="right">{TITLE.TESTS}</span>
-        </button>
+        <NavButton to={VIEW_PATHS.tests} label={TITLE.TESTS} side="right" />
       </div>
-      <div className="hidden">
+
+      <div className="hidden"> {/* avoid unused variable */}
         <p>Genius Token: '{ geniusToken }'</p>
       </div>
 

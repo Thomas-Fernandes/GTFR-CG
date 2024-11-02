@@ -1,32 +1,32 @@
 .color-picker {
-  .color-picker--img {
-      margin-right: 1rem;
-      cursor: pointer;
-  }
+    .color-picker--img {
+        margin-right: 1rem;
+        cursor: pointer;
+    }
 
-  .color-picker--color {
-      width: 8rem;
-      height: 100%;
-      justify-content: center;
+    .color-picker--color {
+        width: 8rem;
+        height: 100%;
+        justify-content: center;
 
-      margin: 0 auto;
-      border: 2px solid #dddddd;
-      border-radius: .5rem;
+        margin: 0 auto;
+        border: 2px solid #dddddd;
+        border-radius: .5rem;
 
-      text-align: center;
-      letter-spacing: 0.2rem;
-  }
+        text-align: center;
+        letter-spacing: 0.2rem;
+    }
 
-  .color-picker--load-latest {
-      cursor: pointer;
-      font-size: smaller;
+    .color-picker--load-latest {
+        cursor: pointer;
+        font-size: smaller;
 
-      background-color: #8fbc8f;
-      color: #ffffff;
-      border-radius: .25rem;
+        background-color: #8fbc8f;
+        color: #ffffff;
+        border-radius: .25rem;
 
-      &:hover {
-          background-color: #0056b3;
-      }
-  }
+        &:hover {
+            background-color: #0056b3;
+        }
+    }
 }

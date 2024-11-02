@@ -1,13 +1,13 @@
 .lyrics-textarea {
-  width: 60%;
-  padding: 10px;
-  align-self: center;
-  text-wrap: nowrap;
-  background-image:
-    linear-gradient(to right,
-      transparent calc(0.92ch * 62),
-      lightgray calc(0.92ch * 62),
-      lightgray calc(0.92ch * 63),
-      transparent calc(0.92ch * 63)
-    );
+    width: 60%;
+    padding: 10px;
+    align-self: center;
+    text-wrap: nowrap;
+    background-image:
+        linear-gradient(to right,
+            transparent calc(0.92ch * 62),
+            lightgray calc(0.92ch * 62),
+            lightgray calc(0.92ch * 63),
+            transparent calc(0.92ch * 63)
+        );
 }

@@ -1,68 +1,13 @@
-.card-gallery {
-  .card-container {
-    text-align: center;
-    position: relative;
+#cards-generation {
+    .card-gallery {
+        .card-container {
+            text-align: center;
+            position: relative;
 
-    img, input {
-      cursor: pointer;
+            img, input {
+                cursor: pointer;
+                border-radius: .25rem;
+            }
+        }
     }
-  }
-
-  .gallery-card {
-    transition: transform 0.3s ease;
-
-    &:hover {
-      transform: scale(1.02);
-    }
-  }
-
-  .modal-overlay {
-    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; /* full view */
-
-    background-color: rgba(0, 0, 0, 0.7); /* dimmed background around overlay */
-
-    z-index: 9999;
-  }
-
-  .modal-content {
-    position: relative;
-    width: 70%;
-    padding: 2rem;
-    background-color: lightgray;
-    border-radius: .4rem;
-    box-shadow: 0 .2rem 1rem rgba(0, 0, 0, 0.1);
-  }
-
-  .modal-actions {
-    button {
-      width: -webkit-fill-available;
-      padding: .5rem 1rem;
-      border: none;
-
-      color: #ffffff;
-      font-size: .8rem;
-
-      border-radius: .25rem;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-
-      background-color: #007bff;
-      &:hover { background-color: #0056b3; }
-      &:last-child {
-        background-color: #d9534f;
-        &:hover { background-color: #c9302c; }
-      }
-      &:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-      }
-    }
-
-    #cards-generation_generate-single {
-      * { /* for spinner */
-        padding-left: 0 !important;
-      }
-    }
-  }
-
 }
