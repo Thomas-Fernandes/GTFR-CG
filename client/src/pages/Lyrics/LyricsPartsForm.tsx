@@ -6,20 +6,13 @@ import { SPINNER_ID } from "@constants/spinners";
 
 import { useLyricsContext } from "./context";
 import { handleLyricsSaveSubmit, handleSetLyricsParts } from "./handlers";
-import { LyricsPartType } from "./types";
+import { LyricsPartProps, LyricsPartsFormProps } from "./types";
 import { convertToCardContents } from "./utils";
 
 import "./LyricsPartsForm.css";
 
-type LyricsPartProps = {
-  key?: number;
-  part: LyricsPartType;
-  idx: number;
-};
-
-const LyricsPart: React.FC<LyricsPartProps> = ({key, part, idx}): JSX.Element => {
+const LyricsPart: React.FC<LyricsPartProps> = ({ part, idx }): JSX.Element => {
   const { lyricsParts, setLyricsParts, dismissedParts, setDismissedParts } = useLyricsContext();
-  key?.valueOf(); // unused
 
   return (
     <div key={"part_" + idx} className="lyrics-part">
@@ -46,10 +39,6 @@ const LyricsPart: React.FC<LyricsPartProps> = ({key, part, idx}): JSX.Element =>
       <hr className="w-66 mv-0" />
     </div>
   );
-};
-
-type LyricsPartsFormProps = {
-  lyricsParts: LyricsPartType[];
 };
 
 const LyricsPartsForm: React.FC<LyricsPartsFormProps> = ({ lyricsParts }): JSX.Element => {

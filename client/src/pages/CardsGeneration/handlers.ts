@@ -2,29 +2,17 @@ import { FormEvent } from "react";
 
 import { showSpinner } from "@common/spinner";
 import { sendToast } from "@common/toast";
-import { ImageDownloadRequest, StateSetter } from "@common/types";
+import { ImageDownloadRequest } from "@common/types";
 import { isFileExtensionAccepted } from "@common/utils/fileUtils";
 
 import { FILE_UPLOAD } from "@constants/ArtworkGeneration";
 import { SPINNER_ID } from "@constants/spinners";
 import { TOAST, TOAST_TYPE } from "@constants/toasts";
 
-import { GenerationProps } from "./CardsGallery";
 import { CardData } from "./interfaces";
 import { postGenerateCards, postGenerateSingleCard } from "./requests";
-import { CardsGenerationRequest } from "./types";
+import { CardsGenerationRequest, HandleGenerateCardsProps, HandleSaveModalProps } from "./types";
 import { generateFormData } from "./utils";
-
-type HandleSaveModalProps = {
-  generationProps: GenerationProps;
-  newLyrics: string;
-  generateSingleCardProps: {
-    currentCard: CardData;
-    setCards: StateSetter<CardData[]>;
-    setIsModalSaving: StateSetter<boolean>;
-    closeModal: () => void;
-  }
-};
 
 export const handleSaveModal = (
   currentCard: CardData | null, isModalSaving: boolean,
@@ -70,13 +58,6 @@ export const handleSubmitDownloadCard = (e: FormEvent<HTMLFormElement> | undefin
   }
 };
 
-type HandleGenerateCardsProps = {
-  generationInProgress: boolean;
-  setGenerationInProgress: StateSetter<boolean>;
-  setCardPaths: StateSetter<string[]>;
-  setCards: StateSetter<CardData[]>;
-  setColorPick: StateSetter<string>;
-};
 export const handleGenerateCards = (
   e: FormEvent<HTMLFormElement>, body: CardsGenerationRequest,
   props: HandleGenerateCardsProps

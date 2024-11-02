@@ -1,25 +1,14 @@
 import { FormEvent } from "react";
-import { NavigateFunction } from "react-router-dom";
 
 import { sendToast } from "@common/toast";
-import { StateSetter } from "@common/types";
 
 import { TOAST, TOAST_TYPE } from "@constants/toasts";
 
 import { SongPartsCards } from "@pages/CardsGeneration/types";
 
 import { postLyricsSave, postLyricsSearch } from "./requests";
-import { LyricsContents, LyricsPartType, LyricsRequest, PageMetadata } from "./types";
+import { HandleLoadLastContentsProps, HandleLyricsSaveSubmitProps, HandleLyricsSearchSubmitProps, HandleSetLyricsPartsProps, LyricsRequest } from "./types";
 
-type HandleLyricsSaveSubmitProps = {
-  isSavingCardsContent: boolean;
-  setIsSavingCardsContent: StateSetter<boolean>;
-  pageMetadata: PageMetadata;
-  isManual: boolean;
-  lyricsParts: LyricsPartType[];
-  dismissedParts: Set<number>;
-  navigate: NavigateFunction;
-};
 export const handleLyricsSaveSubmit = (
   e: FormEvent<HTMLFormElement>, body: SongPartsCards,
   props: HandleLyricsSaveSubmitProps
@@ -41,10 +30,6 @@ export const handleLyricsSaveSubmit = (
   postLyricsSave(data, { pageMetadata, isManual, lyricsParts, dismissedParts, navigate, setIsSavingCardsContent });
 };
 
-export type HandleSetLyricsPartsProps = {
-  lyricsParts: LyricsPartType[];
-  setLyricsParts: StateSetter<LyricsPartType[]>;
-};
 export const handleSetLyricsParts = (
   lyrics: string, idx: number,
   props: HandleSetLyricsPartsProps
@@ -55,12 +40,6 @@ export const handleSetLyricsParts = (
   setLyricsParts(updatedLyricsParts);
 };
 
-type HandleLyricsSearchSubmitProps = {
-  isFetching: boolean;
-  setIsFetching: StateSetter<boolean>;
-  setLyricsParts: StateSetter<LyricsPartType[]>;
-  setPageMetadata: StateSetter<PageMetadata>;
-};
 export const handleLyricsSearchSubmit = (
   e: FormEvent<HTMLFormElement>, body: LyricsRequest,
   props: HandleLyricsSearchSubmitProps
@@ -82,12 +61,6 @@ export const handleLyricsSearchSubmit = (
   postLyricsSearch(body, { setIsFetching, setLyricsParts, setPageMetadata });
 };
 
-type HandleLoadLastContentsProps = {
-  lastContents: LyricsContents;
-  setPageMetadata: StateSetter<PageMetadata>;
-  setLyricsParts: StateSetter<LyricsPartType[]>;
-  setDismissedParts: StateSetter<Set<number>>;
-};
 export const handleLoadLastContents = (
   props: HandleLoadLastContentsProps
 ) => {

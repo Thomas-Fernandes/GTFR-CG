@@ -13,8 +13,8 @@ import { TOAST_TYPE } from "@constants/toasts";
 
 import { LyricsResponse } from "@pages/Lyrics/types";
 
-import { TestResult } from "./Test";
 import { TestsBoard } from "./TestsBoard";
+import { TestResult } from "./types";
 
 import "./Tests.css";
 

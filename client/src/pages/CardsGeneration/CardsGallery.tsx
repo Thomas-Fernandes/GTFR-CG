@@ -5,25 +5,9 @@ import CardView from "./CardView";
 import { CardsGalleryContext } from "./context";
 import { CardData } from "./interfaces";
 import { handleMouseDown, handleMouseUp } from "./mouse";
+import { CardsGalleryProps } from "./types";
 
 import "./CardsGallery.css";
-
-export type GenerationProps = {
-  cardMetaname: string;
-  bgImg: File | undefined;
-  colorPick: string;
-  includeCenterArtwork: boolean | undefined;
-  generateOutro: boolean;
-  includeBackgroundImg: boolean;
-
-  cardBottomColor: string;
-};
-
-type CardsGalleryProps = {
-  id: string;
-  initialCards: CardData[];
-  generationProps: GenerationProps;
-};
 
 const CardsGallery: React.FC<CardsGalleryProps> = ({ id, initialCards, generationProps }): JSX.Element => {
   const [cards, setCards] = useState<CardData[]>(initialCards);

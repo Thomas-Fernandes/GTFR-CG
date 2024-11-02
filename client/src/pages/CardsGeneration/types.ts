@@ -1,4 +1,41 @@
-import { ApiResponse } from "@common/types";
+import { ApiResponse, StateSetter } from "@common/types";
+
+import { CardData } from "./interfaces";
+
+export type GenerationProps = {
+  cardMetaname: string;
+  bgImg: File | undefined;
+  colorPick: string;
+  includeCenterArtwork: boolean | undefined;
+  generateOutro: boolean;
+  includeBackgroundImg: boolean;
+
+  cardBottomColor: string;
+};
+
+export type HandleSaveModalProps = {
+  generationProps: GenerationProps;
+  newLyrics: string;
+  generateSingleCardProps: {
+    currentCard: CardData;
+    setCards: StateSetter<CardData[]>;
+    setIsModalSaving: StateSetter<boolean>;
+    closeModal: () => void;
+  }
+};
+export type CardEditModalProps = {
+  generationProps: GenerationProps;
+};
+
+export type CardViewProps = {
+  card: CardData;
+  cardIdx: number;
+};
+export type CardsGalleryProps = {
+  id: string;
+  initialCards: CardData[];
+  generationProps: GenerationProps;
+};
 
 export type CardsGenerationResponse = ApiResponse & {
   data: {
@@ -19,6 +56,26 @@ export type CardsGenerationRequest = {
 export type SingleCardGenerationRequest = CardsGenerationRequest & {
   cardsContents: string[];
   cardFilename: string;
+};
+
+export type GenerateSingleCardProps = {
+  currentCard: CardData;
+  setCards: StateSetter<CardData[]>;
+  setIsModalSaving: StateSetter<boolean>;
+  closeModal: () => void;
+};
+export type HandleGenerateCardsProps = {
+  generationInProgress: boolean;
+  setGenerationInProgress: StateSetter<boolean>;
+  setCardPaths: StateSetter<string[]>;
+  setCards: StateSetter<CardData[]>;
+  setColorPick: StateSetter<string>;
+};
+export type GenerateCardsProps = {
+  setGenerationInProgress: StateSetter<boolean>;
+  setCardPaths: StateSetter<string[]>;
+  setCards: StateSetter<CardData[]>;
+  setColorPick: StateSetter<string>;
 };
 
 export type SongPartsCards = string[][];

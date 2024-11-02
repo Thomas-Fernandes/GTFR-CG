@@ -4,16 +4,12 @@ import { SPINNER_ID } from "@constants/spinners";
 
 import { AutoResizeTextarea } from "@components/AutoResizeTextarea/AutoResizeTextarea";
 
-import { GenerationProps } from "./CardsGallery";
 import { useCardsGalleryContext } from "./context";
 import { handleSaveModal } from "./handlers";
 import { handleOverlayClick } from "./mouse";
+import { CardEditModalProps } from "./types";
 
 import "./CardEditModal.css";
-
-type CardEditModalProps = {
-  generationProps: GenerationProps;
-};
 
 const CardEditModal: React.FC<CardEditModalProps> = ({ generationProps }): JSX.Element => {
   const { setIsModalOpen, currentCard, newLyrics, setNewLyrics, setCards } = useCardsGalleryContext();

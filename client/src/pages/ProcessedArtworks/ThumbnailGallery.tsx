@@ -1,25 +1,15 @@
 import { JSX, useState } from "react";
 
-import { StateSetter } from "@common/types";
-
 import { PROCESSED_ARTWORKS_PATH } from "@constants/paths";
 import { DEFAULT_SELECTED_POSITION, LOGO_POSITIONS } from "@constants/thumbnails";
 
 import { handleSubmitDownloadImage } from "./handlers";
+import { ThumbnailOptionProps } from "./types";
 import { processImageName } from "./utils";
 
 import "./ThumbnailGallery.css";
 
-export type ThumbnailOptionProps = {
-  key: number;
-  logoPosition: string;
-  idx: number;
-  setSelectedThumbnail: StateSetter<string>;
-};
-
-const ThumbnailOption: React.FC<ThumbnailOptionProps> = ({ key, logoPosition, idx, setSelectedThumbnail }): JSX.Element => {
-  key?.valueOf(); // unused
-
+const ThumbnailOption: React.FC<ThumbnailOptionProps> = ({ logoPosition, idx, setSelectedThumbnail }): JSX.Element => {
   return (
     <div className="thumbnail-item" key={"thumbnail-item" + idx.toString()}>
       <label htmlFor={"radio_" + idx}>

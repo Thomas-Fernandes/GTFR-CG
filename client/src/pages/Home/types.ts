@@ -1,3 +1,7 @@
+export type StatisticsBoardProps = {
+  stats: Statistics;
+};
+
 export type StatisticsResponse = {
   dateFirstOperation: string;
   dateLastOperation: string;
@@ -12,4 +16,10 @@ export type Statistics = {
   artworkGenerations: string;
   lyricsFetches: string;
   cardsGenerated: string;
+};
+
+export type StatisticProps = {
+  label: string;
+  value: string;
+  spinnerId: string;
 };

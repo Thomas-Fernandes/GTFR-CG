@@ -7,13 +7,9 @@ import { TOAST, TOAST_TYPE } from "@constants/toasts";
 import { useCardsGalleryContext } from "./context";
 import { handleSubmitDownloadCard } from "./handlers";
 import { CardData } from "./interfaces";
+import { CardViewProps } from "./types";
 
 import "./CardView.css";
-
-type CardViewProps = {
-  card: CardData;
-  cardIdx: number;
-};
 
 const CardView: React.FC<CardViewProps> = ({ card, cardIdx }): JSX.Element => {
   const { setIsModalOpen, setCurrentCard, setNewLyrics } = useCardsGalleryContext();

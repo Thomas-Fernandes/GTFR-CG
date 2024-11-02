@@ -1,22 +1,14 @@
-import { FormEvent, TransitionStartFunction } from "react";
-import { NavigateFunction } from "react-router-dom";
+import { FormEvent } from "react";
 
 import { sendToast } from "@common/toast";
-import { StateSetter } from "@common/types";
 import { isFileExtensionAccepted } from "@common/utils/fileUtils";
-import { FileUploadRequest, ItunesRequest, ItunesResult, YoutubeRequest } from "@pages/ArtworkGeneration/types";
+import { FileUploadRequest, HandleChangeTermProps, HandleSubmitArtworkGenerationProps, HandleSubmitItunesSearchProps, ItunesRequest, ItunesResult, YoutubeRequest } from "@pages/ArtworkGeneration/types";
 
 import { FILE_UPLOAD } from "@constants/ArtworkGeneration";
 import { TOAST, TOAST_TYPE } from "@constants/toasts";
 
 import { postFileUpload, postItunesResult, postItunesSearch, postYoutubeUrl } from "./requests";
 import { isValidYoutubeUrl } from "./utils";
-
-export type HandleSubmitArtworkGenerationProps = {
-  isProcessingLoading: boolean;
-  setIsProcessingLoading: StateSetter<boolean>;
-  navigate: NavigateFunction;
-};
 
 export const handleSubmitItunesImage = (
   item: ItunesResult, key: number,
@@ -36,10 +28,6 @@ export const handleSubmitItunesImage = (
   postItunesResult(body, key, {setIsProcessingLoading, navigate});
 };
 
-type HandleSubmitItunesSearchProps = {
-  setItunesResults: StateSetter<ItunesResult[]>;
-};
-
 export const handleSubmitItunesSearch = (
   e: FormEvent<HTMLFormElement> | undefined, body: ItunesRequest,
   props: HandleSubmitItunesSearchProps
@@ -49,12 +37,6 @@ export const handleSubmitItunesSearch = (
   e?.preventDefault();
 
   postItunesSearch(body, {setItunesResults});
-};
-
-type HandleChangeTermProps = {
-  setTerm: StateSetter<string>;
-  startItunesSearch: TransitionStartFunction;
-  setItunesResults: StateSetter<ItunesResult[]>;
 };
 
 export const handleChangeTerm = (

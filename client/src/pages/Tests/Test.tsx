@@ -1,21 +1,8 @@
-import { RefObject, useState } from "react";
+import { useState } from "react";
 
-import { StateSetter } from "@common/types";
 import { isEmpty } from "@common/utils/objUtils";
 
-export type TestResult = {
-  successful: boolean;
-  prompt: string;
-  duration?: number;
-};
-
-export type TestFunc = (setter: StateSetter<TestResult>) => Promise<void>;
-
-export type TestProps = {
-  title: string;
-  func: TestFunc;
-  buttonRef: RefObject<HTMLButtonElement>;
-};
+import { TestFunc, TestProps, TestResult } from "./types";
 
 export const Test = (props: TestProps): JSX.Element => {
   const { title, func, buttonRef } = props;

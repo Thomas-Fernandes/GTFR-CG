@@ -1,10 +1,5 @@
-import { Test, TestProps } from "./Test";
-
-type TestsBoardProps = {
-  id?: string;
-  title?: string;
-  tests?: TestProps[];
-};
+import { Test } from "./Test";
+import { TestsBoardProps } from "./types";
 
 export const TestsBoard = (props: TestsBoardProps): JSX.Element => {
   const { id, title, tests } = props;

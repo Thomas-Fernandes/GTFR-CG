@@ -1,29 +1,21 @@
 import { JSX, useState } from "react";
 
-import { ItunesResult } from "@pages/ArtworkGeneration/types";
+import { ItunesImageGalleryProps, ItunesImageResultProps } from "@pages/ArtworkGeneration/types";
 
 import ImgButton from "@components/ImgButton/ImgButton";
 
 import { SPINNER_ID } from "@constants/spinners";
 
 import { useArtworkGenerationContext } from "./context";
-import { HandleSubmitArtworkGenerationProps } from "./handlers";
 
 import "./ItunesImageGallery.css";
 
-type ItunesImageResultProps = {
-  key?: number;
-  item: ItunesResult;
-  itemId: number;
-  handleSubmitItunesImage: (item: ItunesResult, key: number, props: HandleSubmitArtworkGenerationProps) => void;
-};
-
 const ItunesImageResult: React.FC<ItunesImageResultProps> = ({key, item, itemId, handleSubmitItunesImage}): JSX.Element => {
   const { isProcessingLoading, setIsProcessingLoading, navigate } = useArtworkGenerationContext();
+  key?.toString(); // unused
 
   const resultLabel = (item.collectionName || item.trackName).replace(" - Single", "");
   const [itemLabel, setItemLabel] = useState("");
-  key?.toString(); // unused
 
   return (
     <div className="result-item">
@@ -37,11 +29,6 @@ const ItunesImageResult: React.FC<ItunesImageResultProps> = ({key, item, itemId,
       <div className="flex-row" id={SPINNER_ID.ITUNES_OPTION + itemId.toString()} />
     </div>
   );
-};
-
-type ItunesImageGalleryProps = {
-  items: ItunesResult[];
-  handleSubmitItunesImage: (item: ItunesResult, key: number, props: HandleSubmitArtworkGenerationProps) => void;
 };
 
 const ItunesImageGallery: React.FC<ItunesImageGalleryProps> = ({items, handleSubmitItunesImage}): JSX.Element => {

@@ -1,17 +1,12 @@
 import { JSX } from "react";
 
-import { Statistics } from "@pages/Home/types";
+import { StatisticProps, StatisticsBoardProps } from "@pages/Home/types";
 
 import { SPINNER_ID } from "@constants/spinners";
 import { STAT_NAME } from "@constants/statistics";
 
 import "./StatisticsBoard.css";
 
-type StatisticProps = {
-  label: string;
-  value: string;
-  spinnerId: string;
-};
 
 const Statistic: React.FC<StatisticProps> = ({ label, value, spinnerId }): JSX.Element => {
   return (
@@ -24,10 +19,6 @@ const Statistic: React.FC<StatisticProps> = ({ label, value, spinnerId }): JSX.E
       </p>
     </div>
   );
-};
-
-type StatisticsBoardProps = {
-  stats: Statistics;
 };
 
 const StatisticsBoard: React.FC<StatisticsBoardProps> = ({ stats }): JSX.Element => {
