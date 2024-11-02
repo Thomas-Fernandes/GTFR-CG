@@ -72,13 +72,11 @@ export type HandleGenerateCardsProps = {
   setGenerationInProgress: StateSetter<boolean>;
   setCardPaths: StateSetter<string[]>;
   setCards: StateSetter<CardData[]>;
-  setColorPick: StateSetter<string>;
 };
 export type GenerateCardsProps = {
   setGenerationInProgress: StateSetter<boolean>;
   setCardPaths: StateSetter<string[]>;
   setCards: StateSetter<CardData[]>;
-  setColorPick: StateSetter<string>;
 };
 
 export type SongPartsCards = string[][];

@@ -4,7 +4,7 @@ import { sendToast } from "@common/toast";
 
 import { TOAST, TOAST_TYPE } from "@constants/toasts";
 
-import { useCardsGalleryContext } from "./context";
+import { useCardsGalleryContext } from "./contexts";
 import { handleSubmitDownloadCard } from "./handlers";
 import { CardData, CardViewProps } from "./types";
 

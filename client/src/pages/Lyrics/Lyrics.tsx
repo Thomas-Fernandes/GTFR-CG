@@ -10,7 +10,7 @@ import { SESSION_STORAGE, TITLE } from "@constants/browser";
 import { VIEW_PATHS } from "@constants/paths";
 import { TOAST } from "@constants/toasts";
 
-import { LyricsContext } from "./context";
+import { LyricsContext } from "./contexts";
 import GenerationModeFlipper from "./GenerationModeFlipper";
 import { handleLoadLastContents } from "./handlers";
 import LyricsPartsForm from "./LyricsPartsForm";

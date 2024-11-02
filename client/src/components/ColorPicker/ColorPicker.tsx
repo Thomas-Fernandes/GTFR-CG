@@ -38,7 +38,7 @@ const ColorPicker: React.FC<Props> = ({ id, latest, label, labelClassName, sette
   };
 
   const handleLoadLatest = () => {
-    if (!latest){
+    if (!latest) {
       sendToast(TOAST.NO_LATEST_COLOR, TOAST_TYPE.WARN);
       return;
     }

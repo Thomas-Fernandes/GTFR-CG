@@ -1,7 +1,7 @@
 
 import { SPINNER_ID } from "@constants/spinners";
 
-import { useLyricsContext } from "./context";
+import { useLyricsContext } from "./contexts";
 import { handleLyricsSearchSubmit } from "./handlers";
 
 const LyricsSearchForm = (): JSX.Element => {

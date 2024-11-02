@@ -13,7 +13,7 @@ import { VIEW_PATHS } from "@constants/paths";
 import { SPINNER_ID } from "@constants/spinners";
 
 import ItunesImageGallery from "./ItunesImageGallery";
-import { ArtworkGenerationContext } from "./context";
+import { ArtworkGenerationContext } from "./contexts";
 import { handleChangeTerm, handleSubmitFileUpload, handleSubmitItunesImage, handleSubmitItunesSearch, handleSubmitYoutubeUrl } from "./handlers";
 
 import Checkbox from "@/components/Checkbox/Checkbox";
@@ -57,7 +57,7 @@ const ArtworkGeneration = (): JSX.Element => {
         <form id="itunes" onSubmit={(e) => handleSubmitItunesSearch(e, { term, country }, { setItunesResults })}>
           <div className="flexbox">
             <input id="itunes-text" type="text" placeholder="Search on iTunes"
-              onChange={(e) => handleChangeTerm(e.target.value, country, { setTerm, startItunesSearch, setItunesResults })}
+              onChange={(e) => handleChangeTerm(e.target.value, country, { term, setTerm, startItunesSearch, setItunesResults })}
             />
             <div id={SPINNER_ID.ITUNES} className="itunes-search">
               <select aria-label="Country"

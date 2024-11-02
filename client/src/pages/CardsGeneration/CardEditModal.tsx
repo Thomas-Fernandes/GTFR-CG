@@ -4,7 +4,7 @@ import { SPINNER_ID } from "@constants/spinners";
 
 import { AutoResizeTextarea } from "@components/AutoResizeTextarea/AutoResizeTextarea";
 
-import { useCardsGalleryContext } from "./context";
+import { useCardsGalleryContext } from "./contexts";
 import { handleSaveModal } from "./handlers";
 import { handleOverlayClick } from "./mouse";
 import { CardEditModalProps } from "./types";

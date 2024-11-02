@@ -1,9 +1,11 @@
 import { NavigateFunction } from "react-router-dom";
 
+import { StateSetter } from "@/common/types";
 import { createNewContext } from "@common/contextProvider";
-import { LyricsPartType, PageMetadata, StateSetter } from "@common/types/cardsGenerationTypes";
 
-export interface LyricsContextType {
+import { LyricsPartType, PageMetadata } from "./types";
+
+interface LyricsContextType {
   isFetching: boolean;
   setIsFetching: StateSetter<boolean>;
   artist: string;
@@ -20,8 +22,10 @@ export interface LyricsContextType {
   setIsManual: StateSetter<boolean>;
   navigate: NavigateFunction;
 }
-
-const { context: LyricsContext, useContext: useLyricsContext } = createNewContext<LyricsContextType>();
+const {
+  context: LyricsContext,
+  useContext: useLyricsContext
+} = createNewContext<LyricsContextType>();
 
 export { LyricsContext, useLyricsContext };
 

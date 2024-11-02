@@ -7,6 +7,7 @@ import { FileUploadRequest, HandleChangeTermProps, HandleSubmitArtworkGeneration
 import { FILE_UPLOAD } from "@constants/ArtworkGeneration";
 import { TOAST, TOAST_TYPE } from "@constants/toasts";
 
+import { AUTOMATIC_SEARCH_TRIGGERS } from "./constants";
 import { postFileUpload, postItunesResult, postItunesSearch, postYoutubeUrl } from "./requests";
 import { isValidYoutubeUrl } from "./utils";
 
@@ -43,11 +44,19 @@ export const handleChangeTerm = (
   value: string, country: string,
   props: HandleChangeTermProps
 ) => {
-  const { setTerm, startItunesSearch, setItunesResults } = props;
+  const { term, setTerm, startItunesSearch, setItunesResults } = props;
+
+  const willMakeSearch = value && (
+    value.length > AUTOMATIC_SEARCH_TRIGGERS.LENGTH
+    || (value.length > AUTOMATIC_SEARCH_TRIGGERS.LENGTH_WITHOUT_TERM && (
+      value.includes(AUTOMATIC_SEARCH_TRIGGERS.SPACE)
+      || (!term.length && value.length > AUTOMATIC_SEARCH_TRIGGERS.LENGTH_WITHOUT_TERM)
+    ))
+  );
 
   setTerm(value);
 
-  if (value && (value.length > 7 || (value?.length > 5 && value?.includes(" "))))
+  if (willMakeSearch)
     startItunesSearch(() => {
       handleSubmitItunesSearch(undefined, {term: value, country}, { setItunesResults });
     });

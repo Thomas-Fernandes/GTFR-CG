@@ -6,13 +6,12 @@ import ImgButton from "@components/ImgButton/ImgButton";
 
 import { SPINNER_ID } from "@constants/spinners";
 
-import { useArtworkGenerationContext } from "./context";
+import { useArtworkGenerationContext } from "./contexts";
 
 import "./ItunesImageGallery.css";
 
-const ItunesImageResult: React.FC<ItunesImageResultProps> = ({key, item, itemId, handleSubmitItunesImage}): JSX.Element => {
+const ItunesImageResult: React.FC<ItunesImageResultProps> = ({ item, itemId, handleSubmitItunesImage }): JSX.Element => {
   const { isProcessingLoading, setIsProcessingLoading, navigate } = useArtworkGenerationContext();
-  key?.toString(); // unused
 
   const resultLabel = (item.collectionName || item.trackName).replace(" - Single", "");
   const [itemLabel, setItemLabel] = useState("");
@@ -31,7 +30,7 @@ const ItunesImageResult: React.FC<ItunesImageResultProps> = ({key, item, itemId,
   );
 };
 
-const ItunesImageGallery: React.FC<ItunesImageGalleryProps> = ({items, handleSubmitItunesImage}): JSX.Element => {
+const ItunesImageGallery: React.FC<ItunesImageGalleryProps> = ({ items, handleSubmitItunesImage }): JSX.Element => {
   return (
     <div id="results" className="result-container">
       { items.map((item, index) => (

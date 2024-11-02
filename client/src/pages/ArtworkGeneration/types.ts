@@ -20,7 +20,6 @@ export type FileUploadRequest = {
 };
 
 export type ItunesImageResultProps = {
-  key?: number;
   item: ItunesResult;
   itemId: number;
   handleSubmitItunesImage: (item: ItunesResult, key: number, props: HandleSubmitArtworkGenerationProps) => void;
@@ -53,6 +52,7 @@ export type ItunesRequest = {
   limit?: number;
 };
 export type HandleChangeTermProps = {
+  term: string;
   setTerm: StateSetter<string>;
   startItunesSearch: TransitionStartFunction;
   setItunesResults: StateSetter<ItunesResult[]>;

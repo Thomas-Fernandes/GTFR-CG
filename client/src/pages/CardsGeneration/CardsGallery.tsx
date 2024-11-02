@@ -2,7 +2,7 @@ import React, { useMemo, useRef, useState } from "react";
 
 import CardEditModal from "./CardEditModal";
 import CardView from "./CardView";
-import { CardsGalleryContext } from "./context";
+import { CardsGalleryContext } from "./contexts";
 import { handleMouseDown, handleMouseUp } from "./mouse";
 import { CardData, CardsGalleryProps } from "./types";
 

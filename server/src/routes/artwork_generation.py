@@ -103,7 +103,7 @@ class ItunesSearchResource(Resource):
             log.error(err)
             return createApiResponse(const.HttpStatus.BAD_REQUEST.value, err)
 
-        log.info(f"Searching {limit} iTunes images for term: {term}, country: {country}...")
+        log.info(f"Searching {limit} iTunes images for term: '{term}', country: {(country or "''").toUpper()}...")
         start = time()
         url_to_hit = f"https://itunes.apple.com/search?term={term}&country={country}&entity={entity}&limit={limit}"
         response = makeItunesRequest(url_to_hit)

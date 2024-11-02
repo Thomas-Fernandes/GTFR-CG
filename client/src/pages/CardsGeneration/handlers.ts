@@ -61,7 +61,7 @@ export const handleGenerateCards = (
   e: FormEvent<HTMLFormElement>, body: CardsGenerationRequest,
   props: HandleGenerateCardsProps
 ) => {
-  const { generationInProgress, setGenerationInProgress, setCardPaths, setCards, setColorPick } = props;
+  const { generationInProgress, setGenerationInProgress, setCardPaths, setCards } = props;
 
   e.preventDefault();
 
@@ -89,7 +89,7 @@ export const handleGenerateCards = (
   showSpinner(SPINNER_ID.CARDS_GENERATE);
   setCardPaths([]);
 
-  postGenerateCards(body, formData, { setGenerationInProgress, setCardPaths, setCards, setColorPick });
+  postGenerateCards(body, formData, { setGenerationInProgress, setCardPaths, setCards });
 };
 
 export const handleUnauthorizedCheckbox = () => {

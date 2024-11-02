@@ -1,4 +1,4 @@
-import { useLyricsContext } from "./context";
+import { useLyricsContext } from "./contexts";
 
 const ManualGenerationInputBar = (): JSX.Element => {
   const { setArtist, setSongName, pageMetadata, setPageMetadata } = useLyricsContext();

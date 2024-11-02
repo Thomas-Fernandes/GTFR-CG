@@ -1,0 +1,5 @@
+export const AUTOMATIC_SEARCH_TRIGGERS = {
+  LENGTH: 7,
+  LENGTH_WITHOUT_TERM: 5,
+  SPACE: " ",
+};

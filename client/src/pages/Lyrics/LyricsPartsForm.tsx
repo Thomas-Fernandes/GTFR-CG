@@ -4,7 +4,7 @@ import { AutoResizeTextarea } from "@components/AutoResizeTextarea/AutoResizeTex
 
 import { SPINNER_ID } from "@constants/spinners";
 
-import { useLyricsContext } from "./context";
+import { useLyricsContext } from "./contexts";
 import { handleLyricsSaveSubmit, handleSetLyricsParts } from "./handlers";
 import { LyricsPartProps, LyricsPartsFormProps } from "./types";
 import { convertToCardContents } from "./utils";
