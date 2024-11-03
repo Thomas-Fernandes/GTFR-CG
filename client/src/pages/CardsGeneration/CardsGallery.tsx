@@ -8,7 +8,7 @@ import { CardData, CardsGalleryProps } from "./types";
 
 import "./CardsGallery.css";
 
-const CardsGallery: React.FC<CardsGalleryProps> = ({ id, initialCards, generationProps }): JSX.Element => {
+const CardsGallery: React.FC<CardsGalleryProps> = ({ id, initialCards }): JSX.Element => {
   const [cards, setCards] = useState<CardData[]>(initialCards);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -25,19 +25,19 @@ const CardsGallery: React.FC<CardsGalleryProps> = ({ id, initialCards, generatio
   const clickedInsideModalRef = useRef(false);
 
   return (
-    <CardsGalleryContext.Provider value={contextValue}>
-      <div id={id} className="card-gallery flex-row"
-        onMouseDown={(e) => handleMouseDown(e, { isMouseDownRef, clickedInsideModalRef })}
-        onMouseUp={() => handleMouseUp({ isMouseDownRef })}
-      >
+    <div id={id} className="card-gallery flex-row"
+      onMouseDown={(e) => handleMouseDown(e, { isMouseDownRef, clickedInsideModalRef })}
+      onMouseUp={() => handleMouseUp({ isMouseDownRef })}
+    >
+      <CardsGalleryContext.Provider value={contextValue}>
         { cards?.map((card, idx) =>
           <CardView key={idx} card={card} cardIdx={idx} />
         )}
         { isModalOpen && currentCard && (
-          <CardEditModal generationProps={generationProps} />
+          <CardEditModal />
         )}
-      </div>
-    </CardsGalleryContext.Provider>
+      </CardsGalleryContext.Provider>
+    </div>
   );
 };
 

@@ -11,6 +11,7 @@ import { handleGenerateCards, handleUnauthorizedCheckbox } from "./handlers";
 import { CardsGenerationFormProps } from "./types";
 
 import "./CardsGenerationForm.css";
+import { CONTENTS_GENERATION_MODE } from "./constants";
 
 const CardsGenerationForm: React.FC<CardsGenerationFormProps> = ({ setCardPaths, setCards }): JSX.Element => {
   const [isComponentMounted, setIsComponentMounted] = useState(false);
@@ -42,7 +43,7 @@ const CardsGenerationForm: React.FC<CardsGenerationFormProps> = ({ setCardPaths,
     <form id="settings"
       onSubmit={(e) => handleGenerateCards(e,
         {cardMetaname, outroContributors, bgImg, colorPick, includeCenterArtwork, generateOutro, includeBackgroundImg},
-        {generationInProgress, setGenerationInProgress, setCardPaths, setCards}
+        {generationInProgress, setGenerationInProgress, setCardPaths, setCards, setColorPick}
       )}
     >
       <div id="text-fields" className="settings flexbox">
@@ -60,40 +61,42 @@ const CardsGenerationForm: React.FC<CardsGenerationFormProps> = ({ setCardPaths,
           />
         }
       </div>
+
       <div id="enforcers" className="settings flexbox flex-row">
         <FileUploader
-          id="background-image" label="Select image" caption="Enforce background image?"
+          id="background-image" label={"Select image"} caption={"Enforce background image?"}
           accept="image/*" setter={setBgImg}
         />
         <ColorPicker
-          id="bottom-bar" label="Enforce bottom color?"
+          id="bottom-bar" label={"Enforce bottom color?"}
           latest={cardBottomColor} setter={setColorPick}
         />
       </div>
+
       <div id="selectors" className="settings flexbox flex-row">
         { bgImg &&
           <Checkbox
-            id="include_center_artwork" label="Include center artwork"
+            id="include_center_artwork" label={"Include center artwork"}
             defaultChecked={includeCenterArtwork}
             onChange={(e) => setIncludeCenterArtwork(e.target.checked)}
           />
         }
-        <div onClick={() => cardMethod === "manual" && handleUnauthorizedCheckbox()}>
+        <div onClick={() => cardMethod === CONTENTS_GENERATION_MODE.MANUAL && handleUnauthorizedCheckbox()}>
           <Checkbox
-            id="generate_outro" label="Generate outro image"
-            defaultChecked={cardMethod === "auto"} disabled={cardMethod === "manual"}
+            id="generate_outro" label={"Generate outro image"}
+            defaultChecked={cardMethod === CONTENTS_GENERATION_MODE.AUTO} disabled={cardMethod === CONTENTS_GENERATION_MODE.MANUAL}
             onChange={(e) => setGenerateOutro(e.target.checked)}
           />
         </div>
         <Checkbox
-          id="include_background" label="Include background image"
+          id="include_background" label={"Include background image"}
           defaultChecked={includeBackgroundImg}
           onChange={(e) => setIncludeBackgroundImg(e.target.checked)}
         />
       </div>
 
       <div className="action-button pad-l-1" id={SPINNER_ID.CARDS_GENERATE}>
-        <input type="submit" value="GENERATE" className="action-button" />
+        <input type="submit" value={"GENERATE"} className="action-button" />
       </div>
     </form>
   )

@@ -16,7 +16,7 @@ const {
   useContext: useCardsGalleryContext
 } = createNewContext<CardsGalleryContextType>();
 
-interface CardsGenerationContextType {
+interface CardsGenerationFormContextType {
   outroContributors: string;
   setBgImg: StateSetter<File | undefined>;
   setColorPick: StateSetter<string>;
@@ -25,9 +25,26 @@ interface CardsGenerationContextType {
   setIncludeBackgroundImg: StateSetter<boolean>;
 }
 const {
+  context: CardsGenerationFormContext,
+  useContext: useCardsGenerationFormContext
+} = createNewContext<CardsGenerationFormContextType>();
+
+interface CardsGenerationContextType {
+  cardMetaname: string;
+  bgImg: File | undefined;
+  colorPick: string;
+  includeCenterArtwork: boolean;
+  generateOutro: boolean;
+  includeBackgroundImg: boolean;
+  cardBottomColor: string;
+}
+const {
   context: CardsGenerationContext,
   useContext: useCardsGenerationContext
 } = createNewContext<CardsGenerationContextType>();
 
-export { CardsGalleryContext, CardsGenerationContext as CardsGenerationFormContext, useCardsGalleryContext, useCardsGenerationContext as useCardsGenerationFormContext };
+export {
+  CardsGalleryContext, CardsGenerationContext, CardsGenerationFormContext,
+  useCardsGalleryContext, useCardsGenerationContext, useCardsGenerationFormContext
+};
 

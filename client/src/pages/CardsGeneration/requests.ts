@@ -56,7 +56,7 @@ export const postGenerateCards = (
   body: CardsGenerationRequest, formData: FormData,
   props: GenerateCardsProps
 ) => {
-  const { setGenerationInProgress, setCardPaths, setCards } = props;
+  const { setGenerationInProgress, setCardPaths, setCards, setColorPick } = props;
 
   setGenerationInProgress(true);
   showSpinner(SPINNER_ID.CARDS_GENERATE);
@@ -77,6 +77,7 @@ export const postGenerateCards = (
     setCardPaths(pathsWithCacheBuster);
     const newCards = deduceNewCards(pathsWithCacheBuster, response.data.cardsLyrics, body.generateOutro ?? false);
     setCards(newCards);
+    setColorPick(response.data.cardBottomColor);
     sessionStorage.setItem(SESSION_STORAGE.CARD_METANAME, body.cardMetaname);
     sessionStorage.setItem(SESSION_STORAGE.CARD_BOTTOM_COLOR, body.colorPick);
     sendToast(TOAST.CARDS_GENERATED, TOAST_TYPE.SUCCESS);

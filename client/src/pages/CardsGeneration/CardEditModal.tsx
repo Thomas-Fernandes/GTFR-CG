@@ -1,19 +1,20 @@
-import React, { useRef, useState } from "react";
-
-import { SPINNER_ID } from "@constants/spinners";
+import { useRef, useState } from "react";
 
 import { AutoResizeTextarea } from "@components/AutoResizeTextarea/AutoResizeTextarea";
 
-import { useCardsGalleryContext } from "./contexts";
+import { SPINNER_ID } from "@constants/spinners";
+
+import { useCardsGalleryContext, useCardsGenerationContext } from "./contexts";
 import { handleSaveModal } from "./handlers";
 import { handleOverlayClick } from "./mouse";
-import { CardEditModalProps } from "./types";
 
 import "./CardEditModal.css";
 
-const CardEditModal: React.FC<CardEditModalProps> = ({ generationProps }): JSX.Element => {
+const CardEditModal = (): JSX.Element => {
+  const generationProps = useCardsGenerationContext();
+
   const { setIsModalOpen, currentCard, newLyrics, setNewLyrics, setCards } = useCardsGalleryContext();
-  const cardIdPadding = currentCard && currentCard.id < 10 ? "0" : "";
+  const cardIdPadding = (currentCard && currentCard.id < 10) ? "0" : "";
 
   const [isModalSaving, setIsModalSaving] = useState(false);
 
@@ -30,7 +31,7 @@ const CardEditModal: React.FC<CardEditModalProps> = ({ generationProps }): JSX.E
 
         <AutoResizeTextarea title={"card-edit"} disabled={isModalSaving}
           value={newLyrics} onChange={(e) => setNewLyrics(e.target.value)}
-          style={{ width: "100%" }}
+          className="w-100"
         />
 
         <div className="modal-actions flex-row g-1">
@@ -39,7 +40,7 @@ const CardEditModal: React.FC<CardEditModalProps> = ({ generationProps }): JSX.E
               { generationProps, newLyrics, generateSingleCardProps: { currentCard, setCards, setIsModalSaving, closeModal } }
             )}
           >
-            {isModalSaving ? "Saving..." : "Save"}
+            { isModalSaving ? "Saving..." : "Save" }
           </button>
 
           <div id={SPINNER_ID.CARDS_GENERATE_SINGLE} /> {/* Spinner for saving, in-between */}

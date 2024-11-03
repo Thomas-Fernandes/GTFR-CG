@@ -1,6 +1,6 @@
-import { StateSetter } from "@common/types";
+import { SongPartsCards, StateSetter } from "@common/types";
 
-import { CardData, CardsGenerationRequest, SingleCardGenerationRequest, SongPartsCards } from "./types";
+import { CardData, CardsGenerationRequest, SingleCardGenerationRequest } from "./types";
 
 export const updateCard = (setCards: StateSetter<CardData[]>, currentCard: CardData, newLyrics: string, cardFilename: string) => {
   setCards((prevCards) =>

@@ -11,10 +11,10 @@ import { VIEW_PATHS } from "@constants/paths";
 
 import CardsGallery from "./CardsGallery";
 import CardsGenerationForm from "./CardsGenerationForm";
+import { CardsGenerationContext, CardsGenerationFormContext } from "./contexts";
 import { CardData } from "./types";
 
 import "./CardsGeneration.css";
-import { CardsGenerationFormContext } from "./contexts";
 
 const CardsGeneration = (): JSX.Element => {
   useTitle(TITLE.CARDS_GENERATION);
@@ -35,7 +35,7 @@ const CardsGeneration = (): JSX.Element => {
   const [cardPaths, setCardPaths] = useState([] as string[]);
   const [cards, setCards] = useState([] as CardData[]);
 
-  const contextValue = useMemo(
+  const formContextValue = useMemo(
     () => ({
       outroContributors, setBgImg, setColorPick,
       setIncludeCenterArtwork, setGenerateOutro, setIncludeBackgroundImg
@@ -44,6 +44,10 @@ const CardsGeneration = (): JSX.Element => {
       outroContributors, setBgImg, setColorPick,
       setIncludeCenterArtwork, setGenerateOutro, setIncludeBackgroundImg
     ]
+  );
+  const contextValue = useMemo(
+    () => ({ cardMetaname, bgImg, colorPick, includeCenterArtwork, generateOutro, includeBackgroundImg, cardBottomColor }),
+    [cardMetaname, bgImg, colorPick, includeCenterArtwork, generateOutro, includeBackgroundImg, cardBottomColor]
   );
 
   useEffect(() => {
@@ -69,7 +73,7 @@ const CardsGeneration = (): JSX.Element => {
 
       <h1>{TITLE.CARDS_GENERATION}</h1>
 
-      <CardsGenerationFormContext.Provider value={contextValue}>
+      <CardsGenerationFormContext.Provider value={formContextValue}>
         <CardsGenerationForm setCardPaths={setCardPaths} setCards={setCards} />
       </CardsGenerationFormContext.Provider>
 
@@ -78,12 +82,9 @@ const CardsGeneration = (): JSX.Element => {
           <hr className="mv-1" />
 
           <ZipDownloadButton id="download-all" paths={cardPaths} output={"cards.zip"} />
-          <CardsGallery
-            id="cards" initialCards={cards}
-            generationProps={{
-              cardMetaname, bgImg, colorPick, includeCenterArtwork, generateOutro, includeBackgroundImg, cardBottomColor,
-            }}
-          />
+          <CardsGenerationContext.Provider value={contextValue}>
+            <CardsGallery id="cards" initialCards={cards} />
+          </CardsGenerationContext.Provider>
         </>
       }
 

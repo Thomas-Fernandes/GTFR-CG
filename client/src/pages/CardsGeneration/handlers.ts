@@ -29,6 +29,8 @@ export const handleSaveModal = (
     return;
   }
 
+  if (generationProps.colorPick === "")
+    generationProps.colorPick = generationProps.cardBottomColor;
   postGenerateSingleCard(generationProps, newLyrics, generateSingleCardProps);
 };
 
@@ -61,7 +63,7 @@ export const handleGenerateCards = (
   e: FormEvent<HTMLFormElement>, body: CardsGenerationRequest,
   props: HandleGenerateCardsProps
 ) => {
-  const { generationInProgress, setGenerationInProgress, setCardPaths, setCards } = props;
+  const { generationInProgress, setGenerationInProgress, setCardPaths, setCards, setColorPick } = props;
 
   e.preventDefault();
 
@@ -89,7 +91,7 @@ export const handleGenerateCards = (
   showSpinner(SPINNER_ID.CARDS_GENERATE);
   setCardPaths([]);
 
-  postGenerateCards(body, formData, { setGenerationInProgress, setCardPaths, setCards });
+  postGenerateCards(body, formData, { setGenerationInProgress, setCardPaths, setCards, setColorPick });
 };
 
 export const handleUnauthorizedCheckbox = () => {

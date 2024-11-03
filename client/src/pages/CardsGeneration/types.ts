@@ -27,9 +27,6 @@ export type HandleSaveModalProps = {
     closeModal: () => void;
   }
 };
-export type CardEditModalProps = {
-  generationProps: GenerationProps;
-};
 
 export type CardViewProps = {
   card: CardData;
@@ -38,7 +35,6 @@ export type CardViewProps = {
 export type CardsGalleryProps = {
   id: string;
   initialCards: CardData[];
-  generationProps: GenerationProps;
 };
 
 export type CardsGenerationResponse = ApiResponse & {
@@ -72,11 +68,13 @@ export type HandleGenerateCardsProps = {
   setGenerationInProgress: StateSetter<boolean>;
   setCardPaths: StateSetter<string[]>;
   setCards: StateSetter<CardData[]>;
+  setColorPick: StateSetter<string>;
 };
 export type GenerateCardsProps = {
   setGenerationInProgress: StateSetter<boolean>;
   setCardPaths: StateSetter<string[]>;
   setCards: StateSetter<CardData[]>;
+  setColorPick: StateSetter<string>;
 };
 
 export type CardsGenerationFormProps = {

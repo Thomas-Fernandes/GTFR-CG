@@ -1,13 +1,12 @@
 import { JSX, useState } from "react";
 
-import { ItunesImageResultProps, ItunesResultsProps } from "@pages/ArtworkGeneration/types";
-
 import ImgButton from "@components/ImgButton/ImgButton";
 
 import { SPINNER_ID } from "@constants/spinners";
 
 import { useArtworkGenerationContext } from "./contexts";
 import { handleSelectItunesImage } from "./handlers";
+import { ItunesImageResultProps, ItunesResultsProps } from "./types";
 
 import "./ItunesResults.css";
 
@@ -25,7 +24,9 @@ const ItunesImageResult: React.FC<ItunesImageResultProps> = ({ item, itemId }): 
         onClick={() => handleSelectItunesImage(item, itemId, { isProcessingLoading, setIsProcessingLoading, navigate })}
         className="result-image"
       />
-      <p className="result-text centered bold italic">{itemLabel}</p>
+      <p className="result-text centered bold italic">
+        {itemLabel}
+      </p>
 
       <div className="mt-p5" style={{paddingLeft: "0 !important"}} id={SPINNER_ID.ITUNES_OPTION + itemId.toString()} />
     </div>
@@ -36,7 +37,9 @@ const ItunesResults: React.FC<ItunesResultsProps> = ({ items, setItunesResults }
   return (
     <div className="results">
       { items.length > 0 &&
-        <button id="clear" onClick={() => setItunesResults([])}>Clear results</button>
+        <button id="clear" onClick={() => setItunesResults([])}>
+          {"Clear results"}
+        </button>
       }
       <div id="results" className="result-container">
         { items.map((item, index) => (

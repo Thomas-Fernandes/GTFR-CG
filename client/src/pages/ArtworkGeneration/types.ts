@@ -11,12 +11,12 @@ export type HandleSubmitArtworkGenerationProps = {
 export type YoutubeRequest = {
   url: string;
 };
-export type ItunesImageRequest = {
-  url: string;
-};
 export type FileUploadRequest = {
   localFile: File | undefined;
   includeCenterArtwork: boolean;
+};
+export type ItunesImageRequest = {
+  url: string;
 };
 
 export type ItunesImageResultProps = {
@@ -27,7 +27,6 @@ export type ItunesResultsProps = {
   items: ItunesResult[];
   setItunesResults: StateSetter<ItunesResult[]>;
 };
-
 export type ItunesResult = {
   resultId: number;
   artistName: string;
@@ -35,6 +34,7 @@ export type ItunesResult = {
   trackName: string;
   artworkUrl100: string;
 };
+
 export type ItunesResponse = ApiResponse & {
   data: {
     resultCount: number;

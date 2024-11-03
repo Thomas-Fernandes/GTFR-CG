@@ -38,6 +38,7 @@ export const postItunesResult = (
     });
   }).catch((error: ApiResponse) => {
     sendToast(error.message, TOAST_TYPE.ERROR);
+  }).finally(() => {
     hideSpinner(spinnerKey);
     setIsProcessingLoading(false);
   });
@@ -77,7 +78,7 @@ export const postItunesSearch = (
       sendToast(TOAST.NO_RESULTS_FOUND, TOAST_TYPE.WARN);
     }
   }).catch((error: ApiResponse) => {
-    setItunesResults(resultItems);
+    setItunesResults([]);
     sendToast(error.message, TOAST_TYPE.ERROR);
   }).finally(() => {
     hideSpinner(SPINNER_ID.ITUNES);

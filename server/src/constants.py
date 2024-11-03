@@ -166,7 +166,7 @@ ERR_CARDS_CONTENTS_READ_FAILED = "Failed to read cards contents."
 ERR_CARDS_METANAME_NOT_FOUND = "No card metaname provided."
 ERR_CARDS_CENTER_ARTWORK_NOT_FOUND = "No center artwork flipper provided."
 ERR_CARDS_BACKGROUND_NOT_FOUND = "No background image provided."
-ERR_CARDS_COLOR_NOT_FOUND = "No background color provided."
+ERR_CARDS_COLOR_NOT_FOUND = "No bottom color provided."
 ERR_CARDS_FILENAME_NOT_FOUND = "No filename provided."
 
 # Response messages
