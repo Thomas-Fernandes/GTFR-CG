@@ -79,4 +79,9 @@ export type GenerateCardsProps = {
   setCards: StateSetter<CardData[]>;
 };
 
+export type CardsGenerationFormProps = {
+  setCardPaths: StateSetter<string[]>,
+  setCards: StateSetter<CardData[]>
+};
+
 export type SongPartsCards = string[][];

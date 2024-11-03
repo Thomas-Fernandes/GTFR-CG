@@ -1,20 +1,5 @@
 #artwork-generation {
     form {
-        &#itunes {
-            .itunes-search {
-                width: 33rem;
-
-                display: flex;
-                flex-direction: row;
-                align-items: center;
-                gap: 5%;
-            }
-        }
-
-        &#local>div>label {
-            padding-top: .5rem;
-        }
-
         input[type="submit"] {
             padding: 1.5rem;
             margin: 1rem 0;
@@ -29,24 +14,6 @@
 
         input[type="text"] {
             margin: 0;
-        }
-    }
-
-    #clear {
-        background-color: #8fbc8f;
-
-        margin-bottom: 1rem;
-        width: 16rem;
-        font-size: smaller;
-
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        align-self: center;
-
-        &:hover {
-            cursor: pointer;
-            background-color: #0056b3;
         }
     }
 

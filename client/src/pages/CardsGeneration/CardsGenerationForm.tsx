@@ -1,7 +1,5 @@
 import { JSX, useEffect, useState } from "react";
 
-import { StateSetter } from "@/common/types";
-
 import Checkbox from "@/components/Checkbox/Checkbox";
 import ColorPicker from "@components/ColorPicker/ColorPicker";
 import FileUploader from "@components/FileUploader/FileUploader";
@@ -10,14 +8,9 @@ import { SESSION_STORAGE } from "@constants/browser";
 import { SPINNER_ID } from "@constants/spinners";
 
 import { handleGenerateCards, handleUnauthorizedCheckbox } from "./handlers";
-import { CardData } from "./types";
+import { CardsGenerationFormProps } from "./types";
 
 import "./CardsGenerationForm.css";
-
-type CardsGenerationFormProps = {
-  setCardPaths: StateSetter<string[]>,
-  setCards: StateSetter<CardData[]>
-};
 
 const CardsGenerationForm: React.FC<CardsGenerationFormProps> = ({ setCardPaths, setCards }): JSX.Element => {
   const [isComponentMounted, setIsComponentMounted] = useState(false);

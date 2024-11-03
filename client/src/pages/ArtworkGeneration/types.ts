@@ -22,11 +22,12 @@ export type FileUploadRequest = {
 export type ItunesImageResultProps = {
   item: ItunesResult;
   itemId: number;
-  handleSubmitItunesImage: (item: ItunesResult, key: number, props: HandleSubmitArtworkGenerationProps) => void;
+  handleSelectItunesImage: (item: ItunesResult, key: number, props: HandleSubmitArtworkGenerationProps) => void;
 };
-export type ItunesImageGalleryProps = {
+export type ItunesResultsProps = {
   items: ItunesResult[];
-  handleSubmitItunesImage: (item: ItunesResult, key: number, props: HandleSubmitArtworkGenerationProps) => void;
+  setItunesResults: StateSetter<ItunesResult[]>;
+  handleSelectItunesImage: (item: ItunesResult, key: number, props: HandleSubmitArtworkGenerationProps) => void;
 };
 
 export type ItunesResult = {
@@ -55,5 +56,8 @@ export type HandleChangeTermProps = {
   term: string;
   setTerm: StateSetter<string>;
   startItunesSearch: TransitionStartFunction;
+  setItunesResults: StateSetter<ItunesResult[]>;
+};
+export type ItunesFormProps = {
   setItunesResults: StateSetter<ItunesResult[]>;
 };

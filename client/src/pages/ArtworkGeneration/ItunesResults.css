@@ -42,4 +42,22 @@
             }
         }
     }
+
+    #clear {
+        background-color: #8fbc8f;
+
+        margin-bottom: 1rem;
+        width: 16rem;
+        font-size: smaller;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        align-self: center;
+
+        &:hover {
+            cursor: pointer;
+            background-color: #0056b3;
+        }
+    }
 }

@@ -11,7 +11,7 @@ import { AUTOMATIC_SEARCH_TRIGGERS } from "./constants";
 import { postFileUpload, postItunesResult, postItunesSearch, postYoutubeUrl } from "./requests";
 import { isValidYoutubeUrl } from "./utils";
 
-export const handleSubmitItunesImage = (
+export const handleSelectItunesImage = (
   item: ItunesResult, key: number,
   props: HandleSubmitArtworkGenerationProps
 ) => {
