@@ -11,7 +11,10 @@ const YoutubeForm = (): JSX.Element => {
   const [youtubeUrl, setYoutubeUrl] = useState("");
 
   return (
-    <form id="youtube" onSubmit={(e) => handleSubmitYoutubeUrl(e, { url: youtubeUrl }, { isProcessingLoading, setIsProcessingLoading, navigate })}>
+    <form
+      id="youtube"
+      onSubmit={(e) => handleSubmitYoutubeUrl(e, { url: youtubeUrl }, { isProcessingLoading, setIsProcessingLoading, navigate })}
+    >
       <div className="flexbox">
         <input type="text" placeholder="Paste YouTube video URL here"
           onChange={(e) => setYoutubeUrl(e.target.value)}

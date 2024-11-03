@@ -5,7 +5,7 @@ import { sendToast } from "@common/toast";
 import { ImageDownloadRequest } from "@common/types";
 import { isFileExtensionAccepted } from "@common/utils/fileUtils";
 
-import { FILE_UPLOAD } from "@constants/ArtworkGeneration";
+import { ACCEPTED_IMG_EXTENSIONS } from "@constants/files";
 import { SPINNER_ID } from "@constants/spinners";
 import { TOAST, TOAST_TYPE } from "@constants/toasts";
 
@@ -71,11 +71,11 @@ export const handleGenerateCards = (
   }
 
   if (body.bgImg) {
-    const fileExtensionIsAccepted = isFileExtensionAccepted(body.bgImg.name, FILE_UPLOAD.ACCEPTED_IMG_EXTENSIONS);
+    const fileExtensionIsAccepted = isFileExtensionAccepted(body.bgImg.name, ACCEPTED_IMG_EXTENSIONS);
     if (!fileExtensionIsAccepted) {
       sendToast(
         TOAST.INVALID_FILE_TYPE + "\n" +
-          "Accepted file extensions: " + FILE_UPLOAD.ACCEPTED_IMG_EXTENSIONS.join(", ") + ".",
+          "Accepted file extensions: " + ACCEPTED_IMG_EXTENSIONS.join(", ") + ".",
         TOAST_TYPE.ERROR
       );
       return;

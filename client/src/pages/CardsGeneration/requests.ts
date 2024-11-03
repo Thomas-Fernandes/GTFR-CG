@@ -4,11 +4,12 @@ import { sendToast } from "@common/toast";
 import { ApiResponse } from "@common/types";
 
 import { SESSION_STORAGE } from "@constants/browser";
-import { API, BACKEND_URL, PROCESSED_CARDS_PATH } from "@constants/paths";
+import { API, BACKEND_URL } from "@constants/paths";
 import { HTTP_STATUS } from "@constants/requests";
 import { SPINNER_ID } from "@constants/spinners";
 import { TOAST, TOAST_TYPE } from "@constants/toasts";
 
+import { OUTRO_FILENAME, PROCESSED_CARDS_PATH } from "./constants";
 import { CardsGenerationRequest, CardsGenerationResponse, GenerateCardsProps, GenerateSingleCardProps, SingleCardGenerationRequest } from "./types";
 import { deduceNewCards, generateFormData, updateCard } from "./utils";
 
@@ -71,7 +72,7 @@ export const postGenerateCards = (
     for (let i = 0; i < nbGenerated; i++)
       cardPaths.push(`${PROCESSED_CARDS_PATH}/${i.toString().padStart(2, "0")}.png`); // 00.png, 01.png, ..., 09.png, 10.png, ...
     if (body.generateOutro === true)
-      cardPaths.push(`${PROCESSED_CARDS_PATH}/outro.png`);
+      cardPaths.push(`${PROCESSED_CARDS_PATH}/${OUTRO_FILENAME}`);
     const pathsWithCacheBuster = cardPaths.map((path) => `${path}?t=${Date.now()}`); // busting cached images with the same name thanks to timestamp
     setCardPaths(pathsWithCacheBuster);
     const newCards = deduceNewCards(pathsWithCacheBuster, response.data.cardsLyrics, body.generateOutro ?? false);

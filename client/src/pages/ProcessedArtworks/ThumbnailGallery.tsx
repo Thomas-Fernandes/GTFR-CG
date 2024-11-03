@@ -1,8 +1,6 @@
 import { JSX, useState } from "react";
 
-import { PROCESSED_ARTWORKS_PATH } from "@constants/paths";
-import { DEFAULT_SELECTED_POSITION, LOGO_POSITIONS } from "@constants/thumbnails";
-
+import { DEFAULT_SELECTED_POSITION, LOGO_POSITIONS, PROCESSED_ARTWORKS_PATH } from "./constants";
 import { handleSubmitDownloadImage } from "./handlers";
 import { ThumbnailOptionProps } from "./types";
 import { processImageName } from "./utils";

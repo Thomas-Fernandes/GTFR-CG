@@ -5,6 +5,8 @@ import { SPINNER_ID } from "@constants/spinners";
 import { handleChangeTerm, handleSubmitItunesSearch } from "./handlers";
 import { ItunesFormProps } from "./types";
 
+import Selector from "@/components/Selector/Selector";
+import { ITUNES_REGION_OPTIONS } from "./constants";
 import "./ItunesForm.css";
 
 const ItunesForm: React.FC<ItunesFormProps> = ({ setItunesResults }): JSX.Element => {
@@ -19,13 +21,9 @@ const ItunesForm: React.FC<ItunesFormProps> = ({ setItunesResults }): JSX.Elemen
           onChange={(e) => handleChangeTerm(e.target.value, country, { term, setTerm, startItunesSearch, setItunesResults })}
         />
         <div id={SPINNER_ID.ITUNES} className="itunes-search">
-          <select aria-label="Country"
-            defaultValue="fr" onChange={(e) => setCountry(e.target.value)}
-          >
-            <option value="fr">{"France"}</option>
-            <option value="us">{"United States"}</option>
-            <option value="nz">{"New Zealand"}</option>
-          </select>
+          <Selector aria-label="Country" defaultValue={ITUNES_REGION_OPTIONS[0].value}
+            setter={setCountry} options={ITUNES_REGION_OPTIONS}
+          />
           <input type="submit" value="SEARCH" className="action-button" />
         </div>
       </div>

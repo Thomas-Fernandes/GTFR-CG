@@ -3,8 +3,9 @@ import { FormEvent } from "react";
 import { sendToast } from "@common/toast";
 import { ImageDownloadRequest } from "@common/types";
 
-import { COVER_ART_FILENAME, PROCESSED_ARTWORKS_PATH } from "@constants/paths";
 import { TOAST, TOAST_TYPE } from "@constants/toasts";
+
+import { COVER_ART_FILENAME, PROCESSED_ARTWORKS_PATH } from "./constants";
 
 export const handleSubmitDownloadImage = (e: FormEvent<HTMLFormElement>, body: ImageDownloadRequest) => {
   e.preventDefault();

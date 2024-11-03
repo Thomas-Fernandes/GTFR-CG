@@ -1,23 +1,20 @@
-import { JSX } from "react";
+import { ComponentPropsWithoutRef, JSX } from "react";
 
 import "./Checkbox.css";
 
-type Props = {
+type Props = ComponentPropsWithoutRef<"input"> & {
   id: string;
   label: string;
-  defaultChecked?: boolean;
-  disabled?: boolean;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-const Checkbox: React.FC<Props> = ({ id, label, defaultChecked, disabled, onChange }): JSX.Element => {
+const Checkbox: React.FC<Props> = ({ id, label, onChange, ...inputProps }): JSX.Element => {
   return (
     <label className="checkbox" htmlFor={id}>
       <input
         type="checkbox" name={id} id={id}
-        defaultChecked={defaultChecked ?? false}
-        disabled={disabled ?? false}
         onChange={onChange}
+        {...inputProps}
       />
       <p className="checkbox-label italic">
         {label}

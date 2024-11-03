@@ -1,4 +1,4 @@
-import { VIEW_PATHS } from "./paths";
+import { VIEW_PATHS } from "@/constants/paths";
 
 export const DEFAULT_REDIRECTION = {
   error_text: "",

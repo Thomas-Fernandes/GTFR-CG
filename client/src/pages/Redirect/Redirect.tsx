@@ -4,8 +4,9 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useTitle } from "@common/hooks/useTitle";
 
 import { TITLE } from "@constants/browser";
-import { DEFAULT_REDIRECTION } from "@constants/redirection";
 import { DEFAULT_EVENT_DURATION } from "@constants/toasts";
+
+import { DEFAULT_REDIRECTION } from "./constants";
 
 import "./Redirect.css";
 

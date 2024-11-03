@@ -2,13 +2,13 @@ import { FormEvent } from "react";
 
 import { sendToast } from "@common/toast";
 import { isFileExtensionAccepted } from "@common/utils/fileUtils";
-import { FileUploadRequest, HandleChangeTermProps, HandleSubmitArtworkGenerationProps, HandleSubmitItunesSearchProps, ItunesRequest, ItunesResult, YoutubeRequest } from "@pages/ArtworkGeneration/types";
 
-import { FILE_UPLOAD } from "@constants/ArtworkGeneration";
+import { ACCEPTED_IMG_EXTENSIONS } from "@constants/files";
 import { TOAST, TOAST_TYPE } from "@constants/toasts";
 
 import { AUTOMATIC_SEARCH_TRIGGERS } from "./constants";
 import { postFileUpload, postItunesResult, postItunesSearch, postYoutubeUrl } from "./requests";
+import { FileUploadRequest, HandleChangeTermProps, HandleSubmitArtworkGenerationProps, HandleSubmitItunesSearchProps, ItunesRequest, ItunesResult, YoutubeRequest } from "./types";
 import { isValidYoutubeUrl } from "./utils";
 
 export const handleSelectItunesImage = (
@@ -84,11 +84,11 @@ export const handleSubmitFileUpload = (
   formData.append("file", body.localFile);
   formData.append("includeCenterArtwork", body.includeCenterArtwork.toString());
 
-  const fileExtensionIsAccepted = isFileExtensionAccepted(body.localFile.name, FILE_UPLOAD.ACCEPTED_IMG_EXTENSIONS);
+  const fileExtensionIsAccepted = isFileExtensionAccepted(body.localFile.name, ACCEPTED_IMG_EXTENSIONS);
   if (!fileExtensionIsAccepted) {
     sendToast(
       TOAST.INVALID_FILE_TYPE + "\n" +
-        "Accepted file extensions: " + FILE_UPLOAD.ACCEPTED_IMG_EXTENSIONS.join(", ") + ".",
+        "Accepted file extensions: " + ACCEPTED_IMG_EXTENSIONS.join(", ") + ".",
       TOAST_TYPE.ERROR
     );
     return;

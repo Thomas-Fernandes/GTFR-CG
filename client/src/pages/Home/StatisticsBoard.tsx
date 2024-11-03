@@ -3,10 +3,10 @@ import { JSX } from "react";
 import { StatisticProps, StatisticsBoardProps } from "@pages/Home/types";
 
 import { SPINNER_ID } from "@constants/spinners";
-import { STAT_NAME } from "@constants/statistics";
+
+import { STAT_NAME } from "./constants";
 
 import "./StatisticsBoard.css";
-
 
 const Statistic: React.FC<StatisticProps> = ({ label, value, spinnerId }): JSX.Element => {
   return (
@@ -28,11 +28,11 @@ const StatisticsBoard: React.FC<StatisticsBoardProps> = ({ stats }): JSX.Element
       <hr />
       <Statistic label={STAT_NAME.DATE_LAST_OPERATION} value={stats.dateLastOperation} spinnerId={SPINNER_ID.STATISTICS_LAST_OPERATION} />
       <hr />
-      <Statistic label={STAT_NAME.ARTWORK_GENERATIONS} value={stats.artworkGenerations} spinnerId={SPINNER_ID.STATISTICS_ARTWORK_GENERATION} />
+      <Statistic label={STAT_NAME.ARTWORK_GENERATIONS} value={stats.artworkGenerations} spinnerId={SPINNER_ID.STATISTICS_ARTWORK_GENERATIONS} />
       <hr />
       <Statistic label={STAT_NAME.LYRICS_FETCHES} value={stats.lyricsFetches} spinnerId={SPINNER_ID.STATISTICS_LYRICS_FETCHES} />
       <hr />
-      <Statistic label={STAT_NAME.CARDS_GENERATED} value={stats.cardsGenerated} spinnerId={SPINNER_ID.STATISTICS_CARDS_GENERATION} />
+      <Statistic label={STAT_NAME.CARDS_GENERATED} value={stats.cardsGenerated} spinnerId={SPINNER_ID.STATISTICS_CARDS_GENERATED} />
     </div>
   );
 };

@@ -4,13 +4,13 @@ import { is2xxSuccessful, sendRequest } from "@common/requests";
 import { hideSpinner, showSpinner } from "@common/spinner";
 import { sendToast } from "@common/toast";
 import { ApiResponse, StateSetter } from "@common/types";
-import { ItunesImageRequest, ItunesRequest, ItunesResponse, ItunesResult, YoutubeRequest } from "@pages/ArtworkGeneration/types";
 
-import { ITUNES } from "@constants/ArtworkGeneration";
 import { API, BACKEND_URL, VIEW_PATHS } from "@constants/paths";
 import { SPINNER_ID } from "@constants/spinners";
 import { TOAST, TOAST_TYPE } from "@constants/toasts";
 
+import { ARTWORK_RESULT_PROPS } from "./constants";
+import { ItunesImageRequest, ItunesRequest, ItunesResponse, ItunesResult, YoutubeRequest } from "./types";
 import { getTitleWithAdjustedLength } from "./utils";
 
 export const postItunesResult = (
@@ -60,9 +60,9 @@ export const postItunesSearch = (
 
     if (response.data.resultCount > 0) {
       response.data.results.forEach((result) => {
-        if (result.artistName?.length > ITUNES.MAX_TITLE_LENGTH)
+        if (result.artistName?.length > ARTWORK_RESULT_PROPS.MAX_TITLE_LENGTH)
           result.artistName = getTitleWithAdjustedLength(result.artistName);
-        if (result.collectionName?.length > ITUNES.MAX_TITLE_LENGTH)
+        if (result.collectionName?.length > ARTWORK_RESULT_PROPS.MAX_TITLE_LENGTH)
           result.collectionName = getTitleWithAdjustedLength(result.collectionName);
         resultItems.push({
           resultId: resultItems.length,

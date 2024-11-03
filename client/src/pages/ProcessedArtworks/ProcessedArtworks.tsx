@@ -8,11 +8,12 @@ import NavButton from "@components/NavButton";
 import ToastContainer from "@components/ToastContainer/ToastContainer";
 
 import { TITLE } from "@constants/browser";
-import { COVER_ART_FILENAME, PROCESSED_ARTWORKS_PATH, VIEW_PATHS } from "@constants/paths";
+import { VIEW_PATHS } from "@constants/paths";
 import { TOAST } from "@constants/toasts";
 
 import BackgroundImageDisplay from "./BackgroundImageDisplay";
 import ThumbnailGallery from "./ThumbnailGallery";
+import { COVER_ART_FILENAME, PROCESSED_ARTWORKS_PATH } from "./constants";
 
 import "./ProcessedArtworks.css";
 

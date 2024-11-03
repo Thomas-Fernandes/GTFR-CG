@@ -1,9 +1,5 @@
-export const PROCESSED_ARTWORKS_PATH = "./processed-artworks";
-export const COVER_ART_FILENAME = "ProcessedArtwork.png";
-export const OUTRO_FILENAME = "outro.png";
-export const PROCESSED_CARDS_PATH = "./processed-cards";
-
 export enum VIEW_PATHS {
+  ROOT = "/",
   REDIRECT = "/redirect",
   HOME = "/home",
   TESTS = "/tests",

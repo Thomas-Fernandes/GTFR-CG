@@ -24,7 +24,7 @@ const App = (): JSX.Element => {
         <Route path={VIEW_PATHS.REDIRECT} element={<Redirect />} />
         <Route path={VIEW_PATHS.TESTS} element={<Tests />} />
         <Route path={VIEW_PATHS.HOME} element={<Home />} />
-        <Route path="*" element={<Home />} />
+        <Route path={VIEW_PATHS.ROOT} element={<Home />} />
       </Routes>
     </Router>
   )

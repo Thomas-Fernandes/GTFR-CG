@@ -1,7 +1,6 @@
 import { JSX } from "react";
 
-import { COVER_ART_FILENAME, PROCESSED_ARTWORKS_PATH } from "@constants/paths";
-
+import { COVER_ART_FILENAME, PROCESSED_ARTWORKS_PATH } from "./constants";
 import { handleSubmitDownloadImage } from "./handlers";
 
 import "./BackgroundImageDisplay.css";
