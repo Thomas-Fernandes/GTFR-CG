@@ -1,16 +1,17 @@
-import React from "react";
+import React, { ComponentPropsWithoutRef } from "react";
 
 import "./ButtonRemove.css";
 
-type Props = {
+type Props = ComponentPropsWithoutRef<"button"> & {
   className?: string;
   onClick: () => void;
 };
 
-const ButtonRemove: React.FC<Props> = ({ className, onClick }) => {
+const ButtonRemove: React.FC<Props> = ({ className, onClick, ...props }) => {
   return (
-    <button type="button" className={"btn-remove " + (className ?? "")}
-      onClick={onClick}
+    <button type="button" onClick={onClick}
+      className={"btn-remove " + (className ?? "")}
+      {...props}
     >
       <span className="btn-remove--cross">{"✖"}</span>
     </button>

@@ -24,7 +24,7 @@ const ProcessedArtworks = (): JSX.Element => {
   useEffect(() => {
     doesFileExist(PROCESSED_ARTWORKS_PATH + "/" + COVER_ART_FILENAME).then((anyProcessedImageExists: boolean) => {
       if (!anyProcessedImageExists) {
-        navigate(`${VIEW_PATHS.redirect}?redirect_to=${VIEW_PATHS.artworkGeneration}&error_text=${TOAST.NO_PROCESSED_IMAGE}`);
+        navigate(`${VIEW_PATHS.REDIRECT}?redirect_to=${VIEW_PATHS.ARTWORK_GENERATION}&error_text=${TOAST.NO_PROCESSED_IMAGE}`);
       }
     });
   });
@@ -35,10 +35,10 @@ const ProcessedArtworks = (): JSX.Element => {
       <span className="top-bot-spacer" />
 
       <div className="navbar">
-        <NavButton to={VIEW_PATHS.home} label={TITLE.HOME} side="left" />
-        <NavButton to={VIEW_PATHS.artworkGeneration} label={TITLE.ARTWORK_GENERATION} side="left" />
-        <NavButton to={VIEW_PATHS.lyrics} label={TITLE.LYRICS} side="right" />
-        <NavButton to={VIEW_PATHS.cardsGeneration} label={TITLE.CARDS_GENERATION} side="right" />
+        <NavButton to={VIEW_PATHS.HOME} label={TITLE.HOME} side="left" />
+        <NavButton to={VIEW_PATHS.ARTWORK_GENERATION} label={TITLE.ARTWORK_GENERATION} side="left" />
+        <NavButton to={VIEW_PATHS.LYRICS} label={TITLE.LYRICS} side="right" />
+        <NavButton to={VIEW_PATHS.CARDS_GENERATION} label={TITLE.CARDS_GENERATION} side="right" />
       </div>
 
       <h1>{TITLE.PROCESSED_ARTWORKS}</h1>

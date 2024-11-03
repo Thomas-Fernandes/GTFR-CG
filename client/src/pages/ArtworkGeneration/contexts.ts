@@ -14,4 +14,3 @@ const {
 } = createNewContext<ArtworkGenerationContextType>();
 
 export { ArtworkGenerationContext, useArtworkGenerationContext };
-

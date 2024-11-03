@@ -1,15 +1,16 @@
-import React from "react";
+import React, { ComponentPropsWithoutRef } from "react";
 
-import { saveAs } from "file-saver";
 import JSZip from "jszip";
 
-type Props = {
+import { saveAs } from "file-saver";
+
+type Props = ComponentPropsWithoutRef<"button"> & {
   id?: string;
   paths: string[];
   output: string;
 };
 
-const ZipDownloadButton: React.FC<Props> = ({ id, paths, output }) => {
+const ZipDownloadButton: React.FC<Props> = ({ id, paths, output, ...props }) => {
   const handleDownloadButtonClick = async () => {
     const zip = new JSZip();
 
@@ -38,7 +39,10 @@ const ZipDownloadButton: React.FC<Props> = ({ id, paths, output }) => {
   };
 
   return (
-    <button type="button" id={id} onClick={handleDownloadButtonClick}>
+    <button
+      type="button" id={id} onClick={handleDownloadButtonClick}
+      {...props}
+    >
       {"Download All as Zip"}
     </button>
   );

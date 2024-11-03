@@ -3,40 +3,39 @@ export const COVER_ART_FILENAME = "ProcessedArtwork.png";
 export const OUTRO_FILENAME = "outro.png";
 export const PROCESSED_CARDS_PATH = "./processed-cards";
 
-export const VIEW_PATHS = {
-  redirect: "/redirect",
-  home: "/home",
-  tests: "/tests",
-  artworkGeneration: "/artwork-generation",
-  artworkProcessing: "/artwork-processing",
-  lyrics: "/lyrics",
-  cardsGeneration: "/cards-generation",
-  processedCards: "/processed-cards",
-};
+export enum VIEW_PATHS {
+  REDIRECT = "/redirect",
+  HOME = "/home",
+  TESTS = "/tests",
+  ARTWORK_GENERATION = "/artwork-generation",
+  ARTWORK_PROCESSING = "/artwork-processing",
+  LYRICS = "/lyrics",
+  CARDS_GENERATION = "/cards-generation",
+}
 
 export const API = {
   STATISTICS: "/statistics",
   GENIUS_TOKEN: "/genius-token",
 
   ARTWORK_GENERATION: {
-    ITUNES_SEARCH: VIEW_PATHS.artworkGeneration + "/search-itunes",
-    ITUNES: VIEW_PATHS.artworkGeneration + "/use-itunes-image",
-    FILE_UPLOAD: VIEW_PATHS.artworkGeneration + "/use-local-image",
-    YOUTUBE_THUMBNAIL: VIEW_PATHS.artworkGeneration + "/use-youtube-thumbnail",
+    ITUNES_SEARCH: VIEW_PATHS.ARTWORK_GENERATION + "/search-itunes",
+    ITUNES: VIEW_PATHS.ARTWORK_GENERATION + "/use-itunes-image",
+    FILE_UPLOAD: VIEW_PATHS.ARTWORK_GENERATION + "/use-local-image",
+    YOUTUBE_THUMBNAIL: VIEW_PATHS.ARTWORK_GENERATION + "/use-youtube-thumbnail",
   },
 
   ARTWORK_PROCESSING: {
-    PROCESS_ARTWORKS: VIEW_PATHS.artworkProcessing + "/process-artworks",
+    PROCESS_ARTWORKS: VIEW_PATHS.ARTWORK_PROCESSING + "/process-artworks",
   },
 
   LYRICS: {
-    GET_LYRICS: VIEW_PATHS.lyrics + "/get-genius-lyrics",
+    GET_LYRICS: VIEW_PATHS.LYRICS + "/get-genius-lyrics",
   },
 
   CARDS_GENERATION: {
-    SAVE_CARDS_CONTENTS: VIEW_PATHS.cardsGeneration + "/save-cards-contents",
-    GENERATE_CARDS: VIEW_PATHS.cardsGeneration + "/generate",
-    GENERATE_SINGLE_CARD: VIEW_PATHS.cardsGeneration + "/generate-single",
+    SAVE_CARDS_CONTENTS: VIEW_PATHS.CARDS_GENERATION + "/save-cards-contents",
+    GENERATE_CARDS: VIEW_PATHS.CARDS_GENERATION + "/generate",
+    GENERATE_SINGLE_CARD: VIEW_PATHS.CARDS_GENERATION + "/generate-single",
   },
 };
 

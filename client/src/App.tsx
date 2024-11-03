@@ -17,13 +17,13 @@ const App = (): JSX.Element => {
   return (
     <Router>
       <Routes>
-        <Route path={VIEW_PATHS.cardsGeneration} element={<CardsGeneration />} />
-        <Route path={VIEW_PATHS.lyrics} element={<Lyrics />} />
-        <Route path={VIEW_PATHS.artworkProcessing} element={<ProcessedArtworks />} />
-        <Route path={VIEW_PATHS.artworkGeneration} element={<ArtworkGeneration />} />
-        <Route path={VIEW_PATHS.redirect} element={<Redirect />} />
-        <Route path={VIEW_PATHS.tests} element={<Tests />} />
-        <Route path={VIEW_PATHS.home} element={<Home />} />
+        <Route path={VIEW_PATHS.CARDS_GENERATION} element={<CardsGeneration />} />
+        <Route path={VIEW_PATHS.LYRICS} element={<Lyrics />} />
+        <Route path={VIEW_PATHS.ARTWORK_PROCESSING} element={<ProcessedArtworks />} />
+        <Route path={VIEW_PATHS.ARTWORK_GENERATION} element={<ArtworkGeneration />} />
+        <Route path={VIEW_PATHS.REDIRECT} element={<Redirect />} />
+        <Route path={VIEW_PATHS.TESTS} element={<Tests />} />
+        <Route path={VIEW_PATHS.HOME} element={<Home />} />
         <Route path="*" element={<Home />} />
       </Routes>
     </Router>

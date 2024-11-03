@@ -30,7 +30,7 @@ export const postLyricsSave = (body: LyricsSaveRequest, props: LyricsSaveProps) 
     sessionStorage.setItem(SESSION_STORAGE.LATEST_CARD_GENERATION, JSON.stringify({
       pageMetadata, lyricsParts, dismissedParts: Array.from(dismissedParts)
     }));
-    navigate(VIEW_PATHS.cardsGeneration);
+    navigate(VIEW_PATHS.CARDS_GENERATION);
   }).catch((error: ApiResponse) => {
     sendToast(error.message, TOAST_TYPE.ERROR);
   }).finally(() => {

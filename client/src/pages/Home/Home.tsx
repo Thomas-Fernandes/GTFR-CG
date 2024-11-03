@@ -26,8 +26,8 @@ const Home = (): JSX.Element => {
 
   useEffect(() => {
     const fetchAndSetData = () => {
-      if (!window.location.href.endsWith(VIEW_PATHS.home)) {
-        navigate(VIEW_PATHS.home);
+      if (!window.location.href.endsWith(VIEW_PATHS.HOME)) {
+        navigate(VIEW_PATHS.HOME);
         return;
       }
 
@@ -56,18 +56,18 @@ const Home = (): JSX.Element => {
 
       <div className="home navbar">
         <div className="navbar-row">
-          <NavButton to={VIEW_PATHS.artworkGeneration} label={TITLE.ARTWORK_GENERATION} side="right" />
-          <NavButton to={VIEW_PATHS.lyrics} label={TITLE.LYRICS} side="right" />
+          <NavButton to={VIEW_PATHS.ARTWORK_GENERATION} label={TITLE.ARTWORK_GENERATION} side="right" />
+          <NavButton to={VIEW_PATHS.LYRICS} label={TITLE.LYRICS} side="right" />
         </div>
         <div className="navbar-row">
-          <NavButton to={VIEW_PATHS.cardsGeneration} label={TITLE.CARDS_GENERATION} side="right" />
+          <NavButton to={VIEW_PATHS.CARDS_GENERATION} label={TITLE.CARDS_GENERATION} side="right" />
         </div>
       </div>
 
       <StatisticsBoard stats={stats} />
 
       <div className="tests navbar">
-        <NavButton to={VIEW_PATHS.tests} label={TITLE.TESTS} side="right" />
+        <NavButton to={VIEW_PATHS.TESTS} label={TITLE.TESTS} side="right" />
       </div>
 
       <div className="hidden"> {/* avoid unused variable */}

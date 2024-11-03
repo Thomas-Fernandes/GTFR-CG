@@ -1,23 +1,22 @@
-import React, { useState } from "react";
+import React, { ComponentPropsWithoutRef, useState } from "react";
 
 import "./ImgButton.css";
 
-type Props = {
+type Props = ComponentPropsWithoutRef<"img"> & {
   src: string;
   alt: string;
-  className?: string;
-  onLoad?: () => void;
   onClick?: () => void;
+  onLoad?: () => void;
 };
 
-const ImgButton: React.FC<Props> = ({ src, alt, className, onLoad, onClick }) => {
+const ImgButton: React.FC<Props> = ({ src, alt, onClick, onLoad, ...imgProps }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
     <div className="img-button">
       <button
         style={{
-          padding: isHovered ? "5px" : "0",
+          padding: isHovered ? ".33rem" : "0",
         }}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
@@ -25,7 +24,7 @@ const ImgButton: React.FC<Props> = ({ src, alt, className, onLoad, onClick }) =>
       >
         <img
           src={src} alt={alt} onLoad={onLoad}
-          className={className}
+          {...imgProps}
         />
       </button>
     </div>

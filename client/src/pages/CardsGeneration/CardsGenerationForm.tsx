@@ -1,6 +1,6 @@
 import { JSX, useEffect, useState } from "react";
 
-import Checkbox from "@/components/Checkbox/Checkbox";
+import Checkbox from "@components/Checkbox/Checkbox";
 import ColorPicker from "@components/ColorPicker/ColorPicker";
 import FileUploader from "@components/FileUploader/FileUploader";
 
@@ -92,7 +92,7 @@ const CardsGenerationForm: React.FC<CardsGenerationFormProps> = ({ setCardPaths,
         />
       </div>
 
-      <div className="action-button" id={SPINNER_ID.CARDS_GENERATE}>
+      <div className="action-button pad-l-1" id={SPINNER_ID.CARDS_GENERATE}>
         <input type="submit" value="GENERATE" className="action-button" />
       </div>
     </form>

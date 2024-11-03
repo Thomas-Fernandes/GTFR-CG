@@ -15,7 +15,6 @@ import ItunesForm from "./ItunesForm";
 import ItunesResults from "./ItunesResults";
 import YoutubeForm from "./YoutubeForm";
 import { ArtworkGenerationContext } from "./contexts";
-import { handleSelectItunesImage } from "./handlers";
 
 import "./ArtworkGeneration.css";
 
@@ -39,15 +38,15 @@ const ArtworkGeneration = (): JSX.Element => {
       <span className="top-bot-spacer" />
 
       <div className="navbar">
-        <NavButton to={VIEW_PATHS.home} label={TITLE.HOME} side="left" />
-        <NavButton to={VIEW_PATHS.lyrics} label={TITLE.LYRICS} side="right" />
-        <NavButton to={VIEW_PATHS.cardsGeneration} label={TITLE.CARDS_GENERATION} side="right" />
+        <NavButton to={VIEW_PATHS.HOME} label={TITLE.HOME} side="left" />
+        <NavButton to={VIEW_PATHS.LYRICS} label={TITLE.LYRICS} side="right" />
+        <NavButton to={VIEW_PATHS.CARDS_GENERATION} label={TITLE.CARDS_GENERATION} side="right" />
       </div>
 
       <ArtworkGenerationContext.Provider value={contextValue}>
         <h1>{"Search for cover artwork on iTunes"}</h1>
         <ItunesForm setItunesResults={setItunesResults} />
-        <ItunesResults items={itunesResults} setItunesResults={setItunesResults} handleSelectItunesImage={handleSelectItunesImage} />
+        <ItunesResults items={itunesResults} setItunesResults={setItunesResults} />
 
         <hr />
 

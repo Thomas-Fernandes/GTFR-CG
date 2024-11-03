@@ -20,7 +20,7 @@ const LyricsSearchForm = (): JSX.Element => {
           type="text" name="songName" placeholder="Enter song name"
           onChange={(e) => setSongName(e.target.value)}
         />
-        <div className="action-button" id={SPINNER_ID.LYRICS_SEARCH}>
+        <div className="action-button pad-l-1" id={SPINNER_ID.LYRICS_SEARCH}>
           <input type="submit" value="SEARCH" className="action-button search-button" />
         </div>
       </div>

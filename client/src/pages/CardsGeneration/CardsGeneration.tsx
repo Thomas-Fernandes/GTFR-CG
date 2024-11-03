@@ -62,9 +62,9 @@ const CardsGeneration = (): JSX.Element => {
       <span className="top-bot-spacer" />
 
       <div className="navbar">
-        <NavButton to={VIEW_PATHS.home} label={TITLE.HOME} side="left" />
-        <NavButton to={VIEW_PATHS.artworkGeneration} label={TITLE.ARTWORK_GENERATION} side="left" />
-        <NavButton to={VIEW_PATHS.lyrics} label={TITLE.LYRICS} side="left" />
+        <NavButton to={VIEW_PATHS.HOME} label={TITLE.HOME} side="left" />
+        <NavButton to={VIEW_PATHS.ARTWORK_GENERATION} label={TITLE.ARTWORK_GENERATION} side="left" />
+        <NavButton to={VIEW_PATHS.LYRICS} label={TITLE.LYRICS} side="left" />
       </div>
 
       <h1>{TITLE.CARDS_GENERATION}</h1>

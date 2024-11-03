@@ -129,7 +129,7 @@ const Tests = (): JSX.Element => { // TODO remove this when backend unit tests a
       <span className="top-bot-spacer" />
 
       <div className="navbar">
-        <button type="button" onClick={() => navigate(VIEW_PATHS.home)}>
+        <button type="button" onClick={() => navigate(VIEW_PATHS.HOME)}>
           <span className="left">{TITLE.HOME}</span>
         </button>
       </div>

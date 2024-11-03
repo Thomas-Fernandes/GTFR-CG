@@ -7,10 +7,11 @@ import ImgButton from "@components/ImgButton/ImgButton";
 import { SPINNER_ID } from "@constants/spinners";
 
 import { useArtworkGenerationContext } from "./contexts";
+import { handleSelectItunesImage } from "./handlers";
 
 import "./ItunesResults.css";
 
-const ItunesImageResult: React.FC<ItunesImageResultProps> = ({ item, itemId, handleSelectItunesImage }): JSX.Element => {
+const ItunesImageResult: React.FC<ItunesImageResultProps> = ({ item, itemId }): JSX.Element => {
   const { isProcessingLoading, setIsProcessingLoading, navigate } = useArtworkGenerationContext();
 
   const resultLabel = (item.collectionName || item.trackName).replace(" - Single", "");
@@ -25,12 +26,13 @@ const ItunesImageResult: React.FC<ItunesImageResultProps> = ({ item, itemId, han
         className="result-image"
       />
       <p className="result-text centered bold italic">{itemLabel}</p>
-      <div className="flex-row" id={SPINNER_ID.ITUNES_OPTION + itemId.toString()} />
+
+      <div className="mt-p5" style={{paddingLeft: "0 !important"}} id={SPINNER_ID.ITUNES_OPTION + itemId.toString()} />
     </div>
   );
 };
 
-const ItunesResults: React.FC<ItunesResultsProps> = ({ items, setItunesResults, handleSelectItunesImage }): JSX.Element => {
+const ItunesResults: React.FC<ItunesResultsProps> = ({ items, setItunesResults }): JSX.Element => {
   return (
     <div className="results">
       { items.length > 0 &&
@@ -40,7 +42,6 @@ const ItunesResults: React.FC<ItunesResultsProps> = ({ items, setItunesResults, 
         { items.map((item, index) => (
           <ItunesImageResult
             key={index} item={item} itemId={index}
-            handleSelectItunesImage={handleSelectItunesImage}
           />
         ))}
       </div>

@@ -1,4 +1,4 @@
-import { SongPartsCards } from "@pages/CardsGeneration/types";
+import { SongPartsCards } from "@common/types";
 
 import { LyricsPartType } from "./types";
 

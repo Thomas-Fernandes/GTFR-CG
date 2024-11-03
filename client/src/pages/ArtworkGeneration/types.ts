@@ -22,12 +22,10 @@ export type FileUploadRequest = {
 export type ItunesImageResultProps = {
   item: ItunesResult;
   itemId: number;
-  handleSelectItunesImage: (item: ItunesResult, key: number, props: HandleSubmitArtworkGenerationProps) => void;
 };
 export type ItunesResultsProps = {
   items: ItunesResult[];
   setItunesResults: StateSetter<ItunesResult[]>;
-  handleSelectItunesImage: (item: ItunesResult, key: number, props: HandleSubmitArtworkGenerationProps) => void;
 };
 
 export type ItunesResult = {

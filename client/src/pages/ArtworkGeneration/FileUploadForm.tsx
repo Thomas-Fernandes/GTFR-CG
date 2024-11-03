@@ -27,7 +27,7 @@ const FileUploadForm = (): JSX.Element => {
           defaultChecked={includeCenterArtwork}
           onChange={(e) => setIncludeCenterArtwork(e.target.checked)}
         />
-        <div className="action-button" id={SPINNER_ID.FILE_UPLOAD}>
+        <div className="action-button pad-l-1" id={SPINNER_ID.FILE_UPLOAD}>
           <input type="submit" value="UPLOAD" className="action-button" />
         </div>
       </div>

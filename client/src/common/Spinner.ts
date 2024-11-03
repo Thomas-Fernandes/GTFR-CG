@@ -2,34 +2,37 @@ import { TOAST, TOAST_TYPE } from "@constants/toasts";
 
 import { sendToast } from "./toast";
 
+const createSpinnerContainer = (spinnerDiv: HTMLElement, name: string) => {
+  const spinnerContainer = document.createElement("div");
+  spinnerContainer.classList.add("spinner-container");
+  spinnerContainer.id = "spinner-container" + "-" + name;
+
+  const spinner = document.createElement("span");
+  spinner.classList.add("spinner");
+
+  const favicon = document.createElement("img");
+  favicon.src = "/favicon.ico";
+  favicon.alt = "favicon";
+  spinner.appendChild(favicon);
+
+  spinnerContainer.appendChild(spinner);
+  spinnerDiv.appendChild(spinnerContainer);
+};
+
 export const showSpinner = (name: string) => {
   if (!name) {
     sendToast(TOAST.NO_SPINNER_ID, TOAST_TYPE.ERROR);
     return;
   }
 
-  const button = document.getElementById(name);
+  const spinnerDiv = document.getElementById(name);
 
   // Create spinner container if it doesn't exist
-  if (button?.querySelector(".spinner-container") === null) {
-    const spinnerContainer = document.createElement("div");
-    spinnerContainer.classList.add("spinner-container");
-    spinnerContainer.id = "spinner-container" + "-" + name;
-
-    const spinner = document.createElement("span");
-    spinner.classList.add("spinner");
-
-    const favicon = document.createElement("img");
-    favicon.src = "/favicon.ico";
-    favicon.alt = "favicon";
-    spinner.appendChild(favicon);
-
-    spinnerContainer.appendChild(spinner);
-    button.appendChild(spinnerContainer);
-  }
+  if (spinnerDiv?.querySelector(".spinner-container") === null)
+    createSpinnerContainer(spinnerDiv, name);
 
   // Show the spinner
-  const spinnerContainer = button?.querySelector(".spinner-container") as HTMLElement;
+  const spinnerContainer = spinnerDiv?.querySelector(".spinner-container") as HTMLDivElement;
   if (!spinnerContainer) {
     sendToast(TOAST.NO_SPINNER_CONTAINER, TOAST_TYPE.ERROR);
     return;

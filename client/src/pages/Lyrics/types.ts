@@ -1,6 +1,6 @@
-import { ApiResponse, StateSetter } from "@common/types";
-import { SongPartsCards } from "@pages/CardsGeneration/types";
 import { NavigateFunction } from "react-router-dom";
+
+import { ApiResponse, SongPartsCards, StateSetter } from "@common/types";
 
 export type PageMetadata = {
   artist: string;

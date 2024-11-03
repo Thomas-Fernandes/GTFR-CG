@@ -58,7 +58,7 @@ const Lyrics = (): JSX.Element => {
 
     isTokenSet().then((isSet) => {
       if (!isSet) {
-        navigate(`${VIEW_PATHS.redirect}?redirect_to=${VIEW_PATHS.home}&error_text=${TOAST.NO_GENIUS_TOKEN}`);
+        navigate(`${VIEW_PATHS.REDIRECT}?redirect_to=${VIEW_PATHS.HOME}&error_text=${TOAST.NO_GENIUS_TOKEN}`);
       } else {
         setIsGeniusTokenSet(true);
 
@@ -77,9 +77,9 @@ const Lyrics = (): JSX.Element => {
       <span className="top-bot-spacer" />
 
       <div className="navbar">
-        <NavButton to={VIEW_PATHS.home} label={TITLE.HOME} side="left" />
-        <NavButton to={VIEW_PATHS.artworkGeneration} label={TITLE.ARTWORK_GENERATION} side="left" />
-        <NavButton to={VIEW_PATHS.cardsGeneration} label={TITLE.CARDS_GENERATION} side="right" />
+        <NavButton to={VIEW_PATHS.HOME} label={TITLE.HOME} side="left" />
+        <NavButton to={VIEW_PATHS.ARTWORK_GENERATION} label={TITLE.ARTWORK_GENERATION} side="left" />
+        <NavButton to={VIEW_PATHS.CARDS_GENERATION} label={TITLE.CARDS_GENERATION} side="right" />
       </div>
 
       <h1>{TITLE.LYRICS}</h1>

@@ -1,5 +1,7 @@
 import { Dispatch, SetStateAction } from "react";
 
+export type SongPartsCards = string[][];
+
 export type ImageDownloadRequest = {
   selectedImage: string;
 };

@@ -1,10 +1,9 @@
 import { FormEvent } from "react";
 
 import { sendToast } from "@common/toast";
+import { SongPartsCards } from "@common/types";
 
 import { TOAST, TOAST_TYPE } from "@constants/toasts";
-
-import { SongPartsCards } from "@pages/CardsGeneration/types";
 
 import { postLyricsSave, postLyricsSearch } from "./requests";
 import { HandleLoadLastContentsProps, HandleLyricsSaveSubmitProps, HandleLyricsSearchSubmitProps, HandleSetLyricsPartsProps, LyricsRequest } from "./types";
