@@ -7,11 +7,11 @@ const ManualGenerationInputBar = (): JSX.Element => {
     <div className="flexbox">
       <div id="metadata-bar" className="flex-row g-1">
         <input required
-          type="text" name="artist" placeholder="Enter artist name"
+          type="text" name="artist" placeholder={"Enter artist name"}
           onChange={(e) => { setArtist(e.target.value); setPageMetadata({...pageMetadata, artist: e.target.value}); }}
         />
         <input required
-          type="text" name="songName" placeholder="Enter song name"
+          type="text" name="songName" placeholder={"Enter song name"}
           onChange={(e) => { setSongName(e.target.value); setPageMetadata({...pageMetadata, title: e.target.value}); }}
         />
       </div>

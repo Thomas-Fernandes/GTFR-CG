@@ -33,10 +33,6 @@ div.navbar {
     }
 }
 
-span.top-bot-spacer {
-    padding: 0.5em 0;
-}
-
 div.spinner-container {
     position: relative;
     display: inline-block;
@@ -173,6 +169,10 @@ button {
         span.left:before  { left:  -2%; }
         span.right:before { right: -2%; }
     }
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
 }
 a.button, input.button {
     display: inline-block;
@@ -226,7 +226,7 @@ input.action-button {
 input[type="text"], textarea {
     width: 50%;
     padding: 1.5rem;
-    margin: 1.5rem 0;
+    margin: 1rem 0;
 
     border: 2px solid #ddd;
     border-radius: 0.2rem;

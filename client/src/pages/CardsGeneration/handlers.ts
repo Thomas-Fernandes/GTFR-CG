@@ -6,8 +6,8 @@ import { ImageDownloadRequest } from "@common/types";
 import { isFileExtensionAccepted } from "@common/utils/fileUtils";
 
 import { ACCEPTED_IMG_EXTENSIONS } from "@constants/files";
-import { SPINNER_ID } from "@constants/spinners";
-import { TOAST, TOAST_TYPE } from "@constants/toasts";
+import { SpinnerId } from "@constants/spinners";
+import { Toast, ToastType } from "@constants/toasts";
 
 import { postGenerateCards, postGenerateSingleCard } from "./requests";
 import { CardData, CardsGenerationRequest, HandleGenerateCardsProps, HandleSaveModalProps } from "./types";
@@ -20,12 +20,12 @@ export const handleSaveModal = (
   const { generationProps, newLyrics, generateSingleCardProps } = props;
 
   if (currentCard === null) {
-    sendToast(TOAST.CARD_EDIT_FAILED, TOAST_TYPE.ERROR);
+    sendToast(Toast.CardEditFailed, ToastType.Error);
     return;
   }
 
   if (isModalSaving) {
-    sendToast(TOAST.CARD_EDIT_IN_PROGRESS, TOAST_TYPE.WARN);
+    sendToast(Toast.CardEditInProgress, ToastType.Warn);
     return;
   }
 
@@ -38,7 +38,7 @@ export const handleSubmitDownloadCard = (e: FormEvent<HTMLFormElement> | undefin
   e?.preventDefault();
 
   if (!body.selectedImage) {
-    sendToast(TOAST.NO_IMG_SELECTION, TOAST_TYPE.ERROR);
+    sendToast(Toast.NoImgSelection, ToastType.Error);
     return;
   }
 
@@ -53,7 +53,7 @@ export const handleSubmitDownloadCard = (e: FormEvent<HTMLFormElement> | undefin
     console.log("Downloading", body.selectedImage);
     link.click();
   } catch (err) {
-    sendToast((err as Error).message, TOAST_TYPE.ERROR);
+    sendToast((err as Error).message, ToastType.Error);
   } finally {
     document.body.removeChild(link);
   }
@@ -68,7 +68,7 @@ export const handleGenerateCards = (
   e.preventDefault();
 
   if (generationInProgress) {
-    sendToast(TOAST.PROCESSING_IN_PROGRESS, TOAST_TYPE.WARN);
+    sendToast(Toast.ProcessingInProgress, ToastType.Warn);
     return;
   }
 
@@ -76,9 +76,9 @@ export const handleGenerateCards = (
     const fileExtensionIsAccepted = isFileExtensionAccepted(body.bgImg.name, ACCEPTED_IMG_EXTENSIONS);
     if (!fileExtensionIsAccepted) {
       sendToast(
-        TOAST.INVALID_FILE_TYPE + "\n" +
+        Toast.InvalidFileType + "\n" +
           "Accepted file extensions: " + ACCEPTED_IMG_EXTENSIONS.join(", ") + ".",
-        TOAST_TYPE.ERROR
+        ToastType.Error
       );
       return;
     }
@@ -88,12 +88,12 @@ export const handleGenerateCards = (
   generateFormData(body, formData);
 
   setGenerationInProgress(true);
-  showSpinner(SPINNER_ID.CARDS_GENERATE);
+  showSpinner(SpinnerId.CardsGenerate);
   setCardPaths([]);
 
   postGenerateCards(body, formData, { setGenerationInProgress, setCardPaths, setCards, setColorPick });
 };
 
 export const handleUnauthorizedCheckbox = () => {
-  sendToast(TOAST.UNAUTHORIZED_OUTRO, TOAST_TYPE.WARN);
+  sendToast(Toast.UnauthorizedOutro, ToastType.Warn);
 };

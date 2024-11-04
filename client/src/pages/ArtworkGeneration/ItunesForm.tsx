@@ -2,7 +2,7 @@ import { JSX, useState, useTransition } from "react";
 
 import Selector from "@components/Selector/Selector";
 
-import { SPINNER_ID } from "@constants/spinners";
+import { SpinnerId } from "@constants/spinners";
 
 import { ITUNES_REGION_OPTIONS } from "./constants";
 import { handleChangeTerm, handleSubmitItunesSearch } from "./handlers";
@@ -23,7 +23,7 @@ const ItunesForm: React.FC<ItunesFormProps> = ({ setItunesResults }): JSX.Elemen
         <input id="itunes-text" type="text" placeholder="Search on iTunes"
           onChange={(e) => handleChangeTerm(e.target.value, country, { term, setTerm, startItunesSearch, setItunesResults })}
         />
-        <div id={SPINNER_ID.ITUNES} className="itunes-search">
+        <div id={SpinnerId.ItunesSearch} className="itunes-search">
           <Selector aria-label="Country" defaultValue={ITUNES_REGION_OPTIONS[0].value}
             setter={setCountry} options={ITUNES_REGION_OPTIONS}
           />

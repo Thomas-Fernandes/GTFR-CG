@@ -3,13 +3,13 @@ import { NavigateFunction } from "react-router-dom";
 import { is2xxSuccessful, sendRequest } from "@common/requests";
 import { hideSpinner, showSpinner } from "@common/spinner";
 import { sendToast } from "@common/toast";
-import { ApiResponse, StateSetter } from "@common/types";
+import { ApiResponse, RestVerb, StateSetter } from "@common/types";
 
-import { API, BACKEND_URL, VIEW_PATHS } from "@constants/paths";
-import { SPINNER_ID } from "@constants/spinners";
-import { TOAST, TOAST_TYPE } from "@constants/toasts";
+import { API, BACKEND_URL, ViewPaths } from "@constants/paths";
+import { SpinnerId } from "@constants/spinners";
+import { Toast, ToastType } from "@constants/toasts";
 
-import { ARTWORK_RESULT_PROPS } from "./constants";
+import { ArtworkResultProps } from "./constants";
 import { ItunesImageRequest, ItunesRequest, ItunesResponse, ItunesResult, YoutubeRequest } from "./types";
 import { getTitleWithAdjustedLength } from "./utils";
 
@@ -20,28 +20,28 @@ export const postItunesResult = (
   const { setIsProcessingLoading, navigate } = props;
 
   setIsProcessingLoading(true);
-  const spinnerKey = SPINNER_ID.ITUNES_OPTION + key.toString();
+  const spinnerKey = SpinnerId.ItunesResult + key.toString();
   showSpinner(spinnerKey);
 
-  sendRequest("POST", BACKEND_URL + API.ARTWORK_GENERATION.ITUNES, body).then((response: ApiResponse) => {
-    if (!is2xxSuccessful(response.status)) {
-      throw new Error(response.message);
-    }
+  setTimeout(() => { // to allow setIsProcessingLoading to get into effect
+    sendRequest(RestVerb.Post, BACKEND_URL + API.ARTWORK_GENERATION.ITUNES, body).then((response: ApiResponse) => {
+      if (!is2xxSuccessful(response.status)) {
+        throw new Error(response.message);
+      }
 
-    sendRequest("POST", BACKEND_URL + API.ARTWORK_PROCESSING.PROCESS_ARTWORKS).then(() => {
-      navigate(VIEW_PATHS.ARTWORK_PROCESSING);
+      sendRequest(RestVerb.Post, BACKEND_URL + API.ARTWORK_PROCESSING.PROCESS_ARTWORKS).then(() => {
+        navigate(ViewPaths.ArtworkProcessing);
+      }).catch((error: ApiResponse) => {
+        sendToast(error.message, ToastType.Error);
+      }).finally(() => {
+        hideSpinner(spinnerKey);
+        setIsProcessingLoading(false);
+      });
     }).catch((error: ApiResponse) => {
-      sendToast(error.message, TOAST_TYPE.ERROR);
-    }).finally(() => {
-      hideSpinner(spinnerKey);
+      sendToast(error.message, ToastType.Error);
       setIsProcessingLoading(false);
     });
-  }).catch((error: ApiResponse) => {
-    sendToast(error.message, TOAST_TYPE.ERROR);
-  }).finally(() => {
-    hideSpinner(spinnerKey);
-    setIsProcessingLoading(false);
-  });
+  }, 0);
 };
 
 export const postItunesSearch = (
@@ -50,20 +50,20 @@ export const postItunesSearch = (
 ) => {
   const { setItunesResults } = props;
 
-  showSpinner(SPINNER_ID.ITUNES);
+  showSpinner(SpinnerId.ItunesSearch);
 
   const resultItems: ItunesResult[] = [];
 
-  sendRequest("POST", BACKEND_URL + API.ARTWORK_GENERATION.ITUNES_SEARCH, body).then((response: ItunesResponse) => {
+  sendRequest(RestVerb.Post, BACKEND_URL + API.ARTWORK_GENERATION.ITUNES_SEARCH, body).then((response: ItunesResponse) => {
     if (!is2xxSuccessful(response.status)) {
       throw new Error(response.message);
     }
 
     if (response.data.resultCount > 0) {
       response.data.results.forEach((result) => {
-        if (result.artistName?.length > ARTWORK_RESULT_PROPS.MAX_TITLE_LENGTH)
+        if (result.artistName?.length > ArtworkResultProps.MaxTitleLength)
           result.artistName = getTitleWithAdjustedLength(result.artistName);
-        if (result.collectionName?.length > ARTWORK_RESULT_PROPS.MAX_TITLE_LENGTH)
+        if (result.collectionName?.length > ArtworkResultProps.MaxTitleLength)
           result.collectionName = getTitleWithAdjustedLength(result.collectionName);
         resultItems.push({
           resultId: resultItems.length,
@@ -75,13 +75,13 @@ export const postItunesSearch = (
       });
       setItunesResults(resultItems);
     } else {
-      sendToast(TOAST.NO_RESULTS_FOUND, TOAST_TYPE.WARN);
+      sendToast(Toast.NoResultsFound, ToastType.Warn);
     }
   }).catch((error: ApiResponse) => {
     setItunesResults([]);
-    sendToast(error.message, TOAST_TYPE.ERROR);
+    sendToast(error.message, ToastType.Error);
   }).finally(() => {
-    hideSpinner(SPINNER_ID.ITUNES);
+    hideSpinner(SpinnerId.ItunesSearch);
   });
 };
 
@@ -92,24 +92,24 @@ export const postFileUpload = (
   const { setIsProcessingLoading, navigate } = props;
 
   setIsProcessingLoading(true);
-  showSpinner(SPINNER_ID.FILE_UPLOAD);
+  showSpinner(SpinnerId.FileUpload);
 
-  sendRequest("POST", BACKEND_URL + API.ARTWORK_GENERATION.FILE_UPLOAD, formData).then((response: ApiResponse) => {
+  sendRequest(RestVerb.Post, BACKEND_URL + API.ARTWORK_GENERATION.FILE_UPLOAD, formData).then((response: ApiResponse) => {
     if (!is2xxSuccessful(response.status)) {
       throw new Error(response.message);
     }
 
-    sendRequest("POST", BACKEND_URL + API.ARTWORK_PROCESSING.PROCESS_ARTWORKS).then(() => {
-      navigate(VIEW_PATHS.ARTWORK_PROCESSING);
+    sendRequest(RestVerb.Post, BACKEND_URL + API.ARTWORK_PROCESSING.PROCESS_ARTWORKS).then(() => {
+      navigate(ViewPaths.ArtworkProcessing);
     }).catch((error: ApiResponse) => {
-      sendToast(error.message, TOAST_TYPE.ERROR);
+      sendToast(error.message, ToastType.Error);
     }).finally(() => {
-      hideSpinner(SPINNER_ID.FILE_UPLOAD);
+      hideSpinner(SpinnerId.FileUpload);
       setIsProcessingLoading(false);
     });
   }).catch((error: ApiResponse) => {
-    sendToast(error.message, TOAST_TYPE.ERROR);
-    hideSpinner(SPINNER_ID.FILE_UPLOAD);
+    sendToast(error.message, ToastType.Error);
+    hideSpinner(SpinnerId.FileUpload);
     setIsProcessingLoading(false);
   });
 };
@@ -121,24 +121,24 @@ export const postYoutubeUrl = (
   const { setIsProcessingLoading, navigate } = props;
 
   setIsProcessingLoading(true);
-  showSpinner(SPINNER_ID.YOUTUBE_URL);
+  showSpinner(SpinnerId.YoutubeUrl);
 
-  sendRequest("POST", BACKEND_URL + API.ARTWORK_GENERATION.YOUTUBE_THUMBNAIL, body).then((response: ApiResponse) => {
+  sendRequest(RestVerb.Post, BACKEND_URL + API.ARTWORK_GENERATION.YOUTUBE_THUMBNAIL, body).then((response: ApiResponse) => {
     if (!is2xxSuccessful(response.status)) {
       throw new Error(response.message);
     }
 
-    sendRequest("POST", BACKEND_URL + API.ARTWORK_PROCESSING.PROCESS_ARTWORKS).then(() => {
-      navigate(VIEW_PATHS.ARTWORK_PROCESSING);
+    sendRequest(RestVerb.Post, BACKEND_URL + API.ARTWORK_PROCESSING.PROCESS_ARTWORKS).then(() => {
+      navigate(ViewPaths.ArtworkProcessing);
     }).catch((error: ApiResponse) => {
-      sendToast(error.message, TOAST_TYPE.ERROR);
+      sendToast(error.message, ToastType.Error);
     }).finally(() => {
-      hideSpinner(SPINNER_ID.YOUTUBE_URL);
+      hideSpinner(SpinnerId.YoutubeUrl);
       setIsProcessingLoading(false);
     });
   }).catch((error: ApiResponse) => {
-    sendToast(error.message, TOAST_TYPE.ERROR);
-    hideSpinner(SPINNER_ID.YOUTUBE_URL);
+    sendToast(error.message, ToastType.Error);
+    hideSpinner(SpinnerId.YoutubeUrl);
     setIsProcessingLoading(false);
   });
 };

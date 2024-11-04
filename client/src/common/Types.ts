@@ -1,5 +1,10 @@
 import { Dispatch, SetStateAction } from "react";
 
+export enum ContentsGenerationMode {
+  Manual = "manual",
+  Auto = "auto",
+}
+
 export type SongPartsCards = string[][];
 
 export type ImageDownloadRequest = {
@@ -12,10 +17,14 @@ export type ApiResponse = {
   data?: object;
 };
 
-export type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";
-
-export type ResponseStatus = "info" | "success" | "warn" | "error";
-export type ToastType = "info" | "success" | "warn" | "error";
+export enum RestVerb {
+  Get = "GET",
+  Post = "POST",
+  Put = "PUT",
+  Patch = "PATCH",
+  Delete = "DELETE",
+}
+export type RestVerbType = `${RestVerb}`;
 
 export type StateSetter<T> = Dispatch<SetStateAction<T>>;
 

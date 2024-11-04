@@ -4,22 +4,24 @@ import { useNavigate } from "react-router-dom";
 import { useTitle } from "@common/hooks/useTitle";
 import { ItunesResult } from "@pages/ArtworkGeneration/types";
 
-import NavButton from "@components/NavButton";
+import { NavButtonSide } from "@components/NavButton/constants";
+import NavButton from "@components/NavButton/NavButton";
 import ToastContainer from "@components/ToastContainer/ToastContainer";
+import TopBotSpacer from "@components/TopBotSpacer/TopBotSpacer";
 
-import { TITLE } from "@constants/browser";
-import { VIEW_PATHS } from "@constants/paths";
+import { Title } from "@constants/browser";
+import { ViewPaths } from "@constants/paths";
 
+import { ArtworkGenerationContext } from "./contexts";
 import FileUploadForm from "./FileUploadForm";
 import ItunesForm from "./ItunesForm";
 import ItunesResults from "./ItunesResults";
 import YoutubeForm from "./YoutubeForm";
-import { ArtworkGenerationContext } from "./contexts";
 
 import "./ArtworkGeneration.css";
 
 const ArtworkGeneration = (): JSX.Element => {
-  useTitle(TITLE.ARTWORK_GENERATION);
+  useTitle(Title.ArtworkGeneration);
 
   const navigate = useNavigate();
 
@@ -28,19 +30,18 @@ const ArtworkGeneration = (): JSX.Element => {
   const [itunesResults, setItunesResults] = useState([] as ItunesResult[]);
 
   const contextValue = useMemo(
-    () => ({ isProcessingLoading, setIsProcessingLoading, navigate }),
-    [isProcessingLoading, setIsProcessingLoading, navigate]
+    () => ({ isProcessingLoading, setIsProcessingLoading, navigate }), [isProcessingLoading, navigate]
   );
 
   return (
     <div id="artwork-generation">
       <ToastContainer />
-      <span className="top-bot-spacer" />
+      <TopBotSpacer />
 
       <div className="navbar">
-        <NavButton to={VIEW_PATHS.HOME} label={TITLE.HOME} side="left" />
-        <NavButton to={VIEW_PATHS.LYRICS} label={TITLE.LYRICS} side="right" />
-        <NavButton to={VIEW_PATHS.CARDS_GENERATION} label={TITLE.CARDS_GENERATION} side="right" />
+        <NavButton to={ViewPaths.Home} label={Title.Home} side={NavButtonSide.Left} />
+        <NavButton to={ViewPaths.Lyrics} label={Title.Lyrics} side={NavButtonSide.Right} />
+        <NavButton to={ViewPaths.CardsGeneration} label={Title.CardsGeneration} side={NavButtonSide.Right} />
       </div>
 
       <ArtworkGenerationContext.Provider value={contextValue}>
@@ -59,7 +60,7 @@ const ArtworkGeneration = (): JSX.Element => {
         <YoutubeForm />
       </ArtworkGenerationContext.Provider>
 
-      <span className="top-bot-spacer" />
+      <TopBotSpacer />
     </div>
   );
 };

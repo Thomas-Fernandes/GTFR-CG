@@ -3,11 +3,13 @@ import { useNavigate } from "react-router-dom";
 
 import { useTitle } from "@common/hooks/useTitle";
 
-import NavButton from "@components/NavButton";
+import { NavButtonSide } from "@components/NavButton/constants";
+import NavButton from "@components/NavButton/NavButton";
 import ToastContainer from "@components/ToastContainer/ToastContainer";
+import TopBotSpacer from "@components/TopBotSpacer/TopBotSpacer";
 
-import { TITLE } from "@constants/browser";
-import { VIEW_PATHS } from "@constants/paths";
+import { Title } from "@constants/browser";
+import { ViewPaths } from "@constants/paths";
 
 import { getGeniusToken, getStatistics } from "./requests";
 import { hideAllStatsSpinners, showAllStatsSpinners } from "./spinners";
@@ -17,7 +19,7 @@ import { Statistics } from "./types";
 import "./Home.css";
 
 const Home = (): JSX.Element => {
-  useTitle(TITLE.HOME);
+  useTitle(Title.Home);
 
   const navigate = useNavigate();
 
@@ -26,8 +28,8 @@ const Home = (): JSX.Element => {
 
   useEffect(() => {
     const fetchAndSetData = () => {
-      if (!window.location.href.endsWith(VIEW_PATHS.HOME)) {
-        navigate(VIEW_PATHS.HOME);
+      if (!window.location.href.endsWith(ViewPaths.Home)) {
+        navigate(ViewPaths.Home);
         return;
       }
 
@@ -50,31 +52,31 @@ const Home = (): JSX.Element => {
   return (
     <div id="home">
       <ToastContainer />
-      <span className="top-bot-spacer" />
+      <TopBotSpacer />
 
-      <h1>{TITLE.HOME}</h1>
+      <h1>{Title.Home}</h1>
 
       <div className="home navbar">
         <div className="navbar-row">
-          <NavButton to={VIEW_PATHS.ARTWORK_GENERATION} label={TITLE.ARTWORK_GENERATION} side="right" />
-          <NavButton to={VIEW_PATHS.LYRICS} label={TITLE.LYRICS} side="right" />
+          <NavButton to={ViewPaths.ArtworkGeneration} label={Title.ArtworkGeneration} side={NavButtonSide.Right} />
+          <NavButton to={ViewPaths.Lyrics} label={Title.Lyrics} side={NavButtonSide.Right} />
         </div>
         <div className="navbar-row">
-          <NavButton to={VIEW_PATHS.CARDS_GENERATION} label={TITLE.CARDS_GENERATION} side="right" />
+          <NavButton to={ViewPaths.CardsGeneration} label={Title.CardsGeneration} side={NavButtonSide.Right} />
         </div>
       </div>
 
       <StatisticsBoard stats={stats} />
 
       <div className="tests navbar">
-        <NavButton to={VIEW_PATHS.TESTS} label={TITLE.TESTS} side="right" />
+        <NavButton to={ViewPaths.Tests} label={Title.Tests} side={NavButtonSide.Right} />
       </div>
 
       <div className="hidden"> {/* avoid unused variable */}
         <p>Genius Token: '{ geniusToken }'</p>
       </div>
 
-      <span className="top-bot-spacer" />
+      <TopBotSpacer />
     </div>
   );
 };

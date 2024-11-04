@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 
 import { AutoResizeTextarea } from "@components/AutoResizeTextarea/AutoResizeTextarea";
 
-import { SPINNER_ID } from "@constants/spinners";
+import { SpinnerId } from "@constants/spinners";
 
 import { useCardsGalleryContext, useCardsGenerationContext } from "./contexts";
 import { handleSaveModal } from "./handlers";
@@ -43,7 +43,7 @@ const CardEditModal = (): JSX.Element => {
             { isModalSaving ? "Saving..." : "Save" }
           </button>
 
-          <div id={SPINNER_ID.CARDS_GENERATE_SINGLE} /> {/* Spinner for saving, in-between */}
+          <div id={SpinnerId.CardsGenerateSingle} /> {/* Spinner for saving, in-between */}
 
           <button type="button" onClick={closeModal} disabled={isModalSaving}>
             {"Cancel"}

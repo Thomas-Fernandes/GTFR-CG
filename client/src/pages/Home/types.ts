@@ -1,13 +1,13 @@
-export type StatisticsBoardProps = {
-  stats: Statistics;
-};
+import { ApiResponse } from "@common/types";
 
-export type StatisticsResponse = {
-  dateFirstOperation: string;
-  dateLastOperation: string;
-  artworkGenerations: number;
-  lyricsFetches: number;
-  cardsGenerated: number;
+export type StatisticsResponse = ApiResponse & {
+  data: {
+    dateFirstOperation: string;
+    dateLastOperation: string;
+    artworkGenerations: number;
+    lyricsFetches: number;
+    cardsGenerated: number;
+  }
 };
 
 export type Statistics = {
@@ -22,4 +22,13 @@ export type StatisticProps = {
   label: string;
   value: string;
   spinnerId: string;
+};
+export type StatisticsBoardProps = {
+  stats: Statistics;
+};
+
+export type GeniusTokenResponse = ApiResponse & {
+  data: {
+    token: string;
+  }
 };

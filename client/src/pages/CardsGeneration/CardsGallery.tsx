@@ -16,8 +16,8 @@ const CardsGallery: React.FC<CardsGalleryProps> = ({ id, initialCards }): JSX.El
   const [newLyrics, setNewLyrics] = useState("");
 
   const contextValue = useMemo(
-    () => ({ setIsModalOpen, currentCard, setCurrentCard, newLyrics, setNewLyrics, setCards }),
-    [setIsModalOpen, currentCard, setCurrentCard, newLyrics, setNewLyrics, setCards]
+    () => ({ setCards, setIsModalOpen, currentCard, setCurrentCard, newLyrics, setNewLyrics }),
+    [setCards, currentCard, newLyrics]
   );
 
   // used to prevent the modal from closing when click&dragging from inside to outside the modal

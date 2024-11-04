@@ -14,7 +14,7 @@ export const doesFileExist = async (fileName: string): Promise<boolean> => {
     } else {
       return true;
     }
-  } catch (error) {
+  } catch (err) {
     return false;
   }
 };

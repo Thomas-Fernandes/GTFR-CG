@@ -61,6 +61,7 @@ export type HandleLyricsSearchSubmitProps = {
   setIsFetching: StateSetter<boolean>;
   setLyricsParts: StateSetter<LyricsPartType[]>;
   setPageMetadata: StateSetter<PageMetadata>;
+  setDismissedParts: StateSetter<Set<number>>;
 };
 
 export type LyricsPartsFormProps = {

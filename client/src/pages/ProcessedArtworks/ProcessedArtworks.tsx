@@ -4,52 +4,53 @@ import { useNavigate } from "react-router-dom";
 import { useTitle } from "@common/hooks/useTitle";
 import { doesFileExist } from "@common/utils/fileUtils";
 
-import NavButton from "@components/NavButton";
+import { NavButtonSide } from "@components/NavButton/constants";
+import NavButton from "@components/NavButton/NavButton";
 import ToastContainer from "@components/ToastContainer/ToastContainer";
+import TopBotSpacer from "@components/TopBotSpacer/TopBotSpacer";
 
-import { TITLE } from "@constants/browser";
-import { VIEW_PATHS } from "@constants/paths";
-import { TOAST } from "@constants/toasts";
+import { Title } from "@constants/browser";
+import { ViewPaths } from "@constants/paths";
+import { Toast } from "@constants/toasts";
 
 import BackgroundImageDisplay from "./BackgroundImageDisplay";
-import ThumbnailGallery from "./ThumbnailGallery";
 import { COVER_ART_FILENAME, PROCESSED_ARTWORKS_PATH } from "./constants";
+import ThumbnailGallery from "./ThumbnailGallery";
 
 import "./ProcessedArtworks.css";
 
 const ProcessedArtworks = (): JSX.Element => {
-  useTitle(TITLE.PROCESSED_ARTWORKS);
+  useTitle(Title.ProcessedArtworks);
 
   const navigate = useNavigate();
 
   useEffect(() => {
     doesFileExist(PROCESSED_ARTWORKS_PATH + "/" + COVER_ART_FILENAME).then((anyProcessedImageExists: boolean) => {
-      if (!anyProcessedImageExists) {
-        navigate(`${VIEW_PATHS.REDIRECT}?redirect_to=${VIEW_PATHS.ARTWORK_GENERATION}&error_text=${TOAST.NO_PROCESSED_IMAGE}`);
-      }
+      if (!anyProcessedImageExists)
+        navigate(`${ViewPaths.Redirect}?redirect_to=${ViewPaths.ArtworkGeneration}&error_text=${Toast.NoProcessedImage}`);
     });
   });
 
   return (
     <div id="processed-artworks">
       <ToastContainer />
-      <span className="top-bot-spacer" />
+      <TopBotSpacer />
 
       <div className="navbar">
-        <NavButton to={VIEW_PATHS.HOME} label={TITLE.HOME} side="left" />
-        <NavButton to={VIEW_PATHS.ARTWORK_GENERATION} label={TITLE.ARTWORK_GENERATION} side="left" />
-        <NavButton to={VIEW_PATHS.LYRICS} label={TITLE.LYRICS} side="right" />
-        <NavButton to={VIEW_PATHS.CARDS_GENERATION} label={TITLE.CARDS_GENERATION} side="right" />
+        <NavButton to={ViewPaths.Home} label={Title.Home} side={NavButtonSide.Left} />
+        <NavButton to={ViewPaths.ArtworkGeneration} label={Title.ArtworkGeneration} side={NavButtonSide.Left} />
+        <NavButton to={ViewPaths.Lyrics} label={Title.Lyrics} side={NavButtonSide.Right} />
+        <NavButton to={ViewPaths.CardsGeneration} label={Title.CardsGeneration} side={NavButtonSide.Right} />
       </div>
 
-      <h1>{TITLE.PROCESSED_ARTWORKS}</h1>
+      <h1>{Title.ProcessedArtworks}</h1>
 
       <div id="image-panels">
         <BackgroundImageDisplay />
         <ThumbnailGallery />
       </div>
 
-      <span className="top-bot-spacer" />
+      <TopBotSpacer />
     </div>
   )
 };

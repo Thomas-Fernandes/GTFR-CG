@@ -1,7 +1,7 @@
 import { HTTP_STATUS } from "@constants/requests";
-import { TOAST } from "@constants/toasts";
+import { Toast } from "@constants/toasts";
 
-import { HttpMethod } from "./types";
+import { RestVerbType } from "./types";
 
 export const isErrorCode = (status: number): boolean => {
   return status >= HTTP_STATUS.BAD_REQUEST && status < 600;
@@ -10,7 +10,7 @@ export const is2xxSuccessful = (status: number): boolean => {
   return status >= HTTP_STATUS.OK && status < HTTP_STATUS.MULTIPLE_CHOICES;
 };
 
-export const sendRequest = async (method: HttpMethod, url: string, body?: unknown) => {
+export const sendRequest = async (method: RestVerbType, url: string, body?: unknown) => {
   const requestHeaders = body instanceof FormData
     ? {}
     : { "Content-Type": "application/json" };
@@ -27,7 +27,7 @@ export const sendRequest = async (method: HttpMethod, url: string, body?: unknow
     if (err instanceof Error && err.message === "Failed to fetch") {
       return {
         status: HTTP_STATUS.SERVER_UNAVAILABLE,
-        message: TOAST.SERVER_UNAVAILABLE,
+        message: Toast.ServerUnavailable,
       };
     }
     return {

@@ -1,43 +1,24 @@
-import { JSX, useEffect, useState } from "react";
+import { JSX, useState } from "react";
+
+import { ContentsGenerationMode } from "@common/types";
 
 import Checkbox from "@components/Checkbox/Checkbox";
 import ColorPicker from "@components/ColorPicker/ColorPicker";
 import FileUploader from "@components/FileUploader/FileUploader";
 
-import { SESSION_STORAGE } from "@constants/browser";
-import { SPINNER_ID } from "@constants/spinners";
+import { SpinnerId } from "@constants/spinners";
 
+import { useCardsGenerationContext, useCardsGenerationFormContext } from "./contexts";
 import { handleGenerateCards, handleUnauthorizedCheckbox } from "./handlers";
 import { CardsGenerationFormProps } from "./types";
 
 import "./CardsGenerationForm.css";
-import { CONTENTS_GENERATION_MODE } from "./constants";
 
 const CardsGenerationForm: React.FC<CardsGenerationFormProps> = ({ setCardPaths, setCards }): JSX.Element => {
-  const [isComponentMounted, setIsComponentMounted] = useState(false);
-
-  const [cardMetaname, setCardMetaname] = useState("");
-  const [outroContributors, setOutroContributors] = useState("");
-  const cardMethod = sessionStorage.getItem(SESSION_STORAGE.CARD_METHOD) ?? "auto";
-  const cardBottomColor = sessionStorage.getItem(SESSION_STORAGE.CARD_BOTTOM_COLOR) ?? "";
-
-  const [bgImg, setBgImg] = useState<File>();
-  const [colorPick, setColorPick] = useState<string>("");
-  const [includeCenterArtwork, setIncludeCenterArtwork] = useState(true);
-  const [generateOutro, setGenerateOutro] = useState(cardMethod === "auto");
-  const [includeBackgroundImg, setIncludeBackgroundImg] = useState(true);
+  const { cardMethod, cardMetaname, setCardMetaname, bgImg, colorPick, includeCenterArtwork, generateOutro, includeBackgroundImg, cardBottomColor } = useCardsGenerationContext();
+  const { outroContributors, setOutroContributors, setBgImg, setColorPick, setIncludeCenterArtwork, setGenerateOutro, setIncludeBackgroundImg } = useCardsGenerationFormContext();
 
   const [generationInProgress, setGenerationInProgress] = useState(false);
-
-  useEffect(() => {
-    if (isComponentMounted)
-      return;
-
-    setCardMetaname(sessionStorage.getItem(SESSION_STORAGE.CARD_METANAME) ?? "");
-    const storedOutroContributors = sessionStorage.getItem(SESSION_STORAGE.OUTRO_CONTRIBUTORS);
-    setOutroContributors(storedOutroContributors ? JSON.parse(storedOutroContributors).join(", ") : "");
-    setIsComponentMounted(true);
-  }, [isComponentMounted, colorPick]);
 
   return (
     <form id="settings"
@@ -81,10 +62,10 @@ const CardsGenerationForm: React.FC<CardsGenerationFormProps> = ({ setCardPaths,
             onChange={(e) => setIncludeCenterArtwork(e.target.checked)}
           />
         }
-        <div onClick={() => cardMethod === CONTENTS_GENERATION_MODE.MANUAL && handleUnauthorizedCheckbox()}>
+        <div onClick={() => cardMethod === ContentsGenerationMode.Manual && handleUnauthorizedCheckbox()}>
           <Checkbox
             id="generate_outro" label={"Generate outro image"}
-            defaultChecked={cardMethod === CONTENTS_GENERATION_MODE.AUTO} disabled={cardMethod === CONTENTS_GENERATION_MODE.MANUAL}
+            defaultChecked={cardMethod === ContentsGenerationMode.Auto} disabled={cardMethod === ContentsGenerationMode.Manual}
             onChange={(e) => setGenerateOutro(e.target.checked)}
           />
         </div>
@@ -95,7 +76,7 @@ const CardsGenerationForm: React.FC<CardsGenerationFormProps> = ({ setCardPaths,
         />
       </div>
 
-      <div className="action-button pad-l-1" id={SPINNER_ID.CARDS_GENERATE}>
+      <div className="action-button pad-l-1" id={SpinnerId.CardsGenerate}>
         <input type="submit" value={"GENERATE"} className="action-button" />
       </div>
     </form>

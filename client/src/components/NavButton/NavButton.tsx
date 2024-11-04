@@ -1,10 +1,12 @@
 import { ComponentPropsWithoutRef } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { NavButtonSideType } from "./types";
+
 type Props = ComponentPropsWithoutRef<"button"> & {
   to: string;
   label: string;
-  side: "left" | "right";
+  side: NavButtonSideType;
 };
 
 const NavButton: React.FC<Props> = ({ to, label, side, ...props }) => {

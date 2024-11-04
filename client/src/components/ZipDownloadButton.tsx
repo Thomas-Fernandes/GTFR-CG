@@ -1,8 +1,10 @@
 import React, { ComponentPropsWithoutRef } from "react";
 
+import { saveAs } from "file-saver";
 import JSZip from "jszip";
 
-import { saveAs } from "file-saver";
+import { sendToast } from "@common/toast";
+import { ResponseStatus } from "@constants/requests";
 
 type Props = ComponentPropsWithoutRef<"button"> & {
   id?: string;
@@ -27,8 +29,9 @@ const ZipDownloadButton: React.FC<Props> = ({ id, paths, output, ...props }) => 
           const fileName = (filePath.split('/').pop() ?? "").split('?')[0] ?? "img";
 
           zip.file(fileName, blob);
-        } catch (error) {
-          console.error(`Error fetching file at ${filePath}: `, error);
+        } catch (err) {
+          sendToast((err as Error).message, ResponseStatus.Error);
+          console.error(`Error fetching file at ${filePath}: `, (err as Error).message);
         }
       })
     );

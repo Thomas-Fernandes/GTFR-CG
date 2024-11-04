@@ -1,21 +1,23 @@
 
 import { is2xxSuccessful, sendRequest } from "@common/requests";
 import { sendToast } from "@common/toast";
-import { StateSetter, Statistics, StatisticsResponse } from "@common/types/cardsGenerationTypes";
+import { RestVerb, StateSetter } from "@common/types";
 
 import { API, BACKEND_URL } from "@constants/paths";
-import { TOAST, TOAST_TYPE } from "@constants/toasts";
+import { Toast, ToastType } from "@constants/toasts";
+
+import { GeniusTokenResponse, Statistics, StatisticsResponse } from "./types";
 
 import "./Home.css";
 
 export const getStatistics = (setStats: StateSetter<Statistics>) => {
-  sendRequest("GET", BACKEND_URL + API.STATISTICS).then((response) => {
+  sendRequest(RestVerb.Get, BACKEND_URL + API.STATISTICS).then((response: StatisticsResponse) => {
     if (!is2xxSuccessful(response.status)) {
-      sendToast(response.message, TOAST_TYPE.ERROR);
+      sendToast(response.message, ToastType.Error);
       return;
     }
 
-    const stats = response.data as StatisticsResponse;
+    const stats = response.data;
     setStats({
       dateFirstOperation: new Date(stats.dateFirstOperation).toLocaleString(),
       dateLastOperation: new Date(stats.dateLastOperation).toLocaleString(),
@@ -24,21 +26,21 @@ export const getStatistics = (setStats: StateSetter<Statistics>) => {
       cardsGenerated: stats.cardsGenerated.toLocaleString(),
     });
   }).catch((error) => {
-    sendToast(error.message, TOAST_TYPE.ERROR);
+    sendToast(error.message, ToastType.Error);
   });
 };
 
 export const getGeniusToken = (setGeniusToken: StateSetter<string>) => {
-  sendRequest("GET", BACKEND_URL + API.GENIUS_TOKEN).then((response) => {
+  sendRequest(RestVerb.Get, BACKEND_URL + API.GENIUS_TOKEN).then((response: GeniusTokenResponse) => {
     if (!is2xxSuccessful(response.status) || response.data.token === "") {
-      sendToast(response.message, TOAST_TYPE.ERROR, 10);
-      sendToast(TOAST.ADD_GENIUS_TOKEN, TOAST_TYPE.WARN, 20);
+      sendToast(response.message, ToastType.Error, 10);
+      sendToast(Toast.AddGeniusToken, ToastType.Warn, 20);
       return;
     }
 
-    sendToast(TOAST.WELCOME, TOAST_TYPE.SUCCESS, 5);
+    sendToast(Toast.Welcome, ToastType.Success, 5);
     setGeniusToken(response.data.token);
   }).catch((error) => {
-    sendToast(error.message, TOAST_TYPE.ERROR);
+    sendToast(error.message, ToastType.Error);
   });
 };

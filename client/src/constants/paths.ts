@@ -1,12 +1,12 @@
-export enum VIEW_PATHS {
-  ROOT = "/",
-  REDIRECT = "/redirect",
-  HOME = "/home",
-  TESTS = "/tests",
-  ARTWORK_GENERATION = "/artwork-generation",
-  ARTWORK_PROCESSING = "/artwork-processing",
-  LYRICS = "/lyrics",
-  CARDS_GENERATION = "/cards-generation",
+export enum ViewPaths {
+  Root = "/",
+  Redirect = "/redirect",
+  Home = "/home",
+  Tests = "/tests",
+  ArtworkGeneration = "/artwork-generation",
+  ArtworkProcessing = "/artwork-processing",
+  Lyrics = "/lyrics",
+  CardsGeneration = "/cards-generation",
 }
 
 export const API = {
@@ -14,24 +14,24 @@ export const API = {
   GENIUS_TOKEN: "/genius-token",
 
   ARTWORK_GENERATION: {
-    ITUNES_SEARCH: VIEW_PATHS.ARTWORK_GENERATION + "/search-itunes",
-    ITUNES: VIEW_PATHS.ARTWORK_GENERATION + "/use-itunes-image",
-    FILE_UPLOAD: VIEW_PATHS.ARTWORK_GENERATION + "/use-local-image",
-    YOUTUBE_THUMBNAIL: VIEW_PATHS.ARTWORK_GENERATION + "/use-youtube-thumbnail",
+    ITUNES_SEARCH: ViewPaths.ArtworkGeneration + "/search-itunes",
+    ITUNES: ViewPaths.ArtworkGeneration + "/use-itunes-image",
+    FILE_UPLOAD: ViewPaths.ArtworkGeneration + "/use-local-image",
+    YOUTUBE_THUMBNAIL: ViewPaths.ArtworkGeneration + "/use-youtube-thumbnail",
   },
 
   ARTWORK_PROCESSING: {
-    PROCESS_ARTWORKS: VIEW_PATHS.ARTWORK_PROCESSING + "/process-artworks",
+    PROCESS_ARTWORKS: ViewPaths.ArtworkProcessing + "/process-artworks",
   },
 
   LYRICS: {
-    GET_LYRICS: VIEW_PATHS.LYRICS + "/get-genius-lyrics",
+    GET_LYRICS: ViewPaths.Lyrics + "/get-genius-lyrics",
   },
 
   CARDS_GENERATION: {
-    SAVE_CARDS_CONTENTS: VIEW_PATHS.CARDS_GENERATION + "/save-cards-contents",
-    GENERATE_CARDS: VIEW_PATHS.CARDS_GENERATION + "/generate",
-    GENERATE_SINGLE_CARD: VIEW_PATHS.CARDS_GENERATION + "/generate-single",
+    SAVE_CARDS_CONTENTS: ViewPaths.CardsGeneration + "/save-cards-contents",
+    GENERATE_CARDS: ViewPaths.CardsGeneration + "/generate",
+    GENERATE_SINGLE_CARD: ViewPaths.CardsGeneration + "/generate-single",
   },
 };
 

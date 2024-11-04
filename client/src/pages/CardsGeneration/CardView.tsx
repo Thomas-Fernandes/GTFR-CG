@@ -2,7 +2,7 @@ import React from "react";
 
 import { sendToast } from "@common/toast";
 
-import { TOAST, TOAST_TYPE } from "@constants/toasts";
+import { Toast, ToastType } from "@constants/toasts";
 
 import { useCardsGalleryContext } from "./contexts";
 import { handleSubmitDownloadCard } from "./handlers";
@@ -19,7 +19,7 @@ const CardView: React.FC<CardViewProps> = ({ card, cardIdx }): JSX.Element => {
 
   const openModal = (card: CardData, cardFileName: string) => {
     if (cardFileName === "00" || cardFileName === "outro") {
-      sendToast(TOAST.CARD_NOT_EDITABLE, TOAST_TYPE.WARN);
+      sendToast(Toast.CardNotEditable, ToastType.Warn);
       return;
     }
 

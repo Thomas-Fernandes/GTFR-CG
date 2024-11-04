@@ -4,9 +4,9 @@ import { sendToast } from "@common/toast";
 import { isFileExtensionAccepted } from "@common/utils/fileUtils";
 
 import { ACCEPTED_IMG_EXTENSIONS } from "@constants/files";
-import { TOAST, TOAST_TYPE } from "@constants/toasts";
+import { Toast, ToastType } from "@constants/toasts";
 
-import { AUTOMATIC_SEARCH_TRIGGERS } from "./constants";
+import { AutomaticSearchTriggers } from "./constants";
 import { postFileUpload, postItunesResult, postItunesSearch, postYoutubeUrl } from "./requests";
 import { FileUploadRequest, HandleChangeTermProps, HandleSubmitArtworkGenerationProps, HandleSubmitItunesSearchProps, ItunesRequest, ItunesResult, YoutubeRequest } from "./types";
 import { isValidYoutubeUrl } from "./utils";
@@ -18,7 +18,7 @@ export const handleSelectItunesImage = (
   const { isProcessingLoading, setIsProcessingLoading, navigate } = props;
 
   if (isProcessingLoading) {
-    sendToast(TOAST.PROCESSING_IN_PROGRESS, TOAST_TYPE.WARN);
+    sendToast(Toast.ProcessingInProgress, ToastType.Warn);
     return;
   }
 
@@ -47,10 +47,10 @@ export const handleChangeTerm = (
   const { term, setTerm, startItunesSearch, setItunesResults } = props;
 
   const willMakeSearch = value && (
-    value.length > AUTOMATIC_SEARCH_TRIGGERS.LENGTH
-    || (value.length > AUTOMATIC_SEARCH_TRIGGERS.LENGTH_WITHOUT_TERM && (
-      value.includes(AUTOMATIC_SEARCH_TRIGGERS.SPACE)
-      || (!term.length && value.length > AUTOMATIC_SEARCH_TRIGGERS.LENGTH_WITHOUT_TERM)
+    value.length > AutomaticSearchTriggers.Length
+    || (value.length > AutomaticSearchTriggers.LengthWithoutTerm && (
+      value.includes(AutomaticSearchTriggers.Space)
+      || (!term.length && value.length > AutomaticSearchTriggers.LengthWithoutTerm)
     ))
   );
 
@@ -71,12 +71,12 @@ export const handleSubmitFileUpload = (
   e.preventDefault();
 
   if (isProcessingLoading) {
-    sendToast(TOAST.PROCESSING_IN_PROGRESS, TOAST_TYPE.WARN);
+    sendToast(Toast.ProcessingInProgress, ToastType.Warn);
     return;
   }
 
   if (!body.localFile) {
-    sendToast(TOAST.NO_IMG, TOAST_TYPE.WARN);
+    sendToast(Toast.NoImgFile, ToastType.Warn);
     return;
   }
 
@@ -87,9 +87,9 @@ export const handleSubmitFileUpload = (
   const fileExtensionIsAccepted = isFileExtensionAccepted(body.localFile.name, ACCEPTED_IMG_EXTENSIONS);
   if (!fileExtensionIsAccepted) {
     sendToast(
-      TOAST.INVALID_FILE_TYPE + "\n" +
+      Toast.InvalidFileType + "\n" +
         "Accepted file extensions: " + ACCEPTED_IMG_EXTENSIONS.join(", ") + ".",
-      TOAST_TYPE.ERROR
+      ToastType.Error
     );
     return;
   }
@@ -106,12 +106,12 @@ export const handleSubmitYoutubeUrl = (
   e.preventDefault();
 
   if (isProcessingLoading) {
-    sendToast(TOAST.PROCESSING_IN_PROGRESS, TOAST_TYPE.WARN);
+    sendToast(Toast.ProcessingInProgress, ToastType.Warn);
     return;
   }
 
   if (!isValidYoutubeUrl(body.url)) {
-    sendToast(TOAST.INVALID_URL, TOAST_TYPE.ERROR);
+    sendToast(Toast.InvalidUrl, ToastType.Error);
     return;
   }
 

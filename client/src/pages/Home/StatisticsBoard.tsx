@@ -1,38 +1,25 @@
 import { JSX } from "react";
 
-import { StatisticProps, StatisticsBoardProps } from "@pages/Home/types";
+import { SpinnerId } from "@constants/spinners";
 
-import { SPINNER_ID } from "@constants/spinners";
-
-import { STAT_NAME } from "./constants";
+import { StatName } from "./constants";
+import Statistic from "./Statistic";
+import { StatisticsBoardProps } from "./types";
 
 import "./StatisticsBoard.css";
-
-const Statistic: React.FC<StatisticProps> = ({ label, value, spinnerId }): JSX.Element => {
-  return (
-    <div className="stats-entry">
-      <h3 className="stat-title">
-        {label}
-      </h3>
-      <p className="stat-text" id={spinnerId}>
-        {value}
-      </p>
-    </div>
-  );
-};
 
 const StatisticsBoard: React.FC<StatisticsBoardProps> = ({ stats }): JSX.Element => {
   return (
     <div className="stats-board">
-      <Statistic label={STAT_NAME.DATE_FIRST_OPERATION} value={stats.dateFirstOperation} spinnerId={SPINNER_ID.STATISTICS_FIRST_OPERATION} />
+      <Statistic label={StatName.DateFirstOperation} value={stats.dateFirstOperation} spinnerId={SpinnerId.StatsFirstOperation} />
       <hr />
-      <Statistic label={STAT_NAME.DATE_LAST_OPERATION} value={stats.dateLastOperation} spinnerId={SPINNER_ID.STATISTICS_LAST_OPERATION} />
+      <Statistic label={StatName.DateLastOperation} value={stats.dateLastOperation} spinnerId={SpinnerId.StatsLastOperation} />
       <hr />
-      <Statistic label={STAT_NAME.ARTWORK_GENERATIONS} value={stats.artworkGenerations} spinnerId={SPINNER_ID.STATISTICS_ARTWORK_GENERATIONS} />
+      <Statistic label={StatName.ArtworkGenerations} value={stats.artworkGenerations} spinnerId={SpinnerId.StatsArtworkGenerations} />
       <hr />
-      <Statistic label={STAT_NAME.LYRICS_FETCHES} value={stats.lyricsFetches} spinnerId={SPINNER_ID.STATISTICS_LYRICS_FETCHES} />
+      <Statistic label={StatName.LyricsFetches} value={stats.lyricsFetches} spinnerId={SpinnerId.StatsLyricsFetches} />
       <hr />
-      <Statistic label={STAT_NAME.CARDS_GENERATED} value={stats.cardsGenerated} spinnerId={SPINNER_ID.STATISTICS_CARDS_GENERATED} />
+      <Statistic label={StatName.CardsGenerated} value={stats.cardsGenerated} spinnerId={SpinnerId.StatsCardsGenerated} />
     </div>
   );
 };

@@ -3,12 +3,14 @@ import { useNavigate } from "react-router-dom";
 
 import { useTitle } from "@common/hooks/useTitle";
 
-import NavButton from "@components/NavButton";
+import { NavButtonSide } from "@components/NavButton/constants";
+import NavButton from "@components/NavButton/NavButton";
 import ToastContainer from "@components/ToastContainer/ToastContainer";
+import TopBotSpacer from "@components/TopBotSpacer/TopBotSpacer";
 
-import { SESSION_STORAGE, TITLE } from "@constants/browser";
-import { VIEW_PATHS } from "@constants/paths";
-import { TOAST } from "@constants/toasts";
+import { SessionStorage, Title } from "@constants/browser";
+import { ViewPaths } from "@constants/paths";
+import { Toast } from "@constants/toasts";
 
 import { LyricsContext } from "./contexts";
 import GenerationModeFlipper from "./GenerationModeFlipper";
@@ -22,7 +24,7 @@ import { LyricsContents, LyricsPartType, PageMetadata } from "./types";
 import "./Lyrics.css";
 
 const Lyrics = (): JSX.Element => {
-  useTitle(TITLE.LYRICS);
+  useTitle(Title.Lyrics);
 
   const navigate = useNavigate();
 
@@ -46,10 +48,7 @@ const Lyrics = (): JSX.Element => {
       isFetching, setIsFetching, artist, setArtist, songName, setSongName, pageMetadata, setPageMetadata,
       lyricsParts, setLyricsParts, dismissedParts, setDismissedParts, isManual, setIsManual, navigate
     }),
-    [
-      isFetching, setIsFetching, artist, setArtist, songName, setSongName, pageMetadata, setPageMetadata,
-      lyricsParts, setLyricsParts, dismissedParts, setDismissedParts, isManual, setIsManual, navigate
-    ]
+    [isFetching, artist, songName, pageMetadata, lyricsParts, dismissedParts, isManual, navigate]
   );
 
   useEffect(() => {
@@ -58,31 +57,29 @@ const Lyrics = (): JSX.Element => {
 
     isTokenSet().then((isSet) => {
       if (!isSet) {
-        navigate(`${VIEW_PATHS.REDIRECT}?redirect_to=${VIEW_PATHS.HOME}&error_text=${TOAST.NO_GENIUS_TOKEN}`);
-      } else {
-        setIsGeniusTokenSet(true);
-
-        const latestCardGeneration = sessionStorage.getItem(SESSION_STORAGE.LATEST_CARD_GENERATION);
-        setLastContents(latestCardGeneration !== null
-          ? JSON.parse(latestCardGeneration)
-          : "{{}, [], [], []}"
-        );
+        navigate(`${ViewPaths.Redirect}?redirect_to=${ViewPaths.Home}&error_text=${Toast.NoGeniusToken}`);
+        return;
       }
+
+      setIsGeniusTokenSet(true);
+
+      const latestCardGeneration = sessionStorage.getItem(SessionStorage.LatestCardGeneration);
+      setLastContents(JSON.parse(latestCardGeneration ?? "{{}, [], [], []}"));
     });
   });
 
   return (
     <div id="lyrics">
       <ToastContainer />
-      <span className="top-bot-spacer" />
+      <TopBotSpacer />
 
       <div className="navbar">
-        <NavButton to={VIEW_PATHS.HOME} label={TITLE.HOME} side="left" />
-        <NavButton to={VIEW_PATHS.ARTWORK_GENERATION} label={TITLE.ARTWORK_GENERATION} side="left" />
-        <NavButton to={VIEW_PATHS.CARDS_GENERATION} label={TITLE.CARDS_GENERATION} side="right" />
+        <NavButton to={ViewPaths.Home} label={Title.Home} side={NavButtonSide.Left} />
+        <NavButton to={ViewPaths.ArtworkGeneration} label={Title.ArtworkGeneration} side={NavButtonSide.Left} />
+        <NavButton to={ViewPaths.CardsGeneration} label={Title.CardsGeneration} side={NavButtonSide.Right} />
       </div>
 
-      <h1>{TITLE.LYRICS}</h1>
+      <h1>{Title.Lyrics}</h1>
 
       <button type="button" className="last-generation mv-0"
         onClick={() => handleLoadLastContents({lastContents, setPageMetadata, setLyricsParts, setDismissedParts})}
@@ -109,7 +106,7 @@ const Lyrics = (): JSX.Element => {
         }
       </LyricsContext.Provider>
 
-      <span className="top-bot-spacer" />
+      <TopBotSpacer />
     </div>
   )
 };

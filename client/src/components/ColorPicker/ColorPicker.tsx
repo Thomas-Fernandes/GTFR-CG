@@ -4,7 +4,7 @@ import { sendToast } from "@common/toast";
 
 import ButtonRemove from "@components/ButtonRemove/ButtonRemove";
 
-import { TOAST, TOAST_TYPE } from "@constants/toasts";
+import { Toast, ToastType } from "@constants/toasts";
 
 import "./ColorPicker.css";
 
@@ -39,7 +39,7 @@ const ColorPicker: React.FC<Props> = ({ id, latest, label, labelClassName, sette
 
   const handleLoadLatest = () => {
     if (!latest) {
-      sendToast(TOAST.NO_LATEST_COLOR, TOAST_TYPE.WARN);
+      sendToast(Toast.NoLatestColor, ToastType.Warn);
       return;
     }
     setSelectedColor(latest);

@@ -1,13 +1,13 @@
 import { is2xxSuccessful, sendRequest } from "@common/requests";
 import { hideSpinner, showSpinner } from "@common/spinner";
 import { sendToast } from "@common/toast";
-import { ApiResponse } from "@common/types";
+import { ApiResponse, RestVerb } from "@common/types";
 
-import { SESSION_STORAGE } from "@constants/browser";
+import { SessionStorage } from "@constants/browser";
 import { API, BACKEND_URL } from "@constants/paths";
 import { HTTP_STATUS } from "@constants/requests";
-import { SPINNER_ID } from "@constants/spinners";
-import { TOAST, TOAST_TYPE } from "@constants/toasts";
+import { SpinnerId } from "@constants/spinners";
+import { Toast, ToastType } from "@constants/toasts";
 
 import { OUTRO_FILENAME, PROCESSED_CARDS_PATH } from "./constants";
 import { CardsGenerationRequest, CardsGenerationResponse, GenerateCardsProps, GenerateSingleCardProps, SingleCardGenerationRequest } from "./types";
@@ -20,7 +20,7 @@ export const postGenerateSingleCard = (
   const { setIsModalSaving, currentCard, setCards, closeModal } = props;
 
   setIsModalSaving(true);
-  showSpinner(SPINNER_ID.CARDS_GENERATE_SINGLE);
+  showSpinner(SpinnerId.CardsGenerateSingle);
 
   const cardFilename = currentCard.src.split('?')[0] ?? "card";
   const body: SingleCardGenerationRequest = {
@@ -31,22 +31,22 @@ export const postGenerateSingleCard = (
   const formData = new FormData();
   generateFormData(body, formData);
 
-  sendRequest("POST", BACKEND_URL + API.CARDS_GENERATION.GENERATE_SINGLE_CARD, formData).then((response: ApiResponse) => {
+  sendRequest(RestVerb.Post, BACKEND_URL + API.CARDS_GENERATION.GENERATE_SINGLE_CARD, formData).then((response: ApiResponse) => {
     if (!is2xxSuccessful(response.status)) {
       console.error(response.message);
-      sendToast(response.message, TOAST_TYPE.ERROR);
+      sendToast(response.message, ToastType.Error);
       return;
     }
 
     updateCard(setCards, currentCard, newLyrics, cardFilename);
 
-    const toastMsg = TOAST.CARD_EDITED + `: ${(currentCard.id < 10 ? "0" : "")}${currentCard.id}.png`;
-    sendToast(toastMsg, TOAST_TYPE.SUCCESS);
+    const toastMsg = Toast.CardEdited + `: ${(currentCard.id < 10 ? "0" : "")}${currentCard.id}.png`;
+    sendToast(toastMsg, ToastType.Success);
   }).catch((error) => {
     console.error("Failed to upload text:", error);
-    sendToast(TOAST.CARD_EDIT_FAILED, TOAST_TYPE.ERROR);
+    sendToast(Toast.CardEditFailed, ToastType.Error);
   }).finally(() => {
-    hideSpinner(SPINNER_ID.CARDS_GENERATE_SINGLE);
+    hideSpinner(SpinnerId.CardsGenerateSingle);
     setIsModalSaving(false);
     closeModal();
   });
@@ -59,10 +59,10 @@ export const postGenerateCards = (
   const { setGenerationInProgress, setCardPaths, setCards, setColorPick } = props;
 
   setGenerationInProgress(true);
-  showSpinner(SPINNER_ID.CARDS_GENERATE);
+  showSpinner(SpinnerId.CardsGenerate);
   setCardPaths([]);
 
-  sendRequest("POST", BACKEND_URL + API.CARDS_GENERATION.GENERATE_CARDS, formData).then((response: CardsGenerationResponse) => {
+  sendRequest(RestVerb.Post, BACKEND_URL + API.CARDS_GENERATION.GENERATE_CARDS, formData).then((response: CardsGenerationResponse) => {
     if (!is2xxSuccessful(response.status)) {
       throw new Error(response.message);
     }
@@ -78,16 +78,16 @@ export const postGenerateCards = (
     const newCards = deduceNewCards(pathsWithCacheBuster, response.data.cardsLyrics, body.generateOutro ?? false);
     setCards(newCards);
     setColorPick(response.data.cardBottomColor);
-    sessionStorage.setItem(SESSION_STORAGE.CARD_METANAME, body.cardMetaname);
-    sessionStorage.setItem(SESSION_STORAGE.CARD_BOTTOM_COLOR, body.colorPick);
-    sendToast(TOAST.CARDS_GENERATED, TOAST_TYPE.SUCCESS);
+    sessionStorage.setItem(SessionStorage.CardMetaname, body.cardMetaname);
+    sessionStorage.setItem(SessionStorage.CardBottomColor, body.colorPick);
+    sendToast(Toast.CardsGenerated, ToastType.Success);
   }).catch((error: ApiResponse) => {
     if (error.status === HTTP_STATUS.PRECONDITION_FAILED)
-      sendToast(TOAST.NO_CARDS_CONTENTS, TOAST_TYPE.ERROR);
+      sendToast(Toast.NoCardsContents, ToastType.Error);
     else
-      sendToast(error.message, TOAST_TYPE.ERROR);
+      sendToast(error.message, ToastType.Error);
   }).finally(() => {
-    hideSpinner(SPINNER_ID.CARDS_GENERATE);
+    hideSpinner(SpinnerId.CardsGenerate);
     setGenerationInProgress(false);
   });
 };

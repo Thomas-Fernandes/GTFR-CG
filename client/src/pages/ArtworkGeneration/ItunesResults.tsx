@@ -2,7 +2,7 @@ import { JSX, useState } from "react";
 
 import ImgButton from "@components/ImgButton/ImgButton";
 
-import { SPINNER_ID } from "@constants/spinners";
+import { SpinnerId } from "@constants/spinners";
 
 import { useArtworkGenerationContext } from "./contexts";
 import { handleSelectItunesImage } from "./handlers";
@@ -28,7 +28,7 @@ const ItunesImageResult: React.FC<ItunesImageResultProps> = ({ item, itemId }): 
         {itemLabel}
       </p>
 
-      <div className="mt-p5" style={{paddingLeft: "0 !important"}} id={SPINNER_ID.ITUNES_OPTION + itemId.toString()} />
+      <div className="mt-p5" style={{paddingLeft: "0 !important"}} id={SpinnerId.ItunesResult + itemId.toString()} />
     </div>
   );
 };

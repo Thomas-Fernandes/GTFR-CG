@@ -1,35 +1,39 @@
 import { JSX, useEffect, useMemo, useState } from "react";
 
 import { useTitle } from "@common/hooks/useTitle";
+import { ContentsGenerationMode } from "@common/types";
 
-import NavButton from "@components/NavButton";
+import { NavButtonSide } from "@components/NavButton/constants";
+import NavButton from "@components/NavButton/NavButton";
 import ToastContainer from "@components/ToastContainer/ToastContainer";
+import TopBotSpacer from "@components/TopBotSpacer/TopBotSpacer";
 import ZipDownloadButton from "@components/ZipDownloadButton";
 
-import { SESSION_STORAGE, TITLE } from "@constants/browser";
-import { VIEW_PATHS } from "@constants/paths";
+import { SessionStorage, Title } from "@constants/browser";
+import { ViewPaths } from "@constants/paths";
 
 import CardsGallery from "./CardsGallery";
 import CardsGenerationForm from "./CardsGenerationForm";
+import { CARDS_ZIP_FILENAME } from "./constants";
 import { CardsGenerationContext, CardsGenerationFormContext } from "./contexts";
 import { CardData } from "./types";
 
 import "./CardsGeneration.css";
 
 const CardsGeneration = (): JSX.Element => {
-  useTitle(TITLE.CARDS_GENERATION);
+  useTitle(Title.CardsGeneration);
 
   const [isComponentMounted, setIsComponentMounted] = useState(false);
 
   const [cardMetaname, setCardMetaname] = useState("");
   const [outroContributors, setOutroContributors] = useState("");
-  const cardMethod = sessionStorage.getItem(SESSION_STORAGE.CARD_METHOD) ?? "auto";
-  const cardBottomColor = sessionStorage.getItem(SESSION_STORAGE.CARD_BOTTOM_COLOR) ?? "";
+  const cardMethod = sessionStorage.getItem(SessionStorage.CardMethod) ?? ContentsGenerationMode.Auto;
+  const cardBottomColor = sessionStorage.getItem(SessionStorage.CardBottomColor) ?? "";
 
   const [bgImg, setBgImg] = useState<File>();
   const [colorPick, setColorPick] = useState<string>("");
   const [includeCenterArtwork, setIncludeCenterArtwork] = useState(true);
-  const [generateOutro, setGenerateOutro] = useState(cardMethod === "auto");
+  const [generateOutro, setGenerateOutro] = useState(cardMethod === ContentsGenerationMode.Auto);
   const [includeBackgroundImg, setIncludeBackgroundImg] = useState(true);
 
   const [cardPaths, setCardPaths] = useState([] as string[]);
@@ -37,25 +41,22 @@ const CardsGeneration = (): JSX.Element => {
 
   const formContextValue = useMemo(
     () => ({
-      outroContributors, setBgImg, setColorPick,
+      outroContributors, setOutroContributors, setBgImg, setColorPick,
       setIncludeCenterArtwork, setGenerateOutro, setIncludeBackgroundImg
     }),
-    [
-      outroContributors, setBgImg, setColorPick,
-      setIncludeCenterArtwork, setGenerateOutro, setIncludeBackgroundImg
-    ]
+    [outroContributors]
   );
   const contextValue = useMemo(
-    () => ({ cardMetaname, bgImg, colorPick, includeCenterArtwork, generateOutro, includeBackgroundImg, cardBottomColor }),
-    [cardMetaname, bgImg, colorPick, includeCenterArtwork, generateOutro, includeBackgroundImg, cardBottomColor]
+    () => ({ cardMethod, cardMetaname, setCardMetaname, bgImg, colorPick, includeCenterArtwork, generateOutro, includeBackgroundImg, cardBottomColor }),
+    [cardMethod, cardMetaname, bgImg, colorPick, includeCenterArtwork, generateOutro, includeBackgroundImg, cardBottomColor]
   );
 
   useEffect(() => {
     if (isComponentMounted)
       return;
 
-    setCardMetaname(sessionStorage.getItem(SESSION_STORAGE.CARD_METANAME) ?? "");
-    const storedOutroContributors = sessionStorage.getItem(SESSION_STORAGE.OUTRO_CONTRIBUTORS);
+    setCardMetaname(sessionStorage.getItem(SessionStorage.CardMetaname) ?? "");
+    const storedOutroContributors = sessionStorage.getItem(SessionStorage.OutroContributors);
     setOutroContributors(storedOutroContributors ? JSON.parse(storedOutroContributors).join(", ") : "");
     setIsComponentMounted(true);
   }, [isComponentMounted, colorPick]);
@@ -63,32 +64,34 @@ const CardsGeneration = (): JSX.Element => {
   return (
     <div id="cards-generation">
       <ToastContainer />
-      <span className="top-bot-spacer" />
+      <TopBotSpacer />
 
       <div className="navbar">
-        <NavButton to={VIEW_PATHS.HOME} label={TITLE.HOME} side="left" />
-        <NavButton to={VIEW_PATHS.ARTWORK_GENERATION} label={TITLE.ARTWORK_GENERATION} side="left" />
-        <NavButton to={VIEW_PATHS.LYRICS} label={TITLE.LYRICS} side="left" />
+        <NavButton to={ViewPaths.Home} label={Title.Home} side={NavButtonSide.Left} />
+        <NavButton to={ViewPaths.ArtworkGeneration} label={Title.ArtworkGeneration} side={NavButtonSide.Left} />
+        <NavButton to={ViewPaths.Lyrics} label={Title.Lyrics} side={NavButtonSide.Left} />
       </div>
 
-      <h1>{TITLE.CARDS_GENERATION}</h1>
+      <h1>{Title.CardsGeneration}</h1>
 
-      <CardsGenerationFormContext.Provider value={formContextValue}>
-        <CardsGenerationForm setCardPaths={setCardPaths} setCards={setCards} />
-      </CardsGenerationFormContext.Provider>
+      <CardsGenerationContext.Provider value={contextValue}>
+        <CardsGenerationFormContext.Provider value={formContextValue}>
+          <CardsGenerationForm setCardPaths={setCardPaths} setCards={setCards} />
+        </CardsGenerationFormContext.Provider>
+      </CardsGenerationContext.Provider>
 
       { cardPaths.length > 0 &&
         <>
           <hr className="mv-1" />
 
-          <ZipDownloadButton id="download-all" paths={cardPaths} output={"cards.zip"} />
+          <ZipDownloadButton id="download-all" paths={cardPaths} output={CARDS_ZIP_FILENAME} />
           <CardsGenerationContext.Provider value={contextValue}>
             <CardsGallery id="cards" initialCards={cards} />
           </CardsGenerationContext.Provider>
         </>
       }
 
-      <span className="top-bot-spacer" />
+      <TopBotSpacer />
     </div>
   )
 };

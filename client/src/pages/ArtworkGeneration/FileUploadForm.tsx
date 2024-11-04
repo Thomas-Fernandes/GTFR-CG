@@ -3,7 +3,7 @@ import { JSX, useState } from "react";
 import Checkbox from "@components/Checkbox/Checkbox";
 import FileUploader from "@components/FileUploader/FileUploader";
 
-import { SPINNER_ID } from "@constants/spinners";
+import { SpinnerId } from "@constants/spinners";
 
 import { useArtworkGenerationContext } from "./contexts";
 import { handleSubmitFileUpload } from "./handlers";
@@ -27,7 +27,7 @@ const FileUploadForm = (): JSX.Element => {
           defaultChecked={includeCenterArtwork}
           onChange={(e) => setIncludeCenterArtwork(e.target.checked)}
         />
-        <div className="action-button pad-l-1" id={SPINNER_ID.FILE_UPLOAD}>
+        <div className="action-button pad-l-1" id={SpinnerId.FileUpload}>
           <input type="submit" value="UPLOAD" className="action-button" />
         </div>
       </div>

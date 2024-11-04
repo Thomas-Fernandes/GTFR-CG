@@ -1,20 +1,20 @@
 
 import { hideSpinner, showSpinner } from "@common/spinner";
 
-import { SPINNER_ID } from "@constants/spinners";
+import { SpinnerId } from "@constants/spinners";
 
 import "./Home.css";
 
 export const hideAllStatsSpinners = () => {
-  hideSpinner(SPINNER_ID.STATISTICS_FIRST_OPERATION);
-  hideSpinner(SPINNER_ID.STATISTICS_LAST_OPERATION);
-  hideSpinner(SPINNER_ID.STATISTICS_ARTWORK_GENERATIONS);
-  hideSpinner(SPINNER_ID.STATISTICS_LYRICS_FETCHES);
+  hideSpinner(SpinnerId.StatsFirstOperation);
+  hideSpinner(SpinnerId.StatsLastOperation);
+  hideSpinner(SpinnerId.StatsArtworkGenerations);
+  hideSpinner(SpinnerId.StatsLyricsFetches);
 };
 
 export const showAllStatsSpinners = () => {
-  showSpinner(SPINNER_ID.STATISTICS_FIRST_OPERATION);
-  showSpinner(SPINNER_ID.STATISTICS_LAST_OPERATION);
-  showSpinner(SPINNER_ID.STATISTICS_ARTWORK_GENERATIONS);
-  showSpinner(SPINNER_ID.STATISTICS_LYRICS_FETCHES);
+  showSpinner(SpinnerId.StatsFirstOperation);
+  showSpinner(SpinnerId.StatsLastOperation);
+  showSpinner(SpinnerId.StatsArtworkGenerations);
+  showSpinner(SpinnerId.StatsLyricsFetches);
 };

@@ -1,8 +1,8 @@
 import { useEffect, useRef } from "react";
 
-import { TITLE } from "@constants/browser";
+import { Title } from "@constants/browser";
 
-type TitleType = `${TITLE}`;
+type TitleType = `${Title}`;
 
 export const useTitle = (title: TitleType) => {
   const documentIsDefined = document !== undefined;
@@ -15,7 +15,7 @@ export const useTitle = (title: TitleType) => {
     const currentTitle = originalTitle?.current ?? "";
 
     if (document.title !== title)
-      document.title = TITLE.PREFIX + title;
+      document.title = Title.Prefix + title;
 
     return () => {
       document.title = currentTitle;

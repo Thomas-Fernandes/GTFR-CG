@@ -1,6 +1,14 @@
-import { SongPartsCards } from "@common/types";
+import { Dict, SongPartsCards } from "@common/types";
 
-import { LyricsPartType } from "./types";
+import { LyricsPartType, PageMetadata } from "./types";
+
+export const strArrToMetadata = (metadata: string[]): PageMetadata => {
+  return metadata.reduce((acc: PageMetadata, curr) => {
+    const [key, value] = curr.split(": ");
+    (acc as Dict)[key] = value;
+    return acc;
+  }, {} as PageMetadata);
+};
 
 export const convertToCardContents = (lyricsParts: LyricsPartType[], dismissedParts: Set<number>): SongPartsCards => {
   // Input: [{section: "Verse 1", lyrics: "The whole lyrics\nOf the section\nAre here as is\nTotally disorganized"}, ...]

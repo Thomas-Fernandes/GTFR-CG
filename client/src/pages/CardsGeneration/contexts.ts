@@ -1,15 +1,15 @@
-import { createNewContext } from "@common/contextProvider";
+import { createNewContext } from "@common/contextCreator";
 import { StateSetter } from "@common/types";
 
 import { CardData } from "./types";
 
 interface CardsGalleryContextType {
+  setCards: StateSetter<CardData[]>;
   setIsModalOpen: StateSetter<boolean>;
   currentCard: CardData | null;
   setCurrentCard: StateSetter<CardData | null>;
   newLyrics: string;
   setNewLyrics: StateSetter<string>;
-  setCards: StateSetter<CardData[]>;
 }
 const {
   context: CardsGalleryContext,
@@ -18,6 +18,7 @@ const {
 
 interface CardsGenerationFormContextType {
   outroContributors: string;
+  setOutroContributors: StateSetter<string>;
   setBgImg: StateSetter<File | undefined>;
   setColorPick: StateSetter<string>;
   setIncludeCenterArtwork: StateSetter<boolean>;
@@ -30,7 +31,9 @@ const {
 } = createNewContext<CardsGenerationFormContextType>();
 
 interface CardsGenerationContextType {
+  cardMethod: string;
   cardMetaname: string;
+  setCardMetaname: StateSetter<string>;
   bgImg: File | undefined;
   colorPick: string;
   includeCenterArtwork: boolean;

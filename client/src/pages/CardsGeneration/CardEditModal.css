@@ -35,10 +35,6 @@
         background-color: #d9534f;
         &:hover { background-color: #c9302c; }
       }
-      &:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-      }
     }
 
     #cards-generation_generate-single {

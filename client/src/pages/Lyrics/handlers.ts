@@ -1,12 +1,13 @@
 import { FormEvent } from "react";
 
 import { sendToast } from "@common/toast";
-import { SongPartsCards } from "@common/types";
+import { SongPartsCards, StateSetter } from "@common/types";
 
-import { TOAST, TOAST_TYPE } from "@constants/toasts";
+import { Toast, ToastType } from "@constants/toasts";
 
+import { METADATA_IDENTIFIER, METADATA_SEPARATOR } from "./constants";
 import { postLyricsSave, postLyricsSearch } from "./requests";
-import { HandleLoadLastContentsProps, HandleLyricsSaveSubmitProps, HandleLyricsSearchSubmitProps, HandleSetLyricsPartsProps, LyricsRequest } from "./types";
+import { HandleLoadLastContentsProps, HandleLyricsSaveSubmitProps, HandleLyricsSearchSubmitProps, HandleSetLyricsPartsProps, LyricsRequest, LyricsSaveRequest } from "./types";
 
 export const handleLyricsSaveSubmit = (
   e: FormEvent<HTMLFormElement>, body: SongPartsCards,
@@ -17,16 +18,28 @@ export const handleLyricsSaveSubmit = (
   e.preventDefault();
 
   if (isSavingCardsContent) {
-    sendToast(TOAST.PROCESSING_IN_PROGRESS, TOAST_TYPE.WARN);
+    sendToast(Toast.ProcessingInProgress, ToastType.Warn);
     return;
   }
 
-  const metadata = "Metadata | " + Object.entries(pageMetadata).map(([key, value]) => `${key}: ${value}`).join(" ;;; ");
-  const data = {
+  const metadata = METADATA_IDENTIFIER + Object.entries(pageMetadata).map(([key, value]) => `${key}: ${value}`).join(METADATA_SEPARATOR);
+  const data: LyricsSaveRequest = {
     cardsContents: [[metadata]].concat(body),
   };
 
   postLyricsSave(data, { pageMetadata, isManual, lyricsParts, dismissedParts, navigate, setIsSavingCardsContent });
+};
+
+export const handleRestorePart = (dismissedParts: Set<number>, idx: number, setDismissedParts: StateSetter<Set<number>>) => {
+  const n = new Set(dismissedParts);
+  n.delete(idx);
+  setDismissedParts(n);
+};
+
+export const handleSetDismissedParts = (dismissedParts: Set<number>, idx: number, setDismissedParts: StateSetter<Set<number>>) => {
+  const n = new Set(dismissedParts);
+  n.add(idx);
+  setDismissedParts(n);
 };
 
 export const handleSetLyricsParts = (
@@ -34,8 +47,10 @@ export const handleSetLyricsParts = (
   props: HandleSetLyricsPartsProps
 ) => {
   const { lyricsParts, setLyricsParts } = props;
+
   const updatedLyricsParts = [...lyricsParts];
   updatedLyricsParts[idx].lyrics = lyrics;
+
   setLyricsParts(updatedLyricsParts);
 };
 
@@ -43,20 +58,21 @@ export const handleLyricsSearchSubmit = (
   e: FormEvent<HTMLFormElement>, body: LyricsRequest,
   props: HandleLyricsSearchSubmitProps
 ) => {
-  const { isFetching, setIsFetching, setLyricsParts, setPageMetadata } = props;
+  const { isFetching, setIsFetching, setLyricsParts, setPageMetadata, setDismissedParts } = props;
 
   e.preventDefault();
 
   if (isFetching) {
-    sendToast(TOAST.FETCH_IN_PROGRESS, TOAST_TYPE.WARN);
+    sendToast(Toast.FetchInProgress, ToastType.Warn);
     return;
   }
 
   if (body.artist.trim() === "" || body.songName.trim() === "") {
-    sendToast(TOAST.MISSING_FIELDS, TOAST_TYPE.WARN);
+    sendToast(Toast.MissingFields, ToastType.Warn);
     return;
   }
 
+  setDismissedParts(new Set<number>());
   postLyricsSearch(body, { setIsFetching, setLyricsParts, setPageMetadata });
 };
 
@@ -66,7 +82,7 @@ export const handleLoadLastContents = (
   const { lastContents, setPageMetadata, setLyricsParts, setDismissedParts } = props;
 
   if (lastContents?.pageMetadata?.id === undefined) {
-    sendToast(TOAST.NO_LAST_GENERATION, TOAST_TYPE.WARN);
+    sendToast(Toast.NoLastGeneration, ToastType.Warn);
     return;
   }
   setPageMetadata(lastContents.pageMetadata);

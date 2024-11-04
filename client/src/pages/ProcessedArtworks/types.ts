@@ -1,4 +1,4 @@
-import { ApiResponse, StateSetter } from "@common/types";
+import { ApiResponse } from "@common/types";
 
 export type ProcessedArtworksPathResponse = ApiResponse & {
   data: {
@@ -9,5 +9,4 @@ export type ProcessedArtworksPathResponse = ApiResponse & {
 export type ThumbnailOptionProps = {
   logoPosition: string;
   idx: number;
-  setSelectedThumbnail: StateSetter<string>;
 };

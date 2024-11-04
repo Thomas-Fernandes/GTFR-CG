@@ -4,13 +4,15 @@ import { useNavigate } from "react-router-dom";
 import { useTitle } from "@common/hooks/useTitle";
 import { is2xxSuccessful, objectToQueryString, sendRequest } from "@common/requests";
 import { dismissToast, sendToast } from "@common/toast";
-import { StateSetter } from "@common/types";
+import { RestVerb, StateSetter } from "@common/types";
+
+import TopBotSpacer from "@components/TopBotSpacer/TopBotSpacer";
+
+import { Title } from "@constants/browser";
+import { API, BACKEND_URL, ITUNES_URL, ViewPaths } from "@constants/paths";
+import { ToastType } from "@constants/toasts";
+
 import { ItunesResponse } from "@pages/ArtworkGeneration/types";
-
-import { TITLE } from "@constants/browser";
-import { API, BACKEND_URL, ITUNES_URL, VIEW_PATHS } from "@constants/paths";
-import { TOAST_TYPE } from "@constants/toasts";
-
 import { LyricsResponse } from "@pages/Lyrics/types";
 
 import { TestsBoard } from "./TestsBoard";
@@ -19,7 +21,7 @@ import { TestResult } from "./types";
 import "./Tests.css";
 
 const Tests = (): JSX.Element => { // TODO remove this when backend unit tests are implemented
-  useTitle(TITLE.TESTS);
+  useTitle(Title.Tests);
 
   const refGeniusToken = useRef<HTMLButtonElement>(null);
   const refStatistics = useRef<HTMLButtonElement>(null);
@@ -32,7 +34,7 @@ const Tests = (): JSX.Element => { // TODO remove this when backend unit tests a
   // ENV-VAR
   const testGeniusToken = async (setter: StateSetter<TestResult>) => {
     const start = Date.now();
-    await sendRequest("GET", BACKEND_URL + API.GENIUS_TOKEN).then((response) => {
+    await sendRequest(RestVerb.Get, BACKEND_URL + API.GENIUS_TOKEN).then((response) => {
       setter({ successful: is2xxSuccessful(response.status), prompt: response.message, duration: Date.now() - start });
     }).catch((error) => {
       setter({ successful: false, prompt: error.message, duration: Date.now() - start });
@@ -40,7 +42,7 @@ const Tests = (): JSX.Element => { // TODO remove this when backend unit tests a
   };
   const testStatistics = async (setter: StateSetter<TestResult>) => {
     const start = Date.now();
-    await sendRequest("GET", BACKEND_URL + API.STATISTICS).then((response) => {
+    await sendRequest(RestVerb.Get, BACKEND_URL + API.STATISTICS).then((response) => {
       setter({ successful: is2xxSuccessful(response.status), prompt: response.message, duration: Date.now() - start });
     }).catch((error) => {
       setter({ successful: false, prompt: error.message, duration: Date.now() - start });
@@ -57,7 +59,7 @@ const Tests = (): JSX.Element => { // TODO remove this when backend unit tests a
       return;
     }
 
-    sendToast("Testing snacks", TOAST_TYPE.INFO);
+    sendToast("Testing snacks", ToastType.Info);
     if (toastContainer.childElementCount === 0) {
       setter({ successful: false, prompt: "Snacks not working", duration: Date.now() - start });
     } else {
@@ -72,7 +74,7 @@ const Tests = (): JSX.Element => { // TODO remove this when backend unit tests a
     const data = { term: "hello", country: "US", entity: "album", limit: 10 };
     const queryString = objectToQueryString(data);
 
-    await sendRequest("POST", ITUNES_URL + "/search" + queryString).then((response: ItunesResponse) => {
+    await sendRequest(RestVerb.Post, ITUNES_URL + "/search" + queryString).then((response: ItunesResponse) => {
       setter({ successful: response.data.resultCount > 0, prompt: "iTunes API test successful", duration: Date.now() - start });
     }).catch((error) => {
       setter({ successful: false, prompt: error.message, duration: Date.now() - start });
@@ -81,7 +83,7 @@ const Tests = (): JSX.Element => { // TODO remove this when backend unit tests a
   const testGenius = async (setter: StateSetter<TestResult>) => {
     const start = Date.now();
     const body = { artist: "Adele", songName: "Hello" };
-    await sendRequest("POST", BACKEND_URL + API.LYRICS.GET_LYRICS, body).then((response: LyricsResponse) => {
+    await sendRequest(RestVerb.Post, BACKEND_URL + API.LYRICS.GET_LYRICS, body).then((response: LyricsResponse) => {
       setter({ successful: is2xxSuccessful(response.status), prompt: response.message, duration: Date.now() - start });
     }).catch((error) => {
       setter({ successful: false, prompt: error.message, duration: Date.now() - start });
@@ -126,11 +128,11 @@ const Tests = (): JSX.Element => { // TODO remove this when backend unit tests a
 
   return (
     <div id="tests">
-      <span className="top-bot-spacer" />
+      <TopBotSpacer />
 
       <div className="navbar">
-        <button type="button" onClick={() => navigate(VIEW_PATHS.HOME)}>
-          <span className="left">{TITLE.HOME}</span>
+        <button type="button" onClick={() => navigate(ViewPaths.Home)}>
+          <span className="left">{Title.Home}</span>
         </button>
       </div>
 
@@ -149,7 +151,7 @@ const Tests = (): JSX.Element => { // TODO remove this when backend unit tests a
         </div>
       </div>
 
-      <span className="top-bot-spacer" />
+      <TopBotSpacer />
     </div>
   );
 };

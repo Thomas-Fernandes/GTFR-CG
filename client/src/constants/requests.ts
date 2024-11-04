@@ -1,11 +1,9 @@
-import { ResponseStatus } from "@common/types/cardsGenerationTypes";
-
-export const RESPONSE_STATUS: Record<string, ResponseStatus> = {
-  INFO: "info",
-  SUCCESS: "success",
-  WARN: "warn",
-  ERROR: "error",
-};
+export enum ResponseStatus {
+  Info = "info",
+  Success = "success",
+  Warn = "warn",
+  Error = "error",
+}
 
 export const HTTP_STATUS = {
   OK: 200,

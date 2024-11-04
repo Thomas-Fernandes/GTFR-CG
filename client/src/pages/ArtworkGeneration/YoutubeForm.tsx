@@ -1,6 +1,6 @@
 import { JSX, useState } from "react";
 
-import { SPINNER_ID } from "@constants/spinners";
+import { SpinnerId } from "@constants/spinners";
 
 import { useArtworkGenerationContext } from "./contexts";
 import { handleSubmitYoutubeUrl } from "./handlers";
@@ -19,7 +19,7 @@ const YoutubeForm = (): JSX.Element => {
         <input type="text" placeholder={"Paste YouTube video URL here"}
           onChange={(e) => setYoutubeUrl(e.target.value)}
         />
-        <div className="action-button pad-l-1" id={SPINNER_ID.YOUTUBE_URL}>
+        <div className="action-button pad-l-1" id={SpinnerId.YoutubeUrl}>
           <input type="submit" value="SEARCH" className="action-button" />
         </div>
       </div>

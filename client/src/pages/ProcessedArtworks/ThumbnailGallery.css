@@ -20,14 +20,6 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 10px;
-
-            .thumbnail-item {
-                img {
-                    max-width: 100%;
-                    height: auto;
-                    cursor: pointer;
-                }
-            }
         }
     }
 }

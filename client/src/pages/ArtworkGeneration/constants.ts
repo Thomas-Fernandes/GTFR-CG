@@ -1,19 +1,19 @@
-import { Option } from "@/components/Selector/Selector";
+import { Option } from "@components/Selector/Selector";
 
 export const REGEX_YOUTUBE_URL = [
   /https?:\/\/(www\.)?youtube\.com\/watch\?v=[a-zA-Z0-9_-]{11}/,
   /https?:\/\/youtu\.be\/[a-zA-Z0-9_-]{11}/,
 ];
 
-export enum AUTOMATIC_SEARCH_TRIGGERS {
-  LENGTH = 7,
-  LENGTH_WITHOUT_TERM = 5,
-  SPACE = " ",
+export enum AutomaticSearchTriggers {
+  Length = 7,
+  LengthWithoutTerm = 5,
+  Space = " ",
 }
 
-export enum ARTWORK_RESULT_PROPS {
-  MAX_TITLE_LENGTH = 42,
-  MAX_CROP_LENGTH = 12,
+export enum ArtworkResultProps {
+  MaxTitleLength = 42,
+  MaxCropLength = 12,
 }
 
 export const ITUNES_REGION_OPTIONS: Option[] = [

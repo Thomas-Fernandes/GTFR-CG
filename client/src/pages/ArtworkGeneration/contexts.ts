@@ -1,6 +1,6 @@
 import { NavigateFunction } from "react-router-dom";
 
-import { createNewContext } from "@common/contextProvider";
+import { createNewContext } from "@common/contextCreator";
 import { StateSetter } from "@common/types";
 
 interface ArtworkGenerationContextType {
@@ -14,3 +14,4 @@ const {
 } = createNewContext<ArtworkGenerationContextType>();
 
 export { ArtworkGenerationContext, useArtworkGenerationContext };
+

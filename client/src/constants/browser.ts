@@ -1,19 +1,19 @@
-export enum SESSION_STORAGE {
-  CARD_METANAME = "cardMetaname",
-  CARD_METHOD = "cardMethod",
-  CARD_BOTTOM_COLOR = "cardBottomColor",
-  OUTRO_CONTRIBUTORS = "outroContributors",
-  LATEST_CARD_GENERATION = "latestCardGeneration",
+export enum SessionStorage {
+  CardMetaname = "cardMetaname",
+  CardMethod = "cardMethod",
+  CardBottomColor = "cardBottomColor",
+  OutroContributors = "outroContributors",
+  LatestCardGeneration = "latestCardGeneration",
 }
 
-export enum TITLE {
-  PREFIX = "GTFR-CG - ",
+export enum Title {
+  Prefix = "GTFR-CG - ",
 
-  REDIRECT = "Redirect",
-  HOME = "Home",
-  TESTS = "Tests",
-  ARTWORK_GENERATION = "Artwork Generation",
-  PROCESSED_ARTWORKS = "Processed Artworks",
-  LYRICS = "Lyrics",
-  CARDS_GENERATION = "Cards Generation",
+  Redirect = "Redirection page",
+  Home = "Home",
+  Tests = "Tests",
+  ArtworkGeneration = "Artwork Generation",
+  ProcessedArtworks = "Processed Artworks",
+  Lyrics = "Lyrics",
+  CardsGeneration = "Cards Generation",
 }

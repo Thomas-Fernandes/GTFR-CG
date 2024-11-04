@@ -3,32 +3,32 @@ import { FormEvent } from "react";
 import { sendToast } from "@common/toast";
 import { ImageDownloadRequest } from "@common/types";
 
-import { TOAST, TOAST_TYPE } from "@constants/toasts";
+import { Toast, ToastType } from "@constants/toasts";
 
-import { COVER_ART_FILENAME, PROCESSED_ARTWORKS_PATH } from "./constants";
+import { COVER_ART_FILENAME, DEFAULT_DOWNLOAD_FILENAME, DOWNLOAD_BG_IMG_FILENAME, PROCESSED_ARTWORKS_PATH } from "./constants";
 
 export const handleSubmitDownloadImage = (e: FormEvent<HTMLFormElement>, body: ImageDownloadRequest) => {
   e.preventDefault();
 
   if (!body.selectedImage) {
-    sendToast(TOAST.NO_IMG_SELECTION, TOAST_TYPE.ERROR);
+    sendToast(Toast.NoImgSelection, ToastType.Error);
     return;
   }
 
   const filepath = `${PROCESSED_ARTWORKS_PATH}/${body.selectedImage}`;
   const filename = filepath.split('/').pop();
-  const outputFilename = filename === COVER_ART_FILENAME ? "background.png" : filename;
+  const outputFilename = filename === COVER_ART_FILENAME ? DOWNLOAD_BG_IMG_FILENAME : filename;
 
-  const link = document.createElement("a");
-  link.download = outputFilename ?? "download.png";
-  link.href = filepath;
-  document.body.appendChild(link);
+  const linkElement = document.createElement("a");
+  linkElement.download = outputFilename ?? DEFAULT_DOWNLOAD_FILENAME;
+  linkElement.href = filepath;
+  document.body.appendChild(linkElement);
 
   try {
-    link.click();
+    linkElement.click();
   } catch (err) {
-    sendToast((err as Error).message, TOAST_TYPE.ERROR);
+    sendToast((err as Error).message, ToastType.Error);
   } finally {
-    document.body.removeChild(link);
+    document.body.removeChild(linkElement);
   }
 };

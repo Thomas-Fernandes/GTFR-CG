@@ -1,6 +1,5 @@
-import { DEFAULT_EVENT_DURATION, TOAST_TYPE } from "@constants/toasts";
-
-import { ToastType } from "./types";
+import { ResponseStatus } from "@constants/requests";
+import { DEFAULT_EVENT_DURATION, ToastType } from "@constants/toasts";
 
 const convertToHtmlMessage = (message: string) => {
   return message.trim()
@@ -21,12 +20,12 @@ const flattenMessage = (message: string) => {
 
 export const sendToast = (
   message: string,
-  type: ToastType = TOAST_TYPE.ERROR,
+  type: ResponseStatus = ToastType.Error,
   duration: number = DEFAULT_EVENT_DURATION.SECONDS_TOAST
 ) => {
-  if (type === TOAST_TYPE.ERROR)
+  if (type === ToastType.Error)
     console.error(`Toast: ${type} - ${flattenMessage(message)}`);
-  else if (type === TOAST_TYPE.WARN)
+  else if (type === ToastType.Warn)
     console.log(`Toast: ${type} - ${flattenMessage(message)}`);
 
   const toast = document.createElement("div");
