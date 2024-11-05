@@ -4,11 +4,13 @@ from PIL import Image, ImageFilter, ImageDraw
 
 from os import path
 from time import time
+from typing import Optional
 
 import server.src.constants as const
 from server.src.docs import models, ns_artwork_processing
 from server.src.logger import log, LogSeverity
 from server.src.statistics import updateStats
+from server.src.utils.string_utils import getSessionFirstName
 from server.src.utils.web_utils import createApiResponse
 
 from server.src.app import api, app
@@ -17,18 +19,42 @@ session = app.config
 api_prefix = const.API_ROUTE + const.ROUTES.art_proc.path
 api.add_namespace(ns_artwork_processing, path=api_prefix)
 
+def addGaussianBlur(cropped_image: Image.Image, original_image: Image.Image) -> Image.Image:
+    """ Adds a Gaussian blur to the given image.
+    :param original_image: [Image.Image] The original image as a reference.
+    :param cropped_image: [Image.Image] The image to blur.
+    :return: [Image.Image] The blurred image.
+    """
+    log.debug("  Applying Gaussian blur and radial mask...")
+    blurred_image: Image.Image = cropped_image.filter(ImageFilter.GaussianBlur(radius=25))
+
+    mask = Image.new("L", cropped_image.size, "black")
+    draw: ImageDraw.ImageDraw = ImageDraw.Draw(mask)
+    max_dim = min(cropped_image.size) / 2
+    center_x, center_y = cropped_image.size[0] // 2, cropped_image.size[1] // 2
+
+    for i in range(int(max_dim)):
+        opacity = 255 - int((255 * i) / max_dim)
+        coords = [
+            center_x - i, center_y - i,
+            center_x + i, center_y + i
+        ]
+        draw.ellipse(coords, fill=opacity)
+
+    final_image = Image.composite(cropped_image, blurred_image, mask)
+
+    center_image: Image.Image = original_image.resize((800, 800), Image.Resampling.LANCZOS)
+    (top_left_x, top_left_y) = (center_x - 400, center_y - 400)
+    final_image.paste(center_image, (top_left_x, top_left_y))
+    return final_image
+
 def generateCoverArt(input_path: str, output_path: str, include_center_artwork: bool = True) -> None:
     """ Generates the cover art for the given input image and saves it to the output path.
     :param input_path: [string] The path to the input image.
     :param output_path: [string] The path to save the output image.
     :param include_center_artwork: [bool] Whether to include the center artwork in the cover art. (default: True)
     """
-    def getSessionFirstName() -> str:
-        """ Returns the first segment of the session id.
-        :return: [string] The first segment of the session id.
-        """
-        return input_path.split(const.SLASH)[-2].split('-')[0]
-    log.info(f"Generating cover art... (session {getSessionFirstName()}-...)")
+    log.info(f"Generating cover art... (session {getSessionFirstName(input_path)}-...)")
 
     image: Image.Image = Image.open(input_path)
 
@@ -47,62 +73,47 @@ def generateCoverArt(input_path: str, output_path: str, include_center_artwork: 
     if (include_center_artwork == False):
         final_image = cropped_image
     else:
-        log.debug("  Applying Gaussian blur and radial mask...")
-        blurred_image: Image.Image = cropped_image.filter(ImageFilter.GaussianBlur(radius=25))
-
-        mask = Image.new("L", cropped_image.size, "black")
-        draw: ImageDraw.ImageDraw = ImageDraw.Draw(mask)
-        max_dim = min(cropped_image.size) / 2
-        center_x, center_y = cropped_image.size[0] // 2, cropped_image.size[1] // 2
-
-        for i in range(int(max_dim)):
-            opacity = 255 - int((255 * i) / max_dim)
-            coords = [
-                center_x - i,
-                center_y - i,
-                center_x + i,
-                center_y + i
-            ]
-            draw.ellipse(coords, fill=opacity)
-
-        final_image = Image.composite(cropped_image, blurred_image, mask)
-
-        center_image: Image.Image = image.resize((800, 800), Image.Resampling.LANCZOS)
-        (top_left_x, top_left_y) = (center_x - 400, center_y - 400)
-        final_image.paste(center_image, (top_left_x, top_left_y))
+        final_image = addGaussianBlur(cropped_image, image)
 
     final_image.save(output_path)
     final_image.save(f"{const.FRONT_PROCESSED_ARTWORKS_DIR}{const.PROCESSED_ARTWORK_FILENAME}")
     log.debug(f"Cover art saved: {output_path}")
 
-def generateThumbnails(bg_path: str, output_folder: str) -> None:
+def generateThumbnail(position: str, user_folder: str, bg_path: str, output_folder: str) -> Optional[str]:
+    log.debug(f"  Generating {position} thumbnail...")
+    logo_path = f"{position}.png"
+    overlay_file = f"{user_folder}{const.SLASH}{const.THUMBNAILS_DIR}{logo_path}"
+    if (not path.exists(overlay_file)):
+        log.err(f"  Overlay file not found: {overlay_file}")
+        return const.ERR_OVERLAY_NOT_FOUND
+    overlay = Image.open(overlay_file)
+
+    background = Image.open(bg_path)
+    new_background = Image.new("RGBA", background.size)
+    new_background.paste(background, (0, 0))
+    new_background.paste(overlay, mask=overlay)
+
+    final_image = new_background.convert("RGB")
+    output_path = path.join(output_folder, f"thumbnail_{position}.png")
+    final_image.save(output_path)
+    final_image.save(f"{const.FRONT_PROCESSED_ARTWORKS_DIR}thumbnail_{position}.png")
+    log.debug(f"  Thumbnail saved: {output_path}")
+    return None
+
+def generateThumbnails(bg_path: str, output_folder: str) -> Optional[str]:
     """ Generates the thumbnails for the given background image and saves them in the output folder.
     :param bg_path: [string] The path to the background image.
     :param output_folder: [string] The path to the folder where the thumbnails will be saved.
     """
     log.info(f"Generating thumbnails... (session {bg_path.split(const.SLASH)[-3].split('-')[0]}-...)")
 
+    user_folder = path.abspath(str(session[const.SessionFields.user_folder.value]))
+    user_folder = const.SLASH.join(user_folder.split(const.SLASH)[:-1])
     for position in const.LOGO_POSITIONS:
-        log.debug(f"  Generating {position} thumbnail...")
-        logo_path = f"{position}.png"
-        user_folder = path.abspath(str(session[const.SessionFields.user_folder.value]))
-        user_folder = const.SLASH.join(user_folder.split(const.SLASH)[:-1])
-        overlay_file = f"{user_folder}{const.SLASH}{const.THUMBNAILS_DIR}{logo_path}"
-        if (not path.exists(overlay_file)):
-            log.warn(f"  Overlay file not found: {overlay_file}")
-            break
-        overlay = Image.open(overlay_file)
-
-        background = Image.open(bg_path)
-        new_background = Image.new("RGBA", background.size)
-        new_background.paste(background, (0, 0))
-        new_background.paste(overlay, mask=overlay)
-
-        final_image = new_background.convert("RGB")
-        output_path = path.join(output_folder, f"thumbnail_{position}.png")
-        final_image.save(output_path)
-        final_image.save(f"{const.FRONT_PROCESSED_ARTWORKS_DIR}thumbnail_{position}.png")
-        log.debug(f"  Thumbnail saved: {output_path}")
+        err = generateThumbnail(position, user_folder, bg_path, output_folder)
+        if err:
+            return err
+    return None
 
 @ns_artwork_processing.route("/process-artworks")
 class ProcessArtworkResource(Resource):
@@ -110,6 +121,7 @@ class ProcessArtworkResource(Resource):
     @ns_artwork_processing.expect(models[const.ROUTES.art_proc.bp_name]["process-artworks"]["payload"])
     @ns_artwork_processing.response(const.HttpStatus.CREATED.value, const.MSG_PROCESSED_IMAGES_SUCCESS)
     @ns_artwork_processing.response(const.HttpStatus.BAD_REQUEST.value, const.ERR_NO_IMG)
+    @ns_artwork_processing.response(const.HttpStatus.PRECONDITION_FAILED.value, const.ERR_OVERLAY_NOT_FOUND)
     def post(self) -> Response:
         """ Renders the processed background image and thumbnails """
         if const.SessionFields.generated_artwork_path.value not in session:
@@ -124,7 +136,9 @@ class ProcessArtworkResource(Resource):
 
         start = time()
         generateCoverArt(generated_artwork_path, output_bg, include_center_artwork)
-        generateThumbnails(output_bg, user_processed_path)
+        err = generateThumbnails(output_bg, user_processed_path)
+        if err:
+            return createApiResponse(const.HttpStatus.PRECONDITION_FAILED.value, err)
         center_mark = "with" if include_center_artwork else "without"
         log.log(f"Images generation ({center_mark} center artwork) complete.").time(LogSeverity.LOG, time() - start)
         updateStats(to_increment=const.AvailableStats.artworkGenerations.value)

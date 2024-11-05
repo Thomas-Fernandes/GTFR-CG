@@ -12,7 +12,7 @@ from sys import exit
 # Local modules
 import server.src.constants as const
 from server.src.logger import log
-from server.src.utils.soft_utils import getExpirationTimestamp
+from server.src.utils.time_utils import getExpirationTimestamp
 from server.src.statistics import onLaunch as printInitStatistics
 
 # Application initialization

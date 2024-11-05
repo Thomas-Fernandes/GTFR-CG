@@ -126,6 +126,9 @@ INCREMENTABLE_STATS: list[str] = [
 SLASH = '/' if (osName != 'nt') else '\\'
 SESSION_DIR = "flask_session" + SLASH
 PROCESSED_DIR = "processed" + SLASH
+UPLOADED_ITUNES_IMG_FILENAME = "itunes_image.png"
+UPLOADED_FILE_IMG_FILENAME = "uploaded_image.png"
+UPLOADED_YOUTUBE_IMG_FILENAME = "youtube_thumbnail.png"
 PROCESSED_ARTWORK_FILENAME = "ProcessedArtwork.png"
 PROCESSED_OUTRO_FILENAME = "outro.png"
 FRONT_PROCESSED = f"..{SLASH}client{SLASH}public{SLASH}"
@@ -155,6 +158,7 @@ ERR_NO_IMG = "No image was selected or uploaded."
 ERR_IMG_INVALID_FILETYPE = "Invalid file type. Only PNG and JPG files are allowed."
 ERR_NO_IMG_URL = "No image URL provided."
 ERR_INVALID_YT_URL = "Invalid YouTube URL."
+ERR_OVERLAY_NOT_FOUND = "Overlay file not found."
 ERR_FAIL_DOWNLOAD = "Failed to download image."
 ERR_LYRICS_MISSING_PARAMS = "Missing parameters for lyrics fetching."
 ERR_LYRICS_NOT_FOUND = "Lyrics not found."

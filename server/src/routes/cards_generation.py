@@ -16,7 +16,9 @@ from server.src.logger import log, LogSeverity
 from server.src.routes.artwork_processing import generateCoverArt
 from server.src.statistics import updateStats
 from server.src.typing_gtfr import CardgenSettings, CardsContents, CardMetadata, RGBAColor, SongMetadata
-from server.src.utils.soft_utils import doesFileExist, getCardsContentsFromFile, getHexColorFromRGB, getNowStamp, snakeToCamelCase, writeCardsContentsToFile
+from server.src.utils.file_utils import doesFileExist, getCardsContentsFromFile, writeCardsContentsToFile
+from server.src.utils.string_utils import getHexColorFromRGB, snakeToCamelCase
+from server.src.utils.time_utils import getNowStamp
 from server.src.utils.web_utils import createApiResponse
 
 from server.src.app import api, app
@@ -317,7 +319,7 @@ def saveEnforcedBackgroundImage(file: FileStorage, include_center_artwork: bool)
     user_processed_path = path.join(const.PROCESSED_DIR, user_folder)
     log.info(f"Creating user processed path directory: {user_processed_path}")
     makedirs(user_processed_path, exist_ok=True)
-    image_path = path.join(user_processed_path, "uploaded_image.png")
+    image_path = path.join(user_processed_path, const.UPLOADED_FILE_IMG_FILENAME)
 
     log.debug(f"Saving uploaded image to {image_path}")
     file.save(image_path)

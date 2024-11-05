@@ -13,7 +13,8 @@ import server.src.constants as const
 from server.src.decorators import retry
 from server.src.docs import models, ns_artwork_generation
 from server.src.logger import log, LogSeverity
-from server.src.utils.soft_utils import checkImageFilenameValid, snakeToCamelCase
+from server.src.utils.file_utils import checkImageFilenameValid
+from server.src.utils.string_utils import snakeToCamelCase
 from server.src.utils.web_utils import createApiResponse
 
 from server.src.app import api, app
@@ -53,7 +54,7 @@ class ItunesImageResource(Resource):
             return createApiResponse(const.HttpStatus.INTERNAL_SERVER_ERROR.value, const.ERR_FAIL_DOWNLOAD)
         log.debug("iTunes image fetched successfully.")
 
-        image_path = path.join(user_processed_path, "itunes_image.png")
+        image_path = path.join(user_processed_path, const.UPLOADED_ITUNES_IMG_FILENAME)
         with open(image_path, "wb") as file:
             log.debug(f"Saving iTunes image to {image_path}")
             file.write(image_response.content)
@@ -148,7 +149,7 @@ class LocalImageResource(Resource):
         log.info(f"Creating user processed path: {user_processed_path}")
         makedirs(user_processed_path, exist_ok=True)
 
-        image_path = path.join(user_processed_path, "uploaded_image.png")
+        image_path = path.join(user_processed_path, const.UPLOADED_FILE_IMG_FILENAME)
         log.debug(f"Saving uploaded image to {image_path}")
         file.save(image_path)
 
@@ -186,7 +187,7 @@ def processYoutubeThumbnail(thumbnail_url: str) -> Response:
     if image_response.status_code != const.HttpStatus.OK.value:
         return createApiResponse(const.HttpStatus.INTERNAL_SERVER_ERROR.value, const.ERR_FAIL_DOWNLOAD)
 
-    image_path = path.join(user_processed_path, "youtube_thumbnail.png")
+    image_path = path.join(user_processed_path, const.UPLOADED_YOUTUBE_IMG_FILENAME)
     with open(image_path, "wb") as file:
         file.write(image_response.content)
 

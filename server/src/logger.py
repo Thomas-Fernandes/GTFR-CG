@@ -6,7 +6,7 @@ import sys # The whole module must be imported for output redirection to work
 from typing import Iterator, Optional, Self
 
 import server.src.constants as const
-from server.src.utils.soft_utils import getNowEpoch
+from server.src.utils.time_utils import getNowEpoch
 
 class LogSeverity(IntEnum):
     """ Enum for severity levels.
