@@ -7,8 +7,10 @@ from time import time
 from typing import Optional
 
 from server.src.constants.enums import AvailableCacheElemType, AvailableStats, HttpStatus, SessionFields
+from server.src.constants.image_generation import LOGO_OVERLAYS
 from server.src.constants.paths import \
-    API_ROUTE, FRONT_PROCESSED_ARTWORKS_DIR, LOGO_POSITIONS, PROCESSED_ARTWORK_FILENAME, PROCESSED_DIR, ROUTES, SLASH, ASSETS_THUMBNAILS_DIR
+    API_ROUTE, FRONT_PROCESSED_ARTWORKS_DIR, LOGO_POSITIONS, \
+    PROCESSED_ARTWORK_FILENAME, PROCESSED_DIR, ROUTES, SLASH
 from server.src.constants.responses import Err, Msg
 from server.src.docs import models, ns_artwork_processing
 from server.src.logger import log, LogSeverity
@@ -82,24 +84,17 @@ def generateCoverArt(input_path: str, output_path: str, include_center_artwork: 
     final_image.save(f"{FRONT_PROCESSED_ARTWORKS_DIR}{PROCESSED_ARTWORK_FILENAME}")
     log.debug(f"Cover art saved: {output_path}")
 
-def generateThumbnail(position: str, user_folder: str, bg_path: str, output_folder: str) -> Optional[str]:
+def generateThumbnail(thumbnail: Image.Image, position: str, output_folder: str) -> Optional[str]:
     log.debug(f"  Generating {position} thumbnail...")
     logo_path = f"{position}.png"
-    overlay_file = f"{user_folder}{SLASH}{ASSETS_THUMBNAILS_DIR}{logo_path}"
-    if (not path.exists(overlay_file)):
-        log.err(f"  Overlay file not found: {overlay_file}")
-        return Err.Error.ERR_OVERLAY_NOT_FOUND
-    overlay = Image.open(overlay_file)
+    overlay = LOGO_OVERLAYS[LOGO_POSITIONS.index(position)]
 
-    background = Image.open(bg_path)
-    new_background = Image.new("RGBA", background.size)
-    new_background.paste(background, (0, 0))
-    new_background.paste(overlay, mask=overlay)
+    thumbnail.paste(overlay, mask=overlay)
 
-    final_image = new_background.convert("RGB")
-    output_path = path.join(output_folder, f"thumbnail_{position}.png")
-    final_image.save(output_path)
-    final_image.save(f"{FRONT_PROCESSED_ARTWORKS_DIR}thumbnail_{position}.png")
+    image_output_filename = f"thumbnail_{logo_path}"
+    output_path = path.join(output_folder, image_output_filename)
+    thumbnail.save(output_path)
+    thumbnail.save(f"{FRONT_PROCESSED_ARTWORKS_DIR}{image_output_filename}")
     log.debug(f"  Thumbnail saved: {output_path}")
     return None
 
@@ -110,11 +105,10 @@ def generateThumbnails(bg_path: str, output_folder: str) -> Optional[str]:
     """
     log.info(f"Generating thumbnails... (session {bg_path.split(SLASH)[-3].split('-')[0]}-...)")
 
-    user_folder = path.abspath(str(session[SessionFields.USER_FOLDER]))
-    user_folder = SLASH.join(user_folder.split(SLASH)[:-1])
+    background = Image.open(bg_path)
     for position in LOGO_POSITIONS:
-        err = generateThumbnail(position, user_folder, bg_path, output_folder)
-        if err:
+        err = generateThumbnail(background.copy(), position, output_folder)
+        if err is not None:
             return err
     return None
 

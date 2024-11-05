@@ -1,7 +1,7 @@
 from os import path
 from typing import Optional
 
-from server.src.constants.cards_generation import TRANSLATION_TABLE
+from server.src.constants.image_generation import TRANSLATION_TABLE
 from server.src.constants.responses import Err
 from server.src.typing_gtfr import CardsContents
 

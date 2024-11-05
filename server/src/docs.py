@@ -2,11 +2,13 @@ from flask_restx import fields, Namespace
 
 from server.src.constants.paths import ROUTES
 
-ns_home = Namespace((ROUTES.home.bp_name or "?"), description="Home related routes")
-ns_artwork_generation = Namespace((ROUTES.art_gen.bp_name or "?"), description="Artwork generation related routes")
-ns_artwork_processing = Namespace((ROUTES.art_proc.bp_name or "?"), description="Artwork processing related routes")
-ns_lyrics = Namespace((ROUTES.lyrics.bp_name or "?"), description="Lyrics related routes")
-ns_cards_generation = Namespace((ROUTES.cards_gen.bp_name or "?"), description="Cards generation related routes")
+fallback_bp_name = "?"
+
+ns_home = Namespace((ROUTES.home.bp_name or fallback_bp_name), description="Home related routes")
+ns_artwork_generation = Namespace((ROUTES.art_gen.bp_name or fallback_bp_name), description="Artwork generation related routes")
+ns_artwork_processing = Namespace((ROUTES.art_proc.bp_name or fallback_bp_name), description="Artwork processing related routes")
+ns_lyrics = Namespace((ROUTES.lyrics.bp_name or fallback_bp_name), description="Lyrics related routes")
+ns_cards_generation = Namespace((ROUTES.cards_gen.bp_name or fallback_bp_name), description="Cards generation related routes")
 
 # create a type of field for a python dictionary
 

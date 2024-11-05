@@ -23,9 +23,7 @@ class GeniusTokenResource(Resource):
         """ Returns the Genius API token """
         log.log("GET - Fetching Genius API token...")
 
-        token = session.get(SessionFields.GENIUS_TOKEN, "")
-
-        return createApiResponse(HttpStatus.OK, Msg.GENIUS_TOKEN_FETCHED, {"token": token})
+        return createApiResponse(HttpStatus.OK, Msg.GENIUS_TOKEN_FETCHED, {"token": session.get(SessionFields.GENIUS_TOKEN)})
 
 @ns_home.route("/statistics")
 class StatisticsResource(Resource):

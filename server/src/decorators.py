@@ -21,7 +21,7 @@ def retry(*, condition: Optional[Callable[[Any], bool]] = None, times: int = 1, 
         def wrapper(*args: tuple[Any], **kwargs: dict[str, Any]) -> Any: # screw you, SonarLint
             rv = None
             thrown = None
-            for _ in range(times):
+            for n in range(times):
                 rv = None # reset the return value
                 thrown = None # reset the thrown exception
                 try:
@@ -30,7 +30,7 @@ def retry(*, condition: Optional[Callable[[Any], bool]] = None, times: int = 1, 
                     thrown = e # catch the exception to examine it later
                 if thrown is None and (condition is None or condition(rv) == True):
                     return rv # if condition is met, return the rv of the first successful run
-                to_wait = back_off * 2 ** _ # make back-off grow exponentially
+                to_wait = back_off * 2 ** n # make back-off grow exponentially
                 sleep(to_wait / 1000)
             if thrown is not None: # if method kept throwing, raise the last exception
                 raise thrown

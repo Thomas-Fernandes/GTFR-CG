@@ -10,8 +10,8 @@ from time import time
 from typing import Any, Optional
 from uuid import uuid4
 
-from server.src.constants.cards_generation import BLACK_OVERLAY, METADATA_IDENTIFIER, METADATA_SEP, OUTRO_IMAGE, WHITE_OVERLAY
 from server.src.constants.enums import AvailableCacheElemType, AvailableStats, HttpStatus, MetanameFontNames, SessionFields
+from server.src.constants.image_generation import BLACK_OVERLAY, ImageMode, METADATA_IDENTIFIER, METADATA_SEP, OUTRO_IMAGE, WHITE_OVERLAY
 from server.src.constants.paths import \
     API_ROUTE, FRONT_PROCESSED_CARDS_DIR, ROUTES, SLASH, \
     PROCESSED_DIR, PROCESSED_OUTRO_FILENAME, PROCESSED_ARTWORK_FILENAME, UPLOADED_FILE_IMG_FILENAME
@@ -41,7 +41,7 @@ def generateOutroCard(output_path: str, contributor_logins: list[str]) -> None:
     :param contributor_logins: [list[str]] The logins of the contributors
     """
     log.info("  Generating outro card...")
-    card = Image.new("RGB", (1920, 1080), (0,0,0))
+    card = Image.new(ImageMode.RGB, (1920, 1080), (0,0,0))
     card.paste(OUTRO_IMAGE, (0, -32))
 
     def getContributorsString(contributor_logins: list[str]) -> str:
@@ -104,12 +104,12 @@ def generateCard(output_path: str, lyrics: list[str], card_metadata: CardMetadat
     """
     card_name = output_path.split(SLASH)[-1]
     log.info(f"  Generating card {card_name}...")
-    card: Image.Image = Image.new("RGBA", (1920, 1080), (0,0,0,0))
+    card: Image.Image = Image.new(ImageMode.RGBA, (1920, 1080), (0,0,0,0))
 
     if (card_metadata.include_bg_img == True):
         card.paste(card_metadata.bg, (0, -100))
 
-    bottom_bar = Image.new("RGB", (1920, 200), card_metadata.dominant_color) # bottom: 880px -> 1080 - 880 = 200px
+    bottom_bar = Image.new(ImageMode.RGB, (1920, 200), card_metadata.dominant_color) # bottom: 880px -> 1080 - 880 = 200px
     card.paste(bottom_bar, (0, 880))
     card.paste(card_metadata.bottom_bar_overlay, mask=card_metadata.bottom_bar_overlay)
 
@@ -292,7 +292,7 @@ def generateCards(cards_contents: CardsContents, song_data: SongMetadata, settin
         outro_contributors = [c for c in outro_contributors if c != ""] # remove empty strings
         generateOutroCard(image_output_path, outro_contributors)
 
-    number_of_generated_cards = len(cards_contents) + (2 if gen_outro else 1) # lyrics + empty + outro card
+    number_of_generated_cards = len(cards_contents) + (2 if gen_outro else 1) # lyrics + 00 + outro card
     updateStats(to_increment=AvailableStats.CARDS_GENERATED, increment=number_of_generated_cards)
     log.log(f"Generated {number_of_generated_cards} card{'s' if number_of_generated_cards > 1 else ''} successfully.") \
         .time(LogSeverity.LOG, time() - start)

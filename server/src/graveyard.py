@@ -4,6 +4,7 @@ from PIL import Image
 from contextlib import redirect_stdout, redirect_stderr
 from io import StringIO
 
+from server.src.constants.image_generation import ImageMode
 from server.src.typing_gtfr import RGBAColor, RGBColor
 
 def convertHexToRgba(hex_color: str) -> RGBAColor:
@@ -23,7 +24,7 @@ def getDominantColor(image_path: str, n_clusters: int = 4, random_state: int = 7
     """
     try:
         with Image.open(image_path) as img:
-            img = img.convert("RGB")
+            img = img.convert(ImageMode.RGB)
     except Exception as e:
         print(f"Error while opening image: {e}")
         return "000000"
@@ -50,7 +51,7 @@ def getAverageColor(image_path: str) -> str: # initially used for the background
     """
     try:
         with Image.open(image_path) as img:
-            img = img.convert("RGB")
+            img = img.convert(ImageMode.RGB)
     except Exception as e:
         # log.error(f"Error while opening image: {e}") # causes circular import on log
         print(f"Error while opening image: {e}")

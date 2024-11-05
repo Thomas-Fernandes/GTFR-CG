@@ -9,14 +9,13 @@ from requests.exceptions import ReadTimeout as ReadTimeoutException
 from time import time
 from typing import Literal, Optional, Union
 
-from server.src.constants.cards_generation import ATTRIBUTION_PERCENTAGE_TOLERANCE
 from server.src.constants.dotenv import GENIUS_API_TOKEN, GENIUS_API_TOKEN_PATTERN
 from server.src.constants.enums import AvailableStats, HttpStatus, SessionFields
+from server.src.constants.image_generation import ATTRIBUTION_PERCENTAGE_TOLERANCE
 from server.src.constants.paths import API_ROUTE, ROUTES
 from server.src.constants.responses import Err, Msg
 from server.src.decorators import retry
 from server.src.docs import models, ns_lyrics
-from server.src.logger import log
 from server.src.logger import log, LogSeverity
 from server.src.statistics import updateStats
 from server.src.utils.web_utils import createApiResponse
