@@ -71,6 +71,7 @@ class CardMetadata:
         card_metaname: [string] The author and title of the song
         include_bg_img: [bool] Whether to include the background image
         bg: [Image.Image] The background image of the card
+        bottom_bar_overlay: [Image.Image] The bottom bar overlay of the card
         dominant_color: [RGBColor] The average color of the background image
         text_lyrics_color: [RGBColor] The background color for the text of the card
         text_meta_color: [RGBColor] The text color of the metadata of the card
@@ -78,6 +79,7 @@ class CardMetadata:
     card_metaname: str
     include_bg_img: bool
     bg: Image.Image
+    bottom_bar_overlay: Image.Image
     dominant_color: RGBColor
     text_lyrics_color: RGBColor
     text_meta_color: RGBColor

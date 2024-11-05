@@ -8,7 +8,7 @@ from typing import Optional
 
 from server.src.constants.enums import AvailableCacheElemType, AvailableStats, HttpStatus, SessionFields
 from server.src.constants.paths import \
-    API_ROUTE, FRONT_PROCESSED_ARTWORKS_DIR, LOGO_POSITIONS, PROCESSED_ARTWORK_FILENAME, PROCESSED_DIR, ROUTES, SLASH, THUMBNAILS_DIR
+    API_ROUTE, FRONT_PROCESSED_ARTWORKS_DIR, LOGO_POSITIONS, PROCESSED_ARTWORK_FILENAME, PROCESSED_DIR, ROUTES, SLASH, ASSETS_THUMBNAILS_DIR
 from server.src.constants.responses import Err, Msg
 from server.src.docs import models, ns_artwork_processing
 from server.src.logger import log, LogSeverity
@@ -85,7 +85,7 @@ def generateCoverArt(input_path: str, output_path: str, include_center_artwork: 
 def generateThumbnail(position: str, user_folder: str, bg_path: str, output_folder: str) -> Optional[str]:
     log.debug(f"  Generating {position} thumbnail...")
     logo_path = f"{position}.png"
-    overlay_file = f"{user_folder}{SLASH}{THUMBNAILS_DIR}{logo_path}"
+    overlay_file = f"{user_folder}{SLASH}{ASSETS_THUMBNAILS_DIR}{logo_path}"
     if (not path.exists(overlay_file)):
         log.err(f"  Overlay file not found: {overlay_file}")
         return Err.Error.ERR_OVERLAY_NOT_FOUND

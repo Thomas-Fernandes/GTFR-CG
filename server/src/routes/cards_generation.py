@@ -10,10 +10,10 @@ from time import time
 from typing import Any, Optional
 from uuid import uuid4
 
-from server.src.constants.cards_generation import METADATA_IDENTIFIER, METADATA_SEP
+from server.src.constants.cards_generation import BLACK_OVERLAY, METADATA_IDENTIFIER, METADATA_SEP, OUTRO_IMAGE, WHITE_OVERLAY
 from server.src.constants.enums import AvailableCacheElemType, AvailableStats, HttpStatus, MetanameFontNames, SessionFields
 from server.src.constants.paths import \
-    API_ROUTE, CARDS_BOTTOM_B, CARDS_BOTTOM_W, FRONT_PROCESSED_CARDS_DIR, ROUTES, SLASH, CARDS_DIR, \
+    API_ROUTE, FRONT_PROCESSED_CARDS_DIR, ROUTES, SLASH, \
     PROCESSED_DIR, PROCESSED_OUTRO_FILENAME, PROCESSED_ARTWORK_FILENAME, UPLOADED_FILE_IMG_FILENAME
 from server.src.constants.pillow import \
     FONT_LYRICS, FONT_OUTRO, FONTS_METANAME, LYRIC_HEIGHT, LYRIC_SPACING, LYRIC_BOX_OFFSET, LYRIC_TEXT_OFFSET, \
@@ -41,12 +41,8 @@ def generateOutroCard(output_path: str, contributor_logins: list[str]) -> None:
     :param contributor_logins: [list[str]] The logins of the contributors
     """
     log.info("  Generating outro card...")
-    user_folder = path.abspath(str(session[SessionFields.USER_FOLDER]))
-    user_folder = SLASH.join(user_folder.split(SLASH)[:-1])
-    image_file = f"{user_folder}{SLASH}{CARDS_DIR}{PROCESSED_OUTRO_FILENAME}"
-    empty_background = Image.new("RGBA", (1920, 1080), (0,0,0,0))
-    image: Image.Image = Image.open(image_file)
-    empty_background.paste(image, (0, -32))
+    card = Image.new("RGB", (1920, 1080), (0,0,0))
+    card.paste(OUTRO_IMAGE, (0, -32))
 
     def getContributorsString(contributor_logins: list[str]) -> str:
         """ Gets the string of contributors from their logins
@@ -63,12 +59,12 @@ def generateOutroCard(output_path: str, contributor_logins: list[str]) -> None:
         return contributors_str
     contributors_str = "" if contributor_logins == [] else getContributorsString(contributor_logins)
 
-    draw = IDraw.Draw(image)
+    draw = IDraw.Draw(card)
     _, _, w, _ = draw.textbbox((0, 0), contributors_str, font=FONT_OUTRO) # deduce the width of the text to center it
     draw.text(((1920-w) / 2, 960-32), contributors_str, font=FONT_OUTRO, fill=OUTRO_TEXT_COLOR)
 
-    image.save(output_path)
-    image.save(f"{FRONT_PROCESSED_CARDS_DIR}{PROCESSED_OUTRO_FILENAME}")
+    card.save(output_path)
+    card.save(f"{FRONT_PROCESSED_CARDS_DIR}{PROCESSED_OUTRO_FILENAME}")
     log.info("  Outro card generated successfully.")
 
 def getVerticalOffset(font_type: MetanameFontNames) -> int:
@@ -113,11 +109,9 @@ def generateCard(output_path: str, lyrics: list[str], card_metadata: CardMetadat
     if (card_metadata.include_bg_img == True):
         card.paste(card_metadata.bg, (0, -100))
 
-    bottom_color_bar = Image.new("RGBA", (1920, 200), card_metadata.dominant_color) # bottom: 880px -> 1080 - 880 = 200px
-    card.paste(bottom_color_bar, (0, 880))
-
-    bottom_bar = Image.open(f"{CARDS_BOTTOM_B if card_metadata.text_meta_color[0] == 0 else CARDS_BOTTOM_W}")
-    card.paste(bottom_bar, mask=bottom_bar)
+    bottom_bar = Image.new("RGB", (1920, 200), card_metadata.dominant_color) # bottom: 880px -> 1080 - 880 = 200px
+    card.paste(bottom_bar, (0, 880))
+    card.paste(card_metadata.bottom_bar_overlay, mask=card_metadata.bottom_bar_overlay)
 
     draw = IDraw.Draw(card)
     def drawMetaname(draw: IDraw.ImageDraw, metaname: str, color: RGBAColor) -> None:
@@ -213,11 +207,13 @@ def getCardMetadata(song_data: SongMetadata, enforce_bottom_color: str | None, i
         log.time(LogSeverity.INFO, time() - start, padding=2)
     text_meta_color = (0,0,0) if dominant_color_luminance > 128 else (255,255,255)
     text_lyrics_color = (255,255,255) if dominant_color_luminance > 220 else (0,0,0)
+    bottom_bar_overlay= BLACK_OVERLAY if text_meta_color[0] == 0 else WHITE_OVERLAY
 
     cards_metadata = CardMetadata(
         card_metaname=card_metaname,
-        include_bg_img=include_bg_img, bg=bg, dominant_color=dominant_color,
-        text_meta_color=text_meta_color, text_lyrics_color=text_lyrics_color,
+        include_bg_img=include_bg_img,
+        bg=bg, bottom_bar_overlay=bottom_bar_overlay,
+        dominant_color=dominant_color, text_meta_color=text_meta_color, text_lyrics_color=text_lyrics_color,
     )
     log.debug(f"  {cards_metadata}")
     return cards_metadata
@@ -248,7 +244,8 @@ def generateSingleCard(cards_contents: CardsContents, song_data: SongMetadata, s
     user_processed_path = path.join(PROCESSED_DIR, user_folder)
     log.info(f"Generating card... ({user_processed_path + SLASH}...)")
     image_output_path = f"{user_processed_path}{SLASH}{settings[SessionFields.CARD_FILENAME].split('/')[-1]}"
-    generateCard(image_output_path, literal_eval(cards_contents[1][0]), card_metadata)
+    lyrics_to_print = literal_eval(cards_contents[1][0])[-8:] # get the last 8 lines of the lyrics; rest overflows
+    generateCard(image_output_path, lyrics_to_print, card_metadata)
     log.log("Generated new card successfully.")
     updateStats(to_increment=AvailableStats.CARDS_GENERATED)
 
@@ -284,10 +281,11 @@ def generateCards(cards_contents: CardsContents, song_data: SongMetadata, settin
     image_output_path = f"{user_processed_path}{SLASH}00.png"
     generateCard(image_output_path, [], card_metadata)
     cards_contents = cards_contents[1:] # remove the metadata from the cards contents
-    for idx, card in enumerate(cards_contents, start=1):
+    for idx, card_lyrics in enumerate(cards_contents, start=1):
         padding = '0' if idx < 10 else ''
         image_output_path = f"{user_processed_path}{SLASH}{padding}{idx}.png"
-        generateCard(image_output_path, card, card_metadata)
+        lyrics_to_print = card_lyrics[-8:] # get the last 8 lines of the lyrics; rest overflows
+        generateCard(image_output_path, lyrics_to_print, card_metadata)
     if gen_outro:
         image_output_path = f"{user_processed_path}{SLASH}{PROCESSED_OUTRO_FILENAME}"
         outro_contributors = settings.get(SessionFields.OUTRO_CONTRIBUTORS, "").split(", ")
