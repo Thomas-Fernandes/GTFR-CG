@@ -55,17 +55,17 @@ def initApp() -> None:
     log.debug("App initialized.")
 
 def main(host: str = HOST_HOME, port: int = DEFAULT_PORT) -> None:
-    f""" Main function to clean the cache, initialize the server and start it.
-    :param host: [string] The host address to run the server on. (default: "{HOST_HOME}")
-    :param port: [integer] The port to run the server on. (default: {DEFAULT_PORT})
+    f""" Main function to clean the cache, initialize the server and start it
+    :param host: [string] The host address to run the server on (default: "{HOST_HOME}")
+    :param port: [integer] The port to run the server on (default: {DEFAULT_PORT})
     """
     host_display_name = "localhost" if host == HOST_HOME else host
     log.log(f"Starting server @ http://{host_display_name}:{port}...")
 
     def removeExpiredCache(folder: str, cache_type: str) -> int:
-        """ Removes expired cache contents.
-        :param folder: [string] The folder whose content is to clean if expired.
-        :return: [integer] The number of entries removed.
+        """ Removes expired cache contents
+        :param folder: [string] The folder whose content is to clean if expired
+        :return: [integer] The number of entries removed
         """
         nb_eliminated_entries: int = 0
         if not path.isdir(folder):
@@ -78,7 +78,7 @@ def main(host: str = HOST_HOME, port: int = DEFAULT_PORT) -> None:
                 log.error(f"Error while checking file expiration: {e}")
                 exit(1)
 
-        if cache_type == AvailableCacheElemType.sessions.value:
+        if cache_type == AvailableCacheElemType.sessions:
             filepaths: list[str] = [path.join(folder, f) for f in listdir(folder)]
             for file in filepaths:
                 if isFileExpired(file, cache_type):
@@ -106,14 +106,13 @@ def main(host: str = HOST_HOME, port: int = DEFAULT_PORT) -> None:
         return nb_eliminated_entries
 
     def cacheCleanup() -> None:
-        """ Cleans up the cache by removing expired entries.
-        """
+        """ Cleans up the cache by removing expired entries """
         nb_eliminated_entries: int = 0
 
         log.debug("Cleaning up cache...")
-        nb_eliminated_entries += removeExpiredCache(SESSION_DIR, AvailableCacheElemType.sessions.value)
-        nb_eliminated_entries += removeExpiredCache(PROCESSED_DIR, AvailableCacheElemType.artworks.value)
-        nb_eliminated_entries += removeExpiredCache(PROCESSED_DIR, AvailableCacheElemType.cards.value)
+        nb_eliminated_entries += removeExpiredCache(SESSION_DIR, AvailableCacheElemType.sessions)
+        nb_eliminated_entries += removeExpiredCache(PROCESSED_DIR, AvailableCacheElemType.artworks)
+        nb_eliminated_entries += removeExpiredCache(PROCESSED_DIR, AvailableCacheElemType.cards)
 
         if nb_eliminated_entries == 0:
             log.info("Cache still fresh. Loading...")

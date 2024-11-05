@@ -30,8 +30,8 @@ api.add_namespace(ns_lyrics, path=api_prefix)
 genius = None
 try:
     def checkGeniusTokenIntegrity() -> Optional[str]:
-        """ Checks the integrity of the Genius API token.
-        :return: [str] The error message if the token is invalid, None otherwise.
+        """ Checks the integrity of the Genius API token
+        :return: [str] The error message if the token is invalid, None otherwise
         """
         if GENIUS_API_TOKEN is None or GENIUS_API_TOKEN == "":
             return "Genius API token not found."
@@ -44,14 +44,14 @@ try:
         raise ValueError(err)
 
     genius = Genius(access_token=GENIUS_API_TOKEN, retries=3)
-    session[SessionFields.genius_token.value] = GENIUS_API_TOKEN
+    session[SessionFields.genius_token] = GENIUS_API_TOKEN
 except TypeError as e:
     log.error(f"Error while creating Genius object: {e}. "
               "Lyrics fetching will not work.")
 
 def getSongContributors(song_id: Union[int, Literal["manual"]] = -1) -> list[str]:
-    """ Adds the contributors to the song data.
-    :param song_id: [int | str] The ID of the song or "manual".
+    """ Adds the contributors to the song data
+    :param song_id: [int | str] The ID of the song or "manual"
     """
     if song_id == "manual":
         return []
@@ -81,9 +81,9 @@ def getSongContributors(song_id: Union[int, Literal["manual"]] = -1) -> list[str
     return [c["login"] for c in contributors[:3]]
 
 def areLyricsNotFound(lyrics: list[dict[str, str]]) -> bool:
-    """ Checks if the lyrics are not found.
-    :param lyrics: [list] The lyrics to check.
-    :return: [bool] True if the lyrics are not found, False otherwise.
+    """ Checks if the lyrics are not found
+    :param lyrics: [list] The lyrics to check
+    :return: [bool] True if the lyrics are not found, False otherwise
     """
     return len(lyrics) == 1 \
         and lyrics[0]["section"] == "warn" \
@@ -91,10 +91,10 @@ def areLyricsNotFound(lyrics: list[dict[str, str]]) -> bool:
 
 @retry(condition=(lambda x: not areLyricsNotFound(x)), times=3)
 def fetchLyricsFromGenius(song_title: str, artist_name: str) -> list[dict[str, str]]:
-    """ Tries to fetch the lyrics of a song from Genius dot com.
-    :param song_title: [string] The title of the song.
-    :param artist_name: [string] The name of the artist.
-    :return: [list] A list of tuples with section names and lyrics.
+    """ Tries to fetch the lyrics of a song from Genius dot com
+    :param song_title: [string] The title of the song
+    :param artist_name: [string] The name of the artist
+    :return: [list] A list of tuples with section names and lyrics
     """
     log.debug(f"Fetching lyrics for {artist_name} - \"{song_title}\"...")
     start = time()
@@ -126,9 +126,9 @@ def fetchLyricsFromGenius(song_title: str, artist_name: str) -> list[dict[str, s
 
     # Ensure double newline before song parts
     def add_newline_before_song_parts(lyrics: str) -> str:
-        """ Adds a newline before song parts that are enclosed in double quotes.
-        :param lyrics: [string] The stringified lyrics to process.
-        :return: [string] The processed stringified lyrics.
+        """ Adds a newline before song parts that are enclosed in double quotes
+        :param lyrics: [string] The stringified lyrics to process
+        :return: [string] The processed stringified lyrics
         """
         return sub(r"(?<=\])\s*(?=\[)", "\n\n", lyrics)
 
@@ -151,7 +151,7 @@ def fetchLyricsFromGenius(song_title: str, artist_name: str) -> list[dict[str, s
     lyrics_parts += [{"section": parts[i], "lyrics": parts[i + 1].strip()} for i in range(1, len(parts) - 1, 2)]
 
     log.debug("Lyrics split into parts successfully.")
-    updateStats(to_increment=AvailableStats.lyricsFetches.value)
+    updateStats(to_increment=AvailableStats.lyricsFetches)
 
     log.log(f"Lyrics fetch for {artist_name} - \"{song_title}\" complete.").time(LogSeverity.LOG, time() - start)
     return lyrics_parts
@@ -160,8 +160,8 @@ def fetchLyricsFromGenius(song_title: str, artist_name: str) -> list[dict[str, s
 class GeniusLyricsResource(Resource):
     @ns_lyrics.doc("post_get_genius_lyrics")
     @ns_lyrics.expect(models[ROUTES.lyrics.bp_name]["get-genius-lyrics"]["payload"])
-    @ns_lyrics.response(HttpStatus.OK.value, Msg.MSG_LYRICS_FETCH_SUCCESS, models[ROUTES.lyrics.bp_name]["get-genius-lyrics"]["response"])
-    @ns_lyrics.response(HttpStatus.BAD_REQUEST.value, Err.ERR_LYRICS_MISSING_PARAMS)
+    @ns_lyrics.response(HttpStatus.OK, Msg.MSG_LYRICS_FETCH_SUCCESS, models[ROUTES.lyrics.bp_name]["get-genius-lyrics"]["response"])
+    @ns_lyrics.response(HttpStatus.BAD_REQUEST, Err.ERR_LYRICS_MISSING_PARAMS)
     def post(self) -> Response:
         """ Fetches the lyrics of a song from Genius dot com """
         log.log("POST - Fetching lyrics from Genius...")
@@ -172,7 +172,7 @@ class GeniusLyricsResource(Resource):
 
         if song_name is None or artist is None:
             log.error(Err.ERR_LYRICS_MISSING_PARAMS)
-            return createApiResponse(HttpStatus.BAD_REQUEST.value, Err.ERR_LYRICS_MISSING_PARAMS)
+            return createApiResponse(HttpStatus.BAD_REQUEST, Err.ERR_LYRICS_MISSING_PARAMS)
 
         lyrics_parts = fetchLyricsFromGenius(song_name, artist)
-        return createApiResponse(HttpStatus.OK.value, Msg.MSG_LYRICS_FETCH_SUCCESS, {"lyricsParts": lyrics_parts})
+        return createApiResponse(HttpStatus.OK, Msg.MSG_LYRICS_FETCH_SUCCESS, {"lyricsParts": lyrics_parts})

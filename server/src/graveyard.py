@@ -7,9 +7,9 @@ from io import StringIO
 from server.src.typing_gtfr import RGBAColor, RGBColor
 
 def convertHexToRgba(hex_color: str) -> RGBAColor:
-    """ Converts a hex color to an RGBA tuple.
-    :param hex_color: [string] The hex color to convert.
-    :return: [RGBAColor] The RGBA tuple.
+    """ Converts a hex color to an RGBA tuple
+    :param hex_color: [string] The hex color to convert
+    :return: [RGBAColor] The RGBA tuple
     """
     r, g, b = int(hex_color[0:2], 16), int(hex_color[2:4], 16), int(hex_color[4:6], 16)
     return r, g, b, 255
@@ -18,8 +18,8 @@ with redirect_stdout(StringIO()), redirect_stderr(StringIO()): # make it silent,
     from sklearn.cluster import KMeans
 def getDominantColor(image_path: str, n_clusters: int = 4, random_state: int = 777) -> str: # TRUST THE 777
     """ Gets the dominant color of an image, using the K-means algorithm
-    :param image_path: [string] The path to the image.
-    :return: [str] The dominant color.
+    :param image_path: [string] The path to the image
+    :return: [str] The dominant color
     """
     try:
         with Image.open(image_path) as img:
@@ -44,9 +44,9 @@ def getDominantColor(image_path: str, n_clusters: int = 4, random_state: int = 7
     return dominant_colors[0]
 
 def getAverageColor(image_path: str) -> str: # initially used for the background color of the generated cards
-    """ Gets the average color of an image.
-    :param image_path: [string] The path to the image.
-    :return: [string] The hex color of the average color.
+    """ Gets the average color of an image
+    :param image_path: [string] The path to the image
+    :return: [string] The hex color of the average color
     """
     try:
         with Image.open(image_path) as img:
@@ -71,8 +71,8 @@ def getAverageColor(image_path: str) -> str: # initially used for the background
     return avg_hex
 
 def getNormalizedFilename(name: str) -> str: # initially used for the filename of the generated cards
-    """ Formats the name of the song for the filename.
-    :param name: [string] The name of the song.
-    :return: [string] The formatted name of the song.
+    """ Formats the name of the song for the filename
+    :param name: [string] The name of the song
+    :return: [string] The formatted name of the song
     """
     return "".join([c for c in name.replace(" ", "_") if c.isalnum() or c == "_"]) # replace spaces with underscores, remove any non-alphanum char

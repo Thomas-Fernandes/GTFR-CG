@@ -10,8 +10,7 @@ from server.src.constants.regex import LYRICSGENIUS_PATTERNS
 from server.src.utils.time_utils import getNowEpoch
 
 class LogSeverity(IntEnum):
-    """ Enum for severity levels.
-    """
+    """ Enum for severity levels """
     TIME     = 000
     DEBUG    = 100
     INFO     = 200
@@ -20,10 +19,8 @@ class LogSeverity(IntEnum):
     ERROR    = 400
     CRITICAL = 500
 
-
 class SeverityPrefix(StrEnum):
-    """ Enum for severity prefixes.
-    """
+    """ Enum for severity prefixes """
     TIME     = "TIME:"
     DEBUG    = "DEBUG"
     INFO     = "INFO."
@@ -33,26 +30,26 @@ class SeverityPrefix(StrEnum):
     CRITICAL = "CRIT!"
 
 def getFormattedMessage(msg: str, severity: Optional[LogSeverity] = None) -> str:
-    """ Formats a message to log.
-    :param msg: [string] The core message to log.
-    :param severity: [LogSeverity?] The severity of the message, used as a prefix. (default: None)
-    :return: [string] The formatted message.
+    """ Formats a message to log
+    :param msg: [string] The core message to log
+    :param severity: [LogSeverity?] The severity of the message, used as a prefix (default: None)
+    :return: [string] The formatted message
     """
     prefix: str
     now: str = getNowEpoch()
     try:
-        prefix = SeverityPrefix["" if (severity is None) else severity.name].value
+        prefix = SeverityPrefix["" if (severity is None) else severity.name]
     except KeyError:
-        print(f"[{SeverityPrefix.CRITICAL.value} | {now}] Invalid severity level: {severity}")
+        print(f"[{SeverityPrefix.CRITICAL} | {now}] Invalid severity level: {severity}")
         sys.exit(1)
     return f"[{prefix} | {now}] {msg}"
 
 class Logger:
-    """ Logger class to log messages.
+    """ Logger class to log messages
 
     Attributes:
-        __severity: [LogSeverity] The severity level of the logger.
-        __log_file: [string] The path of the file to write logs to.
+        __severity: [LogSeverity] The severity level of the logger
+        __log_file: [string] The path of the file to write logs to
     """
     def critical(self, msg: str) -> Self: return self.send(msg, LogSeverity.CRITICAL)
     def error(self,    msg: str) -> Self: return self.send(msg, LogSeverity.ERROR)
@@ -62,10 +59,10 @@ class Logger:
     def debug(self,    msg: str) -> Self: return self.send(msg, LogSeverity.DEBUG)
 
     def time(self, sev: LogSeverity, duration: float, *, padding: int = 0) -> Self:
-        """ Logs a message with a timestamp.
-        :param start: [float] The start time.
-        :param end: [float] The end time.
-        :return: [Logger] The logger instance. (for chaining)
+        """ Logs a message with a timestamp
+        :param start: [float] The start time
+        :param end: [float] The end time
+        :return: [Logger] The logger instance (for chaining)
         """
         if padding < 0: raise ValueError("Padding must be a non-negative integer.")
 
@@ -81,9 +78,8 @@ class Logger:
 
     @contextmanager
     def redirect_stdout_stderr(self) -> Iterator[tuple[StringIO, StringIO]]:
-        """ Redirects stdout and stderr to a StringIO buffer.
-        The buffers are then sent to the logger.
-        :return: [iterator] A tuple containing the new stdout and stderr buffers.
+        """ Redirects stdout and stderr to a StringIO buffer; the buffers are then sent to the logger
+        :return: [iterator] A tuple containing the new stdout and stderr buffers
         """
         new_stdout, new_stderr = StringIO(), StringIO()
         old_stdout, old_stderr = sys.stdout, sys.stderr
@@ -124,10 +120,10 @@ class Logger:
                     self.error(processed_line)
 
     def send(self, msg: str, severity: LogSeverity) -> Self:
-        """ Sends a message to log.
-        :param msg: [string] The message to log.
-        :param severity: [LogSeverity?] The severity of the message.
-        :return: [Logger] The logger instance. (for chaining)
+        """ Sends a message to log
+        :param msg: [string] The message to log
+        :param severity: [LogSeverity?] The severity of the message
+        :return: [Logger] The logger instance (for chaining)
         """
         if severity != LogSeverity.TIME and severity < self.__severity: return self
         message_to_log = getFormattedMessage(msg, severity)
@@ -141,8 +137,8 @@ class Logger:
         return self
 
     def getSeverity(self) -> LogSeverity:
-        """ Returns the severity level of the logger.
-        :return: [LogSeverity] The severity level of the logger.
+        """ Returns the severity level of the logger
+        :return: [LogSeverity] The severity level of the logger
         """
         self.debug(f"Returning severity level: {self.__severity.name}")
         return self.__severity
@@ -152,16 +148,16 @@ class Logger:
         severity: LogSeverity = LogSeverity.INFO,
         log_file: Optional[str] = None
     ) -> None:
-        """ Initializes the logger.
-        :param severity: [LogSeverity?] The logger will only log with that severity or higher. (default: LogSeverity.INFO)
-        :param log_file: [string?] The path of the file to write logs to. (default: None --- standard output)
+        """ Initializes the logger
+        :param severity: [LogSeverity?] The logger will only log with that severity or higher (default: LogSeverity__INFO)
+        :param log_file: [string?] The path of the file to write logs to (default: None --- standard output)
         """
         self.__severity = severity
         self.__log_file = log_file
 
 def exitInvalidSeverityLevel(severity: str) -> None:
-    """ Prints an error message for an invalid severity level and exits the program.
-    :param severity: [string] The invalid severity level.
+    """ Prints an error message for an invalid severity level and exits the program
+    :param severity: [string] The invalid severity level
     """
     print(getFormattedMessage(f"Invalid severity level: '{severity}'", LogSeverity.CRITICAL))
     print(getFormattedMessage("Available severity levels:", LogSeverity.INFO))
@@ -169,9 +165,9 @@ def exitInvalidSeverityLevel(severity: str) -> None:
         print(getFormattedMessage(f"\t- {level.name}", LogSeverity.INFO))
     sys.exit(1)
 def getSeverityArg(args: list[str]) -> LogSeverity:
-    """ Gets the severity level from .env, otherwise from the command line arguments.
-    :param args: [list] The command line arguments.
-    :return: [LogSeverity] The severity level. (default: LogSeverity.LOG)
+    """ Gets the severity level from dotenv, otherwise from the command line arguments
+    :param args: [list] The command line arguments
+    :return: [LogSeverity] The severity level (default: LogSeverity__LOG)
     """
     if LOGGER_SEVERITY is not None:
         if LOGGER_SEVERITY.upper() not in LogSeverity.__members__:

@@ -6,16 +6,16 @@ from server.src.constants.responses import Err
 from server.src.typing_gtfr import CardsContents
 
 def doesFileExist(filepath: str) -> bool:
-    """ Checks if the file exists.
-    :param filepath: [string] The path to the file.
-    :return: [bool] Whether the file exists.
+    """ Checks if the file exists
+    :param filepath: [string] The path to the file
+    :return: [bool] Whether the file exists
     """
     return path.isfile(filepath)
 
 def getCardsContentsFromFile(filepath: str) -> CardsContents:
-    """ Returns the contents of the cards from a file.
-    :param filepath: [string] The path to the file.
-    :return: [list] The contents of the cards.
+    """ Returns the contents of the cards from a file
+    :param filepath: [string] The path to the file
+    :return: [list] The contents of the cards
     """
     with open(filepath, "r") as file:
         all_cards = [card.split("\n\n") for card in file.read().split("\n\n\n")]
@@ -23,9 +23,9 @@ def getCardsContentsFromFile(filepath: str) -> CardsContents:
     return [card.split("\n") for card in cards]
 
 def writeCardsContentsToFile(filepath: str, cards_contents: list[list[str]]) -> None:
-    """ Writes the cards contents to a file.
-    :param filepath: [string] The path to the file.
-    :param cards_contents: [list] The contents of the cards.
+    """ Writes the cards contents to a file
+    :param filepath: [string] The path to the file
+    :param cards_contents: [list] The contents of the cards
     """
     with open(filepath, "w") as file:
         for card in cards_contents:
@@ -34,9 +34,9 @@ def writeCardsContentsToFile(filepath: str, cards_contents: list[list[str]]) -> 
                 file.write(("\n\n".join(card) + "\n\n").translate(TRANSLATION_TABLE))
 
 def checkImageFilenameValid(filename: str | None) -> Optional[str]:
-    """ Checks if the given filename is valid for an image file.
-    :param filename: [string] The filename to check.
-    :return: [string?] The error message if the filename is invalid, None otherwise.
+    """ Checks if the given filename is valid for an image file
+    :param filename: [string] The filename to check
+    :return: [string?] The error message if the filename is invalid, None otherwise
     """
     if filename == None or filename.strip() == "":
         return Err.ERR_NO_FILE

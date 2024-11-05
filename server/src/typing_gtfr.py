@@ -3,22 +3,24 @@ from PIL import Image
 from dataclasses import dataclass
 from typing import Literal, Optional, TypeAlias
 
+from server.src.constants.enums import SessionFields
+
 ############ BROWSER ############
 
 @dataclass
 class Route:
-    """ Dataclass to store a route's information.
+    """ Dataclass to store a route's information
 
     Attributes:
-        path: [string] The path of the route.
-        bp_name: [string?] The name of the blueprint. (default: None)
+        path: [string] The path of the route
+        bp_name: [string?] The name of the blueprint (default: None)
     """
     path: str
     bp_name: Optional[str] = None
 
     def __repr__(self) -> str:
         """ Returns the Route dataclass as a string
-        :return: [string] The dataclass' content, as a string.
+        :return: [string] The dataclass' content, as a string
         """
         content: str = ""
         for (key, value) in self.__dict__.items():
@@ -28,15 +30,15 @@ class Route:
 
 @dataclass
 class Routes:
-    """ Dataclass to store the application's routes.
+    """ Dataclass to store the application's routes
 
     Attributes:
-        root: [Route] The root route.
-        redirect: [Route] The redirect route.
-        home: [Route] The home route.
-        art_proc: [Route] The artwork generation route.
-        proc_art: [Route] The artwork processing route.
-        lyrics: [Route] The lyrics route.
+        root: [Route] The root route
+        redirect: [Route] The redirect route
+        home: [Route] The home route
+        art_proc: [Route] The artwork generation route
+        proc_art: [Route] The artwork processing route
+        lyrics: [Route] The lyrics route
     """
     root: Route
     redirect: Route
@@ -48,7 +50,7 @@ class Routes:
 
     def __repr__(self) -> str:
         """ Returns the Routes dataclass as a string
-        :return: [string] The dataclass' content, as a string.
+        :return: [string] The dataclass' content, as a string
         """
         content: str = ""
         for (key, value) in self.__dict__.items():
@@ -63,15 +65,15 @@ RGBColor: TypeAlias = tuple[int, int, int]
 
 @dataclass
 class CardMetadata:
-    """ Dataclass to store the card's metadata.
+    """ Dataclass to store the card's metadata
 
     Attributes:
-        card_metaname: [string] The author and title of the song.
-        include_bg_img: [bool] Whether to include the background image.
-        bg: [Image.Image] The background image of the card.
-        dominant_color: [RGBColor] The average color of the background image.
-        text_lyrics_color: [RGBColor] The background color for the text of the card.
-        text_meta_color: [RGBColor] The text color of the metadata of the card.
+        card_metaname: [string] The author and title of the song
+        include_bg_img: [bool] Whether to include the background image
+        bg: [Image.Image] The background image of the card
+        dominant_color: [RGBColor] The average color of the background image
+        text_lyrics_color: [RGBColor] The background color for the text of the card
+        text_meta_color: [RGBColor] The text color of the metadata of the card
     """
     card_metaname: str
     include_bg_img: bool
@@ -82,7 +84,7 @@ class CardMetadata:
 
     def __repr__(self) -> str:
         """ Returns the CardMetadata dataclass as a string
-        :return: [string] The dataclass' content, as a string.
+        :return: [string] The dataclass' content, as a string
         """
         content: str = ""
         for (key, value) in self.__dict__.items():
@@ -95,7 +97,7 @@ class CardMetadata:
                     content += f"{key}={value}, "
         return f"CardMetadata({content[:-2]})"
 
-CardgenSettings: TypeAlias = dict[str, bool | str]
+CardgenSettings: TypeAlias = dict[SessionFields, bool | str]
 
 CardsContents: TypeAlias = list[list[str]]
 
@@ -106,12 +108,12 @@ CachedElemType: TypeAlias = Literal[
 ]
 @dataclass(kw_only=True)
 class Cache:
-    """ Dataclass to store cache information.
+    """ Dataclass to store cache information
 
     Attributes:
-        sessions: [string] The name of the Flask sessions directory.
-        images: [string] The name of the images directory.
-        cards: [string] The name of the cards directory.
+        sessions: [string] The name of the Flask sessions directory
+        images: [string] The name of the images directory
+        cards: [string] The name of the cards directory
     """
     sessions: str
     images: str
@@ -119,7 +121,7 @@ class Cache:
 
     def __repr__(self) -> str:
         """ Returns the Cache dataclass as a string
-        :return: [string] The dataclass' content, as a string.
+        :return: [string] The dataclass' content, as a string
         """
         content: str = ""
         for (key, value) in self.__dict__.items():

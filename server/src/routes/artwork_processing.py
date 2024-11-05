@@ -1,13 +1,14 @@
 from flask import Blueprint, Response
 from flask_restx import Resource
-from PIL import Image, ImageFilter, ImageDraw
+from PIL import Image, ImageFilter as IFilter, ImageDraw as IDraw
 
 from os import path
 from time import time
 from typing import Optional
 
 from server.src.constants.enums import AvailableCacheElemType, AvailableStats, HttpStatus, SessionFields
-from server.src.constants.paths import API_ROUTE, FRONT_PROCESSED_ARTWORKS_DIR, LOGO_POSITIONS, PROCESSED_ARTWORK_FILENAME, PROCESSED_DIR, ROUTES, SLASH, THUMBNAILS_DIR
+from server.src.constants.paths import \
+    API_ROUTE, FRONT_PROCESSED_ARTWORKS_DIR, LOGO_POSITIONS, PROCESSED_ARTWORK_FILENAME, PROCESSED_DIR, ROUTES, SLASH, THUMBNAILS_DIR
 from server.src.constants.responses import Err, Msg
 from server.src.docs import models, ns_artwork_processing
 from server.src.logger import log, LogSeverity
@@ -22,16 +23,16 @@ api_prefix = API_ROUTE + ROUTES.art_proc.path
 api.add_namespace(ns_artwork_processing, path=api_prefix)
 
 def addGaussianBlur(cropped_image: Image.Image, original_image: Image.Image) -> Image.Image:
-    """ Adds a Gaussian blur to the given image.
-    :param original_image: [Image.Image] The original image as a reference.
-    :param cropped_image: [Image.Image] The image to blur.
-    :return: [Image.Image] The blurred image.
+    """ Adds a Gaussian blur to the given image
+    :param original_image: [Image__Image] The original image as a reference
+    :param cropped_image: [Image__Image] The image to blur
+    :return: [Image__Image] The blurred image
     """
     log.debug("  Applying Gaussian blur and radial mask...")
-    blurred_image: Image.Image = cropped_image.filter(ImageFilter.GaussianBlur(radius=25))
+    blurred_image: Image.Image = cropped_image.filter(IFilter.GaussianBlur(radius=25))
 
     mask = Image.new("L", cropped_image.size, "black")
-    draw: ImageDraw.ImageDraw = ImageDraw.Draw(mask)
+    draw: IDraw.ImageDraw = IDraw.Draw(mask)
     max_dim = min(cropped_image.size) / 2
     center_x, center_y = cropped_image.size[0] // 2, cropped_image.size[1] // 2
 
@@ -51,10 +52,10 @@ def addGaussianBlur(cropped_image: Image.Image, original_image: Image.Image) -> 
     return final_image
 
 def generateCoverArt(input_path: str, output_path: str, include_center_artwork: bool = True) -> None:
-    """ Generates the cover art for the given input image and saves it to the output path.
-    :param input_path: [string] The path to the input image.
-    :param output_path: [string] The path to save the output image.
-    :param include_center_artwork: [bool] Whether to include the center artwork in the cover art. (default: True)
+    """ Generates the cover art for the given input image and saves it to the output path
+    :param input_path: [string] The path to the input image
+    :param output_path: [string] The path to save the output image
+    :param include_center_artwork: [bool] Whether to include the center artwork in the cover art (default: True)
     """
     log.info(f"Generating cover art... (session {getSessionFirstName(input_path)}-...)")
 
@@ -103,13 +104,13 @@ def generateThumbnail(position: str, user_folder: str, bg_path: str, output_fold
     return None
 
 def generateThumbnails(bg_path: str, output_folder: str) -> Optional[str]:
-    """ Generates the thumbnails for the given background image and saves them in the output folder.
-    :param bg_path: [string] The path to the background image.
-    :param output_folder: [string] The path to the folder where the thumbnails will be saved.
+    """ Generates the thumbnails for the given background image and saves them in the output folder
+    :param bg_path: [string] The path to the background image
+    :param output_folder: [string] The path to the folder where the thumbnails will be saved
     """
     log.info(f"Generating thumbnails... (session {bg_path.split(SLASH)[-3].split('-')[0]}-...)")
 
-    user_folder = path.abspath(str(session[SessionFields.user_folder.value]))
+    user_folder = path.abspath(str(session[SessionFields.user_folder]))
     user_folder = SLASH.join(user_folder.split(SLASH)[:-1])
     for position in LOGO_POSITIONS:
         err = generateThumbnail(position, user_folder, bg_path, output_folder)
@@ -121,28 +122,28 @@ def generateThumbnails(bg_path: str, output_folder: str) -> Optional[str]:
 class ProcessArtworkResource(Resource):
     @ns_artwork_processing.doc("post_process_images")
     @ns_artwork_processing.expect(models[ROUTES.art_proc.bp_name]["process-artworks"]["payload"])
-    @ns_artwork_processing.response(HttpStatus.CREATED.value, Msg.MSG_PROCESSED_IMAGES_SUCCESS)
-    @ns_artwork_processing.response(HttpStatus.BAD_REQUEST.value, Err.ERR_NO_IMG)
-    @ns_artwork_processing.response(HttpStatus.PRECONDITION_FAILED.value, Err.ERR_OVERLAY_NOT_FOUND)
+    @ns_artwork_processing.response(HttpStatus.CREATED, Msg.MSG_PROCESSED_IMAGES_SUCCESS)
+    @ns_artwork_processing.response(HttpStatus.BAD_REQUEST, Err.ERR_NO_IMG)
+    @ns_artwork_processing.response(HttpStatus.PRECONDITION_FAILED, Err.ERR_OVERLAY_NOT_FOUND)
     def post(self) -> Response:
         """ Renders the processed background image and thumbnails """
-        if SessionFields.generated_artwork_path.value not in session:
+        if SessionFields.generated_artwork_path not in session:
             log.error(Err.ERR_NO_IMG)
-            return createApiResponse(HttpStatus.BAD_REQUEST.value, Err.ERR_NO_IMG)
+            return createApiResponse(HttpStatus.BAD_REQUEST, Err.ERR_NO_IMG)
 
-        user_folder = str(session[SessionFields.user_folder.value]) + SLASH + AvailableCacheElemType.artworks.value
+        user_folder = str(session[SessionFields.user_folder]) + SLASH + AvailableCacheElemType.artworks
         user_processed_path = path.join(PROCESSED_DIR, user_folder)
-        generated_artwork_path = str(session[SessionFields.generated_artwork_path.value])
-        include_center_artwork = session.get(SessionFields.include_center_artwork.value, True)
+        generated_artwork_path = str(session[SessionFields.generated_artwork_path])
+        include_center_artwork = session.get(SessionFields.include_center_artwork, True)
         output_bg = path.join(user_processed_path, PROCESSED_ARTWORK_FILENAME)
 
         start = time()
         generateCoverArt(generated_artwork_path, output_bg, include_center_artwork)
         err = generateThumbnails(output_bg, user_processed_path)
         if err:
-            return createApiResponse(HttpStatus.PRECONDITION_FAILED.value, err)
+            return createApiResponse(HttpStatus.PRECONDITION_FAILED, err)
         center_mark = "with" if include_center_artwork else "without"
         log.log(f"Images generation ({center_mark} center artwork) complete.").time(LogSeverity.LOG, time() - start)
-        updateStats(to_increment=AvailableStats.artworkGenerations.value)
+        updateStats(to_increment=AvailableStats.artworkGenerations)
 
-        return createApiResponse(HttpStatus.CREATED.value, Msg.MSG_PROCESSED_IMAGES_SUCCESS)
+        return createApiResponse(HttpStatus.CREATED, Msg.MSG_PROCESSED_IMAGES_SUCCESS)

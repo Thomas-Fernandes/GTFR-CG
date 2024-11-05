@@ -10,7 +10,7 @@ from server.src.logger import log, LogSeverity
 
 def quitIfError(result: CompletedProcess[bytes]) -> None:
     """ Quits the installation if an error occurred
-    :param result: [CompletedProcess] The result of the subprocess.
+    :param result: [CompletedProcess] The result of the subprocess
     """
     if result.returncode not in [0, 2316632107]: # package installed, or already installed
         log.critical(f"Error while trying to install React: {result.stderr}")
@@ -36,7 +36,7 @@ def installNvm() -> None:
 
     def getNvmVersion() -> Optional[str]:
         """ Checks if Nvm is installed
-        :return: [str] The version of Nvm if it is installed, None otherwise.
+        :return: [str] The version of Nvm if it is installed, None otherwise
         """
         try:
             if osName == "nt": # Windows
@@ -79,7 +79,7 @@ def installNode() -> None:
     """ Installs NodeJs, needed for React """
     def getNodeVersion() -> Optional[str]:
         """ Checks if NodeJs is installed
-        :return: [str] The version of Node.js if it is installed, None otherwise.
+        :return: [str] The version of NodeJs if it is installed, None otherwise
         """
         try:
             result = run(["node", "-v"], capture_output=True, text=True)

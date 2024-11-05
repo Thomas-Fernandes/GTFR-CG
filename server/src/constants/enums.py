@@ -27,6 +27,8 @@ class AvailableCacheElemType(StrEnum):
     artworks = "artworks"
     cards = "cards"
 
+    def __repr__(self) -> str: return self.value
+
 class SessionFields(StrEnum):
     """ Enum for the fields in the session object """
     # Application
@@ -51,6 +53,8 @@ class SessionFields(StrEnum):
     bottom_color = "card_bottom_color"
     card_filename = "card_filename"
 
+    def __repr__(self) -> str: return self.value
+
 class AvailableStats(StrEnum):
     """ Enum for the available statistics """
     dateFirstOperation = "dateFirstOperation"
@@ -58,6 +62,8 @@ class AvailableStats(StrEnum):
     artworkGenerations = "artworkGenerations"
     lyricsFetches = "lyricsFetches"
     cardsGenerated = "cardsGenerated"
+
+    def __repr__(self) -> str: return self.value
 
 class MetanameFontNames(StrEnum):
     """ Enum for the available font types """
@@ -67,3 +73,5 @@ class MetanameFontNames(StrEnum):
     japanese = "FONT_METANAME_JAPANESE"
     korean = "FONT_METANAME_KOREAN"
     fallback = "FONT_METANAME_FALLBACK"
+
+    def __repr__(self) -> str: return self.value

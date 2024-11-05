@@ -44,10 +44,10 @@ path_prefix = "" if path.isfile("requirements.txt") else f"server{SLASH}" # for 
 SESSION_DIR = "flask_session" + SLASH
 
 PROCESSED_DIR = "processed" + SLASH
-FRONT_DIR = f"..{SLASH}client{SLASH}"
+front_dir = f"..{SLASH}client{SLASH}"
 
-FRONT_PROCESSED = f"{FRONT_DIR}public{SLASH}"
-FRONT_PROCESSED_ARTWORKS_DIR = f"{FRONT_PROCESSED}processed-{AvailableCacheElemType.artworks.value}{SLASH}"
+FRONT_PROCESSED = f"{front_dir}public{SLASH}"
+FRONT_PROCESSED_ARTWORKS_DIR = f"{FRONT_PROCESSED}processed-{AvailableCacheElemType.artworks}{SLASH}"
 THUMBNAILS_DIR = f"assets{SLASH}thumbnails{SLASH}"
 UPLOADED_ITUNES_IMG_FILENAME = "itunes_image.png"
 UPLOADED_FILE_IMG_FILENAME = "uploaded_image.png"
@@ -60,7 +60,7 @@ LOGO_POSITIONS = [
 PROCESSED_ARTWORK_FILENAME = "ProcessedArtwork.png"
 PROCESSED_OUTRO_FILENAME = "outro.png"
 
-FRONT_PROCESSED_CARDS_DIR = f"{FRONT_PROCESSED}processed-{AvailableCacheElemType.cards.value}{SLASH}"
+FRONT_PROCESSED_CARDS_DIR = f"{FRONT_PROCESSED}processed-{AvailableCacheElemType.cards}{SLASH}"
 CARDS_DIR = f"{path_prefix}assets{SLASH}cards{SLASH}"
 CARDS_BOTTOM_B = f"{CARDS_DIR}bottom_black.png"
 CARDS_BOTTOM_W = f"{CARDS_DIR}bottom_white.png"
