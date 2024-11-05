@@ -5,7 +5,8 @@ from re import Match
 import sys # The whole module must be imported for output redirection to work
 from typing import Iterator, Optional, Self
 
-import server.src.constants as const
+from server.src.constants.dotenv import LOGGER_SEVERITY
+from server.src.constants.regex import LYRICSGENIUS_PATTERNS
 from server.src.utils.time_utils import getNowEpoch
 
 class LogSeverity(IntEnum):
@@ -97,7 +98,7 @@ class Logger:
             stderr_content = new_stderr.read()
 
             def process_message(line: str) -> str:
-                for (pattern, action) in const.LYRICSGENIUS_PATTERNS:
+                for (pattern, action) in LYRICSGENIUS_PATTERNS:
                     match: Optional[Match[str]] = pattern.match(line)
                     if match is not None:
                         return action(match)
@@ -172,11 +173,11 @@ def getSeverityArg(args: list[str]) -> LogSeverity:
     :param args: [list] The command line arguments.
     :return: [LogSeverity] The severity level. (default: LogSeverity.LOG)
     """
-    if const.LOGGER_SEVERITY is not None:
-        if const.LOGGER_SEVERITY.upper() not in LogSeverity.__members__:
-            exitInvalidSeverityLevel(const.LOGGER_SEVERITY)
-        print(getFormattedMessage(f"  Severity level to {const.LOGGER_SEVERITY} according to .env file", LogSeverity.INFO))
-        return LogSeverity[const.LOGGER_SEVERITY]
+    if LOGGER_SEVERITY is not None:
+        if LOGGER_SEVERITY.upper() not in LogSeverity.__members__:
+            exitInvalidSeverityLevel(LOGGER_SEVERITY)
+        print(getFormattedMessage(f"  Severity level to {LOGGER_SEVERITY} according to .env file", LogSeverity.INFO))
+        return LogSeverity[LOGGER_SEVERITY]
 
     severity: LogSeverity = LogSeverity.LOG
     if len(args) > 1:
@@ -186,6 +187,7 @@ def getSeverityArg(args: list[str]) -> LogSeverity:
         severity = LogSeverity[args[1].upper()]
         print(getFormattedMessage(f"  Severity level set to {severity}", LogSeverity.INFO))
     return severity
+
 print(getFormattedMessage("Trying to initialize logger variable...", LogSeverity.DEBUG))
 log = Logger(severity=getSeverityArg(sys.argv))
 log.log(f"Logger initialized with level {log.getSeverity().name}.")

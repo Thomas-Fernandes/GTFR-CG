@@ -1,7 +1,8 @@
 from os import path
 from typing import Optional
 
-import server.src.constants as const
+from server.src.constants.cards_generation import TRANSLATION_TABLE
+from server.src.constants.responses import Err
 from server.src.typing_gtfr import CardsContents
 
 def doesFileExist(filepath: str) -> bool:
@@ -30,7 +31,7 @@ def writeCardsContentsToFile(filepath: str, cards_contents: list[list[str]]) -> 
         for card in cards_contents:
             has_content = len(card) > 0 and any([len(elem.strip(" \n")) > 0 for elem in card])
             if has_content:
-                file.write(("\n\n".join(card) + "\n\n").translate(const.TRANSLATION_TABLE))
+                file.write(("\n\n".join(card) + "\n\n").translate(TRANSLATION_TABLE))
 
 def checkImageFilenameValid(filename: str | None) -> Optional[str]:
     """ Checks if the given filename is valid for an image file.
@@ -38,7 +39,7 @@ def checkImageFilenameValid(filename: str | None) -> Optional[str]:
     :return: [string?] The error message if the filename is invalid, None otherwise.
     """
     if filename == None or filename.strip() == "":
-        return const.ERR_NO_FILE
+        return Err.ERR_NO_FILE
     if not('.' in filename and filename.rsplit('.', 1)[1].lower() in ["png", "jpg", "jpeg"]):
-        return const.ERR_IMG_INVALID_FILETYPE
+        return Err.ERR_IMG_INVALID_FILETYPE
     return None

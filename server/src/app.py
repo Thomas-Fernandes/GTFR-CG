@@ -10,7 +10,8 @@ from os import listdir, makedirs, path, remove, removedirs
 from sys import exit
 
 # Local modules
-import server.src.constants as const
+from server.src.constants.enums import AvailableCacheElemType
+from server.src.constants.paths import DEFAULT_PORT, FRONT_PROCESSED_ARTWORKS_DIR, FRONT_PROCESSED_CARDS_DIR, HOST_HOME, PROCESSED_DIR, SESSION_DIR, SLASH
 from server.src.logger import log
 from server.src.utils.time_utils import getExpirationTimestamp
 from server.src.statistics import onLaunch as printInitStatistics
@@ -45,20 +46,20 @@ def initApp() -> None:
             app.register_blueprint(blueprint) # practically useless, but "unused import" if removed
         log.debug("  Blueprints initialized.")
     initBlueprints()
-    makedirs(const.FRONT_PROCESSED_ARTWORKS_DIR, exist_ok=True)
-    makedirs(const.FRONT_PROCESSED_CARDS_DIR, exist_ok=True)
+    makedirs(FRONT_PROCESSED_ARTWORKS_DIR, exist_ok=True)
+    makedirs(FRONT_PROCESSED_CARDS_DIR, exist_ok=True)
     app.config["SESSION_PERMANENT"] = False
     app.config["SESSION_TYPE"] = "filesystem"
-    app.config["SESSION_FILE_DIR"] = const.SESSION_DIR
+    app.config["SESSION_FILE_DIR"] = SESSION_DIR
     Session(app)
     log.debug("App initialized.")
 
-def main(host: str = const.HOST_HOME, port: int = const.DEFAULT_PORT) -> None:
+def main(host: str = HOST_HOME, port: int = DEFAULT_PORT) -> None:
     f""" Main function to clean the cache, initialize the server and start it.
-    :param host: [string] The host address to run the server on. (default: "{const.HOST_HOME}")
-    :param port: [integer] The port to run the server on. (default: {const.DEFAULT_PORT})
+    :param host: [string] The host address to run the server on. (default: "{HOST_HOME}")
+    :param port: [integer] The port to run the server on. (default: {DEFAULT_PORT})
     """
-    host_display_name = "localhost" if host == const.HOST_HOME else host
+    host_display_name = "localhost" if host == HOST_HOME else host
     log.log(f"Starting server @ http://{host_display_name}:{port}...")
 
     def removeExpiredCache(folder: str, cache_type: str) -> int:
@@ -77,7 +78,7 @@ def main(host: str = const.HOST_HOME, port: int = const.DEFAULT_PORT) -> None:
                 log.error(f"Error while checking file expiration: {e}")
                 exit(1)
 
-        if cache_type == const.AvailableCacheElemType.sessions.value:
+        if cache_type == AvailableCacheElemType.sessions.value:
             filepaths: list[str] = [path.join(folder, f) for f in listdir(folder)]
             for file in filepaths:
                 if isFileExpired(file, cache_type):
@@ -88,7 +89,7 @@ def main(host: str = const.HOST_HOME, port: int = const.DEFAULT_PORT) -> None:
         else:
             directory_paths: list[str] = [path.join(folder, f) for f in listdir(folder)]
             for dir in directory_paths:
-                cache_dir_path = dir + const.SLASH + ((cache_type + const.SLASH) if path.isdir(dir + const.SLASH + cache_type) else "")
+                cache_dir_path = dir + SLASH + ((cache_type + SLASH) if path.isdir(dir + SLASH + cache_type) else "")
                 filepaths: list[str] = [path.join(cache_dir_path, f) for f in listdir(cache_dir_path)]
                 for file in filepaths:
                     if isFileExpired(file, cache_type):
@@ -110,9 +111,9 @@ def main(host: str = const.HOST_HOME, port: int = const.DEFAULT_PORT) -> None:
         nb_eliminated_entries: int = 0
 
         log.debug("Cleaning up cache...")
-        nb_eliminated_entries += removeExpiredCache(const.SESSION_DIR, const.AvailableCacheElemType.sessions.value)
-        nb_eliminated_entries += removeExpiredCache(const.PROCESSED_DIR, const.AvailableCacheElemType.artworks.value)
-        nb_eliminated_entries += removeExpiredCache(const.PROCESSED_DIR, const.AvailableCacheElemType.cards.value)
+        nb_eliminated_entries += removeExpiredCache(SESSION_DIR, AvailableCacheElemType.sessions.value)
+        nb_eliminated_entries += removeExpiredCache(PROCESSED_DIR, AvailableCacheElemType.artworks.value)
+        nb_eliminated_entries += removeExpiredCache(PROCESSED_DIR, AvailableCacheElemType.cards.value)
 
         if nb_eliminated_entries == 0:
             log.info("Cache still fresh. Loading...")

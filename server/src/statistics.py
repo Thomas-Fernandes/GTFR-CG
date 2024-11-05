@@ -2,7 +2,10 @@ from dataclasses import dataclass
 from time import time
 from typing import Optional
 
-import server.src.constants as const
+from server.src.constants.enums import AvailableStats
+from server.src.constants.paths import STATS_FILE_PATH
+from server.src.constants.responses import Err
+from server.src.constants.statistics import EMPTY_STATS, INCREMENTABLE_STATS
 from server.src.logger import log, LogSeverity
 from server.src.typing_gtfr import JsonDict
 
@@ -30,11 +33,11 @@ class Stats:
         :return: [dict] The dataclass as a dictionary.
         """
         return {
-            const.AvailableStats.dateFirstOperation.value: self.date_first_operation,
-            const.AvailableStats.dateLastOperation.value: self.date_last_operation,
-            const.AvailableStats.artworkGenerations.value: self.artwork_generations,
-            const.AvailableStats.lyricsFetches.value: self.lyrics_fetches,
-            const.AvailableStats.cardsGenerated.value: self.cards_generations,
+            AvailableStats.dateFirstOperation.value: self.date_first_operation,
+            AvailableStats.dateLastOperation.value: self.date_last_operation,
+            AvailableStats.artworkGenerations.value: self.artwork_generations,
+            AvailableStats.lyricsFetches.value: self.lyrics_fetches,
+            AvailableStats.cardsGenerated.value: self.cards_generations,
         }
 
     def __repr__(self) -> str:
@@ -63,15 +66,15 @@ from json import loads, dumps, JSONDecodeError
 
 from server.src.utils.time_utils import getNowEpoch
 
-def getJsonStatsFromFile(path: str = const.STATS_FILE_PATH) -> JsonDict:
+def getJsonStatsFromFile(path: str = STATS_FILE_PATH) -> JsonDict:
     f""" Returns the statistics contained in a JSON statistics file.
-    :param path: [string] The path to the statistics file. (default: {const.STATS_FILE_PATH})
+    :param path: [string] The path to the statistics file. (default: {STATS_FILE_PATH})
     :return: [dict] The statistics from the statistics file.
     """
     log.debug(f"Getting stats from file: {path}...")
     try:
         if not path.endswith(".json"):
-            raise ValueError(const.ERR_STATS_FILETYPE)
+            raise ValueError(Err.ERR_STATS_FILETYPE)
         with open(path, "r") as file:
             log.debug(f"Loaded stats from file {path}.")
             return loads(file.read()) # <- read stats from stats file
@@ -82,27 +85,27 @@ def getJsonStatsFromFile(path: str = const.STATS_FILE_PATH) -> JsonDict:
         log.warn(f"Error decoding stats file ({path}). Initializing new stats file...")
         return initStats()
 
-def updateStats(path: str = const.STATS_FILE_PATH, to_increment: Optional[str] = None, increment: int = 1) -> None:
+def updateStats(path: str = STATS_FILE_PATH, to_increment: Optional[str] = None, increment: int = 1) -> None:
     f""" Updates the statistics contained in a JSON statistics file.
-    :param path: [string] The path to the statistics file. (default: {const.STATS_FILE_PATH})
+    :param path: [string] The path to the statistics file. (default: {STATS_FILE_PATH})
     :param to_increment: [string?] The statistic to increment. (default: None)
     """
     json_stats: JsonDict = getJsonStatsFromFile(path)
 
     log.debug(f"Updating stats from file: {path}...")
     new_stats: JsonDict = {}
-    new_stats[const.AvailableStats.dateFirstOperation.value] = \
-        json_stats.get(const.AvailableStats.dateFirstOperation.value, getNowEpoch())
-    new_stats[const.AvailableStats.dateLastOperation.value] = \
+    new_stats[AvailableStats.dateFirstOperation.value] = \
+        json_stats.get(AvailableStats.dateFirstOperation.value, getNowEpoch())
+    new_stats[AvailableStats.dateLastOperation.value] = \
         getNowEpoch()
-    new_stats[const.AvailableStats.artworkGenerations.value] = \
-        int(json_stats.get(const.AvailableStats.artworkGenerations.value, 0))
-    new_stats[const.AvailableStats.lyricsFetches.value] = \
-        int(json_stats.get(const.AvailableStats.lyricsFetches.value, 0))
-    new_stats[const.AvailableStats.cardsGenerated.value] = \
-        int(json_stats.get(const.AvailableStats.cardsGenerated.value, 0))
+    new_stats[AvailableStats.artworkGenerations.value] = \
+        int(json_stats.get(AvailableStats.artworkGenerations.value, 0))
+    new_stats[AvailableStats.lyricsFetches.value] = \
+        int(json_stats.get(AvailableStats.lyricsFetches.value, 0))
+    new_stats[AvailableStats.cardsGenerated.value] = \
+        int(json_stats.get(AvailableStats.cardsGenerated.value, 0))
 
-    if to_increment in const.INCREMENTABLE_STATS:
+    if to_increment in INCREMENTABLE_STATS:
         new_stats[to_increment] += increment
     else:
         log.warn(f"Invalid statistic to increment: {to_increment}")
@@ -126,11 +129,11 @@ def initStats() -> JsonDict:
     log.debug("Initializing statistics...")
     start = time()
     stats: JsonDict = {}
-    for stat in const.AvailableStats:
-        stats.setdefault(stat.value, const.EMPTY_STATS[stat.value])
+    for stat in AvailableStats:
+        stats.setdefault(stat.value, EMPTY_STATS[stat.value])
 
-    with open(const.STATS_FILE_PATH, "w") as file:
-        log.debug(f"  Stats file created @ {const.STATS_FILE_PATH}")
+    with open(STATS_FILE_PATH, "w") as file:
+        log.debug(f"  Stats file created @ {STATS_FILE_PATH}")
         file.write(dumps(stats))
 
     log.info("Statistics initialization complete.").time(LogSeverity.INFO, time() - start)
@@ -140,15 +143,15 @@ def onLaunch() -> None:
     """ Initializes the project with the statistics from the statistics file.
     """
     log.debug("Initializing project with statistics...")
-    log.debug(f"  Getting stats from file: {const.STATS_FILE_PATH}...")
-    json_stats: JsonDict = getJsonStatsFromFile(const.STATS_FILE_PATH)
+    log.debug(f"  Getting stats from file: {STATS_FILE_PATH}...")
+    json_stats: JsonDict = getJsonStatsFromFile(STATS_FILE_PATH)
 
     log.debug("  Creating Stats object with values from file...")
     stats = Stats(
-        date_first_operation=json_stats.get(const.AvailableStats.dateFirstOperation.value),
-        date_last_operation=json_stats.get(const.AvailableStats.dateLastOperation.value),
-        artwork_generations=json_stats.get(const.AvailableStats.artworkGenerations.value),
-        lyrics_fetches=json_stats.get(const.AvailableStats.lyricsFetches.value),
-        cards_generations=json_stats.get(const.AvailableStats.cardsGenerated.value),
+        date_first_operation=json_stats.get(AvailableStats.dateFirstOperation.value),
+        date_last_operation=json_stats.get(AvailableStats.dateLastOperation.value),
+        artwork_generations=json_stats.get(AvailableStats.artworkGenerations.value),
+        lyrics_fetches=json_stats.get(AvailableStats.lyricsFetches.value),
+        cards_generations=json_stats.get(AvailableStats.cardsGenerated.value),
     )
     log.info(f"Initializing project with statistics: {stats}")

@@ -1,7 +1,10 @@
 from flask import Blueprint, Response
 from flask_restx import Resource
 
-import server.src.constants as const
+from server.src.constants.enums import AvailableStats, HttpStatus, SessionFields
+from server.src.constants.paths import API_ROUTE, ROUTES
+from server.src.constants.responses import Err, Msg
+from server.src.constants.statistics import EMPTY_STATS
 from server.src.docs import models, ns_home
 from server.src.logger import log
 from server.src.statistics import getJsonStatsFromFile
@@ -9,27 +12,27 @@ from server.src.utils.web_utils import createApiResponse
 
 from server.src.app import api, app
 session = app.config
-bp_home = Blueprint(const.ROUTES.home.bp_name, __name__.split('.')[-1])
-api.add_namespace(ns_home, path=const.API_ROUTE)
+bp_home = Blueprint(ROUTES.home.bp_name, __name__.split('.')[-1])
+api.add_namespace(ns_home, path=API_ROUTE)
 
 @ns_home.route("/genius-token")
 class GeniusTokenResource(Resource):
     @ns_home.doc("get_genius_token")
-    @ns_home.response(const.HttpStatus.OK.value, const.MSG_GENIUS_TOKEN_FETCHED, models[const.ROUTES.home.bp_name]["genius-token"]["response"])
+    @ns_home.response(HttpStatus.OK.value, Msg.MSG_GENIUS_TOKEN_FETCHED, models[ROUTES.home.bp_name]["genius-token"]["response"])
     def get(self) -> Response:
         """ Returns the Genius API token """
         log.log("GET - Fetching Genius API token...")
 
-        token = session.get(const.SessionFields.genius_token.value, "")
+        token = session.get(SessionFields.genius_token.value, "")
 
-        return createApiResponse(const.HttpStatus.OK.value, const.MSG_GENIUS_TOKEN_FETCHED, {"token": token})
+        return createApiResponse(HttpStatus.OK.value, Msg.MSG_GENIUS_TOKEN_FETCHED, {"token": token})
 
 @ns_home.route("/statistics")
 class StatisticsResource(Resource):
     @ns_home.doc("get_statistics")
-    @ns_home.response(const.HttpStatus.OK.value, const.MSG_STATS_FETCHED, models[const.ROUTES.home.bp_name]["statistics"]["response"])
-    @ns_home.response(const.HttpStatus.CREATED.value, const.MSG_STATS_CREATED, models[const.ROUTES.home.bp_name]["statistics"]["response"])
-    @ns_home.response(const.HttpStatus.BAD_REQUEST.value, const.ERR_STATS_FILETYPE)
+    @ns_home.response(HttpStatus.OK.value, Msg.MSG_STATS_FETCHED, models[ROUTES.home.bp_name]["statistics"]["response"])
+    @ns_home.response(HttpStatus.CREATED.value, Msg.MSG_STATS_CREATED, models[ROUTES.home.bp_name]["statistics"]["response"])
+    @ns_home.response(HttpStatus.BAD_REQUEST.value, Err.ERR_STATS_FILETYPE)
     def get(self) -> Response:
         """ Returns the statistics as a JSON object """
         log.log("GET - Fetching statistics...")
@@ -37,8 +40,8 @@ class StatisticsResource(Resource):
         try:
             stats = getJsonStatsFromFile()
         except ValueError as e:
-            return createApiResponse(const.HttpStatus.BAD_REQUEST.value, str(e))
+            return createApiResponse(HttpStatus.BAD_REQUEST.value, str(e))
 
-        if stats[const.AvailableStats.dateFirstOperation.value] == const.EMPTY_STATS[const.AvailableStats.dateFirstOperation.value]:
-            return createApiResponse(const.HttpStatus.CREATED.value, const.MSG_STATS_CREATED, stats)
-        return createApiResponse(const.HttpStatus.OK.value, const.MSG_STATS_FETCHED, stats)
+        if stats[AvailableStats.dateFirstOperation.value] == EMPTY_STATS[AvailableStats.dateFirstOperation.value]:
+            return createApiResponse(HttpStatus.CREATED.value, Msg.MSG_STATS_CREATED, stats)
+        return createApiResponse(HttpStatus.OK.value, Msg.MSG_STATS_FETCHED, stats)

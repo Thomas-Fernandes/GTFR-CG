@@ -1,4 +1,4 @@
-import server.src.constants as const
+from server.src.constants.paths import SLASH
 
 def getHexColorFromRGB(rgb: tuple[int, int, int]) -> str:
     """ Converts an RGB color to a hex color.
@@ -11,7 +11,7 @@ def getSessionFirstName(session_name: str) -> str:
     """ Returns the first segment of the session id.
     :return: [string] The first segment of the session id.
     """
-    return session_name.split(const.SLASH)[-2].split('-')[0]
+    return session_name.split(SLASH)[-2].split('-')[0]
 
 def snakeToCamelCase(snake_str: str) -> str:
     """ Converts a snake_case string to a camelCase string.

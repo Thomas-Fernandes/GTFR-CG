@@ -6,7 +6,9 @@ from os import path
 from time import time
 from typing import Optional
 
-import server.src.constants as const
+from server.src.constants.enums import AvailableCacheElemType, AvailableStats, HttpStatus, SessionFields
+from server.src.constants.paths import API_ROUTE, FRONT_PROCESSED_ARTWORKS_DIR, LOGO_POSITIONS, PROCESSED_ARTWORK_FILENAME, PROCESSED_DIR, ROUTES, SLASH, THUMBNAILS_DIR
+from server.src.constants.responses import Err, Msg
 from server.src.docs import models, ns_artwork_processing
 from server.src.logger import log, LogSeverity
 from server.src.statistics import updateStats
@@ -14,9 +16,9 @@ from server.src.utils.string_utils import getSessionFirstName
 from server.src.utils.web_utils import createApiResponse
 
 from server.src.app import api, app
-bp_artwork_processing = Blueprint(const.ROUTES.art_proc.bp_name, __name__.split('.')[-1])
+bp_artwork_processing = Blueprint(ROUTES.art_proc.bp_name, __name__.split('.')[-1])
 session = app.config
-api_prefix = const.API_ROUTE + const.ROUTES.art_proc.path
+api_prefix = API_ROUTE + ROUTES.art_proc.path
 api.add_namespace(ns_artwork_processing, path=api_prefix)
 
 def addGaussianBlur(cropped_image: Image.Image, original_image: Image.Image) -> Image.Image:
@@ -76,16 +78,16 @@ def generateCoverArt(input_path: str, output_path: str, include_center_artwork: 
         final_image = addGaussianBlur(cropped_image, image)
 
     final_image.save(output_path)
-    final_image.save(f"{const.FRONT_PROCESSED_ARTWORKS_DIR}{const.PROCESSED_ARTWORK_FILENAME}")
+    final_image.save(f"{FRONT_PROCESSED_ARTWORKS_DIR}{PROCESSED_ARTWORK_FILENAME}")
     log.debug(f"Cover art saved: {output_path}")
 
 def generateThumbnail(position: str, user_folder: str, bg_path: str, output_folder: str) -> Optional[str]:
     log.debug(f"  Generating {position} thumbnail...")
     logo_path = f"{position}.png"
-    overlay_file = f"{user_folder}{const.SLASH}{const.THUMBNAILS_DIR}{logo_path}"
+    overlay_file = f"{user_folder}{SLASH}{THUMBNAILS_DIR}{logo_path}"
     if (not path.exists(overlay_file)):
         log.err(f"  Overlay file not found: {overlay_file}")
-        return const.ERR_OVERLAY_NOT_FOUND
+        return Err.Error.ERR_OVERLAY_NOT_FOUND
     overlay = Image.open(overlay_file)
 
     background = Image.open(bg_path)
@@ -96,7 +98,7 @@ def generateThumbnail(position: str, user_folder: str, bg_path: str, output_fold
     final_image = new_background.convert("RGB")
     output_path = path.join(output_folder, f"thumbnail_{position}.png")
     final_image.save(output_path)
-    final_image.save(f"{const.FRONT_PROCESSED_ARTWORKS_DIR}thumbnail_{position}.png")
+    final_image.save(f"{FRONT_PROCESSED_ARTWORKS_DIR}thumbnail_{position}.png")
     log.debug(f"  Thumbnail saved: {output_path}")
     return None
 
@@ -105,11 +107,11 @@ def generateThumbnails(bg_path: str, output_folder: str) -> Optional[str]:
     :param bg_path: [string] The path to the background image.
     :param output_folder: [string] The path to the folder where the thumbnails will be saved.
     """
-    log.info(f"Generating thumbnails... (session {bg_path.split(const.SLASH)[-3].split('-')[0]}-...)")
+    log.info(f"Generating thumbnails... (session {bg_path.split(SLASH)[-3].split('-')[0]}-...)")
 
-    user_folder = path.abspath(str(session[const.SessionFields.user_folder.value]))
-    user_folder = const.SLASH.join(user_folder.split(const.SLASH)[:-1])
-    for position in const.LOGO_POSITIONS:
+    user_folder = path.abspath(str(session[SessionFields.user_folder.value]))
+    user_folder = SLASH.join(user_folder.split(SLASH)[:-1])
+    for position in LOGO_POSITIONS:
         err = generateThumbnail(position, user_folder, bg_path, output_folder)
         if err:
             return err
@@ -118,29 +120,29 @@ def generateThumbnails(bg_path: str, output_folder: str) -> Optional[str]:
 @ns_artwork_processing.route("/process-artworks")
 class ProcessArtworkResource(Resource):
     @ns_artwork_processing.doc("post_process_images")
-    @ns_artwork_processing.expect(models[const.ROUTES.art_proc.bp_name]["process-artworks"]["payload"])
-    @ns_artwork_processing.response(const.HttpStatus.CREATED.value, const.MSG_PROCESSED_IMAGES_SUCCESS)
-    @ns_artwork_processing.response(const.HttpStatus.BAD_REQUEST.value, const.ERR_NO_IMG)
-    @ns_artwork_processing.response(const.HttpStatus.PRECONDITION_FAILED.value, const.ERR_OVERLAY_NOT_FOUND)
+    @ns_artwork_processing.expect(models[ROUTES.art_proc.bp_name]["process-artworks"]["payload"])
+    @ns_artwork_processing.response(HttpStatus.CREATED.value, Msg.MSG_PROCESSED_IMAGES_SUCCESS)
+    @ns_artwork_processing.response(HttpStatus.BAD_REQUEST.value, Err.ERR_NO_IMG)
+    @ns_artwork_processing.response(HttpStatus.PRECONDITION_FAILED.value, Err.ERR_OVERLAY_NOT_FOUND)
     def post(self) -> Response:
         """ Renders the processed background image and thumbnails """
-        if const.SessionFields.generated_artwork_path.value not in session:
-            log.error(const.ERR_NO_IMG)
-            return createApiResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_NO_IMG)
+        if SessionFields.generated_artwork_path.value not in session:
+            log.error(Err.ERR_NO_IMG)
+            return createApiResponse(HttpStatus.BAD_REQUEST.value, Err.ERR_NO_IMG)
 
-        user_folder = str(session[const.SessionFields.user_folder.value]) + const.SLASH + const.AvailableCacheElemType.artworks.value
-        user_processed_path = path.join(const.PROCESSED_DIR, user_folder)
-        generated_artwork_path = str(session[const.SessionFields.generated_artwork_path.value])
-        include_center_artwork = session.get(const.SessionFields.include_center_artwork.value, True)
-        output_bg = path.join(user_processed_path, const.PROCESSED_ARTWORK_FILENAME)
+        user_folder = str(session[SessionFields.user_folder.value]) + SLASH + AvailableCacheElemType.artworks.value
+        user_processed_path = path.join(PROCESSED_DIR, user_folder)
+        generated_artwork_path = str(session[SessionFields.generated_artwork_path.value])
+        include_center_artwork = session.get(SessionFields.include_center_artwork.value, True)
+        output_bg = path.join(user_processed_path, PROCESSED_ARTWORK_FILENAME)
 
         start = time()
         generateCoverArt(generated_artwork_path, output_bg, include_center_artwork)
         err = generateThumbnails(output_bg, user_processed_path)
         if err:
-            return createApiResponse(const.HttpStatus.PRECONDITION_FAILED.value, err)
+            return createApiResponse(HttpStatus.PRECONDITION_FAILED.value, err)
         center_mark = "with" if include_center_artwork else "without"
         log.log(f"Images generation ({center_mark} center artwork) complete.").time(LogSeverity.LOG, time() - start)
-        updateStats(to_increment=const.AvailableStats.artworkGenerations.value)
+        updateStats(to_increment=AvailableStats.artworkGenerations.value)
 
-        return createApiResponse(const.HttpStatus.CREATED.value, const.MSG_PROCESSED_IMAGES_SUCCESS)
+        return createApiResponse(HttpStatus.CREATED.value, Msg.MSG_PROCESSED_IMAGES_SUCCESS)

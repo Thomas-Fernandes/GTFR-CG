@@ -3,7 +3,8 @@ from flask import Config
 from datetime import datetime
 from time import time
 
-import server.src.constants as const
+from server.src.constants.enums import AvailableCacheElemType, SessionFields, TimeInSeconds
+from server.src.constants.time import DATE_FORMAT_FULL, DATE_FORMAT_STAMP
 from server.src.typing_gtfr import CachedElemType
 
 def getNowStamp() -> str: # as YY-MM-DD_HH-MM-SS
@@ -11,7 +12,7 @@ def getNowStamp() -> str: # as YY-MM-DD_HH-MM-SS
     :return: [string] The current time in stamp format.
     """
     current_time = datetime.now()
-    formatted_time = current_time.strftime(const.DATE_FORMAT_STAMP)
+    formatted_time = current_time.strftime(DATE_FORMAT_STAMP)
     return formatted_time
 
 def getNowEpoch() -> str: # in MM-DD 24-hour format
@@ -19,7 +20,7 @@ def getNowEpoch() -> str: # in MM-DD 24-hour format
     :return: [string] The current time in epoch format.
     """
     current_time = datetime.now()
-    formatted_time = current_time.strftime(const.DATE_FORMAT_FULL)
+    formatted_time = current_time.strftime(DATE_FORMAT_FULL)
     return formatted_time
 
 def getExpirationTimestamp(filetype: CachedElemType, session: Config) -> int:
@@ -30,13 +31,13 @@ def getExpirationTimestamp(filetype: CachedElemType, session: Config) -> int:
 
     expiration_time: int = 0
     match filetype:
-        case const.AvailableCacheElemType.sessions.value:
-            expiration_time = const.TimeInSeconds.DAY.value
-        case const.AvailableCacheElemType.artworks.value | const.AvailableCacheElemType.cards.value:
-            if const.SessionFields.user_folder.value in session: # user is still logged in
-                expiration_time = 2 * const.TimeInSeconds.HOUR.value
+        case AvailableCacheElemType.sessions.value:
+            expiration_time = TimeInSeconds.DAY.value
+        case AvailableCacheElemType.artworks.value | AvailableCacheElemType.cards.value:
+            if SessionFields.user_folder.value in session: # user is still logged in
+                expiration_time = 2 * TimeInSeconds.HOUR.value
             else: # user has logged out
-                expiration_time = 30 * const.TimeInSeconds.MINUTE.value
+                expiration_time = 30 * TimeInSeconds.MINUTE.value
         case _:
             raise ValueError(f"Invalid cached element type: {filetype}")
     return int(time() - expiration_time)

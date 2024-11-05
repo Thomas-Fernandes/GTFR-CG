@@ -9,7 +9,11 @@ from requests.exceptions import ReadTimeout as ReadTimeoutException
 from time import time
 from typing import Literal, Optional, Union
 
-import server.src.constants as const
+from server.src.constants.cards_generation import ATTRIBUTION_PERCENTAGE_TOLERANCE
+from server.src.constants.dotenv import GENIUS_API_TOKEN, GENIUS_API_TOKEN_PATTERN
+from server.src.constants.enums import AvailableStats, HttpStatus, SessionFields
+from server.src.constants.paths import API_ROUTE, ROUTES
+from server.src.constants.responses import Err, Msg
 from server.src.decorators import retry
 from server.src.docs import models, ns_lyrics
 from server.src.logger import log
@@ -18,9 +22,9 @@ from server.src.statistics import updateStats
 from server.src.utils.web_utils import createApiResponse
 
 from server.src.app import api, app
-bp_lyrics = Blueprint(const.ROUTES.lyrics.bp_name, __name__.split('.')[-1])
+bp_lyrics = Blueprint(ROUTES.lyrics.bp_name, __name__.split('.')[-1])
 session = app.config
-api_prefix = const.API_ROUTE + const.ROUTES.lyrics.path
+api_prefix = API_ROUTE + ROUTES.lyrics.path
 api.add_namespace(ns_lyrics, path=api_prefix)
 
 genius = None
@@ -29,18 +33,18 @@ try:
         """ Checks the integrity of the Genius API token.
         :return: [str] The error message if the token is invalid, None otherwise.
         """
-        if const.GENIUS_API_TOKEN is None or const.GENIUS_API_TOKEN == "":
+        if GENIUS_API_TOKEN is None or GENIUS_API_TOKEN == "":
             return "Genius API token not found."
-        if len(const.GENIUS_API_TOKEN) != 64 or \
-            const.GENIUS_API_TOKEN_PATTERN.match(const.GENIUS_API_TOKEN) is None:
+        if len(GENIUS_API_TOKEN) != 64 or \
+            GENIUS_API_TOKEN_PATTERN.match(GENIUS_API_TOKEN) is None:
                 return "Invalid Genius API token."
         return None
     err = checkGeniusTokenIntegrity()
     if err:
         raise ValueError(err)
 
-    genius = Genius(access_token=const.GENIUS_API_TOKEN, retries=3)
-    session[const.SessionFields.genius_token.value] = const.GENIUS_API_TOKEN
+    genius = Genius(access_token=GENIUS_API_TOKEN, retries=3)
+    session[SessionFields.genius_token.value] = GENIUS_API_TOKEN
 except TypeError as e:
     log.error(f"Error while creating Genius object: {e}. "
               "Lyrics fetching will not work.")
@@ -67,7 +71,7 @@ def getSongContributors(song_id: Union[int, Literal["manual"]] = -1) -> list[str
 
     contributors = []
     for scribe in song_contributors["contributors"]["transcribers"]:
-        if scribe["attribution"] * 100 > const.ATTRIBUTION_PERCENTAGE_TOLERANCE: # ignore contributors with less
+        if scribe["attribution"] * 100 > ATTRIBUTION_PERCENTAGE_TOLERANCE: # ignore contributors with less
             contributors.append({
                 "login": scribe["user"]["login"],
                 "attribution": str(int(scribe["attribution"] * 100)) + "%", # may be useful later
@@ -83,7 +87,7 @@ def areLyricsNotFound(lyrics: list[dict[str, str]]) -> bool:
     """
     return len(lyrics) == 1 \
         and lyrics[0]["section"] == "warn" \
-        and lyrics[0]["lyrics"] == const.ERR_LYRICS_NOT_FOUND
+        and lyrics[0]["lyrics"] == Err.ERR_LYRICS_NOT_FOUND
 
 @retry(condition=(lambda x: not areLyricsNotFound(x)), times=3)
 def fetchLyricsFromGenius(song_title: str, artist_name: str) -> list[dict[str, str]]:
@@ -95,7 +99,7 @@ def fetchLyricsFromGenius(song_title: str, artist_name: str) -> list[dict[str, s
     log.debug(f"Fetching lyrics for {artist_name} - \"{song_title}\"...")
     start = time()
     if genius is None:
-        return [{"section": "error", "lyrics": const.ERR_GENIUS_TOKEN_NOT_FOUND}]
+        return [{"section": "error", "lyrics": Err.ERR_GENIUS_TOKEN_NOT_FOUND}]
 
     song: Optional[Genius.Song] = None
     try:
@@ -104,7 +108,7 @@ def fetchLyricsFromGenius(song_title: str, artist_name: str) -> list[dict[str, s
     except ReadTimeoutException as e:
         log.error(f"Lyrics fetch failed: {e}")
     if song is None:
-        return [{"section": "warn", "lyrics": const.ERR_LYRICS_NOT_FOUND}]
+        return [{"section": "warn", "lyrics": Err.ERR_LYRICS_NOT_FOUND}]
 
     log.debug("Sanitizing the fetched lyrics...")
     lyrics = song.lyrics
@@ -147,7 +151,7 @@ def fetchLyricsFromGenius(song_title: str, artist_name: str) -> list[dict[str, s
     lyrics_parts += [{"section": parts[i], "lyrics": parts[i + 1].strip()} for i in range(1, len(parts) - 1, 2)]
 
     log.debug("Lyrics split into parts successfully.")
-    updateStats(to_increment=const.AvailableStats.lyricsFetches.value)
+    updateStats(to_increment=AvailableStats.lyricsFetches.value)
 
     log.log(f"Lyrics fetch for {artist_name} - \"{song_title}\" complete.").time(LogSeverity.LOG, time() - start)
     return lyrics_parts
@@ -155,9 +159,9 @@ def fetchLyricsFromGenius(song_title: str, artist_name: str) -> list[dict[str, s
 @ns_lyrics.route("/get-genius-lyrics")
 class GeniusLyricsResource(Resource):
     @ns_lyrics.doc("post_get_genius_lyrics")
-    @ns_lyrics.expect(models[const.ROUTES.lyrics.bp_name]["get-genius-lyrics"]["payload"])
-    @ns_lyrics.response(const.HttpStatus.OK.value, const.MSG_LYRICS_FETCH_SUCCESS, models[const.ROUTES.lyrics.bp_name]["get-genius-lyrics"]["response"])
-    @ns_lyrics.response(const.HttpStatus.BAD_REQUEST.value, const.ERR_LYRICS_MISSING_PARAMS)
+    @ns_lyrics.expect(models[ROUTES.lyrics.bp_name]["get-genius-lyrics"]["payload"])
+    @ns_lyrics.response(HttpStatus.OK.value, Msg.MSG_LYRICS_FETCH_SUCCESS, models[ROUTES.lyrics.bp_name]["get-genius-lyrics"]["response"])
+    @ns_lyrics.response(HttpStatus.BAD_REQUEST.value, Err.ERR_LYRICS_MISSING_PARAMS)
     def post(self) -> Response:
         """ Fetches the lyrics of a song from Genius dot com """
         log.log("POST - Fetching lyrics from Genius...")
@@ -167,8 +171,8 @@ class GeniusLyricsResource(Resource):
         artist: Optional[str] = body.get("artist")
 
         if song_name is None or artist is None:
-            log.error(const.ERR_LYRICS_MISSING_PARAMS)
-            return createApiResponse(const.HttpStatus.BAD_REQUEST.value, const.ERR_LYRICS_MISSING_PARAMS)
+            log.error(Err.ERR_LYRICS_MISSING_PARAMS)
+            return createApiResponse(HttpStatus.BAD_REQUEST.value, Err.ERR_LYRICS_MISSING_PARAMS)
 
         lyrics_parts = fetchLyricsFromGenius(song_name, artist)
-        return createApiResponse(const.HttpStatus.OK.value, const.MSG_LYRICS_FETCH_SUCCESS, {"lyricsParts": lyrics_parts})
+        return createApiResponse(HttpStatus.OK.value, Msg.MSG_LYRICS_FETCH_SUCCESS, {"lyricsParts": lyrics_parts})

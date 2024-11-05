@@ -1,12 +1,12 @@
 from flask_restx import fields, Namespace
 
-import server.src.constants as const
+from server.src.constants.paths import ROUTES
 
-ns_home = Namespace((const.ROUTES.home.bp_name or "?"), description="Home related routes")
-ns_artwork_generation = Namespace((const.ROUTES.art_gen.bp_name or "?"), description="Artwork generation related routes")
-ns_artwork_processing = Namespace((const.ROUTES.art_proc.bp_name or "?"), description="Artwork processing related routes")
-ns_lyrics = Namespace((const.ROUTES.lyrics.bp_name or "?"), description="Lyrics related routes")
-ns_cards_generation = Namespace((const.ROUTES.cards_gen.bp_name or "?"), description="Cards generation related routes")
+ns_home = Namespace((ROUTES.home.bp_name or "?"), description="Home related routes")
+ns_artwork_generation = Namespace((ROUTES.art_gen.bp_name or "?"), description="Artwork generation related routes")
+ns_artwork_processing = Namespace((ROUTES.art_proc.bp_name or "?"), description="Artwork processing related routes")
+ns_lyrics = Namespace((ROUTES.lyrics.bp_name or "?"), description="Lyrics related routes")
+ns_cards_generation = Namespace((ROUTES.cards_gen.bp_name or "?"), description="Cards generation related routes")
 
 # create a type of field for a python dictionary
 
@@ -15,7 +15,7 @@ class fieldsDict(fields.Raw):
     __schema_example__ = "{key: value}"
 
 models = {
-    const.ROUTES.home.bp_name: {
+    ROUTES.home.bp_name: {
         "genius-token": {
             "response": ns_home.model("Home - Genius Token - response", {
                 "token": fields.String(description="Genius API Token"),
@@ -32,7 +32,7 @@ models = {
         }
     },
 
-    const.ROUTES.art_gen.bp_name: {
+    ROUTES.art_gen.bp_name: {
         "search-itunes": {
             "payload": ns_artwork_generation.model("Artwork Generation - Search iTunes - payload", {
                 "term": fields.String(description="Search term"),
@@ -65,7 +65,7 @@ models = {
         },
     },
 
-    const.ROUTES.art_proc.bp_name: {
+    ROUTES.art_proc.bp_name: {
         "process-artworks": {
             "payload": ns_artwork_processing.model("Artwork Processing - Process Artworks - payload", {
                 "[INFERRED] generatedArtworkPath": fields.String(description="Path to the input image"),
@@ -74,7 +74,7 @@ models = {
         },
     },
 
-    const.ROUTES.lyrics.bp_name: {
+    ROUTES.lyrics.bp_name: {
         "get-genius-lyrics": {
             "payload": ns_lyrics.model("Lyrics - Get Genius Lyrics - payload", {
                 "songName": fields.String(description="Title of the song"),
@@ -86,7 +86,7 @@ models = {
         },
     },
 
-    const.ROUTES.cards_gen.bp_name: {
+    ROUTES.cards_gen.bp_name: {
         "save-cards-contents": {
             "payload": ns_cards_generation.model("Cards Generation - Save Lyrics Contents - payload", {
                 "cardsContents": fields.List(fields.List(fields.String(description="Lyric line"))),
