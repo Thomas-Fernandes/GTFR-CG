@@ -78,7 +78,7 @@ def main(host: str = HOST_HOME, port: int = DEFAULT_PORT) -> None:
                 log.error(f"Error while checking file expiration: {e}")
                 exit(1)
 
-        if cache_type == AvailableCacheElemType.sessions:
+        if cache_type == AvailableCacheElemType.SESSIONS:
             filepaths: list[str] = [path.join(folder, f) for f in listdir(folder)]
             for file in filepaths:
                 if isFileExpired(file, cache_type):
@@ -110,9 +110,9 @@ def main(host: str = HOST_HOME, port: int = DEFAULT_PORT) -> None:
         nb_eliminated_entries: int = 0
 
         log.debug("Cleaning up cache...")
-        nb_eliminated_entries += removeExpiredCache(SESSION_DIR, AvailableCacheElemType.sessions)
-        nb_eliminated_entries += removeExpiredCache(PROCESSED_DIR, AvailableCacheElemType.artworks)
-        nb_eliminated_entries += removeExpiredCache(PROCESSED_DIR, AvailableCacheElemType.cards)
+        nb_eliminated_entries += removeExpiredCache(SESSION_DIR, AvailableCacheElemType.SESSIONS)
+        nb_eliminated_entries += removeExpiredCache(PROCESSED_DIR, AvailableCacheElemType.ARTWORKS)
+        nb_eliminated_entries += removeExpiredCache(PROCESSED_DIR, AvailableCacheElemType.CARDS)
 
         if nb_eliminated_entries == 0:
             log.info("Cache still fresh. Loading...")

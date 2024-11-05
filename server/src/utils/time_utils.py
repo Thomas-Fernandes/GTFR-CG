@@ -31,10 +31,10 @@ def getExpirationTimestamp(filetype: CachedElemType, session: Config) -> int:
 
     expiration_time: int = 0
     match filetype:
-        case AvailableCacheElemType.sessions:
+        case AvailableCacheElemType.SESSIONS:
             expiration_time = TimeInSeconds.DAY
-        case AvailableCacheElemType.artworks | AvailableCacheElemType.cards:
-            if SessionFields.user_folder in session: # user is still logged in
+        case AvailableCacheElemType.ARTWORKS | AvailableCacheElemType.CARDS:
+            if SessionFields.USER_FOLDER in session: # user is still logged in
                 expiration_time = 2 * TimeInSeconds.HOUR
             else: # user has logged out
                 expiration_time = 30 * TimeInSeconds.MINUTE

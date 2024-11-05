@@ -39,7 +39,7 @@ def checkImageFilenameValid(filename: str | None) -> Optional[str]:
     :return: [string?] The error message if the filename is invalid, None otherwise
     """
     if filename == None or filename.strip() == "":
-        return Err.ERR_NO_FILE
+        return Err.NO_FILE
     if not('.' in filename and filename.rsplit('.', 1)[1].lower() in ["png", "jpg", "jpeg"]):
-        return Err.ERR_IMG_INVALID_FILETYPE
+        return Err.IMG_INVALID_FILETYPE
     return None

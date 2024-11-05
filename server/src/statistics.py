@@ -33,11 +33,11 @@ class Stats:
         :return: [dict] The dataclass as a dictionary
         """
         return {
-            AvailableStats.dateFirstOperation: self.date_first_operation,
-            AvailableStats.dateLastOperation: self.date_last_operation,
-            AvailableStats.artworkGenerations: self.artwork_generations,
-            AvailableStats.lyricsFetches: self.lyrics_fetches,
-            AvailableStats.cardsGenerated: self.cards_generations,
+            AvailableStats.DATE_FIRST_OPERATION: self.date_first_operation,
+            AvailableStats.DATE_LAST_OPERATION: self.date_last_operation,
+            AvailableStats.ARTWORK_GENERATIONS: self.artwork_generations,
+            AvailableStats.LYRICS_FETCHES: self.lyrics_fetches,
+            AvailableStats.CARDS_GENERATED: self.cards_generations,
         }
 
     def __repr__(self) -> str:
@@ -74,7 +74,7 @@ def getJsonStatsFromFile(path: str = STATS_FILE_PATH) -> JsonDict:
     log.debug(f"Getting stats from file: {path}...")
     try:
         if not path.endswith(".json"):
-            raise ValueError(Err.ERR_STATS_FILETYPE)
+            raise ValueError(Err.STATS_FILETYPE)
         with open(path, "r") as file:
             log.debug(f"Loaded stats from file {path}.")
             return loads(file.read()) # <- read stats from stats file
@@ -94,16 +94,16 @@ def updateStats(path: str = STATS_FILE_PATH, to_increment: Optional[str] = None,
 
     log.debug(f"Updating stats from file: {path}...")
     new_stats: JsonDict = {}
-    new_stats[AvailableStats.dateFirstOperation] = \
-        json_stats.get(AvailableStats.dateFirstOperation, getNowEpoch())
-    new_stats[AvailableStats.dateLastOperation] = \
+    new_stats[AvailableStats.DATE_FIRST_OPERATION] = \
+        json_stats.get(AvailableStats.DATE_FIRST_OPERATION, getNowEpoch())
+    new_stats[AvailableStats.DATE_LAST_OPERATION] = \
         getNowEpoch()
-    new_stats[AvailableStats.artworkGenerations] = \
-        int(json_stats.get(AvailableStats.artworkGenerations, 0))
-    new_stats[AvailableStats.lyricsFetches] = \
-        int(json_stats.get(AvailableStats.lyricsFetches, 0))
-    new_stats[AvailableStats.cardsGenerated] = \
-        int(json_stats.get(AvailableStats.cardsGenerated, 0))
+    new_stats[AvailableStats.ARTWORK_GENERATIONS] = \
+        int(json_stats.get(AvailableStats.ARTWORK_GENERATIONS, 0))
+    new_stats[AvailableStats.LYRICS_FETCHES] = \
+        int(json_stats.get(AvailableStats.LYRICS_FETCHES, 0))
+    new_stats[AvailableStats.CARDS_GENERATED] = \
+        int(json_stats.get(AvailableStats.CARDS_GENERATED, 0))
 
     if to_increment in INCREMENTABLE_STATS:
         new_stats[to_increment] += increment
@@ -147,10 +147,10 @@ def onLaunch() -> None:
 
     log.debug("  Creating Stats object with values from file...")
     stats = Stats(
-        date_first_operation=json_stats.get(AvailableStats.dateFirstOperation),
-        date_last_operation=json_stats.get(AvailableStats.dateLastOperation),
-        artwork_generations=json_stats.get(AvailableStats.artworkGenerations),
-        lyrics_fetches=json_stats.get(AvailableStats.lyricsFetches),
-        cards_generations=json_stats.get(AvailableStats.cardsGenerated),
+        date_first_operation=json_stats.get(AvailableStats.DATE_FIRST_OPERATION),
+        date_last_operation=json_stats.get(AvailableStats.DATE_LAST_OPERATION),
+        artwork_generations=json_stats.get(AvailableStats.ARTWORK_GENERATIONS),
+        lyrics_fetches=json_stats.get(AvailableStats.LYRICS_FETCHES),
+        cards_generations=json_stats.get(AvailableStats.CARDS_GENERATED),
     )
     log.info(f"Initializing project with statistics: {stats}")

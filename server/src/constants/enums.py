@@ -12,7 +12,7 @@ class HttpStatus(IntEnum):
     INTERNAL_SERVER_ERROR = 500
 
 class TimeInSeconds(IntEnum):
-    """ Enum for time units, converted to seconds """
+    """ Enum for time units, converted to seconds for convenience """
     SECOND = 1
     MINUTE = 60 * SECOND
     HOUR   = 60 * MINUTE
@@ -23,55 +23,55 @@ class TimeInSeconds(IntEnum):
 
 class AvailableCacheElemType(StrEnum):
     """ Enum for the available cache elements """
-    sessions = "sessions"
-    artworks = "artworks"
-    cards = "cards"
+    SESSIONS = "sessions"
+    ARTWORKS = "artworks"
+    CARDS = "cards"
 
     def __repr__(self) -> str: return self.value
 
 class SessionFields(StrEnum):
     """ Enum for the fields in the session object """
     # Application
-    user_folder = "user_folder"
+    USER_FOLDER = "user_folder"
 
     # Artwork generation
-    generated_artwork_path = "generated_artwork_path"
-    include_center_artwork = "include_center_artwork"
+    GENERATED_ARTWORK_PATH = "generated_artwork_path"
+    INCLUDE_CENTER_ARTWORK = "include_center_artwork"
 
     # Lyrics
-    genius_token = "genius_token"
+    GENIUS_TOKEN = "genius_token"
 
     # Cards generation
-    cards_contents = "cards_contents"
-    song_data = "song_data"
-    enforce_background_image = "enforce_background_image"
-    enforce_bottom_color = "enforce_bottom_color"
-    outro_contributors = "outro_contributors"
-    gen_outro = "generate_outro"
-    include_bg_img = "include_background_img"
-    card_metaname = "card_metaname"
-    bottom_color = "card_bottom_color"
-    card_filename = "card_filename"
+    CARDS_CONTENTS = "cards_contents"
+    SONG_DATA = "song_data"
+    ENFORCE_BACKGROUND_IMAGE = "enforce_background_image"
+    ENFORCE_BOTTOM_COLOR = "enforce_bottom_color"
+    OUTRO_CONTRIBUTORS = "outro_contributors"
+    GEN_OUTRO = "generate_outro"
+    INCLUDE_BG_IMG = "include_background_img"
+    CARD_METANAME = "card_metaname"
+    BOTTOM_COLOR = "card_bottom_color"
+    CARD_FILENAME = "card_filename"
 
     def __repr__(self) -> str: return self.value
 
 class AvailableStats(StrEnum):
     """ Enum for the available statistics """
-    dateFirstOperation = "dateFirstOperation"
-    dateLastOperation = "dateLastOperation"
-    artworkGenerations = "artworkGenerations"
-    lyricsFetches = "lyricsFetches"
-    cardsGenerated = "cardsGenerated"
+    DATE_FIRST_OPERATION = "dateFirstOperation"
+    DATE_LAST_OPERATION = "dateLastOperation"
+    ARTWORK_GENERATIONS = "artworkGenerations"
+    LYRICS_FETCHES = "lyricsFetches"
+    CARDS_GENERATED = "cardsGenerated"
 
     def __repr__(self) -> str: return self.value
 
 class MetanameFontNames(StrEnum):
     """ Enum for the available font types """
-    latin = "FONT_METANAME_LATIN"
-    s_chinese = "FONT_METANAME_S_CHINESE"
-    t_chinese = "FONT_METANAME_T_CHINESE"
-    japanese = "FONT_METANAME_JAPANESE"
-    korean = "FONT_METANAME_KOREAN"
-    fallback = "FONT_METANAME_FALLBACK"
+    LATIN = "FONT_METANAME_LATIN"
+    S_CHINESE = "FONT_METANAME_S_CHINESE"
+    T_CHINESE = "FONT_METANAME_T_CHINESE"
+    JAPANESE = "FONT_METANAME_JAPANESE"
+    KOREAN = "FONT_METANAME_KOREAN"
+    FALLBACK = "FONT_METANAME_FALLBACK"
 
     def __repr__(self) -> str: return self.value

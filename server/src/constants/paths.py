@@ -47,7 +47,7 @@ PROCESSED_DIR = "processed" + SLASH
 front_dir = f"..{SLASH}client{SLASH}"
 
 FRONT_PROCESSED = f"{front_dir}public{SLASH}"
-FRONT_PROCESSED_ARTWORKS_DIR = f"{FRONT_PROCESSED}processed-{AvailableCacheElemType.artworks}{SLASH}"
+FRONT_PROCESSED_ARTWORKS_DIR = f"{FRONT_PROCESSED}processed-{AvailableCacheElemType.ARTWORKS}{SLASH}"
 THUMBNAILS_DIR = f"assets{SLASH}thumbnails{SLASH}"
 UPLOADED_ITUNES_IMG_FILENAME = "itunes_image.png"
 UPLOADED_FILE_IMG_FILENAME = "uploaded_image.png"
@@ -60,7 +60,7 @@ LOGO_POSITIONS = [
 PROCESSED_ARTWORK_FILENAME = "ProcessedArtwork.png"
 PROCESSED_OUTRO_FILENAME = "outro.png"
 
-FRONT_PROCESSED_CARDS_DIR = f"{FRONT_PROCESSED}processed-{AvailableCacheElemType.cards}{SLASH}"
+FRONT_PROCESSED_CARDS_DIR = f"{FRONT_PROCESSED}processed-{AvailableCacheElemType.CARDS}{SLASH}"
 CARDS_DIR = f"{path_prefix}assets{SLASH}cards{SLASH}"
 CARDS_BOTTOM_B = f"{CARDS_DIR}bottom_black.png"
 CARDS_BOTTOM_W = f"{CARDS_DIR}bottom_white.png"
