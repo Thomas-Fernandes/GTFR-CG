@@ -55,10 +55,9 @@ def initApp() -> None:
         from server.src.routes.artwork_generation.artwork_generation import addArtworkGenerationNamespace
         from server.src.routes.artwork_processing.artwork_processing import addArtworkProcessingNamespace
         from server.src.routes.cards_generation.cards_generation import addCardsGenerationNamespace
-        from server.src.routes.home import bp_home
+        from server.src.routes.home.home import addHomeNamespace
         from server.src.routes.lyrics import bp_lyrics
         blueprints = [
-            bp_home,
             bp_lyrics,
         ]
         for blueprint in blueprints:
@@ -67,6 +66,7 @@ def initApp() -> None:
         addArtworkGenerationNamespace(api)
         addArtworkProcessingNamespace(api)
         addCardsGenerationNamespace(api)
+        addHomeNamespace(api)
         log.debug("  Blueprints initialized.")
     initBlueprints()
     logRegisteredRoutes()

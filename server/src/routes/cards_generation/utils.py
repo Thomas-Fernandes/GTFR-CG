@@ -1,6 +1,7 @@
 from typing import Any
 
 from server.src.constants.enums import MetanameFontNames
+
 from server.src.logger import log
 from server.src.typing_gtfr import RGBAColor
 

@@ -1,29 +1,17 @@
 from flask import Blueprint, Response
 from flask_restx import Resource
 
-from server.src.constants.enums import AvailableStats, HttpStatus, SessionFields
-from server.src.constants.paths import API_ROUTE, ROUTES
+from server.src.constants.enums import AvailableStats, HttpStatus
+from server.src.constants.paths import ROUTES
 from server.src.constants.responses import Err, Msg
 from server.src.constants.statistics import EMPTY_STATS
+
 from server.src.docs import models, ns_home
 from server.src.logger import log
 from server.src.statistics import getJsonStatsFromFile
 from server.src.utils.web_utils import createApiResponse
 
-from server.src.app import api, app
-session = app.config
-bp_home = Blueprint(ROUTES.home.bp_name, __name__.split('.')[-1])
-api.add_namespace(ns_home, path=API_ROUTE)
-
-@ns_home.route("/genius-token")
-class GeniusTokenResource(Resource):
-    @ns_home.doc("get_genius_token")
-    @ns_home.response(HttpStatus.OK, Msg.GENIUS_TOKEN_FETCHED, models[ROUTES.home.bp_name]["genius-token"]["response"])
-    def get(self) -> Response:
-        """ Returns the Genius API token """
-        log.log("GET - Fetching Genius API token...")
-
-        return createApiResponse(HttpStatus.OK, Msg.GENIUS_TOKEN_FETCHED, {"token": session.get(SessionFields.GENIUS_TOKEN)})
+bp_home_statistics = Blueprint("statistics", __name__.split('.')[-1])
 
 @ns_home.route("/statistics")
 class StatisticsResource(Resource):

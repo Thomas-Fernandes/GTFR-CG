@@ -13,13 +13,12 @@ from server.src.constants.image_generation import BLACK_OVERLAY, METADATA_IDENTI
 from server.src.constants.paths import SLASH, PROCESSED_DIR, PROCESSED_ARTWORK_FILENAME, UPLOADED_FILE_IMG_FILENAME
 from server.src.constants.responses import Err, Warn
 
+from server.src.app import session
 from server.src.logger import log, LogSeverity
 from server.src.routes.artwork_processing.pillow import generateCoverArt
 from server.src.typing_gtfr import CardgenSettings, CardsContents, CardMetadata, SongMetadata
 from server.src.utils.file_utils import doesFileExist
 from server.src.utils.string_utils import snakeToCamel
-
-from server.src.app import session
 
 from server.src.routes.cards_generation.utils import getLuminance
 

@@ -9,6 +9,7 @@ from server.src.constants.image_generation import METADATA_IDENTIFIER
 from server.src.constants.paths import ROUTES, SLASH, PROCESSED_DIR, PROCESSED_OUTRO_FILENAME
 from server.src.constants.responses import Err, Msg
 
+from server.src.app import session
 from server.src.docs import models, ns_cards_generation
 from server.src.logger import log, LogSeverity
 from server.src.statistics import updateStats
@@ -16,8 +17,6 @@ from server.src.typing_gtfr import CardgenSettings, CardsContents, SongMetadata
 from server.src.utils.file_utils import getCardsContentsFromFile
 from server.src.utils.string_utils import getHexColorFromRGB
 from server.src.utils.web_utils import createApiResponse
-
-from server.src.app import session
 
 from server.src.routes.cards_generation.pillow import generateCard, generateOutroCard
 from server.src.routes.cards_generation.settings import getBaseCardgenSettings, getCardMetadata, getSongMetadata

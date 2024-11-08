@@ -11,14 +11,13 @@ from server.src.constants.enums import AvailableCacheElemType, HttpStatus, Sessi
 from server.src.constants.paths import ROUTES, SLASH, PROCESSED_DIR
 from server.src.constants.responses import Err, Msg, Warn
 
+from server.src.app import session
 from server.src.docs import models, ns_cards_generation
 from server.src.logger import log, LogSeverity
 from server.src.typing_gtfr import CardsContents
 from server.src.utils.file_utils import writeCardsContentsToFile
 from server.src.utils.time_utils import getNowStamp
 from server.src.utils.web_utils import createApiResponse
-
-from server.src.app import session
 
 from server.src.routes.cards_generation.utils import isListListStr
 
