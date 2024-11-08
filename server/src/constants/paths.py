@@ -42,7 +42,7 @@ STATS_FILE_PATH = "stats.json"
 SLASH = '/' if (osName != 'nt') else '\\'
 path_prefix = "" if path.isfile("requirements.txt") else f"server{SLASH}" # for running from installer.py
 SESSION_TYPE = "filesystem"
-SESSION_DIR = "flask_session" + SLASH
+SESSION_FILE_DIR = "flask_session" + SLASH
 
 PROCESSED_DIR = "processed" + SLASH
 front_dir = f"..{SLASH}client{SLASH}"

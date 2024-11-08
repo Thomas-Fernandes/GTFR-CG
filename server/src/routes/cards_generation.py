@@ -21,7 +21,7 @@ from server.src.constants.pillow import \
 from server.src.constants.responses import Err, Msg, Warn
 from server.src.docs import models, ns_cards_generation
 from server.src.logger import log, LogSeverity
-from server.src.routes.artwork_processing import generateCoverArt
+from server.src.routes.artwork_processing.pillow import generateCoverArt
 from server.src.statistics import updateStats
 from server.src.typing_gtfr import CardgenSettings, CardsContents, CardMetadata, RGBAColor, SongMetadata
 from server.src.utils.file_utils import doesFileExist, getCardsContentsFromFile, writeCardsContentsToFile

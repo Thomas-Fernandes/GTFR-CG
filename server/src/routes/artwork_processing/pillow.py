@@ -1,28 +1,13 @@
-from flask import Blueprint, Response
-from flask_restx import Resource
 from PIL import Image, ImageFilter as IFilter, ImageDraw as IDraw
 
 from os import path
-from time import time
 from typing import Optional
 
-from server.src.constants.enums import AvailableCacheElemType, AvailableStats, HttpStatus, SessionFields
 from server.src.constants.image_generation import LOGO_OVERLAYS
-from server.src.constants.paths import \
-    API_ROUTE, FRONT_PROCESSED_ARTWORKS_DIR, LOGO_POSITIONS, \
-    PROCESSED_ARTWORK_FILENAME, PROCESSED_DIR, ROUTES, SLASH
-from server.src.constants.responses import Err, Msg
-from server.src.docs import models, ns_artwork_processing
-from server.src.logger import log, LogSeverity
-from server.src.statistics import updateStats
-from server.src.utils.string_utils import getSessionFirstName
-from server.src.utils.web_utils import createApiResponse
+from server.src.constants.paths import LOGO_POSITIONS, FRONT_PROCESSED_ARTWORKS_DIR, PROCESSED_ARTWORK_FILENAME, SLASH
 
-from server.src.app import api, app
-bp_artwork_processing = Blueprint(ROUTES.art_proc.bp_name, __name__.split('.')[-1])
-session = app.config
-api_prefix = API_ROUTE + ROUTES.art_proc.path
-api.add_namespace(ns_artwork_processing, path=api_prefix)
+from server.src.logger import log
+from server.src.utils.string_utils import getSessionFirstName
 
 def addGaussianBlur(cropped_image: Image.Image, original_image: Image.Image) -> Image.Image:
     """ Adds a Gaussian blur to the given image
@@ -84,6 +69,7 @@ def generateCoverArt(input_path: str, output_path: str, include_center_artwork: 
     final_image.save(f"{FRONT_PROCESSED_ARTWORKS_DIR}{PROCESSED_ARTWORK_FILENAME}")
     log.debug(f"Cover art saved: {output_path}")
 
+
 def generateThumbnail(thumbnail: Image.Image, position: str, output_folder: str) -> Optional[str]:
     log.debug(f"  Generating {position} thumbnail...")
     logo_path = f"{position}.png"
@@ -111,33 +97,3 @@ def generateThumbnails(bg_path: str, output_folder: str) -> Optional[str]:
         if err is not None:
             return err
     return None
-
-@ns_artwork_processing.route("/process-artworks")
-class ProcessArtworkResource(Resource):
-    @ns_artwork_processing.doc("post_process_images")
-    @ns_artwork_processing.expect(models[ROUTES.art_proc.bp_name]["process-artworks"]["payload"])
-    @ns_artwork_processing.response(HttpStatus.CREATED, Msg.PROCESSED_IMAGES_SUCCESS)
-    @ns_artwork_processing.response(HttpStatus.BAD_REQUEST, Err.NO_IMG)
-    @ns_artwork_processing.response(HttpStatus.PRECONDITION_FAILED, Err.OVERLAY_NOT_FOUND)
-    def post(self) -> Response:
-        """ Renders the processed background image and thumbnails """
-        if SessionFields.GENERATED_ARTWORK_PATH not in session:
-            log.error(Err.NO_IMG)
-            return createApiResponse(HttpStatus.BAD_REQUEST, Err.NO_IMG)
-
-        user_folder = str(session[SessionFields.USER_FOLDER]) + SLASH + AvailableCacheElemType.ARTWORKS
-        user_processed_path = path.join(PROCESSED_DIR, user_folder)
-        generated_artwork_path = str(session[SessionFields.GENERATED_ARTWORK_PATH])
-        include_center_artwork = session.get(SessionFields.INCLUDE_CENTER_ARTWORK, True)
-        output_bg = path.join(user_processed_path, PROCESSED_ARTWORK_FILENAME)
-
-        start = time()
-        generateCoverArt(generated_artwork_path, output_bg, include_center_artwork)
-        err = generateThumbnails(output_bg, user_processed_path)
-        if err:
-            return createApiResponse(HttpStatus.PRECONDITION_FAILED, err)
-        center_mark = "with" if include_center_artwork else "without"
-        log.log(f"Images generation ({center_mark} center artwork) complete.").time(LogSeverity.LOG, time() - start)
-        updateStats(to_increment=AvailableStats.ARTWORK_GENERATIONS)
-
-        return createApiResponse(HttpStatus.CREATED, Msg.PROCESSED_IMAGES_SUCCESS)
