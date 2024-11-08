@@ -16,7 +16,7 @@ from server.src.utils.web_utils import createApiResponse
 
 from server.src.routes.artwork_processing.pillow import generateCoverArt, generateThumbnails
 
-bp_artwork_generation_process_artworks = Blueprint("process-artworks", __name__.split('.')[-1])
+bp_artwork_processing_process_artworks = Blueprint("process-artworks", __name__.split('.')[-1])
 
 @ns_artwork_processing.route("/process-artworks")
 class ProcessArtworkResource(Resource):

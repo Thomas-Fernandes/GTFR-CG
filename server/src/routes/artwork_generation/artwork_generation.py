@@ -10,8 +10,8 @@ from server.src.routes.artwork_generation.local_file import bp_artwork_generatio
 from server.src.routes.artwork_generation.youtube_thumbnail import bp_artwork_generation_youtube_thumbnail
 
 bp_artwork_generation = Blueprint(ROUTES.art_gen.bp_name, __name__.split('.')[-1])
-bp_artwork_generation.register_blueprint(bp_artwork_generation_itunes_image)
 bp_artwork_generation.register_blueprint(bp_artwork_generation_itunes_search)
+bp_artwork_generation.register_blueprint(bp_artwork_generation_itunes_image)
 bp_artwork_generation.register_blueprint(bp_artwork_generation_local_file)
 bp_artwork_generation.register_blueprint(bp_artwork_generation_youtube_thumbnail)
 
