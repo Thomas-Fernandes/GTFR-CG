@@ -11,11 +11,10 @@ from server.src.constants.enums import AvailableCacheElemType, HttpStatus, Sessi
 from server.src.constants.paths import PROCESSED_DIR, ROUTES, SLASH, UPLOADED_ITUNES_IMG_FILENAME
 from server.src.constants.responses import Err, Msg, Warn
 
+from server.src.app import session
 from server.src.docs import models, ns_artwork_generation
 from server.src.logger import log
 from server.src.utils.web_utils import createApiResponse
-
-from server.src.app import session
 
 bp_artwork_generation_itunes_image = Blueprint("use-itunes-image", __name__.split('.')[-1])
 
