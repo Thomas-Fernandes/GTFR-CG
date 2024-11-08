@@ -79,10 +79,10 @@ def getJsonStatsFromFile(path: str = STATS_FILE_PATH) -> JsonDict:
             log.debug(f"Loaded stats from file {path}.")
             return loads(file.read()) # <- read stats from stats file
     except FileNotFoundError:
-        log.warn(f"No stats file ({path}). Initializing new stats file...")
+        log.warn(f"  No stats file ({path}). Initializing new stats file...")
         return initStats()
     except JSONDecodeError:
-        log.warn(f"Error decoding stats file ({path}). Initializing new stats file...")
+        log.warn(f"  Error decoding stats file ({path}). Initializing new stats file...")
         return initStats()
 
 def updateStats(path: str = STATS_FILE_PATH, to_increment: Optional[str] = None, increment: int = 1) -> None:
@@ -142,7 +142,6 @@ def initStats() -> JsonDict:
 def onLaunch() -> None:
     """ Initializes the project with the statistics from the statistics file """
     log.debug("Initializing project with statistics...")
-    log.debug(f"  Getting stats from file: {STATS_FILE_PATH}...")
     json_stats: JsonDict = getJsonStatsFromFile(STATS_FILE_PATH)
 
     log.debug("  Creating Stats object with values from file...")

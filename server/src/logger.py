@@ -140,7 +140,6 @@ class Logger:
         """ Returns the severity level of the logger
         :return: [LogSeverity] The severity level of the logger
         """
-        self.debug(f"Returning severity level: {self.__severity.name}")
         return self.__severity
 
     def __init__(
@@ -172,16 +171,15 @@ def getSeverityArg(args: list[str]) -> LogSeverity:
     if LOGGER_SEVERITY is not None:
         if LOGGER_SEVERITY.upper() not in LogSeverity.__members__:
             exitInvalidSeverityLevel(LOGGER_SEVERITY)
-        print(getFormattedMessage(f"  Severity level to {LOGGER_SEVERITY} according to .env file", LogSeverity.INFO))
+        print(getFormattedMessage(f"  Severity level to {LogSeverity.__members__[LOGGER_SEVERITY].name} according to .env file", LogSeverity.INFO))
         return LogSeverity[LOGGER_SEVERITY]
 
     severity: LogSeverity = LogSeverity.LOG
     if len(args) > 1:
         if args[1].upper() not in LogSeverity.__members__:
             exitInvalidSeverityLevel(args[1])
-        print(getFormattedMessage(f"  Trying to set severity level to {args[1].upper()}", LogSeverity.INFO))
         severity = LogSeverity[args[1].upper()]
-        print(getFormattedMessage(f"  Severity level set to {severity}", LogSeverity.INFO))
+        print(getFormattedMessage(f"  Severity level manually set to {severity.name}", LogSeverity.INFO))
     return severity
 
 print(getFormattedMessage("Trying to initialize logger variable...", LogSeverity.DEBUG))

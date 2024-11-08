@@ -1,30 +1,20 @@
-from flask import Blueprint, request, Response
-from flask_restx import Resource
-from lyricsgenius import Genius
-
-from ast import literal_eval
-from json import dumps
-from re import sub, split
+from lyricsgenius.genius import Genius
 from requests.exceptions import ReadTimeout as ReadTimeoutException
+
+from json import dumps
+from re import split, sub
 from time import time
 from typing import Literal, Optional, Union
 
 from server.src.constants.dotenv import GENIUS_API_TOKEN, GENIUS_API_TOKEN_PATTERN
-from server.src.constants.enums import AvailableStats, HttpStatus, SessionFields
+from server.src.constants.enums import AvailableStats, SessionFields
 from server.src.constants.image_generation import ATTRIBUTION_PERCENTAGE_TOLERANCE
-from server.src.constants.paths import API_ROUTE, ROUTES
-from server.src.constants.responses import Err, Msg
-from server.src.decorators import retry
-from server.src.docs import models, ns_lyrics
-from server.src.logger import log, LogSeverity
-from server.src.statistics import updateStats
-from server.src.utils.web_utils import createApiResponse
+from server.src.constants.responses import Err
 
-from server.src.app import api, app
-bp_lyrics = Blueprint(ROUTES.lyrics.bp_name, __name__.split('.')[-1])
-session = app.config
-api_prefix = API_ROUTE + ROUTES.lyrics.path
-api.add_namespace(ns_lyrics, path=api_prefix)
+from server.src.app import session
+from server.src.decorators import retry
+from server.src.statistics import updateStats
+from server.src.logger import LogSeverity, log
 
 genius = None
 try:
@@ -46,7 +36,7 @@ try:
     session[SessionFields.GENIUS_TOKEN] = GENIUS_API_TOKEN
 except TypeError as e:
     log.error(f"Error while creating Genius object: {e}. "
-              "Lyrics fetching will not work.")
+        "Lyrics fetching will not work.")
 
 def getSongContributors(song_id: Union[int, Literal["manual"]] = -1) -> list[str]:
     """ Adds the contributors to the song data
@@ -154,24 +144,3 @@ def fetchLyricsFromGenius(song_title: str, artist_name: str) -> list[dict[str, s
 
     log.log(f"Lyrics fetch for {artist_name} - \"{song_title}\" complete.").time(LogSeverity.LOG, time() - start)
     return lyrics_parts
-
-@ns_lyrics.route("/get-genius-lyrics")
-class GeniusLyricsResource(Resource):
-    @ns_lyrics.doc("post_get_genius_lyrics")
-    @ns_lyrics.expect(models[ROUTES.lyrics.bp_name]["get-genius-lyrics"]["payload"])
-    @ns_lyrics.response(HttpStatus.OK, Msg.LYRICS_FETCH_SUCCESS, models[ROUTES.lyrics.bp_name]["get-genius-lyrics"]["response"])
-    @ns_lyrics.response(HttpStatus.BAD_REQUEST, Err.LYRICS_MISSING_PARAMS)
-    def post(self) -> Response:
-        """ Fetches the lyrics of a song from Genius dot com """
-        log.log("POST - Fetching lyrics from Genius...")
-
-        body = literal_eval(request.get_data(as_text=True))
-        song_name: Optional[str] = body.get("songName")
-        artist: Optional[str] = body.get("artist")
-
-        if song_name is None or artist is None:
-            log.error(Err.LYRICS_MISSING_PARAMS)
-            return createApiResponse(HttpStatus.BAD_REQUEST, Err.LYRICS_MISSING_PARAMS)
-
-        lyrics_parts = fetchLyricsFromGenius(song_name, artist)
-        return createApiResponse(HttpStatus.OK, Msg.LYRICS_FETCH_SUCCESS, {"lyricsParts": lyrics_parts})
