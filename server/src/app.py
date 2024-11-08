@@ -1,5 +1,5 @@
 # Installed libraries
-from flask import Flask
+from flask import Flask, request, Response
 from flask_cors import CORS
 from flask_restx import Api
 from flask_session import Session
@@ -11,32 +11,51 @@ from sys import exit
 
 # Local modules
 from server.src.constants.enums import AvailableCacheElemType
-from server.src.constants.paths import DEFAULT_PORT, FRONT_PROCESSED_ARTWORKS_DIR, FRONT_PROCESSED_CARDS_DIR, HOST_HOME, PROCESSED_DIR, SESSION_DIR, SLASH
+from server.src.constants.paths import DEFAULT_PORT, FRONT_PROCESSED_ARTWORKS_DIR, FRONT_PROCESSED_CARDS_DIR, HOST_HOME, PROCESSED_DIR, SESSION_DIR, SESSION_TYPE, SLASH
 from server.src.logger import log
 from server.src.utils.time_utils import getExpirationTimestamp
 from server.src.statistics import onLaunch as printInitStatistics
 
 # Application initialization
-global app, api
+global app, api, session
 app = Flask(__name__.split('.')[-1]) # so that the app name is app, not {dirpath}.app
+CORS(app)
+session = app.config
 api = Api(app, doc="/docs", version="1.0", title="GTFR-CG API Documentation",
           description="Swagger API Documentation for GTFR-CG")
+api.init_app(app, add_specs=False)
+
+@app.before_request
+def handle_preflight() -> Response | None:
+    if request.method != "OPTIONS":
+        return None
+    response = app.make_default_options_response()
+    headers = response.headers
+    headers["Access-Control-Allow-Origin"] = "http://localhost:4242"
+    headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
+    headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+    headers["Access-Control-Allow-Credentials"] = "true"
+    return response
+
+def logRegisteredRoutes() -> None:
+    """ Logs all registered routes in the Flask app """
+    log.debug("Registered routes:")
+    for rule in app.url_map.iter_rules():
+        log.debug(f"  .../{rule.endpoint.split("_")[0]}/{rule.rule.split('/')[-1]}")
 
 def initApp() -> None:
     """ Initializes the Flask app: declares config and session, assigns blueprints """
     log.debug("Initializing app...")
-    CORS(app)
 
     def initBlueprints() -> None:
         """ Initializes the blueprints for the app """
         log.debug("  Initializing blueprints...")
-        from server.src.routes.artwork_generation import bp_artwork_generation
+        from server.src.routes.artwork_generation.artwork_generation import addArtworkGenerationNamespace
         from server.src.routes.cards_generation import bp_cards_generation
         from server.src.routes.home import bp_home
         from server.src.routes.lyrics import bp_lyrics
         from server.src.routes.artwork_processing import bp_artwork_processing
         blueprints = [
-            bp_artwork_generation,
             bp_cards_generation,
             bp_home,
             bp_lyrics,
@@ -44,13 +63,16 @@ def initApp() -> None:
         ]
         for blueprint in blueprints:
             app.register_blueprint(blueprint) # practically useless, but "unused import" if removed
+            log.debug(f"  Registered blueprint: {blueprint.name}")
+        addArtworkGenerationNamespace(api)
         log.debug("  Blueprints initialized.")
     initBlueprints()
+    logRegisteredRoutes()
     makedirs(FRONT_PROCESSED_ARTWORKS_DIR, exist_ok=True)
     makedirs(FRONT_PROCESSED_CARDS_DIR, exist_ok=True)
-    app.config["SESSION_PERMANENT"] = False
-    app.config["SESSION_TYPE"] = "filesystem"
-    app.config["SESSION_FILE_DIR"] = SESSION_DIR
+    session["SESSION_PERMANENT"] = False
+    session["SESSION_TYPE"] = SESSION_TYPE
+    session["SESSION_FILE_DIR"] = SESSION_DIR
     Session(app)
     log.debug("App initialized.")
 

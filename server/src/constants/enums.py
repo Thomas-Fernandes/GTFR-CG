@@ -36,6 +36,7 @@ class SessionFields(StrEnum):
 
     # Artwork generation
     GENERATED_ARTWORK_PATH = "generated_artwork_path"
+    LOCAL_FILE = "file" # Local image
     INCLUDE_CENTER_ARTWORK = "include_center_artwork"
 
     # Lyrics
