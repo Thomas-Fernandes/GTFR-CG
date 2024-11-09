@@ -5,13 +5,6 @@ from server.src.constants.image_generation import TRANSLATION_TABLE
 from server.src.constants.responses import Err
 from server.src.typing_gtfr import CardsContents
 
-def doesFileExist(filepath: str) -> bool:
-    """ Checks if the file exists
-    :param filepath: [string] The path to the file
-    :return: [bool] Whether the file exists
-    """
-    return path.isfile(filepath)
-
 def getCardsContentsFromFile(filepath: str) -> CardsContents:
     """ Returns the contents of the cards from a file
     :param filepath: [string] The path to the file
@@ -43,3 +36,10 @@ def validateImageFilename(filename: str | None) -> Optional[str]:
     if not('.' in filename and filename.rsplit('.', 1)[1].lower() in ["png", "jpg", "jpeg"]):
         return Err.IMG_INVALID_FILETYPE
     return None
+
+def doesFileExist(filepath: str) -> bool:
+    """ Checks if the file exists
+    :param filepath: [string] The path to the file
+    :return: [bool] Whether the file exists
+    """
+    return path.isfile(filepath)
