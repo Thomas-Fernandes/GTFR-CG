@@ -2,11 +2,10 @@ from flask import Blueprint, Response
 from flask_restx import Resource
 
 from ast import literal_eval
-from os import path
 from time import time
 
-from server.src.constants.enums import AvailableCacheElemType, AvailableStats, HttpStatus, SessionFields
-from server.src.constants.paths import ROUTES, SLASH, PROCESSED_DIR
+from server.src.constants.enums import AvailableStats, HttpStatus, PayloadFields, SessionFields
+from server.src.constants.paths import ROUTES, SLASH
 from server.src.constants.responses import Err, Msg
 
 from server.src.app import session
@@ -18,6 +17,7 @@ from server.src.utils.web_utils import createApiResponse
 
 from server.src.routes.cards_generation.pillow import generateCard
 from server.src.routes.cards_generation.settings import getCardMetadata, getGenerationRequisites
+from server.src.routes.cards_generation.utils import getUserProcessedPath
 
 def generateSingleCard(cards_contents: CardsContents, song_data: SongMetadata, settings: CardgenSettings) -> Response:
     """ Generates a single card using the contents provided
@@ -26,8 +26,8 @@ def generateSingleCard(cards_contents: CardsContents, song_data: SongMetadata, s
     :param settings: [dict] The settings for card generation
     :return: [Response] The response to the request
     """
-    enforce_bottom_color = settings.get(SessionFields.ENFORCE_BOTTOM_COLOR)
-    include_bg_img = settings.get(SessionFields.INCLUDE_BG_IMG)
+    enforce_bottom_color = settings.get(PayloadFields.ENFORCE_BOTTOM_COLOR)
+    include_bg_img = settings.get(PayloadFields.INCLUDE_BG_IMG)
 
     if SessionFields.USER_FOLDER not in session:
         log.error("User folder not found in session. Needed thumbnail is unreachable.")
@@ -41,10 +41,7 @@ def generateSingleCard(cards_contents: CardsContents, song_data: SongMetadata, s
         return createApiResponse(HttpStatus.PRECONDITION_FAILED, e)
     log.info("Card metadata calculated successfully.")
 
-    user_folder = str(session[SessionFields.USER_FOLDER]) + SLASH + AvailableCacheElemType.CARDS
-    user_processed_path = path.join(PROCESSED_DIR, user_folder)
-    log.info(f"Generating card... ({user_processed_path + SLASH}...)")
-    image_output_path = f"{user_processed_path}{SLASH}{settings[SessionFields.CARD_FILENAME].split('/')[-1]}"
+    image_output_path = f"{getUserProcessedPath()}{SLASH}{settings[PayloadFields.CARD_FILENAME].split('/')[-1]}"
     lyrics_to_print = literal_eval(cards_contents[1][0])[-8:] # get the last 8 lines of the lyrics; rest overflows
     generateCard(image_output_path, lyrics_to_print, card_metadata)
     log.log("Generated new card successfully.")

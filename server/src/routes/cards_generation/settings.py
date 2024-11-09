@@ -8,7 +8,7 @@ from time import time
 from typing import Optional
 from uuid import uuid4
 
-from server.src.constants.enums import AvailableCacheElemType, SessionFields
+from server.src.constants.enums import AvailableCacheElemType, PayloadFields, SessionFields
 from server.src.constants.image_generation import BLACK_OVERLAY, METADATA_IDENTIFIER, METADATA_SEP, WHITE_OVERLAY
 from server.src.constants.paths import SLASH, PROCESSED_DIR, PROCESSED_ARTWORK_FILENAME, UPLOADED_FILE_IMG_FILENAME
 from server.src.constants.responses import Err, Warn
@@ -39,7 +39,7 @@ def getCardMetadata(song_data: SongMetadata, enforce_bottom_color: str | None, i
             song_title = song_data.get("title", "???").upper()
         card_metaname = f"{song_author}, “{song_title}”"
 
-    bg_path = f"{PROCESSED_DIR}{session[SessionFields.USER_FOLDER]}{SLASH}" + \
+    bg_path = f"{PROCESSED_DIR}{session.get(SessionFields.USER_FOLDER)}{SLASH}" + \
         f"{AvailableCacheElemType.ARTWORKS}{SLASH}" + \
         f"{PROCESSED_ARTWORK_FILENAME}"
     bg = None
@@ -98,7 +98,7 @@ def saveEnforcedBackgroundImage(file: FileStorage, include_center_artwork: bool)
         log.debug(Warn.NO_USER_FOLDER)
         session[SessionFields.USER_FOLDER] = str(uuid4())
 
-    user_folder = str(session[SessionFields.USER_FOLDER]) + SLASH + AvailableCacheElemType.ARTWORKS + SLASH
+    user_folder = str(session.get(SessionFields.USER_FOLDER)) + SLASH + AvailableCacheElemType.ARTWORKS + SLASH
     user_processed_path = path.join(PROCESSED_DIR, user_folder)
     log.info(f"Creating user processed path directory: {user_processed_path}")
     makedirs(user_processed_path, exist_ok=True)
@@ -111,31 +111,31 @@ def saveEnforcedBackgroundImage(file: FileStorage, include_center_artwork: bool)
     generateCoverArt(image_path, output_bg, include_center_artwork)
 
 def getBaseCardgenSettings(is_singular_card: bool) -> CardgenSettings:
-    enforce_bg_image: bool = snakeToCamel(SessionFields.ENFORCE_BACKGROUND_IMAGE) in request.files
+    enforce_bg_image: bool = snakeToCamel(PayloadFields.ENFORCE_BACKGROUND_IMAGE) in request.files
     enforce_bottom_color: Optional[str] = None
     include_center_artwork: Optional[bool] = None
     gen_outro: Optional[str] = None
     if not is_singular_card:
-        gen_outro = request.form[snakeToCamel(SessionFields.GEN_OUTRO)]
-    include_bg_img: Optional[str] = request.form[snakeToCamel(SessionFields.INCLUDE_BG_IMG)]
-    card_metaname: Optional[str] = request.form[snakeToCamel(SessionFields.CARD_METANAME)]
+        gen_outro = request.form[snakeToCamel(PayloadFields.GEN_OUTRO)]
+    include_bg_img: Optional[str] = request.form[snakeToCamel(PayloadFields.INCLUDE_BG_IMG)]
+    card_metaname: Optional[str] = request.form[snakeToCamel(PayloadFields.CARD_METANAME)]
 
     if enforce_bg_image:
         include_center_artwork = \
-            request.form[snakeToCamel(SessionFields.INCLUDE_CENTER_ARTWORK)] == "true"
-        saveEnforcedBackgroundImage(request.files[snakeToCamel(SessionFields.ENFORCE_BACKGROUND_IMAGE)], include_center_artwork)
+            request.form[snakeToCamel(PayloadFields.INCLUDE_CENTER_ARTWORK)] == "true"
+        saveEnforcedBackgroundImage(request.files[snakeToCamel(PayloadFields.ENFORCE_BACKGROUND_IMAGE)], include_center_artwork)
 
-    if snakeToCamel(SessionFields.ENFORCE_BOTTOM_COLOR) in request.form:
-        enforce_bottom_color = request.form[snakeToCamel(SessionFields.ENFORCE_BOTTOM_COLOR)]
+    if snakeToCamel(PayloadFields.ENFORCE_BOTTOM_COLOR) in request.form:
+        enforce_bottom_color = request.form[snakeToCamel(PayloadFields.ENFORCE_BOTTOM_COLOR)]
 
     outro_contributors: Optional[str] = None
     if gen_outro is not None and eval(gen_outro.capitalize()) == True:
-        outro_contributors = request.form[snakeToCamel(SessionFields.OUTRO_CONTRIBUTORS)]
+        outro_contributors = request.form[snakeToCamel(PayloadFields.OUTRO_CONTRIBUTORS)]
 
     include_background_img = \
         include_bg_img is not None and stringIsBool(include_bg_img) and eval(include_bg_img.capitalize())
     def validateCardgenParameters(card_metaname: str, enforce_bg_image: bool, include_center_artwork: bool, include_bg_img: bool) -> Optional[str]:
-        bg_path = f"{PROCESSED_DIR}{session[SessionFields.USER_FOLDER]}{SLASH}" + \
+        bg_path = f"{PROCESSED_DIR}{session.get(SessionFields.USER_FOLDER)}{SLASH}" + \
             f"{AvailableCacheElemType.ARTWORKS}{SLASH}" + \
             f"{PROCESSED_ARTWORK_FILENAME}"
         bg_exists = doesFileExist(bg_path)
@@ -155,16 +155,16 @@ def getBaseCardgenSettings(is_singular_card: bool) -> CardgenSettings:
         raise ValueError(err)
 
     base_settings = {
-        SessionFields.ENFORCE_BOTTOM_COLOR: enforce_bottom_color,
-        SessionFields.GEN_OUTRO: gen_outro is not None and eval(gen_outro.capitalize()),
-        SessionFields.INCLUDE_BG_IMG: eval(include_bg_img.capitalize()),
-        SessionFields.CARD_METANAME: card_metaname,
-        SessionFields.OUTRO_CONTRIBUTORS: outro_contributors,
+        PayloadFields.ENFORCE_BOTTOM_COLOR: enforce_bottom_color,
+        PayloadFields.GEN_OUTRO: gen_outro is not None and eval(gen_outro.capitalize()),
+        PayloadFields.INCLUDE_BG_IMG: eval(include_bg_img.capitalize()),
+        PayloadFields.CARD_METANAME: card_metaname,
+        PayloadFields.OUTRO_CONTRIBUTORS: outro_contributors,
     }
 
     if is_singular_card:
-        card_content: Optional[str] = request.form[snakeToCamel(SessionFields.CARDS_CONTENTS)]
-        card_filename: Optional[str] = request.form[snakeToCamel(SessionFields.CARD_FILENAME)]
+        card_content: Optional[str] = request.form[snakeToCamel(PayloadFields.CARDS_CONTENTS)]
+        card_filename: Optional[str] = request.form[snakeToCamel(PayloadFields.CARD_FILENAME)]
 
         def validateSingularCardgenParameters(card_content: str, card_filename: str, bottom_color: str) -> Optional[str]:
             if bottom_color is None: return Err.CARDS_COLOR_NOT_FOUND
@@ -175,8 +175,8 @@ def getBaseCardgenSettings(is_singular_card: bool) -> CardgenSettings:
         if err is not None:
             raise ValueError(err)
 
-        base_settings[SessionFields.CARDS_CONTENTS] = card_content
-        base_settings[SessionFields.CARD_FILENAME] = card_filename
+        base_settings[PayloadFields.CARDS_CONTENTS] = card_content
+        base_settings[PayloadFields.CARD_FILENAME] = card_filename
 
     return base_settings
 
@@ -192,7 +192,7 @@ def getGenerationRequisites(
 
     log.info(f"Getting cards contents from {'request' if is_singular_card else 'savefile'}...")
     try:
-        cards_contents: CardsContents = getCardsContentsFromFile(session[SessionFields.CARDS_CONTENTS])
+        cards_contents: CardsContents = getCardsContentsFromFile(session.get(SessionFields.CARDS_CONTENTS))
 
         if len(cards_contents) == 0 or not cards_contents[0][0].startswith(METADATA_IDENTIFIER):
             raise ValueError(Err.CARDS_CONTENTS_INVALID)
@@ -200,7 +200,7 @@ def getGenerationRequisites(
         def sanitizeCardsContents(cards_contents: CardsContents, is_singular_card: bool) -> CardsContents:
             if is_singular_card:
                 cards_contents = cards_contents[:1] # keep only the metadata
-                cards_contents += [[c.strip() for c in cardgen_settings[SessionFields.CARDS_CONTENTS].split("\n")]]
+                cards_contents += [[c.strip() for c in cardgen_settings[PayloadFields.CARDS_CONTENTS].split("\n")]]
             else:
                 cards_contents = [[line.strip() for line in card] for card in cards_contents]
             return cards_contents
@@ -211,5 +211,5 @@ def getGenerationRequisites(
     log.debug(f"  Card{'' if is_singular_card else 's'} contents:")
     for card in cards_contents:
         log.debug(f"    {card}")
-    song_data = getSongMetadata(cards_contents, cardgen_settings[SessionFields.CARD_METANAME])
+    song_data = getSongMetadata(cards_contents, cardgen_settings[PayloadFields.CARD_METANAME])
     return (None, cardgen_settings, cards_contents, song_data)

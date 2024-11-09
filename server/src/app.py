@@ -69,9 +69,10 @@ def initApp() -> None:
         routes = []
         for rule in app.url_map.iter_rules():
             routes.append(f"./{rule.endpoint.split("_")[0]}/{rule.rule.split('/')[-1]}")
-        log.debug(f"  Registered {len(routes)} routes for {API_ROUTE}:")
+        log.debug(f"  Registered {len(routes)} routes for {API_ROUTE}: [")
         for r in routes:
             log.debug(f"    {r}")
+        log.debug("  ]")
     logRegisteredRoutes()
 
     makedirs(FRONT_PROCESSED_ARTWORKS_DIR, exist_ok=True)

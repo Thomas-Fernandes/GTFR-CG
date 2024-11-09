@@ -31,9 +31,9 @@ class ProcessArtworkResource(Resource):
             log.error(f"Error in session: {Err.NO_IMG}")
             return createApiResponse(HttpStatus.PRECONDITION_FAILED, Err.NO_IMG)
 
-        user_folder = str(session[SessionFields.USER_FOLDER]) + SLASH + AvailableCacheElemType.ARTWORKS
+        user_folder = str(session.get(SessionFields.USER_FOLDER)) + SLASH + AvailableCacheElemType.ARTWORKS
         user_processed_path = path.join(PROCESSED_DIR, user_folder)
-        generated_artwork_path = str(session[SessionFields.GENERATED_ARTWORK_PATH])
+        generated_artwork_path = str(session.get(SessionFields.GENERATED_ARTWORK_PATH))
         include_center_artwork = session.get(SessionFields.INCLUDE_CENTER_ARTWORK, True)
         output_bg = path.join(user_processed_path, PROCESSED_ARTWORK_FILENAME)
 

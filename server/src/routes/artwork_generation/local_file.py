@@ -5,7 +5,7 @@ from werkzeug.datastructures import FileStorage
 from os import path, makedirs
 from uuid import uuid4
 
-from server.src.constants.enums import AvailableCacheElemType, HttpStatus, SessionFields
+from server.src.constants.enums import AvailableCacheElemType, HttpStatus, PayloadFields, SessionFields
 from server.src.constants.paths import PROCESSED_DIR, ROUTES, SLASH, UPLOADED_FILE_IMG_FILENAME
 from server.src.constants.responses import Err, Msg, Warn
 
@@ -30,15 +30,15 @@ class LocalImageResource(Resource):
         """ Saves the uploaded image to the user's folder """
         log.log("POST - Generating artwork using a local image...")
 
-        if snakeToCamel(SessionFields.LOCAL_FILE) not in request.files:
+        if snakeToCamel(PayloadFields.LOCAL_FILE) not in request.files:
             log.error(f"Error in request payload: {Err.NO_FILE}")
             return createApiResponse(HttpStatus.BAD_REQUEST, Err.NO_FILE)
-        file: FileStorage = request.files[snakeToCamel(SessionFields.LOCAL_FILE)]
+        file: FileStorage = request.files[snakeToCamel(PayloadFields.LOCAL_FILE)]
 
         if SessionFields.USER_FOLDER not in session:
             log.debug(Warn.NO_USER_FOLDER)
             session[SessionFields.USER_FOLDER] = str(uuid4())
-        user_folder = str(session[SessionFields.USER_FOLDER]) + SLASH + AvailableCacheElemType.ARTWORKS + SLASH
+        user_folder = str(session.get(SessionFields.USER_FOLDER)) + SLASH + AvailableCacheElemType.ARTWORKS + SLASH
 
         err = validateImageFilename(file.filename)
         if err is not None:
@@ -53,7 +53,7 @@ class LocalImageResource(Resource):
         log.debug(f"Image filename is valid: {file.filename}")
 
         include_center_artwork: bool = \
-            request.form[snakeToCamel(SessionFields.INCLUDE_CENTER_ARTWORK)] == "true"
+            request.form[snakeToCamel(PayloadFields.INCLUDE_CENTER_ARTWORK)] == "true"
         user_processed_path = path.join(PROCESSED_DIR, user_folder)
         log.info(f"Creating user processed path: {user_processed_path}")
         makedirs(user_processed_path, exist_ok=True)

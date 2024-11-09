@@ -3,7 +3,7 @@ from PIL import Image
 from dataclasses import dataclass
 from typing import Literal, Optional, TypeAlias
 
-from server.src.constants.enums import SessionFields
+from server.src.constants.enums import PayloadFields
 
 ############ BROWSER ############
 
@@ -99,7 +99,7 @@ class CardMetadata:
                     content += f"{key}={value}, "
         return f"CardMetadata({content[:-2]})"
 
-CardgenSettings: TypeAlias = dict[SessionFields, bool | str]
+CardgenSettings: TypeAlias = dict[PayloadFields, bool | str]
 
 CardsContents: TypeAlias = list[list[str]]
 

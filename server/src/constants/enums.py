@@ -31,26 +31,26 @@ class AvailableCacheElemType(StrEnum):
 
 class SessionFields(StrEnum):
     """ Enum for the fields in the session object """
-    # Application
     USER_FOLDER = "user_folder"
-
-    # Artwork generation
     GENERATED_ARTWORK_PATH = "generated_artwork_path"
-    LOCAL_FILE = "file" # Local image
-    INCLUDE_CENTER_ARTWORK = "include_center_artwork"
-
-    # Lyrics
     GENIUS_TOKEN = "genius_token"
-
-    # Cards generation
+    INCLUDE_CENTER_ARTWORK = "include_center_artwork"
     CARDS_CONTENTS = "cards_contents"
-    SONG_DATA = "song_data"
+
+    def __repr__(self) -> str: return self.value
+
+class PayloadFields(StrEnum):
+    INCLUDE_CENTER_ARTWORK = "include_center_artwork"
+    LOCAL_FILE = "file"
+
+    CARDS_CONTENTS = "cards_contents"
     ENFORCE_BACKGROUND_IMAGE = "enforce_background_image"
     ENFORCE_BOTTOM_COLOR = "enforce_bottom_color"
     OUTRO_CONTRIBUTORS = "outro_contributors"
     GEN_OUTRO = "generate_outro"
     INCLUDE_BG_IMG = "include_background_img"
     CARD_METANAME = "card_metaname"
+    CARDS_LYRICS = "cards_lyrics"
     BOTTOM_COLOR = "card_bottom_color"
     CARD_FILENAME = "card_filename"
 

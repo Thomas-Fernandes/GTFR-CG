@@ -1,9 +1,26 @@
+from os import path
 from typing import Any
 
-from server.src.constants.enums import MetanameFontNames
+from server.src.constants.enums import AvailableCacheElemType, MetanameFontNames, SessionFields
 
+from server.src.app import session
+from server.src.constants.paths import PROCESSED_DIR, SLASH
 from server.src.logger import log
 from server.src.typing_gtfr import RGBAColor
+
+def getContributorsString(contributor_logins: list[str]) -> str:
+    """ Gets the string of contributors from their logins
+    :param contributor_logins: [list[str]] The logins of the contributors
+    :return: [str] The string of contributors
+    """
+    contributor_logins = [f"@{c}" for c in contributor_logins] # add '@' before each login
+    log.debug(f"  Contributors: {contributor_logins}")
+    contributors_str = "Traduit par : "
+    if len(contributor_logins) != 1:
+        contributors_str += ", ".join(contributor_logins[:-1]) + " & " + contributor_logins[-1]
+    else:
+        contributors_str += contributor_logins[0]
+    return contributors_str
 
 def getVerticalOffset(font_type: MetanameFontNames) -> int:
     match font_type:
@@ -45,6 +62,12 @@ def getLuminance(bg_color: RGBAColor) -> int:
     luminance = 0.3 * r + 0.6 * g + 0.1 * b
     log.debug(f"  Deducted luminance={round(luminance, 2)}, rgb=({round(0.3 * r, 2)}, {round(0.6 * g, 2)}, {round(0.1 * b, 2)})")
     return int(luminance)
+
+def getUserProcessedPath() -> str:
+    user_folder = f"{str(session.get(SessionFields.USER_FOLDER))}{SLASH}{AvailableCacheElemType.CARDS}"
+    user_processed_path = path.join(PROCESSED_DIR, user_folder)
+    log.info(f"Generating cards... ({user_processed_path}{SLASH}...)")
+    return user_processed_path
 
 def isListListStr(obj: list[list[str]] | Any) -> bool:
     """ Checks if the object is a list of lists of strings

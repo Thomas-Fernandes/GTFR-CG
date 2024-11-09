@@ -31,7 +31,7 @@ def saveCardsContents(cards_contents: CardsContents) -> Response:
         log.debug(Warn.NO_USER_FOLDER)
         session[SessionFields.USER_FOLDER] = str(uuid4())
 
-    user_folder = str(session[SessionFields.USER_FOLDER]) + SLASH + AvailableCacheElemType.CARDS + SLASH
+    user_folder = str(session.get(SessionFields.USER_FOLDER)) + SLASH + AvailableCacheElemType.CARDS + SLASH
     user_processed_path = path.join(PROCESSED_DIR, user_folder)
     makedirs(user_processed_path, exist_ok=True)
 
