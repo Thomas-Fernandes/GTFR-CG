@@ -30,7 +30,7 @@ class GeniusLyricsResource(Resource):
         artist: Optional[str] = body.get("artist")
 
         if song_name is None or artist is None:
-            log.error(Err.LYRICS_MISSING_PARAMS)
+            log.error(f"Error in request payload: {Err.LYRICS_MISSING_PARAMS}")
             return createApiResponse(HttpStatus.BAD_REQUEST, Err.LYRICS_MISSING_PARAMS)
 
         lyrics_parts = fetchLyricsFromGenius(song_name, artist)

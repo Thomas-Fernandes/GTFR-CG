@@ -12,7 +12,7 @@ from server.src.constants.responses import Err, Msg, Warn
 from server.src.app import session
 from server.src.docs import models, ns_artwork_generation
 from server.src.logger import log
-from server.src.utils.file_utils import checkImageFilenameValid
+from server.src.utils.file_utils import validateImageFilename
 from server.src.utils.string_utils import snakeToCamel
 from server.src.utils.web_utils import createApiResponse
 
@@ -31,7 +31,7 @@ class LocalImageResource(Resource):
         log.log("POST - Generating artwork using a local image...")
 
         if snakeToCamel(SessionFields.LOCAL_FILE) not in request.files:
-            log.error(Err.NO_FILE)
+            log.error(f"Error in request payload: {Err.NO_FILE}")
             return createApiResponse(HttpStatus.BAD_REQUEST, Err.NO_FILE)
         file: FileStorage = request.files[snakeToCamel(SessionFields.LOCAL_FILE)]
 
@@ -40,15 +40,15 @@ class LocalImageResource(Resource):
             session[SessionFields.USER_FOLDER] = str(uuid4())
         user_folder = str(session[SessionFields.USER_FOLDER]) + SLASH + AvailableCacheElemType.ARTWORKS + SLASH
 
-        err = checkImageFilenameValid(file.filename)
+        err = validateImageFilename(file.filename)
         if err is not None:
-            log.error(err)
+            log.error(f"Error in request payload: {err}")
             if err == Err.IMG_INVALID_FILETYPE:
                 return createApiResponse(HttpStatus.UNSUPPORTED_MEDIA_TYPE, err)
             else:
                 return createApiResponse(HttpStatus.BAD_REQUEST, err)
         if file.filename is None:
-            log.error(Err.NO_FILE)
+            log.error(f"Error in request payload: {Err.NO_FILE}")
             return createApiResponse(HttpStatus.BAD_REQUEST, Err.NO_FILE)
         log.debug(f"Image filename is valid: {file.filename}")
 

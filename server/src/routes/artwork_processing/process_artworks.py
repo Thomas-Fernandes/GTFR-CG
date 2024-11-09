@@ -28,8 +28,8 @@ class ProcessArtworkResource(Resource):
     def post(self) -> Response:
         """ Renders the processed background image and thumbnails """
         if SessionFields.GENERATED_ARTWORK_PATH not in session:
-            log.error(Err.NO_IMG)
-            return createApiResponse(HttpStatus.BAD_REQUEST, Err.NO_IMG)
+            log.error(f"Error in session: {Err.NO_IMG}")
+            return createApiResponse(HttpStatus.PRECONDITION_FAILED, Err.NO_IMG)
 
         user_folder = str(session[SessionFields.USER_FOLDER]) + SLASH + AvailableCacheElemType.ARTWORKS
         user_processed_path = path.join(PROCESSED_DIR, user_folder)

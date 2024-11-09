@@ -37,15 +37,6 @@ def handle_preflight() -> Response | None:
     headers["Access-Control-Allow-Credentials"] = "true"
     return response
 
-def logRegisteredRoutes() -> None:
-    """ Logs all registered routes in the Flask app """
-    routes = []
-    for rule in app.url_map.iter_rules():
-        routes.append(f"./{rule.endpoint.split("_")[0]}/{rule.rule.split('/')[-1]}")
-    log.debug(f"  Registered {len(routes)} routes for {API_ROUTE}:")
-    for r in routes:
-        log.debug(f"    {r}")
-
 def initApp() -> None:
     """ Initializes the Flask app: declares config and session, assigns blueprints """
     log.debug("Initializing app...")
@@ -53,6 +44,7 @@ def initApp() -> None:
     def addNamespaces() -> None:
         """ Adds the routing namespaces to the app """
         log.debug("  Adding namespaces...")
+
         from server.src.routes.artwork_generation.artwork_generation import addArtworkGenerationNamespace
         from server.src.routes.artwork_processing.artwork_processing import addArtworkProcessingNamespace
         from server.src.routes.cards_generation.cards_generation import addCardsGenerationNamespace
@@ -68,10 +60,20 @@ def initApp() -> None:
         for addNamespace in namespaceAdders:
             addNamespace(api)
         log.debug(f"  Namespaces added: ["
-                f"{', '.join([addNamespace.__name__[3:].replace("Namespace", "") for addNamespace in namespaceAdders])}"
-                "].")
+            f"{', '.join([addNamespace.__name__[3:].replace("Namespace", "") for addNamespace in namespaceAdders])}"
+        "].")
     addNamespaces()
+
+    def logRegisteredRoutes() -> None:
+        """ Logs all registered routes in the Flask app """
+        routes = []
+        for rule in app.url_map.iter_rules():
+            routes.append(f"./{rule.endpoint.split("_")[0]}/{rule.rule.split('/')[-1]}")
+        log.debug(f"  Registered {len(routes)} routes for {API_ROUTE}:")
+        for r in routes:
+            log.debug(f"    {r}")
     logRegisteredRoutes()
+
     makedirs(FRONT_PROCESSED_ARTWORKS_DIR, exist_ok=True)
     makedirs(FRONT_PROCESSED_CARDS_DIR, exist_ok=True)
     session["SESSION_PERMANENT"] = False

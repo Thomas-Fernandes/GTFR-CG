@@ -33,7 +33,7 @@ def writeCardsContentsToFile(filepath: str, cards_contents: list[list[str]]) -> 
             if has_content:
                 file.write(("\n\n".join(card) + "\n\n").translate(TRANSLATION_TABLE))
 
-def checkImageFilenameValid(filename: str | None) -> Optional[str]:
+def validateImageFilename(filename: str | None) -> Optional[str]:
     """ Checks if the given filename is valid for an image file
     :param filename: [string] The filename to check
     :return: [string?] The error message if the filename is invalid, None otherwise

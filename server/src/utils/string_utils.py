@@ -7,6 +7,13 @@ def getHexColorFromRGB(rgb: tuple[int, int, int]) -> str:
     """
     return "#{:02x}{:02x}{:02x}".format(*rgb)
 
+def stringIsBool(string: str) -> bool:
+    """ Checks if a string is a boolean
+    :param string: [string] The string to check
+    :return: [bool] Whether the string is a boolean
+    """
+    return string.capitalize() in [str(True), str(False)]
+
 def getSessionFirstName(session_name: str) -> str:
     """ Returns the first segment of the session id
     :return: [string] The first segment of the session id

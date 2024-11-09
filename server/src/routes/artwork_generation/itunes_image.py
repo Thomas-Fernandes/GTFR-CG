@@ -31,7 +31,7 @@ class ItunesImageResource(Resource):
         body = literal_eval(request.get_data(as_text=True))
         image_url: Optional[str] = body.get("url")
         if image_url is None:
-            log.error(Err.NO_IMG_URL)
+            log.error(f"Error in request payload: {Err.NO_IMG_URL}")
             return createApiResponse(HttpStatus.BAD_REQUEST, Err.NO_IMG_URL)
 
         if SessionFields.USER_FOLDER not in session:

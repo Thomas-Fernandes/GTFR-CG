@@ -20,7 +20,7 @@ from server.src.utils.web_utils import createApiResponse
 def makeItunesRequest(url_to_hit: str) -> RequestsResponse:
     return requestsGet(url_to_hit)
 
-def checkItunesParametersValidity(term: str, country: str) -> Optional[str]:
+def validateItunesParameters(term: str, country: str) -> Optional[str]:
     """ Checks the validity of the provided iTunes parameters
     :param term: [str] The search term to be used in the iTunes API request
     :param country: [str] The country code to be used in the iTunes API request
@@ -53,9 +53,9 @@ class ItunesSearchResource(Resource):
         entity = "album" # album by default, but can be "song", "movie", "tv-show"...
         limit = 6 # arbitrary limit for now
 
-        err = checkItunesParametersValidity(term, country)
+        err = validateItunesParameters(term, country)
         if err is not None:
-            log.error(err)
+            log.error(f"Error in request payload: {err}")
             return createApiResponse(HttpStatus.BAD_REQUEST, err)
 
         log.info(f"Searching {limit} iTunes images for term: '{term}', country: {(country or "''").upper()}...")

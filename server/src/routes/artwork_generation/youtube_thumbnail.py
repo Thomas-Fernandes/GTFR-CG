@@ -74,12 +74,12 @@ class YoutubeThumbnailResource(Resource):
         youtube_url: Optional[str] = body.get("url")
 
         if youtube_url is None:
-            log.error(Err.NO_IMG_URL)
+            log.error(f"Error in request payload: {Err.NO_IMG_URL}")
             return createApiResponse(HttpStatus.BAD_REQUEST, Err.NO_IMG_URL)
 
         video_id = extractYoutubeVideoId(youtube_url)
         if video_id is None:
-            log.error(Err.INVALID_YT_URL)
+            log.error(f"Error in request payload: {Err.INVALID_YT_URL}")
             return createApiResponse(HttpStatus.BAD_REQUEST, Err.INVALID_YT_URL)
 
         thumbnail_url = f"https://i3.ytimg.com/vi/{video_id}/maxresdefault.jpg"

@@ -45,7 +45,7 @@ class Stats:
         :return: [string] The dataclass' content, as a string
         """
         stats_dict = self.dict()
-        stats_dict = {k: v for k, v in stats_dict.items() if v is not None} # remove None values
+        stats_dict = {k: v for (k, v) in stats_dict.items() if v is not None} # remove None values
 
         dict_size = len(stats_dict) - 1
         sep = ", "
@@ -85,7 +85,7 @@ def getJsonStatsFromFile(path: str = STATS_FILE_PATH) -> JsonDict:
         log.warn(f"  Error decoding stats file ({path}). Initializing new stats file...")
         return initStats()
 
-def updateStats(path: str = STATS_FILE_PATH, to_increment: Optional[str] = None, increment: int = 1) -> None:
+def updateStats(*, path: str = STATS_FILE_PATH, to_increment: Optional[AvailableStats] = None, increment: int = 1) -> None:
     f""" Updates the statistics contained in a JSON statistics file
     :param path: [string] The path to the statistics file (default: {STATS_FILE_PATH})
     :param to_increment: [string?] The statistic to increment (default: None)
@@ -93,17 +93,13 @@ def updateStats(path: str = STATS_FILE_PATH, to_increment: Optional[str] = None,
     json_stats: JsonDict = getJsonStatsFromFile(path)
 
     log.debug(f"Updating stats from file: {path}...")
-    new_stats: JsonDict = {}
-    new_stats[AvailableStats.DATE_FIRST_OPERATION] = \
-        json_stats.get(AvailableStats.DATE_FIRST_OPERATION, getNowEpoch())
-    new_stats[AvailableStats.DATE_LAST_OPERATION] = \
-        getNowEpoch()
-    new_stats[AvailableStats.ARTWORK_GENERATIONS] = \
-        int(json_stats.get(AvailableStats.ARTWORK_GENERATIONS, 0))
-    new_stats[AvailableStats.LYRICS_FETCHES] = \
-        int(json_stats.get(AvailableStats.LYRICS_FETCHES, 0))
-    new_stats[AvailableStats.CARDS_GENERATED] = \
-        int(json_stats.get(AvailableStats.CARDS_GENERATED, 0))
+    new_stats: JsonDict = {
+        AvailableStats.DATE_FIRST_OPERATION: json_stats.get(AvailableStats.DATE_FIRST_OPERATION, getNowEpoch()),
+        AvailableStats.DATE_LAST_OPERATION: getNowEpoch(),
+        AvailableStats.ARTWORK_GENERATIONS: int(json_stats.get(AvailableStats.ARTWORK_GENERATIONS, 0)),
+        AvailableStats.LYRICS_FETCHES: int(json_stats.get(AvailableStats.LYRICS_FETCHES, 0)),
+        AvailableStats.CARDS_GENERATED: int(json_stats.get(AvailableStats.CARDS_GENERATED, 0)),
+    }
 
     if to_increment in INCREMENTABLE_STATS:
         new_stats[to_increment] += increment

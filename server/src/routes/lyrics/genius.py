@@ -1,4 +1,4 @@
-from lyricsgenius.genius import Genius
+from lyricsgenius.genius import Genius, Song as GeniusSongType
 from requests.exceptions import ReadTimeout as ReadTimeoutException
 
 from json import dumps
@@ -18,7 +18,7 @@ from server.src.logger import LogSeverity, log
 
 genius = None
 try:
-    def checkGeniusTokenIntegrity() -> Optional[str]:
+    def validateGeniusTokenIntegrity() -> Optional[str]:
         """ Checks the integrity of the Genius API token
         :return: [str] The error message if the token is invalid, None otherwise
         """
@@ -28,7 +28,7 @@ try:
             GENIUS_API_TOKEN_PATTERN.match(GENIUS_API_TOKEN) is None:
                 return "Invalid Genius API token."
         return None
-    err = checkGeniusTokenIntegrity()
+    err = validateGeniusTokenIntegrity()
     if err:
         raise ValueError(err)
 
@@ -69,6 +69,18 @@ def getSongContributors(song_id: Union[int, Literal["manual"]] = -1) -> list[str
             log.debug(f"  Ignoring {scribe['user']['login']} with {round(scribe['attribution'] * 100, 2)}% attribution.")
     return [c["login"] for c in contributors[:3]]
 
+def getGeniusSong(song_title: str, artist_name: str) -> GeniusSongType: # type: ignore
+    if genius is None:
+        return None
+
+    result: Optional[GeniusSongType] = None
+    try:
+        with log.redirect_stdout_stderr() as (stdout, stderr): # type: ignore
+            result = genius.search_song(song_title, artist_name)
+    except ReadTimeoutException as e:
+        log.error(f"Lyrics fetch failed: {e}")
+    return result
+
 def areLyricsNotFound(lyrics: list[dict[str, str]]) -> bool:
     """ Checks if the lyrics are not found
     :param lyrics: [list] The lyrics to check
@@ -77,7 +89,6 @@ def areLyricsNotFound(lyrics: list[dict[str, str]]) -> bool:
     return len(lyrics) == 1 \
         and lyrics[0]["section"] == "warn" \
         and lyrics[0]["lyrics"] == Err.LYRICS_NOT_FOUND
-
 @retry(condition=(lambda x: not areLyricsNotFound(x)), times=3)
 def fetchLyricsFromGenius(song_title: str, artist_name: str) -> list[dict[str, str]]:
     """ Tries to fetch the lyrics of a song from Genius dot com
@@ -90,57 +101,57 @@ def fetchLyricsFromGenius(song_title: str, artist_name: str) -> list[dict[str, s
     if genius is None:
         return [{"section": "error", "lyrics": Err.GENIUS_TOKEN_NOT_FOUND}]
 
-    song: Optional[Genius.Song] = None
-    try:
-        with log.redirect_stdout_stderr() as (stdout, stderr): # type: ignore
-            song = genius.search_song(song_title, artist_name)
-    except ReadTimeoutException as e:
-        log.error(f"Lyrics fetch failed: {e}")
+    song: Optional[GeniusSongType] = getGeniusSong(song_title, artist_name)
     if song is None:
         return [{"section": "warn", "lyrics": Err.LYRICS_NOT_FOUND}]
 
     log.debug("Sanitizing the fetched lyrics...")
-    lyrics = song.lyrics
-    # Removing charabia at the beginning and end of the lyrics
-    lyrics = sub(r"^.*Lyrics\[", '[', lyrics).strip()
-    lyrics = sub(r"Embed\s*\d*\s*$", '', lyrics).strip()
-    lyrics = sub(r"\d+\s*$", '', lyrics).strip()
+    def sanitizeLyrics(lyrics: str) -> str:
+        # Removing charabia at the beginning and end of the lyrics
+        lyrics = sub(r"^.*Lyrics\[", '[', lyrics).strip()
+        lyrics = sub(r"Embed\s*\d*\s*$", '', lyrics).strip()
+        lyrics = sub(r"\d+\s*$", '', lyrics).strip()
 
-    # Removing "You might also like" advertising's legend
-    lyrics = lyrics.replace("You might also like", '\n')
+        # Removing "You might also like" advertising's legend
+        lyrics = lyrics.replace("You might also like", '\n')
 
-    # Removing track name translation header
-    if lyrics.startswith("[Paroles de") or lyrics.startswith("[Traduction de"):
-        lyrics = '\n'.join(lyrics.split('\n')[1:]).strip()
+        # Removing track name translation header
+        if lyrics.startswith("[Paroles de") or lyrics.startswith("[Traduction de"):
+            lyrics = '\n'.join(lyrics.split('\n')[1:]).strip()
 
-    # Ensure double newline before song parts
-    def add_newline_before_song_parts(lyrics: str) -> str:
-        """ Adds a newline before song parts that are enclosed in double quotes
-        :param lyrics: [string] The stringified lyrics to process
-        :return: [string] The processed stringified lyrics
-        """
-        return sub(r"(?<=\])\s*(?=\[)", "\n\n", lyrics)
+        # Ensure double newline before song parts
+        def add_newline_before_song_parts(lyrics: str) -> str:
+            """ Adds a newline before song parts that are enclosed in double quotes
+            :param lyrics: [string] The stringified lyrics to process
+            :return: [string] The processed stringified lyrics
+            """
+            return sub(r"(?<=\])\s*(?=\[)", "\n\n", lyrics)
 
-    lyrics = add_newline_before_song_parts(lyrics)
+        return add_newline_before_song_parts(lyrics)
+    lyrics = sanitizeLyrics(song.lyrics)
     log.debug("Lyrics sanitized successfully.")
 
-    # Split lyrics into blocks based on sections, e.g. "[Chorus]"
-    parts = split(r"(\[.*?\])", lyrics)
-    jsonified_contributors = dumps(getSongContributors(song.id))
-    lyrics_parts = [{ # the first part is metadata
-        "section": "[Metadata]",
-        "lyrics": f"id: {song.id}" + "\n"
-            f"artist: {song.artist}" + "\n"
-            f"title: {song.title}" + "\n"
-            f"contributors: {jsonified_contributors}"
-    }]
-    # other available metadata: '_body', '_client', 'url', 'primary_artist', 'stats', 'api_path', 'path',
-    #   'full_title', 'header_image_thumbnail_url', 'header_image_url', 'lyrics_owner_id', 'lyrics_state',
-    #   'song_art_image_thumbnail_url', 'song_art_image_url', 'title_with_featured'
-    lyrics_parts += [{"section": parts[i], "lyrics": parts[i + 1].strip()} for i in range(1, len(parts) - 1, 2)]
+    def generateLyricsParts(lyrics: str) -> list[dict[str, str]]:
+        # Split lyrics into blocks based on sections, e.g. "[Chorus]"
+        parts = split(r"(\[.*?\])", lyrics)
+        jsonified_contributors = dumps(getSongContributors(song.id))
+        lyrics_parts = [{ # the first part is metadata
+            "section": "[Metadata]",
+            "lyrics": f"id: {song.id}" + "\n"
+                f"artist: {song.artist}" + "\n"
+                f"title: {song.title}" + "\n"
+                f"contributors: {jsonified_contributors}"
+        }]
+        # other available metadata: '_body', '_client', 'url', 'primary_artist', 'stats', 'api_path', 'path',
+        #   'full_title', 'header_image_thumbnail_url', 'header_image_url', 'lyrics_owner_id', 'lyrics_state',
+        #   'song_art_image_thumbnail_url', 'song_art_image_url', 'title_with_featured'
+        lyrics_parts += [{"section": parts[i], "lyrics": parts[i + 1].strip()} for i in range(1, len(parts) - 1, 2)]
+        return lyrics_parts
+    lyrics_parts = generateLyricsParts(lyrics)
 
     log.debug("Lyrics split into parts successfully.")
     updateStats(to_increment=AvailableStats.LYRICS_FETCHES)
 
-    log.log(f"Lyrics fetch for {artist_name} - \"{song_title}\" complete.").time(LogSeverity.LOG, time() - start)
+    log.log(f"Lyrics fetch for {artist_name} - \"{song_title}\" complete.") \
+        .time(LogSeverity.LOG, time() - start)
     return lyrics_parts

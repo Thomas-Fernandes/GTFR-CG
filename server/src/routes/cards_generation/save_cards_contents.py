@@ -36,7 +36,7 @@ def saveCardsContents(cards_contents: CardsContents) -> Response:
     makedirs(user_processed_path, exist_ok=True)
 
     if not isListListStr(cards_contents):
-        log.error(Err.CARDS_CONTENTS_INVALID)
+        log.error(f"Error while saving cards contents: {Err.CARDS_CONTENTS_INVALID}")
         return createApiResponse(HttpStatus.BAD_REQUEST, Err.CARDS_CONTENTS_INVALID)
 
     filepath = path.join(user_processed_path, f"contents_{getNowStamp()}.txt")
@@ -67,7 +67,7 @@ class CardsContentsResource(Resource):
         cards_contents: Optional[list[list[str]]] = body.get("cardsContents")
 
         if cards_contents is None:
-            log.error(Err.CARDS_CONTENTS_NOT_FOUND)
+            log.error(f"Error while deducing cards metadata: {Err.CARDS_CONTENTS_NOT_FOUND}")
             return createApiResponse(HttpStatus.BAD_REQUEST, Err.CARDS_CONTENTS_NOT_FOUND)
 
         return saveCardsContents(cards_contents)

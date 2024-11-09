@@ -91,7 +91,7 @@ class CardMetadata:
         content: str = ""
         for (key, value) in self.__dict__.items():
             if value is not None:
-                if key == "bg" or key == "text_fonts":
+                if key == "bg" or key == "bottom_bar_overlay":
                     continue
                 if isinstance(value, str):
                     content += f"{key}='{value}', "
