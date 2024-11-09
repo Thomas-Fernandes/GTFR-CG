@@ -1,9 +1,8 @@
-import React, { useMemo, useRef, useState } from "react";
+import React, { useMemo, useState } from "react";
 
 import CardEditModal from "./CardEditModal";
 import CardView from "./CardView";
 import { CardsGalleryContext } from "./contexts";
-import { handleMouseDown, handleMouseUp } from "./mouse";
 import { CardData, CardsGalleryProps } from "./types";
 
 import "./CardsGallery.css";
@@ -20,15 +19,8 @@ const CardsGallery: React.FC<CardsGalleryProps> = ({ id, initialCards }): JSX.El
     [setCards, currentCard, newLyrics]
   );
 
-  // used to prevent the modal from closing when click&dragging from inside to outside the modal
-  const isMouseDownRef = useRef(false);
-  const clickedInsideModalRef = useRef(false);
-
   return (
-    <div id={id} className="card-gallery flex-row"
-      onMouseDown={(e) => handleMouseDown(e, { isMouseDownRef, clickedInsideModalRef })}
-      onMouseUp={() => handleMouseUp({ isMouseDownRef })}
-    >
+    <div id={id} className="card-gallery flex-row">
       <CardsGalleryContext.Provider value={contextValue}>
         { cards?.map((card, idx) =>
           <CardView key={idx} card={card} cardIdx={idx} />

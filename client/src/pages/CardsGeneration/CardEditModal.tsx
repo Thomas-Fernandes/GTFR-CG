@@ -6,7 +6,7 @@ import { SpinnerId } from "@constants/spinners";
 
 import { useCardsGalleryContext, useCardsGenerationContext } from "./contexts";
 import { handleSaveModal } from "./handlers";
-import { handleOverlayClick } from "./mouse";
+import { handleMouseDown, handleMouseUp, handleOverlayClick } from "./mouse";
 
 import "./CardEditModal.css";
 
@@ -20,10 +20,16 @@ const CardEditModal = (): JSX.Element => {
 
   const closeModal = () => { setIsModalOpen(false); setIsModalSaving(false); };
 
+  // used to prevent the modal from closing when click&dragging from inside to outside the modal
+  const isMouseDownRef = useRef(false);
   const clickedInsideModalRef = useRef(false);
 
   return (
-    <div className="modal-overlay flexbox" onClick={() => handleOverlayClick({ clickedInsideModalRef, closeModal })}>
+    <div className="modal-overlay flexbox"
+      onMouseDown={(e) => handleMouseDown(e, { isMouseDownRef, clickedInsideModalRef })}
+      onMouseUp={() => handleMouseUp({ isMouseDownRef })}
+      onClick={() => handleOverlayClick({ clickedInsideModalRef, closeModal })}
+    >
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <h3 className="mv-0">
           {`Edit Lyrics of Card ${cardIdPadding}${currentCard?.id}`}
