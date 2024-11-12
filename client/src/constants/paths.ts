@@ -4,7 +4,7 @@ export enum ViewPaths {
   Home = "/home",
   Tests = "/tests",
   ArtworkGeneration = "/artwork-generation",
-  ArtworkProcessing = "/artwork-processing",
+  ProcessedArtworks = "/processed-artworks",
   Lyrics = "/lyrics",
   CardsGeneration = "/cards-generation",
 }
@@ -21,7 +21,7 @@ export const API = {
   },
 
   ARTWORK_PROCESSING: {
-    PROCESS_ARTWORKS: ViewPaths.ArtworkProcessing + "/process-artworks",
+    PROCESS_ARTWORKS: "/artwork-processing" + "/process-artworks",
   },
 
   LYRICS: {

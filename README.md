@@ -104,7 +104,7 @@ cd client/ && npm run dev # will launch the front end of the application
 
 - By default, the application runs locally on ports [**8000**](http://localhost:8000) (back) and [**4242**](http://localhost:4242) (front).
   - The API's documentation can be accessed @ [**http://localhost:8000/docs**](http://localhost:8000/docs).
-- The application features 6 major pages:
+- The application features 6 major pages to date:
   - [x] **Home**: the main page, where your statistics are displayed and you can navigate to **Artwork Generation** and **Lyrics**.
   - [x] **Tests** : the unit tests page, to check the application's integrity.
   - [x] **Artwork Generation**: the page where you can generate artwork from a local file or an iTunes search.
@@ -128,13 +128,12 @@ Find a detailed changelog in the [CHANGELOG.md](./CHANGELOG.md) file.
 
 - ***[2.0.0]** Coming later...*: **Endgame** — Project will feature automated video edition with AI sync. [#???](#card_file_box-changelog)
 - ***[1.6.0]** Coming later...*: **Koh-Lanta** — Project will be unified in an all-in-one application. [#???](#card_file_box-changelog)
-- ***[1.5.0]** Coming later...*: **Boost!** — Project will see its existing functionalities sharpened. [#???](#card_file_box-changelog)
-- ***[1.4.0]** Sep 17 2024*: **Lyrics Cards** — Project now supports automatic cards generation from text blocks. [#093](https://github.com/Thomas-Fernandes/GTFR-CG/pull/93)
-- ***[1.3.0]** Aug 19 2024*: **Lyrics Fetch** — Project now supports lyrics fetching from Genius and their conversion to lyrics blocks. [#089](https://github.com/Thomas-Fernandes/GTFR-CG/pull/89)
-- ***[1.2.0]** Jun 27 2024*: **Thumbnails** — Project now supports artwork generation. [#010](https://github.com/Thomas-Fernandes/GTFR/pull/10)
-- ***[1.1.0]** Jun 23 2024*: **Welcome** — Project now supports artwork generation from a local file.
-  - ***[1.0.1]** Jun 23 2024*: [**@QuentindiMeo**](https://github.com/QuentindiMeo) joins the project. Project starts. [#001](https://github.com/Thomas-Fernandes/GTFR/pull/1)
-- ***[1.0.0]** May 09 2024*: **Hello World!** — Project creation.
+- ***[1.5.0]** Nov ?? 2024*: **Boost!** — Project sees its existing codebase, functionalities and looks sharpened. [#155](https://github.com/Thomas-Fernandes/GTFR-CG/pull/155)
+- ***[1.4.0]** Sep 17 2024*: **Lyrics Cards** — Project supports automated cards generation from text blocks. [#093](https://github.com/Thomas-Fernandes/GTFR-CG/pull/93)
+- ***[1.3.0]** Aug 19 2024*: **Lyrics Fetch** — Project supports lyrics fetching and converts them to lyrics blocks. [#089](https://github.com/Thomas-Fernandes/GTFR-CG/pull/89)
+- ***[1.2.0]** Jun 27 2024*: **Thumbnails** — Project supports artwork generation. [#010](https://github.com/Thomas-Fernandes/GTFR/pull/10)
+- ***[1.1.0]** Jun 23 2024*: **Welcome** — Project supports artwork generation from a local file. [#001](https://github.com/Thomas-Fernandes/GTFR/pull/1)
+- ***[1.0.0]** May 09 2024*: **Hello World!** — Project ideation, artwork generation drafting.
 
 <br />
 
