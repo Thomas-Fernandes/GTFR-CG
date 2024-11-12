@@ -3,6 +3,7 @@ sys.path.append("..") # need to add parent directory to path to import from inst
 from installer import installPythonReq
 
 from server.src.constants.paths import DEFAULT_PORT, HOST_HOME
+
 from server.src.app import main
 
 if __name__ == '__main__':
