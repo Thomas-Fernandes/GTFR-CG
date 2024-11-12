@@ -1,5 +1,5 @@
-import { createNewContext } from "@common/contextCreator";
-import { StateSetter } from "@common/types";
+import { createNewContext } from "@/common/contextCreator";
+import { StateSetter } from "@/common/types";
 
 import { CardData } from "./types";
 
@@ -47,7 +47,7 @@ const {
 } = createNewContext<CardsGenerationContextType>();
 
 export {
-  CardsGalleryContext, CardsGenerationContext, CardsGenerationFormContext,
-  useCardsGalleryContext, useCardsGenerationContext, useCardsGenerationFormContext
+    CardsGalleryContext, CardsGenerationContext, CardsGenerationFormContext,
+    useCardsGalleryContext, useCardsGenerationContext, useCardsGenerationFormContext
 };
 

@@ -1,9 +1,9 @@
 import { JSX, useState } from "react";
 
-import Checkbox from "@components/Checkbox/Checkbox";
-import FileUploader from "@components/FileUploader/FileUploader";
+import Checkbox from "@/components/Checkbox/Checkbox";
+import FileUploader from "@/components/FileUploader/FileUploader";
 
-import { SpinnerId } from "@constants/spinners";
+import { SpinnerId } from "@/constants/spinners";
 
 import { useArtworkGenerationContext } from "./contexts";
 import { handleSubmitFileUpload } from "./handlers";

@@ -1,16 +1,16 @@
 import { JSX, useEffect, useMemo, useState } from "react";
 
-import { useTitle } from "@common/hooks/useTitle";
-import { ContentsGenerationMode } from "@common/types";
+import { useTitle } from "@/common/hooks/useTitle";
+import { ContentsGenerationMode } from "@/common/types";
 
-import { NavButtonSide } from "@components/NavButton/constants";
-import NavButton from "@components/NavButton/NavButton";
-import ToastContainer from "@components/ToastContainer/ToastContainer";
-import TopBotSpacer from "@components/TopBotSpacer/TopBotSpacer";
-import ZipDownloadButton from "@components/ZipDownloadButton";
+import { NavButtonSide } from "@/components/NavButton/constants";
+import NavButton from "@/components/NavButton/NavButton";
+import ToastContainer from "@/components/ToastContainer/ToastContainer";
+import TopBotSpacer from "@/components/TopBotSpacer/TopBotSpacer";
+import ZipDownloadButton from "@/components/ZipDownloadButton";
 
-import { SessionStorage, Title } from "@constants/browser";
-import { ViewPaths } from "@constants/paths";
+import { SessionStorage, Title } from "@/constants/browser";
+import { ViewPaths } from "@/constants/paths";
 
 import CardsGallery from "./CardsGallery";
 import CardsGenerationForm from "./CardsGenerationForm";

@@ -1,6 +1,6 @@
 import { JSX, useState } from "react";
 
-import { SpinnerId } from "@constants/spinners";
+import { SpinnerId } from "@/constants/spinners";
 
 import { useArtworkGenerationContext } from "./contexts";
 import { handleSubmitYoutubeUrl } from "./handlers";

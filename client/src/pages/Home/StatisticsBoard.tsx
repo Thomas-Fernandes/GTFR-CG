@@ -1,6 +1,6 @@
 import { JSX } from "react";
 
-import { SpinnerId } from "@constants/spinners";
+import { SpinnerId } from "@/constants/spinners";
 
 import { StatName } from "./constants";
 import Statistic from "./Statistic";

@@ -1,15 +1,15 @@
 import { JSX, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { useTitle } from "@common/hooks/useTitle";
+import { useTitle } from "@/common/hooks/useTitle";
 
-import { NavButtonSide } from "@components/NavButton/constants";
-import NavButton from "@components/NavButton/NavButton";
-import ToastContainer from "@components/ToastContainer/ToastContainer";
-import TopBotSpacer from "@components/TopBotSpacer/TopBotSpacer";
+import { NavButtonSide } from "@/components/NavButton/constants";
+import NavButton from "@/components/NavButton/NavButton";
+import ToastContainer from "@/components/ToastContainer/ToastContainer";
+import TopBotSpacer from "@/components/TopBotSpacer/TopBotSpacer";
 
-import { Title } from "@constants/browser";
-import { ViewPaths } from "@constants/paths";
+import { Title } from "@/constants/browser";
+import { ViewPaths } from "@/constants/paths";
 
 import { getGeniusToken, getStatistics } from "./requests";
 import { hideAllStatsSpinners, showAllStatsSpinners } from "./spinners";

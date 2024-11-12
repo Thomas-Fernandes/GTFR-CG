@@ -1,17 +1,17 @@
 import { JSX, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { useTitle } from "@common/hooks/useTitle";
-import { doesFileExist } from "@common/utils/fileUtils";
+import { useTitle } from "@/common/hooks/useTitle";
+import { doesFileExist } from "@/common/utils/fileUtils";
 
-import { NavButtonSide } from "@components/NavButton/constants";
-import NavButton from "@components/NavButton/NavButton";
-import ToastContainer from "@components/ToastContainer/ToastContainer";
-import TopBotSpacer from "@components/TopBotSpacer/TopBotSpacer";
+import { NavButtonSide } from "@/components/NavButton/constants";
+import NavButton from "@/components/NavButton/NavButton";
+import ToastContainer from "@/components/ToastContainer/ToastContainer";
+import TopBotSpacer from "@/components/TopBotSpacer/TopBotSpacer";
 
-import { Title } from "@constants/browser";
-import { ViewPaths } from "@constants/paths";
-import { Toast } from "@constants/toasts";
+import { Title } from "@/constants/browser";
+import { ViewPaths } from "@/constants/paths";
+import { Toast } from "@/constants/toasts";
 
 import BackgroundImageDisplay from "./BackgroundImageDisplay";
 import { COVER_ART_FILENAME, PROCESSED_ARTWORKS_PATH } from "./constants";

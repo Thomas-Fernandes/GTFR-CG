@@ -1,5 +1,5 @@
-import { ResponseStatus } from "@constants/requests";
-import { DEFAULT_EVENT_DURATION, ToastType } from "@constants/toasts";
+import { ResponseStatus } from "@/constants/requests";
+import { DEFAULT_EVENT_DURATION, ToastType } from "@/constants/toasts";
 
 const convertToHtmlMessage = (message: string) => {
   return message.trim()

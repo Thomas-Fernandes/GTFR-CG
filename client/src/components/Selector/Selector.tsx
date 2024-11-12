@@ -1,6 +1,6 @@
 import { ComponentPropsWithoutRef, JSX } from "react";
 
-import { StateSetter } from "@common/types";
+import { StateSetter } from "@/common/types";
 
 import "./Selector.css";
 

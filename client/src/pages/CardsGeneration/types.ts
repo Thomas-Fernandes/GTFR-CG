@@ -1,4 +1,4 @@
-import { ApiResponse, SongPartsCards, StateSetter } from "@common/types";
+import { ApiResponse, SongPartsCards, StateSetter } from "@/common/types";
 
 export type GenerationProps = {
   cardMetaname: string;

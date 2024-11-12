@@ -1,13 +1,15 @@
-import { HTTP_STATUS } from "@constants/requests";
-import { Toast } from "@constants/toasts";
+import { HttpStatus } from "@/constants/requests";
+import { Toast } from "@/constants/toasts";
 
 import { RestVerbType } from "./types";
 
-export const isErrorCode = (status: number): boolean => {
-  return status >= HTTP_STATUS.BAD_REQUEST && status < 600;
+export const isErrorful = (status: number): boolean => {
+  return status >= HttpStatus.BadRequest
+    && status <= HttpStatus.NetworkAuthenticationRequired;
 };
 export const is2xxSuccessful = (status: number): boolean => {
-  return status >= HTTP_STATUS.OK && status < HTTP_STATUS.MULTIPLE_CHOICES;
+  return status >= HttpStatus.Ok
+    && status < HttpStatus.MultipleChoices;
 };
 
 export const sendRequest = async (method: RestVerbType, url: string, body?: unknown) => {
@@ -26,12 +28,12 @@ export const sendRequest = async (method: RestVerbType, url: string, body?: unkn
   } catch (err) {
     if (err instanceof Error && err.message === "Failed to fetch") {
       return {
-        status: HTTP_STATUS.SERVER_UNAVAILABLE,
+        status: HttpStatus.ServerUnavailable,
         message: Toast.ServerUnavailable,
       };
     }
     return {
-      status: HTTP_STATUS.INTERNAL_SERVER_ERROR,
+      status: HttpStatus.InternalServerError,
       message: (err as Error).message,
     };
   }

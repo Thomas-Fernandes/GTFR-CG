@@ -1,16 +1,16 @@
 import { JSX, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { useTitle } from "@common/hooks/useTitle";
+import { useTitle } from "@/common/hooks/useTitle";
 import { ItunesResult } from "@pages/ArtworkGeneration/types";
 
-import { NavButtonSide } from "@components/NavButton/constants";
-import NavButton from "@components/NavButton/NavButton";
-import ToastContainer from "@components/ToastContainer/ToastContainer";
-import TopBotSpacer from "@components/TopBotSpacer/TopBotSpacer";
+import { NavButtonSide } from "@/components/NavButton/constants";
+import NavButton from "@/components/NavButton/NavButton";
+import ToastContainer from "@/components/ToastContainer/ToastContainer";
+import TopBotSpacer from "@/components/TopBotSpacer/TopBotSpacer";
 
-import { Title } from "@constants/browser";
-import { ViewPaths } from "@constants/paths";
+import { Title } from "@/constants/browser";
+import { ViewPaths } from "@/constants/paths";
 
 import { ArtworkGenerationContext } from "./contexts";
 import FileUploadForm from "./FileUploadForm";

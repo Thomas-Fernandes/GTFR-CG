@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 
-import { SpinnerId } from "@constants/spinners";
+import { SpinnerId } from "@/constants/spinners";
 
 import { useLyricsContext } from "./contexts";
 import { handleLyricsSaveSubmit } from "./handlers";

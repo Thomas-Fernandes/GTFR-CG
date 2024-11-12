@@ -1,7 +1,7 @@
 import { TransitionStartFunction } from "react";
 import { NavigateFunction } from "react-router-dom";
 
-import { ApiResponse, StateSetter } from "@common/types";
+import { ApiResponse, StateSetter } from "@/common/types";
 
 export type HandleSubmitArtworkGenerationProps = {
   isProcessingLoading: boolean;

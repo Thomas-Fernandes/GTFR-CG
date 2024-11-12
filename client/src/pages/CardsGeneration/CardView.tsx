@@ -1,8 +1,8 @@
 import React from "react";
 
-import { sendToast } from "@common/toast";
+import { sendToast } from "@/common/toast";
 
-import { Toast, ToastType } from "@constants/toasts";
+import { Toast, ToastType } from "@/constants/toasts";
 
 import { useCardsGalleryContext } from "./contexts";
 import { handleSubmitDownloadCard } from "./handlers";

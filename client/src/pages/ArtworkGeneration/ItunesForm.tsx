@@ -1,8 +1,8 @@
 import { JSX, useState, useTransition } from "react";
 
-import Selector from "@components/Selector/Selector";
+import Selector from "@/components/Selector/Selector";
 
-import { SpinnerId } from "@constants/spinners";
+import { SpinnerId } from "@/constants/spinners";
 
 import { ITUNES_REGION_OPTIONS } from "./constants";
 import { handleChangeTerm, handleSubmitItunesSearch } from "./handlers";

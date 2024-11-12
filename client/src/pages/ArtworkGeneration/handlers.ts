@@ -1,10 +1,10 @@
 import { FormEvent } from "react";
 
-import { sendToast } from "@common/toast";
-import { isFileExtensionAccepted } from "@common/utils/fileUtils";
+import { sendToast } from "@/common/toast";
+import { isFileExtensionAccepted } from "@/common/utils/fileUtils";
 
-import { ACCEPTED_IMG_EXTENSIONS } from "@constants/files";
-import { Toast, ToastType } from "@constants/toasts";
+import { ACCEPTED_IMG_EXTENSIONS } from "@/constants/files";
+import { Toast, ToastType } from "@/constants/toasts";
 
 import { AutomaticSearchTriggers } from "./constants";
 import { postFileUpload, postItunesResult, postItunesSearch, postYoutubeUrl } from "./requests";

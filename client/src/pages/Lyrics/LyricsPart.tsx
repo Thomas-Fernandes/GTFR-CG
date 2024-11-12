@@ -1,4 +1,4 @@
-import { AutoResizeTextarea } from "@components/AutoResizeTextarea/AutoResizeTextarea";
+import { AutoResizeTextarea } from "@/components/AutoResizeTextarea/AutoResizeTextarea";
 
 import { useLyricsContext } from "./contexts";
 import { handleRestorePart, handleSetDismissedParts, handleSetLyricsParts } from "./handlers";

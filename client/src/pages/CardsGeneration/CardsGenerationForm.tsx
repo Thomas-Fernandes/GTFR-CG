@@ -1,12 +1,12 @@
 import { JSX, useState } from "react";
 
-import { ContentsGenerationMode } from "@common/types";
+import { ContentsGenerationMode } from "@/common/types";
 
-import Checkbox from "@components/Checkbox/Checkbox";
-import ColorPicker from "@components/ColorPicker/ColorPicker";
-import FileUploader from "@components/FileUploader/FileUploader";
+import Checkbox from "@/components/Checkbox/Checkbox";
+import ColorPicker from "@/components/ColorPicker/ColorPicker";
+import FileUploader from "@/components/FileUploader/FileUploader";
 
-import { SpinnerId } from "@constants/spinners";
+import { SpinnerId } from "@/constants/spinners";
 
 import { useCardsGenerationContext, useCardsGenerationFormContext } from "./contexts";
 import { handleGenerateCards, handleUnauthorizedCheckbox } from "./handlers";

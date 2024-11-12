@@ -1,10 +1,10 @@
 
-import { is2xxSuccessful, sendRequest } from "@common/requests";
-import { sendToast } from "@common/toast";
-import { RestVerb, StateSetter } from "@common/types";
+import { is2xxSuccessful, sendRequest } from "@/common/requests";
+import { sendToast } from "@/common/toast";
+import { RestVerb, StateSetter } from "@/common/types";
 
-import { API, BACKEND_URL } from "@constants/paths";
-import { Toast, ToastType } from "@constants/toasts";
+import { API, BACKEND_URL } from "@/constants/paths";
+import { Toast, ToastType } from "@/constants/toasts";
 
 import { GeniusTokenResponse, Statistics, StatisticsResponse } from "./types";
 

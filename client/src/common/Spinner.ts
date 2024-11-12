@@ -1,11 +1,11 @@
-import { Toast, ToastType } from "@constants/toasts";
+import { Toast, ToastType } from "@/constants/toasts";
 
 import { sendToast } from "./toast";
 
 const createSpinnerContainer = (spinnerDiv: HTMLElement, name: string) => {
   const spinnerContainer = document.createElement("div");
   spinnerContainer.classList.add("spinner-container");
-  spinnerContainer.id = "spinner-container" + "-" + name;
+  spinnerContainer.id = `spinner-container-${name}`;
 
   const spinner = document.createElement("span");
   spinner.classList.add("spinner");
@@ -42,7 +42,7 @@ export const showSpinner = (name: string) => {
 }
 
 export const hideSpinner = (name: string) => {
-  const spinnerContainer = document.getElementById("spinner-container" + "-" + name);
+  const spinnerContainer = document.getElementById(`spinner-container-${name}`);
   if (spinnerContainer) {
     spinnerContainer.style.display = "none";
   }

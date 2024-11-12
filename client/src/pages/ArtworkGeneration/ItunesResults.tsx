@@ -1,8 +1,8 @@
 import { JSX, useState } from "react";
 
-import ImgButton from "@components/ImgButton/ImgButton";
+import ImgButton from "@/components/ImgButton/ImgButton";
 
-import { SpinnerId } from "@constants/spinners";
+import { SpinnerId } from "@/constants/spinners";
 
 import { useArtworkGenerationContext } from "./contexts";
 import { handleSelectItunesImage } from "./handlers";

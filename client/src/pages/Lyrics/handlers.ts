@@ -1,9 +1,9 @@
 import { FormEvent } from "react";
 
-import { sendToast } from "@common/toast";
-import { SongPartsCards, StateSetter } from "@common/types";
+import { sendToast } from "@/common/toast";
+import { SongPartsCards, StateSetter } from "@/common/types";
 
-import { Toast, ToastType } from "@constants/toasts";
+import { Toast, ToastType } from "@/constants/toasts";
 
 import { METADATA_IDENTIFIER, METADATA_SEPARATOR } from "./constants";
 import { postLyricsSave, postLyricsSearch } from "./requests";

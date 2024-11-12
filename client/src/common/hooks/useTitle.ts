@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-import { Title } from "@constants/browser";
+import { Title } from "@/constants/browser";
 
 type TitleType = `${Title}`;
 

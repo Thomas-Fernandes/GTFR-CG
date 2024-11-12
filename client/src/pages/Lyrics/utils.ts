@@ -1,4 +1,4 @@
-import { Dict, SongPartsCards } from "@common/types";
+import { Dict, SongPartsCards } from "@/common/types";
 
 import { LyricsPartType, PageMetadata } from "./types";
 

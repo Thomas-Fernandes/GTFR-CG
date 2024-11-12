@@ -5,25 +5,27 @@ export enum ResponseStatus {
   Error = "error",
 }
 
-export const HTTP_STATUS = {
-  OK: 200,
-  CREATED: 201,
-  ACCEPTED: 202,
+export enum HttpStatus {
+  Ok = 200,
+  Created = 201,
+  Accepted = 202,
 
-  MULTIPLE_CHOICES: 300,
-  REDIRECTION: 301,
+  MultipleChoices = 300,
+  Redirection = 301,
 
-  BAD_REQUEST: 400,
-  UNAUTHORIZED: 401,
-  FORBIDDEN: 403,
-  NOT_FOUND: 404,
-  METHOD_NOT_ALLOWED: 405,
-  REQUEST_TIMEOUT: 408,
-  CONFLICT: 409,
-  PRECONDITION_FAILED: 412,
+  BadRequest = 400,
+  Unauthorized = 401,
+  Forbidden = 403,
+  NotFound = 404,
+  MethodNotAllowed = 405,
+  RequestTimeout = 408,
+  Conflict = 409,
+  PreconditionFailed = 412,
 
-  INTERNAL_SERVER_ERROR: 500,
-  NOT_IMPLEMENTED: 501,
-  BAD_GATEWAY: 502,
-  SERVER_UNAVAILABLE: 503,
-};
+  InternalServerError = 500,
+  NotImplemented = 501,
+  BadGateway = 502,
+  ServerUnavailable = 503,
+  GatewayTimeout = 504,
+  NetworkAuthenticationRequired = 511,
+}

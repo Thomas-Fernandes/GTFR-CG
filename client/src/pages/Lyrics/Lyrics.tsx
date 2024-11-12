@@ -1,16 +1,16 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { useTitle } from "@common/hooks/useTitle";
+import { useTitle } from "@/common/hooks/useTitle";
 
-import { NavButtonSide } from "@components/NavButton/constants";
-import NavButton from "@components/NavButton/NavButton";
-import ToastContainer from "@components/ToastContainer/ToastContainer";
-import TopBotSpacer from "@components/TopBotSpacer/TopBotSpacer";
+import { NavButtonSide } from "@/components/NavButton/constants";
+import NavButton from "@/components/NavButton/NavButton";
+import ToastContainer from "@/components/ToastContainer/ToastContainer";
+import TopBotSpacer from "@/components/TopBotSpacer/TopBotSpacer";
 
-import { SessionStorage, Title } from "@constants/browser";
-import { ViewPaths } from "@constants/paths";
-import { Toast } from "@constants/toasts";
+import { SessionStorage, Title } from "@/constants/browser";
+import { ViewPaths } from "@/constants/paths";
+import { Toast } from "@/constants/toasts";
 
 import { LyricsContext } from "./contexts";
 import GenerationModeFlipper from "./GenerationModeFlipper";

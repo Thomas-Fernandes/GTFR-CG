@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 
-import { StateSetter } from "@common/types";
+import { StateSetter } from "@/common/types";
 
-import ButtonRemove from "@components/ButtonRemove/ButtonRemove";
+import ButtonRemove from "@/components/ButtonRemove/ButtonRemove";
 
 import "./FileUploader.css";
 

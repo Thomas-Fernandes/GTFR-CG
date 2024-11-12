@@ -1,6 +1,6 @@
 import { ComponentPropsWithoutRef } from "react";
 
-import { ContentsGenerationMode } from "@common/types";
+import { ContentsGenerationMode } from "@/common/types";
 
 import { MANUAL_CREATION_SECTION } from "./constants";
 import { useLyricsContext } from "./contexts";

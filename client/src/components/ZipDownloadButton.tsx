@@ -3,8 +3,8 @@ import React, { ComponentPropsWithoutRef } from "react";
 import { saveAs } from "file-saver";
 import JSZip from "jszip";
 
-import { sendToast } from "@common/toast";
-import { ResponseStatus } from "@constants/requests";
+import { sendToast } from "@/common/toast";
+import { ResponseStatus } from "@/constants/requests";
 
 type Props = ComponentPropsWithoutRef<"button"> & {
   id?: string;

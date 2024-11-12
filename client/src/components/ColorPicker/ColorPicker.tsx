@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 
-import { sendToast } from "@common/toast";
+import { sendToast } from "@/common/toast";
 
-import ButtonRemove from "@components/ButtonRemove/ButtonRemove";
+import ButtonRemove from "@/components/ButtonRemove/ButtonRemove";
 
-import { Toast, ToastType } from "@constants/toasts";
+import { Toast, ToastType } from "@/constants/toasts";
 
 import "./ColorPicker.css";
 

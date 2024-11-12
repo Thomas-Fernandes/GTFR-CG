@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { isEmpty } from "@common/utils/objUtils";
+import { isEmpty } from "@/common/utils/objUtils";
 
 import { TestFunc, TestProps, TestResult } from "./types";
 

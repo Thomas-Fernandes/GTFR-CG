@@ -1,5 +1,5 @@
 
-import { SpinnerId } from "@constants/spinners";
+import { SpinnerId } from "@/constants/spinners";
 
 import { useLyricsContext } from "./contexts";
 import { handleLyricsSearchSubmit } from "./handlers";

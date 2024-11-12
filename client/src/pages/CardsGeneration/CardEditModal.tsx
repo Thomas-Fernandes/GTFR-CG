@@ -1,8 +1,8 @@
 import { useRef, useState } from "react";
 
-import { AutoResizeTextarea } from "@components/AutoResizeTextarea/AutoResizeTextarea";
+import { AutoResizeTextarea } from "@/components/AutoResizeTextarea/AutoResizeTextarea";
 
-import { SpinnerId } from "@constants/spinners";
+import { SpinnerId } from "@/constants/spinners";
 
 import { useCardsGalleryContext, useCardsGenerationContext } from "./contexts";
 import { handleSaveModal } from "./handlers";

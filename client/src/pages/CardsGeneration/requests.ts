@@ -1,13 +1,13 @@
-import { is2xxSuccessful, sendRequest } from "@common/requests";
-import { hideSpinner, showSpinner } from "@common/spinner";
-import { sendToast } from "@common/toast";
-import { ApiResponse, RestVerb } from "@common/types";
+import { is2xxSuccessful, sendRequest } from "@/common/requests";
+import { hideSpinner, showSpinner } from "@/common/spinner";
+import { sendToast } from "@/common/toast";
+import { ApiResponse, RestVerb } from "@/common/types";
 
-import { SessionStorage } from "@constants/browser";
-import { API, BACKEND_URL } from "@constants/paths";
-import { HTTP_STATUS } from "@constants/requests";
-import { SpinnerId } from "@constants/spinners";
-import { Toast, ToastType } from "@constants/toasts";
+import { SessionStorage } from "@/constants/browser";
+import { API, BACKEND_URL } from "@/constants/paths";
+import { HttpStatus } from "@/constants/requests";
+import { SpinnerId } from "@/constants/spinners";
+import { Toast, ToastType } from "@/constants/toasts";
 
 import { OUTRO_FILENAME, PROCESSED_CARDS_PATH } from "./constants";
 import { CardsGenerationRequest, CardsGenerationResponse, GenerateCardsProps, GenerateSingleCardProps, SingleCardGenerationRequest } from "./types";
@@ -82,7 +82,7 @@ export const postGenerateCards = (
     sessionStorage.setItem(SessionStorage.CardBottomColor, body.colorPick);
     sendToast(Toast.CardsGenerated, ToastType.Success);
   }).catch((error: ApiResponse) => {
-    if (error.status === HTTP_STATUS.PRECONDITION_FAILED)
+    if (error.status === HttpStatus.PreconditionFailed)
       sendToast(Toast.NoCardsContents, ToastType.Error);
     else
       sendToast(error.message, ToastType.Error);

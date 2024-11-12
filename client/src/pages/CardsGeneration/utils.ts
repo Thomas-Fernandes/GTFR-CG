@@ -1,4 +1,4 @@
-import { SongPartsCards, StateSetter } from "@common/types";
+import { SongPartsCards, StateSetter } from "@/common/types";
 
 import { CardData, CardsGenerationRequest, SingleCardGenerationRequest } from "./types";
 
