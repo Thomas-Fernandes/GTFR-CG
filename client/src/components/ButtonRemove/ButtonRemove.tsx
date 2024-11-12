@@ -3,15 +3,15 @@ import React, { ComponentPropsWithoutRef } from "react";
 import "./ButtonRemove.css";
 
 type Props = ComponentPropsWithoutRef<"button"> & {
-  className?: string;
   onClick: () => void;
+  className?: string;
 };
 
-const ButtonRemove: React.FC<Props> = ({ className, onClick, ...props }) => {
+const ButtonRemove: React.FC<Props> = ({ onClick, className, ...buttonProps }) => {
   return (
     <button type="button" onClick={onClick}
-      className={"btn-remove " + (className ?? "")}
-      {...props}
+      className={`btn-remove ${className ?? ""}`}
+      {...buttonProps}
     >
       <span className="btn-remove--cross">{"✖"}</span>
     </button>

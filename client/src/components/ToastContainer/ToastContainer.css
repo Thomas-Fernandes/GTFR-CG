@@ -5,17 +5,17 @@
     z-index: 999;
 
     .toast {
-        min-width: 250px;
+        min-width: 12.5rem;
 
-        margin-top: 10px;
-        padding: 16px;
+        margin-top: .5rem;
+        padding: .8rem;
 
         background-color: #007f00;
-        border-radius: 4px;
+        border-radius: .2rem;
         opacity: 0;
 
         color: #ffffff;
-        font-size: 14px;
+        font-size: .8rem;
 
         animation: fade-in 0.5s;
         transition: margin 0.2s ease, transform 0.5s ease, opacity 0.5s ease;
@@ -33,11 +33,11 @@
             bottom: 0;
             left: 0;
 
-            height: 4px;
+            height: .2rem;
             width: 100%;
 
             background-color: #00ff004d;
-            border-radius: 4px;
+            border-radius: .2rem;
 
             &.warn  { background-color: #ffff004d; }
             &.error { background-color: #ff00004d; }
@@ -46,7 +46,7 @@
                 height: 100%;
 
                 background-color: #00ff00;
-                border-radius: 4px;
+                border-radius: .2rem;
 
                 transition: width linear;
 

@@ -5,7 +5,7 @@
             margin: 1rem 0;
 
             &.file {
-                border: 2px solid #dddddd;
+                border: .1rem solid #dddddd;
 
                 width: 75%;
                 margin-bottom: 1%;

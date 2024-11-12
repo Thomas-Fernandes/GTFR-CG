@@ -7,7 +7,7 @@
 
     font-family: Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif;
     text-align: left;
-    font-size: 20px;
+    font-size: 1.1rem;
     letter-spacing: 0.08rem;
 }
 head {
@@ -21,7 +21,7 @@ body {
 
 div.navbar {
     width: auto;
-    gap: 32px;
+    gap: 1.6rem;
 
     margin: auto;
     flex-direction: row;
@@ -36,18 +36,18 @@ div.navbar {
 div.spinner-container {
     position: relative;
     display: inline-block;
-    width: 48px;
-    height: 48px;
+    width: 2.4rem;
+    height: 2.4rem;
 
     span.spinner {
-        width: 48px;
-        height: 48px;
+        width: 2.4rem;
+        height: 2.4rem;
 
         display: inline-block;
 
         border-radius: 50%;
-        border-top: 4px solid #ffff64;
-        border-right: 4px solid transparent;
+        border-top: .2rem solid #ffff64;
+        border-right: .2rem solid transparent;
         box-sizing: border-box;
 
         animation: spin 0.67s linear infinite;
@@ -59,12 +59,12 @@ div.spinner-container {
             left: 0;
             top: 0;
 
-            width: 48px;
-            height: 48px;
+            width: 2.4rem;
+            height: 2.4rem;
 
             border-radius: 50%;
-            border-bottom: 4px solid #002654;
-            border-left: 4px solid transparent;
+            border-bottom: .2rem solid #002654;
+            border-left: .2rem solid transparent;
         }
 
         img {
@@ -88,7 +88,7 @@ h1, h2, h3, h4, h5, h6, .centered, input[type="text"], button, .button, .action-
 
 h1 {
     font-family: Helvetica, sans-serif;
-    font-size: 64px;
+    font-size: 3.5rem;
     margin: 2% 0 2% 0;
     font-style: italic;
     letter-spacing: 0;
@@ -98,7 +98,7 @@ hr {
     border: 0;
     height: 0;
     width: 80%;
-    box-shadow: 0 0 2px 0.1px #000000;
+    box-shadow: 0 0 .1rem .005rem #000000;
 
     &.w-80 { width: calc(80% * 4/5); }
     &.w-66 { width: calc(80% * 2/3); }
@@ -107,7 +107,7 @@ hr {
     &.w-25 { width: calc(80% * 1/4); }
 
     @-moz-document url-prefix() { /* Firefox only supports half-pixels */
-        box-shadow: 0 0 2px 0.5px #000000; /* significantly thicker */
+        box-shadow: 0 0 .1rem .025rem #000000; /* significantly thicker */
     }
 
     &:after { /* Not really supposed to work, but does */
@@ -116,17 +116,17 @@ hr {
 }
 
 button {
-    padding: 10px 20px;
+    padding: .5rem 1rem;
     display: inline-block;
     cursor: pointer;
 
     color: #ffffff;
     background-color: #007bff;
-    border: 2px solid #00000010;
-    box-shadow: 0 0 10px #0000007f;
-    border-radius: 8px;
+    border: .1rem solid #00000010;
+    box-shadow: 0 0 .5rem #0000007f;
+    border-radius: .4rem;
 
-    font-size: 28px;
+    font-size: 1.4rem;
 
     transition: all 0.3s;
 
@@ -160,8 +160,8 @@ button {
     &:hover {
         background-color: #0056b3;
 
-        span.left  { padding-left:  15px; }
-        span.right { padding-right: 15px; }
+        span.left  { padding-left:  .75rem; }
+        span.right { padding-right: .75rem; }
 
         span:before {
             opacity: 1;
@@ -177,8 +177,8 @@ button {
 a.button, input.button {
     display: inline-block;
 
-    margin-top: 20px;
-    padding: 10px 0;
+    margin-top: 1rem;
+    padding: .5rem 0;
 
     background-color: #007bff;
     color: white;
@@ -203,11 +203,11 @@ input.action-button {
     padding: 1rem;
     align-self: center;
 
-    border: 2px solid #00000010;
-    box-shadow: 0 0 10px #0000007f;
-    border-radius: 8px;
+    border: .1rem solid #00000010;
+    box-shadow: 0 0 .5rem #0000007f;
+    border-radius: .4rem;
 
-    font-size: 24px;
+    font-size: 1.4rem;
     font-weight: bold;
     letter-spacing: 0.3rem;
 
@@ -228,7 +228,7 @@ input[type="text"], textarea {
     padding: 1.5rem;
     margin: 1rem 0;
 
-    border: 2px solid #ddd;
+    border: .1rem solid #ddd;
     border-radius: 0.2rem;
 
     &.empty-text {
@@ -242,7 +242,7 @@ input[type="file"] {
 
     &::file-selector-button {
         margin-right: 5%;
-        padding: 8px 32px;
+        padding: .4rem 1.6rem;
 
         border: none;
         border-radius: 0.2rem;

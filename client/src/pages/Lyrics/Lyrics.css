@@ -5,8 +5,7 @@
 
     button.mode-flipper, button.last-generation {
         background-color: #8fbc8f;
-        width: 32%;
-        font-size: 16px;
+        font-size: .8rem;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -16,6 +15,10 @@
             cursor: pointer;
             background-color: #0056b3;
         }
+    }
+
+    button.mode-flipper {
+        width: 32%;
     }
 
     button.last-generation {

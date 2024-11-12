@@ -17,7 +17,7 @@ export const AutoResizeTextarea = forwardRef<HTMLTextAreaElement, Props>(({ valu
     if (textarea) {
       const resizeTextarea = () => {
         textarea.style.height = "auto";
-        textarea.style.height = `${textarea.scrollHeight + 4}px`;
+        textarea.style.height = `${(textarea.scrollHeight + 8) / 17.777}rem`;
       };
       resizeTextarea();
       textarea.addEventListener("input", resizeTextarea);

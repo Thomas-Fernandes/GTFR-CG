@@ -2,11 +2,11 @@
     cursor: pointer;
     background: #ffff64;
 
-    padding: 8px 32px;
+    padding: .4rem 1.6rem;
 
-    border: 2px solid #00000010;
-    box-shadow: 0 0 10px #0000007f;
-    border-radius: 8px;
+    border: .1rem solid #00000010;
+    box-shadow: 0 0 .5rem #0000007f;
+    border-radius: .4rem;
 
     text-align: left;
     letter-spacing: normal;

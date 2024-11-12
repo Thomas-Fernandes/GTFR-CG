@@ -61,7 +61,7 @@ export const sendToast = (
 export const dismissToast = (toast: HTMLElement, duration: number = DEFAULT_EVENT_DURATION.MS_FADE_OUT) => {
   toast.style.animation = `fade-out ${duration.toString()}ms forwards`;
   setTimeout(() => {
-    toast.style.marginTop = `-${toast.offsetHeight}px`;
+    toast.style.marginTop = `-${toast.offsetHeight / 17.777}rem`;
     toast.style.opacity = "0";
     setTimeout(() => {
       toast.remove();

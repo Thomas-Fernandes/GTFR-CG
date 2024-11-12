@@ -10,8 +10,8 @@
 
             display: grid;
             grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 32px 5%;
-            margin-bottom: 32px;
+            gap: 1.6rem 5%;
+            margin-bottom: 1.6rem;
         }
 
         .result-item {
@@ -25,20 +25,16 @@
                     max-width: 10rem;
                     max-height: 10rem;
 
-                    border: 1px solid #dddddd;
-                    border-radius: 4px;
+                    border: .05rem solid #dddddd;
+                    border-radius: .2rem;
 
-                    padding: 5px;
+                    padding: .25rem;
                 }
-            }
-            .result-name {
-                margin: .5rem auto;
-                line-height: 1rem;
             }
             .result-text {
                 min-height: -webkit-fill-available;
                 margin: .5rem auto 0 auto;
-                line-height: 1rem;
+                line-height: 1.2rem;
             }
         }
     }
