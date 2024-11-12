@@ -1,3 +1,5 @@
+import { JSX } from "react";
+
 import "./TopBotSpacer.css";
 
 const TopBotSpacer = (): JSX.Element => {

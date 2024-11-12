@@ -28,7 +28,7 @@ const ItunesImageResult: React.FC<ItunesImageResultProps> = ({ item, itemId }): 
         {itemLabel}
       </p>
 
-      <div className="mt-p5" style={{paddingLeft: "0 !important"}} id={SpinnerId.ItunesResult + itemId.toString()} />
+      <div className="mt-p5" id={SpinnerId.ItunesResult + itemId.toString()} />
     </div>
   );
 };

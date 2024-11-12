@@ -3,8 +3,6 @@ import { hideSpinner, showSpinner } from "@/common/spinner";
 
 import { SpinnerId } from "@/constants/spinners";
 
-import "./Home.css";
-
 export const hideAllStatsSpinners = () => {
   hideSpinner(SpinnerId.StatsFirstOperation);
   hideSpinner(SpinnerId.StatsLastOperation);

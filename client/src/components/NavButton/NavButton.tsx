@@ -17,7 +17,9 @@ const NavButton: React.FC<Props> = ({ to, label, side, ...props }) => {
       type="button" onClick={() => navigate(to)}
       {...props}
     >
-      <span className={side}>{label}</span>
+      <span className={side}>
+        {label}
+      </span>
     </button>
   );
 };

@@ -48,9 +48,9 @@ const ColorPicker: React.FC<Props> = ({ id, latest, label, labelClassName, sette
 
   return (
     <div id={id} className="color-picker flex-row"> {/* flex-row stays for the color result label height calculation */}
-      <div className={"flexbox" + (selectedColor === "" ? " g-p5" : "")}>
+      <div className={`flexbox ${selectedColor === "" ? "g-p5" : ""}`}>
         { selectedColor === ""
-        ? <><p className={"m-0 italic " + (label ? (labelClassName ?? "") : "hidden")}>
+        ? <><p className={`m-0 italic ${label ? (labelClassName ?? "") : "hidden"}`}>
             {label}
           </p>
           <div className="flex-row">

@@ -7,12 +7,11 @@ import { sendToast } from "@/common/toast";
 import { ResponseStatus } from "@/constants/requests";
 
 type Props = ComponentPropsWithoutRef<"button"> & {
-  id?: string;
   paths: string[];
   output: string;
 };
 
-const ZipDownloadButton: React.FC<Props> = ({ id, paths, output, ...props }) => {
+const ZipDownloadButton: React.FC<Props> = ({ paths, output, ...buttonProps }) => {
   const handleDownloadButtonClick = async () => {
     const zip = new JSZip();
 
@@ -43,8 +42,8 @@ const ZipDownloadButton: React.FC<Props> = ({ id, paths, output, ...props }) => 
 
   return (
     <button
-      type="button" id={id} onClick={handleDownloadButtonClick}
-      {...props}
+      type="button" onClick={handleDownloadButtonClick}
+      {...buttonProps}
     >
       {"Download All as Zip"}
     </button>

@@ -8,8 +8,6 @@ import { Toast, ToastType } from "@/constants/toasts";
 
 import { GeniusTokenResponse, Statistics, StatisticsResponse } from "./types";
 
-import "./Home.css";
-
 export const getStatistics = (setStats: StateSetter<Statistics>) => {
   sendRequest(RestVerb.Get, BACKEND_URL + API.STATISTICS).then((response: StatisticsResponse) => {
     if (!is2xxSuccessful(response.status)) {
@@ -18,13 +16,14 @@ export const getStatistics = (setStats: StateSetter<Statistics>) => {
     }
 
     const stats = response.data;
-    setStats({
+    const displayedStats = {
       dateFirstOperation: new Date(stats.dateFirstOperation).toLocaleString(),
       dateLastOperation: new Date(stats.dateLastOperation).toLocaleString(),
       artworkGenerations: stats.artworkGenerations.toLocaleString(),
       lyricsFetches: stats.lyricsFetches.toLocaleString(),
       cardsGenerated: stats.cardsGenerated.toLocaleString(),
-    });
+    };
+    setStats(displayedStats);
   }).catch((error) => {
     sendToast(error.message, ToastType.Error);
   });

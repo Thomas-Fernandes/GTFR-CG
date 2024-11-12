@@ -6,10 +6,9 @@ type Props = ComponentPropsWithoutRef<"img"> & {
   src: string;
   alt: string;
   onClick?: () => void;
-  onLoad?: () => void;
 };
 
-const ImgButton: React.FC<Props> = ({ src, alt, onClick, onLoad, ...imgProps }) => {
+const ImgButton: React.FC<Props> = ({ src, alt, onClick, ...imgProps }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
@@ -23,7 +22,7 @@ const ImgButton: React.FC<Props> = ({ src, alt, onClick, onLoad, ...imgProps }) 
         onClick={onClick}
       >
         <img
-          src={src} alt={alt} onLoad={onLoad}
+          src={src} alt={alt}
           {...imgProps}
         />
       </button>
