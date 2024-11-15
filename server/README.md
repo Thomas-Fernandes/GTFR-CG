@@ -13,6 +13,10 @@
   <sup><b>powered by:</b></sup>
 
   <img title="Flask" src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files/flask.svg" width="28px" alt="Flask" />
+  <img title="Pillow" src="https://cdn.fosstodon.org/accounts/avatars/109/325/533/008/309/323/original/6fe5f3db3360b8ff.png" width="28px" alt="PIL" />
+  <img title="Genius API" src="https://images.genius.com/086f5809e96b133dd536982629e5844b.300x300x1.png" width="28px" alt="Genius API" />
+  <img title="Flask-Restx" src="https://avatars.githubusercontent.com/u/59693083?v=4" width="28px" alt="Flask-Restx" />
+  <img title="Swagger" src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files/swagger.svg" width="28px" alt="Swagger" />
   <a href="#top"><img alt="Python version" src="https://img.shields.io/badge/Python-3.11+-blue?logo=python" width="128px" /></a>
 </div>
 
@@ -22,7 +26,8 @@
 
 The back end of **GTFR-CG** allows you to generate content and expose the API endpoints triggering back room operations.  
 It is also the backbone of the application, where all the complex operations are completed; our discreet powerhouse.  
-Discreet, yet verbose: the back end logs all actions and reactions in the terminal, and stores your user statistics.
+Discreet, yet verbose: the back end logs all actions and reactions in the terminal, and stores your user statistics.  
+All of the exposed routes are documented in the Swagger documentation, as well as the data models and the expected responses.
 
 &#xa0;
 
@@ -64,11 +69,11 @@ python launcher.py # will launch the back end of the application
 &nbsp;&nbsp; :bookmark_tabs:&nbsp; **General Information**
 
 - By default, the back end runs locally on port [**8000**](http://localhost:8000). Edit [the code](./src/app.py) to change that.
-  - The API's documentation can be accessed @ [**http://localhost:8000/docs**](http://localhost:8000/docs).
+  - The API's Swagger documentation can be accessed @ [**http://localhost:8000/docs**](http://localhost:8000/docs).
 - The server features a logger that displays the ongoing actions and reactions in the terminal *via* Python.
   - You can choose a severity level for the logger in the `.env` file. Check out [`.env.example`](./.env.example) for more information.
 - Your user statistics are stored here, @ `stats.json`.
-- If you encounter external Python module issues, try running `pip install -r requirements.txt --force-reinstall` for a complete reinstall.
+- If you encounter issues with external Python modules, try running `pip install -r requirements.txt --force-reinstall` for a complete reinstall.
 
 > [!NOTE]
 > **Report a malfunction** or **request a feature** by [**opening an issue**](https://github.com/Thomas-Fernandes/GTFR/issues)!
