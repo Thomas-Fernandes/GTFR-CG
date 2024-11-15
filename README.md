@@ -59,7 +59,7 @@ The application was thought, designed, programmed and crafted by Frenchmen 🇫�
 ## :gear: Requirements
 
 This application was tested on, and designed for **Windows 11** and **Ubuntu 22.04**.  
-All the required back end modules are listed in [the requirements file](./requirements.txt). They will be installed upon launch of the back end.  
+All the required back end modules are listed in [the requirements file](./server/requirements.txt). They will be installed upon launch of the back end.  
 All the required front end software and modules can be installed by running [the installer file](./installer.py) with Python.
 
 > [!CAUTION]
@@ -69,7 +69,7 @@ All the required front end software and modules can be installed by running [the
 
 > [!IMPORTANT]
 > In order for **GTFR-CG**'s lyrics fetch feature to work, you need to declare a `GENIUS_API_TOKEN` variable in the `.env` file at the root of the repository.  
-> Find more information about it by reading through [the tutorial .env file](./.env.example).  
+> Find more information about it by reading through [the tutorial .env file](./server/.env.example).  
 > Without this token, the GTFR-CG application will still run, but the lyrics fetch feature will be disabled.
 
 &#xa0;
@@ -79,7 +79,7 @@ All the required front end software and modules can be installed by running [the
 &nbsp;&nbsp; :clamp:&nbsp; **Build**
 
 ``` bash
-python installer.py # will install back end modules, front end software & modules
+python installer.py # will install back end modules, front end software & modules !! requires **Python 3.11**
 ```
 
 &#xa0;
@@ -89,13 +89,13 @@ python installer.py # will install back end modules, front end software & module
 **Back end:**
 
 ``` bash
-python launcher.py # will check needed modules and install, then launch the application
+cd server/ && python launcher.py # will check needed modules and install, then launch the application
 ```
 
 **Front end:**
 
 ``` bash
-cd front-end/ && npm run dev # will launch the front end of the application
+cd client/ && npm run dev # will launch the front end of the application
 ```
 
 &#xa0;
@@ -104,7 +104,7 @@ cd front-end/ && npm run dev # will launch the front end of the application
 
 - By default, the application runs locally on ports [**8000**](http://localhost:8000) (back) and [**4242**](http://localhost:4242) (front).
   - The API's documentation can be accessed @ [**http://localhost:8000/docs**](http://localhost:8000/docs).
-- The application features 6 major pages:
+- The application features 6 major pages to date:
   - [x] **Home**: the main page, where your statistics are displayed and you can navigate to **Artwork Generation** and **Lyrics**.
   - [x] **Tests** : the unit tests page, to check the application's integrity.
   - [x] **Artwork Generation**: the page where you can generate artwork from a local file or an iTunes search.
@@ -113,7 +113,7 @@ cd front-end/ && npm run dev # will launch the front end of the application
     - [x] **Cards Generation**: the page where cards are generated from the Lyrics text blocks.
 - The application features a [toast notification system](https://web.dev/articles/building/a-toast-component) that will give you feedback upon actions.
 - Most of the application's back end actions and reactions will be logged in the terminal *via* Python.
-  - You can define a minimum severity level in the `.env` file, choosing the logger verbosity's. Check out [`.env.example`](./.env.example) for more information.
+  - You can define a minimum severity level in the `.env` file, choosing the logger verbosity's. Check out [`.env.example`](./server/.env.example) for more information.
 - Your user statistics are stored at the root of the repository in a file named `stats.json`.
 - If you encounter external Python module issues, try running `pip install -r requirements.txt --force-reinstall` for a complete reinstall.
 
@@ -124,33 +124,16 @@ cd front-end/ && npm run dev # will launch the front end of the application
 
 ## :card_file_box: Changelog
 
-- ***[1.0.0]** May 09 2024*: **Hello World!** — Project creation.
-  - ***[1.0.1]** Jun 23 2024*: [**@QuentindiMeo**](https://github.com/QuentindiMeo) joins the project. Project starts. [#001](https://github.com/Thomas-Fernandes/GTFR/pull/1)
-- ***[1.1.0]** Jun 23 2024*: **Welcome** — Project now supports artwork generation from a local file.
-  - ***[1.1.1]** Jun 24 2024*: Project gets a new visual appearance. [#005](https://github.com/Thomas-Fernandes/GTFR/pull/5)
-- ***[1.2.0]** Jun 27 2024*: **Thumbnails** — Project now supports artwork generation from iTunes. [#010](https://github.com/Thomas-Fernandes/GTFR/pull/10)
-  - ***[1.2.1]** Jun 29 2024*: Project now generates thumbnails with 9 possible logo positions. [#022](https://github.com/Thomas-Fernandes/GTFR/pull/22)
-  - ***[1.2.2]** Jul 04 2024*: Project now has a Python logger, navigation, better GitHub QoL. [#046](https://github.com/Thomas-Fernandes/GTFR/pull/46)
-  - ***[1.2.3]** Jul 06 2024*: Project now supports artwork generation without center artwork, has statistics and gets reworked... [#059](https://github.com/Thomas-Fernandes/GTFR/pull/59)
-    - routes are reworked and redirection is implemented
-    - toasts are implemented as a feedback system of web actions
-    - `requirements.txt` and this README are created
-  - ***[1.2.4]** Jul 20 2024*: Project now supports artwork generation from a YouTube link, gets some more reworks. [#086](https://github.com/Thomas-Fernandes/GTFR-CG/pull/86)
-    - a loading spinner now comes alongside action buttons
-    - documentation strings are added to the codebase
-    - the artwork generation page is reworked to welcome YT section and better UX
-    - the logger system is reinforced to log more actions and be customizable
-- ***[1.3.0]** Aug 19 2024*: **Lyrics Fetch** — Project now supports lyrics fetching from Genius and their conversion to lyrics blocks. [#089](https://github.com/Thomas-Fernandes/GTFR-CG/pull/89)
-  - ***[1.3.1]** Aug 19 2024*: Project's front end is fully migrated to **React Typescript with Vite**. [#088](https://github.com/Thomas-Fernandes/GTFR-CG/pull/88)
-  - ***[1.3.2]** Sep 14 2024*: Project now has a unit tests page, better .env handling with a tutorial file. [#092](https://github.com/Thomas-Fernandes/GTFR-CG/pull/92)
-- ***[1.4.0]** Sep 17 2024*: **Lyrics Cards** — Project now supports automatic cards generation from text blocks. [#093](https://github.com/Thomas-Fernandes/GTFR-CG/pull/93)
-  - ***[1.4.1]** Sep 29 2024*: Cards can now be generated manually, improved QoL in card content creation. [#120](https://github.com/Thomas-Fernandes/GTFR-CG/pull/120)
-  - ***[1.4.2]** Oct 24 2024*: The API is now fully documented with Flask-RESTx & Swagger. [#139](https://github.com/Thomas-Fernandes/GTFR-CG/pull/139)
-  - ***[1.4.3]** Oct 26 2024*: Cards can now be generated with full customization and edited in real time. [#140](https://github.com/Thomas-Fernandes/GTFR-CG/pull/140)
-  - ***[1.4.4]** Oct 29 2024*: All major European and Asian fonts are now handled, back end functional logic is reinforced. [#152](https://github.com/Thomas-Fernandes/GTFR-CG/pull/152)
-- ***[1.5.0]** Coming later...*: **Boost!** — Project will see its existing functionalities sharpened. [#???](#card_file_box-changelog)
-- ***[1.6.0]** Coming later...*: **Koh-Lanta** — Project will be unified in an all-in-one application. [#???](#card_file_box-changelog)
+Find a detailed changelog in the [CHANGELOG.md](./CHANGELOG.md) file.
+
 - ***[2.0.0]** Coming later...*: **Endgame** — Project will feature automated video edition with AI sync. [#???](#card_file_box-changelog)
+- ***[1.6.0]** Coming later...*: **Koh-Lanta** — Project will be unified in an all-in-one application. [#???](#card_file_box-changelog)
+- ***[1.5.0]** Nov ?? 2024*: **Boost!** — Project sees its existing codebase, functionalities and looks sharpened. [#155](https://github.com/Thomas-Fernandes/GTFR-CG/pull/155)
+- ***[1.4.0]** Sep 17 2024*: **Lyrics Cards** — Project supports automated cards generation from text blocks. [#093](https://github.com/Thomas-Fernandes/GTFR-CG/pull/93)
+- ***[1.3.0]** Aug 19 2024*: **Lyrics Fetch** — Project supports lyrics fetching and converts them to lyrics blocks. [#089](https://github.com/Thomas-Fernandes/GTFR-CG/pull/89)
+- ***[1.2.0]** Jun 27 2024*: **Thumbnails** — Project supports artwork generation. [#010](https://github.com/Thomas-Fernandes/GTFR/pull/10)
+- ***[1.1.0]** Jun 23 2024*: **Welcome** — Project supports artwork generation from a local file. [#001](https://github.com/Thomas-Fernandes/GTFR/pull/1)
+- ***[1.0.0]** May 09 2024*: **Hello World!** — Project ideation, artwork generation drafting.
 
 <br />
 

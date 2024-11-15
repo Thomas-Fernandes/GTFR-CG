@@ -1,0 +1,12 @@
+#artwork-generation {
+    form#itunes {
+        .itunes-search {
+            width: 33rem;
+
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 5%;
+        }
+    }
+}

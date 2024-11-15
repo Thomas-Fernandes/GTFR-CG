@@ -1,0 +1,39 @@
+#redirect {
+    .board {
+        width: 67%;
+        min-height: 15rem;
+
+        margin: 2% auto 0 auto;
+        padding: 0.75em;
+
+        border: .1rem solid #ddd;
+        border-radius: 1rem;
+        background-color: #ffffff;
+
+        font-style: italic;
+
+        p {
+            margin: auto;
+        }
+
+        .title {
+            margin: 2% auto 0 auto;
+            text-align: center;
+            font-size: larger;
+        }
+
+        .err {
+            font-size: 1em;
+            font-style: normal;
+        }
+
+        .counter {
+            margin: 0 auto 2% auto;
+            flex-direction: row;
+        }
+
+        span#direction {
+            color: #666666;
+        }
+    }
+}

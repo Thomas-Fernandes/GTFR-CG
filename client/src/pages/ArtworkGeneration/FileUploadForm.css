@@ -1,0 +1,5 @@
+#artwork-generation {
+    form#local>div>label {
+        padding-top: .5rem;
+    }
+}

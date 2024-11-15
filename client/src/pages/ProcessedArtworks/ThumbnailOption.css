@@ -1,0 +1,9 @@
+#processed-artworks {
+    .thumbnail-item {
+        img {
+            max-width: 100%;
+            height: auto;
+            cursor: pointer;
+        }
+    }
+}
