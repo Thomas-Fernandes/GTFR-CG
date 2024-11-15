@@ -20,7 +20,7 @@ LOGO_OVERLAYS = []
 for pos in LOGO_POSITIONS:
     overlay_filepath = f"{ASSETS_THUMBNAILS_DIR}{pos}.png"
     if (not path.exists(overlay_filepath)):
-        log.err(f"  Overlay file not found: {overlay_filepath}")
+        log.error(f"  Overlay file not found: {overlay_filepath}")
         raise FileNotFoundError(Err.OVERLAY_NOT_FOUND)
     overlay = Image.open(overlay_filepath)
     LOGO_OVERLAYS.append(overlay)
