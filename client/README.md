@@ -6,7 +6,9 @@
   <a href="https://github.com/Thomas-Fernandes/GTFR-CG/blob/develop/README.md">Main README</a> &#xa0; | &#xa0;
   <a href="https://github.com/Thomas-Fernandes/GTFR-CG/blob/develop/server/README.md">Back end README</a>
 </div>
-<br />
+
+&#xa0;
+
 <div align="center">
   <sup><b>powered by:</b></sup>
 
@@ -30,16 +32,6 @@ All the required front end software and modules can be installed by running [the
 The installer will install **npm**, **node** and the required **node modules**.  
 The front end doesn't use any major utility library, and uses React's built-in features to manage state, routing and requests.
 
-> [!CAUTION]
-> **GTFR-CG**'s back end is written in **Python 3.11**. It is compatible with later versions, but **not with anterior versions**.  
-> You can check your Python version by running `python --version` in your terminal.
-</blockquote>
-
-> [!IMPORTANT]
-> In order for **GTFR-CG**'s lyrics fetch feature to work, you need to declare a `GENIUS_API_TOKEN` variable in the `.env` file at the root of the repository.  
-> Find more information about it by reading through [the tutorial .env file](./.env.example).  
-> Without this token, the GTFR-CG application will still run, but the lyrics fetch feature will be disabled.
-
 &#xa0;
 
 ## :movie_camera: Usage
@@ -47,7 +39,7 @@ The front end doesn't use any major utility library, and uses React's built-in f
 &nbsp;&nbsp; :clamp:&nbsp; **Build**
 
 ``` bash
-python installer.py # will install npm, node and node modules !! requires **Python 3.11**
+python ../installer.py # will install npm, node and node modules !! requires **Python 3.11**
 ```
 
 &#xa0;
@@ -55,22 +47,22 @@ python installer.py # will install npm, node and node modules !! requires **Pyth
 &nbsp;&nbsp; :rocket:&nbsp; **Launch**
 
 ``` bash
-cd client/ && npm run dev # will launch the front end of the application
+npm run dev # will launch the front end of the application
 ```
 
 &#xa0;
 
 &nbsp;&nbsp; :bookmark_tabs:&nbsp; **General Information**
 
-- By default, the front end runs locally on port [**4242**](http://localhost:4242). Edit [the code](https://github.com/Thomas-Fernandes/GTFR-CG/blob/develop/client/src/constants/paths.ts) to change that.
-- The application features 6 pages to date:
+- By default, the front end runs locally on port [**4242**](http://localhost:4242). Edit [the code](./src/constants/paths.ts) to change that.
+- The front end features 6 pages to date:
   - [x] **Home**: the main page, where your statistics are displayed and you can navigate to the other 3 main pages described below.
   - [x] **Artwork Generation**: where you can generate artwork from an iTunes image, a local file or a YouTube video.
     - [x] **Processed Artworks**: where you can download a background image and a YouTube thumbnail.
   - [x] **Lyrics**: where you can fetch lyrics from Genius and convert them to lyrics blocks.
   - [x] **Cards Generation**: where cards are generated, based on the blocks from the Lyrics page.
   - **Tests** (deprecated): the unit tests page, to check the application's integrity.
-- The application features a [toast notification system](https://web.dev/articles/building/a-toast-component) that will give you feedback upon actions.
+- The client features a [toast notification system](https://web.dev/articles/building/a-toast-component) that will give you feedback upon actions.
 - Your user statistics are stored in a file handled [by the back end](https://github.com/Thomas-Fernandes/GTFR-CG/blob/develop/server/README.md).
 
 > [!NOTE]
@@ -80,12 +72,12 @@ cd client/ && npm run dev # will launch the front end of the application
 
 ## :pager: Codebase segments
 
-:file_folder: [***./***](https://github.com/Thomas-Fernandes/GTFR-CG/tree/develop/client): the root folder, where the main configuration files are located  
-:file_folder: [***public/***](https://github.com/Thomas-Fernandes/GTFR-CG/tree/develop/client/public): where the public assets lie, such as the favicon and other icons  
-:file_folder: [***src/common/***](https://github.com/Thomas-Fernandes/GTFR-CG/tree/develop/client/src/common): where the common properties and utilities are located  
-:file_folder: [***src/components/***](https://github.com/Thomas-Fernandes/GTFR-CG/tree/develop/client/src/components): where all the generic components are located  
-:file_folder: [***src/constants/***](https://github.com/Thomas-Fernandes/GTFR-CG/tree/develop/client/src/constants): where the application's constants are located  
-:file_folder: [***src/pages/***](https://github.com/Thomas-Fernandes/GTFR-CG/tree/develop/client/src/pages): where the application's TSX code is located (one folder per page)
+:file_folder: [***./***](https://github.com/Thomas-Fernandes/GTFR-CG/tree/develop/client) : the root folder, where the main configuration files are located  
+:file_folder: [***public/***](https://github.com/Thomas-Fernandes/GTFR-CG/tree/develop/client/public) : where the public assets lie, such as the favicon and other icons  
+:file_folder: [***src/common/***](https://github.com/Thomas-Fernandes/GTFR-CG/tree/develop/client/src/common) : where the common properties and utilities are located  
+:file_folder: [***src/components/***](https://github.com/Thomas-Fernandes/GTFR-CG/tree/develop/client/src/components) : where all the generic components are located  
+:file_folder: [***src/constants/***](https://github.com/Thomas-Fernandes/GTFR-CG/tree/develop/client/src/constants) : where the application's constants are located  
+:file_folder: [***src/pages/***](https://github.com/Thomas-Fernandes/GTFR-CG/tree/develop/client/src/pages) : where the application's TSX code is located (one folder per page)
 
 <br />
 
