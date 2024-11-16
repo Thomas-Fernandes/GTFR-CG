@@ -1,0 +1,20 @@
+#home {
+    .stats-entry {
+        flex-direction: row;
+
+        .stat-title {
+            width: 60%;
+            margin: .5rem 0;
+
+            text-align: center;
+            font-size: larger;
+        }
+
+        .stat-text {
+            margin: auto;
+
+            font-size: 1em;
+            font-style: italic;
+        }
+    }
+}

@@ -1,0 +1,23 @@
+#artwork-generation {
+    form {
+        input[type="submit"] {
+            padding: 1.5rem;
+            margin: 1rem 0;
+
+            &.file {
+                border: .1rem solid #dddddd;
+
+                width: 75%;
+                margin-bottom: 1%;
+            }
+        }
+
+        input[type="text"] {
+            margin: 0;
+        }
+    }
+
+    hr {
+        margin-top: 2rem;
+    }
+}
