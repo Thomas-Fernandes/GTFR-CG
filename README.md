@@ -1,12 +1,26 @@
 <div align="center" id="top">
-    <h1>:scroll: Genius traductions françaises Content Generator :film_strip:</h1>
+  <h1>:scroll: Genius traductions françaises Content Generator :film_strip:</h1>
 </div>
 
 <div align="center">
-    <a href="#memo-description">Description</a> &#xa0; | &#xa0;
-    <a href="#gear-requirements">Requirements</a> &#xa0; | &#xa0;
-    <a href="#movie_camera-usage">Usage</a> &#xa0; | &#xa0;
-    <a href="#card_file_box-changelog">Changelog</a>
+  <a href="#memo-description">Description</a> &#xa0; | &#xa0;
+  <a href="#gear-requirements">Requirements</a> &#xa0; | &#xa0;
+  <a href="#movie_camera-usage--general-information">Usage & General Information</a> &#xa0; | &#xa0;
+  <a href="#card_file_box-project-roadmap">Project Roadmap</a>
+</div>
+
+&#xa0;
+
+<div align="center">
+  <a href="#top"><img alt="Python version" src="https://img.shields.io/badge/Python-3.11+-blue?logo=python" /></a>
+  <a href="#card_file_box-changelog"><img alt="Last version released" src="https://img.shields.io/badge/release-v1.5.0-blue?logo=windows-terminal" /></a>
+  <a href="https://github.com/Thomas-Fernandes/GTFR/commits/main"><img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/Thomas-Fernandes/GTFR?color=blueviolet&logo=clarifai" /></a>
+</div>
+<div align="center">
+  <a href="https://github.com/Thomas-Fernandes/GTFR/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/Thomas-Fernandes/GTFR?color=yellow&logo=github" /></a>
+  <a href="https://github.com/Thomas-Fernandes/GTFR/issues"><img alt="GitHub issues" src="https://img.shields.io/github/issues/Thomas-Fernandes/GTFR?color=forestgreen&logo=target" /></a>
+  <a href="https://github.com/Thomas-Fernandes/GTFR/graphs/contributors"><img alt="GitHub contributors" src="https://img.shields.io/github/contributors/Thomas-Fernandes/GTFR?color=red&logo=stackedit" /></a>
+  <a href="#top"><img alt="GitHub repository size" src="https://img.shields.io/github/languages/code-size/Thomas-Fernandes/GTFR?color=blue&logo=frontify" /></a>
 </div>
 
 &#xa0;
@@ -16,27 +30,13 @@
 
   <img title="Python" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/1028px-Python-logo-notext.svg.png" width="28px" alt="Python" />
   <img title="Flask" src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files/flask.svg" width="28px" alt="Flask" />
-  <img title="React.js" src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files/react.svg" width="28px" alt="React" />
+  <img title="TypeScript" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Typescript_logo_2020.svg/2048px-Typescript_logo_2020.svg.png" width="28px" alt="TypeScript" />
   <img title="Vite" src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files/vite.svg" width="28px" alt="Vite" />
-  <img title="TypeScript" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Typescript_logo_2020.svg/2048px-Typescript_logo_2020.svg.png" width="28px" alt="TScript" />
+  <img title="React.js" src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files/react.svg" width="28px" alt="React" />
   &nbsp;<sup><b>| formerly:</b></sup>&nbsp;
   <img title="GIMP" src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files/gimp.svg" width="28px" alt="GIMP" />
-  <img title="Adobe Premiere Pro" src="https://upload.wikimedia.org/wikipedia/commons/4/40/Adobe_Premiere_Pro_CC_icon.svg" width="28px" alt="Premiere" />
-
-</div>
-
-&#xa0;
-
-<div align="center">
-    <a href="#top"><img alt="Python version" src="https://img.shields.io/badge/Python-3.11+-blue?logo=python" /></a>
-    <a href="#card_file_box-changelog"><img alt="Last version released" src="https://img.shields.io/badge/release-v1.4.4-blue?logo=windows-terminal" /></a>
-    <a href="https://github.com/Thomas-Fernandes/GTFR/commits/main"><img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/Thomas-Fernandes/GTFR?color=blueviolet&logo=clarifai" /></a>
-</div>
-<div align="center">
-    <a href="https://github.com/Thomas-Fernandes/GTFR/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/Thomas-Fernandes/GTFR?color=yellow&logo=github" /></a>
-    <a href="https://github.com/Thomas-Fernandes/GTFR/issues"><img alt="GitHub issues" src="https://img.shields.io/github/issues/Thomas-Fernandes/GTFR?color=forestgreen&logo=target" /></a>
-    <a href="https://github.com/Thomas-Fernandes/GTFR/graphs/contributors"><img alt="GitHub contributors" src="https://img.shields.io/github/contributors/Thomas-Fernandes/GTFR?color=red&logo=stackedit" /></a>
-    <a href="#top"><img alt="GitHub repository size" src="https://img.shields.io/github/languages/code-size/Thomas-Fernandes/GTFR?color=blue&logo=frontify" /></a>
+  <img title="sgnarly.me" src="https://www.svgrepo.com/show/504384/genius.svg" width="28px" alt="sgnarly" />
+  <img title="Adobe Premiere Pro" src="https://upload.wikimedia.org/wikipedia/commons/4/40/Adobe_Premiere_Pro_CC_icon.svg" width="28px" alt="PremierePro" />
 </div>
 
 &#xa0;
@@ -59,8 +59,6 @@ The application was thought, designed, programmed and crafted by Frenchmen 🇫�
 ## :gear: Requirements
 
 This application was tested on, and designed for **Windows 11** and **Ubuntu 22.04**.  
-All the required back end modules are listed in [the requirements file](./server/requirements.txt). They will be installed upon launch of the back end.  
-All the required front end software and modules can be installed by running [the installer file](./installer.py) with Python.
 
 > [!CAUTION]
 > **GTFR-CG**'s back end is written in **Python 3.11**. It is compatible with later versions, but **not with anterior versions**.  
@@ -68,63 +66,26 @@ All the required front end software and modules can be installed by running [the
 </blockquote>
 
 > [!IMPORTANT]
-> In order for **GTFR-CG**'s lyrics fetch feature to work, you need to declare a `GENIUS_API_TOKEN` variable in the `.env` file at the root of the repository.  
+> In order for **GTFR-CG**'s lyrics fetch feature to work, you need to declare a `GENIUS_API_TOKEN` variable in the `.env` file at the root of the server.  
 > Find more information about it by reading through [the tutorial .env file](./server/.env.example).  
 > Without this token, the GTFR-CG application will still run, but the lyrics fetch feature will be disabled.
 
 &#xa0;
 
-## :movie_camera: Usage
+## :movie_camera: Usage & General Information
 
-&nbsp;&nbsp; :clamp:&nbsp; **Build**
-
-``` bash
-python installer.py # will install back end modules, front end software & modules !! requires **Python 3.11**
-```
-
-&#xa0;
-
-&nbsp;&nbsp; :rocket:&nbsp; **Launch**
-
-**Back end:**
-
-``` bash
-cd server/ && python launcher.py # will check needed modules and install, then launch the application
-```
-
-**Front end:**
-
-``` bash
-cd client/ && npm run dev # will launch the front end of the application
-```
-
-&#xa0;
-
-&nbsp;&nbsp; :bookmark_tabs:&nbsp; **General Information**
-
-- By default, the application runs locally on ports [**8000**](http://localhost:8000) (back) and [**4242**](http://localhost:4242) (front).
-  - The API's documentation can be accessed @ [**http://localhost:8000/docs**](http://localhost:8000/docs).
-- The application features 6 major pages to date:
-  - [x] **Home**: the main page, where your statistics are displayed and you can navigate to **Artwork Generation** and **Lyrics**.
-  - [x] **Tests** : the unit tests page, to check the application's integrity.
-  - [x] **Artwork Generation**: the page where you can generate artwork from a local file or an iTunes search.
-    - [x] **Processed Images**: the page where you can download a background image and a YouTube thumbnail.
-  - [x] **Lyrics**: the page where you can fetch lyrics from Genius and convert them to lyrics blocks.
-    - [x] **Cards Generation**: the page where cards are generated from the Lyrics text blocks.
-- The application features a [toast notification system](https://web.dev/articles/building/a-toast-component) that will give you feedback upon actions.
-- Most of the application's back end actions and reactions will be logged in the terminal *via* Python.
-  - You can define a minimum severity level in the `.env` file, choosing the logger verbosity's. Check out [`.env.example`](./server/.env.example) for more information.
-- Your user statistics are stored at the root of the repository in a file named `stats.json`.
-- If you encounter external Python module issues, try running `pip install -r requirements.txt --force-reinstall` for a complete reinstall.
+<h1 align="center">
+  <a href="./client">Front</a> &#xa0; | &#xa0; <a href="./server">Back</a>
+</h1>
 
 > [!NOTE]
 > **Report** any kind of malfunction or **request a feature** by [**opening an issue**](https://github.com/Thomas-Fernandes/GTFR/issues)!
 
 &#xa0;
 
-## :card_file_box: Changelog
+## :card_file_box: Project Roadmap
 
-Find a detailed changelog in the [CHANGELOG.md](./CHANGELOG.md) file.
+Find detailed versioning in the [CHANGELOG.md](./CHANGELOG.md) file.
 
 - ***[2.0.0]** Coming later...*: **Endgame** — Project will feature automated video edition with AI sync. [#???](#card_file_box-changelog)
 - ***[1.6.0]** Coming later...*: **Koh-Lanta** — Project will be unified in an all-in-one application. [#???](#card_file_box-changelog)
