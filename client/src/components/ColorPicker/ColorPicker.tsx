@@ -48,7 +48,7 @@ const ColorPicker: React.FC<Props> = ({ id, latest, label, labelClassName, sette
 
   return (
     <div id={id} className="color-picker flex-row"> {/* flex-row stays for the color result label height calculation */}
-      <div className={`flexbox ${selectedColor === "" ? "g-p5" : ""}`}>
+      <div className={`flexbox ${selectedColor === "" ? "gap-2" : ""}`}>
         { selectedColor === ""
         ? <><p className={`m-0 italic ${label ? (labelClassName ?? "") : "hidden"}`}>
             {label}
@@ -73,12 +73,12 @@ const ColorPicker: React.FC<Props> = ({ id, latest, label, labelClassName, sette
             {/* hidden; is here so that the div keeps the same width when a color is picked */}
             {label}
           </p>
-          <div className="flex-row g-p5">
+          <div className="flex-row gap-2">
             <p
               className="color-picker--color"
               style={{
                 backgroundColor: selectedColor,
-                color: calculateLuminance(selectedColor) > 128 ? "#000000" : "#ffffff"
+                color: calculateLuminance(selectedColor) > 128 ? "#000000" : "white"
               }}
             >
               {selectedColor}

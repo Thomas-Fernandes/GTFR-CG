@@ -31,16 +31,16 @@ const CardEditModal = (): JSX.Element => {
       onClick={() => handleOverlayClick({ clickedInsideModalRef, closeModal })}
     >
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <h3 className="mv-0">
+        <h3 className="my-0">
           {`Edit Lyrics of Card ${cardIdPadding}${currentCard?.id}`}
         </h3>
 
         <AutoResizeTextarea title={"card-edit"} disabled={isModalSaving}
           value={newLyrics} onChange={(e) => setNewLyrics(e.target.value)}
-          className="w-100"
+          className="w-full"
         />
 
-        <div className="modal-actions flex-row g-1">
+        <div className="modal-actions flex-row gap-4">
           <button type="button" disabled={isModalSaving}
             onClick={() => currentCard && handleSaveModal(currentCard, isModalSaving,
               { generationProps, newLyrics, generateSingleCardProps: { currentCard, setCards, setIsModalSaving, closeModal } }

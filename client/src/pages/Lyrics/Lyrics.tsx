@@ -81,7 +81,7 @@ const Lyrics = (): JSX.Element => {
 
       <h1>{Title.Lyrics}</h1>
 
-      <button type="button" className="last-generation mv-0"
+      <button type="button" className="last-generation my-0"
         onClick={() => handleLoadLastContents({lastContents, setPageMetadata, setLyricsParts, setDismissedParts})}
       >
         {"Load last contents"}
@@ -99,7 +99,7 @@ const Lyrics = (): JSX.Element => {
 
         { !isFetching && lyricsParts.length > 0 &&
           <>
-            <hr className="mv-2" />
+            <hr className="my-8" />
 
             <LyricsPartsForm lyricsParts={lyricsParts} />
           </>

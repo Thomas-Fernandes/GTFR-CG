@@ -1,6 +1,6 @@
 .selector {
     cursor: pointer;
-    background: #ffff64;
+    background: var(--yellow-genius);
 
     padding: .4rem 1.6rem;
 

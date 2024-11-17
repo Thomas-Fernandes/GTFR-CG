@@ -12,13 +12,13 @@ const LyricsPart: React.FC<LyricsPartProps> = ({ part, idx }): JSX.Element => {
   return (
     <div key={"part_" + idx} className="lyrics-part">
       { !isManual && dismissedParts.has(idx)
-      ? <div className="lyrics-part--header flexbox flex-row g-2">
+      ? <div className="lyrics-part--header flexbox flex-row gap-8">
           <button type="button" className="restore" onClick={() => handleRestorePart(dismissedParts, idx, setDismissedParts)}>
             {`Restore ${part.section}`}
           </button>
         </div>
       : <>
-        <div className="lyrics-part--header flexbox flex-row g-2">
+        <div className="lyrics-part--header flexbox flex-row gap-8">
           <button type="button" disabled={isManual}
             onClick={() => handleSetDismissedParts(dismissedParts, idx, setDismissedParts)}
             className="red"
@@ -38,7 +38,7 @@ const LyricsPart: React.FC<LyricsPartProps> = ({ part, idx }): JSX.Element => {
         />
       </>}
 
-      <hr className="w-66 mv-0" />
+      <hr className="w-66 my-0" />
     </div>
   );
 };

@@ -24,11 +24,11 @@ const ItunesImageResult: React.FC<ItunesImageResultProps> = ({ item, itemId }): 
         onClick={() => handleSelectItunesImage(item, itemId, { isProcessingLoading, setIsProcessingLoading, navigate })}
         className="result-image"
       />
-      <p className="result-text centered bold italic">
+      <p className="result-text centered font-bold italic">
         {itemLabel}
       </p>
 
-      <div className="mt-p5" id={SpinnerId.ItunesResult + itemId.toString()} />
+      <div className="mt-2" id={SpinnerId.ItunesResult + itemId.toString()} />
     </div>
   );
 };

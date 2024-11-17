@@ -82,7 +82,7 @@ const CardsGeneration = (): JSX.Element => {
 
       { cardPaths.length > 0 &&
         <>
-          <hr className="mv-1" />
+          <hr className="my-4" />
 
           <ZipDownloadButton id="download-all" paths={cardPaths} output={CARDS_ZIP_FILENAME} />
           <CardsGenerationContext.Provider value={contextValue}>

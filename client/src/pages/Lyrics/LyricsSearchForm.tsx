@@ -11,7 +11,7 @@ const LyricsSearchForm = (): JSX.Element => {
     <form className="search-form flexbox"
       onSubmit={(e) => handleLyricsSearchSubmit(e, {artist, songName}, {isFetching, setIsFetching, setLyricsParts, setPageMetadata, setDismissedParts})}
     >
-      <div id="search-bar" className="flex-row g-1">
+      <div id="search-bar" className="flex-row gap-4">
         <input required
           type="text" name="artist" placeholder="Enter artist name"
           onChange={(e) => setArtist(e.target.value)}

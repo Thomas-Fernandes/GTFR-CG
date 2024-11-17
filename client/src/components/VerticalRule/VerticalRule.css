@@ -1,5 +1,5 @@
 .vertical-rule {
-    border-top: 4vw solid #000000;
+    border-top: 4vw solid black;
     height: 100%;
-    box-shadow: 0 0 .1rem .01rem #000000;
+    box-shadow: 0 0 .1rem .01rem black;
 }
