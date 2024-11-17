@@ -2,7 +2,7 @@ import { ComponentPropsWithoutRef, JSX } from "react";
 
 import { StateSetter } from "@/common/types";
 
-import "./Selector.css";
+import "./Selector.scss";
 
 export type Option = {
   label: string;

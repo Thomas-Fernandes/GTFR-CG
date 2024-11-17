@@ -1,3 +1,12 @@
+$light-green: #00ff00;
+$dark-green: #007f00;
+$dark-yellow: #7f7f00;
+$dark-red: #7f0000;
+
+$light-green-progress: #00ff004d;
+$dark-yellow-progress: #ffff004d;
+$dark-red-progress: #ff00004d;
+
 #toast-container {
     position: fixed;
     top: 2%;
@@ -10,7 +19,7 @@
         margin-top: .5rem;
         padding: .8rem;
 
-        background-color: #007f00;
+        background-color: $dark-green;
         border-radius: .2rem;
         opacity: 0;
 
@@ -25,8 +34,8 @@
         &.show { opacity: 1; transform: translateX(0);    }
         &.hide { opacity: 0; transform: translateX(100%); }
 
-        &.warn  { background-color: #7f7f00; }
-        &.error { background-color: #7f0000; }
+        &.warn  { background-color: $dark-yellow; }
+        &.error { background-color: $dark-red; }
 
         .toast-progress {
             position: absolute;
@@ -36,22 +45,22 @@
             height: .2rem;
             width: 100%;
 
-            background-color: #00ff004d;
+            background-color: $light-green-progress;
             border-radius: .2rem;
 
-            &.warn  { background-color: #ffff004d; }
-            &.error { background-color: #ff00004d; }
+            &.warn  { background-color: $dark-yellow-progress; }
+            &.error { background-color: $dark-red-progress; }
 
             .toast-progress-fill {
                 height: 100%;
 
-                background-color: #00ff00;
+                background-color: $light-green;
                 border-radius: .2rem;
 
                 transition: width linear;
 
-                &.warn  { background-color: #ffff00; }
-                &.error { background-color: #ff0000; }
+                &.warn  { background-color: yellow; }
+                &.error { background-color: red; }
             }
         }
     }

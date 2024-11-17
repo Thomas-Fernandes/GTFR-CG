@@ -57,7 +57,7 @@ const ColorPicker: React.FC<Props> = ({ id, latest, label, labelClassName, sette
             {/* if input had class 'hidden', element not found so picking tab is displayed at the top-left corner of the window */}
             <input
               type="color" name="color-picker" id="color-picker" className="hidden-h"
-              value={selectedColor !== "" ? selectedColor : "#000000"} onChange={handleColorChange}
+              value={selectedColor !== "" ? selectedColor : "black"} onChange={handleColorChange}
             />
             <label htmlFor="color-picker" className="color-picker--img">
               <img src="/img/color-dropper-42.png" alt="color-picker" />
@@ -78,7 +78,7 @@ const ColorPicker: React.FC<Props> = ({ id, latest, label, labelClassName, sette
               className="color-picker--color"
               style={{
                 backgroundColor: selectedColor,
-                color: calculateLuminance(selectedColor) > 128 ? "#000000" : "white"
+                color: calculateLuminance(selectedColor) > 128 ? "black" : "white"
               }}
             >
               {selectedColor}

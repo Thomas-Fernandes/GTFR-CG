@@ -11,7 +11,7 @@ import ProcessedArtworks from "@/pages/ProcessedArtworks/ProcessedArtworks";
 import Redirect from "@/pages/Redirect/Redirect";
 import Tests from "@/pages/Tests/Tests";
 
-import "./App.css";
+import "./App.scss";
 
 const App = (): JSX.Element => {
   return (

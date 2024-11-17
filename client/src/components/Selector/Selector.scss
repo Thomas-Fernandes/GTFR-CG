@@ -1,6 +1,8 @@
+@use "@/variables" as var;
+
 .selector {
     cursor: pointer;
-    background: var(--yellow-genius);
+    background: var.$yellow-genius;
 
     padding: .4rem 1.6rem;
 

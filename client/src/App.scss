@@ -1,3 +1,5 @@
+@use "./variables" as var;
+
 * {
     padding: 0;
     box-sizing: border-box;
@@ -14,23 +16,8 @@ head {
     display: none;
 }
 
-:root {
-    --yellow-genius: #ffff64;
-    --blue-french: #002654;
-
-    --blue-button: #007bff;
-    --blue-button-hover: #0056b3;
-    --navbutton-hover: #008cff;
-    --button-border: #00000010;
-    --button-shadow: #0000007f;
-
-    --text-green: #007f00;
-    --text-yellow: #7f7f00;
-    --text-red: #7f0000;
-}
-
 body {
-    background: linear-gradient(to right, var(--yellow-genius), var(--blue-french));
+    background: linear-gradient(to right, var.$yellow-genius, var.$blue-french);
     height: 100%;
 }
 
@@ -44,7 +31,7 @@ div.navbar {
     justify-content: space-between;
 
     button:hover {
-        background-color: var(--navbutton-hover);
+        background-color: var.$navbutton-hover;
     }
 }
 
@@ -61,7 +48,7 @@ div.spinner-container {
         display: inline-block;
 
         border-radius: 50%;
-        border-top: .2rem solid var(--yellow-genius);
+        border-top: .2rem solid var.$yellow-genius;
         border-right: .2rem solid transparent;
         box-sizing: border-box;
 
@@ -78,7 +65,7 @@ div.spinner-container {
             height: 2.4rem;
 
             border-radius: 50%;
-            border-bottom: .2rem solid var(--blue-french);
+            border-bottom: .2rem solid var.$blue-french;
             border-left: .2rem solid transparent;
         }
 
@@ -141,9 +128,9 @@ button {
     cursor: pointer;
 
     color: white;
-    background-color: var(--blue-button);
-    border: .1rem solid var(--button-border);
-    box-shadow: 0 0 .5rem var(--button-shadow);
+    background-color: var.$blue-button;
+    border: .1rem solid var.$button-border;
+    box-shadow: 0 0 .5rem var.$button-shadow;
     border-radius: .4rem;
 
     font-size: 1.4rem;
@@ -178,7 +165,7 @@ button {
     }
 
     &:hover {
-        background-color: var(--blue-button-hover);
+        background-color: var.$blue-button-hover;
 
         span.left  { padding-left:  .75rem; }
         span.right { padding-right: .75rem; }
@@ -200,14 +187,14 @@ a.button, input.button {
     margin-top: 1rem;
     padding: .5rem 0;
 
-    background-color: var(--blue-button);
+    background-color: var.$blue-button;
     color: white;
     border: none;
 
     text-decoration: none; /* remove underline */
 
     &:hover {
-        background-color: var(--blue-button-hover);
+        background-color: var.$blue-button-hover;
         transition: 0.3s;
         cursor: pointer;
     }
@@ -223,22 +210,22 @@ input.action-button {
     padding: 1rem;
     align-self: center;
 
-    border: .1rem solid var(--button-border);
-    box-shadow: 0 0 .5rem var(--button-shadow);
+    border: .1rem solid var.$button-border;
+    box-shadow: 0 0 .5rem var.$button-shadow;
     border-radius: .4rem;
 
     font-size: 1.4rem;
     font-weight: bold;
     letter-spacing: 0.3rem;
 
-    background-color: var(--yellow-genius);
+    background-color: var.$yellow-genius;
     color: black;
 
     cursor: pointer;
     transition: all 0.3s;
 
     &:hover {
-        background-color: var(--blue-french);
+        background-color: var.$blue-french;
         color: white;
     }
 }
@@ -268,7 +255,7 @@ input[type="file"] {
         border: none;
         border-radius: 0.2rem;
 
-        background: var(--blue-button);
+        background: var.$blue-button;
         color: white;
     }
 }
@@ -286,6 +273,6 @@ input[type="file"] {
     padding-left: .5rem;
 }
 
-.t-green { color: var(--text-green); }
-.t-yellow { color: var(--text-yellow); }
-.t-red { color: var(--text-red); }
+.t-green { color: var.$text-green; }
+.t-yellow { color: var.$text-yellow; }
+.t-red { color: var.$text-red; }

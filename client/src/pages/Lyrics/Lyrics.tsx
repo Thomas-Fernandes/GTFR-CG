@@ -64,7 +64,7 @@ const Lyrics = (): JSX.Element => {
       setIsGeniusTokenSet(true);
 
       const latestCardGeneration = sessionStorage.getItem(SessionStorage.LatestCardGeneration);
-      setLastContents(JSON.parse(latestCardGeneration ?? "{{}, [], [], []}"));
+      setLastContents(JSON.parse(latestCardGeneration ?? "{{}, [], []}"));
     });
   });
 
