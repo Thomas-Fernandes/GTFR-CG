@@ -22,6 +22,7 @@ const ItunesImageResult: React.FC<ItunesImageResultProps> = ({ item, itemId }): 
         src={item.artworkUrl100} alt={resultLabel}
         onLoad={() => setItemLabel(`${item.artistName} - ${resultLabel}`)}
         onClick={() => handleSelectItunesImage(item, itemId, { isProcessingLoading, setIsProcessingLoading, navigate })}
+        overlayText={"Use this image"}
         className="result-image"
       />
       <p className="result-text centered font-bold italic">

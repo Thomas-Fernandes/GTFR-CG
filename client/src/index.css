@@ -263,6 +263,7 @@ progress { vertical-align: baseline; }
 */
 [type="search"] {
   -webkit-appearance: textfield;
+  appearance: textfield;
   outline-offset: -2px;
 }
 
@@ -358,8 +359,6 @@ img, video {
 h1, h2, h3, h4, h5, h6 {
   font-weight: revert; /* screw you, Tailwind */
 }
-
-.m-0 { margin: 0px; }
 
 .block { display: block; }
 .contents { display: contents; }

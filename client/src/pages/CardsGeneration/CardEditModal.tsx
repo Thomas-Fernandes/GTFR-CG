@@ -37,7 +37,7 @@ const CardEditModal = (): JSX.Element => {
 
         <AutoResizeTextarea title={"card-edit"} disabled={isModalSaving}
           value={newLyrics} onChange={(e) => setNewLyrics(e.target.value)}
-          className="w-full"
+          className="!w-full"
         />
 
         <div className="modal-actions flex-row gap-4">

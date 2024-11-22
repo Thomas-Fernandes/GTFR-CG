@@ -3,9 +3,18 @@
         border: none;
         background: none;
         cursor: pointer;
+        padding: 0;
+
+        &:hover {
+            padding: .33rem;
+        }
 
         img {
             display: block;
+
+            &:hover {
+                filter: brightness(0.8);
+            }
         }
     }
 }
