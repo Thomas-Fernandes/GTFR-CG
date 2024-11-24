@@ -32,6 +32,7 @@ export const sendToast = (
   toast.className = "toast " + type.trim().toLowerCase();
   toast.innerHTML = convertToHtmlMessage(message);
 
+  /* FIXME for some reason changing the className's naming kind of breaks it? so I can't sass-additive-name it?? */
   const progressBar = document.createElement("div");
   progressBar.className = "toast-progress " + type.trim().toLowerCase();
   toast.appendChild(progressBar);

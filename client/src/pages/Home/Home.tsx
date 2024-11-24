@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import { useTitle } from "@/common/hooks/useTitle";
 
+import DarkModeToggle from "@/components/DarkModeToggle/DarkModeToggle";
 import { NavButtonSide } from "@/components/NavButton/constants";
 import NavButton from "@/components/NavButton/NavButton";
 import ToastContainer from "@/components/ToastContainer/ToastContainer";
@@ -53,6 +54,8 @@ const Home = (): JSX.Element => {
     <div id="home">
       <ToastContainer />
       <TopBotSpacer />
+
+      <DarkModeToggle />
 
       <h1>{Title.Home}</h1>
 

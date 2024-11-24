@@ -1,4 +1,5 @@
-@use "./variables" as var;
+@use "./variables" as *;
+@use "./theme" as *;
 
 * {
     padding: 0;
@@ -12,13 +13,16 @@
     font-size: 1.1rem;
     letter-spacing: 0.08rem;
 }
-head {
-    display: none;
-}
+head { display: none; }
 
-body {
-    background: linear-gradient(to right, var.$yellow-genius, var.$blue-french);
-    height: 100%;
+html {
+    transition: background-color 0.3s ease;
+
+    @include apply-theme($dark-theme);
+
+    &[data-theme="light"] {
+        @include apply-theme($light-theme);
+    }
 }
 
 div.navbar {
@@ -31,7 +35,7 @@ div.navbar {
     justify-content: space-between;
 
     button:hover {
-        background-color: var.$navbutton-hover;
+        background-color: $navbutton-hover;
     }
 }
 
@@ -48,7 +52,7 @@ div.spinner-container {
         display: inline-block;
 
         border-radius: 50%;
-        border-top: .2rem solid var.$yellow-genius;
+        border-top: .2rem solid $yellow-genius;
         border-right: .2rem solid transparent;
         box-sizing: border-box;
 
@@ -65,7 +69,7 @@ div.spinner-container {
             height: 2.4rem;
 
             border-radius: 50%;
-            border-bottom: .2rem solid var.$blue-french;
+            border-bottom: .2rem solid $blue-french;
             border-left: .2rem solid transparent;
         }
 
@@ -128,9 +132,9 @@ button {
     cursor: pointer;
 
     color: white;
-    background-color: var.$blue-button;
-    border: .1rem solid var.$button-border;
-    box-shadow: 0 0 .5rem var.$button-shadow;
+    background-color: $blue-button;
+    border: .1rem solid $button-border;
+    box-shadow: 0 0 .5rem $button-shadow;
     border-radius: .4rem;
 
     font-size: 1.4rem;
@@ -165,7 +169,7 @@ button {
     }
 
     &:hover {
-        background-color: var.$blue-button-hover;
+        background-color: $blue-button-hover;
 
         span.left  { padding-left:  .75rem; }
         span.right { padding-right: .75rem; }
@@ -187,14 +191,14 @@ a.button, input.button {
     margin-top: 1rem;
     padding: .5rem 0;
 
-    background-color: var.$blue-button;
+    background-color: $blue-button;
     color: white;
     border: none;
 
     text-decoration: none; /* remove underline */
 
     &:hover {
-        background-color: var.$blue-button-hover;
+        background-color: $blue-button-hover;
         transition: 0.3s;
         cursor: pointer;
     }
@@ -210,22 +214,22 @@ input.action-button {
     padding: 1rem;
     align-self: center;
 
-    border: .1rem solid var.$button-border;
-    box-shadow: 0 0 .5rem var.$button-shadow;
+    border: .1rem solid $button-border;
+    box-shadow: 0 0 .5rem $button-shadow;
     border-radius: .4rem;
 
     font-size: 1.4rem;
     font-weight: bold;
     letter-spacing: 0.3rem;
 
-    background-color: var.$yellow-genius;
+    background-color: $yellow-genius;
     color: black;
 
     cursor: pointer;
     transition: all 0.3s;
 
     &:hover {
-        background-color: var.$blue-french;
+        background-color: $blue-french;
         color: white;
     }
 }
@@ -255,7 +259,7 @@ input[type="file"] {
         border: none;
         border-radius: 0.2rem;
 
-        background: var.$blue-button;
+        background: $blue-button;
         color: white;
     }
 }
@@ -273,6 +277,6 @@ input[type="file"] {
     padding-left: .5rem;
 }
 
-.t-green { color: var.$text-green; }
-.t-yellow { color: var.$text-yellow; }
-.t-red { color: var.$text-red; }
+.t-green { color: $text-green; }
+.t-yellow { color: $text-yellow; }
+.t-red { color: $text-red; }

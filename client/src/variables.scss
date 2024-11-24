@@ -10,3 +10,11 @@ $button-shadow: #0000007f;
 $text-green: #007f00;
 $text-yellow: #7f7f00;
 $text-red: #7f0000;
+
+$light-theme: (
+    background-color: linear-gradient(to right, $yellow-genius, $blue-french),
+);
+
+$dark-theme: (
+    background-color: linear-gradient(to left, $yellow-genius, $blue-french),
+);
