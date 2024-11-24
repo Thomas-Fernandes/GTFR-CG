@@ -1,8 +1,10 @@
+@use "sass:map";
+
 @use "@/variables" as *;
 
 .selector {
     cursor: pointer;
-    background: $yellow-genius;
+    background: map.get($primary-yellow, full);
 
     padding: .4rem 1.6rem;
 

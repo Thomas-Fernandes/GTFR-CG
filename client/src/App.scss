@@ -1,3 +1,5 @@
+@use "sass:map";
+
 @use "./variables" as *;
 @use "./theme" as *;
 
@@ -52,7 +54,7 @@ div.spinner-container {
         display: inline-block;
 
         border-radius: 50%;
-        border-top: .2rem solid $yellow-genius;
+        border-top: .2rem solid map.get($primary-yellow, full);
         border-right: .2rem solid transparent;
         box-sizing: border-box;
 
@@ -69,7 +71,7 @@ div.spinner-container {
             height: 2.4rem;
 
             border-radius: 50%;
-            border-bottom: .2rem solid $blue-french;
+            border-bottom: .2rem solid map.get($primary-blue, full);
             border-left: .2rem solid transparent;
         }
 
@@ -98,7 +100,6 @@ input[type="text"],
 
 h1 {
     font-family: Helvetica, sans-serif;
-    font-size: 3.5rem;
     margin: 2% 0 2% 0;
     font-style: italic;
     letter-spacing: 0;
@@ -222,14 +223,14 @@ input.action-button {
     font-weight: bold;
     letter-spacing: 0.3rem;
 
-    background-color: $yellow-genius;
+    background-color: map.get($primary-yellow, full);
     color: black;
 
     cursor: pointer;
     transition: all 0.3s;
 
     &:hover {
-        background-color: $blue-french;
+        background-color: map.get($primary-blue, full);
         color: white;
     }
 }

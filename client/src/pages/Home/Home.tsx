@@ -76,7 +76,7 @@ const Home = (): JSX.Element => {
       </div>
 
       <div className="hidden"> {/* avoid unused variable */}
-        <p>Genius Token: '{ geniusToken }'</p>
+        <p>{`Genius Token: '${geniusToken}'`}</p>
       </div>
 
       <TopBotSpacer />

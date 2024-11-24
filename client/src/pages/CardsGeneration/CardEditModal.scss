@@ -5,7 +5,7 @@
     background-color: rgba(0, 0, 0, 0.5); /* dimmed... */
     backdrop-filter: blur(.25rem); /* and blurred background around overlay */
 
-    z-index: 9999;
+    z-index: 999;
 
     &--content {
       position: relative;

@@ -1,5 +1,11 @@
-$yellow-genius: #ffff64;
-$blue-french: #002654;
+@use "sass:map";
+
+$primary-yellow: (full: #ffff64, /* Genius yellow */ half: #ffff647f, quarter: #ffff643f);
+$secondary-yellow: (full: #e0e462, half: #e0e4627f, quarter: #e0e4623f);
+$ternary-yellow: (full: #c0c960, half: #c0c9607f, quarter: #c0c9603f);
+$ternary-blue: (full: #405d58, half: #405d587f, quarter: #405d583f);
+$secondary-blue: (full: #204256, half: #2042567f, quarter: #2042563f);
+$primary-blue: (full: #002654, /* French flag blue */ half: #0026547f, quarter: #0026543f);
 
 $blue-button: #007bff;
 $blue-button-hover: #0056b3;
@@ -12,9 +18,9 @@ $text-yellow: #7f7f00;
 $text-red: #7f0000;
 
 $light-theme: (
-    background-color: linear-gradient(to right, $yellow-genius, $blue-french),
+    background-color: linear-gradient(to right, map.get($primary-yellow, full), map.get($primary-blue, full)),
 );
 
 $dark-theme: (
-    background-color: linear-gradient(to left, $yellow-genius, $blue-french),
+    background-color: linear-gradient(to left, map.get($primary-yellow, full), map.get($primary-blue, full)),
 );
