@@ -1,0 +1,15 @@
+@use "sass:map";
+
+@use "./variables" as *;
+
+@mixin apply-theme($theme-map) {
+    background: map.get($theme-map, background-color) !important;
+}
+
+$light-theme: (
+    background-color: linear-gradient(to right, map.get($primary-yellow, full), map.get($primary-blue, full)),
+);
+
+$dark-theme: (
+    background-color: linear-gradient(to left, map.get($primary-yellow, full), map.get($primary-blue, full)),
+);

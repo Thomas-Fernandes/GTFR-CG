@@ -1,5 +1,0 @@
-@use "sass:map";
-
-@mixin apply-theme($theme-map) {
-    background: map.get($theme-map, background-color) !important;
-}

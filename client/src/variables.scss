@@ -1,5 +1,3 @@
-@use "sass:map";
-
 $primary-yellow: (full: #ffff64, /* Genius yellow */ half: #ffff647f, quarter: #ffff643f);
 $secondary-yellow: (full: #e0e462, half: #e0e4627f, quarter: #e0e4623f);
 $ternary-yellow: (full: #c0c960, half: #c0c9607f, quarter: #c0c9603f);
@@ -16,11 +14,3 @@ $button-shadow: #0000007f;
 $text-green: #007f00;
 $text-yellow: #7f7f00;
 $text-red: #7f0000;
-
-$light-theme: (
-    background-color: linear-gradient(to right, map.get($primary-yellow, full), map.get($primary-blue, full)),
-);
-
-$dark-theme: (
-    background-color: linear-gradient(to left, map.get($primary-yellow, full), map.get($primary-blue, full)),
-);

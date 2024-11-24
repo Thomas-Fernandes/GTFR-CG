@@ -1,7 +1,13 @@
 @use "sass:map";
 
+@use "./themes" as *;
 @use "./variables" as *;
-@use "./theme" as *;
+
+// |Avantgarde:ital,wght@0,400..900;1,400..900
+// |TeX+Gyre+Adventor:ital,wght@0,400..900;1,400..900
+// |URW+Gothic+L:ital,wght@0,400..900;1,400..900&display=swap);
+
+@import url(http://fonts.googleapis.com/css?family=Playfair+Display:ital,wght@0,400..900;1,400..900|Rubik:ital,wght@0,300..900;1,300..900|Lora:ital,wght@0,400..700;1,400..700|DM+Sans:ital,wght@0,9..40,100..1000;1,9..40,100..1000);
 
 * {
     padding: 0;
@@ -10,7 +16,7 @@
     display: flex;
     flex-direction: column;
 
-    font-family: Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif;
+    font-family: "Avantgarde", "TeX Gyre Adventor", "URW Gothic L", sans-serif;
     text-align: left;
     font-size: 1.1rem;
     letter-spacing: 0.08rem;
