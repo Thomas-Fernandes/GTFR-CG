@@ -1,0 +1,28 @@
+#cards-generation {
+    .card-container {
+        text-align: center;
+        position: relative;
+
+        img, input {
+            cursor: pointer;
+            border-radius: .25rem;
+        }
+
+        &--card {
+            padding: .5rem;
+            border: .1rem solid lightgray;
+            border-radius: .5rem;
+            transition: transform 0.3s ease;
+
+            input[type="submit"] {
+                margin: auto;
+                margin-top: .4rem;
+                width: 80%;
+            }
+
+            &:hover {
+                transform: scale(1.02);
+            }
+        }
+    }
+}

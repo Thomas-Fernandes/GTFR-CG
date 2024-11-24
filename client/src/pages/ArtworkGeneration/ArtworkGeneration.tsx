@@ -2,7 +2,6 @@ import { JSX, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useTitle } from "@/common/hooks/useTitle";
-import { ItunesResult } from "@pages/ArtworkGeneration/types";
 
 import { NavButtonSide } from "@/components/NavButton/constants";
 import NavButton from "@/components/NavButton/NavButton";
@@ -16,6 +15,7 @@ import { ArtworkGenerationContext } from "./contexts";
 import FileUploadForm from "./FileUploadForm";
 import ItunesForm from "./ItunesForm";
 import ItunesResults from "./ItunesResults";
+import { ItunesResult } from "./types";
 import YoutubeForm from "./YoutubeForm";
 
 import "./ArtworkGeneration.css";

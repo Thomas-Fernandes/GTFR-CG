@@ -7,7 +7,7 @@ import { CardData, CardsGalleryProps } from "./types";
 
 import "./CardsGallery.css";
 
-const CardsGallery: React.FC<CardsGalleryProps> = ({ id, initialCards }): JSX.Element => {
+const CardsGallery: React.FC<CardsGalleryProps> = ({ initialCards, ...divProps }): JSX.Element => {
   const [cards, setCards] = useState<CardData[]>(initialCards);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -20,7 +20,7 @@ const CardsGallery: React.FC<CardsGalleryProps> = ({ id, initialCards }): JSX.El
   );
 
   return (
-    <div id={id} className="card-gallery flex-row">
+    <div className="card-gallery flex-row" {...divProps}>
       <CardsGalleryContext.Provider value={contextValue}>
         { cards?.map((card, idx) =>
           <CardView key={idx} card={card} cardIdx={idx} />

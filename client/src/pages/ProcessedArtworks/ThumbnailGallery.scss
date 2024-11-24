@@ -1,5 +1,5 @@
 #processed-artworks {
-    #thumbnails {
+    #thumbnail-gallery {
         width: 45%;
         padding: 1rem;
 
@@ -14,7 +14,7 @@
             }
         }
 
-        #thumbnail-grid {
+        &--grid {
             height: 80%;
 
             display: grid;

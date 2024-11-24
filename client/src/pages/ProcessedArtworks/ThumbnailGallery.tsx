@@ -6,7 +6,7 @@ import { handleSubmitDownloadImage } from "./handlers";
 import ThumbnailOption from "./ThumbnailOption";
 import { processImageName } from "./utils";
 
-import "./ThumbnailGallery.css";
+import "./ThumbnailGallery.scss";
 
 const ThumbnailGallery = (): JSX.Element => {
   const [selectedThumbnail, setSelectedThumbnail ] = useState(DEFAULT_SELECTED_POSITION);
@@ -14,9 +14,9 @@ const ThumbnailGallery = (): JSX.Element => {
   const contextValue = useMemo(() => ({ setSelectedThumbnail }), []);
 
   return (
-    <div id="thumbnails">
+    <div id="thumbnail-gallery">
       <form onSubmit={(e) => handleSubmitDownloadImage(e, { selectedImage: processImageName(selectedThumbnail) })}>
-        <div id="thumbnail-grid">
+        <div id="thumbnail-gallery--grid">
           <ThumbnailGalleryContext.Provider value={contextValue}>
             { LOGO_POSITIONS.map((logoPosition, idx) =>
               <ThumbnailOption key={`thumbnail-item_${idx}`} logoPosition={logoPosition} idx={idx} />

@@ -16,18 +16,18 @@
             margin: auto;
         }
 
-        .title {
+        &--title {
             margin: 2% auto 0 auto;
             text-align: center;
             font-size: larger;
         }
 
-        .err {
+        &--err {
             font-size: 1em;
             font-style: normal;
         }
 
-        .counter {
+        &--counter {
             margin: 0 auto 2% auto;
             flex-direction: row;
         }

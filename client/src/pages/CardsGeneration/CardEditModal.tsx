@@ -8,7 +8,7 @@ import { useCardsGalleryContext, useCardsGenerationContext } from "./contexts";
 import { handleSaveModal } from "./handlers";
 import { handleMouseDown, handleMouseUp, handleOverlayClick } from "./mouse";
 
-import "./CardEditModal.css";
+import "./CardEditModal.scss";
 
 const CardEditModal = (): JSX.Element => {
   const generationProps = useCardsGenerationContext();
@@ -30,7 +30,7 @@ const CardEditModal = (): JSX.Element => {
       onMouseUp={() => handleMouseUp({ isMouseDownRef })}
       onClick={() => handleOverlayClick({ clickedInsideModalRef, closeModal })}
     >
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+      <div className="modal-overlay--content" onClick={(e) => e.stopPropagation()}>
         <h3 className="my-0">
           {`Edit Lyrics of Card ${cardIdPadding}${currentCard?.id}`}
         </h3>
@@ -40,7 +40,7 @@ const CardEditModal = (): JSX.Element => {
           className="!w-full"
         />
 
-        <div className="modal-actions flex-row gap-4">
+        <div className="modal-overlay--content--actions flex-row gap-4">
           <button type="button" disabled={isModalSaving}
             onClick={() => currentCard && handleSaveModal(currentCard, isModalSaving,
               { generationProps, newLyrics, generateSingleCardProps: { currentCard, setCards, setIsModalSaving, closeModal } }

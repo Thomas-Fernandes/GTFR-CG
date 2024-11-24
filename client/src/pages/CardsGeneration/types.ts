@@ -1,3 +1,5 @@
+import { ComponentPropsWithoutRef } from "react";
+
 import { ApiResponse, SongPartsCards, StateSetter } from "@/common/types";
 
 export type GenerationProps = {
@@ -28,12 +30,11 @@ export type HandleSaveModalProps = {
   }
 };
 
-export type CardViewProps = {
+export type CardViewProps = ComponentPropsWithoutRef<"div"> & {
   card: CardData;
   cardIdx: number;
 };
-export type CardsGalleryProps = {
-  id: string;
+export type CardsGalleryProps = ComponentPropsWithoutRef<"div"> & {
   initialCards: CardData[];
 };
 

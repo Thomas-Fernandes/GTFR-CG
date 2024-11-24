@@ -38,7 +38,7 @@ const CardsGenerationForm: React.FC<CardsGenerationFormProps> = ({ setCardPaths,
             type="text" name="contributors" placeholder="contributors (comma-separated)"
             value={(outroContributors && "by: ") + outroContributors}
             onChange={(e) => setOutroContributors(e.target.value.replace("by: ", ""))}
-            className={"contributors" + (!outroContributors ? " empty-text" : "")}
+            className={`contributors ${(!outroContributors ? "empty-text" : "")}`}
           />
         }
       </div>

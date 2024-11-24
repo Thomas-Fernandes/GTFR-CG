@@ -10,7 +10,7 @@ import { useCardsGalleryContext } from "./contexts";
 import { handleSubmitDownloadCard } from "./handlers";
 import { CardViewProps } from "./types";
 
-import "./CardView.css";
+import "./CardView.scss";
 
 const CardView: React.FC<CardViewProps> = ({ card, cardIdx }): JSX.Element => {
   const { setIsModalOpen, setCurrentCard, setNewLyrics } = useCardsGalleryContext();
@@ -32,8 +32,8 @@ const CardView: React.FC<CardViewProps> = ({ card, cardIdx }): JSX.Element => {
   };
 
   return (
-    <div key={alt} className="card card-container">
-      <div onClick={openModal} className="gallery-card">
+    <div key={alt} className="card-container">
+      <div onClick={openModal} className="card-container--card">
         { !cardIsEditable
         ? <img
             src={card.src} alt={alt}

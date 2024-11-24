@@ -5,7 +5,7 @@ const ManualGenerationInputBar = (): JSX.Element => {
 
   return (
     <div className="flexbox">
-      <div id="metadata-bar" className="flex-row gap-4">
+      <div className="flex-row gap-4">
         <input required
           type="text" name="artist" placeholder={"Enter artist name"}
           onChange={(e) => { setArtist(e.target.value); setPageMetadata({...pageMetadata, artist: e.target.value}); }}

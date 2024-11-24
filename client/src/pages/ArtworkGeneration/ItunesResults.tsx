@@ -8,7 +8,7 @@ import { useArtworkGenerationContext } from "./contexts";
 import { handleSelectItunesImage } from "./handlers";
 import { ItunesImageResultProps, ItunesResultsProps } from "./types";
 
-import "./ItunesResults.css";
+import "./ItunesResults.scss";
 
 const ItunesImageResult: React.FC<ItunesImageResultProps> = ({ item, itemId }): JSX.Element => {
   const { isProcessingLoading, setIsProcessingLoading, navigate } = useArtworkGenerationContext();
@@ -23,9 +23,9 @@ const ItunesImageResult: React.FC<ItunesImageResultProps> = ({ item, itemId }): 
         onLoad={() => setItemLabel(`${item.artistName} - ${resultLabel}`)}
         onClick={() => handleSelectItunesImage(item, itemId, { isProcessingLoading, setIsProcessingLoading, navigate })}
         overlayText={"Use this image"}
-        className="result-image"
+        className="result-item--image"
       />
-      <p className="result-text centered font-bold italic">
+      <p className="result-item--text centered font-bold italic">
         {itemLabel}
       </p>
 

@@ -2,7 +2,7 @@
     .stats-entry {
         flex-direction: row;
 
-        .stat-title {
+        &--title {
             width: 60%;
             margin: .75rem 0;
 
@@ -10,7 +10,7 @@
             font-size: larger;
         }
 
-        .stat-text {
+        &--text {
             margin: auto;
 
             font-size: 1em;

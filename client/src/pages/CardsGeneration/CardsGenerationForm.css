@@ -29,7 +29,7 @@
                 min-height: 4rem;
                 gap: 1rem;
 
-                >p {
+                &>p {
                     font-size: larger;
                     font-weight: bold;
                 }

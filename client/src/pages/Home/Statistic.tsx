@@ -2,15 +2,15 @@ import { JSX } from "react";
 
 import { StatisticProps } from "./types";
 
-import "./Statistic.css";
+import "./Statistic.scss";
 
 const Statistic: React.FC<StatisticProps> = ({ label, value, spinnerId }): JSX.Element => {
   return (
     <div className="stats-entry">
-      <h3 className="stat-title">
+      <h3 className="stats-entry--title">
         {label}
       </h3>
-      <p className="stat-text" id={spinnerId}>
+      <p className="stats-entry--text" id={spinnerId}>
         {value}
       </p>
     </div>

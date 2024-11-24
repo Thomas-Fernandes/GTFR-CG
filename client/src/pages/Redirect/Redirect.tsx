@@ -10,7 +10,7 @@ import { DEFAULT_EVENT_DURATION } from "@/constants/toasts";
 
 import { DEFAULT_REDIRECTION, RedirectParams } from "./constants";
 
-import "./Redirect.css";
+import "./Redirect.scss";
 
 const Redirect = (): JSX.Element => {
   useTitle(Title.Lyrics);
@@ -46,15 +46,15 @@ const Redirect = (): JSX.Element => {
       <h1>{Title.Redirect}</h1>
 
       <div className="board">
-        <h3 className="title">
+        <h3 className="board--title">
           {"You are being redirected after an error was met..."}
         </h3>
 
-        <p className="err">
+        <p className="board--err">
           { errorText.current }
         </p>
 
-        <p className="counter">
+        <p className="board--counter">
           {`You will be redirected to ${redirectTo.current} in ${countdown} second${plural}.`}
         </p>
       </div>

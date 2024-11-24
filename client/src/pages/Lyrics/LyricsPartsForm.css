@@ -1,12 +1,10 @@
 #lyrics {
-    form.lyrics-form {
-        &>div {
-            width: 100%;
-            margin-bottom: 1.25rem;
+    form.lyrics-form>div {
+        width: 100%;
+        margin-bottom: 1.25rem;
 
-            &#lyrics_convert {
-                width: 60%;
-            }
+        &#lyrics_convert {
+            width: 60%;
         }
     }
 }

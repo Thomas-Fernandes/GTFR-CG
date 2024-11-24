@@ -1,13 +1,7 @@
 #cards-generation {
     .card-gallery {
-        .card-container {
-            text-align: center;
-            position: relative;
-
-            img, input {
-                cursor: pointer;
-                border-radius: .25rem;
-            }
-        }
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+        gap: .5rem;
     }
 }
