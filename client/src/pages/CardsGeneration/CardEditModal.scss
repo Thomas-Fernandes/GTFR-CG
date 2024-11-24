@@ -2,7 +2,8 @@
   .modal-overlay {
     position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; /* full view */
 
-    background-color: rgba(0, 0, 0, 0.7); /* dimmed background around overlay */
+    background-color: rgba(0, 0, 0, 0.5); /* dimmed... */
+    backdrop-filter: blur(.25rem); /* and blurred background around overlay */
 
     z-index: 9999;
 
