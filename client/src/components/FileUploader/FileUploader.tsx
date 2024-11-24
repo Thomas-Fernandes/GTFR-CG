@@ -62,7 +62,7 @@ const FileUploader: React.FC<Props> = ({ id, label, caption, accept, labelClassN
         <label htmlFor="file-upload" className={labelClassName}>
           {label}
         </label>
-        <p className={captionClassName + (selectedFileName ? "" : " italic")}>
+        <p className={`${captionClassName} ${selectedFileName ? "" : "italic"}`}>
           {selectedFileName ?? (caption ?? "No file selected.")}
         </p>
       </div>

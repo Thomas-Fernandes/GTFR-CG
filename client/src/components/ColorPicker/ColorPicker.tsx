@@ -6,7 +6,7 @@ import ButtonRemove from "@/components/ButtonRemove/ButtonRemove";
 
 import { Toast, ToastType } from "@/constants/toasts";
 
-import "./ColorPicker.css";
+import "./ColorPicker.scss";
 
 type Props = {
   id: string;

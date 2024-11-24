@@ -42,12 +42,12 @@ export const sendToast = (
   document.getElementById("toast-container")?.appendChild(toast);
 
   setTimeout(() => { // Use setTimeout to ensure the initial styles are applied before transitioning
-   toast.classList.add("show");
-   progressFill.style.width = "100%";
-   progressFill.style.transitionDuration = `${duration}s`;
-   setTimeout(() => {
-     progressFill.style.width = "0%";
-   }, DEFAULT_EVENT_DURATION.MS_PROGRESS_UPDATE);
+    toast.classList.add("show");
+    progressFill.style.width = "100%";
+    progressFill.style.transitionDuration = `${duration}s`;
+    setTimeout(() => {
+      progressFill.style.width = "0%";
+    }, DEFAULT_EVENT_DURATION.MS_PROGRESS_UPDATE);
   }, DEFAULT_EVENT_DURATION.MS_PROGRESS_UPDATE);
 
   toast.addEventListener("click", () => {

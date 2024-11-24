@@ -1,13 +1,13 @@
-.image-container {
+.iwo {
     position: relative;
     overflow: hidden;
     cursor: pointer;
 
-    .image {
+    &--image {
         object-fit: cover;
     }
 
-    .overlay {
+    &--overlay {
         position: absolute;
         z-index: 10;
         top: 0; left: 0;
@@ -25,11 +25,11 @@
         &:hover {
             opacity: 1;
         }
-    }
 
-    .overlay-text {
-        font-weight: bold;
-        color: black; /* Contrasts with light effect */
-        text-shadow: 0 0 .4rem white;
+        &--text {
+            font-weight: bold;
+            color: black; /* Contrasts with light effect */
+            text-shadow: 0 0 .4rem white;
+        }
     }
 }

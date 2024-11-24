@@ -1,6 +1,6 @@
 import React, { ComponentPropsWithoutRef } from "react";
 
-import "./ImgWithOverlay.css";
+import "./ImgWithOverlay.scss";
 
 type Props = ComponentPropsWithoutRef<"img"> & {
   alt: string;
@@ -10,14 +10,14 @@ type Props = ComponentPropsWithoutRef<"img"> & {
 
 const ImgWithOverlay: React.FC<Props> = ({ alt, overlayText, className, ...imgProps }) => {
   return (
-    <div className="image-container">
+    <div className="iwo">
       <img
         alt={alt}
-        className={`${className} image`}
+        className={`iwo--image ${className ?? ""}`}
         {...imgProps}
       />
-      <div className="overlay">
-        <span className="overlay-text">{overlayText}</span>
+      <div className="iwo--overlay">
+        <span className="iwo--overlay--text">{overlayText}</span>
       </div>
     </div>
   );

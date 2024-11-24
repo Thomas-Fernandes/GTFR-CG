@@ -10,6 +10,7 @@
     &.dragging {
         border: .1rem dashed #007bff;
         background-color: #f0f8ffcc;
+        cursor: grabbing;
 
         label {
             opacity: 0.5;
