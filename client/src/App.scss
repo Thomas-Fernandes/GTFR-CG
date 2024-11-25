@@ -23,8 +23,13 @@
 }
 head { display: none; }
 
+body {
+    background: url("/img/ref3.gif") no-repeat center center fixed;
+    background-size: cover;
+}
+
 html {
-    transition: background-color 0.3s ease;
+    background: black;
 
     @include apply-theme($dark-theme);
 
