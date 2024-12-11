@@ -3,7 +3,7 @@
     cursor: pointer;
     min-width: 32rem;
     max-width: max-content;
-    border: .1rem solid lightgray;
+    border: .1rem solid lightgrey;
     padding: .5rem;
     transition: border-color 0.25s ease;
 

@@ -8,6 +8,8 @@ import App from "./App"
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <DarkModeProvider>
+      <div className="rotate-zoom" />
+      <div className="custom-background" />
       <App />
     </DarkModeProvider>
   </StrictMode>

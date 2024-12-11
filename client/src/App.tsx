@@ -6,6 +6,7 @@ import { ViewPaths } from "@/constants/paths";
 import ArtworkGeneration from "@/pages/ArtworkGeneration/ArtworkGeneration";
 import CardsGeneration from "@/pages/CardsGeneration/CardsGeneration";
 import Home from "@/pages/Home/Home";
+import LandingPage from "@/pages/LandingPage/LandingPage";
 import Lyrics from "@/pages/Lyrics/Lyrics";
 import ProcessedArtworks from "@/pages/ProcessedArtworks/ProcessedArtworks";
 import Redirect from "@/pages/Redirect/Redirect";
@@ -24,7 +25,8 @@ const App = (): JSX.Element => {
         <Route path={ViewPaths.Redirect} element={<Redirect />} />
         <Route path={ViewPaths.Tests} element={<Tests />} />
         <Route path={ViewPaths.Home} element={<Home />} />
-        <Route path={ViewPaths.Root} element={<Home />} />
+        <Route path={ViewPaths.LandingPage} element={<LandingPage />} />
+        <Route path={ViewPaths.Root} element={<LandingPage />} />
       </Routes>
     </Router>
   )

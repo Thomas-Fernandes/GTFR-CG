@@ -1,0 +1,97 @@
+@use "@/variables" as *;
+
+#landing-page {
+    @apply h-full flex flex-col items-center overflow-auto;
+
+    .landing-page--content {
+        @apply flex;
+
+        &--left {
+            @apply flex relative right-8;
+
+            &--content {
+                @apply w-full flex flex-col items-center justify-end;
+                gap: $gap--3xl;
+
+                &--motto {
+                    @apply flex flex-col gap-2 items-center;
+
+                    * {
+                        font-family: $font-family--header;
+                    }
+
+                    &--phrase {
+                        @apply flex;
+
+                        span {
+                            @apply font-semibold text-6xl;
+
+                            &.blue  { color: $french-blue; }
+                            &.white { color: $french-white; }
+                            &.red   { color: $french-red; }
+                        }
+                    }
+
+                    &--brand {
+                        span {
+                            @apply text-3xl;
+
+                            &.blue  { color: $french-blue; }
+                            &.white { color: $french-white; }
+                            &.red   { color: $french-red; }
+                        }
+                    }
+                }
+
+                &--buttons {
+                    @apply w-max flex flex-row gap-8;
+
+                    > button {
+                        padding: $pad--xl $pad--4xl;
+                    }
+
+                    > :first-child {
+                        @apply bg-transparent;
+                        border: $border--primary-2;
+
+                        &:hover {
+                            background-color: $primary-bluee;
+                        }
+
+                        > .action-button--label {
+                            @apply font-medium text-3xl;
+                            color: $secondary-1;
+                        }
+                    }
+                    > :last-child {
+                        > .action-button--label {
+                            @apply font-semibold text-4xl;
+                        }
+                    }
+                }
+            }
+        }
+
+        &--right {
+            @apply relative -left-4;
+
+            img[alt="gtfr"] {
+                position: relative;
+                top: calc((16rem)/1.75);
+                left: calc((-16rem)/2);
+
+                max-height: 16rem;
+                aspect-ratio: 1/1;
+            }
+
+            img[alt="video"] {
+                @apply mb-1;
+                max-height: 24rem;
+                aspect-ratio: 16/9;
+
+                outline: .25rem #ffff64 solid;
+                box-shadow: $glow--primary1--xl;
+            }
+        }
+    }
+}

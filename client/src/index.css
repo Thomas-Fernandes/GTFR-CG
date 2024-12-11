@@ -400,12 +400,7 @@ a {
 body {
   display: flex;
   min-width: 16rem;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+  /* min-height: 100vh; */
 }
 
 button {
@@ -422,8 +417,8 @@ button {
 
 @media (prefers-color-scheme: light) {
   :root {
-    color: #213547;
-    background-color: white;
+    color: white;
+    background-color: black;
   }
 
   a:hover {

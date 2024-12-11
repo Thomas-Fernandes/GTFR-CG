@@ -38,27 +38,27 @@
 }
 
 $light-theme: (
-    app-background-color: linear-gradient(to right, map.get($primary-yellow, full), map.get($primary-blue, full)),
+    // app-background-color: linear-gradient(to right, map.get($primary-yellow, full), map.get($primary-blue, full)),
     text-color: black,
     background-color: white,
     lyrics-overflow-marker: linear-gradient(
         to right,
         transparent calc(0.92ch* 62),
-        lightgray calc(0.92ch* 62),
-        lightgray calc(0.92ch* 63),
+        lightgrey calc(0.92ch* 62),
+        lightgrey calc(0.92ch* 63),
         transparent calc(0.92ch* 63)
     ),
 );
 
 $dark-theme: (
-    app-background-color: linear-gradient(to left, map.get($primary-yellow, full), map.get($primary-blue, full)),
+    // app-background-color: linear-gradient(to left, map.get($primary-yellow, full), map.get($primary-blue, full)),
     text-color: white,
     background-color: #222,
     lyrics-overflow-marker: linear-gradient(
         to right,
         transparent calc(0.92ch* 62),
-        darkgray calc(0.92ch* 62),
-        darkgray calc(0.92ch* 63),
+        darkgrey calc(0.92ch* 62),
+        darkgrey calc(0.92ch* 63),
         transparent calc(0.92ch* 63)
     ),
 );

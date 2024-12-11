@@ -3,39 +3,74 @@
 @use "./themes" as *;
 @use "./variables" as *;
 
-// |Avantgarde:ital,wght@0,400..900;1,400..900
-// |TeX+Gyre+Adventor:ital,wght@0,400..900;1,400..900
-// |URW+Gothic+L:ital,wght@0,400..900;1,400..900&display=swap);
-
-@import url(http://fonts.googleapis.com/css?family=Playfair+Display:ital,wght@0,400..900;1,400..900|Rubik:ital,wght@0,300..900;1,300..900|Lora:ital,wght@0,400..700;1,400..700|DM+Sans:ital,wght@0,9..40,100..1000;1,9..40,100..1000);
-
-* {
-    padding: 0;
-    box-sizing: border-box;
-
-    display: flex;
-    flex-direction: column;
-
-    font-family: "Avantgarde", "TeX Gyre Adventor", "URW Gothic L", sans-serif;
-    text-align: left;
-    font-size: 1.1rem;
-    letter-spacing: 0.08rem;
-}
-head { display: none; }
-
-body {
-    background: url("/img/ref3.gif") no-repeat center center fixed;
-    background-size: cover;
-}
+@import url($font-family);
 
 html {
     background: black;
+    min-height: 100%;
+    min-width: 100%;
 
     @include apply-theme($dark-theme);
 
     &[data-theme="light"] {
         @include apply-theme($light-theme);
     }
+}
+
+head {
+    @apply hidden;
+}
+#root {
+    min-width: 100vw;
+    min-height: 100vh;
+
+    > div[id] {
+        @apply flex flex-col items-center text-left text-base;
+
+        box-sizing: border-box;
+        font-family: "Poppins", "Rubik", sans-serif;
+        color: white;
+        // letter-spacing: 0.08rem;
+    }
+}
+
+body {
+    z-index: 0;
+}
+
+.custom-background::before {
+    @apply fixed w-full h-full overflow-hidden;
+    content: ""; /* Required for pseudo-element */
+    background: url("/img/ref4.gif") no-repeat center center fixed;
+    background-size: cover;
+    filter: saturate(0%); /* Apply saturation filter to the background */
+    z-index: -2;
+}
+.rotate-zoom {
+    position: fixed;
+    overflow: hidden; /* Prevent scrolling due to pseudo-element */
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    background: url("/svg/palette-waves-light.svg") no-repeat center center fixed;
+    background-size: cover;
+    opacity: 0.75;
+    animation: rotateBackground 60s ease-in-out infinite, zoomEffect 80s ease-in-out infinite;
+    transform-origin: center center; /* Ensure the transform happens from the center */
+}
+@keyframes rotateBackground {
+    0%   { background-position: 0% 0%;     rotate: 0deg;   }
+    25%  { background-position: 100% 100%; rotate: .2deg;  }
+    50%  { background-position: 0% 0%;     rotate: 0deg;   }
+    75%  { background-position: 100% 100%; rotate: -.2deg; }
+    100% { background-position: 0% 0%;     rotate: 0deg;   }
+}
+
+@keyframes zoomEffect {
+    0%   { transform: scale(1); }
+    25%  { transform: scale(1.4); }
+    75%  { transform: scale(1.4); }
+    100% { transform: scale(1); }
 }
 
 div.navbar {
@@ -112,7 +147,6 @@ input[type="text"],
 h1 {
     font-family: Helvetica, sans-serif;
     margin: 2% 0 2% 0;
-    font-style: italic;
     letter-spacing: 0;
 }
 
@@ -139,7 +173,6 @@ hr {
 }
 
 button {
-    padding: .5rem 1rem;
     display: inline-block;
     cursor: pointer;
 
@@ -150,8 +183,6 @@ button {
     border-radius: .4rem;
 
     font-size: 1.4rem;
-
-    transition: all 0.3s;
 
     span {
         position: relative;
@@ -238,7 +269,6 @@ input.action-button {
     color: black;
 
     cursor: pointer;
-    transition: all 0.3s;
 
     &:hover {
         background-color: map.get($primary-blue, full);
@@ -252,7 +282,7 @@ input[type="text"], textarea {
     margin: 1rem 0;
     line-height: normal;
 
-    border: .1rem solid lightgray;
+    border: .1rem solid lightgrey;
     border-radius: 0.2rem;
 
     &.empty-text {
