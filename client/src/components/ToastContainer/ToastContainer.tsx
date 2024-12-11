@@ -1,4 +1,4 @@
-import './ToastContainer.scss';
+import "./ToastContainer.scss";
 
 const ToastContainer = () => {
   return (

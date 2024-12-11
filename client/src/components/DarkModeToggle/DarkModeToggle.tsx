@@ -1,5 +1,3 @@
-import React from "react";
-
 import { useDarkMode } from "@/common/hooks/useDarkMode/useDarkMode";
 
 import "./DarkModeToggle.scss";

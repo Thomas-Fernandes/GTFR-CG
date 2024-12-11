@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { DarkModeContext } from "@/common/hooks/useDarkMode/contexts";
 
@@ -10,9 +10,6 @@ export const DarkModeProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", isDarkMode ? ThemeType.Dark : ThemeType.Light);
     localStorage.setItem("theme", isDarkMode ? ThemeType.Dark : ThemeType.Light);
-    // console.log("Dark mode:", isDarkMode); // Check the state value
-    // document.documentElement.setAttribute("data-theme", isDarkMode ? "dark" : "light");
-    // localStorage.setItem("theme", isDarkMode ? "dark" : "light");
   }, [isDarkMode]);
 
   const toggleDarkMode = useCallback(() => {

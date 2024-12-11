@@ -1,21 +1,13 @@
-@use "sass:map";
-
 @use "@/variables" as *;
 
 .selector {
-    cursor: pointer;
-    background: map.get($primary-yellow, full);
+  @apply cursor-pointer py-2 px-6 rounded-md text-left;
+  background: $primary-yelloww;
 
-    padding: .4rem 1.6rem;
+  border: .1rem solid #00000010;
+  box-shadow: 0 0 .5rem #0000007f;
 
-    border: .1rem solid #00000010;
-    box-shadow: 0 0 .5rem #0000007f;
-    border-radius: .4rem;
-
-    text-align: left;
-    letter-spacing: normal;
-
-    option {
-        text-align: justify;
-    }
+  option {
+    @apply text-justify;
+  }
 }

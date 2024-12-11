@@ -1,4 +1,4 @@
-import { JSX, useState } from "react";
+import { useState } from "react";
 
 import { ContentsGenerationMode } from "@/common/types";
 

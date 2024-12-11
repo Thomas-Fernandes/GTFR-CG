@@ -9,6 +9,10 @@
     font-family: $font-family--action-button;
   }
 
+  &--icon {
+    @apply w-4;
+  }
+
   &:hover {
     background-color: $primary-bluee;
     box-shadow: $glow--primary2--md;

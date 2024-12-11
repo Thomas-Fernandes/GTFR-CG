@@ -1,17 +1,12 @@
-import React, { ComponentPropsWithoutRef } from "react";
-
 import { saveAs } from "file-saver";
 import JSZip from "jszip";
 
 import { sendToast } from "@/common/toast";
 import { ResponseStatus } from "@/constants/requests";
 
-type Props = ComponentPropsWithoutRef<"button"> & {
-  paths: string[];
-  output: string;
-};
+import { ZipDownloadButtonProps } from "./types";
 
-const ZipDownloadButton: React.FC<Props> = ({ paths, output, ...buttonProps }) => {
+const ZipDownloadButton: React.FC<ZipDownloadButtonProps> = ({ paths, output, ...buttonProps }) => {
   const handleDownloadButtonClick = async () => {
     const zip = new JSZip();
 

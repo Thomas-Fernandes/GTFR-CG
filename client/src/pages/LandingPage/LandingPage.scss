@@ -4,93 +4,97 @@
     @apply h-full flex flex-col items-center overflow-auto;
 
     .landing-page--content {
-        @apply flex;
+        @apply flex flex-wrap justify-center;
+        margin-top: 5vh;
 
         &--left {
-            @apply flex relative right-8;
+            @apply flex flex-col items-center justify-end relative right-2;
+            gap: $gap--3xl;
 
-            &--content {
-                @apply w-full flex flex-col items-center justify-end;
-                gap: $gap--3xl;
+            &--motto {
+                @apply flex flex-col gap-2 items-center flex-wrap justify-center;
 
-                &--motto {
-                    @apply flex flex-col gap-2 items-center;
+                * {
+                    @apply flex-wrap justify-center text-center text-pretty;
+                    text-align: center;
+                    font-family: $font-family--header;
+                }
 
-                    * {
-                        font-family: $font-family--header;
-                    }
+                &--phrase {
+                    @apply flex;
 
-                    &--phrase {
-                        @apply flex;
+                    span {
+                        @apply font-semibold text-6xl;
 
-                        span {
-                            @apply font-semibold text-6xl;
-
-                            &.blue  { color: $french-blue; }
-                            &.white { color: $french-white; }
-                            &.red   { color: $french-red; }
-                        }
-                    }
-
-                    &--brand {
-                        span {
-                            @apply text-3xl;
-
-                            &.blue  { color: $french-blue; }
-                            &.white { color: $french-white; }
-                            &.red   { color: $french-red; }
-                        }
+                        &.blue  { color: $french-blue; }
+                        &.white { color: $french-white; }
+                        &.red   { color: $french-red; }
                     }
                 }
 
-                &--buttons {
-                    @apply w-max flex flex-row gap-8;
+                &--brand {
+                    span {
+                        @apply text-2xl;
 
-                    > button {
-                        padding: $pad--xl $pad--4xl;
+                        &.blue  { color: $french-blue; }
+                        &.white { color: $french-white; }
+                        &.red   { color: $french-red; }
+                    }
+                }
+            }
+
+            &--buttons {
+                @apply flex flex-row gap-8 flex-wrap justify-center;
+
+                > button {
+                    padding: $pad--md $pad--xl;
+                }
+
+                > :first-child {
+                    @apply bg-transparent;
+                    border: $border--primary-2--md;
+
+                    &:hover {
+                        background-color: $primary-bluee;
                     }
 
-                    > :first-child {
-                        @apply bg-transparent;
-                        border: $border--primary-2;
-
-                        &:hover {
-                            background-color: $primary-bluee;
-                        }
-
-                        > .action-button--label {
-                            @apply font-medium text-3xl;
-                            color: $secondary-1;
-                        }
+                    > .action-button--label {
+                        @apply font-medium text-3xl;
+                        color: $secondary-1;
                     }
-                    > :last-child {
-                        > .action-button--label {
-                            @apply font-semibold text-4xl;
-                        }
+                }
+                > :last-child {
+                    > .action-button--label {
+                        @apply font-semibold text-4xl;
                     }
                 }
             }
         }
 
         &--right {
-            @apply relative -left-4;
+            @apply relative left-6;
 
-            img[alt="gtfr"] {
-                position: relative;
-                top: calc((16rem)/1.75);
-                left: calc((-16rem)/2);
+            > :first-child {
+                @apply relative aspect-square z-10;
+                top: calc(16vh / 2.25);
+                left: calc(-16vw / 4);
 
-                max-height: 16rem;
-                aspect-ratio: 1/1;
+                max-height: 16vh;
             }
 
-            img[alt="video"] {
-                @apply mb-1;
+            > :last-child {
+                @apply aspect-video;
                 max-height: 24rem;
-                aspect-ratio: 16/9;
 
-                outline: .25rem #ffff64 solid;
-                box-shadow: $glow--primary1--xl;
+                .iwo {
+                    @apply rounded-sm;
+                    outline: $outline--primary-1--lg;
+                    box-shadow: $glow--primary1--xl;
+                }
+
+                &:hover {
+                    padding: 0 !important;
+                }
             }
         }
     }

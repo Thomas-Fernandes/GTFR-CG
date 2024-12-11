@@ -1,22 +1,15 @@
-import React, { ComponentPropsWithoutRef } from "react";
+import ImgWithOverlay from "@/components/ImgWithOverlay/ImgWithOverlay";
 
-import ImgWithOverlay from "../ImgWithOverlay/ImgWithOverlay";
-import "./ImgButton.css";
+import { ImgButtonProps } from "./types";
 
-type Props = ComponentPropsWithoutRef<"img"> & {
-  src: string;
-  alt: string;
-  onClick?: () => void;
-  overlayText?: string;
-};
+import "./ImgButton.scss";
 
-const ImgButton: React.FC<Props> = ({ src, alt, onClick, overlayText, ...imgProps }) => {
-
+const ImgButton: React.FC<ImgButtonProps> = ({ src, alt, onClick, overlayText, newTabLink, ...imgProps }) => {
   return (
     <div className="img-button">
       <button onClick={onClick}>
         { overlayText
-        ? <ImgWithOverlay overlayText={overlayText}
+        ? <ImgWithOverlay overlayText={overlayText} newTabLink={newTabLink}
             src={src} alt={alt} {...imgProps}
           />
         : <img src={src} alt={alt} {...imgProps} />

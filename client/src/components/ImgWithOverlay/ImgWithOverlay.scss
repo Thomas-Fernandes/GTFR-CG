@@ -1,35 +1,36 @@
+@use "@/variables" as *;
+
 .iwo {
-    position: relative;
-    overflow: hidden;
-    cursor: pointer;
+  @apply relative overflow-hidden cursor-pointer;
 
-    &--image {
-        object-fit: cover;
+  &--image {
+    @apply object-cover;
+  }
+
+  &--overlay {
+    @apply absolute z-10 top-0 left-0 w-full h-full flex items-center justify-center;
+    background: radial-gradient(
+      ellipse at center,
+      rgba(255, 255, 255, 0.6) 20%, /* Bright white center */
+      rgba(255, 255, 255, 0.1) 80%, /* Faded edges */
+      rgba(255, 255, 255, 0.0) 100% /* Fully transparent at the edges */
+    );
+    opacity: 0; /* Initially hidden */
+    gap: $gap--sm;
+    transition: opacity 0.3s ease-in-out;
+
+    &:hover {
+      @apply opacity-100;
     }
 
-    &--overlay {
-        position: absolute;
-        z-index: 10;
-        top: 0; left: 0;
-        width: 100%; height: 100%;
-        display: flex; align-items: center; justify-content: center;
-        background: radial-gradient(
-            ellipse at center,
-            rgba(255, 255, 255, 0.6) 10%, /* Bright white center */
-            rgba(255, 255, 255, 0.1) 60%, /* Faded edges */
-            rgba(255, 255, 255, 0.0) 100% /* Fully transparent at the edges */
-        );
-        opacity: 0; /* Initially hidden */
-        transition: opacity 0.3s ease-in-out;
-
-        &:hover {
-            opacity: 1;
-        }
-
-        &--text {
-            font-weight: bold;
-            color: black; /* Contrasts with light effect */
-            text-shadow: 0 0 .4rem white;
-        }
+    &--text {
+      @apply font-bold;
+      color: $secondary-3;
+      text-shadow: 0 0 .4rem white;
     }
+
+    &--icon {
+      @apply w-4;
+    }
+  }
 }

@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 import CardEditModal from "./CardEditModal";
 import CardView from "./CardView";

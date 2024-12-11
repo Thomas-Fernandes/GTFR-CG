@@ -1,0 +1,36 @@
+@use "@/variables" as *;
+
+.file-upload-component {
+  @apply p-2 self-center cursor-pointer;
+  min-width: 32rem;
+  max-width: max-content;
+  border: .1rem solid lightgrey;
+  transition: border-color 0.25s ease;
+
+  &.dragging {
+    @apply cursor-grabbing;
+    border: .1rem dashed #007bff;
+    background-color: #f0f8ffcc;
+
+    label {
+      @apply opacity-50;
+    }
+  }
+
+  * {
+    @apply mx-2 my-0 cursor-pointer;
+  }
+
+  label {
+    @apply py-1 px-2 bg-blue-600 rounded-sm;
+    color: $secondary-1;
+  }
+
+  p {
+    @apply mr-0;
+  }
+
+  div, button {
+    @apply m-0;
+  }
+}

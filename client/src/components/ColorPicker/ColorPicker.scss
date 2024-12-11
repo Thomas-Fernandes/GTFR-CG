@@ -1,32 +1,32 @@
 .color-picker {
-    &--img {
-        margin-right: 1rem;
-        cursor: pointer;
+  &--img {
+    margin-right: 1rem;
+    cursor: pointer;
+  }
+
+  &--color {
+    width: 8rem;
+    height: 100%;
+    justify-content: center;
+
+    margin: 0 auto;
+    border: .1rem solid lightgrey;
+    border-radius: .5rem;
+
+    text-align: center;
+    letter-spacing: 0.2rem;
+  }
+
+  &--load-latest {
+    cursor: pointer;
+    font-size: smaller;
+
+    background-color: #8fbc8f;
+    color: white;
+    border-radius: .25rem;
+
+    &:hover {
+      background-color: #0056b3;
     }
-
-    &--color {
-        width: 8rem;
-        height: 100%;
-        justify-content: center;
-
-        margin: 0 auto;
-        border: .1rem solid lightgrey;
-        border-radius: .5rem;
-
-        text-align: center;
-        letter-spacing: 0.2rem;
-    }
-
-    &--load-latest {
-        cursor: pointer;
-        font-size: smaller;
-
-        background-color: #8fbc8f;
-        color: white;
-        border-radius: .25rem;
-
-        &:hover {
-            background-color: #0056b3;
-        }
-    }
+  }
 }

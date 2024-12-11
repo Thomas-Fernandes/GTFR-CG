@@ -1,4 +1,4 @@
-import { JSX, useState } from "react";
+import { useState } from "react";
 
 import ImgButton from "@/components/ImgButton/ImgButton";
 

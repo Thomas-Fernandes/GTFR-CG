@@ -1,77 +1,48 @@
-$light-green: #00ff00;
-$dark-green: #007f00;
-$dark-yellow: #7f7f00;
-$dark-red: #7f0000;
-
-$light-green-progress: #00ff004d;
-$dark-yellow-progress: #ffff004d;
-$dark-red-progress: #ff00004d;
+@use "@/variables" as *;
 
 #toast-container {
-    position: fixed;
-    top: 2%;
-    right: 2%;
-    z-index: 999;
+  @apply fixed z-50 top-2 right-4;
 
-    .toast {
-        min-width: 12.5rem;
+  .toast {
+    @apply min-w-48 rounded mt-2 p-3 opacity-0 text-white text-sm cursor-pointer;
 
-        margin-top: .5rem;
-        padding: .8rem;
+    background-color: $toast--success;
 
-        background-color: $dark-green;
-        border-radius: .2rem;
-        opacity: 0;
+    animation: fade-in 0.5s;
+    transition: margin 0.2s ease, transform 0.5s ease, opacity 0.5s ease;
 
-        color: white;
-        font-size: .8rem;
+    &.show { @apply opacity-100; transform: translateX(0);    }
+    &.hide { @apply opacity-0;   transform: translateX(100%); }
 
-        animation: fade-in 0.5s;
-        transition: margin 0.2s ease, transform 0.5s ease, opacity 0.5s ease;
+    &.warn  { background-color: $toast--warning; }
+    &.error { background-color: $toast--failure; }
 
-        cursor: pointer;
+    .toast-progress {
+      @apply absolute bottom-0 left-0 h-1 w-full rounded;
+      background-color: $toast--success;
 
-        &.show { opacity: 1; transform: translateX(0);    }
-        &.hide { opacity: 0; transform: translateX(100%); }
+      &.warn  { background-color: $toast--warning; }
+      &.error { background-color: $toast--failure; }
 
-        &.warn  { background-color: $dark-yellow; }
-        &.error { background-color: $dark-red; }
+      .toast-progress-fill {
+        @apply h-full rounded;
 
-        .toast-progress {
-            position: absolute;
-            bottom: 0;
-            left: 0;
+        background-color: $toast--progress--success;
+        transition: width linear;
 
-            height: .2rem;
-            width: 100%;
-
-            background-color: $light-green-progress;
-            border-radius: .2rem;
-
-            &.warn  { background-color: $dark-yellow-progress; }
-            &.error { background-color: $dark-red-progress; }
-
-            .toast-progress-fill {
-                height: 100%;
-
-                background-color: $light-green;
-                border-radius: .2rem;
-
-                transition: width linear;
-
-                &.warn  { background-color: yellow; }
-                &.error { background-color: red; }
-            }
-        }
+        &.warn  { background-color: $toast--progress--failure; }
+        &.error { background-color: $toast--progress--warning; }
+      }
     }
+  }
 }
 
 @keyframes fade-in {
-    from { opacity: 0; transform: translateX(100%); }
-    to   { opacity: 1; transform: translateX(0);    }
+  from { @apply opacity-0;   transform: translateX(100%); }
+  to   { @apply opacity-100; transform: translateX(0);    }
 }
 
 @keyframes fade-out {
-    from { opacity: 1; transform: translateX(0);    }
-    to   { opacity: 0; transform: translateX(100%); }
+  from { @apply opacity-100; transform: translateX(0);    }
+  to   { @apply opacity-0;   transform: translateX(100%); }
 }

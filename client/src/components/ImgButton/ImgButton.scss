@@ -1,0 +1,15 @@
+.img-button > button {
+  @apply border-none bg-none p-0 cursor-pointer;
+
+  &:hover {
+    @apply p-1;
+  }
+
+  img {
+    @apply block;
+
+    &:hover {
+      @apply brightness-75;
+    }
+  }
+}

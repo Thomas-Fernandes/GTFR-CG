@@ -1,4 +1,3 @@
-import { JSX } from "react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
 import { ViewPaths } from "@/constants/paths";

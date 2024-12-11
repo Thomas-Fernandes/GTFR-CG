@@ -1,22 +1,12 @@
-import React, { useState } from "react";
-
-import { StateSetter } from "@/common/types";
+import { useState } from "react";
 
 import ButtonRemove from "@/components/ButtonRemove/ButtonRemove";
 
-import "./FileUploader.css";
+import { FileUploaderProps } from "./types";
 
-type Props = {
-  id: string;
-  label: string;
-  caption?: string;
-  accept?: string;
-  labelClassName?: string;
-  captionClassName?: string;
-  setter: StateSetter<File | undefined>;
-};
+import "./FileUploader.scss";
 
-const FileUploader: React.FC<Props> = ({ id, label, caption, accept, labelClassName, captionClassName, setter }) => {
+const FileUploader: React.FC<FileUploaderProps> = ({ id, label, caption, accept, labelClassName, captionClassName, setter }) => {
   const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState<boolean>(false);
 

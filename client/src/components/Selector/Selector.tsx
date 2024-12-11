@@ -1,25 +1,13 @@
-import { ComponentPropsWithoutRef, JSX } from "react";
-
-import { StateSetter } from "@/common/types";
+import { SelectorProps } from "./types";
 
 import "./Selector.scss";
 
-export type Option = {
-  label: string;
-  value: string;
-};
-
-type Props = ComponentPropsWithoutRef<"select"> & {
-  setter: StateSetter<string>;
-  options: Option[];
-};
-
-const Selector: React.FC<Props> = ({ setter, options, ...props }): JSX.Element => {
+const Selector: React.FC<SelectorProps> = ({ setter, options, ...selectProps }): JSX.Element => {
   return (
     <select
       onChange={(e) => setter(e.target.value)}
-      className={`selector ${props.className ?? ""}`}
-      {...props}
+      className={`selector ${selectProps.className ?? ""}`}
+      {...selectProps}
     >
       { options.map((option, idx) => (
         <option

@@ -1,4 +1,4 @@
-import { JSX, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
 
 import Selector from "@/components/Selector/Selector";
 

@@ -1,22 +1,14 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 import { sendToast } from "@/common/toast";
-
 import ButtonRemove from "@/components/ButtonRemove/ButtonRemove";
-
 import { Toast, ToastType } from "@/constants/toasts";
+
+import { ColorPickerProps } from "./types";
 
 import "./ColorPicker.scss";
 
-type Props = {
-  id: string;
-  latest?: string;
-  label?: string;
-  labelClassName?: string;
-  setter: (color: string) => void;
-};
-
-const ColorPicker: React.FC<Props> = ({ id, latest, label, labelClassName, setter }) => {
+const ColorPicker: React.FC<ColorPickerProps> = ({ id, latest, label, labelClassName, setter }) => {
   const [selectedColor, setSelectedColor] = useState<string>(""); // Default to black color
 
   const calculateLuminance = (hex: string) => {

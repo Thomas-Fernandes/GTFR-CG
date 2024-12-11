@@ -1,5 +1,3 @@
-import { JSX } from "react";
-
 import { DEFAULT_SELECTED_POSITION, PROCESSED_ARTWORKS_PATH } from "./constants";
 import { useThumbnailGalleryContext } from "./contexts";
 import { ThumbnailOptionProps } from "./types";

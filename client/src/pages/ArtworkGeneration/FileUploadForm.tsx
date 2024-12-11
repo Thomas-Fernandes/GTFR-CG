@@ -1,4 +1,4 @@
-import { JSX, useState } from "react";
+import { useState } from "react";
 
 import Checkbox from "@/components/Checkbox/Checkbox";
 import FileUploader from "@/components/FileUploader/FileUploader";

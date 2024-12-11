@@ -1,4 +1,4 @@
-import { JSX, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 import { DEFAULT_SELECTED_POSITION, LOGO_POSITIONS } from "./constants";
 import { ThumbnailGalleryContext } from "./contexts";

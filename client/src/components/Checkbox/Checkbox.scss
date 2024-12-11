@@ -1,27 +1,23 @@
 .checkbox {
-    align-items: center;
-    flex-direction: row;
-    gap: .5rem;
+  @apply flex items-center gap-2;
+
+  &:hover {
+    @apply cursor-pointer font-bold;
+  }
+
+  input[type="checkbox"] {
+    @apply mx-0 my-0;
+    transform: scale(1.5);
+    accent-color: #007bff;
+    transition: all 0.5s;
 
     &:hover {
-        cursor: pointer;
-        font-weight: bold;
+      @apply cursor-pointer;
+      accent-color: #0056b3;
     }
+  }
 
-    input[type="checkbox"] {
-        margin: 0 auto;
-        transform: scale(1.5);
-        accent-color: #007bff;
-        transition: 0.5s;
-
-        &:hover {
-            accent-color: #0056b3;
-            cursor: pointer;
-        }
-    }
-
-    &--label {
-        font-size: .8rem;
-        margin: 0;
-    }
+  &--label {
+    @apply m-0 text-xs italic;
+  }
 }

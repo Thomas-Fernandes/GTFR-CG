@@ -1,14 +1,8 @@
-import React, { ComponentPropsWithoutRef } from "react";
+import { ImgWithOverlayProps } from "./types";
 
 import "./ImgWithOverlay.scss";
 
-type Props = ComponentPropsWithoutRef<"img"> & {
-  alt: string;
-  overlayText: string;
-  className?: string;
-};
-
-const ImgWithOverlay: React.FC<Props> = ({ alt, overlayText, className, ...imgProps }) => {
+const ImgWithOverlay: React.FC<ImgWithOverlayProps> = ({ alt, overlayText, newTabLink, className, ...imgProps }) => {
   return (
     <div className="iwo">
       <img
@@ -18,6 +12,9 @@ const ImgWithOverlay: React.FC<Props> = ({ alt, overlayText, className, ...imgPr
       />
       <div className="iwo--overlay">
         <span className="iwo--overlay--text">{overlayText}</span>
+        { newTabLink &&
+          <img src={"/svg/new-tab.svg"} alt={"new-tab"} className="iwo--overlay--icon" />
+        }
       </div>
     </div>
   );

@@ -1,13 +1,10 @@
-import { ComponentPropsWithoutRef, forwardRef, useEffect, useRef } from "react";
+import { forwardRef, useEffect, useRef } from "react";
 
-import "./AutoResizeTextarea.css";
+import { AutoResizeTextareaProps } from "./types";
 
-type Props = ComponentPropsWithoutRef<"textarea"> & {
-  value: string;
-  className?: string;
-};
+import "./AutoResizeTextarea.scss";
 
-export const AutoResizeTextarea = forwardRef<HTMLTextAreaElement, Props>(({ value, className, ...props }, ref) => {
+export const AutoResizeTextarea = forwardRef<HTMLTextAreaElement, AutoResizeTextareaProps>(({ value, className, ...props }, ref) => {
   const internalRef = useRef<HTMLTextAreaElement>(null);
   const combinedRef = ref || internalRef;
 

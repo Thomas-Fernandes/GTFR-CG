@@ -1,5 +1,3 @@
-import React from "react";
-
 import { sendToast } from "@/common/toast";
 
 import ImgWithOverlay from "@/components/ImgWithOverlay/ImgWithOverlay";

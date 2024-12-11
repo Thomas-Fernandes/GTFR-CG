@@ -1,0 +1,12 @@
+@use "@/variables" as *;
+
+.btn-remove {
+  @apply cursor-pointer p-1 mb-1 bg-transparent border-none shadow-none;
+
+  color: $secondary-1;
+  transition: all .01s;
+
+  &:hover {
+    @apply text-red-600 bg-transparent;
+  }
+}

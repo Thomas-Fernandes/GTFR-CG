@@ -1,0 +1,10 @@
+.lyrics-textarea {
+  @apply w-3/5 p-2 self-center text-nowrap;
+  background-image:
+    linear-gradient(to right,
+      transparent calc(0.92ch * 62),
+      lightgrey calc(0.92ch * 62),
+      lightgrey calc(0.92ch * 63),
+      transparent calc(0.92ch * 63)
+    );
+}

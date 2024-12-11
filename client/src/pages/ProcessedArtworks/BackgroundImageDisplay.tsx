@@ -1,5 +1,3 @@
-import { JSX } from "react";
-
 import { COVER_ART_FILENAME, PROCESSED_ARTWORKS_PATH } from "./constants";
 import { handleSubmitDownloadImage } from "./handlers";
 

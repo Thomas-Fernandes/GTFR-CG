@@ -1,5 +1,3 @@
-import { JSX } from "react";
-
 import { StatisticProps } from "./types";
 
 import "./Statistic.scss";
