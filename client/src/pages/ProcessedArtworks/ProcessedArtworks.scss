@@ -1,0 +1,13 @@
+#processed-artworks {
+  #image-panels {
+    @apply flex items-center justify-center gap-16;
+
+    > div {
+      @apply w-5/12 p-4 flex flex-col gap-4 items-center justify-center rounded-xl;
+
+      button.mac {
+        @apply m-0;
+      }
+    }
+  }
+}

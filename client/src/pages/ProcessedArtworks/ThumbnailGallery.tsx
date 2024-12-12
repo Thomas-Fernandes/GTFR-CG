@@ -1,5 +1,7 @@
 import { useMemo, useState } from "react";
 
+import DownloadButton from "@/components/DownloadButton/DownloadButton";
+
 import { DEFAULT_SELECTED_POSITION, LOGO_POSITIONS } from "./constants";
 import { ThumbnailGalleryContext } from "./contexts";
 import { handleSubmitDownloadImage } from "./handlers";
@@ -15,16 +17,16 @@ const ThumbnailGallery = (): JSX.Element => {
 
   return (
     <div id="thumbnail-gallery">
-      <form onSubmit={(e) => handleSubmitDownloadImage(e, { selectedImage: processImageName(selectedThumbnail) })}>
-        <div id="thumbnail-gallery--grid">
-          <ThumbnailGalleryContext.Provider value={contextValue}>
-            { LOGO_POSITIONS.map((logoPosition, idx) =>
-              <ThumbnailOption key={`thumbnail-item_${idx}`} logoPosition={logoPosition} idx={idx} />
-            )}
-          </ThumbnailGalleryContext.Provider>
-        </div>
-        <input type="submit" value="Download" className="button" />
-      </form>
+      <div id="thumbnail-gallery--grid">
+        <ThumbnailGalleryContext.Provider value={contextValue}>
+          { LOGO_POSITIONS.map((logoPosition, idx) =>
+            <ThumbnailOption key={`thumbnail-item_${idx}`} logoPosition={logoPosition} idx={idx} />
+          )}
+        </ThumbnailGalleryContext.Provider>
+      </div>
+      <DownloadButton className="mac"
+        onClick={() => handleSubmitDownloadImage(processImageName(selectedThumbnail))}
+      />
     </div>
   );
 };

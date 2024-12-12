@@ -16,15 +16,15 @@ const ItunesImageResult: React.FC<ItunesImageResultProps> = ({ item, itemId }): 
   const [itemLabel, setItemLabel] = useState("");
 
   return (
-    <div className="result-item">
+    <div className="results--container--item">
       <ImgButton
         src={item.artworkUrl100} alt={resultLabel}
         onLoad={() => setItemLabel(`${item.artistName} - ${resultLabel}`)}
         onClick={() => handleSelectItunesImage(item, itemId, { isProcessingLoading, setIsProcessingLoading, navigate })}
         overlayText={"Use this image"}
-        className="result-item--image"
+        className="results--container--item--image"
       />
-      <p className="result-item--text centered font-bold italic">
+      <p className="results--container--item--text">
         {itemLabel}
       </p>
 
@@ -37,11 +37,11 @@ const ItunesResults: React.FC<ItunesResultsProps> = ({ items, setItunesResults }
   return (
     <div className="results">
       { items.length > 0 &&
-        <button id="clear" onClick={() => setItunesResults([])}>
+        <button id="clear" className="mac" onClick={() => setItunesResults([])}>
           {"Clear results"}
         </button>
       }
-      <div id="results" className="result-container">
+      <div id="results" className="results--container">
         { items.map((item, index) => (
           <ItunesImageResult
             key={index} item={item} itemId={index}

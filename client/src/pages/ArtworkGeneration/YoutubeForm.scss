@@ -1,7 +1,7 @@
 #artwork-generation {
   form#youtube {
     .submit {
-      @apply w-1/4 flex gap-4;
+      @apply max-w-lg w-1/3 flex gap-4;
 
       .action-button {
         @apply w-full;

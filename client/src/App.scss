@@ -4,9 +4,7 @@
 @import url($font-family);
 
 html {
-  background: black;
-  min-height: 100%;
-  min-width: 100%;
+  @apply bg-black min-w-full min-h-full;
 
   @include apply-theme($dark-theme);
 
@@ -15,46 +13,29 @@ html {
   }
 }
 
-head {
-  @apply hidden;
-}
+head { @apply hidden; }
 #root {
-  width: 100vw;
-  min-height: 100vh;
+  @apply w-screen min-h-screen;
 
   > div[id] {
-    @apply flex flex-col items-center text-left text-base;
+    @apply box-border flex flex-col items-center text-left text-base;
 
-    box-sizing: border-box;
     font-family: "Poppins", "Rubik", sans-serif;
-    color: white;
-    // letter-spacing: 0.08rem;
+    color: $secondary-1;
   }
 }
 
-body {
-  z-index: 0;
-}
-
 .custom-background::before {
-  @apply fixed w-full h-full overflow-hidden;
+  @apply -z-20 fixed w-full h-full overflow-hidden saturate-0;
   content: ""; /* Required for pseudo-element */
   background: url("/img/ref4.gif") no-repeat center center fixed;
   background-size: cover;
-  filter: saturate(0%); /* Apply saturation filter to the background */
-  z-index: -2;
 }
 .rotate-zoom {
-  position: fixed;
-  overflow: hidden; /* Prevent scrolling due to pseudo-element */
-  z-index: -1;
-  width: 100%;
-  height: 100%;
+  @apply -z-10 fixed w-full h-full opacity-75 origin-center overflow-hidden;
   background: url("/svg/palette-waves-light.svg") no-repeat center center fixed;
   background-size: cover;
-  opacity: 0.75;
   animation: rotateBackground 60s ease-in-out infinite, zoomEffect 80s ease-in-out infinite;
-  transform-origin: center center; /* Ensure the transform happens from the center */
 }
 @keyframes rotateBackground {
   0%   { background-position: 0% 0%;     rotate: 0deg;   }
@@ -72,13 +53,7 @@ body {
 }
 
 div.navbar {
-  width: auto;
-  gap: 1.6rem;
-
-  margin: auto;
-  flex-direction: row;
-
-  justify-content: space-between;
+  @apply w-auto flex m-auto gap-6;
 
   button:hover {
     background-color: $navbutton-hover;
@@ -86,74 +61,43 @@ div.navbar {
 }
 
 div.spinner-container {
-  position: relative;
-  display: inline-block;
-  width: 2.4rem;
-  height: 2.4rem;
+  @apply relative inline-block w-10 h-10;
 
   span.spinner {
-    width: 2.4rem;
-    height: 2.4rem;
-
-    display: inline-block;
-
+    @apply inline-block w-10 h-10 box-border;
     border-radius: 50%;
     border-top: .2rem solid $primary-yellow;
     border-right: .2rem solid transparent;
-    box-sizing: border-box;
-
     animation: spin 0.67s linear infinite;
 
     &:after {
+      @apply absolute top-0 left-0 box-border w-10 h-10;
       content: "";
-      box-sizing: border-box;
-      position: absolute;
-      left: 0;
-      top: 0;
-
-      width: 2.4rem;
-      height: 2.4rem;
-
       border-radius: 50%;
       border-bottom: .2rem solid $primary-blue;
       border-left: .2rem solid transparent;
     }
 
     img {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 50%; /* Adjust size as needed */
-      height: 50%; /* Adjust size as needed */
+      @apply absolute top-1/2 left-1/2 w-1/2 h-1/2;
       transform: translate(-50%, -50%);
     }
   }
 }
 @keyframes spin {
-  0%   {transform: rotate(0deg)}
-  100% {transform: rotate(360deg)}
-}
-
-h1, h2, h3, h4, h5, h6,
-button, .button, .action-button,
-input[type="text"],
-.centered
-{
-  text-align: center;
+  0%   { transform: rotate(0deg)   }
+  100% { transform: rotate(360deg) }
 }
 
 h1 {
   @apply mx-0 mt-0 mb-8 text-7xl;
-  font-family: "Playfair Display", sans-serif;
+  font-family: $font-family--header;
   color: $primary-yellow;
   text-shadow: $glow--h1-primary2--md;
 }
 
 hr {
-  width: 80%;
-  margin: 0 auto;
-  height: 0;
-  border: 0;
+  @apply w-4/5 my-0 mx-auto h-0 border-none;
   box-shadow: 0 0 .1rem .005rem black;
 
   &.sz-80 { width: calc(80% * 4/5); }
@@ -178,52 +122,53 @@ button {
   border: .1rem solid $button-border;
   box-shadow: 0 0 .5rem $button-shadow;
 
+  &.mac, &.download-button {
+    @apply w-full py-1 mb-4 font-normal text-xl;
+    background-color: $old-green;
+
+    span {
+      @apply font-normal text-xl;
+    }
+  }
+
+  &.download-button {
+    background-color: $old-green--75;
+  }
+
   span {
-    position: relative;
-    cursor: pointer;
+    @apply cursor-pointer relative items-center align-middle;
+    transition: 0.3s ease;
 
-    align-items: center;
-    vertical-align: middle;
-
-    transition: 0.3s;
-  }
-  span:before {
-    top: 0;
-    position: absolute;
-
-    opacity: 0;
-    transition: 0.3s;
-  }
-  span.left:before {
-    left: -10%;
-
-    content: '\00ab'; /* double left arrow character */
-  }
-  span.right:before {
-    right: -10%;
-
-    content: '\00bb'; /* double right arrow character */
+    &:before {
+      @apply absolute top-0 opacity-0;
+      transition: 0.3s ease;
+    }
+    &.left:before {
+      left: -10%;
+      content: '\00ab'; /* double left arrow character */
+    }
+    &.right:before {
+      right: -10%;
+      content: '\00bb'; /* double right arrow character */
+    }
   }
 
   &:hover {
     background-color: $primary-blue !important;
     color: $secondary-1 !important;
 
-    span.left  { padding-left:  .75rem; }
-    span.right { padding-right: .75rem; }
+    span.left  { @apply pl-3; }
+    span.right { @apply pl-3; }
 
-    span:before {
-      opacity: 1;
-    }
+    span:before { @apply opacity-100; }
     span.left:before  { left:  -2%; }
     span.right:before { right: -2%; }
   }
   &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
+    @apply opacity-50 cursor-not-allowed;
   }
 }
-a.button, input.button {
+input.button {
   display: inline-block;
 
   margin-top: 1rem;
@@ -236,50 +181,44 @@ a.button, input.button {
   text-decoration: none; /* remove underline */
 
   &:hover {
+    @apply cursor-pointer;
     background-color: $blue-button-hover;
-    transition: 0.3s;
-    cursor: pointer;
+    transition: 0.3s ease;
   }
 }
 
-input[type="text"], textarea {
-  width: 50%;
-  padding: 1.5rem;
-  margin: 1rem 0;
-  line-height: normal;
+button, h1, h2, h3, h4, h5, h6, p, span, input {
+  @apply text-center;
+}
 
+input[type="text"], textarea {
+  @apply w-1/2 p-6 my-4 mx-0 rounded;
+  line-height: normal;
   border: .1rem solid lightgrey;
-  border-radius: 0.2rem;
 
   &.empty-text {
-    font-style: italic;
+    @apply italic;
     font-size: .75rem !important;
   }
 }
 input[type="file"] {
+  @apply cursor-pointer;
   text-align-last: center;
-  cursor: pointer;
 
   &::file-selector-button {
+    @apply py-2 px-6 border-none rounded;
     margin-right: 5%;
-    padding: .4rem 1.6rem;
-
-    border: none;
-    border-radius: 0.2rem;
-
     background: $blue-button;
-    color: white;
+    color: $secondary-1;
   }
 }
 
 .flexbox {
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
+  @apply flex flex-row flex-wrap items-center justify-center;
 }
 
-.hidden-h { visibility: hidden; width:  0; }
-.hidden-v { visibility: hidden; height: 0; }
+.hidden-h { visibility: hidden; @apply w-0; }
+.hidden-v { visibility: hidden; @apply h-0; }
 
 .t-green { color: $text-green; }
 .t-yellow { color: $text-yellow; }

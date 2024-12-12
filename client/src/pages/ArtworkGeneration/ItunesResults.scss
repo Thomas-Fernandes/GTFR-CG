@@ -4,12 +4,11 @@
   .results {
     @apply flex flex-col mt-4 items-center;
 
-    #clear {
-      @apply w-64 py-1 mb-4 font-normal text-xl;
-      background-color: $old-green;
+    button.mac {
+      @apply w-64;
     }
 
-    .result-container {
+    &--container {
       &:empty {
         @apply hidden;
       }
@@ -19,7 +18,7 @@
         grid-template-columns: repeat(3, minmax(0, 1fr));
       }
 
-      .result-item {
+      &--item {
         @apply justify-items-center;
 
         button {
@@ -29,10 +28,10 @@
 
         &--image {
           @apply max-w-40 max-h-40 p-1 rounded-md;
-          border: .05rem solid lightgrey;
+          border: .05rem solid $secondary-2;
         }
         &--text {
-          @apply min-h-full mt-2 mb-0 mx-auto text-lg;
+          @apply min-h-full mt-2 mb-0 mx-auto text-center font-bold italic text-lg;
           min-height: -webkit-fill-available;
         }
       }

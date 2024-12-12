@@ -1,0 +1,13 @@
+#processed-artworks {
+  .thumbnail-option {
+    @apply flex flex-col;
+
+    img {
+      @apply max-w-full h-auto cursor-pointer
+    }
+
+    input[type="radio"] {
+      @apply p-0 mt-2 mb-0 border-none;
+    }
+  }
+}

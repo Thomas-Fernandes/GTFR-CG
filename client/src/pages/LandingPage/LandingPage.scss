@@ -74,7 +74,7 @@
       @apply relative left-6;
 
       > :first-child {
-        @apply relative aspect-square z-10;
+        @apply z-10 relative aspect-square;
         top: calc(16vh / 2.25);
         left: calc(-16vw / 4);
 

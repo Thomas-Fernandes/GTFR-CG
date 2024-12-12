@@ -1,0 +1,8 @@
+@use "@/variables" as *;
+
+#processed-artworks {
+  #image-container {
+    background: $secondary-1;
+    box-shadow: 0 0 .5rem #0000001a;
+  }
+}

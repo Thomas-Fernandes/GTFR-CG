@@ -1,25 +1,15 @@
+@use "@/variables" as *;
+
 #processed-artworks {
-    #thumbnail-gallery {
-        width: 45%;
-        padding: 1rem;
+  #thumbnail-gallery {
+    @apply flex flex-col;
 
-        background: white;
-        box-shadow: 0 0 .5rem rgba(0,0,0,0.1);
+    background: $secondary-1;
+    box-shadow: 0 0 .5rem rgba(0,0,0,0.1);
 
-        form {
-            input[type="radio"] {
-                padding: 0;
-                margin: .5rem;
-                border: none;
-            }
-        }
-
-        &--grid {
-            height: 80%;
-
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: .5rem;
-        }
+    &--grid {
+      @apply h-4/5 grid gap-2;
+      grid-template-columns: repeat(3, 1fr);
     }
+  }
 }
