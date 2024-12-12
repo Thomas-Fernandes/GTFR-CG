@@ -2,13 +2,11 @@ import { useEffect, useMemo, useState } from "react";
 
 import { useTitle } from "@/common/hooks/useTitle";
 import { ContentsGenerationMode } from "@/common/types";
-
 import { NavButtonSide } from "@/components/NavButton/constants";
 import NavButton from "@/components/NavButton/NavButton";
 import ToastContainer from "@/components/ToastContainer/ToastContainer";
 import TopBotSpacer from "@/components/TopBotSpacer/TopBotSpacer";
 import ZipDownloadButton from "@/components/ZipDownloadButton/ZipDownloadButton";
-
 import { SessionStorage, Title } from "@/constants/browser";
 import { ViewPaths } from "@/constants/paths";
 
@@ -18,7 +16,7 @@ import { CARDS_ZIP_FILENAME } from "./constants";
 import { CardsGenerationContext, CardsGenerationFormContext } from "./contexts";
 import { CardData } from "./types";
 
-import "./CardsGeneration.css";
+import "./CardsGeneration.scss";
 
 const CardsGeneration = (): JSX.Element => {
   useTitle(Title.CardsGeneration);

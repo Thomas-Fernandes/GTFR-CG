@@ -1,7 +1,6 @@
 import { useState } from "react";
 
 import ImgButton from "@/components/ImgButton/ImgButton";
-
 import { SpinnerId } from "@/constants/spinners";
 
 import { useArtworkGenerationContext } from "./contexts";

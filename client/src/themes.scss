@@ -3,62 +3,56 @@
 @use "./variables" as *;
 
 @mixin apply-theme($theme-map) {
-    background: map.get($theme-map, app-background-color);
+  * {
+    transition: all 0.3s ease, font-weight 0s;
+  }
 
-    * { transition: all 0.3s ease; }
+  h2, h3, h4, h5, h6, p, button, .button, .action-button {
+    color: map.get($theme-map, text-color);
+  }
 
-    h1, h2, h3, h4, h5, h6, p, button, .button, .action-button {
-        color: map.get($theme-map, text-color);
+  hr {
+    box-shadow: 0 0 0.1rem 0.005rem map.get($theme-map, text-color);
+  }
+
+  textarea, input[type="text"] {
+    background: map.get($theme-map, background-color);
+    color: map.get($theme-map, text-color);
+  }
+
+  #home {
+    .stats-board {
+      background: map.get($theme-map, background-color);
     }
+  }
 
-    hr {
-        box-shadow: 0 0 0.1rem 0.005rem map.get($theme-map, text-color);
+  #lyrics {
+    .lyrics-textarea {
+      background-image: map.get($theme-map, lyrics-overflow-marker);
     }
-
-    textarea, input[type="text"] {
-        background: map.get($theme-map, background-color);
-        color: map.get($theme-map, text-color);
-    }
-
-    #home {
-        h1 {
-            color: white;
-        }
-
-        .stats-board {
-            background: map.get($theme-map, background-color);
-        }
-    }
-
-    #lyrics {
-        .lyrics-textarea {
-            background-image: map.get($theme-map, lyrics-overflow-marker);
-        }
-    }
+  }
 }
 
 $light-theme: (
-    // app-background-color: linear-gradient(to right, map.get($primary-yellow, full), map.get($primary-blue, full)),
-    text-color: black,
-    background-color: white,
-    lyrics-overflow-marker: linear-gradient(
-        to right,
-        transparent calc(0.92ch* 62),
-        lightgrey calc(0.92ch* 62),
-        lightgrey calc(0.92ch* 63),
-        transparent calc(0.92ch* 63)
-    ),
+  text-color: $secondary-3,
+  background-color: $secondary-1,
+  lyrics-overflow-marker: linear-gradient(
+    to right,
+    transparent calc(0.92ch * 62),
+    $text-limit--dark calc(0.92ch * 62),
+    $text-limit--dark calc(0.92ch * 63),
+    transparent calc(0.92ch * 63)
+  ),
 );
 
 $dark-theme: (
-    // app-background-color: linear-gradient(to left, map.get($primary-yellow, full), map.get($primary-blue, full)),
-    text-color: white,
-    background-color: #222,
-    lyrics-overflow-marker: linear-gradient(
-        to right,
-        transparent calc(0.92ch* 62),
-        darkgrey calc(0.92ch* 62),
-        darkgrey calc(0.92ch* 63),
-        transparent calc(0.92ch* 63)
-    ),
+  text-color: $secondary-1,
+  background-color: $secondary-3,
+  lyrics-overflow-marker: linear-gradient(
+    to right,
+    transparent calc(0.92ch * 62),
+    $text-limit--light calc(0.92ch * 62),
+    $text-limit--light calc(0.92ch * 63),
+    transparent calc(0.92ch * 63)
+  ),
 );

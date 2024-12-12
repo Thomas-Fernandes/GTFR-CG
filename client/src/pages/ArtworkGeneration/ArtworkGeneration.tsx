@@ -2,12 +2,10 @@ import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useTitle } from "@/common/hooks/useTitle";
-
 import { NavButtonSide } from "@/components/NavButton/constants";
 import NavButton from "@/components/NavButton/NavButton";
 import ToastContainer from "@/components/ToastContainer/ToastContainer";
 import TopBotSpacer from "@/components/TopBotSpacer/TopBotSpacer";
-
 import { Title } from "@/constants/browser";
 import { ViewPaths } from "@/constants/paths";
 
@@ -18,7 +16,7 @@ import ItunesResults from "./ItunesResults";
 import { ItunesResult } from "./types";
 import YoutubeForm from "./YoutubeForm";
 
-import "./ArtworkGeneration.css";
+import "./ArtworkGeneration.scss";
 
 const ArtworkGeneration = (): JSX.Element => {
   useTitle(Title.ArtworkGeneration);

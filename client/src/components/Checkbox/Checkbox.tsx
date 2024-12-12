@@ -9,9 +9,9 @@ const Checkbox: React.FC<CheckboxProps> = ({ id, label, ...inputProps }): JSX.El
         type="checkbox" name={id} id={id}
         {...inputProps}
       />
-      <p className="checkbox--label">
+      <span className="checkbox--label">
         {label}
-      </p>
+      </span>
     </label>
   )
 };

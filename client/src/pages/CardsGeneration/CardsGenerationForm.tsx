@@ -1,18 +1,16 @@
 import { useState } from "react";
 
 import { ContentsGenerationMode } from "@/common/types";
-
 import Checkbox from "@/components/Checkbox/Checkbox";
 import ColorPicker from "@/components/ColorPicker/ColorPicker";
 import FileUploader from "@/components/FileUploader/FileUploader";
-
 import { SpinnerId } from "@/constants/spinners";
 
 import { useCardsGenerationContext, useCardsGenerationFormContext } from "./contexts";
 import { handleGenerateCards, handleUnauthorizedCheckbox } from "./handlers";
 import { CardsGenerationFormProps } from "./types";
 
-import "./CardsGenerationForm.css";
+import "./CardsGenerationForm.scss";
 
 const CardsGenerationForm: React.FC<CardsGenerationFormProps> = ({ setCardPaths, setCards }): JSX.Element => {
   const { cardMethod, cardMetaname, setCardMetaname, bgImg, colorPick, includeCenterArtwork, generateOutro, includeBackgroundImg, cardBottomColor } = useCardsGenerationContext();

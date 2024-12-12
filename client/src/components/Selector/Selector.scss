@@ -1,11 +1,11 @@
 @use "@/variables" as *;
 
 .selector {
-  @apply cursor-pointer py-2 px-6 rounded-md text-left;
-  background: $primary-yelloww;
-
+  @apply cursor-pointer py-1.5 px-6 rounded-md text-left;
+  background: $primary-yellow;
   border: .1rem solid #00000010;
   box-shadow: 0 0 .5rem #0000007f;
+  color: $secondary-3;
 
   option {
     @apply text-justify;

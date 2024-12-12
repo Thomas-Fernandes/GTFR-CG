@@ -1,59 +1,41 @@
+@use "@/variables" as *;
+
 #artwork-generation {
-    #results.result-container {
-        &:empty {
-            display: none;
-        }
-        &:not(:empty) {
-            max-width: 58rem;
-            width: 75%;
-            margin: auto;
-
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 1.6rem 5%;
-            margin-bottom: 1.6rem;
-        }
-
-        .result-item {
-            align-items: center;
-            justify-content: space-between;
-
-            button {
-                font-size: initial;
-            }
-
-            &--image {
-                max-width: 10rem;
-                max-height: 10rem;
-
-                border: .05rem solid lightgrey;
-                border-radius: .2rem;
-
-                padding: .25rem;
-            }
-            &--text {
-                min-height: -webkit-fill-available;
-                margin: .5rem auto 0 auto;
-                line-height: 1.2rem;
-            }
-        }
-    }
+  .results {
+    @apply flex flex-col mt-4 items-center;
 
     #clear {
-        background-color: #8fbc8f;
-
-        margin-bottom: 1rem;
-        width: 16rem;
-        font-size: smaller;
-
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        align-self: center;
-
-        &:hover {
-            cursor: pointer;
-            background-color: #0056b3;
-        }
+      @apply w-64 py-1 mb-4 font-normal text-xl;
+      background-color: $old-green;
     }
+
+    .result-container {
+      &:empty {
+        @apply hidden;
+      }
+      &:not(:empty) {
+        @apply w-5/6 grid gap-x-12 gap-y-6 mb-6;
+        max-width: 58rem;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .result-item {
+        @apply justify-items-center;
+
+        button {
+          @apply bg-transparent rounded-lg;
+          font-size: initial;
+        }
+
+        &--image {
+          @apply max-w-40 max-h-40 p-1 rounded-md;
+          border: .05rem solid lightgrey;
+        }
+        &--text {
+          @apply min-h-full mt-2 mb-0 mx-auto text-lg;
+          min-height: -webkit-fill-available;
+        }
+      }
+    }
+  }
 }

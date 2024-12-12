@@ -1,0 +1,15 @@
+#artwork-generation {
+  form#itunes {
+    .itunes--search {
+      @apply w-1/4 flex flex-row items-center justify-center gap-8;
+
+      select {
+        @apply py-1;
+      }
+
+      .action-button {
+        @apply w-full;
+      }
+    }
+  }
+}

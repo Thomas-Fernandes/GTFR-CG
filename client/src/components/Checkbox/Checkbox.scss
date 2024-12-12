@@ -1,3 +1,5 @@
+@use "@/variables" as *;
+
 .checkbox {
   @apply flex items-center gap-2;
 
@@ -9,15 +11,16 @@
     @apply mx-0 my-0;
     transform: scale(1.5);
     accent-color: #007bff;
-    transition: all 0.5s;
+    transition: all 0.3s ease;
 
     &:hover {
-      @apply cursor-pointer;
+      @apply cursor-pointer font-semibold;
       accent-color: #0056b3;
     }
   }
 
   &--label {
-    @apply m-0 text-xs italic;
+    @apply m-0 text-sm italic;
+    color: $secondary-1;
   }
 }

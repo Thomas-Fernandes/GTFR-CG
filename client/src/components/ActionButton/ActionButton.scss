@@ -1,7 +1,16 @@
 @use "@/variables" as *;
 
 .action-button {
-  background-color: $primary-yelloww;
+  background-color: $primary-yellow;
+
+  &.spaced {
+    @apply py-5;
+
+    .action-button--label {
+      @apply text-2xl;
+      letter-spacing: $letter-spacing--xl;
+    }
+  }
 
   &--label {
     @apply font-semibold text-xl;
@@ -14,7 +23,6 @@
   }
 
   &:hover {
-    background-color: $primary-bluee;
     box-shadow: $glow--primary2--md;
 
     .action-button--label {

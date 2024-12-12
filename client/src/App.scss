@@ -1,139 +1,137 @@
-@use "sass:map";
-
 @use "./themes" as *;
 @use "./variables" as *;
 
 @import url($font-family);
 
 html {
-    background: black;
-    min-height: 100%;
-    min-width: 100%;
+  background: black;
+  min-height: 100%;
+  min-width: 100%;
 
-    @include apply-theme($dark-theme);
+  @include apply-theme($dark-theme);
 
-    &[data-theme="light"] {
-        @include apply-theme($light-theme);
-    }
+  &[data-theme="light"] {
+    @include apply-theme($light-theme);
+  }
 }
 
 head {
-    @apply hidden;
+  @apply hidden;
 }
 #root {
-    width: 100vw;
-    min-height: 100vh;
+  width: 100vw;
+  min-height: 100vh;
 
-    > div[id] {
-        @apply flex flex-col items-center text-left text-base;
+  > div[id] {
+    @apply flex flex-col items-center text-left text-base;
 
-        box-sizing: border-box;
-        font-family: "Poppins", "Rubik", sans-serif;
-        color: white;
-        // letter-spacing: 0.08rem;
-    }
+    box-sizing: border-box;
+    font-family: "Poppins", "Rubik", sans-serif;
+    color: white;
+    // letter-spacing: 0.08rem;
+  }
 }
 
 body {
-    z-index: 0;
+  z-index: 0;
 }
 
 .custom-background::before {
-    @apply fixed w-full h-full overflow-hidden;
-    content: ""; /* Required for pseudo-element */
-    background: url("/img/ref4.gif") no-repeat center center fixed;
-    background-size: cover;
-    filter: saturate(0%); /* Apply saturation filter to the background */
-    z-index: -2;
+  @apply fixed w-full h-full overflow-hidden;
+  content: ""; /* Required for pseudo-element */
+  background: url("/img/ref4.gif") no-repeat center center fixed;
+  background-size: cover;
+  filter: saturate(0%); /* Apply saturation filter to the background */
+  z-index: -2;
 }
 .rotate-zoom {
-    position: fixed;
-    overflow: hidden; /* Prevent scrolling due to pseudo-element */
-    z-index: -1;
-    width: 100%;
-    height: 100%;
-    background: url("/svg/palette-waves-light.svg") no-repeat center center fixed;
-    background-size: cover;
-    opacity: 0.75;
-    animation: rotateBackground 60s ease-in-out infinite, zoomEffect 80s ease-in-out infinite;
-    transform-origin: center center; /* Ensure the transform happens from the center */
+  position: fixed;
+  overflow: hidden; /* Prevent scrolling due to pseudo-element */
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  background: url("/svg/palette-waves-light.svg") no-repeat center center fixed;
+  background-size: cover;
+  opacity: 0.75;
+  animation: rotateBackground 60s ease-in-out infinite, zoomEffect 80s ease-in-out infinite;
+  transform-origin: center center; /* Ensure the transform happens from the center */
 }
 @keyframes rotateBackground {
-    0%   { background-position: 0% 0%;     rotate: 0deg;   }
-    25%  { background-position: 100% 100%; rotate: .2deg;  }
-    50%  { background-position: 0% 0%;     rotate: 0deg;   }
-    75%  { background-position: 100% 100%; rotate: -.2deg; }
-    100% { background-position: 0% 0%;     rotate: 0deg;   }
+  0%   { background-position: 0% 0%;     rotate: 0deg;   }
+  25%  { background-position: 100% 100%; rotate: .2deg;  }
+  50%  { background-position: 0% 0%;     rotate: 0deg;   }
+  75%  { background-position: 100% 100%; rotate: -.2deg; }
+  100% { background-position: 0% 0%;     rotate: 0deg;   }
 }
 
 @keyframes zoomEffect {
-    0%   { transform: scale(1); }
-    25%  { transform: scale(1.4); }
-    75%  { transform: scale(1.4); }
-    100% { transform: scale(1); }
+  0%   { transform: scale(1); }
+  25%  { transform: scale(1.4); }
+  75%  { transform: scale(1.4); }
+  100% { transform: scale(1); }
 }
 
 div.navbar {
-    width: auto;
-    gap: 1.6rem;
+  width: auto;
+  gap: 1.6rem;
 
-    margin: auto;
-    flex-direction: row;
+  margin: auto;
+  flex-direction: row;
 
-    justify-content: space-between;
+  justify-content: space-between;
 
-    button:hover {
-        background-color: $navbutton-hover;
-    }
+  button:hover {
+    background-color: $navbutton-hover;
+  }
 }
 
 div.spinner-container {
-    position: relative;
-    display: inline-block;
+  position: relative;
+  display: inline-block;
+  width: 2.4rem;
+  height: 2.4rem;
+
+  span.spinner {
     width: 2.4rem;
     height: 2.4rem;
 
-    span.spinner {
-        width: 2.4rem;
-        height: 2.4rem;
+    display: inline-block;
 
-        display: inline-block;
+    border-radius: 50%;
+    border-top: .2rem solid $primary-yellow;
+    border-right: .2rem solid transparent;
+    box-sizing: border-box;
 
-        border-radius: 50%;
-        border-top: .2rem solid map.get($primary-yellow, full);
-        border-right: .2rem solid transparent;
-        box-sizing: border-box;
+    animation: spin 0.67s linear infinite;
 
-        animation: spin 0.67s linear infinite;
+    &:after {
+      content: "";
+      box-sizing: border-box;
+      position: absolute;
+      left: 0;
+      top: 0;
 
-        &:after {
-            content: "";
-            box-sizing: border-box;
-            position: absolute;
-            left: 0;
-            top: 0;
+      width: 2.4rem;
+      height: 2.4rem;
 
-            width: 2.4rem;
-            height: 2.4rem;
-
-            border-radius: 50%;
-            border-bottom: .2rem solid map.get($primary-blue, full);
-            border-left: .2rem solid transparent;
-        }
-
-        img {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 50%; /* Adjust size as needed */
-            height: 50%; /* Adjust size as needed */
-            transform: translate(-50%, -50%);
-        }
+      border-radius: 50%;
+      border-bottom: .2rem solid $primary-blue;
+      border-left: .2rem solid transparent;
     }
+
+    img {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 50%; /* Adjust size as needed */
+      height: 50%; /* Adjust size as needed */
+      transform: translate(-50%, -50%);
+    }
+  }
 }
 @keyframes spin {
-    0%   {transform: rotate(0deg)}
-    100% {transform: rotate(360deg)}
+  0%   {transform: rotate(0deg)}
+  100% {transform: rotate(360deg)}
 }
 
 h1, h2, h3, h4, h5, h6,
@@ -141,183 +139,147 @@ button, .button, .action-button,
 input[type="text"],
 .centered
 {
-    text-align: center;
+  text-align: center;
 }
 
 h1 {
-    font-family: Helvetica, sans-serif;
-    margin: 2% 0 2% 0;
-    letter-spacing: 0;
+  @apply mx-0 mt-0 mb-8 text-7xl;
+  font-family: "Playfair Display", sans-serif;
+  color: $primary-yellow;
+  text-shadow: $glow--h1-primary2--md;
 }
 
 hr {
-    width: 80%;
-    margin: 0 auto;
-    height: 0;
-    border: 0;
-    box-shadow: 0 0 .1rem .005rem black;
+  width: 80%;
+  margin: 0 auto;
+  height: 0;
+  border: 0;
+  box-shadow: 0 0 .1rem .005rem black;
 
-    &.w-80 { width: calc(80% * 4/5); }
-    &.w-66 { width: calc(80% * 2/3); }
-    &.w-50 { width: calc(80% * 1/2); }
-    &.w-33 { width: calc(80% * 1/3); }
-    &.w-25 { width: calc(80% * 1/4); }
+  &.sz-80 { width: calc(80% * 4/5); }
+  &.sz-66 { width: calc(80% * 2/3); }
+  &.sz-50 { width: calc(80% * 1/2); }
+  &.sz-33 { width: calc(80% * 1/3); }
+  &.sz-25 { width: calc(80% * 1/4); }
 
-    @-moz-document url-prefix() { /* Firefox only supports half-pixels */
-        box-shadow: 0 0 .1rem .025rem black; /* significantly thicker */
-    }
+  @-moz-document url-prefix() { /* Firefox only supports half-pixels */
+    box-shadow: 0 0 .1rem .025rem black; /* significantly thicker */
+  }
 
-    &:after { /* Not really supposed to work, but does */
-        content: "\00a0"; /* Prevent margin collapse */
-    }
+  &:after { /* Not really supposed to work, but does */
+    content: "\00a0"; /* Prevent margin collapse */
+  }
 }
 
 button {
-    display: inline-block;
+  @apply py-2 px-4 rounded-md text-white text-2xl cursor-pointer;
+
+  background-color: $blue-button;
+  border: .1rem solid $button-border;
+  box-shadow: 0 0 .5rem $button-shadow;
+
+  span {
+    position: relative;
     cursor: pointer;
 
-    color: white;
-    background-color: $blue-button;
-    border: .1rem solid $button-border;
-    box-shadow: 0 0 .5rem $button-shadow;
-    border-radius: .4rem;
+    align-items: center;
+    vertical-align: middle;
 
-    font-size: 1.4rem;
+    transition: 0.3s;
+  }
+  span:before {
+    top: 0;
+    position: absolute;
 
-    span {
-        position: relative;
-        cursor: pointer;
+    opacity: 0;
+    transition: 0.3s;
+  }
+  span.left:before {
+    left: -10%;
 
-        align-items: center;
-        vertical-align: middle;
+    content: '\00ab'; /* double left arrow character */
+  }
+  span.right:before {
+    right: -10%;
 
-        transition: 0.3s;
-    }
+    content: '\00bb'; /* double right arrow character */
+  }
+
+  &:hover {
+    background-color: $primary-blue !important;
+    color: $secondary-1 !important;
+
+    span.left  { padding-left:  .75rem; }
+    span.right { padding-right: .75rem; }
+
     span:before {
-        top: 0;
-        position: absolute;
-
-        opacity: 0;
-        transition: 0.3s;
+      opacity: 1;
     }
-    span.left:before {
-        left: -10%;
-
-        content: '\00ab'; /* double left arrow character */
-    }
-    span.right:before {
-        right: -10%;
-
-        content: '\00bb'; /* double right arrow character */
-    }
-
-    &:hover {
-        background-color: $blue-button-hover;
-
-        span.left  { padding-left:  .75rem; }
-        span.right { padding-right: .75rem; }
-
-        span:before {
-            opacity: 1;
-        }
-        span.left:before  { left:  -2%; }
-        span.right:before { right: -2%; }
-    }
-    &:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-    }
+    span.left:before  { left:  -2%; }
+    span.right:before { right: -2%; }
+  }
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 }
 a.button, input.button {
-    display: inline-block;
+  display: inline-block;
 
-    margin-top: 1rem;
-    padding: .5rem 0;
+  margin-top: 1rem;
+  padding: .5rem 0;
 
-    background-color: $blue-button;
-    color: white;
-    border: none;
+  background-color: $blue-button;
+  color: white;
+  border: none;
 
-    text-decoration: none; /* remove underline */
+  text-decoration: none; /* remove underline */
 
-    &:hover {
-        background-color: $blue-button-hover;
-        transition: 0.3s;
-        cursor: pointer;
-    }
-}
-div.action-button {
-    flex-direction: row;
-    min-width: 33%;
-}
-input.action-button {
-    position: relative;
-    display: inline-block;
-    width: 100%;
-    padding: 1rem;
-    align-self: center;
-
-    border: .1rem solid $button-border;
-    box-shadow: 0 0 .5rem $button-shadow;
-    border-radius: .4rem;
-
-    font-size: 1.4rem;
-    font-weight: bold;
-    letter-spacing: 0.3rem;
-
-    background-color: map.get($primary-yellow, full);
-    color: black;
-
+  &:hover {
+    background-color: $blue-button-hover;
+    transition: 0.3s;
     cursor: pointer;
-
-    &:hover {
-        background-color: map.get($primary-blue, full);
-        color: white;
-    }
+  }
 }
 
 input[type="text"], textarea {
-    width: 50%;
-    padding: 1.5rem;
-    margin: 1rem 0;
-    line-height: normal;
+  width: 50%;
+  padding: 1.5rem;
+  margin: 1rem 0;
+  line-height: normal;
 
-    border: .1rem solid lightgrey;
-    border-radius: 0.2rem;
+  border: .1rem solid lightgrey;
+  border-radius: 0.2rem;
 
-    &.empty-text {
-        font-style: italic;
-        font-size: .75rem !important;
-    }
+  &.empty-text {
+    font-style: italic;
+    font-size: .75rem !important;
+  }
 }
 input[type="file"] {
-    text-align-last: center;
-    cursor: pointer;
+  text-align-last: center;
+  cursor: pointer;
 
-    &::file-selector-button {
-        margin-right: 5%;
-        padding: .4rem 1.6rem;
+  &::file-selector-button {
+    margin-right: 5%;
+    padding: .4rem 1.6rem;
 
-        border: none;
-        border-radius: 0.2rem;
+    border: none;
+    border-radius: 0.2rem;
 
-        background: $blue-button;
-        color: white;
-    }
+    background: $blue-button;
+    color: white;
+  }
 }
 
 .flexbox {
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
 .hidden-h { visibility: hidden; width:  0; }
 .hidden-v { visibility: hidden; height: 0; }
-
-.pad-l-1>.spinner-container {
-    padding-left: .5rem;
-}
 
 .t-green { color: $text-green; }
 .t-yellow { color: $text-yellow; }

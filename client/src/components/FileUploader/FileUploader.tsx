@@ -6,7 +6,7 @@ import { FileUploaderProps } from "./types";
 
 import "./FileUploader.scss";
 
-const FileUploader: React.FC<FileUploaderProps> = ({ id, label, caption, accept, labelClassName, captionClassName, setter }) => {
+const FileUploader: React.FC<FileUploaderProps> = ({ id, label, caption, accept, labelClassName, setter }) => {
   const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState<boolean>(false);
 
@@ -39,8 +39,8 @@ const FileUploader: React.FC<FileUploaderProps> = ({ id, label, caption, accept,
   };
 
   return (
-    <div className={`file-upload-component flexbox flex-row ${isDragging ? "dragging" : ""}`}>
-      <div className="flexbox flex-row"
+    <div className={`file-upload ${isDragging ? "dragging" : ""}`}>
+      <div
         onClick={() => document.getElementById(id)?.click()}
         onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop}
       >
@@ -52,9 +52,9 @@ const FileUploader: React.FC<FileUploaderProps> = ({ id, label, caption, accept,
         <label htmlFor="file-upload" className={labelClassName}>
           {label}
         </label>
-        <p className={`${captionClassName} ${selectedFileName ? "" : "italic"}`}>
+        <span className={`file-upload--caption ${selectedFileName ? "" : "italic"}`}>
           {selectedFileName ?? (caption ?? "No file selected.")}
-        </p>
+        </span>
       </div>
       { selectedFileName &&
         <ButtonRemove onClick={() => handleFileChange(null)} />

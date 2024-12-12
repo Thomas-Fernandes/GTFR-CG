@@ -7,6 +7,5 @@ export type FileUploaderProps = {
   caption?: string;
   accept?: string;
   labelClassName?: string;
-  captionClassName?: string;
   setter: StateSetter<File | undefined>;
 };

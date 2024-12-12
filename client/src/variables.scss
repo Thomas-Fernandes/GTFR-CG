@@ -1,20 +1,14 @@
-$primary-yellow: (full: #ffff64, /* Genius yellow */ half: #ffff647f, quarter: #ffff643f);
-$secondary-yellow: (full: #e0e462, half: #e0e4627f, quarter: #e0e4623f);
-$ternary-yellow: (full: #c0c960, half: #c0c9607f, quarter: #c0c9603f);
-$ternary-blue: (full: #405d58, half: #405d587f, quarter: #405d583f);
-$secondary-blue: (full: #204256, half: #2042567f, quarter: #2042563f);
-$primary-blue: (full: #002654, /* French flag blue */ half: #0026547f, quarter: #0026543f);
-
 $blue-button: #007bff;
 $blue-button-hover: #0056b3;
 $navbutton-hover: #008cff;
 $button-border: #00000010;
 $button-shadow: #0000007f;
 
-$primary-bluee: #2a4d8f;
+// Palette
+$primary-blue: #2a4d8f;
 $primary-blue--75: #1d366f;
 $primary-blue--50: #0f1b4f;
-$primary-yelloww: #ffff64;
+$primary-yellow: #ffff64;
 $primary-yellow--75: #bbbb49;
 $primary-yellow--50: #888832;
 $secondary-1: #ffffff;
@@ -26,33 +20,25 @@ $old-green: #8fbc8f;
 $old-green--75: #6f9f6f;
 $old-green--50: #4f7f4f;
 
-$text-green: #007f00;
+$text-green: #007f00; // FIXME remove all three when no longer needed
 $text-yellow: #7f7f00;
 $text-red: #7f0000;
 $text-limit--light: #c0c0c0c0;
 $text-limit--dark: #505050c0;
 
-$toast--progress--failure: #ff00004d;
-$toast--progress--success: #00ff00;
-$toast--progress--warning: #ffff004d;
-$toast--failure: #7f0000;
-$toast--success: #007f00;
-$toast--warning: #7f7f00;
-
 $french-blue: #002496;
 $french-white: #ffffff;
 $french-red: #ed2839;
 
-$border--primary-2--md: 0.175rem solid $primary-bluee;
-$outline--primary-1--lg: 0.25rem solid $primary-yelloww;
+$border--primary-2--md: 0.175rem solid $primary-blue;
+$outline--primary-1--lg: 0.25rem solid $primary-yellow;
 $border-radius--sm: 0.125rem;
 
 $font-family: "http://fonts.googleapis.com/css?family="
-    + "Playfair+Display:400,700" + "|"
-    // + "Poppins:300,400,500,600,700,300ital,400ital,500ital,600ital,700ital" + "|"
-    + "Poppins:ital,wght@0,300,400,500,600,700;1,300,400,500,600,700" + "|"
-    + "Lora:ital,wght@0,400;1,400" + "|"
-    + "Rubik:ital,wght@0,300,400,500,600,700;1,300,400,500,600,700";
+  + "Playfair+Display:400,700" + "|"
+  + "Poppins:300,400,500,600,700,200ital,300ital,600ital" + "|"
+  + "Lora:ital,wght@0,400;1,400" + "|"
+  + "Rubik:ital,wght@0,300,400,500,600,700;1,300,400,500,600,700";
 $font-family--action-button: "Poppins", sans-serif;
 $font-family--header: "Playfair Display", serif;
 $font-family--lyrics: "Lora", serif;
@@ -69,16 +55,17 @@ $gap--sm: 0.25rem;
 $glow--primary1--xl: 0 0 1rem .5rem $primary-yellow--75;
 $glow--primary1--md: 0 0 .5rem .25rem $primary-yellow--75;
 $glow--primary2--md: 0 0 .5rem .25rem $primary-blue--75;
-$glow--h1-primary1--md: 0 0 1rem 0 $primary-yellow--50;
-$glow--h1-primary2--md: 0 0 1rem 0 $primary-blue;
+$glow--h1-primary1--md: 0 0 1rem $primary-yellow--50;
+$glow--h1-primary2--md: 0 0 1rem $primary-blue;
 
-$gradient--primary-1: linear-gradient(90deg, $primary-yelloww, $primary-bluee);
-$gradient--primary-2: linear-gradient(90deg, $primary-bluee, $primary-yelloww);
+$gradient--primary-1: linear-gradient(90deg, $primary-yellow, $primary-blue);
+$gradient--primary-2: linear-gradient(90deg, $primary-blue, $primary-yellow);
 
 $letter-height--xl: 150%;
 $letter-height--lg: 128%;
 $letter-height--md: 110%;
-$letter-spacing--sm: 6%;
+$letter-spacing--xl: .375rem;
+$letter-spacing--lg: .25rem;
 
 $pad--4xl: 3rem;
 $pad--3xl: 2.25rem;
@@ -88,3 +75,10 @@ $pad--md: 1.25rem;
 
 $shadow--hr-light: 0 0 0.1rem 0.05rem $secondary-1;
 $shadow--hr-dark: 0 0 0.1rem 0.05rem $secondary-3;
+
+$toast--progress--failure: #ff00004d;
+$toast--progress--success: #00ff00;
+$toast--progress--warning: #ffff004d;
+$toast--failure: #7f0000;
+$toast--success: #007f00;
+$toast--warning: #7f7f00;

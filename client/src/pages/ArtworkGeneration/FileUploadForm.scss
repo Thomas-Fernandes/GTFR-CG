@@ -1,0 +1,17 @@
+#artwork-generation {
+  form#local {
+    @apply gap-4;
+
+    .local--selectors {
+      @apply flex flex-col items-center gap-2;
+    }
+
+    .submit {
+      @apply w-1/4 flex gap-4;
+
+      .action-button {
+        @apply w-full;
+      }
+    }
+  }
+}

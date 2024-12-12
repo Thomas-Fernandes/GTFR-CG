@@ -158,12 +158,6 @@ abbr:where([title]) {
   -webkit-text-decoration: underline dotted; text-decoration: underline dotted;
 }
 
-/* Reset links to optimize for opt-in styling instead of opt-out. */
-a {
-  color: inherit;
-  text-decoration: inherit;
-}
-
 /* Add the correct font weight in Edge and Safari. */
 b, strong {
   font-weight: bolder;
@@ -253,9 +247,7 @@ button, input:where([type="button"]), input:where([type="reset"]), input:where([
 progress { vertical-align: baseline; }
 
 /* Correct the cursor style of increment and decrement buttons in Safari. */
-::-webkit-inner-spin-button, ::-webkit-outer-spin-button {
-  height: auto;
-}
+::-webkit-inner-spin-button, ::-webkit-outer-spin-button { height: auto; }
 
 /*
 1. Correct the odd appearance in Chrome and Safari.
@@ -280,20 +272,16 @@ progress { vertical-align: baseline; }
 }
 
 /* Add the correct display in Chrome and Safari. */
-summary { display: list-item; }
-fieldset { margin: 0; padding: 0; }
-legend { padding: 0; }
-ol, ul, menu {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
+summary { @apply list-item; }
+fieldset { @apply p-0 m-0; }
+legend { @apply p-0; }
+ol, ul, menu { @apply p-0 m-0 list-none; }
 
 /* Reset default styling for dialogs. */
-dialog { padding: 0; }
+dialog { @apply p-0; }
 
 /* Prevent resizing textareas horizontally by default. */
-textarea { resize: vertical; }
+textarea { @apply resize-y; }
 
 /*
 1. Reset the default placeholder opacity in Firefox. (https://github.com/tailwindlabs/tailwindcss/issues/3300)
@@ -304,10 +292,10 @@ input::-moz-placeholder, textarea::-moz-placeholder, input::placeholder, textare
 }
 
 /* Set the default cursor for buttons. */
-button, [role="button"] { cursor: pointer; }
+button, [role="button"] { @apply cursor-pointer; }
 
 /* Make sure disabled buttons don't get the pointer cursor. */
-:disabled { cursor: not-allowed; }
+:disabled { @apply cursor-not-allowed; }
 
 /*
 1. Make replaced elements `display: block` by default. (https://github.com/mozdevs/cssremedy/issues/14)
@@ -329,32 +317,15 @@ img, video {
 
 /* Make elements with the HTML hidden attribute stay hidden by default */
 [hidden]:where(:not([hidden="until-found"])) {
-  display: none;
+  @apply hidden;
 }
 
-.container {
-  width: 100%;
-}
-
-@media (min-width: 640px) {
-  .container { max-width: 640px; }
-}
-
-@media (min-width: 768px) {
-  .container { max-width: 768px; }
-}
-
-@media (min-width: 1024px) {
-  .container { max-width: 1024px; }
-}
-
-@media (min-width: 1280px) {
-  .container { max-width: 1280px; }
-}
-
-@media (min-width: 1536px) {
-  .container { max-width: 1536px; }
-}
+.container { @apply w-full; }
+@media (min-width: 640px)  { .container { max-width: 640px;  } }
+@media (min-width: 768px)  { .container { max-width: 768px;  } }
+@media (min-width: 1024px) { .container { max-width: 1024px; } }
+@media (min-width: 1280px) { .container { max-width: 1280px; } }
+@media (min-width: 1536px) { .container { max-width: 1536px; } }
 
 h1, h2, h3, h4, h5, h6 {
   font-weight: revert; /* screw you, Tailwind */
@@ -365,8 +336,6 @@ h1, h2, h3, h4, h5, h6 {
 .hidden { display: none; }
 
 .flex-row { flex-direction: row; }
-
-.italic { font-style: italic; }
 
 .filter {
   filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
@@ -381,7 +350,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -398,34 +367,6 @@ a {
 }
 
 body {
-  display: flex;
+  @apply flex;
   min-width: 16rem;
-  /* min-height: 100vh; */
-}
-
-button {
-  border-radius: .4rem;
-  border: .05rem solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: white;
-    background-color: black;
-  }
-
-  a:hover {
-    color: #747bff;
-  }
-
-  button {
-    background-color: #f9f9f9;
-  }
 }

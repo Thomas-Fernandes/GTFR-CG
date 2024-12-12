@@ -1,0 +1,29 @@
+#cards-generation {
+  form#settings {
+    .settings {
+      @apply mb-4 gap-8 justify-center;
+
+      &#text-fields {
+        @apply w-1/2 gap-2 self-center;
+
+        input {
+          @apply w-full h-4 m-0;
+
+          &.contributors {
+            @apply w-3/5 p-3 self-end text-end;
+            font-size: smaller;
+          }
+        }
+      }
+
+      &#enforcers {
+        @apply min-h-16 gap-4;
+
+        &>p {
+          @apply font-bold;
+          font-size: larger;
+        }
+      }
+    }
+  }
+}

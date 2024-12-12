@@ -1,15 +1,15 @@
 @use "@/variables" as *;
 
-.file-upload-component {
-  @apply p-2 self-center cursor-pointer;
+.file-upload {
+  @apply flex p-2 justify-center cursor-pointer;
   min-width: 32rem;
   max-width: max-content;
-  border: .1rem solid lightgrey;
+  border: .1rem solid $primary-yellow;
   transition: border-color 0.25s ease;
 
   &.dragging {
     @apply cursor-grabbing;
-    border: .1rem dashed #007bff;
+    border: .1rem dashed $old-green--75;
     background-color: #f0f8ffcc;
 
     label {
@@ -21,16 +21,17 @@
     @apply mx-2 my-0 cursor-pointer;
   }
 
-  label {
-    @apply py-1 px-2 bg-blue-600 rounded-sm;
-    color: $secondary-1;
-  }
+  > div {
+    @apply flex items-center;
 
-  p {
-    @apply mr-0;
-  }
+    label {
+      @apply py-2 px-6 rounded-sm text-2xl;
+      background-color: $old-green;
+      color: $secondary-3;
+    }
 
-  div, button {
-    @apply m-0;
+    .file-upload--caption {
+      @apply mr-0 text-2xl font-extralight;
+    }
   }
 }

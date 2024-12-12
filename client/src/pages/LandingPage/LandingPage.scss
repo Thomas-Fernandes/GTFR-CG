@@ -1,101 +1,100 @@
 @use "@/variables" as *;
 
 #landing-page {
-    @apply h-full flex flex-col items-center overflow-auto;
+  @apply h-full flex flex-col items-center overflow-auto;
 
-    .landing-page--content {
-        @apply flex flex-wrap justify-center;
-        margin-top: 5vh;
+  .landing-page--content {
+    @apply flex flex-wrap justify-center;
+    margin-top: 5vh;
 
-        &--left {
-            @apply flex flex-col items-center justify-end relative right-2;
-            gap: $gap--3xl;
+    &--left {
+      @apply flex flex-col items-center justify-end relative right-2;
+      gap: $gap--3xl;
 
-            &--motto {
-                @apply flex flex-col gap-2 items-center flex-wrap justify-center;
+      &--motto {
+        @apply flex flex-col gap-2 items-center flex-wrap justify-center;
 
-                * {
-                    @apply flex-wrap justify-center text-center text-pretty;
-                    text-align: center;
-                    font-family: $font-family--header;
-                }
-
-                &--phrase {
-                    @apply flex;
-
-                    span {
-                        @apply font-semibold text-6xl;
-
-                        &.blue  { color: $french-blue; }
-                        &.white { color: $french-white; }
-                        &.red   { color: $french-red; }
-                    }
-                }
-
-                &--brand {
-                    span {
-                        @apply text-2xl;
-
-                        &.blue  { color: $french-blue; }
-                        &.white { color: $french-white; }
-                        &.red   { color: $french-red; }
-                    }
-                }
-            }
-
-            &--buttons {
-                @apply flex flex-row gap-8 flex-wrap justify-center;
-
-                > button {
-                    padding: $pad--md $pad--xl;
-                }
-
-                > :first-child {
-                    @apply bg-transparent;
-                    border: $border--primary-2--md;
-
-                    &:hover {
-                        background-color: $primary-bluee;
-                    }
-
-                    > .action-button--label {
-                        @apply font-medium text-3xl;
-                        color: $secondary-1;
-                    }
-                }
-                > :last-child {
-                    > .action-button--label {
-                        @apply font-semibold text-4xl;
-                    }
-                }
-            }
+        * {
+          @apply flex-wrap justify-center text-center text-pretty;
+          font-family: $font-family--header;
         }
 
-        &--right {
-            @apply relative left-6;
+        &--phrase {
+          @apply flex;
 
-            > :first-child {
-                @apply relative aspect-square z-10;
-                top: calc(16vh / 2.25);
-                left: calc(-16vw / 4);
+          span {
+            @apply font-semibold text-6xl;
 
-                max-height: 16vh;
-            }
-
-            > :last-child {
-                @apply aspect-video;
-                max-height: 24rem;
-
-                .iwo {
-                    @apply rounded-sm;
-                    outline: $outline--primary-1--lg;
-                    box-shadow: $glow--primary1--xl;
-                }
-
-                &:hover {
-                    padding: 0 !important;
-                }
-            }
+            &.blue  { color: $french-blue; }
+            &.white { color: $french-white; }
+            &.red   { color: $french-red; }
+          }
         }
+
+        &--brand {
+          span {
+            @apply text-2xl;
+
+            &.blue  { color: $french-blue; }
+            &.white { color: $french-white; }
+            &.red   { color: $french-red; }
+          }
+        }
+      }
+
+      &--buttons {
+        @apply flex flex-row gap-8 flex-wrap justify-center;
+
+        > button {
+          padding: $pad--md $pad--xl;
+        }
+
+        > :first-child {
+          @apply bg-transparent;
+          border: $border--primary-2--md;
+
+          &:hover {
+            background-color: $primary-blue;
+          }
+
+          > .action-button--label {
+            @apply font-medium text-3xl;
+            color: $secondary-1;
+          }
+        }
+        > :last-child {
+          > .action-button--label {
+            @apply font-semibold text-4xl;
+          }
+        }
+      }
     }
+
+    &--right {
+      @apply relative left-6;
+
+      > :first-child {
+        @apply relative aspect-square z-10;
+        top: calc(16vh / 2.25);
+        left: calc(-16vw / 4);
+
+        max-height: 16vh;
+      }
+
+      > :last-child {
+        @apply aspect-video;
+        max-height: 24rem;
+
+        .iwo {
+          @apply rounded-sm;
+          outline: $outline--primary-1--lg;
+          box-shadow: $glow--primary1--xl;
+        }
+
+        &:hover {
+          padding: 0 !important;
+        }
+      }
+    }
+  }
 }
