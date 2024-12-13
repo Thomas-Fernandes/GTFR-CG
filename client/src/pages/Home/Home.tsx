@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useTitle } from "@/common/hooks/useTitle";
-import DarkModeToggle from "@/components/DarkModeToggle/DarkModeToggle";
 import { NavButtonSide } from "@/components/NavButton/constants";
 import NavButton from "@/components/NavButton/NavButton";
 import ToastContainer from "@/components/ToastContainer/ToastContainer";
@@ -10,12 +9,12 @@ import TopBotSpacer from "@/components/TopBotSpacer/TopBotSpacer";
 import { Title } from "@/constants/browser";
 import { ViewPaths } from "@/constants/paths";
 
+import { defaultStatistics } from "./constants";
 import { getGeniusToken, getStatistics } from "./requests";
 import { hideAllStatsSpinners, showAllStatsSpinners } from "./spinners";
 import StatisticsBoard from "./StatisticsBoard";
 import { Statistics } from "./types";
 
-import { defaultStatistics } from "./constants";
 import "./Home.scss";
 
 const Home = (): JSX.Element => {
@@ -53,8 +52,6 @@ const Home = (): JSX.Element => {
     <div id="home">
       <ToastContainer />
       <TopBotSpacer />
-
-      <DarkModeToggle />
 
       <h1>{Title.Home}</h1>
 

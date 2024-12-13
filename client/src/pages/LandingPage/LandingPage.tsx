@@ -2,7 +2,6 @@ import { useNavigate } from "react-router-dom";
 
 import { useTitle } from "@/common/hooks/useTitle";
 import ActionButton from "@/components/ActionButton/ActionButton";
-import DarkModeToggle from "@/components/DarkModeToggle/DarkModeToggle";
 import ImgButton from "@/components/ImgButton/ImgButton";
 import ToastContainer from "@/components/ToastContainer/ToastContainer";
 import TopBotSpacer from "@/components/TopBotSpacer/TopBotSpacer";
@@ -20,8 +19,6 @@ const LandingPage = (): JSX.Element => {
     <div id="landing-page">
       <ToastContainer />
       <TopBotSpacer />
-
-      <DarkModeToggle />
 
       <div className="landing-page--content">
           <div className="landing-page--content--left">

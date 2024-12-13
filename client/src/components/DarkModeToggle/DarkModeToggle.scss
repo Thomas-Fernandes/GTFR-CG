@@ -1,3 +1,20 @@
+@use "@/variables" as *;
+
 .dark-mode-toggle {
-  @apply z-50 absolute top-4 left-4;
+  @apply z-50 absolute top-4 left-4 w-32 p-2 border-none rounded-full;
+  background: $gradient--primary-1 !important;
+
+  img {
+    @apply w-12 h-auto;
+    filter: invert(1%) sepia(49%) saturate(1658%) hue-rotate(347deg) brightness(106%); // primary-yellow
+    transition: all .3s ease-in-out, filter 0s !important;
+  }
+
+  &.dark {
+    img {
+      @apply transform rotate-180 translate-x-16; // should be x-X with X half of the toggle's width
+      filter: invert(75%) sepia(79%) saturate(649%) hue-rotate(185deg) brightness(93%); // primary-blue
+      transition: all .3s ease-in-out, filter 0s !important;
+    }
+  }
 }

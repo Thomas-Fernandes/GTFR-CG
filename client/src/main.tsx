@@ -4,12 +4,12 @@ import ReactDOM from "react-dom/client"
 import { DarkModeProvider } from "@/components/DarkModeProvider/DarkModeProvider"
 
 import App from "./App"
+import AppBackground from "./components/AppBackground/AppBackground"
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <DarkModeProvider>
-      <div className="rotate-zoom" />
-      <div className="custom-background" />
+      <AppBackground />
       <App />
     </DarkModeProvider>
   </StrictMode>
