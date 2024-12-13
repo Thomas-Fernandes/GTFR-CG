@@ -1,0 +1,35 @@
+@use "@/variables" as *;
+
+#home {
+  .stats-board {
+    @apply w-1/2 mt-8 mb-0 py-6 rounded-2xl;
+    border: .1rem solid $secondary-2;
+    background-color: $secondary-1;
+
+    &--stats {
+      @apply flex;
+
+      &--titles, &--values {
+        @apply w-1/2 relative flex flex-col;
+
+        span {
+          color: $secondary-3;
+        }
+      }
+
+      &--titles {
+        @apply left-16 font-medium text-3xl gap-6;
+      }
+      &--values {
+        @apply right-16 py-1 justify-between italic text-xl;
+        font-family: $font-family--stats;
+      }
+    }
+
+    &--sep {
+      @apply absolute p-12 flex flex-col justify-between;
+      height: 17.25rem;
+      width: inherit;
+    }
+  }
+}
