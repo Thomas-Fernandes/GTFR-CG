@@ -4,7 +4,7 @@
   background-color: $accent--75;
 
   &--label {
-    @apply font-semibold text-xl;
+    @apply font-light text-xl !important;
     color: $secondary-1;
   }
 

@@ -1,7 +1,6 @@
 import { sendToast } from "@/common/toast";
-
+import DownloadButton from "@/components/DownloadButton/DownloadButton";
 import ImgWithOverlay from "@/components/ImgWithOverlay/ImgWithOverlay";
-
 import { Toast, ToastType } from "@/constants/toasts";
 
 import { useCardsGalleryContext } from "./contexts";
@@ -41,11 +40,12 @@ const CardView: React.FC<CardViewProps> = ({ card, cardIdx }): JSX.Element => {
             overlayText={"Edit this card"}
           />
         }
-
       </div>
-      <form onSubmit={(e) => handleSubmitDownloadCard(e, {selectedImage: card.src})}>
-        <input type="submit" value={"Download " + shortCardFileName} className="button" />
-      </form>
+
+      <DownloadButton className="mac"
+        label={"Download " + shortCardFileName}
+        onClick={() => handleSubmitDownloadCard(card.src)}
+      />
     </div>
   );
 };

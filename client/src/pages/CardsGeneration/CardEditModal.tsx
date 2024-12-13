@@ -1,7 +1,6 @@
 import { useRef, useState } from "react";
 
 import { AutoResizeTextarea } from "@/components/AutoResizeTextarea/AutoResizeTextarea";
-
 import { SpinnerId } from "@/constants/spinners";
 
 import { useCardsGalleryContext, useCardsGenerationContext } from "./contexts";
@@ -31,7 +30,7 @@ const CardEditModal = (): JSX.Element => {
       onClick={() => handleOverlayClick({ clickedInsideModalRef, closeModal })}
     >
       <div className="modal-overlay--content" onClick={(e) => e.stopPropagation()}>
-        <h3 className="my-0">
+        <h3 className="modal-overlay--content--header">
           {`Edit Lyrics of Card ${cardIdPadding}${currentCard?.id}`}
         </h3>
 

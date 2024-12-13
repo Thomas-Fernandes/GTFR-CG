@@ -1,44 +1,40 @@
+@use "@/variables" as *;
+
 #cards-generation {
   .modal-overlay {
-    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; /* full view */
-
-    background-color: rgba(0, 0, 0, 0.5); /* dimmed... */
+    @apply z-10 fixed top-0 left-0 w-screen h-screen;
+    background-color: rgba(0, 0, 0, 0.5); /* dimmed */
     backdrop-filter: blur(.25rem); /* and blurred background around overlay */
 
-    z-index: 999;
-
     &--content {
-      position: relative;
-      width: 70%;
-      padding: 2rem;
-      background-color: lightgrey;
-      border-radius: .4rem;
+      @apply relative w-3/4 p-4 rounded-md;
+      background-color: $secondary-2;
       box-shadow: 0 .2rem 1rem rgba(0, 0, 0, 0.1);
 
+      &--header {
+        @apply mb-4 font-semibold text-2xl;
+        color: $secondary-3;
+      }
+
       &--actions {
+        @apply flex flex-row gap-4;
+
         button {
-          width: -webkit-fill-available;
-          padding: .5rem 1rem;
-          border: none;
+          @apply w-full px-4 py-2;
 
-          color: white;
-          font-size: .8rem;
-
-          border-radius: .25rem;
-          cursor: pointer;
-          transition: background-color 0.3s ease;
-
-          background-color: #007bff;
-          &:hover { background-color: #0056b3; }
+          &:first-child {
+            color: $secondary-1;
+          }
           &:last-child {
-            background-color: #d9534f;
-            &:hover { background-color: #c9302c; }
+            @apply bg-red-500;
+
+            &:hover { background-color: $primary-blue; }
           }
         }
 
         #cards-generation_generate-single {
           * { /* for spinner */
-            padding-left: 0 !important;
+            @apply pl-0 !important;
           }
         }
       }

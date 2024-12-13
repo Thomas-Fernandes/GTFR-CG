@@ -1,32 +1,36 @@
+@use "@/variables" as *;
+
 .color-picker {
-  &--img {
-    margin-right: 1rem;
-    cursor: pointer;
+  @apply flex flex-col justify-center;
+
+  &--label {
+    @apply italic text-lg;
+    color: $secondary-1;
+  }
+
+  &--content {
+    @apply flex flex-row gap-2;
+
+    &--img {
+      @apply mr-2 cursor-pointer;
+    }
+
+    &--load-latest {
+      @apply w-auto text-base !important;
+    }
+  }
+
+  #defined {
+    @apply flex flex-col;
   }
 
   &--color {
-    width: 8rem;
-    height: 100%;
-    justify-content: center;
+    @apply flex flex-row gap-2;
 
-    margin: 0 auto;
-    border: .1rem solid lightgrey;
-    border-radius: .5rem;
-
-    text-align: center;
-    letter-spacing: 0.2rem;
-  }
-
-  &--load-latest {
-    cursor: pointer;
-    font-size: smaller;
-
-    background-color: #8fbc8f;
-    color: white;
-    border-radius: .25rem;
-
-    &:hover {
-      background-color: #0056b3;
+    & > span {
+      @apply w-full content-center rounded-lg;
+      border: .1rem solid lightgrey;
+      letter-spacing: 0.2rem;
     }
   }
 }

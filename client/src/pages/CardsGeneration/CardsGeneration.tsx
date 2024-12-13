@@ -6,13 +6,11 @@ import { NavButtonSide } from "@/components/NavButton/constants";
 import NavButton from "@/components/NavButton/NavButton";
 import ToastContainer from "@/components/ToastContainer/ToastContainer";
 import TopBotSpacer from "@/components/TopBotSpacer/TopBotSpacer";
-import ZipDownloadButton from "@/components/ZipDownloadButton/ZipDownloadButton";
 import { SessionStorage, Title } from "@/constants/browser";
 import { ViewPaths } from "@/constants/paths";
 
 import CardsGallery from "./CardsGallery";
 import CardsGenerationForm from "./CardsGenerationForm";
-import { CARDS_ZIP_FILENAME } from "./constants";
 import { CardsGenerationContext, CardsGenerationFormContext } from "./contexts";
 import { CardData } from "./types";
 
@@ -82,7 +80,7 @@ const CardsGeneration = (): JSX.Element => {
         <>
           <hr className="my-4" />
 
-          <ZipDownloadButton id="download-all" paths={cardPaths} output={CARDS_ZIP_FILENAME} />
+          {/* <ZipDownloadButton id="download-all" paths={cardPaths} output={CARDS_ZIP_FILENAME} /> */}
           <CardsGenerationContext.Provider value={contextValue}>
             <CardsGallery id="cards" initialCards={cards} />
           </CardsGenerationContext.Provider>

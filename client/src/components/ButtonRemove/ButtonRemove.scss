@@ -8,9 +8,8 @@
     color: $secondary-1;
   }
 
-
   &:hover {
-    @apply bg-transparent !important;
+    @apply bg-transparent shadow-none !important;
 
     span {
       @apply text-red-600;

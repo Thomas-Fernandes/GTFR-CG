@@ -9,7 +9,7 @@
         @apply hidden;
       }
       &:not(:empty) {
-        @apply w-5/6 grid gap-x-12 gap-y-6 mb-6;
+        @apply w-full grid gap-x-14 gap-y-4 mb-6;
         max-width: 58rem;
         grid-template-columns: repeat(3, minmax(0, 1fr));
       }

@@ -5,7 +5,7 @@ import CardView from "./CardView";
 import { CardsGalleryContext } from "./contexts";
 import { CardData, CardsGalleryProps } from "./types";
 
-import "./CardsGallery.css";
+import "./CardsGallery.scss";
 
 const CardsGallery: React.FC<CardsGalleryProps> = ({ initialCards, ...divProps }): JSX.Element => {
   const [cards, setCards] = useState<CardData[]>(initialCards);
@@ -20,7 +20,7 @@ const CardsGallery: React.FC<CardsGalleryProps> = ({ initialCards, ...divProps }
   );
 
   return (
-    <div className="card-gallery flex-row" {...divProps}>
+    <div className="card-gallery" {...divProps}>
       <CardsGalleryContext.Provider value={contextValue}>
         { cards?.map((card, idx) =>
           <CardView key={idx} card={card} cardIdx={idx} />

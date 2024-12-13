@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import { ContentsGenerationMode } from "@/common/types";
+import ActionButton from "@/components/ActionButton/ActionButton";
 import Checkbox from "@/components/Checkbox/Checkbox";
 import ColorPicker from "@/components/ColorPicker/ColorPicker";
 import FileUploader from "@/components/FileUploader/FileUploader";
@@ -25,15 +26,15 @@ const CardsGenerationForm: React.FC<CardsGenerationFormProps> = ({ setCardPaths,
         {generationInProgress, setGenerationInProgress, setCardPaths, setCards, setColorPick}
       )}
     >
-      <div id="text-fields" className="settings flexbox">
+      <div id="text-fields" className="settings">
         <input autoComplete="off"
-          type="text" name="metaname" placeholder="if empty, the card metaname will be inferred"
+          type="text" name="metaname" placeholder={"if empty, the card metaname will be inferred"}
           value={cardMetaname} onChange={(e) => setCardMetaname(e.target.value)}
           className={!cardMetaname ? "empty-text" : ""}
         />
         { generateOutro &&
           <input autoComplete="off"
-            type="text" name="contributors" placeholder="contributors (comma-separated)"
+            type="text" name="contributors" placeholder={"contributors (comma-separated)"}
             value={(outroContributors && "by: ") + outroContributors}
             onChange={(e) => setOutroContributors(e.target.value.replace("by: ", ""))}
             className={`contributors ${(!outroContributors ? "empty-text" : "")}`}
@@ -41,7 +42,7 @@ const CardsGenerationForm: React.FC<CardsGenerationFormProps> = ({ setCardPaths,
         }
       </div>
 
-      <div id="enforcers" className="settings flexbox flex-row">
+      <div id="enforcers" className="settings">
         <FileUploader
           id="background-image" label={"Select image"} caption={"Enforce background image?"}
           accept="image/*" setter={setBgImg}
@@ -52,7 +53,7 @@ const CardsGenerationForm: React.FC<CardsGenerationFormProps> = ({ setCardPaths,
         />
       </div>
 
-      <div id="selectors" className="settings flexbox flex-row">
+      <div id="selectors" className="settings">
         { bgImg &&
           <Checkbox
             id="include_center_artwork" label={"Include center artwork"}
@@ -74,8 +75,8 @@ const CardsGenerationForm: React.FC<CardsGenerationFormProps> = ({ setCardPaths,
         />
       </div>
 
-      <div className="action-button pad-l-1" id={SpinnerId.CardsGenerate}>
-        <input type="submit" value={"GENERATE"} className="action-button" />
+      <div className="submit" id={SpinnerId.CardsGenerate}>
+        <ActionButton type="submit" label="GENERATE" className="spaced" />
       </div>
     </form>
   )

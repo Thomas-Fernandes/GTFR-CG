@@ -1,0 +1,6 @@
+#cards-generation {
+  .card-gallery {
+    @apply grid gap-2;
+    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  }
+}

@@ -1,28 +1,20 @@
+@use "@/variables" as *;
+
 #cards-generation {
-    .card-container {
-        text-align: center;
-        position: relative;
+  .card-container {
+    @apply flex flex-col gap-2;
 
-        img, input {
-            cursor: pointer;
-            border-radius: .25rem;
-        }
-
-        &--card {
-            padding: .5rem;
-            border: .1rem solid lightgrey;
-            border-radius: .5rem;
-            transition: transform 0.3s ease;
-
-            input[type="submit"] {
-                margin: auto;
-                margin-top: .4rem;
-                width: 80%;
-            }
-
-            &:hover {
-                transform: scale(1.02);
-            }
-        }
+    img {
+      @apply rounded cursor-pointer;
     }
+
+    &--card {
+      @apply p-2 rounded-lg;
+      border: .1rem solid $secondary-2;
+
+      &:hover {
+        transform: scale(1.02);
+      }
+    }
+  }
 }
