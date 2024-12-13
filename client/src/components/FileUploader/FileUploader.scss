@@ -9,7 +9,7 @@
 
   &.dragging {
     @apply cursor-grabbing;
-    border: .1rem dashed $old-green--75;
+    border: .1rem dashed $accent--75;
     background-color: #f0f8ffcc;
 
     label {
@@ -26,7 +26,7 @@
 
     label {
       @apply py-2 px-6 rounded-sm text-2xl;
-      background-color: $old-green;
+      background-color: $accent;
       color: $secondary-3;
     }
 

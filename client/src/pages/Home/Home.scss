@@ -1,3 +1,5 @@
+@use "@/variables" as *;
+
 #home {
   @apply gap-4;
 
@@ -7,13 +9,30 @@
 
   div.navbar {
     &.home {
-      @apply w-1/2 flex-col gap-2;
+      @apply w-1/2 flex-col m-0 gap-2;
 
       .navbar-row {
         @apply flex gap-2 justify-center;
 
         button {
-          @apply w-1/2 h-24;
+          @apply w-1/2 h-24 text-4xl font-semibold;
+
+          span {
+            @apply relative items-center;
+
+            &:before {
+              @apply absolute font-light opacity-0;
+            }
+            &.right:before { @apply right-0.5; content: '\00bb'; /* double right arrow character */ }
+          }
+
+          &:hover {
+            background-color: $primary-blue;
+
+            span.right { @apply pr-4; } // space between icon and text
+            span:before { @apply opacity-100; }
+            span.right:before { right: -1rem; } // move icon that much
+          }
         }
       }
     }

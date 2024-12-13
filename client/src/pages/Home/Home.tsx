@@ -15,6 +15,7 @@ import { hideAllStatsSpinners, showAllStatsSpinners } from "./spinners";
 import StatisticsBoard from "./StatisticsBoard";
 import { Statistics } from "./types";
 
+import { defaultStatistics } from "./constants";
 import "./Home.scss";
 
 const Home = (): JSX.Element => {
@@ -23,7 +24,7 @@ const Home = (): JSX.Element => {
   const navigate = useNavigate();
 
   const [geniusToken, setGeniusToken] = useState("");
-  const [stats, setStats] = useState<Statistics>({} as Statistics);
+  const [stats, setStats] = useState<Statistics>(defaultStatistics);
 
   useEffect(() => {
     const fetchAndSetData = () => {

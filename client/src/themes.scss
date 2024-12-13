@@ -5,6 +5,13 @@
 @mixin apply-theme($theme-map) {
   * {
     transition: all 0.3s ease, font-weight 0s;
+
+    &:before {
+      transition: all 0.3s ease, font-weight 0s;
+    }
+    &:after {
+      transition: all 0.3s ease, font-weight 0s;
+    }
   }
 
   h2, h3, h4, h5, h6, p, button, .button, .action-button {

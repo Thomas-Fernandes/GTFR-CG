@@ -13,6 +13,7 @@ const StatisticsBoard: React.FC<StatisticsBoardProps> = ({ stats }): JSX.Element
     { label: StatName.LyricsFetches, value: stats.lyricsFetches, spinnerId: SpinnerId.StatsLyricsFetches },
     { label: StatName.CardsGenerated, value: stats.cardsGenerated, spinnerId: SpinnerId.StatsCardsGenerated },
   ]
+
   return (
     <div className="stats-board">
       <div className="stats-board--sep">

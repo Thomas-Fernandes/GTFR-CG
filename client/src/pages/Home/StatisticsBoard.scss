@@ -18,7 +18,7 @@
       }
 
       &--titles {
-        @apply left-16 font-medium text-3xl gap-6;
+        @apply left-16 font-medium text-2xl gap-6;
       }
       &--values {
         @apply right-16 py-1 justify-between italic text-xl;
@@ -27,8 +27,7 @@
     }
 
     &--sep {
-      @apply absolute p-12 flex flex-col justify-between;
-      height: 17.25rem;
+      @apply absolute h-64 p-11 flex flex-col justify-between;
       width: inherit;
     }
   }

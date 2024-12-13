@@ -53,10 +53,33 @@ head { @apply hidden; }
 }
 
 div.navbar {
-  @apply w-auto flex m-auto gap-6;
+  @apply flex mt-4 mb-8 gap-8;
 
-  button:hover {
-    background-color: $navbutton-hover;
+  button {
+    @apply px-8 bg-transparent;
+    border: $border--primary-1--md;
+    color: $secondary-1;
+
+    span {
+      @apply relative items-center;
+
+      &:before {
+        @apply absolute font-light opacity-0;
+      }
+      &.left:before  { @apply -left-0.5; content: '\00ab'; /* double left  arrow character */ }
+      &.right:before { @apply right-0.5; content: '\00bb'; /* double right arrow character */ }
+    }
+
+    &:hover {
+      background-color: $primary-blue;
+
+      span.left  { @apply pl-2; } // space between icon and text
+      span.right { @apply pr-2; }
+
+      span:before { @apply opacity-100; }
+      span.left:before  { left:  -1rem; } // move icon that much
+      span.right:before { right: -1rem; }
+    }
   }
 }
 
@@ -124,7 +147,7 @@ button {
 
   &.mac, &.download-button {
     @apply w-full py-1 mb-4 font-normal text-xl;
-    background-color: $old-green;
+    background-color: $accent;
 
     span {
       @apply font-normal text-xl;
@@ -132,37 +155,13 @@ button {
   }
 
   &.download-button {
-    background-color: $old-green--75;
-  }
-
-  span {
-    @apply cursor-pointer relative items-center align-middle;
-    transition: 0.3s ease;
-
-    &:before {
-      @apply absolute top-0 opacity-0;
-      transition: 0.3s ease;
-    }
-    &.left:before {
-      left: -10%;
-      content: '\00ab'; /* double left arrow character */
-    }
-    &.right:before {
-      right: -10%;
-      content: '\00bb'; /* double right arrow character */
-    }
+    background-color: $accent--75;
   }
 
   &:hover {
-    background-color: $primary-blue !important;
+    background-color: $primary-blue;
+    box-shadow: $glow--primary2--md;
     color: $secondary-1 !important;
-
-    span.left  { @apply pl-3; }
-    span.right { @apply pl-3; }
-
-    span:before { @apply opacity-100; }
-    span.left:before  { left:  -2%; }
-    span.right:before { right: -2%; }
   }
   &:disabled {
     @apply opacity-50 cursor-not-allowed;

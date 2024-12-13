@@ -1,8 +1,11 @@
-$blue-button: #007bff;
+$blue-button: #007bff; // FIXME remove when no longer needed
 $blue-button-hover: #0056b3;
-$navbutton-hover: #008cff;
 $button-border: #00000010;
 $button-shadow: #0000007f;
+
+$french-blue: #002496;
+$french-white: #ffffff;
+$french-red: #ed2839;
 
 // Palette
 $primary-blue: #2a4d8f;
@@ -16,23 +19,19 @@ $secondary-1--half: #ffffff7f;
 $secondary-2: #f4f4f4;
 $secondary-3: #1f1f1f;
 $secondary-3--half: #1f1f1f7f;
-$old-green: #8fbc8f;
-$old-green--75: #6f9f6f;
-$old-green--50: #4f7f4f;
+$accent: #8fbc8f; // old green ftw
+$accent--75: #6f9f6f;
+$accent--50: #4f7f4f;
 
-$text-green: #007f00; // FIXME remove all three when no longer needed
+$text-green: #007f00; // FIXME remove when no longer needed
 $text-yellow: #7f7f00;
 $text-red: #7f0000;
+
 $text-limit--light: #c0c0c0c0;
 $text-limit--dark: #505050c0;
 
-$french-blue: #002496;
-$french-white: #ffffff;
-$french-red: #ed2839;
-
+$border--primary-1--md: 0.175rem solid $primary-yellow;
 $border--primary-2--md: 0.175rem solid $primary-blue;
-$outline--primary-1--lg: 0.25rem solid $primary-yellow;
-$border-radius--sm: 0.125rem;
 
 $font-family: "http://fonts.googleapis.com/css?family="
   + "Playfair+Display:400,700" + "|"
@@ -67,6 +66,8 @@ $letter-height--lg: 128%;
 $letter-height--md: 110%;
 $letter-spacing--xl: .375rem;
 $letter-spacing--lg: .25rem;
+
+$outline--primary-1--lg: 0.25rem solid $primary-yellow;
 
 $pad--4xl: 3rem;
 $pad--3xl: 2.25rem;

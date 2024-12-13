@@ -1,7 +1,7 @@
 @use "@/variables" as *;
 
 .download-button {
-  background-color: $old-green--75;
+  background-color: $accent--75;
 
   &--label {
     @apply font-semibold text-xl;
