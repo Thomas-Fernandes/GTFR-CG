@@ -19,11 +19,11 @@ const ItunesForm: React.FC<ItunesFormProps> = ({ setItunesResults }): JSX.Elemen
     <form id="itunes"
       onSubmit={(e) => handleSubmitItunesSearch(e, { term, country }, { setItunesResults })}
     >
-      <input id="itunes--text" type="text" placeholder="Search on iTunes"
+      <input type="text" placeholder={"Search on iTunes"} className="itunes--text"
         onChange={(e) => handleChangeTerm(e.target.value, country, { term, setTerm, startItunesSearch, setItunesResults })}
       />
       <div id={SpinnerId.ItunesSearch} className="itunes--search">
-        <Selector aria-label="Country" defaultValue={ITUNES_REGION_OPTIONS[0].value}
+        <Selector aria-label={"country"} defaultValue={ITUNES_REGION_OPTIONS[0].value}
           setter={setCountry} options={ITUNES_REGION_OPTIONS}
         />
         <ActionButton type="submit" label="SEARCH" className="spaced" />

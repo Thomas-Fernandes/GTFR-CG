@@ -96,15 +96,12 @@ hr {
   @apply w-4/5 my-0 mx-auto h-0 border-none;
   box-shadow: 0 0 .1rem .005rem black;
 
-  &.sz-80 { width: calc(80% * 4/5); }
-  &.sz-66 { width: calc(80% * 2/3); }
-  &.sz-50 { width: calc(80% * 1/2); }
-  &.sz-33 { width: calc(80% * 1/3); }
-  &.sz-25 { width: calc(80% * 1/4); }
-
   @-moz-document url-prefix() { /* Firefox only supports half-pixels */
     box-shadow: 0 0 .1rem .025rem black; /* significantly thicker */
   }
+
+  &.sz-66 { width: calc(80% * 2/3); }
+
 
   &:after { /* Not really supposed to work, but does */
     content: "\00a0"; /* Prevent margin collapse */
@@ -119,8 +116,12 @@ button {
   box-shadow: 0 0 .5rem $button-shadow;
 
   &.mac, &.download-button {
-    @apply w-full py-1 mb-4 font-normal text-xl;
+    @apply w-full py-1 m-0 font-normal text-xl;
     background-color: $accent;
+
+    &.small  { @apply w-64;  }
+    &.medium { @apply w-96;  }
+    &.large  { width: 36rem; }
 
     span {
       @apply font-normal text-xl;
@@ -131,13 +132,20 @@ button {
     background-color: $accent--75;
   }
 
-  &:hover {
+  &:not(:disabled):hover {
     background-color: $primary-blue;
     box-shadow: $glow--primary2--md;
     color: $secondary-1 !important;
   }
   &:disabled {
     @apply opacity-50 cursor-not-allowed;
+  }
+}
+div.submit {
+  @apply max-w-lg w-1/3 flex gap-4;
+
+  .action-button {
+    @apply w-full;
   }
 }
 input.button {
@@ -163,14 +171,16 @@ button, h1, h2, h3, h4, h5, h6, p, span, input {
   @apply text-center;
 }
 
+input[type="text"] {
+  @apply text-xl;
+}
 input[type="text"], textarea {
   @apply w-1/2 p-6 my-4 mx-0 rounded;
   line-height: normal;
   border: .1rem solid lightgrey;
 
   &.empty-text {
-    @apply italic;
-    font-size: .75rem !important;
+    @apply text-xs italic;
   }
 }
 input[type="file"] {

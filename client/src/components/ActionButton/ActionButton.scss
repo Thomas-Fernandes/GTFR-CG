@@ -22,7 +22,7 @@
     @apply w-4;
   }
 
-  &:hover {
+  &:not(:disabled):hover {
     box-shadow: $glow--primary2--md;
 
     .action-button--label {

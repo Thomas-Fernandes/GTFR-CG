@@ -1,10 +1,8 @@
+@use "@/variables" as *;
+
 .lyrics-textarea {
-  @apply w-3/5 p-2 self-center text-nowrap;
-  background-image:
-    linear-gradient(to right,
-      transparent calc(0.92ch * 62),
-      lightgrey calc(0.92ch * 62),
-      lightgrey calc(0.92ch * 63),
-      transparent calc(0.92ch * 63)
-    );
+  @apply p-2 my-0 self-center text-lg text-nowrap;
+  font-family: $font-family--lyrics;
+  color: $secondary-3;
+  line-height: normal;
 }

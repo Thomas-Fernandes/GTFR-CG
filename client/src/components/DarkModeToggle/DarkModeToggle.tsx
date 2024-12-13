@@ -6,7 +6,7 @@ const DarkModeToggle: React.FC = () => {
   const { isDarkMode, toggleDarkMode } = useDarkMode();
 
   return (
-    <button onClick={toggleDarkMode} className={`dark-mode-toggle ${isDarkMode ? "dark" : "light"}`}>
+    <button onClick={toggleDarkMode} className={`dark-mode-toggle ${ isDarkMode ? "dark" : "light" }`}>
       <img src={"/svg/theme-circle.svg"} alt={"dark-mode-toggle"} />
     </button>
   );

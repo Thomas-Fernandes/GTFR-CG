@@ -6,8 +6,6 @@ import { SpinnerId } from "@/constants/spinners";
 import { useArtworkGenerationContext } from "./contexts";
 import { handleSubmitYoutubeUrl } from "./handlers";
 
-import "./YoutubeForm.scss";
-
 const YoutubeForm = (): JSX.Element => {
   const { isProcessingLoading, setIsProcessingLoading, navigate } = useArtworkGenerationContext();
 

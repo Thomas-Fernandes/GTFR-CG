@@ -1,39 +1,26 @@
+@use "@/variables" as *;
+
 #redirect {
-    .board {
-        width: 67%;
-        min-height: 15rem;
+  .board {
+    @apply absolute top-1/4 max-h-64 w-2/3 flex flex-col rounded-2xl items-center justify-center italic;
+    padding: 10%;
+    border: .1rem solid $secondary-2;
+    background-color: $secondary-1;
 
-        margin: 2% auto 0 auto;
-        padding: 0.75em;
-
-        border: .1rem solid lightgrey;
-        border-radius: 1rem;
-        background-color: white;
-
-        font-style: italic;
-
-        p {
-            margin: auto;
-        }
-
-        &--title {
-            margin: 2% auto 0 auto;
-            text-align: center;
-            font-size: larger;
-        }
-
-        &--err {
-            font-size: 1em;
-            font-style: normal;
-        }
-
-        &--counter {
-            margin: 0 auto 2% auto;
-            flex-direction: row;
-        }
-
-        span#direction {
-            color: #666666;
-        }
+    * {
+      @apply my-0;
     }
+
+    &--title {
+      @apply text-2xl;
+    }
+
+    &--err {
+      @apply my-16 text-3xl;
+    }
+
+    &--counter {
+      @apply flex;
+    }
+  }
 }

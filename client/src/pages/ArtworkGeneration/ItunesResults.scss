@@ -4,10 +4,6 @@
   .results {
     @apply flex flex-col mt-4 items-center;
 
-    button.mac {
-      @apply w-64;
-    }
-
     &--container {
       &:empty {
         @apply hidden;
@@ -32,7 +28,6 @@
         }
         &--text {
           @apply min-h-full mt-2 mb-0 mx-auto text-center font-bold italic text-lg;
-          min-height: -webkit-fill-available;
         }
       }
     }

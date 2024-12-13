@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-
+import ActionButton from "@/components/ActionButton/ActionButton";
 import { SpinnerId } from "@/constants/spinners";
 
 import { useLyricsContext } from "./contexts";
@@ -9,7 +9,7 @@ import LyricsPart from "./LyricsPart";
 import { LyricsPartsFormProps } from "./types";
 import { convertToCardContents } from "./utils";
 
-import "./LyricsPartsForm.css";
+import "./LyricsPartsForm.scss";
 
 const LyricsPartsForm: React.FC<LyricsPartsFormProps> = ({ lyricsParts }): JSX.Element => {
   const { dismissedParts, pageMetadata, isManual, navigate } = useLyricsContext();
@@ -17,16 +17,23 @@ const LyricsPartsForm: React.FC<LyricsPartsFormProps> = ({ lyricsParts }): JSX.E
   const [isSavingCardsContent, setIsSavingCardsContent] = useState(false);
 
   return (
-    <form className="lyrics-form flexbox"
+    <form className="lyrics-form"
       onSubmit={(e) => handleLyricsSaveSubmit(e, convertToCardContents(lyricsParts, dismissedParts),
         {isSavingCardsContent, setIsSavingCardsContent, pageMetadata, isManual, lyricsParts, dismissedParts, navigate}
       )}
     >
       { lyricsParts.map((part, idx) =>
-        <LyricsPart key={idx} part={part} idx={idx} />
+        <>
+          <LyricsPart key={idx} part={part} idx={idx} />
+          { idx !== lyricsParts.length - 1 &&
+            <hr className="sz-66 my-2" />
+          }
+        </>
       )}
-      <div className="action-button" id={SpinnerId.LyricsConvert}>
-        <input type="submit" value="CONVERT TO CARDS" className="action-button convert-button" />
+      <hr className="my-8" />
+
+      <div className="submit" id={SpinnerId.LyricsConvert}>
+        <ActionButton type="submit" label="CONVERT TO CARDS" className="spaced" />
       </div>
     </form>
   );

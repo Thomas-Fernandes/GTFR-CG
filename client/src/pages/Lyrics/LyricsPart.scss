@@ -1,0 +1,39 @@
+@use "@/variables" as *;
+
+#lyrics {
+  .lyrics-part {
+    @apply flex flex-col items-center gap-2;
+
+    &--header {
+      @apply flex items-center gap-8;
+
+      &--section {
+        @apply text-2xl;
+        font-family: $font-family--header;
+      }
+
+      button {
+        @apply w-64 font-light text-lg;
+        color: $secondary-1;
+        transition: all 0.3s ease-in-out, width 0s, height 0s;
+
+        &:not(:disabled):hover {
+          background-color: $primary-blue;
+        }
+
+        &.red   { @apply bg-red-900;   }
+        &.green { @apply bg-green-700; }
+      }
+
+      button.restore {
+        @apply w-full bg-transparent;
+        border: $border--primary-2--md;
+      }
+    }
+
+    textarea {
+      @apply w-full;
+      min-width: 36rem;
+    }
+  }
+}

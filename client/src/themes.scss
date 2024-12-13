@@ -14,7 +14,7 @@
     }
   }
 
-  h2, h3, h4, h5, h6, p, button, .button, .action-button {
+  p, button, .button, .action-button {
     color: map.get($theme-map, text-color);
   }
 
@@ -45,10 +45,10 @@ $light-theme: (
   background-color: $secondary-1,
   lyrics-overflow-marker: linear-gradient(
     to right,
-    transparent calc(0.92ch * 62),
-    $text-limit--dark calc(0.92ch * 62),
-    $text-limit--dark calc(0.92ch * 63),
-    transparent calc(0.92ch * 63)
+    transparent calc(0.92ch * ($lyrics--character-limit - 1)),
+    $text-limit--dark calc(0.92ch * ($lyrics--character-limit - 1)),
+    $text-limit--dark calc(0.92ch * $lyrics--character-limit),
+    transparent calc(0.92ch * $lyrics--character-limit)
   ),
 );
 
@@ -57,9 +57,9 @@ $dark-theme: (
   background-color: $secondary-3,
   lyrics-overflow-marker: linear-gradient(
     to right,
-    transparent calc(0.92ch * 62),
-    $text-limit--light calc(0.92ch * 62),
-    $text-limit--light calc(0.92ch * 63),
-    transparent calc(0.92ch * 63)
+    transparent calc(0.92ch * ($lyrics--character-limit - 1)),
+    $text-limit--light calc(0.92ch * ($lyrics--character-limit - 1)),
+    $text-limit--light calc(0.92ch * $lyrics--character-limit),
+    transparent calc(0.92ch * $lyrics--character-limit)
   ),
 );

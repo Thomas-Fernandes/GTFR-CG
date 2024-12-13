@@ -1,10 +1,6 @@
 #artwork-generation {
   form {
     @apply w-full flex flex-col items-center gap-2;
-
-    input[type="text"] {
-      @apply text-xl;
-    }
   }
 
   hr {

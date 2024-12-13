@@ -37,7 +37,7 @@ const ItunesResults: React.FC<ItunesResultsProps> = ({ items, setItunesResults }
   return (
     <div className="results">
       { items.length > 0 &&
-        <button id="clear" className="mac" onClick={() => setItunesResults([])}>
+        <button id="clear" className="small mac !mb-4" onClick={() => setItunesResults([])}>
           {"Clear results"}
         </button>
       }

@@ -4,7 +4,7 @@ import { useLyricsContext } from "./contexts";
 import { handleRestorePart, handleSetDismissedParts, handleSetLyricsParts } from "./handlers";
 import { LyricsPartProps } from "./types";
 
-import "./LyricsPart.css";
+import "./LyricsPart.scss";
 
 const LyricsPart: React.FC<LyricsPartProps> = ({ part, idx }): JSX.Element => {
   const { isManual, dismissedParts, setDismissedParts, lyricsParts, setLyricsParts } = useLyricsContext();
@@ -12,23 +12,25 @@ const LyricsPart: React.FC<LyricsPartProps> = ({ part, idx }): JSX.Element => {
   return (
     <div key={"part_" + idx} className="lyrics-part">
       { !isManual && dismissedParts.has(idx)
-      ? <div className="lyrics-part--header flexbox flex-row gap-8">
+      ? <div className="lyrics-part--header">
           <button type="button" className="restore" onClick={() => handleRestorePart(dismissedParts, idx, setDismissedParts)}>
             {`Restore ${part.section}`}
           </button>
         </div>
       : <>
-        <div className="lyrics-part--header flexbox flex-row gap-8">
-          <button type="button" disabled={isManual}
+        <div className="lyrics-part--header">
+          <button type="button" disabled={isManual} className="red"
             onClick={() => handleSetDismissedParts(dismissedParts, idx, setDismissedParts)}
-            className="red"
           >
             {"Remove"}
           </button>
-          <label>{part.section}</label>
-          <button type="button"
+
+          <label className="lyrics-part--header--section">
+            {part.section}
+          </label>
+
+          <button type="button" className="green"
             onClick={() => handleSetLyricsParts("", idx, {lyricsParts, setLyricsParts})}
-            className="green"
           >
             {"Clear"}
           </button>
@@ -37,8 +39,6 @@ const LyricsPart: React.FC<LyricsPartProps> = ({ part, idx }): JSX.Element => {
           value={part.lyrics} onChange={(e) => handleSetLyricsParts(e.target.value, idx, {lyricsParts, setLyricsParts})}
         />
       </>}
-
-      <hr className="w-66 my-0" />
     </div>
   );
 };

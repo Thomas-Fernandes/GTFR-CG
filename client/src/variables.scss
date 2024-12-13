@@ -61,11 +61,10 @@ $glow--h1-primary2--md: 0 0 1rem $primary-blue;
 $gradient--primary-1: linear-gradient(90deg, $primary-yellow, $primary-blue);
 $gradient--primary-2: linear-gradient(90deg, $primary-blue, $primary-yellow);
 
-$letter-height--xl: 150%;
-$letter-height--lg: 128%;
-$letter-height--md: 110%;
 $letter-spacing--xl: .375rem;
 $letter-spacing--lg: .25rem;
+
+$lyrics--character-limit: 50;
 
 $outline--primary-1--lg: 0.25rem solid $primary-yellow;
 

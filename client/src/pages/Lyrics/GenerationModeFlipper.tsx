@@ -1,16 +1,10 @@
-import { ComponentPropsWithoutRef } from "react";
-
 import { ContentsGenerationMode } from "@/common/types";
 
 import { MANUAL_CREATION_SECTION } from "./constants";
 import { useLyricsContext } from "./contexts";
-import { LyricsPartType, PageMetadata } from "./types";
+import { GenerationModeFlipperProps, LyricsPartType, PageMetadata } from "./types";
 
-type Props = ComponentPropsWithoutRef<"button"> & {
-  className?: string;
-};
-
-const GenerationModeFlipper: React.FC<Props> = ({ className, ...props }): JSX.Element => {
+const GenerationModeFlipper: React.FC<GenerationModeFlipperProps> = ({ className, ...props }): JSX.Element => {
   const { setLyricsParts, setPageMetadata, artist, songName, isManual, setIsManual } = useLyricsContext();
 
   const handleClick = () => {
@@ -27,7 +21,7 @@ const GenerationModeFlipper: React.FC<Props> = ({ className, ...props }): JSX.El
   return (
     <button type="button"
       onClick={handleClick}
-      className={`mode-flipper ${className ?? ""}`}
+      className={`large mac ${className ?? ""}`}
       {...props}
     >
       { isManual ? "Generate cards automatically" : "Generate cards manually instead" }
