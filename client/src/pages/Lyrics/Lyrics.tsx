@@ -19,7 +19,7 @@ import ManualGenerationInputBar from "./ManualGenerationInputBar";
 import { isTokenSet } from "./requests";
 import { LyricsContents, LyricsPartType, PageMetadata } from "./types";
 
-const Lyrics = (): JSX.Element => {
+const Lyrics = () => {
   useTitle(Title.Lyrics);
 
   const navigate = useNavigate();

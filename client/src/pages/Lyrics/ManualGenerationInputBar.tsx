@@ -2,7 +2,7 @@ import { useLyricsContext } from "./contexts";
 
 import "./ManualGenerationInputBar.scss";
 
-const ManualGenerationInputBar = (): JSX.Element => {
+const ManualGenerationInputBar = () => {
   const { setArtist, setSongName, pageMetadata, setPageMetadata } = useLyricsContext();
 
   return (

@@ -10,7 +10,7 @@ import { ViewPaths } from "@/constants/paths";
 
 import "./LandingPage.scss";
 
-const LandingPage = (): JSX.Element => {
+const LandingPage = () => {
   useTitle(Title.Landing);
 
   const navigate = useNavigate();

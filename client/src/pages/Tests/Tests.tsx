@@ -20,7 +20,7 @@ import { TestResult } from "./types";
 
 import "./Tests.css";
 
-const Tests = (): JSX.Element => { // TODO remove this when backend unit tests are implemented
+const Tests = () => { // TODO remove this when backend unit tests are implemented
   useTitle(Title.Tests);
 
   const refGeniusToken = useRef<HTMLButtonElement>(null);

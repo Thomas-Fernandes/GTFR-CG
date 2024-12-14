@@ -16,7 +16,7 @@ import { CardData } from "./types";
 
 import "./CardsGeneration.scss";
 
-const CardsGeneration = (): JSX.Element => {
+const CardsGeneration = () => {
   useTitle(Title.CardsGeneration);
 
   const [isComponentMounted, setIsComponentMounted] = useState(false);

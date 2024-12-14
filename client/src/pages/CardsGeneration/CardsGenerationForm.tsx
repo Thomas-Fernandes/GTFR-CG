@@ -13,7 +13,7 @@ import { CardsGenerationFormProps } from "./types";
 
 import "./CardsGenerationForm.scss";
 
-const CardsGenerationForm: React.FC<CardsGenerationFormProps> = ({ setCardPaths, setCards }): JSX.Element => {
+const CardsGenerationForm: React.FC<CardsGenerationFormProps> = ({ setCardPaths, setCards }) => {
   const { cardMethod, cardMetaname, setCardMetaname, bgImg, colorPick, includeCenterArtwork, generateOutro, includeBackgroundImg, cardBottomColor } = useCardsGenerationContext();
   const { outroContributors, setOutroContributors, setBgImg, setColorPick, setIncludeCenterArtwork, setGenerateOutro, setIncludeBackgroundImg } = useCardsGenerationFormContext();
 
@@ -30,14 +30,14 @@ const CardsGenerationForm: React.FC<CardsGenerationFormProps> = ({ setCardPaths,
         <input autoComplete="off"
           type="text" name="metaname" placeholder={"if empty, the card metaname will be inferred"}
           value={cardMetaname} onChange={(e) => setCardMetaname(e.target.value)}
-          className={!cardMetaname ? "empty-text" : ""}
+          className={!cardMetaname ? "empty" : ""}
         />
         { generateOutro &&
           <input autoComplete="off"
             type="text" name="contributors" placeholder={"contributors (comma-separated)"}
             value={(outroContributors && "by: ") + outroContributors}
             onChange={(e) => setOutroContributors(e.target.value.replace("by: ", ""))}
-            className={`contributors ${(!outroContributors ? "empty-text" : "")}`}
+            className={`contributors ${(!outroContributors ? "empty" : "")}`}
           />
         }
       </div>
@@ -55,23 +55,26 @@ const CardsGenerationForm: React.FC<CardsGenerationFormProps> = ({ setCardPaths,
 
       <div id="selectors" className="settings">
         { bgImg &&
-          <Checkbox
-            id="include_center_artwork" label={"Include center artwork"}
-            defaultChecked={includeCenterArtwork}
-            onChange={(e) => setIncludeCenterArtwork(e.target.checked)}
+          <Checkbox id="include_center_artwork"
+            size={24}
+            checked={includeCenterArtwork}
+            onChange={() => setIncludeCenterArtwork(!includeCenterArtwork)}
+            label={"Include center artwork"}
           />
         }
         <div onClick={() => cardMethod === ContentsGenerationMode.Manual && handleUnauthorizedCheckbox()}>
-          <Checkbox
-            id="generate_outro" label={"Generate outro image"}
-            defaultChecked={cardMethod === ContentsGenerationMode.Auto} disabled={cardMethod === ContentsGenerationMode.Manual}
-            onChange={(e) => setGenerateOutro(e.target.checked)}
+          <Checkbox id="generate_outro" disabled={cardMethod === ContentsGenerationMode.Manual}
+            size={24}
+            checked={cardMethod === ContentsGenerationMode.Auto && generateOutro}
+            onChange={() => cardMethod === ContentsGenerationMode.Auto && setGenerateOutro(!generateOutro)}
+            label={"Generate outro image"}
           />
         </div>
-        <Checkbox
-          id="include_background" label={"Include background image"}
-          defaultChecked={includeBackgroundImg}
-          onChange={(e) => setIncludeBackgroundImg(e.target.checked)}
+        <Checkbox id="include_background"
+          size={24}
+          checked={includeBackgroundImg}
+          onChange={() => setIncludeBackgroundImg(!includeBackgroundImg)}
+          label={"Include background image"}
         />
       </div>
 

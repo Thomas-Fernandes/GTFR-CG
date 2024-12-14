@@ -10,7 +10,7 @@ import { handleSubmitFileUpload } from "./handlers";
 
 import "./FileUploadForm.scss";
 
-const FileUploadForm = (): JSX.Element => {
+const FileUploadForm = () => {
   const { isProcessingLoading, setIsProcessingLoading, navigate } = useArtworkGenerationContext();
 
   const [localFile, setLocalFile] = useState<File>();
@@ -22,10 +22,11 @@ const FileUploadForm = (): JSX.Element => {
     >
       <div className="local--selectors">
         <FileUploader id="background-image" label="Select background image" accept="image/*" setter={setLocalFile} />
-        <Checkbox
-          id="include_center_artwork" label="Include center artwork"
-          defaultChecked={includeCenterArtwork}
-          onChange={(e) => setIncludeCenterArtwork(e.target.checked)}
+        <Checkbox id="include_center_artwork"
+          size={24}
+          checked={includeCenterArtwork}
+          onChange={() => setIncludeCenterArtwork(!includeCenterArtwork)}
+          label={"Include center artwork"}
         />
       </div>
       <div className="submit" id={SpinnerId.FileUpload}>

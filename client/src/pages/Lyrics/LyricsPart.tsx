@@ -6,7 +6,7 @@ import { LyricsPartProps } from "./types";
 
 import "./LyricsPart.scss";
 
-const LyricsPart: React.FC<LyricsPartProps> = ({ part, idx }): JSX.Element => {
+const LyricsPart: React.FC<LyricsPartProps> = ({ part, idx }) => {
   const { isManual, dismissedParts, setDismissedParts, lyricsParts, setLyricsParts } = useLyricsContext();
 
   return (

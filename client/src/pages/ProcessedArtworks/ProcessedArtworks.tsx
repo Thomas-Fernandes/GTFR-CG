@@ -17,7 +17,7 @@ import ThumbnailGallery from "./ThumbnailGallery";
 
 import "./ProcessedArtworks.scss";
 
-const ProcessedArtworks = (): JSX.Element => {
+const ProcessedArtworks = () => {
   useTitle(Title.ProcessedArtworks);
 
   const navigate = useNavigate();

@@ -4,7 +4,7 @@ import { MANUAL_CREATION_SECTION } from "./constants";
 import { useLyricsContext } from "./contexts";
 import { GenerationModeFlipperProps, LyricsPartType, PageMetadata } from "./types";
 
-const GenerationModeFlipper: React.FC<GenerationModeFlipperProps> = ({ className, ...props }): JSX.Element => {
+const GenerationModeFlipper: React.FC<GenerationModeFlipperProps> = ({ className, ...props }) => {
   const { setLyricsParts, setPageMetadata, artist, songName, isManual, setIsManual } = useLyricsContext();
 
   const handleClick = () => {

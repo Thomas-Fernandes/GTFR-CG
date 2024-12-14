@@ -10,7 +10,7 @@ import { ItunesFormProps } from "./types";
 
 import "./ItunesForm.scss";
 
-const ItunesForm: React.FC<ItunesFormProps> = ({ setItunesResults }): JSX.Element => {
+const ItunesForm: React.FC<ItunesFormProps> = ({ setItunesResults }) => {
   const [term, setTerm] = useState("");
   const [country, setCountry] = useState(ITUNES_REGION_OPTIONS[0].value);
   const [, startItunesSearch] = useTransition();

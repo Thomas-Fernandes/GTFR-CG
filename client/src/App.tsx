@@ -1,7 +1,6 @@
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
 import { ViewPaths } from "@/constants/paths";
-
 import ArtworkGeneration from "@/pages/ArtworkGeneration/ArtworkGeneration";
 import CardsGeneration from "@/pages/CardsGeneration/CardsGeneration";
 import Home from "@/pages/Home/Home";
@@ -13,7 +12,7 @@ import Tests from "@/pages/Tests/Tests";
 
 import "./App.scss";
 
-const App = (): JSX.Element => {
+const App = () => {
   return (
     <Router>
       <Routes>

@@ -5,7 +5,7 @@ import { handleSubmitDownloadImage } from "./handlers";
 
 import "./BackgroundImageDisplay.scss";
 
-const BackgroundImageDisplay = (): JSX.Element => {
+const BackgroundImageDisplay = () => {
   return (
     <div id="image-container">
       <img src={`${PROCESSED_ARTWORKS_PATH}/${COVER_ART_FILENAME}`} alt={"background thumbnail"} />

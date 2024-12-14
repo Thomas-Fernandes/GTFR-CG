@@ -5,7 +5,7 @@ import { StatisticsBoardProps } from "./types";
 
 import "./StatisticsBoard.scss";
 
-const StatisticsBoard: React.FC<StatisticsBoardProps> = ({ stats }): JSX.Element => {
+const StatisticsBoard: React.FC<StatisticsBoardProps> = ({ stats }) => {
   const statistics = [
     { label: StatName.DateFirstOperation, value: stats.dateFirstOperation, spinnerId: SpinnerId.StatsFirstOperation },
     { label: StatName.DateLastOperation, value: stats.dateLastOperation, spinnerId: SpinnerId.StatsLastOperation },

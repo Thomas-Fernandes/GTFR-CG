@@ -1,11 +1,10 @@
 @use "@/variables" as *;
 
 .file-upload {
-  @apply flex p-2 justify-center cursor-pointer;
+  @apply flex px-4 py-2 gap-2 justify-center cursor-pointer;
   min-width: 32rem;
   max-width: max-content;
-  border: .1rem solid $primary-yellow;
-  transition: border-color 0.25s ease;
+  border: .1rem solid $primary-1;
 
   &.dragging {
     @apply cursor-grabbing;
@@ -18,11 +17,11 @@
   }
 
   * {
-    @apply mx-2 my-0 cursor-pointer;
+    @apply my-0 cursor-pointer;
   }
 
   > div {
-    @apply flex items-center;
+    @apply flex gap-4 items-center;
 
     label {
       @apply py-2 px-6 rounded-sm text-2xl;
@@ -32,7 +31,6 @@
 
     .file-upload--caption {
       @apply mr-0 text-2xl font-extralight;
-      transition: font-style 0s;
     }
   }
 }

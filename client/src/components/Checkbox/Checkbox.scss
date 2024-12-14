@@ -1,26 +1,29 @@
 @use "@/variables" as *;
 
 .checkbox {
-  @apply flex items-center gap-2;
+  @apply flex flex-row items-center cursor-pointer;
 
-  &:hover {
-    @apply cursor-pointer font-bold;
+  ::selection {
+    @apply bg-transparent;
   }
 
-  input[type="checkbox"] {
-    @apply mx-0 my-0;
-    transform: scale(1.5);
-    accent-color: #007bff;
-    transition: all 0.3s ease;
+  &.disabled {
+    @apply opacity-75;
+  }
 
-    &:hover {
-      @apply cursor-pointer font-semibold;
-      accent-color: #0056b3;
+  &--box {
+    @apply flex items-center justify-center mr-2 gap-2 rounded;
+
+    &--mark {
+      @apply h-auto;
     }
   }
 
   &--label {
-    @apply m-0 text-sm italic;
-    color: $secondary-1;
+    @apply text-sm;
+
+    &:not(.disabled):hover {
+      @apply font-bold;
+    }
   }
 }

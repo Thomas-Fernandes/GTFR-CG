@@ -11,7 +11,7 @@ import { convertToCardContents } from "./utils";
 
 import "./LyricsPartsForm.scss";
 
-const LyricsPartsForm: React.FC<LyricsPartsFormProps> = ({ lyricsParts }): JSX.Element => {
+const LyricsPartsForm: React.FC<LyricsPartsFormProps> = ({ lyricsParts }) => {
   const { dismissedParts, pageMetadata, isManual, navigate } = useLyricsContext();
 
   const [isSavingCardsContent, setIsSavingCardsContent] = useState(false);
@@ -26,7 +26,7 @@ const LyricsPartsForm: React.FC<LyricsPartsFormProps> = ({ lyricsParts }): JSX.E
         <>
           <LyricsPart key={idx} part={part} idx={idx} />
           { idx !== lyricsParts.length - 1 &&
-            <hr className="sz-66 my-2" />
+            <hr className="w-1/3 my-2" />
           }
         </>
       )}

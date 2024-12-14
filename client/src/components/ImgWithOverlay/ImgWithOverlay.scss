@@ -17,7 +17,6 @@
     );
     opacity: 0; /* Initially hidden */
     gap: $gap--sm;
-    transition: opacity 0.3s ease-in-out;
 
     &:hover {
       @apply opacity-100;

@@ -2,7 +2,7 @@ import { SelectorProps } from "./types";
 
 import "./Selector.scss";
 
-const Selector: React.FC<SelectorProps> = ({ setter, options, ...selectProps }): JSX.Element => {
+const Selector: React.FC<SelectorProps> = ({ setter, options, ...selectProps }) => {
   return (
     <select
       onChange={(e) => setter(e.target.value)}

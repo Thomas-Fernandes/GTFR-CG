@@ -3,17 +3,6 @@
 @use "./variables" as *;
 
 @mixin apply-theme($theme-map) {
-  * {
-    transition: all 0.3s ease, font-weight 0s;
-
-    &:before {
-      transition: all 0.3s ease, font-weight 0s;
-    }
-    &:after {
-      transition: all 0.3s ease, font-weight 0s;
-    }
-  }
-
   p, button, .button, .action-button {
     color: map.get($theme-map, text-color);
   }

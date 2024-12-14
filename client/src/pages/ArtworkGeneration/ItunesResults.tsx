@@ -9,7 +9,7 @@ import { ItunesImageResultProps, ItunesResultsProps } from "./types";
 
 import "./ItunesResults.scss";
 
-const ItunesImageResult: React.FC<ItunesImageResultProps> = ({ item, itemId }): JSX.Element => {
+const ItunesImageResult: React.FC<ItunesImageResultProps> = ({ item, itemId }) => {
   const { isProcessingLoading, setIsProcessingLoading, navigate } = useArtworkGenerationContext();
 
   const resultLabel = (item.collectionName || item.trackName).replace(" - Single", "");
@@ -33,7 +33,7 @@ const ItunesImageResult: React.FC<ItunesImageResultProps> = ({ item, itemId }): 
   );
 };
 
-const ItunesResults: React.FC<ItunesResultsProps> = ({ items, setItunesResults }): JSX.Element => {
+const ItunesResults: React.FC<ItunesResultsProps> = ({ items, setItunesResults }) => {
   return (
     <div className="results">
       { items.length > 0 &&

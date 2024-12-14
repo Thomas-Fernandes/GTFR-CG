@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+import { useDarkModeContext } from "@/common/hooks/useDarkMode/contexts";
 import { sendToast } from "@/common/toast";
 import ButtonRemove from "@/components/ButtonRemove/ButtonRemove";
 import { Toast, ToastType } from "@/constants/toasts";
@@ -9,6 +10,8 @@ import { ColorPickerProps } from "./types";
 import "./ColorPicker.scss";
 
 const ColorPicker: React.FC<ColorPickerProps> = ({ id, latest, label, labelClassName, setter }) => {
+  const { isDarkMode } = useDarkModeContext();
+
   const [selectedColor, setSelectedColor] = useState<string>(""); // Default to black color
 
   const calculateLuminance = (hex: string) => {
@@ -52,8 +55,9 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ id, latest, label, labelClass
               value={selectedColor !== "" ? selectedColor : "black"} onChange={handleColorChange}
             />
             <label htmlFor="color-picker" className="color-picker--content--img">
-              <img src="/img/color-dropper-42.png" alt="color-picker" />
+              <img src={`/img/fill--${isDarkMode ? "yellow" : "blue"}.png`} alt="color-picker" />
             </label>
+
             <button type="button" className="color-picker--content--load-latest mac"
               onClick={handleLoadLatest}
             >

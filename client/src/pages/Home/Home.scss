@@ -4,7 +4,7 @@
   @apply gap-4;
 
   h1 {
-    @apply mt-24;
+    margin-top: 4%;
   }
 
   div.navbar {
@@ -27,7 +27,7 @@
           }
 
           &:hover {
-            background-color: $primary-blue;
+            background-color: $primary-2;
 
             span.right { @apply pr-4; } // space between icon and text
             span:before { @apply opacity-100; }

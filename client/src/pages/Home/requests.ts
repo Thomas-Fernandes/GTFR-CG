@@ -37,7 +37,6 @@ export const getGeniusToken = (setGeniusToken: StateSetter<string>) => {
       return;
     }
 
-    sendToast(Toast.Welcome, ToastType.Success, 5);
     setGeniusToken(response.data.token);
   }).catch((error) => {
     sendToast(error.message, ToastType.Error);

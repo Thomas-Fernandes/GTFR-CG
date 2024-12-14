@@ -18,7 +18,7 @@ import YoutubeForm from "./YoutubeForm";
 
 import "./ArtworkGeneration.scss";
 
-const ArtworkGeneration = (): JSX.Element => {
+const ArtworkGeneration = () => {
   useTitle(Title.ArtworkGeneration);
 
   const navigate = useNavigate();

@@ -9,7 +9,7 @@ import { CardViewProps } from "./types";
 
 import "./CardView.scss";
 
-const CardView: React.FC<CardViewProps> = ({ card, cardIdx }): JSX.Element => {
+const CardView: React.FC<CardViewProps> = ({ card, cardIdx }) => {
   const { setIsModalOpen, setCurrentCard, setNewLyrics } = useCardsGalleryContext();
 
   const cardFileName = (card.src.split('/').pop() ?? "").split('?')[0] ?? "card";

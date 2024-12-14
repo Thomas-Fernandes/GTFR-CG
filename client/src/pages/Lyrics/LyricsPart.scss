@@ -8,7 +8,7 @@
       @apply flex items-center gap-8;
 
       &--section {
-        @apply text-2xl;
+        @apply mb-1 text-2xl;
         font-family: $font-family--header;
       }
 
@@ -18,7 +18,7 @@
         transition: all 0.3s ease-in-out, width 0s, height 0s;
 
         &:not(:disabled):hover {
-          background-color: $primary-blue;
+          background-color: $primary-2;
         }
 
         &.red   { @apply bg-red-900;   }

@@ -12,7 +12,7 @@ import { DEFAULT_REDIRECTION, RedirectParams } from "./constants";
 
 import "./Redirect.scss";
 
-const Redirect = (): JSX.Element => {
+const Redirect = () => {
   useTitle(Title.Lyrics);
 
   const location = useLocation();

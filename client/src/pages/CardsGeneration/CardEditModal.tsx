@@ -9,7 +9,7 @@ import { handleMouseDown, handleMouseUp, handleOverlayClick } from "./mouse";
 
 import "./CardEditModal.scss";
 
-const CardEditModal = (): JSX.Element => {
+const CardEditModal = () => {
   const generationProps = useCardsGenerationContext();
 
   const { setIsModalOpen, currentCard, newLyrics, setNewLyrics, setCards } = useCardsGalleryContext();
@@ -24,7 +24,7 @@ const CardEditModal = (): JSX.Element => {
   const clickedInsideModalRef = useRef(false);
 
   return (
-    <div className="modal-overlay flexbox"
+    <div className="modal-overlay"
       onMouseDown={(e) => handleMouseDown(e, { isMouseDownRef, clickedInsideModalRef })}
       onMouseUp={() => handleMouseUp({ isMouseDownRef })}
       onClick={() => handleOverlayClick({ clickedInsideModalRef, closeModal })}

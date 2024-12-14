@@ -9,10 +9,18 @@
   }
 
   &--content {
-    @apply flex flex-row gap-2;
+    @apply flex flex-row justify-center;
+
+    > *:not([name="color-picker"]) {
+      @apply mx-2;
+    }
 
     &--img {
-      @apply mr-2 cursor-pointer;
+      @apply cursor-pointer;
+
+      img {
+        @apply w-8;
+      }
     }
 
     &--load-latest {
@@ -22,15 +30,15 @@
 
   #defined {
     @apply flex flex-col;
-  }
 
-  &--color {
-    @apply flex flex-row gap-2;
+    .color-picker--color {
+      @apply flex flex-row gap-2;
 
-    & > span {
-      @apply w-full content-center rounded-lg;
-      border: .1rem solid lightgrey;
-      letter-spacing: 0.2rem;
+      & > span {
+        @apply w-full content-center rounded-lg;
+        border: .1rem solid lightgrey;
+        letter-spacing: 0.2rem;
+      }
     }
   }
 }

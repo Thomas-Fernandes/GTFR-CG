@@ -6,7 +6,7 @@ import { handleLyricsSearchSubmit } from "./handlers";
 
 import "./LyricsSearchForm.scss";
 
-const LyricsSearchForm = (): JSX.Element => {
+const LyricsSearchForm = () => {
   const { artist, songName, isFetching, setIsFetching, setLyricsParts, setPageMetadata, setDismissedParts, setArtist, setSongName } = useLyricsContext();
 
   return (

@@ -10,7 +10,7 @@ import { processImageName } from "./utils";
 
 import "./ThumbnailGallery.scss";
 
-const ThumbnailGallery = (): JSX.Element => {
+const ThumbnailGallery = () => {
   const [selectedThumbnail, setSelectedThumbnail ] = useState(DEFAULT_SELECTED_POSITION);
 
   const contextValue = useMemo(() => ({ setSelectedThumbnail }), []);

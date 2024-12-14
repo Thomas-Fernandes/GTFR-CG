@@ -30,8 +30,8 @@
         background-color: $toast--progress--success;
         transition: width linear;
 
-        &.warn  { background-color: $toast--progress--failure; }
-        &.error { background-color: $toast--progress--warning; }
+        &.warn  { background-color: $toast--progress--warning; }
+        &.error { background-color: $toast--progress--failure; }
       }
     }
   }

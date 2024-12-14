@@ -17,7 +17,7 @@ import { Statistics } from "./types";
 
 import "./Home.scss";
 
-const Home = (): JSX.Element => {
+const Home = () => {
   useTitle(Title.Home);
 
   const navigate = useNavigate();

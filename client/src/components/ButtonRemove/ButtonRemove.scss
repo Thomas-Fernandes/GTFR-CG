@@ -1,8 +1,8 @@
 @use "@/variables" as *;
 
 .btn-remove {
-  @apply cursor-pointer p-1 mb-1 bg-transparent border-none shadow-none;
-  transition: color .05s ease-in-out !important;
+  @apply cursor-pointer p-1 ml-0 mb-1 bg-transparent border-none shadow-none;
+  transition: color .05s ease !important;
 
   span {
     color: $secondary-1;

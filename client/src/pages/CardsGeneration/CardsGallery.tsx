@@ -7,7 +7,7 @@ import { CardData, CardsGalleryProps } from "./types";
 
 import "./CardsGallery.scss";
 
-const CardsGallery: React.FC<CardsGalleryProps> = ({ initialCards, ...divProps }): JSX.Element => {
+const CardsGallery: React.FC<CardsGalleryProps> = ({ initialCards, ...divProps }) => {
   const [cards, setCards] = useState<CardData[]>(initialCards);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
