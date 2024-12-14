@@ -10,7 +10,7 @@ const LyricsPart: React.FC<LyricsPartProps> = ({ part, idx }) => {
   const { isManual, dismissedParts, setDismissedParts, lyricsParts, setLyricsParts } = useLyricsContext();
 
   return (
-    <div key={"part_" + idx} className="lyrics-part">
+    <div className="lyrics-part">
       { !isManual && dismissedParts.has(idx)
       ? <div className="lyrics-part--header">
           <button type="button" className="restore" onClick={() => handleRestorePart(dismissedParts, idx, setDismissedParts)}>
@@ -35,7 +35,7 @@ const LyricsPart: React.FC<LyricsPartProps> = ({ part, idx }) => {
             {"Clear"}
           </button>
         </div>
-        <AutoResizeTextarea title={`lyrics-part_${idx}`}
+        <AutoResizeTextarea id={`lyrics-part_${idx}`}
           value={part.lyrics} onChange={(e) => handleSetLyricsParts(e.target.value, idx, {lyricsParts, setLyricsParts})}
         />
       </>}

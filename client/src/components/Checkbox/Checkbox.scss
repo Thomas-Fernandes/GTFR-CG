@@ -14,6 +14,10 @@
   &--box {
     @apply flex items-center justify-center mr-2 gap-2 rounded;
 
+    &:not(.disabled):hover {
+      box-shadow: $button-shadow;
+    }
+
     &--mark {
       @apply h-auto;
     }

@@ -6,7 +6,7 @@ import { FileUploaderProps } from "./types";
 
 import "./FileUploader.scss";
 
-const FileUploader: React.FC<FileUploaderProps> = ({ id, label, caption, accept, labelClassName, setter }) => {
+const FileUploader: React.FC<FileUploaderProps> = ({ id, label, caption, accept, setter }) => {
   const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState<boolean>(false);
 
@@ -49,7 +49,7 @@ const FileUploader: React.FC<FileUploaderProps> = ({ id, label, caption, accept,
           id={id} className="hidden"
           onChange={handleFileChange}
         />
-        <label htmlFor="file-upload" className={labelClassName}>
+        <label htmlFor="file-upload" className="file-upload--label">
           {label}
         </label>
         <span className={`file-upload--caption ${selectedFileName ? "" : "italic"}`}>

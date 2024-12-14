@@ -4,17 +4,12 @@
   .stats-board {
     @apply w-1/2 mt-8 mb-0 py-6 rounded-2xl;
     border: .1rem solid $secondary-2;
-    background-color: $secondary-1;
 
     &--stats {
       @apply flex;
 
       &--titles, &--values {
         @apply w-1/2 relative flex flex-col;
-
-        span {
-          color: $secondary-3;
-        }
       }
 
       &--titles {
@@ -22,8 +17,9 @@
       }
       &--values {
         @apply right-16 justify-between italic text-xl;
-        padding-top: 0.2rem;
-        padding-bottom: 0.2rem;
+        $py: 0.2rem;
+        padding-top: $py;
+        padding-bottom: $py;
         font-family: $font-family--stats;
       }
     }

@@ -4,11 +4,8 @@
   #thumbnail-gallery {
     @apply flex flex-col;
 
-    background: $secondary-1;
-    box-shadow: 0 0 .5rem rgba(0,0,0,0.1);
-
     &--grid {
-      @apply h-4/5 grid gap-2;
+      @apply h-4/5 grid gap-4;
       grid-template-columns: repeat(3, 1fr);
     }
   }

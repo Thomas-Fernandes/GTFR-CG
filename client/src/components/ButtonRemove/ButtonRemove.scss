@@ -2,14 +2,14 @@
 
 .btn-remove {
   @apply cursor-pointer p-1 ml-0 mb-1 bg-transparent border-none shadow-none;
-  transition: color .05s ease !important;
+  transition: color .05s ease;
 
   span {
     color: $secondary-1;
   }
 
   &:hover {
-    @apply bg-transparent shadow-none !important;
+    @apply bg-transparent shadow-none;
 
     span {
       @apply text-red-600;

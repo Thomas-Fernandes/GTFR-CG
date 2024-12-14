@@ -4,11 +4,10 @@
   @apply fixed z-50 top-2 right-4;
 
   .toast {
-    @apply min-w-48 rounded mt-2 p-3 opacity-0 text-white text-sm cursor-pointer;
-
+    @apply min-w-48 rounded mt-2 p-3 opacity-0 text-sm cursor-pointer;
     background-color: $toast--success;
-
-    animation: fade-in 0.5s;
+    color: $secondary-1;
+    animation: fadeIn 0.5s;
     transition: margin 0.2s ease, transform 0.5s ease, opacity 0.5s ease;
 
     &.show { @apply opacity-100; transform: translateX(0);    }
@@ -26,7 +25,6 @@
 
       .toast-progress-fill {
         @apply h-full rounded;
-
         background-color: $toast--progress--success;
         transition: width linear;
 
@@ -37,12 +35,7 @@
   }
 }
 
-@keyframes fade-in {
+@keyframes fadeIn {
   from { @apply opacity-0;   transform: translateX(100%); }
   to   { @apply opacity-100; transform: translateX(0);    }
-}
-
-@keyframes fade-out {
-  from { @apply opacity-100; transform: translateX(0);    }
-  to   { @apply opacity-0;   transform: translateX(100%); }
 }

@@ -27,7 +27,6 @@ head { @apply hidden; }
 }
 
 * {
-  $transition: all .3s ease, font-weight .1s ease, font-style 0s, filter 0s;
   transition: $transition;
   &:before { transition: $transition; }
   &:after  { transition: $transition; }
@@ -39,7 +38,6 @@ div.navbar {
 
   button {
     @apply px-8 bg-transparent;
-    border: $border--primary-1--md;
     color: $secondary-1;
 
     span {
@@ -53,14 +51,12 @@ div.navbar {
     }
 
     &:hover {
-      background-color: $primary-2;
-
       span.left  { @apply pl-2; } // space between icon and text
       span.right { @apply pr-2; }
 
       span:before { @apply opacity-100; }
-      span.left:before  { left:  -1rem; } // move icon that much
-      span.right:before { right: -1rem; }
+      span.left:before  { left:  -.875rem; } // move icon that much
+      span.right:before { right: -.875rem; }
     }
   }
 }
@@ -97,8 +93,6 @@ div.spinner-container {
 h1 {
   @apply mx-0 mt-0 mb-8 text-7xl;
   font-family: $font-family--header;
-  color: $primary-1;
-  text-shadow: $glow--h1-primary2--md;
 }
 
 hr {
@@ -116,14 +110,11 @@ hr {
 
 button {
   @apply py-2 px-4 rounded-md text-white text-2xl cursor-pointer;
-
-  background-color: $blue-button;
-  border: .1rem solid $button-border;
-  box-shadow: 0 0 .5rem $button-shadow;
+  border: $button-border;
+  box-shadow: $button-shadow;
 
   &.mac, &.download-button {
     @apply w-full py-1 m-0 font-normal text-xl;
-    background-color: $accent;
 
     &.small  { @apply w-64;  }
     &.medium { @apply w-96;  }
@@ -134,15 +125,6 @@ button {
     }
   }
 
-  &.download-button {
-    background-color: $accent--75;
-  }
-
-  &:not(:disabled):hover {
-    background-color: $primary-2;
-    box-shadow: $glow--primary2--md;
-    color: $secondary-1 !important;
-  }
   &:disabled {
     @apply opacity-50 cursor-not-allowed;
   }
@@ -178,7 +160,6 @@ input[type="file"] {
   &::file-selector-button {
     @apply py-2 px-6 border-none rounded;
     margin-right: 5%;
-    background: $blue-button;
     color: $secondary-1;
   }
 }

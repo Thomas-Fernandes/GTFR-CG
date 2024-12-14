@@ -3,12 +3,19 @@
 .iwo {
   @apply relative overflow-hidden cursor-pointer;
 
+  &:hover {
+    .iwo--image {
+      @apply brightness-50;
+      transition: all .3s ease;
+    }
+  }
+
   &--image {
     @apply object-cover;
   }
 
   &--overlay {
-    @apply absolute z-10 top-0 left-0 w-full h-full flex items-center justify-center;
+    @apply absolute z-10 top-0 left-0 w-full h-full flex items-center justify-center gap-1;
     background: radial-gradient(
       ellipse at center,
       rgba(255, 255, 255, 0.6) 20%, /* Bright white center */
@@ -16,7 +23,6 @@
       rgba(255, 255, 255, 0.0) 100% /* Fully transparent at the edges */
     );
     opacity: 0; /* Initially hidden */
-    gap: $gap--sm;
 
     &:hover {
       @apply opacity-100;
@@ -25,7 +31,7 @@
     &--text {
       @apply font-bold;
       color: $secondary-3;
-      text-shadow: 0 0 .4rem white;
+      text-shadow: 0 0 .25rem $secondary-1;
     }
 
     &--icon {

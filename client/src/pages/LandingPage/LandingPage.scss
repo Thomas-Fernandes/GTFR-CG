@@ -8,8 +8,7 @@
     margin-top: 5vh;
 
     &--left {
-      @apply flex flex-col items-center justify-end relative right-2;
-      gap: $gap--3xl;
+      @apply flex flex-col items-center justify-end relative right-2 gap-10;
 
       &--motto {
         @apply flex flex-col gap-2 items-center flex-wrap justify-center;
@@ -46,16 +45,11 @@
         @apply flex flex-row gap-8 flex-wrap justify-center;
 
         > button {
-          padding: $pad--md $pad--xl;
+          @apply px-7 py-5;
         }
 
         > :first-child {
           @apply bg-transparent;
-          border: $border--primary-2--md;
-
-          &:hover {
-            background-color: $primary-2;
-          }
 
           > .action-button--label {
             @apply font-medium text-3xl;

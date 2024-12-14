@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useTitle } from "@/common/hooks/useTitle";
@@ -14,6 +15,11 @@ const LandingPage = () => {
   useTitle(Title.Landing);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!window.location.href.endsWith(ViewPaths.LandingPage))
+      navigate(ViewPaths.LandingPage);
+  });
 
   return (
     <div id="landing-page">

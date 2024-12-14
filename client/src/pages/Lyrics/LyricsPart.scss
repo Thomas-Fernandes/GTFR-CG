@@ -13,8 +13,7 @@
       }
 
       button {
-        @apply w-64 font-light text-lg;
-        color: $secondary-1;
+        @apply w-48 font-light text-lg;
         transition: all 0.3s ease-in-out, width 0s, height 0s;
 
         &:not(:disabled):hover {
@@ -27,7 +26,6 @@
 
       button.restore {
         @apply w-full bg-transparent;
-        border: $border--primary-2--md;
       }
     }
 

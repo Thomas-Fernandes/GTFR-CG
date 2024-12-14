@@ -1,8 +1,6 @@
 @use "@/variables" as *;
 
 .action-button {
-  background-color: $primary-1;
-
   &.spaced {
     @apply py-5;
 
@@ -14,19 +12,10 @@
 
   &--label {
     @apply font-semibold text-xl;
-    color: $secondary-3;
     font-family: $font-family--action-button;
   }
 
   &--icon {
     @apply w-4;
-  }
-
-  &:not(:disabled):hover {
-    box-shadow: $glow--primary2--md;
-
-    .action-button--label {
-      color: $secondary-1;
-    }
   }
 }

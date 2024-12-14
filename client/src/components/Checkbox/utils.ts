@@ -8,10 +8,14 @@ const variables = {
 }
 
 export const getBackgroundColor = (disabled: boolean, checked: boolean, isDarkMode: boolean) => {
-  if (disabled) return variables["$accent--75"];
-  return checked ? variables["$accent"] : variables["$secondary-1"];
+  if (disabled)
+    return isDarkMode ? variables["$accent--50"] : variables["$accent--75"];
+
+  const pickAccent = isDarkMode ? variables["$accent--75"] : variables["$accent"];
+  return checked ? pickAccent : variables["$secondary-3"];
 };
 
 export const getBorder = (checked: boolean, isDarkMode: boolean) => {
-  return `.1rem solid ${checked ? variables["$accent"] : variables["$secondary-2"]}`;
+  const pickAccent = isDarkMode ? variables["$accent--75"] : variables["$accent"];
+  return `.1rem solid ${checked ? pickAccent : variables["$secondary-2"]}`;
 };

@@ -23,12 +23,12 @@ const LyricsPartsForm: React.FC<LyricsPartsFormProps> = ({ lyricsParts }) => {
       )}
     >
       { lyricsParts.map((part, idx) =>
-        <>
-          <LyricsPart key={idx} part={part} idx={idx} />
+        <div key={"part_" + idx}>
+          <LyricsPart part={part} idx={idx} />
           { idx !== lyricsParts.length - 1 &&
-            <hr className="w-1/3 my-2" />
+            <hr className="w-full my-4" />
           }
-        </>
+        </div>
       )}
       <hr className="my-8" />
 

@@ -1,37 +1,22 @@
-$blue-button: #007bff; // FIXME remove when no longer needed
-$blue-button-hover: #0056b3;
-$button-border: #00000010;
-$button-shadow: #0000007f;
-
-$french-blue: #002496;
-$french-white: #ffffff;
-$french-red: #ed2839;
-
-// Palette
 $primary-1: #ffff64;
 $primary-1--75: #bbbb49;
 $primary-1--50: #888832;
 $primary-2: #2a4d8f;
 $primary-2--75: #1d366f;
-$primary-2--50: #0f1b4f;
 $secondary-1: #ffffff;
 $secondary-1--half: #ffffff7f;
 $secondary-2: #f4f4f4;
 $secondary-3: #1f1f1f;
 $secondary-3--half: #1f1f1f7f;
-$accent: #8fbc8f; // old green ftw
+$accent: #8fbc8f;
 $accent--75: #6f9f6f;
 $accent--50: #4f7f4f;
 
-$text-green: #007f00; // FIXME remove when no longer needed
-$text-yellow: #7f7f00;
-$text-red: #7f0000;
-
-$text-limit--light: #c0c0c0c0;
-$text-limit--dark: #505050c0;
-
 $border--primary-1--md: 0.175rem solid $primary-1;
 $border--primary-2--md: 0.175rem solid $primary-2;
+
+$button-border: .1rem solid #00000010;
+$button-shadow: 0 0 .5rem #0000007f;
 
 $font-family: "http://fonts.googleapis.com/css?family="
   + "Playfair+Display:400,700" + "|"
@@ -45,12 +30,9 @@ $font-family--nav: "Poppins", sans-serif;
 $font-family--stats: "Rubik", sans-serif;
 $font-family--text: "Poppins", serif;
 
-$gap--3xl: 2.5rem;
-$gap--2xl: 2rem;
-$gap--xl: 1.5rem;
-$gap--lg: 1rem;
-$gap--md: 0.5rem;
-$gap--sm: 0.25rem;
+$french-blue: #002496;
+$french-white: #ffffff;
+$french-red: #ed2839;
 
 $glow--primary1--xl: 0 0 1rem .5rem $primary-1--75;
 $glow--primary1--md: 0 0 .5rem .25rem $primary-1--75;
@@ -68,14 +50,8 @@ $lyrics--character-limit: 50;
 
 $outline--primary-1--lg: 0.25rem solid $primary-1;
 
-$pad--4xl: 3rem;
-$pad--3xl: 2.25rem;
-$pad--xl: 1.75rem;
-$pad--lg: 1.5rem;
-$pad--md: 1.25rem;
-
-$shadow--hr-light: 0 0 0.1rem 0.05rem $secondary-1;
-$shadow--hr-dark: 0 0 0.1rem 0.05rem $secondary-3;
+$text-limit--light: #c0c0c0c0;
+$text-limit--dark: #505050c0;
 
 $toast--failure: #7f0000;
 $toast--success: #007f00;
@@ -83,3 +59,5 @@ $toast--warning: #7f7f00;
 $toast--progress--failure: #ff0000c0;
 $toast--progress--success: #00ff00c0;
 $toast--progress--warning: #ffff00c0;
+
+$transition: all .3s ease, font-weight .1s ease, font-style 0s, filter 0s;

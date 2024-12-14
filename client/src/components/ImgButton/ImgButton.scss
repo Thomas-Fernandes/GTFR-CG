@@ -3,13 +3,13 @@
 
   &:hover {
     @apply p-1;
+
+    img {
+      @apply brightness-75;
+    }
   }
 
   img {
     @apply block;
-
-    &:hover {
-      @apply brightness-75;
-    }
   }
 }

@@ -26,15 +26,10 @@ const Home = () => {
   const [stats, setStats] = useState<Statistics>(defaultStatistics);
 
   useEffect(() => {
+    const routeKey = location.pathname;
+    const hasVisited = sessionStorage.getItem(routeKey);
+
     const fetchAndSetData = () => {
-      if (!window.location.href.endsWith(ViewPaths.Home)) {
-        navigate(ViewPaths.Home);
-        return;
-      }
-
-      const routeKey = location.pathname;
-      const hasVisited = sessionStorage.getItem(routeKey);
-
       showAllStatsSpinners();
       getStatistics(setStats);
       hideAllStatsSpinners();

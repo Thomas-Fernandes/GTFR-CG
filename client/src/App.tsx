@@ -24,7 +24,7 @@ const App = () => {
         <Route path={ViewPaths.Tests} element={<Tests />} />
         <Route path={ViewPaths.Home} element={<Home />} />
         <Route path={ViewPaths.LandingPage} element={<LandingPage />} />
-        <Route path={ViewPaths.Root} element={<LandingPage />} />
+        <Route path={ViewPaths.Default} element={<LandingPage />} />
       </Routes>
     </Router>
   )

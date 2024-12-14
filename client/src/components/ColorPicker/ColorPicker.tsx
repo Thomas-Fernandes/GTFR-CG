@@ -54,8 +54,8 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ id, latest, label, labelClass
               type="color" name="color-picker" id="color-picker" className="hidden-h"
               value={selectedColor !== "" ? selectedColor : "black"} onChange={handleColorChange}
             />
-            <label htmlFor="color-picker" className="color-picker--content--img">
-              <img src={`/img/fill--${isDarkMode ? "yellow" : "blue"}.png`} alt="color-picker" />
+            <label htmlFor="color-picker" className={`color-picker--content--img ${isDarkMode ? "dark" : "light"}`}>
+              <span className="hidden">🎨</span>
             </label>
 
             <button type="button" className="color-picker--content--load-latest mac"

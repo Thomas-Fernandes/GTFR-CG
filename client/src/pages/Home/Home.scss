@@ -27,8 +27,6 @@
           }
 
           &:hover {
-            background-color: $primary-2;
-
             span.right { @apply pr-4; } // space between icon and text
             span:before { @apply opacity-100; }
             span.right:before { right: -1rem; } // move icon that much

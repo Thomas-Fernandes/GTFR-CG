@@ -24,7 +24,6 @@
 
         &--image {
           @apply max-w-40 max-h-40 p-1 rounded-md;
-          border: .1rem solid $secondary-3;
         }
         &--text {
           @apply mt-2 mb-0 mx-auto text-center font-bold italic text-lg;
