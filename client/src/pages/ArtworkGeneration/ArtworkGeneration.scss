@@ -15,8 +15,7 @@
       @apply snap-always snap-center;
 
       &--wrapper {
-        @apply relative min-h-screen flex flex-col;
-        top: 16vh;
+        @apply relative min-h-screen flex flex-col justify-center;
 
         > div {
           @apply container max-w-screen-xl mx-auto flex flex-col justify-center items-center;
@@ -24,7 +23,26 @@
       }
     }
 
-    &--prev { @apply w-full fixed left-0 top-32;   }
-    &--next { @apply w-full fixed left-0 bottom-4; }
+    &--prev, &--next { @apply w-full fixed left-0 flex items-center justify-center gap-2; }
+    &--prev {
+      @apply top-32;
+
+      img {
+        @apply transform -rotate-90;
+      }
+    }
+    &--next {
+      @apply bottom-4;
+
+      img {
+        @apply transform rotate-90;
+      }
+    }
+
+    &--itunes {
+      &.padded {
+        margin-top: 6rem;
+      }
+    }
   }
 }

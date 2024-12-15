@@ -16,11 +16,11 @@
 
     &--img {
       @apply w-10 cursor-pointer;
-      background: url("/img/fill--yellow.png");
+      background: url("/img/fill__yellow.png");
       background-size: cover;
 
       &.dark {
-        background: url("/img/fill--blue.png");
+        background: url("/img/fill__blue.png");
         background-size: cover;
       }
     }

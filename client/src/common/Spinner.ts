@@ -11,8 +11,8 @@ const createSpinnerContainer = (spinnerDiv: HTMLElement, name: string) => {
   spinner.classList.add("spinner");
 
   const favicon = document.createElement("img");
-  favicon.src = "/favicon.ico";
-  favicon.alt = "favicon";
+  favicon.src = "/ico/genius.ico";
+  favicon.alt = "genius";
   spinner.appendChild(favicon);
 
   spinnerContainer.appendChild(spinner);

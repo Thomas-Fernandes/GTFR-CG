@@ -17,6 +17,7 @@ import ItunesResults from "./ItunesResults";
 import { ItunesResult } from "./types";
 import YoutubeForm from "./YoutubeForm";
 
+import { useDarkModeContext } from "@/common/hooks/useDarkMode/contexts";
 import "./ArtworkGeneration.scss";
 
 type Section = {
@@ -70,7 +71,7 @@ const sections: Section[] = [
 
 const ArtworkGeneration = () => {
   useTitle(Title.ArtworkGeneration);
-
+  const { isDarkMode } = useDarkModeContext();
   const navigate = useNavigate();
 
   const [currentSection, setCurrentSection] = useState(0);
@@ -94,29 +95,27 @@ const ArtworkGeneration = () => {
       </div>
 
         <div className="artwork-generation--options">
+          <h2 className={`artwork-generation--options--prev ${currentSection !== 0 ? "" : "empty"}`}>
+            { currentSection !== 0 && <img src={isDarkMode ? "/img/arrow__blue.png" : "/img/arrow__yellow.png"} alt="Previous" /> }
+            <span>{currentSection !== 0 ? `or... ${sections[currentSection - 1].h1}` : ""}</span>
+            { currentSection !== 0 && <img src={isDarkMode ? "/img/arrow__blue.png" : "/img/arrow__yellow.png"} alt="Previous" /> }
+          </h2>
           { sections.map(({ content, className }, i) => (
-            <div key={i} className="artwork-generation--snapper">
-              <ArtworkGenerationContext.Provider value={contextValue}>
-                <div className="artwork-generation--snapper--wrapper" onMouseOver={() => setCurrentSection(i)}>
-                  { i > 0 && currentSection === i &&
-                    <h2 className="artwork-generation--options--prev">
-                      <span>{sections[i - 1].h1}</span>
-                    </h2>
-                  }
-
-                  <div className={className}>
+            <div key={i} className="artwork-generation--snapper" onMouseOver={() => setCurrentSection(i)}>
+              <div className="artwork-generation--snapper--wrapper">
+                <div className={`${className} ${(className.endsWith("--itunes") && itunesResults.length) ? "padded" : ""}`}>
+                  <ArtworkGenerationContext.Provider value={contextValue}>
                     {content(itunesResults, setItunesResults)}
-                  </div>
-
-                  { i < sections.length - 1 && currentSection === i &&
-                    <h2 className="artwork-generation--options--next">
-                      <span>{sections[i + 1].h1}</span>
-                    </h2>
-                  }
+                  </ArtworkGenerationContext.Provider>
                 </div>
-              </ArtworkGenerationContext.Provider>
+              </div>
             </div>
           ))}
+          <h2 className={`artwork-generation--options--next ${currentSection < sections.length - 1 ? "" : "empty"}`}>
+            { currentSection < sections.length - 1 && <img src={isDarkMode ? "/img/arrow__yellow.png" : "/img/arrow__blue.png"} alt="Next" /> }
+            <span>{currentSection < sections.length - 1 ? `or... ${sections[currentSection + 1].h1}` : ""}</span>
+            { currentSection < sections.length - 1 && <img src={isDarkMode ? "/img/arrow__yellow.png" : "/img/arrow__blue.png"} alt="Next" /> }
+          </h2>
         </div>
 
       <TopBotSpacer />

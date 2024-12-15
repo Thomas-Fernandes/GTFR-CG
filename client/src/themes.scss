@@ -131,6 +131,18 @@
   }
 
   #artwork-generation {
+    .artwork-generation--options {
+      &--prev {
+        span {
+          color: map.get($theme-map, text-contrast-color);
+        }
+      }
+      &--next {
+        span {
+          color: map.get($theme-map, text-color);
+        }
+      }
+    }
     .results--container--item--image {
       border: .1rem solid map.get($theme-map, background-color-contrast);
     }
