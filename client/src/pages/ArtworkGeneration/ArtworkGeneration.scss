@@ -24,7 +24,7 @@
       }
     }
 
-    &--prev { @apply w-full fixed left-0 top-32; }
-    &--next { @apply w-full fixed left-0  bottom-4;  }
+    &--prev { @apply w-full fixed left-0 top-32;   }
+    &--next { @apply w-full fixed left-0 bottom-4; }
   }
 }

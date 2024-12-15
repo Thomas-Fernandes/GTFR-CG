@@ -1,6 +1,0 @@
-{
-  "devDependencies": {
-    "@types/node": "^22.10.2",
-    "sass-embedded": "^1.81.0"
-  }
-}

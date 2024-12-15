@@ -2,7 +2,7 @@
   &--gif-gallery::before {
     @apply -z-20 fixed w-full h-full overflow-hidden saturate-0;
     content: ""; /* Required for pseudo-element */
-    background: url("/img/ref4.gif") no-repeat center center fixed;
+    background: url("/gif/mosaic.gif") no-repeat center center fixed;
     background-size: cover;
   }
 

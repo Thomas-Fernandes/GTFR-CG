@@ -5,7 +5,7 @@
 
   .landing-page--content {
     @apply flex flex-wrap justify-center;
-    margin-top: 5vh;
+    margin-top: 8vh;
 
     &--left {
       @apply flex flex-col items-center justify-end relative right-2 gap-10;
@@ -49,7 +49,7 @@
         }
 
         > :first-child {
-          @apply bg-transparent;
+          @apply min-w-64 bg-transparent;
 
           > .action-button--label {
             @apply font-medium text-3xl;
@@ -65,7 +65,8 @@
     }
 
     &--right {
-      @apply relative left-6;
+      @apply relative left-2;
+      bottom: .1rem;
 
       > :first-child {
         @apply z-10 relative aspect-square;
