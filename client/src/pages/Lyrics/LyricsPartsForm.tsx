@@ -22,16 +22,20 @@ const LyricsPartsForm: React.FC<LyricsPartsFormProps> = ({ lyricsParts }) => {
         {isSavingCardsContent, setIsSavingCardsContent, pageMetadata, isManual, lyricsParts, dismissedParts, navigate}
       )}
     >
-      { lyricsParts.map((part, idx) =>
-        <div key={"part_" + idx}>
-          <LyricsPart part={part} idx={idx} />
-          { idx !== lyricsParts.length - 1 &&
-            <hr className="w-full my-4" />
-          }
-        </div>
-      )}
+      <label htmlFor="lyrics-form--parts" className="hidden">{"Lyrics parts"}</label>
+      <ul className="lyrics-form--parts" id="lyrics-form--parts">
+        { lyricsParts.map((part, idx) =>
+          <li key={"part_" + idx}>
+            <LyricsPart part={part} idx={idx} />
+            { idx !== lyricsParts.length - 1 &&
+              <hr className="w-full my-4" />
+            }
+          </li>
+        )}
+      </ul>
       <hr className="my-8" />
 
+      <label htmlFor={SpinnerId.LyricsConvert} className="hidden">{"Convert to cards button"}</label>
       <div className="submit" id={SpinnerId.LyricsConvert}>
         <ActionButton type="submit" label="CONVERT TO CARDS" className="spaced" />
       </div>

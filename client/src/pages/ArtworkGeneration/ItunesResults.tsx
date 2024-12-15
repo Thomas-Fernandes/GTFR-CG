@@ -41,13 +41,13 @@ const ItunesResults: React.FC<ItunesResultsProps> = ({ items, setItunesResults }
           {"Clear results"}
         </button>
       }
-      <div id="results" className="results--container">
+      <ul id="results" className="results--container">
         { items.map((item, index) => (
-          <ItunesImageResult
-            key={index} item={item} itemId={index}
-          />
+          <li key={index}>
+            <ItunesImageResult item={item} itemId={index} />
+          </li>
         ))}
-      </div>
+      </ul>
     </div>
   )
 };

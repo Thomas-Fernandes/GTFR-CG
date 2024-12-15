@@ -20,7 +20,8 @@ const FileUploadForm = () => {
     <form id="local" encType="multipart/form-data"
       onSubmit={(e) => handleSubmitFileUpload(e, { localFile, includeCenterArtwork }, { isProcessingLoading, setIsProcessingLoading, navigate })}
     >
-      <div className="local--selectors">
+      <label htmlFor="local--selectors" className="hidden">{"Selectors"}</label>
+      <div className="local--selectors" id="local--selectors">
         <FileUploader id="background-image" label="Select background image" accept="image/*" setter={setLocalFile} />
         <Checkbox id="include_center_artwork"
           size={24}
@@ -29,6 +30,8 @@ const FileUploadForm = () => {
           label={"Include center artwork"}
         />
       </div>
+
+      <label htmlFor={SpinnerId.FileUpload} className="hidden">{"Upload button"}</label>
       <div className="submit" id={SpinnerId.FileUpload}>
         <ActionButton type="submit" label="UPLOAD" className="spaced" />
       </div>

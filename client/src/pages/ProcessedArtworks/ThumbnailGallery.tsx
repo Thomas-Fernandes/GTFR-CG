@@ -17,13 +17,15 @@ const ThumbnailGallery = () => {
 
   return (
     <div id="thumbnail-gallery">
-      <div id="thumbnail-gallery--grid">
+      <ul id="thumbnail-gallery--grid">
         <ThumbnailGalleryContext.Provider value={contextValue}>
           { LOGO_POSITIONS.map((logoPosition, idx) =>
-            <ThumbnailOption key={`thumbnail-item_${idx}`} logoPosition={logoPosition} idx={idx} />
+            <li key={`thumbnail-item_${idx}`}>
+              <ThumbnailOption logoPosition={logoPosition} idx={idx} />
+            </li>
           )}
         </ThumbnailGalleryContext.Provider>
-      </div>
+      </ul>
       <DownloadButton className="mac"
         onClick={() => handleSubmitDownloadImage(processImageName(selectedThumbnail))}
       />

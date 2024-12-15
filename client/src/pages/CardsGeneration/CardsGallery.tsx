@@ -22,9 +22,13 @@ const CardsGallery: React.FC<CardsGalleryProps> = ({ initialCards, ...divProps }
   return (
     <div className="card-gallery" {...divProps}>
       <CardsGalleryContext.Provider value={contextValue}>
-        { cards?.map((card, idx) =>
-          <CardView key={idx} card={card} cardIdx={idx} />
-        )}
+        <ul className="card-gallery--cards">
+          { cards?.map((card, idx) =>
+            <li key={idx}>
+              <CardView card={card} cardIdx={idx} />
+            </li>
+          )}
+        </ul>
         { isModalOpen && currentCard && (
           <CardEditModal />
         )}

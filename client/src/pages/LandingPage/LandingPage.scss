@@ -45,7 +45,7 @@
         @apply flex flex-row gap-8 flex-wrap justify-center;
 
         > button {
-          @apply px-7 py-5;
+          @apply h-full px-7 py-5;
         }
 
         > :first-child {

@@ -5,11 +5,14 @@ import { getBackgroundColor, getBorder } from "./utils";
 
 import "./Checkbox.scss";
 
-const Checkbox: React.FC<CheckboxProps> = ({ size, checked, disabled, onChange, label, ...divProps }) => {
+const Checkbox: React.FC<CheckboxProps> = ({ size, checked, disabled, onChange, label, ...buttonProps }) => {
   const { isDarkMode } = useDarkModeContext();
 
   return (
-    <div className={`checkbox ${disabled ? "disabled" : ""}`} onClick={onChange} {...divProps}>
+    <button type="button" className={`checkbox ${disabled ? "disabled" : ""}`}
+      onClick={onChange}
+      {...buttonProps}
+    >
       <div className="checkbox--box"
         style={{
           width: size, height: size,
@@ -29,7 +32,7 @@ const Checkbox: React.FC<CheckboxProps> = ({ size, checked, disabled, onChange, 
           {label}
         </span>
       }
-    </div>
+    </button>
   );
 };
 

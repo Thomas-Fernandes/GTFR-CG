@@ -13,7 +13,7 @@ import { DEFAULT_REDIRECTION, RedirectParams } from "./constants";
 import "./Redirect.scss";
 
 const Redirect = () => {
-  useTitle(Title.Lyrics);
+  useTitle(Title.Redirect);
 
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
@@ -46,9 +46,9 @@ const Redirect = () => {
       <h1>{Title.Redirect}</h1>
 
       <div className="board">
-        <h3 className="board--title">
+        <h2 className="board--title">
           {"You are being redirected after an error was met..."}
-        </h3>
+        </h2>
 
         <p className="board--err">
           { errorText.current }

@@ -19,9 +19,12 @@ const ItunesForm: React.FC<ItunesFormProps> = ({ setItunesResults }) => {
     <form id="itunes"
       onSubmit={(e) => handleSubmitItunesSearch(e, { term, country }, { setItunesResults })}
     >
-      <input type="text" placeholder={"Search on iTunes"} className="itunes--text"
+      <label htmlFor="itunes--text" className="hidden">{"Search on iTunes"}</label>
+      <input type="text" placeholder={"Search on iTunes"} className="itunes--text" id="itunes--text"
         onChange={(e) => handleChangeTerm(e.target.value, country, { term, setTerm, startItunesSearch, setItunesResults })}
       />
+
+      <label htmlFor={SpinnerId.ItunesSearch} className="hidden">{"Search button"}</label>
       <div id={SpinnerId.ItunesSearch} className="itunes--search">
         <Selector aria-label={"country"} defaultValue={ITUNES_REGION_OPTIONS[0].value}
           setter={setCountry} options={ITUNES_REGION_OPTIONS}

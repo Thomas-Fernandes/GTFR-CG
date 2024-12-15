@@ -30,14 +30,15 @@ const CardEditModal = () => {
       onClick={() => handleOverlayClick({ clickedInsideModalRef, closeModal })}
     >
       <div className="modal-overlay--content" onClick={(e) => e.stopPropagation()}>
-        <h3 className="modal-overlay--content--header">
+        <h2 className="modal-overlay--content--header">
           {`Edit Lyrics of Card ${cardIdPadding}${currentCard?.id}`}
-        </h3>
+        </h2>
 
-        <AutoResizeTextarea title={"card-edit"} disabled={isModalSaving}
+        <AutoResizeTextarea disabled={isModalSaving}
           value={newLyrics} onChange={(e) => setNewLyrics(e.target.value)}
           className="!w-full"
         />
+        {/* FIXME missing line width limit */}
 
         <div className="modal-overlay--content--actions flex-row gap-4">
           <button type="button" disabled={isModalSaving}

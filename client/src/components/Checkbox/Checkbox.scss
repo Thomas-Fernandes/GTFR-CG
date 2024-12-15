@@ -1,7 +1,7 @@
 @use "@/variables" as *;
 
 .checkbox {
-  @apply flex flex-row items-center cursor-pointer;
+  @apply pt-0 flex flex-row items-center cursor-pointer border-none shadow-none;
 
   ::selection {
     @apply bg-transparent;

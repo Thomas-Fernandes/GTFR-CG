@@ -6,4 +6,25 @@
   hr {
     @apply my-8;
   }
+
+  .artwork-generation--options {
+    @apply absolute h-screen snap-y snap-mandatory overflow-y-scroll;
+    scrollbar-width: none;
+
+    .artwork-generation--snapper {
+      @apply snap-always snap-center;
+
+      &--wrapper {
+        @apply relative min-h-screen flex flex-col;
+        top: 16vh;
+
+        > div {
+          @apply container max-w-screen-xl mx-auto flex flex-col justify-center items-center;
+        }
+      }
+    }
+
+    &--prev { @apply w-full fixed left-0 top-32; }
+    &--next { @apply w-full fixed left-0  bottom-4;  }
+  }
 }

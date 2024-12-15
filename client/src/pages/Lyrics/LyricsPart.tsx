@@ -25,9 +25,9 @@ const LyricsPart: React.FC<LyricsPartProps> = ({ part, idx }) => {
             {"Remove"}
           </button>
 
-          <label className="lyrics-part--header--section">
+          <span className="lyrics-part--header--section">
             {part.section}
-          </label>
+          </span>
 
           <button type="button" className="green"
             onClick={() => handleSetLyricsParts("", idx, {lyricsParts, setLyricsParts})}

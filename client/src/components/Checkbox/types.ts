@@ -1,6 +1,6 @@
 import { ComponentPropsWithoutRef } from "react";
 
-export type CheckboxProps = ComponentPropsWithoutRef<"div"> & {
+export type CheckboxProps = ComponentPropsWithoutRef<"button"> & {
   size: number;
   checked: boolean;
   disabled?: boolean;

@@ -16,9 +16,13 @@ const YoutubeForm = () => {
       id="youtube"
       onSubmit={(e) => handleSubmitYoutubeUrl(e, { url: youtubeUrl }, { isProcessingLoading, setIsProcessingLoading, navigate })}
     >
-      <input type="text" placeholder={"Paste YouTube video URL here"}
+      <label htmlFor="youtube--text" className="hidden">{"link input"}</label>
+      <input type="text" id="youtube--text"
+        placeholder={"Paste YouTube video URL here"}
         onChange={(e) => setYoutubeUrl(e.target.value)}
       />
+
+      <label htmlFor={SpinnerId.YoutubeUrl} className="hidden">{"Search button"}</label>
       <div className="submit" id={SpinnerId.YoutubeUrl}>
         <ActionButton type="submit" label={"SEARCH"} className="spaced" />
       </div>

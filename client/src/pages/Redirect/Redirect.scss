@@ -1,6 +1,10 @@
 @use "@/variables" as *;
 
 #redirect {
+  h1 {
+    margin-top: 4% !important;
+  }
+
   .board {
     @apply absolute top-1/4 max-h-64 w-2/3 flex flex-col rounded-2xl items-center justify-center italic;
     padding: 10%;

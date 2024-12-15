@@ -1,6 +1,8 @@
 @use "@/variables" as *;
 
 .action-button {
+  @apply flex items-center justify-center;
+
   &.spaced {
     @apply py-5;
 
@@ -16,6 +18,10 @@
   }
 
   &--icon {
-    @apply w-4;
+    @apply w-0 opacity-0;
+
+    &.hovered {
+      @apply w-4 opacity-100;
+    }
   }
 }

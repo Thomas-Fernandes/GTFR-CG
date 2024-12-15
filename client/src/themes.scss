@@ -96,13 +96,12 @@
 
         &:hover {
           background-color: map.get($theme-map, theme-color-hover);
-        }
 
-        > .action-button--label {
-          &:hover {
+          > .action-button--label {
             color: map.get($theme-map, text-contrast-color);
           }
         }
+
       }
     }
   }
@@ -114,6 +113,20 @@
       div > span {
         color: map.get($theme-map, text-color);
       }
+    }
+  }
+
+  #redirect {
+    * {
+      color: map.get($theme-map, text-color);
+    }
+
+    h1 {
+      color: map.get($theme-map, h1-color);
+    }
+
+    .board {
+      background: map.get($theme-map, background-color);
     }
   }
 

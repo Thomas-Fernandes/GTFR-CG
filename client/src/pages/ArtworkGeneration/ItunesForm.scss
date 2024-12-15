@@ -1,7 +1,11 @@
 #artwork-generation {
   form#itunes {
+    .itunes--text {
+      @apply m-0;
+    }
+
     .itunes--search {
-      @apply max-w-lg w-1/3 flex flex-row items-center justify-center gap-8;
+      @apply max-w-lg w-1/2 flex flex-row items-center justify-center gap-8;
 
       select {
         @apply py-1;

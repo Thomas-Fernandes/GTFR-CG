@@ -41,10 +41,11 @@ const LandingPage = () => {
             </div>
 
             <div className="landing-page--content--left--buttons">
-              <ActionButton
+              <ActionButton newTabLink
                 onClick={() => window.open("https://github.com/Thomas-Fernandes/GTFR-CG")}
                 label={"Learn More"}
               />
+
               <ActionButton
                 onClick={() => navigate(ViewPaths.Home)}
                 label={"Generate Content"}

@@ -26,6 +26,7 @@ const CardsGenerationForm: React.FC<CardsGenerationFormProps> = ({ setCardPaths,
         {generationInProgress, setGenerationInProgress, setCardPaths, setCards, setColorPick}
       )}
     >
+      <label htmlFor="text-fields" className="hidden">{"Text fields"}</label>
       <div id="text-fields" className="settings">
         <input autoComplete="off"
           type="text" name="metaname" placeholder={"if empty, the card metaname will be inferred"}
@@ -42,6 +43,7 @@ const CardsGenerationForm: React.FC<CardsGenerationFormProps> = ({ setCardPaths,
         }
       </div>
 
+      <label htmlFor="enforcers" className="hidden">{"Enforcers"}</label>
       <div id="enforcers" className="settings">
         <FileUploader
           id="background-image" label={"Select image"} caption={"Enforce background image?"}
@@ -53,6 +55,7 @@ const CardsGenerationForm: React.FC<CardsGenerationFormProps> = ({ setCardPaths,
         />
       </div>
 
+      <label htmlFor="selectors" className="hidden">{"Selectors"}</label>
       <div id="selectors" className="settings">
         { bgImg &&
           <Checkbox id="include_center_artwork"
