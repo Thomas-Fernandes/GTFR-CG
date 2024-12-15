@@ -38,7 +38,6 @@ const CardEditModal = () => {
           value={newLyrics} onChange={(e) => setNewLyrics(e.target.value)}
           className="!w-full"
         />
-        {/* FIXME missing line width limit */}
 
         <div className="modal-overlay--content--actions flex-row gap-4">
           <button type="button" disabled={isModalSaving}

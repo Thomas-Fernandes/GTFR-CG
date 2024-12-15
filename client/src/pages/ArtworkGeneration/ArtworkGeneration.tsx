@@ -96,25 +96,28 @@ const ArtworkGeneration = () => {
 
         <div className="artwork-generation--options">
           <h2 className={`artwork-generation--options--prev ${currentSection !== 0 ? "" : "empty"}`}>
-            { currentSection !== 0 && <img src={isDarkMode ? "/img/arrow__blue.png" : "/img/arrow__yellow.png"} alt="Previous" /> }
+            { currentSection !== 0 && <img src={isDarkMode ? "/img/arrow__blue.png" : "/img/arrow__yellow.png"} alt="previous" /> }
             <span>{currentSection !== 0 ? `or... ${sections[currentSection - 1].h1}` : ""}</span>
-            { currentSection !== 0 && <img src={isDarkMode ? "/img/arrow__blue.png" : "/img/arrow__yellow.png"} alt="Previous" /> }
+            { currentSection !== 0 && <img src={isDarkMode ? "/img/arrow__blue.png" : "/img/arrow__yellow.png"} alt="previous" /> }
           </h2>
           { sections.map(({ content, className }, i) => (
             <div key={i} className="artwork-generation--snapper" onMouseOver={() => setCurrentSection(i)}>
               <div className="artwork-generation--snapper--wrapper">
                 <div className={`${className} ${(className.endsWith("--itunes") && itunesResults.length) ? "padded" : ""}`}>
                   <ArtworkGenerationContext.Provider value={contextValue}>
-                    {content(itunesResults, setItunesResults)}
+                    { className.endsWith("--itunes")
+                    ? content(itunesResults, setItunesResults)
+                    : content()
+                    }
                   </ArtworkGenerationContext.Provider>
                 </div>
               </div>
             </div>
           ))}
           <h2 className={`artwork-generation--options--next ${currentSection < sections.length - 1 ? "" : "empty"}`}>
-            { currentSection < sections.length - 1 && <img src={isDarkMode ? "/img/arrow__yellow.png" : "/img/arrow__blue.png"} alt="Next" /> }
+            { currentSection < sections.length - 1 && <img src={isDarkMode ? "/img/arrow__yellow.png" : "/img/arrow__blue.png"} alt="next" /> }
             <span>{currentSection < sections.length - 1 ? `or... ${sections[currentSection + 1].h1}` : ""}</span>
-            { currentSection < sections.length - 1 && <img src={isDarkMode ? "/img/arrow__yellow.png" : "/img/arrow__blue.png"} alt="Next" /> }
+            { currentSection < sections.length - 1 && <img src={isDarkMode ? "/img/arrow__yellow.png" : "/img/arrow__blue.png"} alt="next" /> }
           </h2>
         </div>
 

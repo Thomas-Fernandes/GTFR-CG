@@ -76,6 +76,9 @@
     background: map.get($theme-map, background-color);
     color: map.get($theme-map, text-color);
   }
+  .lyrics-textarea {
+    background-image: map.get($theme-map, lyrics-overflow-marker);
+  }
 
   .file-upload {
     border: map.get($theme-map, navbar-border);
@@ -156,10 +159,6 @@
 
   #lyrics {
     .lyrics-part {
-      .lyrics-textarea {
-        background-image: map.get($theme-map, lyrics-overflow-marker);
-      }
-
       button {
         &:not(:disabled):hover {
           background-color: map.get($theme-map, theme-color-hover);
