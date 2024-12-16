@@ -12,7 +12,7 @@
       @apply p-2 rounded-lg;
       border: .1rem solid $secondary-2;
 
-      &:hover {
+      &:first-child:hover {
         transform: scale(1.02);
       }
     }

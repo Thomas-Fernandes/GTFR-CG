@@ -80,7 +80,6 @@ export const handleGenerateCards = (
 
   setGenerationInProgress(true);
   showSpinner(SpinnerId.CardsGenerate);
-  setCardPaths([]);
 
   postGenerateCards(body, formData, { setGenerationInProgress, setCardPaths, setCards, setColorPick });
 };

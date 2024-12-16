@@ -16,7 +16,7 @@ const CardsGallery: React.FC<CardsGalleryProps> = ({ initialCards, ...divProps }
 
   const contextValue = useMemo(
     () => ({ setCards, setIsModalOpen, currentCard, setCurrentCard, newLyrics, setNewLyrics }),
-    [setCards, currentCard, newLyrics]
+    [cards, currentCard, newLyrics]
   );
 
   return (

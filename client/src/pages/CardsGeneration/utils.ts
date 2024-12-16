@@ -2,6 +2,8 @@ import { SongPartsCards, StateSetter } from "@/common/types";
 
 import { CardData, CardsGenerationRequest, SingleCardGenerationRequest } from "./types";
 
+export const getArrayOfSize = (size: number): number[] => Array.from({ length: size }, (_, i) => i);
+
 export const updateCard = (setCards: StateSetter<CardData[]>, currentCard: CardData, newLyrics: string, cardFilename: string) => {
   setCards((prevCards) =>
     prevCards.map((img) => img.id === currentCard.id // update only the card that was edited

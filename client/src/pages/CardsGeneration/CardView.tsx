@@ -29,7 +29,7 @@ const CardView: React.FC<CardViewProps> = ({ card, cardIdx }) => {
   };
 
   return (
-    <div key={alt} className="card-container">
+    <div className="card-container">
       <div onClick={openModal} className="card-container--card">
         { !cardIsEditable
         ? <img

@@ -1,4 +1,3 @@
-import { useState } from "react";
 
 import { ContentsGenerationMode } from "@/common/types";
 import ActionButton from "@/components/ActionButton/ActionButton";
@@ -14,10 +13,14 @@ import { CardsGenerationFormProps } from "./types";
 import "./CardsGenerationForm.scss";
 
 const CardsGenerationForm: React.FC<CardsGenerationFormProps> = ({ setCardPaths, setCards }) => {
-  const { cardMethod, cardMetaname, setCardMetaname, bgImg, colorPick, includeCenterArtwork, generateOutro, includeBackgroundImg, cardBottomColor } = useCardsGenerationContext();
-  const { outroContributors, setOutroContributors, setBgImg, setColorPick, setIncludeCenterArtwork, setGenerateOutro, setIncludeBackgroundImg } = useCardsGenerationFormContext();
-
-  const [generationInProgress, setGenerationInProgress] = useState(false);
+  const {
+    cardMethod, cardMetaname, setCardMetaname, bgImg, colorPick, includeCenterArtwork,
+    generateOutro, includeBackgroundImg, cardBottomColor
+  } = useCardsGenerationContext();
+  const {
+    outroContributors, setOutroContributors, setBgImg, setColorPick, setIncludeCenterArtwork,
+    setGenerateOutro, setIncludeBackgroundImg, generationInProgress, setGenerationInProgress
+  } = useCardsGenerationFormContext();
 
   return (
     <form id="settings"

@@ -14,7 +14,9 @@ import CardsGenerationForm from "./CardsGenerationForm";
 import { CardsGenerationContext, CardsGenerationFormContext } from "./contexts";
 import { CardData } from "./types";
 
+import Skeleton from "@/components/Skeleton/Skeleton";
 import "./CardsGeneration.scss";
+import { getArrayOfSize } from "./utils";
 
 const CardsGeneration = () => {
   useTitle(Title.CardsGeneration);
@@ -35,16 +37,20 @@ const CardsGeneration = () => {
   const [cardPaths, setCardPaths] = useState([] as string[]);
   const [cards, setCards] = useState([] as CardData[]);
 
+  const [generationInProgress, setGenerationInProgress] = useState(false);
+
   const formContextValue = useMemo(
     () => ({
-      outroContributors, setOutroContributors, setBgImg, setColorPick,
-      setIncludeCenterArtwork, setGenerateOutro, setIncludeBackgroundImg
-    }),
-    [outroContributors]
+      outroContributors, setOutroContributors, setBgImg, setColorPick, setIncludeCenterArtwork,
+      setGenerateOutro, setIncludeBackgroundImg, generationInProgress, setGenerationInProgress
+    }), []
   );
   const contextValue = useMemo(
-    () => ({ cardMethod, cardMetaname, setCardMetaname, bgImg, colorPick, includeCenterArtwork, generateOutro, includeBackgroundImg, cardBottomColor }),
-    [cardMethod, cardMetaname, bgImg, colorPick, includeCenterArtwork, generateOutro, includeBackgroundImg, cardBottomColor]
+    () => ({
+      cardMethod, cardMetaname, setCardMetaname,
+      bgImg, colorPick, includeCenterArtwork, generateOutro, includeBackgroundImg, cardBottomColor, generationInProgress
+    }),
+    [cardMethod, cardMetaname, bgImg, colorPick, includeCenterArtwork, generateOutro, includeBackgroundImg, cardBottomColor, generationInProgress, cards]
   );
 
   useEffect(() => {
@@ -84,6 +90,23 @@ const CardsGeneration = () => {
           <CardsGenerationContext.Provider value={contextValue}>
             <CardsGallery id="cards" initialCards={cards} />
           </CardsGenerationContext.Provider>
+        </>
+      }
+      { generationInProgress &&
+        <>
+          <hr className="my-4" />
+
+          <ul className="card-gallery--cards skeleton">
+            { getArrayOfSize(window.innerWidth / 256).map((_, idx) =>
+                <li key={`skeleton_${idx}`} className="flex flex-col gap-2">
+                  <div className="card-container">
+                    <Skeleton w="16.9rem" h="10rem" />
+                    <Skeleton w="16.9rem" h="2rem" />
+                  </div>
+                </li>
+              )
+            }
+          </ul>
         </>
       }
 
