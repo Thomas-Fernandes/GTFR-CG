@@ -17,10 +17,13 @@
       }
       &--values {
         @apply right-16 justify-between italic text-xl;
-        $py: 0.2rem;
-        padding-top: $py;
-        padding-bottom: $py;
         font-family: $font-family--stats;
+
+        &.initialized {
+          $py: 0.2rem;
+          padding-top: $py;
+          padding-bottom: $py;
+        }
       }
     }
 

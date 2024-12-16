@@ -3,9 +3,9 @@ import { Statistics } from "./types";
 export const defaultStatistics = {
   dateFirstOperation: "N/A",
   dateLastOperation: "N/A",
-  artworkGenerations: "0",
-  lyricsFetches: "0",
-  cardsGenerated: "0",
+  artworkGenerations: "-1",
+  lyricsFetches: "-1",
+  cardsGenerated: "-1",
 } satisfies Statistics;
 
 export enum StatName {

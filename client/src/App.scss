@@ -62,7 +62,7 @@ div.navbar {
 }
 
 div.spinner-container {
-  @apply relative inline-block w-10 h-10;
+  @apply relative inline-block;
 
   span.spinner {
     @apply inline-block w-10 h-10 box-border;

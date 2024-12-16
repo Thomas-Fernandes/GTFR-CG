@@ -11,7 +11,6 @@ import { ViewPaths } from "@/constants/paths";
 
 import { defaultStatistics } from "./constants";
 import { getGeniusToken, getStatistics } from "./requests";
-import { hideAllStatsSpinners, showAllStatsSpinners } from "./spinners";
 import StatisticsBoard from "./StatisticsBoard";
 import { Statistics } from "./types";
 
@@ -30,9 +29,7 @@ const Home = () => {
     const hasVisited = sessionStorage.getItem(routeKey);
 
     const fetchAndSetData = () => {
-      showAllStatsSpinners();
       getStatistics(setStats);
-      hideAllStatsSpinners();
 
       if (!hasVisited) {
         getGeniusToken(setGeniusToken);

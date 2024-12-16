@@ -2,6 +2,7 @@ import { SpinnerId } from "@/constants/spinners";
 
 import { StatName } from "./constants";
 import { StatisticsBoardProps } from "./types";
+import { getStatDisplayValue, statIsInitialized } from "./utils";
 
 import "./StatisticsBoard.scss";
 
@@ -29,10 +30,12 @@ const StatisticsBoard: React.FC<StatisticsBoardProps> = ({ stats }) => {
             </span>
           ))}
         </div>
-        <div className="stats-board--stats--values">
+        <div className={`stats-board--stats--values ${statIsInitialized(statistics[2].value) ? "initialized" : ""}`}>
           { statistics.map((stat, i) => (
             <span key={`stat-value_${i}`} id={stat.spinnerId}>
-              {stat.value}
+              <p className={`${statIsInitialized(stat.value) ? "" : "opacity-0 hidden-v"}`}>
+                {getStatDisplayValue(stat.value)}
+              </p>
             </span>
           ))}
         </div>
