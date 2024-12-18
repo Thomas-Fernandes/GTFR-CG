@@ -19,13 +19,10 @@ const SelectPopover: React.FC<SelectPopoverProps> = ({ label, options, onSelect,
         setIsOpen(false);
     };
 
-    if (isOpen) {
+    if (isOpen)
       document.addEventListener("mousedown", handleClickOutside);
-    }
 
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isOpen]);
 
   return (

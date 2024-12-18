@@ -197,6 +197,10 @@
   }
 
   #cards-generation {
+    .card-stack--card {
+      border: .1rem solid map.get($theme-map, background-color);
+      background-color: map.get($theme-map, accent-dark);
+    }
     .card-container--card {
       border: .1rem solid map.get($theme-map, background-color);
     }

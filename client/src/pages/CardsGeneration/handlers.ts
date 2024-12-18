@@ -32,24 +32,6 @@ export const handleSaveModal = (
   postGenerateSingleCard(generationProps, newLyrics, generateSingleCardProps);
 };
 
-export const handleSubmitDownloadCard = (path: string) => {
-  const filename = path.split('/').pop();
-
-  const link = document.createElement("a");
-  link.download = filename ? filename.split("?")[0] : "card.png";
-  link.href = path;
-  document.body.appendChild(link);
-
-  try {
-    console.log("Downloading", path);
-    link.click();
-  } catch (err) {
-    sendToast((err as Error).message, ToastType.Error);
-  } finally {
-    document.body.removeChild(link);
-  }
-};
-
 export const handleGenerateCards = (
   e: FormEvent<HTMLFormElement>, body: CardsGenerationRequest,
   props: HandleGenerateCardsProps

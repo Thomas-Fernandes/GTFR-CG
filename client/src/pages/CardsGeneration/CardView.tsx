@@ -1,10 +1,10 @@
 import { sendToast } from "@/common/toast";
+import { downloadFile } from "@/common/utils/fileUtils";
 import DownloadButton from "@/components/DownloadButton/DownloadButton";
 import ImgWithOverlay from "@/components/ImgWithOverlay/ImgWithOverlay";
 import { Toast, ToastType } from "@/constants/toasts";
 
 import { useCardsGalleryContext } from "./contexts";
-import { handleSubmitDownloadCard } from "./handlers";
 import { CardViewProps } from "./types";
 
 import "./CardView.scss";
@@ -44,7 +44,7 @@ const CardView: React.FC<CardViewProps> = ({ card, cardIdx }) => {
 
       <DownloadButton className="mac"
         label={"Download " + shortCardFileName}
-        onClick={() => handleSubmitDownloadCard(card.src)}
+        onClick={() => downloadFile(card.src)}
       />
     </div>
   );
