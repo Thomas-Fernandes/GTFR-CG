@@ -1,7 +1,7 @@
 import { useState, useTransition } from "react";
 
 import ActionButton from "@/components/ActionButton/ActionButton";
-import Selector from "@/components/Selector/Selector";
+import SelectPopover from "@/components/SelectPopover/SelectPopover";
 import { SpinnerId } from "@/constants/spinners";
 
 import { ITUNES_REGION_OPTIONS } from "./constants";
@@ -13,7 +13,7 @@ import "./ItunesForm.scss";
 const ItunesForm: React.FC<ItunesFormProps> = ({ setItunesResults }) => {
   const [term, setTerm] = useState("");
   const [country, setCountry] = useState(ITUNES_REGION_OPTIONS[0].value);
-  const [, startItunesSearch] = useTransition();
+  const [_, startItunesSearch] = useTransition();
 
   return (
     <form id="itunes"
@@ -26,8 +26,10 @@ const ItunesForm: React.FC<ItunesFormProps> = ({ setItunesResults }) => {
 
       <label htmlFor={SpinnerId.ItunesSearch} className="hidden">{"Search button"}</label>
       <div id={SpinnerId.ItunesSearch} className="itunes--search">
-        <Selector aria-label={"country"} defaultValue={ITUNES_REGION_OPTIONS[0].value}
-          setter={setCountry} options={ITUNES_REGION_OPTIONS}
+        <SelectPopover aria-label={"country"}
+          label={country ? `country: ${country.toUpperCase()}` : "Select an option"}
+          options={ITUNES_REGION_OPTIONS}
+          onSelect={setCountry}
         />
         <ActionButton type="submit" label="SEARCH" className="spaced" />
       </div>
