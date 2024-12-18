@@ -22,22 +22,23 @@ stats.json
 *.log
 
 # img cache
-*.png
-*.PNG
-*.jpg
-*.JPG
-*.jpeg
-*.JPEG
-*.gif
-*.GIF
-*.bmp
-*.BMP
-*.ico
-*.ICO
-*.svg
-*.SVG
-*.webp
-*.WEBP
+client/public/processed*
+server/**/*.png
+server/**/*.PNG
+server/**/*.jpg
+server/**/*.JPG
+server/**/*.jpeg
+server/**/*.JPEG
+server/**/*.gif
+server/**/*.GIF
+server/**/*.bmp
+server/**/*.BMP
+server/**/*.ico
+server/**/*.ICO
+server/**/*.svg
+server/**/*.SVG
+server/**/*.webp
+server/**/*.WEBP
 
 # cards cache
 *.txt

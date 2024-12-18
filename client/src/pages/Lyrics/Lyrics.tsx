@@ -2,12 +2,10 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useTitle } from "@/common/hooks/useTitle";
-
 import { NavButtonSide } from "@/components/NavButton/constants";
 import NavButton from "@/components/NavButton/NavButton";
 import ToastContainer from "@/components/ToastContainer/ToastContainer";
 import TopBotSpacer from "@/components/TopBotSpacer/TopBotSpacer";
-
 import { SessionStorage, Title } from "@/constants/browser";
 import { ViewPaths } from "@/constants/paths";
 import { Toast } from "@/constants/toasts";
@@ -21,9 +19,7 @@ import ManualGenerationInputBar from "./ManualGenerationInputBar";
 import { isTokenSet } from "./requests";
 import { LyricsContents, LyricsPartType, PageMetadata } from "./types";
 
-import "./Lyrics.css";
-
-const Lyrics = (): JSX.Element => {
+const Lyrics = () => {
   useTitle(Title.Lyrics);
 
   const navigate = useNavigate();
@@ -64,7 +60,7 @@ const Lyrics = (): JSX.Element => {
       setIsGeniusTokenSet(true);
 
       const latestCardGeneration = sessionStorage.getItem(SessionStorage.LatestCardGeneration);
-      setLastContents(JSON.parse(latestCardGeneration ?? "{{}, [], [], []}"));
+      setLastContents(JSON.parse(latestCardGeneration ?? "{{}, [], []}"));
     });
   });
 
@@ -81,7 +77,7 @@ const Lyrics = (): JSX.Element => {
 
       <h1>{Title.Lyrics}</h1>
 
-      <button type="button" className="last-generation mv-0"
+      <button type="button" className="medium mac"
         onClick={() => handleLoadLastContents({lastContents, setPageMetadata, setLyricsParts, setDismissedParts})}
       >
         {"Load last contents"}
@@ -99,7 +95,7 @@ const Lyrics = (): JSX.Element => {
 
         { !isFetching && lyricsParts.length > 0 &&
           <>
-            <hr className="mv-2" />
+            <hr className="my-8" />
 
             <LyricsPartsForm lyricsParts={lyricsParts} />
           </>

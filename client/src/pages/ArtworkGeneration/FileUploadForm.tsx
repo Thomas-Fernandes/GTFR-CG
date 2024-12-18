@@ -1,16 +1,16 @@
-import { JSX, useState } from "react";
+import { useState } from "react";
 
+import ActionButton from "@/components/ActionButton/ActionButton";
 import Checkbox from "@/components/Checkbox/Checkbox";
 import FileUploader from "@/components/FileUploader/FileUploader";
-
 import { SpinnerId } from "@/constants/spinners";
 
 import { useArtworkGenerationContext } from "./contexts";
 import { handleSubmitFileUpload } from "./handlers";
 
-import "./FileUploadForm.css";
+import "./FileUploadForm.scss";
 
-const FileUploadForm = (): JSX.Element => {
+const FileUploadForm = () => {
   const { isProcessingLoading, setIsProcessingLoading, navigate } = useArtworkGenerationContext();
 
   const [localFile, setLocalFile] = useState<File>();
@@ -20,16 +20,20 @@ const FileUploadForm = (): JSX.Element => {
     <form id="local" encType="multipart/form-data"
       onSubmit={(e) => handleSubmitFileUpload(e, { localFile, includeCenterArtwork }, { isProcessingLoading, setIsProcessingLoading, navigate })}
     >
-      <div className="flexbox">
+      <label htmlFor="local--selectors" className="hidden">{"Selectors"}</label>
+      <div className="local--selectors" id="local--selectors">
         <FileUploader id="background-image" label="Select background image" accept="image/*" setter={setLocalFile} />
-        <Checkbox
-          id="include_center_artwork" label="Include center artwork"
-          defaultChecked={includeCenterArtwork}
-          onChange={(e) => setIncludeCenterArtwork(e.target.checked)}
+        <Checkbox id="include_center_artwork"
+          size={24}
+          checked={includeCenterArtwork}
+          onChange={() => setIncludeCenterArtwork(!includeCenterArtwork)}
+          label={"Include center artwork"}
         />
-        <div className="action-button pad-l-1" id={SpinnerId.FileUpload}>
-          <input type="submit" value="UPLOAD" className="action-button" />
-        </div>
+      </div>
+
+      <label htmlFor={SpinnerId.FileUpload} className="hidden">{"Upload button"}</label>
+      <div className="submit" id={SpinnerId.FileUpload}>
+        <ActionButton type="submit" label="UPLOAD" className="spaced" />
       </div>
     </form>
   );

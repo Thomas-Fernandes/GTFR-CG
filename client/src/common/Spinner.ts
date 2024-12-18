@@ -11,8 +11,8 @@ const createSpinnerContainer = (spinnerDiv: HTMLElement, name: string) => {
   spinner.classList.add("spinner");
 
   const favicon = document.createElement("img");
-  favicon.src = "/favicon.ico";
-  favicon.alt = "favicon";
+  favicon.src = "/ico/genius.ico";
+  favicon.alt = "genius";
   spinner.appendChild(favicon);
 
   spinnerContainer.appendChild(spinner);
@@ -37,8 +37,13 @@ export const showSpinner = (name: string) => {
     sendToast(Toast.NoSpinnerContainer, ToastType.Error);
     return;
   }
-  spinnerContainer.style.display = "block";
-  spinnerContainer.style.alignSelf = "center";
+
+  if (name.startsWith("home_stat")) {
+    spinnerContainer.style.scale = "0.5";
+  } else {
+    spinnerContainer.style.display = "block";
+    spinnerContainer.style.alignSelf = "center";
+  }
 }
 
 export const hideSpinner = (name: string) => {

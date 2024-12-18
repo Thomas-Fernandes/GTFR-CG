@@ -1,0 +1,33 @@
+@use "@/variables" as *;
+
+.checkbox {
+  @apply pt-0 flex flex-row items-center cursor-pointer border-none shadow-none;
+
+  ::selection {
+    @apply bg-transparent;
+  }
+
+  &.disabled {
+    @apply opacity-75;
+  }
+
+  &--box {
+    @apply flex items-center justify-center mr-2 gap-2 rounded;
+
+    &:not(.disabled):hover {
+      box-shadow: $button-shadow;
+    }
+
+    &--mark {
+      @apply h-auto;
+    }
+  }
+
+  &--label {
+    @apply text-sm;
+
+    &:not(.disabled):hover {
+      @apply font-bold;
+    }
+  }
+}

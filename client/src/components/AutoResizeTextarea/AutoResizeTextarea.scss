@@ -1,0 +1,8 @@
+@use "@/variables" as *;
+
+.lyrics-textarea {
+  @apply p-2 my-0 self-center text-lg text-nowrap;
+  font-family: $font-family--lyrics;
+  color: $secondary-3;
+  line-height: normal;
+}

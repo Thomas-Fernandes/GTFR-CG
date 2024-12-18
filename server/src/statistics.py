@@ -71,7 +71,7 @@ def getJsonStatsFromFile(path: str = STATS_FILE_PATH) -> JsonDict:
     :param path: [string] The path to the statistics file (default: {STATS_FILE_PATH})
     :return: [dict] The statistics from the statistics file
     """
-    log.debug(f"Getting stats from file: {path}...")
+    log.debug(f"  Getting stats from file: {path}...")
     try:
         if not path.endswith(".json"):
             raise ValueError(Err.STATS_FILETYPE)

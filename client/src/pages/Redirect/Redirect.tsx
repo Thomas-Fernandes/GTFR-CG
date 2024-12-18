@@ -1,4 +1,4 @@
-import { JSX, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { useTitle } from "@/common/hooks/useTitle";
@@ -10,10 +10,10 @@ import { DEFAULT_EVENT_DURATION } from "@/constants/toasts";
 
 import { DEFAULT_REDIRECTION, RedirectParams } from "./constants";
 
-import "./Redirect.css";
+import "./Redirect.scss";
 
-const Redirect = (): JSX.Element => {
-  useTitle(Title.Lyrics);
+const Redirect = () => {
+  useTitle(Title.Redirect);
 
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
@@ -46,15 +46,15 @@ const Redirect = (): JSX.Element => {
       <h1>{Title.Redirect}</h1>
 
       <div className="board">
-        <h3 className="title">
+        <h2 className="board--title">
           {"You are being redirected after an error was met..."}
-        </h3>
+        </h2>
 
-        <p className="err">
+        <p className="board--err">
           { errorText.current }
         </p>
 
-        <p className="counter">
+        <p className="board--counter">
           {`You will be redirected to ${redirectTo.current} in ${countdown} second${plural}.`}
         </p>
       </div>

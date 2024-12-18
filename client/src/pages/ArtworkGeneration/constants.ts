@@ -1,4 +1,4 @@
-import { Option } from "@/components/Selector/Selector";
+import { Option } from "@/components/SelectPopover/types";
 
 export const REGEX_YOUTUBE_URL = [
   /https?:\/\/(www\.)?youtube\.com\/watch\?v=[a-zA-Z0-9_-]{11}/,

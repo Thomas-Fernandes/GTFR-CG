@@ -4,41 +4,41 @@ import { useLyricsContext } from "./contexts";
 import { handleRestorePart, handleSetDismissedParts, handleSetLyricsParts } from "./handlers";
 import { LyricsPartProps } from "./types";
 
-import "./LyricsPart.css";
+import "./LyricsPart.scss";
 
-const LyricsPart: React.FC<LyricsPartProps> = ({ part, idx }): JSX.Element => {
+const LyricsPart: React.FC<LyricsPartProps> = ({ part, idx }) => {
   const { isManual, dismissedParts, setDismissedParts, lyricsParts, setLyricsParts } = useLyricsContext();
 
   return (
-    <div key={"part_" + idx} className="lyrics-part">
+    <div className="lyrics-part">
       { !isManual && dismissedParts.has(idx)
-      ? <div className="lyrics-part--header flexbox flex-row g-2">
+      ? <div className="lyrics-part--header">
           <button type="button" className="restore" onClick={() => handleRestorePart(dismissedParts, idx, setDismissedParts)}>
             {`Restore ${part.section}`}
           </button>
         </div>
       : <>
-        <div className="lyrics-part--header flexbox flex-row g-2">
-          <button type="button" disabled={isManual}
+        <div className="lyrics-part--header">
+          <button type="button" disabled={isManual} className="red"
             onClick={() => handleSetDismissedParts(dismissedParts, idx, setDismissedParts)}
-            className="red"
           >
             {"Remove"}
           </button>
-          <label>{part.section}</label>
-          <button type="button"
+
+          <span className="lyrics-part--header--section">
+            {part.section}
+          </span>
+
+          <button type="button" className="green"
             onClick={() => handleSetLyricsParts("", idx, {lyricsParts, setLyricsParts})}
-            className="green"
           >
             {"Clear"}
           </button>
         </div>
-        <AutoResizeTextarea title={`lyrics-part_${idx}`}
+        <AutoResizeTextarea id={`lyrics-part_${idx}`}
           value={part.lyrics} onChange={(e) => handleSetLyricsParts(e.target.value, idx, {lyricsParts, setLyricsParts})}
         />
       </>}
-
-      <hr className="w-66 mv-0" />
     </div>
   );
 };

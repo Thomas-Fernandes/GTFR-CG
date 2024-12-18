@@ -24,6 +24,8 @@ interface CardsGenerationFormContextType {
   setIncludeCenterArtwork: StateSetter<boolean>;
   setGenerateOutro: StateSetter<boolean>;
   setIncludeBackgroundImg: StateSetter<boolean>;
+  generationInProgress: boolean;
+  setGenerationInProgress: StateSetter<boolean>;
 }
 const {
   context: CardsGenerationFormContext,
@@ -40,6 +42,7 @@ interface CardsGenerationContextType {
   generateOutro: boolean;
   includeBackgroundImg: boolean;
   cardBottomColor: string;
+  generationInProgress: boolean;
 }
 const {
   context: CardsGenerationContext,
@@ -47,7 +50,7 @@ const {
 } = createNewContext<CardsGenerationContextType>();
 
 export {
-    CardsGalleryContext, CardsGenerationContext, CardsGenerationFormContext,
-    useCardsGalleryContext, useCardsGenerationContext, useCardsGenerationFormContext
+  CardsGalleryContext, CardsGenerationContext, CardsGenerationFormContext,
+  useCardsGalleryContext, useCardsGenerationContext, useCardsGenerationFormContext
 };
 

@@ -14,7 +14,7 @@
             gap: 1rem;
 
             .board {
-                background: #ffffff;
+                background: white;
                 box-shadow: 0 0 .5rem rgba(0,0,0,0.1);
                 border: .2rem solid #0000001a;
                 border-radius: 1em;

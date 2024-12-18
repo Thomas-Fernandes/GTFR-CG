@@ -1,0 +1,26 @@
+@use "@/variables" as *;
+
+.card-stack {
+  @apply relative h-48 mx-auto rounded-lg;
+
+  &:hover {
+    transform: scale(1.02);
+    box-shadow: $button-shadow;
+  }
+
+  &--card {
+    @apply w-full h-full rounded-lg;
+
+    &.top-card {
+      @apply z-10 relative flex flex-col items-center justify-center gap-2;
+    }
+
+    &--img {
+      @apply w-full flex items-center justify-center;
+
+      img {
+        @apply w-5/6 rounded;
+      }
+    }
+  }
+}

@@ -1,7 +1,7 @@
 import { Test } from "./Test";
 import { TestsBoardProps } from "./types";
 
-export const TestsBoard = (props: TestsBoardProps): JSX.Element => {
+export const TestsBoard = (props: TestsBoardProps) => {
   const { id, title, tests } = props;
 
   return (

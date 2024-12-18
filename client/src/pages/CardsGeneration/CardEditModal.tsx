@@ -1,16 +1,15 @@
 import { useRef, useState } from "react";
 
 import { AutoResizeTextarea } from "@/components/AutoResizeTextarea/AutoResizeTextarea";
-
 import { SpinnerId } from "@/constants/spinners";
 
 import { useCardsGalleryContext, useCardsGenerationContext } from "./contexts";
 import { handleSaveModal } from "./handlers";
 import { handleMouseDown, handleMouseUp, handleOverlayClick } from "./mouse";
 
-import "./CardEditModal.css";
+import "./CardEditModal.scss";
 
-const CardEditModal = (): JSX.Element => {
+const CardEditModal = () => {
   const generationProps = useCardsGenerationContext();
 
   const { setIsModalOpen, currentCard, newLyrics, setNewLyrics, setCards } = useCardsGalleryContext();
@@ -25,22 +24,22 @@ const CardEditModal = (): JSX.Element => {
   const clickedInsideModalRef = useRef(false);
 
   return (
-    <div className="modal-overlay flexbox"
+    <div className="modal-overlay"
       onMouseDown={(e) => handleMouseDown(e, { isMouseDownRef, clickedInsideModalRef })}
       onMouseUp={() => handleMouseUp({ isMouseDownRef })}
       onClick={() => handleOverlayClick({ clickedInsideModalRef, closeModal })}
     >
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <h3 className="mv-0">
+      <div className="modal-overlay--content" onClick={(e) => e.stopPropagation()}>
+        <h2 className="modal-overlay--content--header">
           {`Edit Lyrics of Card ${cardIdPadding}${currentCard?.id}`}
-        </h3>
+        </h2>
 
-        <AutoResizeTextarea title={"card-edit"} disabled={isModalSaving}
+        <AutoResizeTextarea disabled={isModalSaving}
           value={newLyrics} onChange={(e) => setNewLyrics(e.target.value)}
-          className="w-100"
+          className="!w-full"
         />
 
-        <div className="modal-actions flex-row g-1">
+        <div className="modal-overlay--content--actions flex-row gap-4">
           <button type="button" disabled={isModalSaving}
             onClick={() => currentCard && handleSaveModal(currentCard, isModalSaving,
               { generationProps, newLyrics, generateSingleCardProps: { currentCard, setCards, setIsModalSaving, closeModal } }

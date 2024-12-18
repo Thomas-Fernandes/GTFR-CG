@@ -1,3 +1,4 @@
+import { ComponentPropsWithoutRef } from "react";
 import { NavigateFunction } from "react-router-dom";
 
 import { ApiResponse, SongPartsCards, StateSetter } from "@/common/types";
@@ -36,6 +37,10 @@ export type LyricsSaveProps = {
   dismissedParts: Set<number>;
   navigate: NavigateFunction;
   setIsSavingCardsContent: StateSetter<boolean>;
+};
+
+export type GenerationModeFlipperProps = ComponentPropsWithoutRef<"button"> & {
+  className?: string;
 };
 
 export type HandleSetLyricsPartsProps = {

@@ -1,0 +1,95 @@
+@use "@/variables" as *;
+
+#landing-page {
+  @apply h-full flex flex-col items-center overflow-auto;
+
+  .landing-page--content {
+    @apply flex flex-wrap justify-center;
+    margin-top: 8vh;
+
+    &--left {
+      @apply flex flex-col items-center justify-end relative right-2 gap-10;
+
+      &--motto {
+        @apply flex flex-col gap-2 items-center flex-wrap justify-center;
+
+        * {
+          @apply flex-wrap justify-center text-center text-pretty;
+          font-family: $font-family--header;
+        }
+
+        &--phrase {
+          @apply flex;
+
+          span {
+            @apply font-semibold text-6xl;
+
+            &.blue  { color: $french-blue; }
+            &.white { color: $french-white; }
+            &.red   { color: $french-red; }
+          }
+        }
+
+        &--brand {
+          span {
+            @apply text-2xl;
+
+            &.blue  { color: $french-blue; }
+            &.white { color: $french-white; }
+            &.red   { color: $french-red; }
+          }
+        }
+      }
+
+      &--buttons {
+        @apply flex flex-row gap-8 flex-wrap justify-center;
+
+        > button {
+          @apply h-full px-7 py-5;
+        }
+
+        > :first-child {
+          @apply min-w-64 bg-transparent;
+
+          > .action-button--label {
+            @apply font-medium text-3xl;
+            color: $secondary-1;
+          }
+        }
+        > :last-child {
+          > .action-button--label {
+            @apply font-semibold text-4xl;
+          }
+        }
+      }
+    }
+
+    &--right {
+      @apply relative left-2;
+      bottom: .1rem;
+
+      > :first-child {
+        @apply z-10 relative aspect-square;
+        top: calc(16vh / 2.25);
+        left: calc(-16vw / 4);
+
+        max-height: 16vh;
+      }
+
+      > :last-child {
+        @apply aspect-video;
+        max-height: 24rem;
+
+        .iwo {
+          @apply rounded-sm;
+          outline: $outline--primary-1--lg;
+          box-shadow: $glow--primary1--xl;
+        }
+
+        &:hover {
+          padding: 0 !important;
+        }
+      }
+    }
+  }
+}

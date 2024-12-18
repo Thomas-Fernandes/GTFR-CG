@@ -6,9 +6,11 @@ import { RestVerb, StateSetter } from "@/common/types";
 import { API, BACKEND_URL } from "@/constants/paths";
 import { Toast, ToastType } from "@/constants/toasts";
 
+import { hideAllStatsSpinners, showAllStatsSpinners } from "./spinners";
 import { GeniusTokenResponse, Statistics, StatisticsResponse } from "./types";
 
 export const getStatistics = (setStats: StateSetter<Statistics>) => {
+  showAllStatsSpinners();
   sendRequest(RestVerb.Get, BACKEND_URL + API.STATISTICS).then((response: StatisticsResponse) => {
     if (!is2xxSuccessful(response.status)) {
       sendToast(response.message, ToastType.Error);
@@ -20,12 +22,14 @@ export const getStatistics = (setStats: StateSetter<Statistics>) => {
       dateFirstOperation: new Date(stats.dateFirstOperation).toLocaleString(),
       dateLastOperation: new Date(stats.dateLastOperation).toLocaleString(),
       artworkGenerations: stats.artworkGenerations.toLocaleString(),
-      lyricsFetches: stats.lyricsFetches.toLocaleString(),
-      cardsGenerated: stats.cardsGenerated.toLocaleString(),
+      lyricsFetches: stats.lyricsFetches.toString(),
+      cardsGenerated: stats.cardsGenerated.toString(),
     };
     setStats(displayedStats);
   }).catch((error) => {
     sendToast(error.message, ToastType.Error);
+  }).finally(() => {
+    hideAllStatsSpinners();
   });
 };
 
@@ -37,7 +41,6 @@ export const getGeniusToken = (setGeniusToken: StateSetter<string>) => {
       return;
     }
 
-    sendToast(Toast.Welcome, ToastType.Success, 5);
     setGeniusToken(response.data.token);
   }).catch((error) => {
     sendToast(error.message, ToastType.Error);

@@ -1,26 +1,24 @@
-import { JSX, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { useTitle } from "@/common/hooks/useTitle";
 import { ContentsGenerationMode } from "@/common/types";
-
 import { NavButtonSide } from "@/components/NavButton/constants";
 import NavButton from "@/components/NavButton/NavButton";
 import ToastContainer from "@/components/ToastContainer/ToastContainer";
 import TopBotSpacer from "@/components/TopBotSpacer/TopBotSpacer";
-import ZipDownloadButton from "@/components/ZipDownloadButton";
-
 import { SessionStorage, Title } from "@/constants/browser";
 import { ViewPaths } from "@/constants/paths";
 
 import CardsGallery from "./CardsGallery";
 import CardsGenerationForm from "./CardsGenerationForm";
-import { CARDS_ZIP_FILENAME } from "./constants";
 import { CardsGenerationContext, CardsGenerationFormContext } from "./contexts";
 import { CardData } from "./types";
 
-import "./CardsGeneration.css";
+import Skeleton from "@/components/Skeleton/Skeleton";
+import "./CardsGeneration.scss";
+import { getArrayOfSize } from "./utils";
 
-const CardsGeneration = (): JSX.Element => {
+const CardsGeneration = () => {
   useTitle(Title.CardsGeneration);
 
   const [isComponentMounted, setIsComponentMounted] = useState(false);
@@ -39,16 +37,20 @@ const CardsGeneration = (): JSX.Element => {
   const [cardPaths, setCardPaths] = useState([] as string[]);
   const [cards, setCards] = useState([] as CardData[]);
 
+  const [generationInProgress, setGenerationInProgress] = useState(false);
+
   const formContextValue = useMemo(
     () => ({
-      outroContributors, setOutroContributors, setBgImg, setColorPick,
-      setIncludeCenterArtwork, setGenerateOutro, setIncludeBackgroundImg
-    }),
-    [outroContributors]
+      outroContributors, setOutroContributors, setBgImg, setColorPick, setIncludeCenterArtwork,
+      setGenerateOutro, setIncludeBackgroundImg, generationInProgress, setGenerationInProgress
+    }), []
   );
   const contextValue = useMemo(
-    () => ({ cardMethod, cardMetaname, setCardMetaname, bgImg, colorPick, includeCenterArtwork, generateOutro, includeBackgroundImg, cardBottomColor }),
-    [cardMethod, cardMetaname, bgImg, colorPick, includeCenterArtwork, generateOutro, includeBackgroundImg, cardBottomColor]
+    () => ({
+      cardMethod, cardMetaname, setCardMetaname,
+      bgImg, colorPick, includeCenterArtwork, generateOutro, includeBackgroundImg, cardBottomColor, generationInProgress
+    }),
+    [cardMethod, cardMetaname, bgImg, colorPick, includeCenterArtwork, generateOutro, includeBackgroundImg, cardBottomColor, generationInProgress, cards]
   );
 
   useEffect(() => {
@@ -82,12 +84,29 @@ const CardsGeneration = (): JSX.Element => {
 
       { cardPaths.length > 0 &&
         <>
-          <hr className="mv-1" />
+          <hr className="my-4" />
 
-          <ZipDownloadButton id="download-all" paths={cardPaths} output={CARDS_ZIP_FILENAME} />
+          {/* <ZipDownloadButton id="download-all" paths={cardPaths} output={CARDS_ZIP_FILENAME} /> */}
           <CardsGenerationContext.Provider value={contextValue}>
             <CardsGallery id="cards" initialCards={cards} />
           </CardsGenerationContext.Provider>
+        </>
+      }
+      { generationInProgress &&
+        <>
+          <hr className="my-4" />
+
+          <ul className="card-gallery--cards skeleton">
+            { getArrayOfSize(window.innerWidth / 256).map((_, idx) =>
+                <li key={`skeleton_${idx}`} className="flex flex-col gap-2">
+                  <div className="card-container">
+                    <Skeleton w="16.9rem" h="10rem" />
+                    <Skeleton w="16.9rem" h="2rem" />
+                  </div>
+                </li>
+              )
+            }
+          </ul>
         </>
       }
 

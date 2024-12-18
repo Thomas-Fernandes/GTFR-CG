@@ -1,14 +1,13 @@
-import React from "react";
+import { VerticalRuleProps } from "./types";
 
-import "./VerticalRule.css";
+import "./VerticalRule.scss";
 
-type Props = {
-  className?: string;
-};
-
-const VerticalRule: React.FC<Props> = ({ className }) => {
+const VerticalRule: React.FC<VerticalRuleProps> = ({ className, ...divProps }) => {
   return (
-    <div className={`vertical-rule ${className ?? ""}`} />
+    <div
+      className={`vertical-rule ${className ?? ""}`}
+      {...divProps}
+    />
   );
 };
 

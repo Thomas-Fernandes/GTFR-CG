@@ -1,6 +1,7 @@
 export enum ViewPaths {
-  Root = "/",
+  Default = "*",
   Redirect = "/redirect",
+  LandingPage = "/landing-page",
   Home = "/home",
   Tests = "/tests",
   ArtworkGeneration = "/artwork-generation",
