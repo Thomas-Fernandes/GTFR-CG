@@ -1,6 +1,6 @@
-import { CardStackProps } from "./types";
+import { getArrayOfSize } from "@/common/utils/arrayUtils";
 
-import { getArrayOfSize } from "@/pages/CardsGeneration/utils";
+import { CardStackProps } from "./types";
 
 import "./CardStack.scss";
 

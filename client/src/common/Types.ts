@@ -7,15 +7,15 @@ export enum ContentsGenerationMode {
 
 export type SongPartsCards = string[][];
 
-export type ImageDownloadRequest = {
+export type ImageDownloadRequest = Readonly<{
   selectedImage: string;
-};
+}>;
 
-export type ApiResponse = {
+export type ApiResponse = Readonly<{
   status: number;
   message: string;
   data?: object;
-};
+}>;
 
 export enum RestVerb {
   Get = "GET",
@@ -24,7 +24,6 @@ export enum RestVerb {
   Patch = "PATCH",
   Delete = "DELETE",
 }
-export type RestVerbType = `${RestVerb}`;
 
 export type StateSetter<T> = Dispatch<SetStateAction<T>>;
 

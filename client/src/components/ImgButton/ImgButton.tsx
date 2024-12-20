@@ -4,15 +4,15 @@ import { ImgButtonProps } from "./types";
 
 import "./ImgButton.scss";
 
-const ImgButton: React.FC<ImgButtonProps> = ({ src, alt, onClick, overlayText, newTabLink, ...imgProps }) => {
+const ImgButton: React.FC<ImgButtonProps> = ({ src, onClick, overlayText, newTabLink, ...imgProps }) => {
   return (
     <div className="img-button">
       <button onClick={onClick}>
         { overlayText
         ? <ImgWithOverlay overlayText={overlayText} newTabLink={newTabLink}
-            src={src} alt={alt} {...imgProps}
+            src={src} alt={imgProps.alt} {...imgProps}
           />
-        : <img src={src} alt={alt} {...imgProps} />
+        : <img src={src} alt={imgProps.alt} {...imgProps} />
         }
       </button>
     </div>

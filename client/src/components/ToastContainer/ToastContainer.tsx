@@ -1,6 +1,6 @@
 import "./ToastContainer.scss";
 
-const ToastContainer = () => {
+const ToastContainer: React.FC = () => {
   return (
     <div id="toast-container" />
   );

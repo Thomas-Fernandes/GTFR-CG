@@ -2,15 +2,13 @@ import { SongPartsCards, StateSetter } from "@/common/types";
 
 import { CardData, CardsGenerationRequest, SingleCardGenerationRequest } from "./types";
 
-export const getArrayOfSize = (size: number): number[] => Array.from({ length: size }, (_, i) => i);
-
 export const updateCard = (setCards: StateSetter<CardData[]>, currentCard: CardData, newLyrics: string, cardFilename: string) => {
   setCards((prevCards) =>
     prevCards.map((img) => img.id === currentCard.id // update only the card that was edited
       ? {
         id: img.id,
+        imgSrc: `${cardFilename}?t=${Date.now()}`, // busting cached image with the same name thanks to timestamp
         lyrics: newLyrics,
-        src: `${cardFilename}?t=${Date.now()}` // busting cached image with the same name thanks to timestamp
       } : img
     )
   );
@@ -18,7 +16,8 @@ export const updateCard = (setCards: StateSetter<CardData[]>, currentCard: CardD
 
 export const deduceNewCards = (paths: string[], cardsLyrics: SongPartsCards, hasOutro: boolean): CardData[] => {
   return paths.map((path, idx) => ({
-    id: idx, src: path,
+    id: idx,
+    imgSrc: path,
     lyrics: idx === 0 || (hasOutro && idx === paths.length - 1) // card 00 and outro card have no lyrics
       ? ""
       : cardsLyrics[idx - 1].join("\n")

@@ -4,7 +4,7 @@ import { ActionButtonProps } from "./types";
 
 import "./ActionButton.scss";
 
-const ActionButton = ({ label, className, newTabLink, ...props }: ActionButtonProps) => {
+const ActionButton: React.FC<ActionButtonProps> = ({ label, className, newTabLink, ...props }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (

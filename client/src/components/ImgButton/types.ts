@@ -1,9 +1,8 @@
 import { ComponentPropsWithoutRef } from "react";
 
-export type ImgButtonProps = ComponentPropsWithoutRef<"img"> & {
+export type ImgButtonProps = ComponentPropsWithoutRef<"img"> & Readonly<{
   src: string;
-  alt: string;
   onClick?: () => void;
   overlayText?: string;
   newTabLink?: boolean;
-};
+}>;

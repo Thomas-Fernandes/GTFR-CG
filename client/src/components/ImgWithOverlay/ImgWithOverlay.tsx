@@ -2,11 +2,11 @@ import { ImgWithOverlayProps } from "./types";
 
 import "./ImgWithOverlay.scss";
 
-const ImgWithOverlay: React.FC<ImgWithOverlayProps> = ({ alt, overlayText, newTabLink, className, ...imgProps }) => {
+const ImgWithOverlay: React.FC<ImgWithOverlayProps> = ({ overlayText, newTabLink, className, ...imgProps }) => {
   return (
     <div className="iwo">
       <img
-        alt={alt}
+        alt={imgProps.alt}
         className={`iwo--image ${className ?? ""}`}
         {...imgProps}
       />

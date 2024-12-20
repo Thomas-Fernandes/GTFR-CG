@@ -16,7 +16,7 @@ const CardView: React.FC<CardViewProps> = ({ card, cardIdx }) => {
 
   const [isMounted, setIsMounted] = useState(false);
 
-  const cardFileName = (card.src.split('/').pop() ?? "").split('?')[0] ?? "card";
+  const cardFileName = (card.imgSrc.split('/').pop() ?? "").split('?')[0] ?? "card";
   const shortCardFileName = cardFileName.replace(".png", "");
   const cardIsEditable = !(shortCardFileName === "00" || shortCardFileName === "outro");
   const alt = `card-${cardIdx.toString()}_${cardFileName}`;
@@ -42,10 +42,10 @@ const CardView: React.FC<CardViewProps> = ({ card, cardIdx }) => {
       <div onClick={openModal} className="card-container--card">
         { !cardIsEditable
         ? <img
-            src={card.src} alt={alt}
+            src={card.imgSrc} alt={alt}
           />
         : <ImgWithOverlay
-            src={card.src} alt={alt}
+            src={card.imgSrc} alt={alt}
             overlayText={"Edit this card"}
           />
         }
@@ -53,7 +53,7 @@ const CardView: React.FC<CardViewProps> = ({ card, cardIdx }) => {
 
       <DownloadButton className="mac"
         label={"Download " + shortCardFileName}
-        onClick={() => downloadFile(card.src)}
+        onClick={() => downloadFile(card.imgSrc)}
       />
     </div>
   );

@@ -22,7 +22,7 @@ export const postGenerateSingleCard = (
   setIsModalSaving(true);
   showSpinner(SpinnerId.CardsGenerateSingle);
 
-  const cardFilename = currentCard.src.split('?')[0] ?? "card";
+  const cardFilename = currentCard.imgSrc.split('?')[0] ?? "card";
   const body: SingleCardGenerationRequest = {
     ...generationProps,
     cardsContents: newLyrics.split("\n"),

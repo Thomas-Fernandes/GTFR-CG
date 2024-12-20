@@ -13,7 +13,7 @@ const StatisticsBoard: React.FC<StatisticsBoardProps> = ({ stats }) => {
     { label: StatName.ArtworkGenerations, value: stats.artworkGenerations, spinnerId: SpinnerId.StatsArtworkGenerations },
     { label: StatName.LyricsFetches, value: stats.lyricsFetches, spinnerId: SpinnerId.StatsLyricsFetches },
     { label: StatName.CardsGenerated, value: stats.cardsGenerated, spinnerId: SpinnerId.StatsCardsGenerated },
-  ]
+  ];
 
   return (
     <div className="stats-board">

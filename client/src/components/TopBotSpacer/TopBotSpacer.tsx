@@ -1,6 +1,6 @@
 import "./TopBotSpacer.scss";
 
-const TopBotSpacer = () => {
+const TopBotSpacer: React.FC = () => {
   return (
     <span className="top-bot-spacer" />
   )

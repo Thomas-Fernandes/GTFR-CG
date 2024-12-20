@@ -2,9 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { useTitle } from "@/common/hooks/useTitle";
-
 import TopBotSpacer from "@/components/TopBotSpacer/TopBotSpacer";
-
 import { Title } from "@/constants/browser";
 import { DEFAULT_EVENT_DURATION } from "@/constants/toasts";
 

@@ -3,7 +3,7 @@ import { StateSetter } from "@/common/types";
 
 import { CardData } from "./types";
 
-interface CardsGalleryContextType {
+interface ICardsGalleryContext {
   setCards: StateSetter<CardData[]>;
   setIsModalOpen: StateSetter<boolean>;
   currentCard: CardData | null;
@@ -14,9 +14,9 @@ interface CardsGalleryContextType {
 const {
   context: CardsGalleryContext,
   useContext: useCardsGalleryContext
-} = createNewContext<CardsGalleryContextType>();
+} = createNewContext<ICardsGalleryContext>();
 
-interface CardsGenerationFormContextType {
+interface ICardsGenerationFormContext {
   outroContributors: string;
   setOutroContributors: StateSetter<string>;
   setBgImg: StateSetter<File | undefined>;
@@ -30,9 +30,9 @@ interface CardsGenerationFormContextType {
 const {
   context: CardsGenerationFormContext,
   useContext: useCardsGenerationFormContext
-} = createNewContext<CardsGenerationFormContextType>();
+} = createNewContext<ICardsGenerationFormContext>();
 
-interface CardsGenerationContextType {
+interface ICardsGenerationContext {
   cardMethod: string;
   cardMetaname: string;
   setCardMetaname: StateSetter<string>;
@@ -47,7 +47,7 @@ interface CardsGenerationContextType {
 const {
   context: CardsGenerationContext,
   useContext: useCardsGenerationContext
-} = createNewContext<CardsGenerationContextType>();
+} = createNewContext<ICardsGenerationContext>();
 
 export {
   CardsGalleryContext, CardsGenerationContext, CardsGenerationFormContext,

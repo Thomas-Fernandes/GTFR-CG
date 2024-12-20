@@ -3,13 +3,14 @@ import { useState } from "react";
 import { useDarkModeContext } from "@/common/hooks/useDarkMode/contexts";
 import { sendToast } from "@/common/Toast";
 import ButtonRemove from "@/components/ButtonRemove/ButtonRemove";
+import { ThemeType } from "@/components/DarkModeProvider/constants";
 import { Toast, ToastType } from "@/constants/toasts";
 
 import { ColorPickerProps } from "./types";
 
 import "./ColorPicker.scss";
 
-const ColorPicker: React.FC<ColorPickerProps> = ({ id, latest, label, labelClassName, setter }) => {
+const ColorPicker: React.FC<ColorPickerProps> = ({ id, latest, label, labelClassName, setter, ...divProps }) => {
   const { isDarkMode } = useDarkModeContext();
 
   const [selectedColor, setSelectedColor] = useState<string>(""); // Default to black color
@@ -42,7 +43,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ id, latest, label, labelClass
   };
 
   return (
-    <div id={id} className="color-picker">
+    <div id={id} className={`color-picker ${divProps.className ?? ""}`} {...divProps}>
       { selectedColor === ""
       ? <>
           <span className={`color-picker--label ${label ? (labelClassName ?? "") : "hidden"}`}>
@@ -54,7 +55,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ id, latest, label, labelClass
               type="color" name="color-picker" id="color-picker" className="hidden-h"
               value={selectedColor !== "" ? selectedColor : "black"} onChange={handleColorChange}
             />
-            <label htmlFor="color-picker" className={`color-picker--content--img ${isDarkMode ? "dark" : "light"}`}>
+            <label htmlFor="color-picker" className={`color-picker--content--img ${isDarkMode ? ThemeType.Dark : ThemeType.Light}`}>
               <span className="hidden">🎨</span>
             </label>
 

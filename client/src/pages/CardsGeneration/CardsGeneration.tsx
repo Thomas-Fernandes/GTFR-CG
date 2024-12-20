@@ -2,8 +2,10 @@ import { useEffect, useMemo, useState } from "react";
 
 import { useTitle } from "@/common/hooks/useTitle";
 import { ContentsGenerationMode } from "@/common/types";
+import { getArrayOfSize } from "@/common/utils/arrayUtils";
 import { NavButtonSide } from "@/components/NavButton/constants";
 import NavButton from "@/components/NavButton/NavButton";
+import Skeleton from "@/components/Skeleton/Skeleton";
 import ToastContainer from "@/components/ToastContainer/ToastContainer";
 import TopBotSpacer from "@/components/TopBotSpacer/TopBotSpacer";
 import { SessionStorage, Title } from "@/constants/browser";
@@ -14,9 +16,7 @@ import CardsGenerationForm from "./CardsGenerationForm";
 import { CardsGenerationContext, CardsGenerationFormContext } from "./contexts";
 import { CardData } from "./types";
 
-import Skeleton from "@/components/Skeleton/Skeleton";
 import "./CardsGeneration.scss";
-import { getArrayOfSize } from "./utils";
 
 const CardsGeneration = () => {
   useTitle(Title.CardsGeneration);

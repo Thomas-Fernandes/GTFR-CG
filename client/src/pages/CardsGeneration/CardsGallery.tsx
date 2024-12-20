@@ -30,8 +30,8 @@ const CardsGallery: React.FC<CardsGalleryProps> = ({ initialCards, ...divProps }
           { cards.length > 0 &&
             <>
               <li key={0}>
-                <CardStack label={"Download All as Zip"} imgSrc={cards[1].src} stackSize={2}
-                  onClick={() => downloadFilesAsZip(cards.map(card => card.src), CARDS_ZIP_FILENAME)}
+                <CardStack label={"Download All as Zip"} imgSrc={cards[1].imgSrc} stackSize={2}
+                  onClick={() => downloadFilesAsZip(cards.map(card => card.imgSrc), CARDS_ZIP_FILENAME)}
                 />
               </li>
               { cards.map((card, idx) =>
