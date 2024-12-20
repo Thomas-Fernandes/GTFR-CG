@@ -1,7 +1,7 @@
 import { FormEvent } from "react";
 
-import { showSpinner } from "@/common/spinner";
-import { sendToast } from "@/common/toast";
+import { showSpinner } from "@/common/Spinner";
+import { sendToast } from "@/common/Toast";
 import { isFileExtensionAccepted } from "@/common/utils/fileUtils";
 import { ACCEPTED_IMG_EXTENSIONS } from "@/constants/files";
 import { SpinnerId } from "@/constants/spinners";

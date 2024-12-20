@@ -1,6 +1,6 @@
 import { Toast, ToastType } from "@/constants/toasts";
 
-import { sendToast } from "./toast";
+import { sendToast } from "./Toast";
 
 const createSpinnerContainer = (spinnerDiv: HTMLElement, name: string) => {
   const spinnerContainer = document.createElement("div");

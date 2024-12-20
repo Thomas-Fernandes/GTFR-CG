@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 import { AutoResizeTextarea } from "@/components/AutoResizeTextarea/AutoResizeTextarea";
 
 import { useLyricsContext } from "./contexts";
@@ -9,8 +11,15 @@ import "./LyricsPart.scss";
 const LyricsPart: React.FC<LyricsPartProps> = ({ part, idx }) => {
   const { isManual, dismissedParts, setDismissedParts, lyricsParts, setLyricsParts } = useLyricsContext();
 
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    if (isMounted) return;
+    setIsMounted(true);
+  }, [isMounted]);
+
   return (
-    <div className="lyrics-part">
+    <div className={`lyrics-part ${isMounted ? "mounted" : ""}`}>
       { !isManual && dismissedParts.has(idx)
       ? <div className="lyrics-part--header">
           <button type="button" className="restore" onClick={() => handleRestorePart(dismissedParts, idx, setDismissedParts)}>
@@ -36,7 +45,8 @@ const LyricsPart: React.FC<LyricsPartProps> = ({ part, idx }) => {
           </button>
         </div>
         <AutoResizeTextarea id={`lyrics-part_${idx}`}
-          value={part.lyrics} onChange={(e) => handleSetLyricsParts(e.target.value, idx, {lyricsParts, setLyricsParts})}
+          value={part.lyrics}
+          onChange={(e) => handleSetLyricsParts(e.target.value, idx, {lyricsParts, setLyricsParts})}
         />
       </>}
     </div>

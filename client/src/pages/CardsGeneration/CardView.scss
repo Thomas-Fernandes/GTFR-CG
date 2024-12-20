@@ -2,7 +2,11 @@
 
 #cards-generation {
   .card-container {
-    @apply flex flex-col gap-2;
+    @apply flex flex-col gap-2 opacity-0;
+
+    &.mounted {
+      @apply opacity-100;
+    }
 
     img {
       @apply rounded cursor-pointer;

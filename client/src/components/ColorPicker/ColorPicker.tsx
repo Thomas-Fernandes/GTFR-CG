@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import { useDarkModeContext } from "@/common/hooks/useDarkMode/contexts";
-import { sendToast } from "@/common/toast";
+import { sendToast } from "@/common/Toast";
 import ButtonRemove from "@/components/ButtonRemove/ButtonRemove";
 import { Toast, ToastType } from "@/constants/toasts";
 

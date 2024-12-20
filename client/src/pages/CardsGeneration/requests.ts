@@ -1,6 +1,6 @@
 import { is2xxSuccessful, sendRequest } from "@/common/requests";
-import { hideSpinner, showSpinner } from "@/common/spinner";
-import { sendToast } from "@/common/toast";
+import { hideSpinner, showSpinner } from "@/common/Spinner";
+import { sendToast } from "@/common/Toast";
 import { ApiResponse, RestVerb } from "@/common/types";
 
 import { SessionStorage } from "@/constants/browser";

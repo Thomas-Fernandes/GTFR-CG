@@ -1,4 +1,6 @@
-import { sendToast } from "@/common/toast";
+import { useEffect, useState } from "react";
+
+import { sendToast } from "@/common/Toast";
 import { downloadFile } from "@/common/utils/fileUtils";
 import DownloadButton from "@/components/DownloadButton/DownloadButton";
 import ImgWithOverlay from "@/components/ImgWithOverlay/ImgWithOverlay";
@@ -11,6 +13,8 @@ import "./CardView.scss";
 
 const CardView: React.FC<CardViewProps> = ({ card, cardIdx }) => {
   const { setIsModalOpen, setCurrentCard, setNewLyrics } = useCardsGalleryContext();
+
+  const [isMounted, setIsMounted] = useState(false);
 
   const cardFileName = (card.src.split('/').pop() ?? "").split('?')[0] ?? "card";
   const shortCardFileName = cardFileName.replace(".png", "");
@@ -28,8 +32,13 @@ const CardView: React.FC<CardViewProps> = ({ card, cardIdx }) => {
     setNewLyrics(card.lyrics);
   };
 
+  useEffect(() => {
+    if (isMounted) return;
+    setIsMounted(true);
+  }, [isMounted]);
+
   return (
-    <div className="card-container">
+    <div className={`card-container ${isMounted ? "mounted" : ""}`}>
       <div onClick={openModal} className="card-container--card">
         { !cardIsEditable
         ? <img

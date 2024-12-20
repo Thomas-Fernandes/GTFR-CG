@@ -15,7 +15,11 @@
       }
 
       &--item {
-        @apply justify-items-center;
+        @apply justify-items-center opacity-0;
+
+        &.mounted {
+          @apply opacity-100;
+        }
 
         button {
           @apply bg-transparent rounded-lg;
@@ -26,7 +30,7 @@
           @apply max-w-40 max-h-40 p-1 rounded-md;
         }
         &--text {
-          @apply mt-2 mb-0 mx-auto text-center font-bold italic text-lg;
+          @apply mb-0 mx-auto text-center font-bold italic text-base;
         }
       }
     }

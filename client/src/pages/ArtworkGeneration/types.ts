@@ -1,4 +1,4 @@
-import { TransitionStartFunction } from "react";
+import { JSX, TransitionStartFunction } from "react";
 import { NavigateFunction } from "react-router-dom";
 
 import { ApiResponse, StateSetter } from "@/common/types";
@@ -58,4 +58,15 @@ export type HandleChangeTermProps = {
 };
 export type ItunesFormProps = {
   setItunesResults: StateSetter<ItunesResult[]>;
+};
+
+export type ArtworkGenerationOption = {
+  h1: string;
+  content: (itunesResults?: ItunesResult[], setItunesResults?: StateSetter<ItunesResult[]>) => JSX.Element;
+  className: string;
+};
+export type GenerationOptionState = {
+  current: number;
+  prevLabel: string;
+  nextLabel: string;
 };

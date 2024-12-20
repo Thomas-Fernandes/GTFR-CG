@@ -1,6 +1,5 @@
-
 import { is2xxSuccessful, sendRequest } from "@/common/requests";
-import { sendToast } from "@/common/toast";
+import { sendToast } from "@/common/Toast";
 import { RestVerb, StateSetter } from "@/common/types";
 
 import { API, BACKEND_URL } from "@/constants/paths";

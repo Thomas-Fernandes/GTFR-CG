@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import ImgButton from "@/components/ImgButton/ImgButton";
 import { SpinnerId } from "@/constants/spinners";
@@ -12,11 +12,18 @@ import "./ItunesResults.scss";
 const ItunesImageResult: React.FC<ItunesImageResultProps> = ({ item, itemId }) => {
   const { isProcessingLoading, setIsProcessingLoading, navigate } = useArtworkGenerationContext();
 
+  const [isMounted, setIsMounted] = useState(false);
+
   const resultLabel = (item.collectionName || item.trackName).replace(" - Single", "");
   const [itemLabel, setItemLabel] = useState("");
 
+  useEffect(() => {
+    if (isMounted) return;
+    setIsMounted(true);
+  }, [isMounted]);
+
   return (
-    <div className="results--container--item">
+    <div className={`results--container--item ${isMounted ? "mounted" : ""}`}>
       <ImgButton
         src={item.artworkUrl100} alt={resultLabel}
         onLoad={() => setItemLabel(`${item.artistName} - ${resultLabel}`)}

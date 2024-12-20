@@ -1,6 +1,6 @@
 import { createNewContext } from "@/common/contextCreator";
 
-interface DarkModeContextType {
+interface IDarkModeContext {
   isDarkMode: boolean;
   toggleDarkMode: () => void;
 }
@@ -8,7 +8,7 @@ interface DarkModeContextType {
 const {
   context: DarkModeContext,
   useContext: useDarkModeContext
-} = createNewContext<DarkModeContextType>();
+} = createNewContext<IDarkModeContext>();
 
-export { DarkModeContext, useDarkModeContext, type DarkModeContextType };
+export { DarkModeContext, useDarkModeContext, type IDarkModeContext as DarkModeContextType };
 

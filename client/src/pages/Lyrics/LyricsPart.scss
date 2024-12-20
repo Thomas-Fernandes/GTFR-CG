@@ -2,7 +2,11 @@
 
 #lyrics {
   .lyrics-part {
-    @apply flex flex-col items-center gap-2;
+    @apply flex flex-col items-center gap-2 opacity-0;
+
+    &.mounted {
+      @apply opacity-100;
+    }
 
     &--header {
       @apply flex items-center gap-8;

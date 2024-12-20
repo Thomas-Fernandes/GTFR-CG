@@ -1,7 +1,7 @@
 import { saveAs } from "file-saver";
 import JSZip from "jszip";
 
-import { sendToast } from "@/common/toast";
+import { sendToast } from "@/common/Toast";
 import { HttpStatus, ResponseStatus } from "@/constants/requests";
 import { ToastType } from "@/constants/toasts";
 
