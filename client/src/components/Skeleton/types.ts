@@ -1,6 +1,5 @@
-import { ComponentPropsWithoutRef } from "react";
-
-export type SkeletonProps = ComponentPropsWithoutRef<"div"> & Readonly<{
+export type SkeletonProps = Readonly<{
   w: string;
   h: string;
+  className?: string;
 }>;

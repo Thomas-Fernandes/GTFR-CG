@@ -16,8 +16,6 @@ import CardsGenerationForm from "./CardsGenerationForm";
 import { CardsGenerationContext, CardsGenerationFormContext } from "./contexts";
 import { CardData } from "./types";
 
-import "./CardsGeneration.scss";
-
 const CardsGeneration = () => {
   useTitle(Title.CardsGeneration);
 
@@ -86,7 +84,6 @@ const CardsGeneration = () => {
         <>
           <hr className="my-4" />
 
-          {/* <ZipDownloadButton id="download-all" paths={cardPaths} output={CARDS_ZIP_FILENAME} /> */}
           <CardsGenerationContext.Provider value={contextValue}>
             <CardsGallery id="cards" initialCards={cards} />
           </CardsGenerationContext.Provider>
@@ -99,9 +96,9 @@ const CardsGeneration = () => {
           <ul className="card-gallery--cards skeleton">
             { getArrayOfSize(window.innerWidth / 256).map((_, idx) =>
                 <li key={`skeleton_${idx}`} className="flex flex-col gap-2">
-                  <div className="card-container">
-                    <Skeleton w="16.9rem" h="10rem" />
-                    <Skeleton w="16.9rem" h="2rem" />
+                  <div className="card-container skeleton">
+                    <Skeleton className="card-container--card" w="16.9rem" h="10rem" />
+                    <Skeleton className="card-container--card" w="16.9rem" h="2rem"  />
                   </div>
                 </li>
               )
