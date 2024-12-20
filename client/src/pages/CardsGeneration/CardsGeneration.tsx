@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 import { useTitle } from "@/common/hooks/useTitle";
 import { ContentsGenerationMode } from "@/common/types";
@@ -19,10 +19,8 @@ import { CardData } from "./types";
 const CardsGeneration = () => {
   useTitle(Title.CardsGeneration);
 
-  const [isComponentMounted, setIsComponentMounted] = useState(false);
-
-  const [cardMetaname, setCardMetaname] = useState("");
-  const [outroContributors, setOutroContributors] = useState("");
+  const [cardMetaname, setCardMetaname] = useState(sessionStorage.getItem(SessionStorage.CardMetaname) ?? "");
+  const [outroContributors, setOutroContributors] = useState(JSON.parse(sessionStorage.getItem(SessionStorage.OutroContributors) ?? "").join(", "));
   const cardMethod = sessionStorage.getItem(SessionStorage.CardMethod) ?? ContentsGenerationMode.Auto;
   const cardBottomColor = sessionStorage.getItem(SessionStorage.CardBottomColor) ?? "";
 
@@ -50,16 +48,6 @@ const CardsGeneration = () => {
     }),
     [cardMethod, cardMetaname, bgImg, colorPick, includeCenterArtwork, generateOutro, includeBackgroundImg, cardBottomColor, generationInProgress, cards]
   );
-
-  useEffect(() => {
-    if (isComponentMounted)
-      return;
-
-    setCardMetaname(sessionStorage.getItem(SessionStorage.CardMetaname) ?? "");
-    const storedOutroContributors = sessionStorage.getItem(SessionStorage.OutroContributors);
-    setOutroContributors(storedOutroContributors ? JSON.parse(storedOutroContributors).join(", ") : "");
-    setIsComponentMounted(true);
-  }, [isComponentMounted, colorPick]);
 
   return (
     <div id="cards-generation">
