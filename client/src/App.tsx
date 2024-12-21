@@ -11,10 +11,12 @@ import Redirect from "@/pages/Redirect/Redirect";
 import Tests from "@/pages/Tests/Tests";
 
 import "./App.scss";
+import AppBackground from "./components/AppBackground/AppBackground";
 
 const App = () => {
   return (
     <Router>
+      <AppBackground />
       <Routes>
         <Route path={ViewPaths.CardsGeneration} element={<CardsGeneration />} />
         <Route path={ViewPaths.Lyrics} element={<Lyrics />} />

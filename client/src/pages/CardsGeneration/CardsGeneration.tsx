@@ -19,8 +19,10 @@ import { CardData } from "./types";
 const CardsGeneration = () => {
   useTitle(Title.CardsGeneration);
 
+  console.log(1, sessionStorage.getItem(SessionStorage.CardMetaname) ?? "")
   const [cardMetaname, setCardMetaname] = useState(sessionStorage.getItem(SessionStorage.CardMetaname) ?? "");
-  const [outroContributors, setOutroContributors] = useState(JSON.parse(sessionStorage.getItem(SessionStorage.OutroContributors) ?? "").join(", "));
+  console.log(2, JSON.parse(sessionStorage.getItem(SessionStorage.OutroContributors) ?? "[]"))
+  const [outroContributors, setOutroContributors] = useState(JSON.parse(sessionStorage.getItem(SessionStorage.OutroContributors) ?? "[]")?.join(", "));
   const cardMethod = sessionStorage.getItem(SessionStorage.CardMethod) ?? ContentsGenerationMode.Auto;
   const cardBottomColor = sessionStorage.getItem(SessionStorage.CardBottomColor) ?? "";
 

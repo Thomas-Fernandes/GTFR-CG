@@ -1,13 +1,17 @@
 .app-background {
   &--gif-gallery::before {
-    @apply -z-20 fixed w-full h-full overflow-hidden saturate-0;
+    @apply -z-20 fixed w-full h-full overflow-hidden saturate-0 opacity-0;
     content: ""; /* Required for pseudo-element */
     background: url("/gif/mosaic.gif") no-repeat center center fixed;
     background-size: cover;
+
+    &.landing-page {
+      @apply opacity-100;
+    }
   }
 
   &--waves {
-    @apply -z-10 fixed w-full h-full opacity-75 origin-center overflow-hidden;
+    @apply -z-10 fixed w-full h-full opacity-85 origin-center overflow-hidden;
     background: url("/svg/palette-waves-light.svg") no-repeat center center fixed;
     background-size: cover;
     animation: rotate 60s ease-in-out infinite, zoom 80s ease-in-out infinite;
@@ -15,6 +19,10 @@
     &.dark {
       background: url("/svg/palette-waves-dark.svg") no-repeat center center fixed;
       background-size: cover;
+    }
+
+    &.landing-page {
+      @apply opacity-70;
     }
   }
 }
