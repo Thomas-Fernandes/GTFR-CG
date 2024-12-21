@@ -1,13 +1,8 @@
-import React, { ComponentPropsWithoutRef } from "react";
+import { ButtonRemoveProps } from "./types";
 
-import "./ButtonRemove.css";
+import "./ButtonRemove.scss";
 
-type Props = ComponentPropsWithoutRef<"button"> & {
-  onClick: () => void;
-  className?: string;
-};
-
-const ButtonRemove: React.FC<Props> = ({ onClick, className, ...buttonProps }) => {
+const ButtonRemove: React.FC<ButtonRemoveProps> = ({ onClick, className, ...buttonProps }) => {
   return (
     <button type="button" onClick={onClick}
       className={`btn-remove ${className ?? ""}`}

@@ -1,0 +1,10 @@
+#processed-artworks {
+  #image-panels {
+    @apply flex items-center justify-center gap-16;
+
+    > div {
+      @apply w-5/12 p-4 flex flex-col gap-4 items-center justify-center rounded-xl;
+      box-shadow: 0 0 .5rem rgba(0,0,0,.5);
+    }
+  }
+}

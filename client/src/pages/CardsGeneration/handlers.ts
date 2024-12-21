@@ -1,10 +1,8 @@
 import { FormEvent } from "react";
 
-import { showSpinner } from "@/common/spinner";
-import { sendToast } from "@/common/toast";
-import { ImageDownloadRequest } from "@/common/types";
+import { showSpinner } from "@/common/Spinner";
+import { sendToast } from "@/common/Toast";
 import { isFileExtensionAccepted } from "@/common/utils/fileUtils";
-
 import { ACCEPTED_IMG_EXTENSIONS } from "@/constants/files";
 import { SpinnerId } from "@/constants/spinners";
 import { Toast, ToastType } from "@/constants/toasts";
@@ -32,31 +30,6 @@ export const handleSaveModal = (
   if (generationProps.colorPick === "")
     generationProps.colorPick = generationProps.cardBottomColor;
   postGenerateSingleCard(generationProps, newLyrics, generateSingleCardProps);
-};
-
-export const handleSubmitDownloadCard = (e: FormEvent<HTMLFormElement> | undefined, body: ImageDownloadRequest) => {
-  e?.preventDefault();
-
-  if (!body.selectedImage) {
-    sendToast(Toast.NoImgSelection, ToastType.Error);
-    return;
-  }
-
-  const filename = body.selectedImage.split('/').pop();
-
-  const link = document.createElement("a");
-  link.download = filename ? filename.split("?")[0] : "card.png";
-  link.href = body.selectedImage;
-  document.body.appendChild(link);
-
-  try {
-    console.log("Downloading", body.selectedImage);
-    link.click();
-  } catch (err) {
-    sendToast((err as Error).message, ToastType.Error);
-  } finally {
-    document.body.removeChild(link);
-  }
 };
 
 export const handleGenerateCards = (
@@ -89,7 +62,6 @@ export const handleGenerateCards = (
 
   setGenerationInProgress(true);
   showSpinner(SpinnerId.CardsGenerate);
-  setCardPaths([]);
 
   postGenerateCards(body, formData, { setGenerationInProgress, setCardPaths, setCards, setColorPick });
 };

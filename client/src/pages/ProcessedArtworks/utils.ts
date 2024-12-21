@@ -1,3 +1,1 @@
-export const processImageName = (position: string): string => {
-  return `thumbnail_${position}.png`;
-};
+export const processImageName = (position: string): string => `thumbnail_${position}.png`;

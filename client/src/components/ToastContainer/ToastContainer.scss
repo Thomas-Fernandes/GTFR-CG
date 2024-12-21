@@ -1,0 +1,41 @@
+@use "@/variables" as *;
+
+#toast-container {
+  @apply fixed z-50 top-2 right-4;
+
+  .toast {
+    @apply min-w-48 rounded mt-2 p-3 opacity-0 text-sm cursor-pointer;
+    background-color: $toast--success;
+    color: $secondary-1;
+    animation: fadeIn 0.5s;
+    transition: margin 0.2s ease, transform 0.5s ease, opacity 0.5s ease;
+
+    &.show { @apply opacity-100; transform: translateX(0);    }
+    &.hide { @apply opacity-0;   transform: translateX(100%); }
+
+    &.warn  { background-color: $toast--warning; }
+    &.error { background-color: $toast--failure; }
+
+    .toast-progress {
+      @apply absolute bottom-0 left-0 h-1 w-full rounded;
+      background-color: $toast--success;
+
+      &.warn  { background-color: $toast--warning; }
+      &.error { background-color: $toast--failure; }
+
+      .toast-progress-fill {
+        @apply h-full rounded;
+        background-color: $toast--progress--success;
+        transition: width linear;
+
+        &.warn  { background-color: $toast--progress--warning; }
+        &.error { background-color: $toast--progress--failure; }
+      }
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from { @apply opacity-0;   transform: translateX(100%); }
+  to   { @apply opacity-100; transform: translateX(0);    }
+}

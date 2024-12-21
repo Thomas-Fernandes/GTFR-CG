@@ -1,0 +1,63 @@
+$primary-1: #ffff64;
+$primary-1--75: #bbbb49;
+$primary-1--50: #888832;
+$primary-2: #2a4d8f;
+$primary-2--75: #1d366f;
+$secondary-1: #ffffff;
+$secondary-1--quarter: #ffffff3f;
+$secondary-2: #f4f4f4;
+$secondary-3: #1f1f1f;
+$secondary-3--quarter: #1f1f1f3f;
+$accent: #8fbc8f;
+$accent--75: #6f9f6f;
+$accent--50: #4f7f4f;
+
+$border--primary-1--md: 0.175rem solid $primary-1;
+$border--primary-2--md: 0.175rem solid $primary-2;
+
+$button-border: .1rem solid #00000010;
+$button-shadow: 0 0 .5rem #0000007f;
+
+$font-family: "http://fonts.googleapis.com/css?family="
+  + "Playfair+Display:400,700" + "|"
+  + "Poppins:300,400,500,600,700,200ital,300ital,600ital" + "|"
+  + "Lora:ital,wght@0,400;1,400" + "|"
+  + "Rubik:ital,wght@0,200,300,400,500,600,700;1,200,300,400,500,600,700";
+$font-family--action-button: "Poppins", sans-serif;
+$font-family--header: "Playfair Display", serif;
+$font-family--lyrics: "Lora", serif;
+$font-family--nav: "Poppins", sans-serif;
+$font-family--stats: "Rubik", sans-serif;
+$font-family--text: "Poppins", serif;
+
+$french-blue: #002496;
+$french-white: #ffffff;
+$french-red: #ed2839;
+
+$glow--primary1--xl: 0 0 1rem .5rem $primary-1--75;
+$glow--primary1--md: 0 0 .5rem .25rem $primary-1--75;
+$glow--primary2--md: 0 0 .5rem .25rem $primary-2--75;
+$glow--h1-primary1--md: 0 0 1rem $primary-1--50;
+$glow--h1-primary2--md: 0 0 1rem $primary-2;
+
+$gradient--primary-1: linear-gradient(90deg, $primary-1, $primary-2);
+$gradient--primary-2: linear-gradient(90deg, $primary-2, $primary-1);
+
+$letter-spacing--xl: .375rem;
+$letter-spacing--lg: .25rem;
+
+$lyrics--character-limit: 50;
+
+$outline--primary-1--lg: 0.25rem solid $primary-1;
+
+$text-limit--light: #c0c0c0c0;
+$text-limit--dark: #505050c0;
+
+$toast--failure: #7f0000;
+$toast--success: #007f00;
+$toast--warning: #7f7f00;
+$toast--progress--failure: #ff0000c0;
+$toast--progress--success: #00ff00c0;
+$toast--progress--warning: #ffff00c0;
+
+$transition: all .3s ease, font-weight .1s ease, font-style 0s, filter 0s;

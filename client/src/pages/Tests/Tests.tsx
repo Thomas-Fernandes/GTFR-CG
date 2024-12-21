@@ -1,17 +1,14 @@
-import { JSX, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useTitle } from "@/common/hooks/useTitle";
 import { is2xxSuccessful, objectToQueryString, sendRequest } from "@/common/requests";
-import { dismissToast, sendToast } from "@/common/toast";
+import { dismissToast, sendToast } from "@/common/Toast";
 import { RestVerb, StateSetter } from "@/common/types";
-
 import TopBotSpacer from "@/components/TopBotSpacer/TopBotSpacer";
-
 import { Title } from "@/constants/browser";
 import { API, BACKEND_URL, ITUNES_URL, ViewPaths } from "@/constants/paths";
 import { ToastType } from "@/constants/toasts";
-
 import { ItunesResponse } from "@/pages/ArtworkGeneration/types";
 import { LyricsResponse } from "@/pages/Lyrics/types";
 
@@ -20,7 +17,7 @@ import { TestResult } from "./types";
 
 import "./Tests.css";
 
-const Tests = (): JSX.Element => { // TODO remove this when backend unit tests are implemented
+const Tests = () => { // TODO remove this when backend unit tests are implemented
   useTitle(Title.Tests);
 
   const refGeniusToken = useRef<HTMLButtonElement>(null);

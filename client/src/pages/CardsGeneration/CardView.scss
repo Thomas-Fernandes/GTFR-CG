@@ -1,0 +1,24 @@
+@use "@/variables" as *;
+
+#cards-generation {
+  .card-container {
+    @apply flex flex-col gap-2 opacity-0;
+
+    &.mounted, &.skeleton {
+      @apply opacity-100;
+    }
+
+    img {
+      @apply rounded cursor-pointer;
+    }
+
+    &--card {
+      @apply p-2 rounded-lg;
+      border: .1rem solid $secondary-2;
+
+      &:first-child:hover {
+        transform: scale(1.02);
+      }
+    }
+  }
+}

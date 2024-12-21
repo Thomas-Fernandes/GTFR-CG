@@ -1,30 +1,19 @@
-import React, { ComponentPropsWithoutRef, useState } from "react";
+import ImgWithOverlay from "@/components/ImgWithOverlay/ImgWithOverlay";
 
-import "./ImgButton.css";
+import { ImgButtonProps } from "./types";
 
-type Props = ComponentPropsWithoutRef<"img"> & {
-  src: string;
-  alt: string;
-  onClick?: () => void;
-};
+import "./ImgButton.scss";
 
-const ImgButton: React.FC<Props> = ({ src, alt, onClick, ...imgProps }) => {
-  const [isHovered, setIsHovered] = useState(false);
-
+const ImgButton: React.FC<ImgButtonProps> = ({ src, onClick, overlayText, newTabLink, ...imgProps }) => {
   return (
     <div className="img-button">
-      <button
-        style={{
-          padding: isHovered ? ".33rem" : "0",
-        }}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-        onClick={onClick}
-      >
-        <img
-          src={src} alt={alt}
-          {...imgProps}
-        />
+      <button onClick={onClick}>
+        { overlayText
+        ? <ImgWithOverlay overlayText={overlayText} newTabLink={newTabLink}
+            src={src} alt={imgProps.alt} {...imgProps}
+          />
+        : <img src={src} alt={imgProps.alt} {...imgProps} />
+        }
       </button>
     </div>
   );

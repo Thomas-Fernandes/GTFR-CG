@@ -1,0 +1,21 @@
+.artwork-generation--options {
+  &--prev, &--next {
+    @apply w-full fixed left-0 flex items-center justify-center gap-2;
+  }
+
+  &--prev {
+    @apply top-32;
+
+    img {
+      @apply transform -rotate-90;
+    }
+  }
+
+  &--next {
+    @apply bottom-4;
+
+    img {
+      @apply transform rotate-90;
+    }
+  }
+}

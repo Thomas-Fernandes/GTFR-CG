@@ -1,0 +1,268 @@
+@use "sass:map";
+
+@use "./variables" as *;
+
+@mixin apply-theme($theme-map) {
+  button.theme-switch {
+    box-shadow: map.get($theme-map, button-glow);
+
+    &:hover {
+      box-shadow: map.get($theme-map, button-glow-hover);
+    }
+  }
+
+  .action-button {
+    background-color: map.get($theme-map, theme-color);
+    border: map.get($theme-map, navbar-border);
+
+    &:not(:disabled):hover {
+      background-color: map.get($theme-map, theme-color-hover);
+      border: map.get($theme-map, button-border);
+      box-shadow: map.get($theme-map, button-glow);
+
+      .action-button--label, :before, :after {
+        color: map.get($theme-map, text-contrast-color);
+      }
+    }
+  }
+  button.mac {
+    background-color: map.get($theme-map, accent);
+
+    &:not(:disabled):hover {
+      background-color: map.get($theme-map, theme-color-hover);
+      box-shadow: map.get($theme-map, button-glow);
+
+      color: map.get($theme-map, text-contrast-color);
+    }
+
+    &.download-button {
+      background-color: map.get($theme-map, accent-dark);
+
+      &:hover > span {
+        color: map.get($theme-map, text-contrast-color);
+      }
+    }
+  }
+
+  p, .action-button > span {
+    color: map.get($theme-map, text-color);
+  }
+
+  .popover {
+    &--toggle {
+      background-color: map.get($theme-map, theme-color);
+      color: map.get($theme-map, text-color);
+    }
+
+    &--dropdown {
+      background-color: map.get($theme-map, theme-color);
+
+      &--list {
+        color: map.get($theme-map, text-color);
+
+        &--option:hover {
+          background-color: map.get($theme-map, popover-selector-option-bg-hover);
+          color: map.get($theme-map, text-contrast-color);
+        }
+      }
+    }
+  }
+
+  h1 {
+    color: map.get($theme-map, h1-color);
+    text-shadow: map.get($theme-map, h1-glow);
+  }
+
+  div.navbar {
+    button {
+      border: map.get($theme-map, navbar-border);
+
+      &:hover {
+        background-color: map.get($theme-map, theme-color-hover) !important;
+        box-shadow: map.get($theme-map, button-glow);
+
+        span, :before, :after {
+          color: map.get($theme-map, text-contrast-color);
+        }
+      }
+    }
+  }
+
+  hr {
+    box-shadow: 0 0 0.1rem 0.005rem map.get($theme-map, text-color);
+  }
+
+  textarea, input[type="text"] {
+    background: map.get($theme-map, background-color);
+    color: map.get($theme-map, text-color);
+  }
+  .lyrics-textarea {
+    background-image: map.get($theme-map, lyrics-overflow-marker);
+  }
+
+  .file-upload {
+    border: map.get($theme-map, navbar-border);
+
+    &.dragging {
+      border: .15rem dashed map.get($theme-map, accent-dark);
+    }
+
+    &--label {
+      background-color: map.get($theme-map, accent);
+    }
+  }
+
+  #landing-page {
+    .landing-page--content--left--buttons {
+      > :first-child {
+        border: map.get($theme-map, button-border);
+
+        &:hover {
+          background-color: map.get($theme-map, theme-color-hover);
+
+          > .action-button--label {
+            color: map.get($theme-map, text-contrast-color);
+          }
+        }
+
+      }
+    }
+  }
+
+  #home {
+    .stats-board {
+      background: map.get($theme-map, background-color);
+
+      div > span {
+        color: map.get($theme-map, text-color);
+      }
+    }
+  }
+
+  #redirect {
+    * {
+      color: map.get($theme-map, text-color);
+    }
+
+    h1 {
+      color: map.get($theme-map, h1-color);
+    }
+
+    .board {
+      background: map.get($theme-map, background-color);
+    }
+  }
+
+  #artwork-generation {
+    .artwork-generation--options {
+      &--prev {
+        span {
+          color: map.get($theme-map, text-contrast-color);
+        }
+      }
+      &--next {
+        span {
+          color: map.get($theme-map, text-color);
+        }
+      }
+    }
+    .results--container--item--image {
+      border: .1rem solid map.get($theme-map, background-color-contrast);
+    }
+  }
+
+  #processed-artworks > div {
+    > div {
+      background: map.get($theme-map, background-color);
+    }
+  }
+
+  #lyrics {
+    .lyrics-part {
+      button {
+        &:not(:disabled):hover {
+          background-color: map.get($theme-map, theme-color-hover);
+          color: map.get($theme-map, text-contrast-color);
+        }
+
+        &.restore {
+          border: map.get($theme-map, button-border);
+
+          &:not(:disabled):hover {
+            background-color: map.get($theme-map, theme-color-hover);
+          }
+        }
+      }
+    }
+  }
+
+  #cards-generation {
+    .card-stack--card {
+      border: .1rem solid map.get($theme-map, background-color);
+      background-color: map.get($theme-map, accent-dark);
+    }
+    .card-container--card {
+      border: .1rem solid map.get($theme-map, background-color);
+    }
+
+    .modal-overlay--content {
+      background-color: map.get($theme-map, accent-dark);
+
+      &--header {
+        color: map.get($theme-map, text-color);
+      }
+    }
+  }
+}
+
+$light-theme: (
+  theme-color: $primary-1,
+  theme-color-hover: $primary-2,
+
+  accent: $accent,
+  accent-dark: $accent--75,
+  background-color: $secondary-1,
+  background-color-contrast: $secondary-3,
+  button-border: $border--primary-2--md,
+  button-glow: $glow--primary2--md,
+  button-glow-hover: $glow--primary1--md,
+  h1-color: $primary-1,
+  h1-glow: $glow--h1-primary2--md,
+  lyrics-overflow-marker: linear-gradient(
+    to right,
+    transparent calc(0.92ch * ($lyrics--character-limit - 1)),
+    $text-limit--dark calc(0.92ch * ($lyrics--character-limit - 1)),
+    $text-limit--dark calc(0.92ch * $lyrics--character-limit),
+    transparent calc(0.92ch * $lyrics--character-limit)
+  ),
+  navbar-border: $border--primary-1--md,
+  popover-selector-option-bg-hover: $secondary-3--quarter,
+  text-color: $secondary-3,
+  text-contrast-color: $secondary-1,
+);
+
+$dark-theme: (
+  theme-color: $primary-2,
+  theme-color-hover: $primary-1,
+
+  accent: $accent--75,
+  accent-dark: $accent--50,
+  background-color: $secondary-3,
+  background-color-contrast: $secondary-1,
+  button-border: $border--primary-1--md,
+  button-glow: $glow--primary1--md,
+  button-glow-hover: $glow--primary2--md,
+  h1-color: $primary-2--75,
+  h1-glow: $glow--h1-primary1--md,
+  lyrics-overflow-marker: linear-gradient(
+    to right,
+    transparent calc(0.92ch * ($lyrics--character-limit - 1)),
+    $text-limit--light calc(0.92ch * ($lyrics--character-limit - 1)),
+    $text-limit--light calc(0.92ch * $lyrics--character-limit),
+    transparent calc(0.92ch * $lyrics--character-limit)
+  ),
+  navbar-border: $border--primary-2--md,
+  popover-selector-option-bg-hover: $secondary-1--quarter,
+  text-color: $secondary-1,
+  text-contrast-color: $secondary-3,
+);

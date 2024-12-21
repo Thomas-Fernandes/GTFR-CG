@@ -1,0 +1,168 @@
+@use "./themes" as *;
+@use "./variables" as *;
+
+@import url($font-family);
+
+html {
+  @apply bg-black min-w-full min-h-full;
+
+  @include apply-theme($light-theme);
+
+  &[data-theme="dark"] {
+    @include apply-theme($dark-theme);
+  }
+}
+
+head { @apply hidden; }
+
+#root {
+  @apply w-screen min-h-screen;
+
+  > div[id] {
+    @apply box-border flex flex-col items-center text-left text-base;
+
+    font-family: "Poppins", "Rubik", sans-serif;
+    color: $secondary-1;
+  }
+}
+
+* {
+  transition: $transition;
+  &:before { transition: $transition; }
+  &:after  { transition: $transition; }
+  &:hover  { transition: $transition; }
+}
+
+div.navbar {
+  @apply flex mt-4 mb-8 gap-8;
+
+  button {
+    @apply px-8 bg-transparent;
+    color: $secondary-1;
+
+    span {
+      @apply relative items-center;
+
+      &:before {
+        @apply absolute font-light opacity-0;
+      }
+      &.left:before  { @apply -left-0.5; content: '\00ab'; /* double left  arrow character */ }
+      &.right:before { @apply right-0.5; content: '\00bb'; /* double right arrow character */ }
+    }
+
+    &:hover {
+      span.left  { @apply pl-2; } // space between icon and text
+      span.right { @apply pr-2; }
+
+      span:before { @apply opacity-100; }
+      span.left:before  { left:  -.875rem; } // move icon that much
+      span.right:before { right: -.875rem; }
+    }
+  }
+}
+
+div.spinner-container {
+  @apply relative inline-block;
+
+  span.spinner {
+    @apply inline-block w-10 h-10 box-border;
+    border-radius: 50%;
+    border-top: .2rem solid $primary-1;
+    border-right: .2rem solid transparent;
+    animation: spin 0.67s linear infinite;
+
+    &:after {
+      @apply absolute top-0 left-0 box-border w-10 h-10;
+      content: "";
+      border-radius: 50%;
+      border-bottom: .2rem solid $primary-2;
+      border-left: .2rem solid transparent;
+    }
+
+    img {
+      @apply absolute top-1/2 left-1/2 w-1/2 h-1/2;
+      transform: translate(-50%, -50%);
+    }
+  }
+}
+@keyframes spin {
+  0%   { transform: rotate(0deg);   }
+  100% { transform: rotate(360deg); }
+}
+
+h1 {
+  @apply px-4 mx-0 mt-0 mb-8 text-7xl;
+  font-family: $font-family--header;
+}
+
+hr {
+  @apply w-4/5 my-0 mx-auto h-0 border-none;
+  box-shadow: 0 0 .1rem .005rem black;
+
+  @-moz-document url-prefix() { /* Firefox only supports half-pixels */
+    box-shadow: 0 0 .1rem .025rem black; /* significantly thicker */
+  }
+
+  &:after { /* Not really supposed to work, but does */
+    content: "\00a0"; /* Prevent margin collapse */
+  }
+}
+
+button {
+  @apply py-2 px-4 rounded-md text-white text-2xl cursor-pointer;
+  border: $button-border;
+  box-shadow: $button-shadow;
+
+  &.mac, &.download-button {
+    @apply w-full py-1 m-0 font-normal text-xl;
+
+    &.small  { @apply w-64;  }
+    &.medium { @apply w-96;  }
+    &.large  { width: 36rem; }
+
+    span {
+      @apply font-normal text-xl;
+    }
+  }
+
+  &:disabled {
+    @apply opacity-50 cursor-not-allowed;
+  }
+}
+div.submit {
+  @apply max-w-lg w-1/3 flex gap-4;
+
+  .action-button {
+    @apply w-full;
+  }
+}
+
+button, h1, h2, h3, h4, h5, h6, p, span, input {
+  @apply text-center;
+}
+
+input[type="text"] {
+  @apply text-xl;
+}
+input[type="text"], textarea {
+  @apply w-1/2 p-6 my-4 mx-0 rounded;
+  line-height: normal;
+  border: .1rem solid $secondary-2;
+
+  &.empty {
+    @apply text-xs italic;
+  }
+}
+input[type="file"] {
+  @apply cursor-pointer;
+  text-align-last: center;
+
+  &::file-selector-button {
+    @apply py-2 px-6 border-none rounded;
+    margin-right: 5%;
+    color: $secondary-1;
+  }
+}
+
+.hidden-h { visibility: hidden; @apply w-0; }
+.hidden-v { visibility: hidden; @apply h-0; }

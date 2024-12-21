@@ -3,7 +3,7 @@ import { NavigateFunction } from "react-router-dom";
 import { createNewContext } from "@/common/contextCreator";
 import { StateSetter } from "@/common/types";
 
-interface ArtworkGenerationContextType {
+interface IArtworkGenerationContext {
   isProcessingLoading: boolean;
   setIsProcessingLoading: StateSetter<boolean>;
   navigate: NavigateFunction;
@@ -11,7 +11,7 @@ interface ArtworkGenerationContextType {
 const {
   context: ArtworkGenerationContext,
   useContext: useArtworkGenerationContext
-} = createNewContext<ArtworkGenerationContextType>();
+} = createNewContext<IArtworkGenerationContext>();
 
 export { ArtworkGenerationContext, useArtworkGenerationContext };
 

@@ -1,8 +1,7 @@
 import { FormEvent } from "react";
 
-import { sendToast } from "@/common/toast";
+import { sendToast } from "@/common/Toast";
 import { SongPartsCards, StateSetter } from "@/common/types";
-
 import { Toast, ToastType } from "@/constants/toasts";
 
 import { METADATA_IDENTIFIER, METADATA_SEPARATOR } from "./constants";

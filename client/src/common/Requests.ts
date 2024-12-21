@@ -1,7 +1,7 @@
 import { HttpStatus } from "@/constants/requests";
 import { Toast } from "@/constants/toasts";
 
-import { RestVerbType } from "./types";
+import { RestVerb } from "./types";
 
 export const isErrorful = (status: number): boolean => {
   return status >= HttpStatus.BadRequest
@@ -12,7 +12,7 @@ export const is2xxSuccessful = (status: number): boolean => {
     && status < HttpStatus.MultipleChoices;
 };
 
-export const sendRequest = async (method: RestVerbType, url: string, body?: unknown) => {
+export const sendRequest = async (method: RestVerb, url: string, body?: unknown) => {
   const requestHeaders = body instanceof FormData
     ? {}
     : { "Content-Type": "application/json" };

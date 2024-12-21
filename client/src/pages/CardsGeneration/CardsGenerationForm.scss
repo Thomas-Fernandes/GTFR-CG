@@ -1,0 +1,30 @@
+#cards-generation {
+  form#settings {
+    @apply w-full mt-4 flex flex-col items-center;
+
+    .settings {
+      @apply flex flex-col mb-4 gap-8 justify-center;
+
+      &#text-fields {
+        @apply w-1/2 flex gap-1 items-end;
+
+        input {
+          @apply w-full h-4 m-0;
+
+          &.contributors {
+            @apply w-3/5 p-3 self-end text-end;
+            font-size: smaller;
+          }
+        }
+      }
+
+      &#enforcers {
+        @apply flex flex-row min-h-16 gap-4;
+      }
+
+      &#selectors {
+        @apply flex flex-row gap-0;
+      }
+    }
+  }
+}

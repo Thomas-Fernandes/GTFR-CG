@@ -1,0 +1,47 @@
+.app-background {
+  &--gif-gallery::before {
+    @apply -z-20 fixed w-full h-full overflow-hidden saturate-0 opacity-0;
+    content: ""; /* Required for pseudo-element */
+    background: url("/gif/mosaic.gif") no-repeat center center fixed;
+    background-size: cover;
+
+    &.landing-page {
+      @apply opacity-100;
+    }
+  }
+
+  &--waves {
+    @apply -z-10 fixed w-full h-full opacity-85 origin-center overflow-hidden;
+    background: url("/svg/palette-waves-light.svg") no-repeat center center fixed;
+    background-size: cover;
+    animation: rotate 60s ease-in-out infinite, zoom 80s ease-in-out infinite;
+
+    &.dark {
+      background: url("/svg/palette-waves-dark.svg") no-repeat center center fixed;
+      background-size: cover;
+    }
+
+    &.landing-page {
+      @apply opacity-70;
+    }
+  }
+}
+
+@keyframes rotate {
+  $base: 0deg;
+  $rotation: 1deg;
+  0%   { background-position: 0% 0%;     rotate: $base;      }
+  25%  { background-position: 100% 100%; rotate: $rotation;  }
+  50%  { background-position: 0% 0%;     rotate: $base;      }
+  75%  { background-position: 100% 100%; rotate: -$rotation; }
+  100% { background-position: 0% 0%;     rotate: $base;      }
+}
+
+@keyframes zoom {
+  $base: 1.1;
+  $zoom: 1.4;
+  0%   { transform: scale($base); }
+  25%  { transform: scale($zoom); }
+  75%  { transform: scale($zoom); }
+  100% { transform: scale($base); }
+}

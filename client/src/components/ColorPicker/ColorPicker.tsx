@@ -1,22 +1,18 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
-import { sendToast } from "@/common/toast";
-
+import { useDarkModeContext } from "@/common/hooks/useDarkMode/contexts";
+import { sendToast } from "@/common/Toast";
 import ButtonRemove from "@/components/ButtonRemove/ButtonRemove";
-
+import { ThemeType } from "@/components/DarkModeProvider/constants";
 import { Toast, ToastType } from "@/constants/toasts";
 
-import "./ColorPicker.css";
+import { ColorPickerProps } from "./types";
 
-type Props = {
-  id: string;
-  latest?: string;
-  label?: string;
-  labelClassName?: string;
-  setter: (color: string) => void;
-};
+import "./ColorPicker.scss";
 
-const ColorPicker: React.FC<Props> = ({ id, latest, label, labelClassName, setter }) => {
+const ColorPicker: React.FC<ColorPickerProps> = ({ id, latest, label, labelClassName, setter, ...divProps }) => {
+  const { isDarkMode } = useDarkModeContext();
+
   const [selectedColor, setSelectedColor] = useState<string>(""); // Default to black color
 
   const calculateLuminance = (hex: string) => {
@@ -47,46 +43,48 @@ const ColorPicker: React.FC<Props> = ({ id, latest, label, labelClassName, sette
   };
 
   return (
-    <div id={id} className="color-picker flex-row"> {/* flex-row stays for the color result label height calculation */}
-      <div className={`flexbox ${selectedColor === "" ? "g-p5" : ""}`}>
-        { selectedColor === ""
-        ? <><p className={`m-0 italic ${label ? (labelClassName ?? "") : "hidden"}`}>
+    <div id={id} className={`color-picker ${divProps.className ?? ""}`} {...divProps}>
+      { selectedColor === ""
+      ? <>
+          <span className={`color-picker--label ${label ? (labelClassName ?? "") : "hidden"}`}>
             {label}
-          </p>
-          <div className="flex-row">
+          </span>
+          <div className="color-picker--content">
             {/* if input had class 'hidden', element not found so picking tab is displayed at the top-left corner of the window */}
             <input
               type="color" name="color-picker" id="color-picker" className="hidden-h"
-              value={selectedColor !== "" ? selectedColor : "#000000"} onChange={handleColorChange}
+              value={selectedColor !== "" ? selectedColor : "black"} onChange={handleColorChange}
             />
-            <label htmlFor="color-picker" className="color-picker--img">
-              <img src="/img/color-dropper-42.png" alt="color-picker" />
+            <label htmlFor="color-picker" className={`color-picker--content--img ${isDarkMode ? ThemeType.Dark : ThemeType.Light}`}>
+              <span className="hidden">🎨</span>
             </label>
-            <button
-              type="button" className="color-picker--load-latest"
+
+            <button type="button" className="color-picker--content--load-latest mac"
               onClick={handleLoadLatest}
             >
               {"Load latest"}
             </button>
-          </div></>
-        : <><p className="m-0 italic hidden-v">
-            {/* hidden; is here so that the div keeps the same width when a color is picked */}
+          </div>
+        </>
+      : <div id="defined">
+          <p className="hidden-v"> {/* hidden; is here so that the div keeps the same width when a color is picked */}
             {label}
           </p>
-          <div className="flex-row g-p5">
-            <p
-              className="color-picker--color"
+
+          <div className="color-picker--color">
+            <span
               style={{
                 backgroundColor: selectedColor,
-                color: calculateLuminance(selectedColor) > 128 ? "#000000" : "#ffffff"
+                color: calculateLuminance(selectedColor) > 128 ? "$secondary-3" : "$secondary-1"
               }}
             >
               {selectedColor}
-            </p>
+            </span>
+
             <ButtonRemove onClick={() => handleColorChange(null)} />
-          </div></>
-        }
-      </div>
+          </div>
+        </div>
+      }
     </div>
   );
 };

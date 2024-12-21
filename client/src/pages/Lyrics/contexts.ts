@@ -5,7 +5,7 @@ import { StateSetter } from "@/common/types";
 
 import { LyricsPartType, PageMetadata } from "./types";
 
-interface LyricsContextType {
+interface ILyricsContext {
   isFetching: boolean;
   setIsFetching: StateSetter<boolean>;
   artist: string;
@@ -25,7 +25,7 @@ interface LyricsContextType {
 const {
   context: LyricsContext,
   useContext: useLyricsContext
-} = createNewContext<LyricsContextType>();
+} = createNewContext<ILyricsContext>();
 
 export { LyricsContext, useLyricsContext };
 
