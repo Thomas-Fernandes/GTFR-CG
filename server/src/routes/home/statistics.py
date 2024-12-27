@@ -21,7 +21,7 @@ class StatisticsResource(Resource):
     @ns_home.response(HttpStatus.BAD_REQUEST, Err.STATS_FILETYPE)
     def get(self) -> Response:
         """ Returns the statistics as a JSON object """
-        log.log("GET - Fetching statistics...")
+        log.info("GET - Fetching statistics...")
 
         try:
             stats = getJsonStatsFromFile()

@@ -1,6 +1,7 @@
 from contextlib import contextmanager
 from enum import IntEnum, StrEnum
 from io import StringIO
+import logging
 from re import Match
 import sys # The whole module must be imported for output redirection to work
 from typing import Iterator, Optional, Self
@@ -11,21 +12,18 @@ from server.src.utils.time_utils import getNowEpoch
 
 class LogSeverity(IntEnum):
     """ Enum for severity levels """
-    TIME     = 000
+    NOTSET   = 0
     DEBUG    = 100
     INFO     = 200
-    LOG      = 201
-    WARN     = 300
+    WARNING  = 300
     ERROR    = 400
     CRITICAL = 500
 
 class SeverityPrefix(StrEnum):
     """ Enum for severity prefixes """
-    TIME     = "TIME:"
     DEBUG    = "DEBUG"
     INFO     = "INFO."
-    LOG      = "LOG.."
-    WARN     = "WARN?"
+    WARNING  = "WARN?"
     ERROR    = "ERR?!"
     CRITICAL = "CRIT!"
 
@@ -44,7 +42,7 @@ def getFormattedMessage(msg: str, severity: Optional[LogSeverity] = None) -> str
         sys.exit(1)
     return f"[{prefix} | {now}] {msg}"
 
-class Logger:
+class Logger(logging.getLoggerClass()):
     """ Logger class to log messages
 
     Attributes:
@@ -53,8 +51,7 @@ class Logger:
     """
     def critical(self, msg: str) -> Self: return self.send(msg, LogSeverity.CRITICAL)
     def error(self,    msg: str) -> Self: return self.send(msg, LogSeverity.ERROR)
-    def warn(self,     msg: str) -> Self: return self.send(msg, LogSeverity.WARN)
-    def log(self,      msg: str) -> Self: return self.send(msg, LogSeverity.LOG)
+    def warn(self,     msg: str) -> Self: return self.send(msg, LogSeverity.WARNING)
     def info(self,     msg: str) -> Self: return self.send(msg, LogSeverity.INFO)
     def debug(self,    msg: str) -> Self: return self.send(msg, LogSeverity.DEBUG)
 
@@ -74,7 +71,9 @@ class Logger:
             else:
                 display_duration = f"{round(duration * 1_000)} m-seconds"
         else: display_duration = f"{round(duration, 2)} seconds"
-        return self.send(f"{' ' * padding}^ took {display_duration}", LogSeverity.TIME)
+        return self.send(f"{' ' * padding}^ took {display_duration}", LogSeverity.INFO)
+
+    # logging.basicConfig(level=log.getSeverity().name, format=f"[{SeverityPrefix.INFO.value} | %(asctime)s] %(message)s")
 
     @contextmanager
     def redirect_stdout_stderr(self) -> Iterator[tuple[StringIO, StringIO]]:
@@ -174,7 +173,7 @@ def getSeverityArg(args: list[str]) -> LogSeverity:
         print(getFormattedMessage(f"  Severity level to {LogSeverity.__members__[LOGGER_SEVERITY].name} according to .env file", LogSeverity.INFO))
         return LogSeverity[LOGGER_SEVERITY]
 
-    severity: LogSeverity = LogSeverity.LOG
+    severity: LogSeverity = LogSeverity.WARNING
     if len(args) > 1:
         if args[1].upper() not in LogSeverity.__members__:
             exitInvalidSeverityLevel(args[1])
@@ -184,4 +183,4 @@ def getSeverityArg(args: list[str]) -> LogSeverity:
 
 print(getFormattedMessage("Trying to initialize logger variable...", LogSeverity.DEBUG))
 log = Logger(severity=getSeverityArg(sys.argv))
-log.log(f"Logger initialized with level {log.getSeverity().name}.")
+log.info(f"Logger initialized with level {log.getSeverity().name}.")

@@ -89,7 +89,7 @@ def main(host: str = HOST_HOME, port: int = DEFAULT_PORT) -> None:
     :param port: [integer] The port to run the server on (default: {DEFAULT_PORT})
     """
     host_display_name = "localhost" if host == HOST_HOME else host
-    log.log(f"Starting server @ http://{host_display_name}:{port}...")
+    log.info(f"Starting server @ http://{host_display_name}:{port}...")
 
     printInitStatistics()
     cacheCleanup(session)

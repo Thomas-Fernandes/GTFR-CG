@@ -83,7 +83,7 @@ def generateCards(cards_contents: CardsContents, song_data: SongMetadata, settin
 
     number_of_generated_cards = len(cards_contents) + (2 if settings.get(PayloadFields.GEN_OUTRO) else 1)
     updateStats(to_increment=AvailableStats.CARDS_GENERATED, increment=number_of_generated_cards)
-    log.log(f"Generated {number_of_generated_cards} card{'s' if number_of_generated_cards > 1 else ''} successfully.") \
+    log.info(f"Generated {number_of_generated_cards} card{'s' if number_of_generated_cards > 1 else ''} successfully.") \
         .time(LogSeverity.LOG, time() - start)
 
     return createApiResponse(HttpStatus.OK, Msg.CARDS_GENERATED, {

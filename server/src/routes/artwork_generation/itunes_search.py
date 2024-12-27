@@ -45,7 +45,7 @@ class ItunesSearchResource(Resource):
     @ns_artwork_generation.response(HttpStatus.BAD_REQUEST, "\n".join([Err.ITUNES_MISSING_PARAMS, Err.ITUNES_INVALID_COUNTRY]))
     def post(self) -> Response:
         """ Handles the request to the iTunes API to fetch possible images """
-        log.log("POST - Searching images on iTunes...")
+        log.info("POST - Searching images on iTunes...")
 
         body = literal_eval(request.get_data(as_text=True))
         term: Optional[str] = body.get("term")

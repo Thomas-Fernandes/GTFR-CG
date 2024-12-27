@@ -54,4 +54,4 @@ def cacheCleanup(session: Config) -> None:
     if nb_eliminated_entries == 0:
         log.info("Cache still fresh. Loading...")
     else:
-        log.log(f"Cache cleanup complete (-{nb_eliminated_entries} entries).")
+        log.info(f"Cache cleanup complete (-{nb_eliminated_entries} entries).")

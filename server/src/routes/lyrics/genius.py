@@ -152,6 +152,6 @@ def fetchLyricsFromGenius(song_title: str, artist_name: str) -> list[dict[str, s
     log.debug("Lyrics split into parts successfully.")
     updateStats(to_increment=AvailableStats.LYRICS_FETCHES)
 
-    log.log(f"Lyrics fetch for {artist_name} - \"{song_title}\" complete.") \
+    log.info(f"Lyrics fetch for {artist_name} - \"{song_title}\" complete.") \
         .time(LogSeverity.LOG, time() - start)
     return lyrics_parts

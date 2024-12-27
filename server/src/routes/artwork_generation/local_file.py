@@ -28,7 +28,7 @@ class LocalImageResource(Resource):
     @ns_artwork_generation.response(HttpStatus.INTERNAL_SERVER_ERROR, Err.FAIL_DOWNLOAD)
     def post(self) -> Response:
         """ Saves the uploaded image to the user's folder """
-        log.log("POST - Generating artwork using a local image...")
+        log.info("POST - Generating artwork using a local image...")
 
         if snakeToCamel(PayloadFields.LOCAL_FILE) not in request.files:
             log.error(f"Error in request payload: {Err.NO_FILE}")
@@ -65,5 +65,5 @@ class LocalImageResource(Resource):
         session[SessionFields.GENERATED_ARTWORK_PATH] = image_path
         session[SessionFields.INCLUDE_CENTER_ARTWORK] = include_center_artwork
 
-        log.log(f"Local image upload complete and saved it to {image_path}")
+        log.info(f"Local image upload complete and saved it to {image_path}")
         return createApiResponse(HttpStatus.CREATED, Msg.LOCAL_IMAGE_UPLOADED)

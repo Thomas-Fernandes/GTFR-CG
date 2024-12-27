@@ -47,7 +47,7 @@ def saveCardsContents(cards_contents: CardsContents) -> Response:
         return createApiResponse(HttpStatus.INTERNAL_SERVER_ERROR, Err.CARDS_CONTENTS_SAVE_FAILED)
 
     session[SessionFields.CARDS_CONTENTS] = filepath
-    log.log(f"Cards contents saved to {filepath}.").time(LogSeverity.INFO, time() - start)
+    log.info(f"Cards contents saved to {filepath}.").time(LogSeverity.INFO, time() - start)
     return createApiResponse(HttpStatus.CREATED, Msg.CARDS_CONTENTS_SAVED)
 
 bp_cards_generation_save_cards_contents = Blueprint("save-cards-contents", __name__.split('.')[-1])

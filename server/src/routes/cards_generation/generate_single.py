@@ -44,7 +44,7 @@ def generateSingleCard(cards_contents: CardsContents, song_data: SongMetadata, s
     image_output_path = f"{getUserProcessedPath()}{SLASH}{settings[PayloadFields.CARD_FILENAME].split('/')[-1]}"
     lyrics_to_print = literal_eval(cards_contents[1][0])[-8:] # get the last 8 lines of the lyrics; rest overflows
     generateCard(image_output_path, lyrics_to_print, card_metadata)
-    log.log("Generated new card successfully.")
+    log.info("Generated new card successfully.")
     updateStats(to_increment=AvailableStats.CARDS_GENERATED)
 
     return createApiResponse(HttpStatus.CREATED, Msg.CARD_GENERATED)

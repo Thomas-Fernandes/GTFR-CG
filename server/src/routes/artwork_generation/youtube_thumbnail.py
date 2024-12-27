@@ -54,7 +54,7 @@ def processYoutubeThumbnail(thumbnail_url: str) -> Response:
     session[SessionFields.GENERATED_ARTWORK_PATH] = image_path
     session[SessionFields.INCLUDE_CENTER_ARTWORK] = False
 
-    log.log(f"YouTube thumbnail upload complete and saved it to {image_path}")
+    log.info(f"YouTube thumbnail upload complete and saved it to {image_path}")
     return createApiResponse(HttpStatus.CREATED, Msg.YOUTUBE_IMAGE_UPLOADED)
 
 bp_artwork_generation_youtube_thumbnail = Blueprint("use-youtube-thumbnail", __name__.split('.')[-1])
@@ -68,7 +68,7 @@ class YoutubeThumbnailResource(Resource):
     @ns_artwork_generation.response(HttpStatus.INTERNAL_SERVER_ERROR, Err.FAIL_DOWNLOAD)
     def post(self) -> Response:
         """ Handles the extraction and processing of a YouTube thumbnail from a given URL """
-        log.log("POST - Generating artwork using a YouTube thumbnail...")
+        log.info("POST - Generating artwork using a YouTube thumbnail...")
 
         body = literal_eval(request.get_data(as_text=True))
         youtube_url: Optional[str] = body.get("url")

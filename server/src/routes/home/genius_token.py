@@ -18,6 +18,6 @@ class GeniusTokenResource(Resource):
     @ns_home.response(HttpStatus.OK, Msg.GENIUS_TOKEN_FETCHED, models[ROUTES.home.bp_name]["genius-token"]["response"])
     def get(self) -> Response:
         """ Returns the Genius API token """
-        log.log("GET - Fetching Genius API token...")
+        log.info("GET - Fetching Genius API token...")
 
         return createApiResponse(HttpStatus.OK, Msg.GENIUS_TOKEN_FETCHED, {"token": session.get(SessionFields.GENIUS_TOKEN)})
