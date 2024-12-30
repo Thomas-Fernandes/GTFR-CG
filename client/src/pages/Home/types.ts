@@ -17,15 +17,18 @@ export type Statistics = Readonly<{
   lyricsFetches: string;
   cardsGenerated: string;
 }>;
+export type StatisticsBoardProps = Readonly<{
+  stats: Statistics;
+}>;
 
 export type StatisticProps = Readonly<{
   label: string;
   value: string;
   spinnerId: string;
 }>;
-export type StatisticsBoardProps = Readonly<{
-  stats: Statistics;
-}>;
+export type StatisticsProps = {
+  statistics: StatisticProps[];
+};
 
 export type GeniusTokenResponse = ApiResponse & Readonly<{
   data: {

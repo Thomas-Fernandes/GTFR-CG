@@ -5,8 +5,12 @@
     @apply w-1/2 mt-8 mb-0 py-6 rounded-2xl;
     border: .1rem solid $secondary-2;
 
-    &--stats {
+    &--stats { // horizontal
       @apply flex;
+
+      &.vertical {
+        @apply flex-col;
+      }
 
       &--titles, &--values {
         @apply w-1/2 relative flex flex-col;
@@ -20,16 +24,32 @@
         font-family: $font-family--stats;
 
         &.initialized {
-          $py: 0.2rem;
-          padding-top: $py;
-          padding-bottom: $py;
+          padding-top: 0.2rem;
         }
       }
     }
 
-    &--sep {
+    &--sep__h {
       @apply absolute h-64 p-11 flex flex-col justify-between;
       width: inherit;
+    }
+
+    &__v { // vertical
+      @apply flex flex-col;
+
+      .stats-board {
+        &--title {
+          @apply text-center text-2xl;
+        }
+
+        &--value {
+          @apply self-center text-xl;
+        }
+
+        &--sep {
+          @apply my-2;
+        }
+      }
     }
   }
 }
