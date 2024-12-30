@@ -26,6 +26,10 @@
         &.initialized {
           padding-top: 0.2rem;
         }
+
+        p.datetime { // syncs datetime with the number-flows which are twice as slow
+          transition: color .6s ease-in-out;
+        }
       }
     }
 
@@ -39,11 +43,16 @@
 
       .stats-board {
         &--title {
-          @apply text-center text-2xl;
+          @apply text-center font-medium text-2xl;
         }
 
         &--value {
-          @apply self-center text-xl;
+          @apply self-center italic text-lg;
+          font-family: $font-family--stats;
+
+          p.datetime { // syncs datetime with the number-flows which are twice as slow
+            transition: color .6s ease-in-out;
+          }
         }
 
         &--sep {

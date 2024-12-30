@@ -27,7 +27,12 @@ const StatisticsHorizontal: React.FC<StatisticsProps> = ({ statistics }) => {
         <div className={`stats-board--stats--values ${statIsInitialized(statistics[2].value) ? "initialized" : ""}`}>
           { statistics.map((stat, i) => (
             <span key={`stat-value_${i}`} id={stat.spinnerId}>
-              <p className={`${statIsInitialized(stat.value) ? "" : "opacity-0 hidden-v"}`}>
+              <p
+                className={
+                  `${statIsInitialized(stat.value) ? "" : "opacity-0 hidden-v"}
+                  ${stat.value.includes("/") ? "datetime" : ""}`
+                }
+              >
                 {getStatDisplayValue(stat.value)}
               </p>
             </span>
@@ -50,8 +55,8 @@ const StatisticsVertical: React.FC<StatisticsProps> = ({ statistics }) => {
           </div>
 
           <div className="stats-board--value">
-            <span id={stat.spinnerId}>
-              <p className={`${statIsInitialized(stat.value) ? "" : "opacity-0 hidden-v"}`}>
+            <span id={stat.spinnerId} className={`${statIsInitialized(stat.value) ? "" : "opacity-0 hidden-v"}`}>
+              <p className={stat.value.includes("/") ? "datetime" : ""}>
                 {getStatDisplayValue(stat.value)}
               </p>
             </span>
