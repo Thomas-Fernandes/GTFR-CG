@@ -2,9 +2,7 @@ import { useEffect, useRef } from "react";
 
 import { Title } from "@/constants/browser";
 
-type TitleType = `${Title}`;
-
-export const useTitle = (title: TitleType) => {
+export const useTitle = (title: Title) => {
   const documentIsDefined = document !== undefined;
   const originalTitle = useRef(documentIsDefined ? document.title : null);
 

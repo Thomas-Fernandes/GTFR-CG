@@ -1,14 +1,14 @@
 import { FormEvent } from "react";
 
-import { sendToast } from "@/common/toast";
+import { sendToast } from "@/common/Toast";
+import { StateSetter } from "@/common/types";
 import { isFileExtensionAccepted } from "@/common/utils/fileUtils";
-
 import { ACCEPTED_IMG_EXTENSIONS } from "@/constants/files";
 import { Toast, ToastType } from "@/constants/toasts";
 
-import { AutomaticSearchTriggers } from "./constants";
+import { ARTWORK_GENERATION_OPTIONS, AutomaticSearchTriggers } from "./constants";
 import { postFileUpload, postItunesResult, postItunesSearch, postYoutubeUrl } from "./requests";
-import { FileUploadRequest, HandleChangeTermProps, HandleSubmitArtworkGenerationProps, HandleSubmitItunesSearchProps, ItunesRequest, ItunesResult, YoutubeRequest } from "./types";
+import { FileUploadRequest, GenerationOptionState, HandleChangeTermProps, HandleSubmitArtworkGenerationProps, HandleSubmitItunesSearchProps, ItunesRequest, ItunesResult, YoutubeRequest } from "./types";
 import { isValidYoutubeUrl } from "./utils";
 
 export const handleSelectItunesImage = (
@@ -116,4 +116,12 @@ export const handleSubmitYoutubeUrl = (
   }
 
   postYoutubeUrl(body, {setIsProcessingLoading, navigate});
+};
+
+export const handleOnMouseOver = (i: number, setter: StateSetter<GenerationOptionState>) => {
+  setter({
+    current: i,
+    prevLabel: i > 0 ? ARTWORK_GENERATION_OPTIONS[i - 1].h1 : "",
+    nextLabel: i < ARTWORK_GENERATION_OPTIONS.length - 1 ? ARTWORK_GENERATION_OPTIONS[i + 1].h1 : ""
+  });
 };

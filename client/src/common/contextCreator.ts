@@ -1,11 +1,11 @@
 import { Context, createContext, useContext } from "react";
 
-type Props<T> = {
+interface INewContextProps<T> {
   context: Context<T | undefined>;
   useContext: () => T;
 };
 
-export function createNewContext<T>(defaultValue?: T): Props<T> {
+export function createNewContext<T>(defaultValue?: T): INewContextProps<T> {
   const context = createContext<T | undefined>(defaultValue);
 
   const useCustomContext = () => {

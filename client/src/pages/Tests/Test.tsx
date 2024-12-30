@@ -4,7 +4,7 @@ import { isEmpty } from "@/common/utils/objUtils";
 
 import { TestFunc, TestProps, TestResult } from "./types";
 
-export const Test = (props: TestProps): JSX.Element => {
+export const Test = (props: TestProps) => {
   const { title, func, buttonRef } = props;
 
   const [result, setResult] = useState<TestResult>({} as TestResult);

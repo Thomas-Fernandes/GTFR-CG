@@ -1,13 +1,13 @@
 import { createNewContext } from "@/common/contextCreator";
 import { StateSetter } from "@/common/types";
 
-interface ThumbnailGalleryContextType {
+interface IThumbnailGalleryContext {
   setSelectedThumbnail: StateSetter<string>;
 }
 const {
   context: ThumbnailGalleryContext,
   useContext: useThumbnailGalleryContext
-} = createNewContext<ThumbnailGalleryContextType>();
+} = createNewContext<IThumbnailGalleryContext>();
 
 export { ThumbnailGalleryContext, useThumbnailGalleryContext };
 
