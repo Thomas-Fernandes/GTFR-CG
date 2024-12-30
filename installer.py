@@ -150,7 +150,7 @@ def installPythonReq() -> None:
         if "WARNING: The script" not in line and "Consider adding this directory to PATH" not in line:
             log.error(line)
 
-    if log.getSeverity() < LogSeverity.LOG:
+    if log.getSeverity() < LogSeverity.INFO:
         print() # Add a newline for better readability
 
 if __name__ == '__main__':
