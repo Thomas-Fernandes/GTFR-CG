@@ -1,0 +1,41 @@
+@use "@/variables" as *;
+
+#cards-generation {
+  .modal-overlay {
+    @apply z-10 fixed top-0 left-0 w-screen h-screen content-center justify-items-center;
+    background-color: rgba(0, 0, 0, 0.5); /* dimmed */
+    backdrop-filter: blur(.25rem); /* and blurred background around overlay */
+
+    &--content {
+      @apply relative w-3/4 p-4 rounded-md;
+      box-shadow: 0 .2rem 1rem rgba(0, 0, 0, 0.1);
+
+      &--header {
+        @apply mb-4 font-semibold text-2xl;
+      }
+
+      &--actions {
+        @apply flex flex-row gap-4;
+
+        button {
+          @apply w-full px-4 py-2;
+
+          &:first-child {
+            @apply bg-blue-500;
+            &:hover { @apply bg-blue-700; }
+          }
+          &:last-child {
+            @apply bg-red-500;
+            &:hover { @apply bg-red-700; }
+          }
+        }
+
+        #cards-generation_generate-single {
+          * { /* for spinner */
+            @apply pl-0 !important;
+          }
+        }
+      }
+    }
+  }
+}

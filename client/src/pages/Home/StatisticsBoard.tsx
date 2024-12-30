@@ -1,25 +1,104 @@
-import { JSX } from "react";
+import { useEffect, useState } from "react";
 
 import { SpinnerId } from "@/constants/spinners";
 
 import { StatName } from "./constants";
-import Statistic from "./Statistic";
-import { StatisticsBoardProps } from "./types";
+import { StatisticsBoardProps, StatisticsProps } from "./types";
+import { getStatDisplayValue, statIsInitialized } from "./utils";
 
-import "./StatisticsBoard.css";
+import "./StatisticsBoard.scss";
 
-const StatisticsBoard: React.FC<StatisticsBoardProps> = ({ stats }): JSX.Element => {
+const StatisticsHorizontal: React.FC<StatisticsProps> = ({ statistics }) => {
+  return (
+    <>
+      <div className="stats-board--sep__h">
+        { statistics.map((_, i) => (i + 1 !== statistics.length && // n-1 separators
+          <hr key={`hr_${i}`} />
+        ))}
+      </div>
+      <div className="stats-board--stats">
+        <div className="stats-board--stats--titles">
+          { statistics.map((stat, i) => (
+            <span key={`stat-title_${i}`}>
+              {stat.label}
+            </span>
+          ))}
+        </div>
+        <div className={`stats-board--stats--values ${statIsInitialized(statistics[2].value) ? "initialized" : ""}`}>
+          { statistics.map((stat, i) => (
+            <span key={`stat-value_${i}`} id={stat.spinnerId}>
+              <p
+                className={
+                  `${statIsInitialized(stat.value) ? "" : "opacity-0 hidden-v"}
+                  ${stat.value.includes("/") ? "datetime" : ""}`
+                }
+              >
+                {getStatDisplayValue(stat.value)}
+              </p>
+            </span>
+          ))}
+        </div>
+      </div>
+    </>
+  );
+};
+
+const StatisticsVertical: React.FC<StatisticsProps> = ({ statistics }) => {
+  return (
+    <>
+      { statistics.map((stat, i) => (
+        <div key={`stat-title_${i}`} className="stats-board__v">
+          <div className="stats-board--title">
+            <span>
+              {stat.label}
+            </span>
+          </div>
+
+          <div className="stats-board--value">
+            <span id={stat.spinnerId} className={`${statIsInitialized(stat.value) ? "" : "opacity-0 hidden-v"}`}>
+              <p className={stat.value.includes("/") ? "datetime" : ""}>
+                {getStatDisplayValue(stat.value)}
+              </p>
+            </span>
+          </div>
+
+          { i + 1 !== statistics.length &&
+            <div className="stats-board--sep">
+              <hr />
+            </div>
+          }
+        </div>
+      ))}
+    </>
+  );
+};
+
+const StatisticsBoard: React.FC<StatisticsBoardProps> = ({ stats }) => {
+  const statistics = [
+    { label: StatName.DateFirstOperation, value: stats.dateFirstOperation, spinnerId: SpinnerId.StatsFirstOperation },
+    { label: StatName.DateLastOperation,  value: stats.dateLastOperation,  spinnerId: SpinnerId.StatsLastOperation },
+    { label: StatName.ArtworkGenerations, value: stats.artworkGenerations, spinnerId: SpinnerId.StatsArtworkGenerations },
+    { label: StatName.LyricsFetches,      value: stats.lyricsFetches,      spinnerId: SpinnerId.StatsLyricsFetches },
+    { label: StatName.CardsGenerated,     value: stats.cardsGenerated,     spinnerId: SpinnerId.StatsCardsGenerated },
+  ];
+
+  const [isDesktop, setIsDesktop] = useState(window.innerWidth > 1500);
+
+  const updateMedia = () => {
+    setIsDesktop(window.innerWidth > 1500);
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", updateMedia);
+    return () => window.removeEventListener("resize", updateMedia);
+  });
+
   return (
     <div className="stats-board">
-      <Statistic label={StatName.DateFirstOperation} value={stats.dateFirstOperation} spinnerId={SpinnerId.StatsFirstOperation} />
-      <hr />
-      <Statistic label={StatName.DateLastOperation} value={stats.dateLastOperation} spinnerId={SpinnerId.StatsLastOperation} />
-      <hr />
-      <Statistic label={StatName.ArtworkGenerations} value={stats.artworkGenerations} spinnerId={SpinnerId.StatsArtworkGenerations} />
-      <hr />
-      <Statistic label={StatName.LyricsFetches} value={stats.lyricsFetches} spinnerId={SpinnerId.StatsLyricsFetches} />
-      <hr />
-      <Statistic label={StatName.CardsGenerated} value={stats.cardsGenerated} spinnerId={SpinnerId.StatsCardsGenerated} />
+      { isDesktop
+      ? <StatisticsHorizontal statistics={statistics} />
+      : <StatisticsVertical   statistics={statistics} />
+      }
     </div>
   );
 };

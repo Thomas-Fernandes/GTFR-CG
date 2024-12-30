@@ -1,0 +1,35 @@
+@use "@/variables" as *;
+
+.file-upload {
+  @apply flex px-4 py-2 gap-2 justify-center cursor-pointer;
+  min-width: 32rem;
+  max-width: max-content;
+
+  &.dragging {
+    @apply cursor-grabbing;
+    border: .1rem dashed $accent--75;
+    background-color: #f0f8ffc0;
+
+    label {
+      @apply opacity-50;
+    }
+  }
+
+  * {
+    @apply my-0 cursor-pointer;
+  }
+
+  > div {
+    @apply flex gap-4 items-center;
+  }
+
+  &--label {
+    @apply py-2 px-6 rounded-md text-2xl;
+    background-color: $accent;
+    color: $secondary-3;
+  }
+
+  &--caption {
+    @apply mr-0 text-2xl font-extralight;
+  }
+}

@@ -1,0 +1,27 @@
+@use "@/variables" as *;
+
+.action-button {
+  @apply flex items-center justify-center;
+
+  &.spaced {
+    @apply py-5;
+
+    .action-button--label {
+      @apply text-2xl;
+      letter-spacing: $letter-spacing--xl;
+    }
+  }
+
+  &--label {
+    @apply font-semibold text-xl;
+    font-family: $font-family--action-button;
+  }
+
+  &--icon {
+    @apply w-0 opacity-0;
+
+    &.hovered {
+      @apply w-4 opacity-100;
+    }
+  }
+}

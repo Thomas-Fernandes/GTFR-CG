@@ -1,0 +1,16 @@
+@use "@/variables" as *;
+
+.download-button {
+  &--label {
+    @apply font-light text-xl !important;
+    color: $secondary-1;
+  }
+
+  &--icon {
+    @apply w-4;
+  }
+
+  &:hover {
+    box-shadow: $glow--primary2--md;
+  }
+}

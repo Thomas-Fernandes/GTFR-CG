@@ -1,0 +1,46 @@
+@use "@/variables" as *;
+
+.color-picker {
+  @apply flex flex-col justify-center;
+
+  &--label {
+    @apply italic text-lg;
+  }
+
+  &--content {
+    @apply flex flex-row justify-center;
+
+    > *:not([name="color-picker"]) {
+      @apply mx-2;
+    }
+
+    &--img {
+      @apply w-10 cursor-pointer;
+      background: url("/img/fill__yellow.png");
+      background-size: cover;
+
+      &.dark {
+        background: url("/img/fill__blue.png");
+        background-size: cover;
+      }
+    }
+
+    &--load-latest {
+      @apply w-auto text-lg !important;
+    }
+  }
+
+  #defined {
+    @apply flex flex-col;
+
+    .color-picker--color {
+      @apply flex flex-row gap-2;
+
+      & > span {
+        @apply w-full content-center rounded-lg;
+        border: .1rem solid $secondary-2;
+        letter-spacing: 0.2rem;
+      }
+    }
+  }
+}

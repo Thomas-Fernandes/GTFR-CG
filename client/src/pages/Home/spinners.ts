@@ -1,18 +1,19 @@
 
-import { hideSpinner, showSpinner } from "@/common/spinner";
+import { hideSpinner, showSpinner } from "@/common/Spinner";
 
 import { SpinnerId } from "@/constants/spinners";
 
+const allStatsSpinnerIds = Object.values(SpinnerId)
+  .filter((id) => id.startsWith("home_stat"));
+
 export const hideAllStatsSpinners = () => {
-  hideSpinner(SpinnerId.StatsFirstOperation);
-  hideSpinner(SpinnerId.StatsLastOperation);
-  hideSpinner(SpinnerId.StatsArtworkGenerations);
-  hideSpinner(SpinnerId.StatsLyricsFetches);
+  allStatsSpinnerIds.forEach((id) => {
+    hideSpinner(id);
+  });
 };
 
 export const showAllStatsSpinners = () => {
-  showSpinner(SpinnerId.StatsFirstOperation);
-  showSpinner(SpinnerId.StatsLastOperation);
-  showSpinner(SpinnerId.StatsArtworkGenerations);
-  showSpinner(SpinnerId.StatsLyricsFetches);
+  allStatsSpinnerIds.forEach((id) => {
+    showSpinner(id);
+  });
 };

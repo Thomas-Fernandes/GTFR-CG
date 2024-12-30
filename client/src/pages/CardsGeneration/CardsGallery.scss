@@ -1,0 +1,21 @@
+@use "@/variables" as *;
+
+#cards-generation {
+  .card-gallery--cards {
+    @apply grid gap-2 mx-4;
+    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+
+    &.skeleton {
+      @apply flex gap-2;
+    }
+
+    .card-stack {
+      @apply cursor-pointer;
+
+      &--card--label {
+        @apply font-light text-xl !important;
+        color: $secondary-1;
+      }
+    }
+  }
+}

@@ -1,26 +1,39 @@
-import { ComponentPropsWithoutRef, JSX } from "react";
+import { useDarkModeContext } from "@/common/hooks/useDarkMode/contexts";
 
-import "./Checkbox.css";
+import { CheckboxProps } from "./types";
+import { getBackgroundColor, getBorder } from "./utils";
 
-type Props = ComponentPropsWithoutRef<"input"> & {
-  id: string;
-  label: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-};
+import "./Checkbox.scss";
 
-const Checkbox: React.FC<Props> = ({ id, label, onChange, ...inputProps }): JSX.Element => {
+const Checkbox: React.FC<CheckboxProps> = ({ size, checked, disabled, onChange, label, ...buttonProps }) => {
+  const { isDarkMode } = useDarkModeContext();
+
   return (
-    <label className="checkbox" htmlFor={id}>
-      <input
-        type="checkbox" name={id} id={id}
-        onChange={onChange}
-        {...inputProps}
-      />
-      <p className="checkbox-label italic">
-        {label}
-      </p>
-    </label>
-  )
+    <button type="button" className={`checkbox ${disabled ? "disabled" : ""}`}
+      onClick={onChange}
+      {...buttonProps}
+    >
+      <div className="checkbox--box"
+        style={{
+          width: size, height: size,
+          backgroundColor: getBackgroundColor(disabled ?? false, checked, isDarkMode),
+          border: getBorder(checked, isDarkMode),
+        }}
+      >
+        { checked &&
+          <img className="checkbox--mark"
+            src={`/svg/check-mark.svg`} alt="check-mark" width={size * .75}
+          />
+        }
+      </div>
+
+      { label &&
+        <span className={`checkbox--label ${disabled ? "disabled" : ""}`}>
+          {label}
+        </span>
+      }
+    </button>
+  );
 };
 
 export default Checkbox;

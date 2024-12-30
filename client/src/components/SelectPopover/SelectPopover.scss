@@ -1,0 +1,33 @@
+@use "@/variables" as *;
+
+.popover {
+  @apply relative inline-block;
+
+  &--toggle {
+    @apply min-w-36 px-4 py-2 rounded-md text-base;
+  }
+
+  &--dropdown {
+    @apply z-10 absolute w-36 mt-2 rounded-md;
+    box-shadow: $button-shadow;
+    animation: fadeInOut 0.15s ease-in-out;
+
+    &--list {
+      @apply py-1;
+
+      &--option {
+        @apply px-4 py-2 cursor-pointer;
+        transition: all .015s ease-in-out;
+
+        &:hover {
+          transition: all .015s ease-in-out;
+        }
+      }
+    }
+  }
+}
+
+@keyframes fadeInOut {
+  0%   { @apply opacity-0;   transform: scale(0.95); }
+  100% { @apply opacity-100; transform: scale(1);    }
+}
