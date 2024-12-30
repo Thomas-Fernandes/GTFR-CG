@@ -11,10 +11,10 @@
 
 <div align="center">
   <sup><b>powered by:</b></sup>
-
-  <img title="TypeScript" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Typescript_logo_2020.svg/2048px-Typescript_logo_2020.svg.png" width="28px" alt="TScript" />
-  <img title="Vite" src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files/vite.svg" width="28px" alt="Vite" />
-  <a href="#top"><img alt="React version" src="https://img.shields.io/badge/React-18+-5dd2f3?logo=react" width="128px" /></a>
+  <a href="#top"><img alt="TypeScript version" src="https://img.shields.io/badge/TypeScript-5.7.2-2d79c7?logo=typescript" height="24px" /></a>
+  <a href="#top"><img alt="React version" src="https://img.shields.io/badge/React-19-5dd2f3?logo=react" height="24px" /></a>
+  <a href="#top"><img alt="Tailwind version" src="https://img.shields.io/badge/Tailwind-3.4-06b6d4?logo=tailwindcss" height="24px" /></a>
+  <a href="#top"><img alt="Vite version" src="https://img.shields.io/badge/Vite-6-fdd835?logo=vite" height="24px" /></a>
 </div>
 
 &#xa0;
@@ -22,7 +22,7 @@
 ## :memo: Quick Description
 
 The front end of **GTFR-CG** allows you to quickly access the core functionalities of the server and generate content dynamically.  
-It is also the face of the application, where you can see your statistics and navigate through the different pages.
+It is also the face of the application, where you can see your statistics and navigate through the different pages.  
 
 &#xa0;
 
@@ -30,7 +30,8 @@ It is also the face of the application, where you can see your statistics and na
 
 All the required front end software and modules can be installed by running [the installer file](https://github.com/Thomas-Fernandes/GTFR-CG/blob/develop/installer.py) with Python.  
 The installer will install **npm**, **node** and the required **node modules**.  
-The front end doesn't use any major utility library, and uses React's built-in features to manage state, routing and requests.
+The front end doesn't use any library for technical features, and uses React's built-in features to manage state, routing and requests.  
+We do use a library for nicer display: Maxwell Barvian's [NumberFlow](https://number-flow.barvian.me/) for statistics display.
 
 &#xa0;
 
@@ -73,8 +74,8 @@ npm run dev # will launch the front end of the application
 ## :pager: Codebase segments
 
 :file_folder: [***./***](https://github.com/Thomas-Fernandes/GTFR-CG/tree/develop/client) : the root folder, where the main configuration files are located  
-:file_folder: [***public/***](https://github.com/Thomas-Fernandes/GTFR-CG/tree/develop/client/public) : where the public assets lie, such as the favicon and other icons  
-:file_folder: [***src/common/***](https://github.com/Thomas-Fernandes/GTFR-CG/tree/develop/client/src/common) : where the common properties and utilities are located  
+:file_folder: [***public/***](https://github.com/Thomas-Fernandes/GTFR-CG/tree/develop/client/public) : where the public assets lie, such as the favicon and other image files  
+:file_folder: [***src/common/***](https://github.com/Thomas-Fernandes/GTFR-CG/tree/develop/client/src/common) : where the common properties, hooks and utils are located  
 :file_folder: [***src/components/***](https://github.com/Thomas-Fernandes/GTFR-CG/tree/develop/client/src/components) : where all the generic components are located  
 :file_folder: [***src/constants/***](https://github.com/Thomas-Fernandes/GTFR-CG/tree/develop/client/src/constants) : where the application's constants are located  
 :file_folder: [***src/pages/***](https://github.com/Thomas-Fernandes/GTFR-CG/tree/develop/client/src/pages) : where the application's TSX code is located (one folder per page)
