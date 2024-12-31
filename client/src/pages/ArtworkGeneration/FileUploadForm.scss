@@ -1,0 +1,9 @@
+#artwork-generation {
+  form#local {
+    @apply gap-4;
+
+    .local--selectors {
+      @apply flex flex-col items-center gap-2;
+    }
+  }
+}

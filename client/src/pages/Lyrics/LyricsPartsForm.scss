@@ -1,0 +1,9 @@
+#lyrics {
+  form.lyrics-form {
+    @apply w-full flex flex-col items-center;
+
+    div.submit {
+      @apply mb-4;
+    }
+  }
+}

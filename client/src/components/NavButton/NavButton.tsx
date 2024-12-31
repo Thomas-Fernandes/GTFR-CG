@@ -1,21 +1,16 @@
-import { ComponentPropsWithoutRef } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { NavButtonSideType } from "./types";
+import { NavButtonProps } from "./types";
 
-type Props = ComponentPropsWithoutRef<"button"> & {
-  to: string;
-  label: string;
-  side: NavButtonSideType;
-};
+import "./NavButton.scss";
 
-const NavButton: React.FC<Props> = ({ to, label, side, ...props }) => {
+const NavButton: React.FC<NavButtonProps> = ({ to, label, side, ...buttonProps }) => {
   const navigate = useNavigate();
 
   return (
-    <button
-      type="button" onClick={() => navigate(to)}
-      {...props}
+    <button type="button" className="nav-button"
+      onClick={() => navigate(to)}
+      {...buttonProps}
     >
       <span className={side}>
         {label}

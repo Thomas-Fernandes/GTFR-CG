@@ -10,6 +10,7 @@ export enum Title {
   Prefix = "GTFR-CG - ",
 
   Redirect = "Redirection page",
+  Landing = "Welcome",
   Home = "Home",
   Tests = "Tests",
   ArtworkGeneration = "Artwork Generation",

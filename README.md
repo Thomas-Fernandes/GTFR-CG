@@ -12,15 +12,15 @@
 &#xa0;
 
 <div align="center">
-  <a href="#top"><img alt="Python version" src="https://img.shields.io/badge/Python-3.11+-blue?logo=python" /></a>
-  <a href="#card_file_box-changelog"><img alt="Last version released" src="https://img.shields.io/badge/release-v1.5.0-blue?logo=windows-terminal" /></a>
+  <a href="#card_file_box-changelog"><img alt="Python version" src="https://img.shields.io/badge/Python-3.11+-blue?logo=python" /></a>
+  <a href="#card_file_box-changelog"><img alt="Last version released" src="https://img.shields.io/badge/release-v1.5.1-blue?logo=semver" /></a>
   <a href="https://github.com/Thomas-Fernandes/GTFR/commits/main"><img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/Thomas-Fernandes/GTFR?color=blueviolet&logo=clarifai" /></a>
 </div>
 <div align="center">
   <a href="https://github.com/Thomas-Fernandes/GTFR/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/Thomas-Fernandes/GTFR?color=yellow&logo=github" /></a>
   <a href="https://github.com/Thomas-Fernandes/GTFR/issues"><img alt="GitHub issues" src="https://img.shields.io/github/issues/Thomas-Fernandes/GTFR?color=forestgreen&logo=target" /></a>
   <a href="https://github.com/Thomas-Fernandes/GTFR/graphs/contributors"><img alt="GitHub contributors" src="https://img.shields.io/github/contributors/Thomas-Fernandes/GTFR?color=red&logo=stackedit" /></a>
-  <a href="#top"><img alt="GitHub repository size" src="https://img.shields.io/github/languages/code-size/Thomas-Fernandes/GTFR?color=blue&logo=frontify" /></a>
+  <a href="#card_file_box-changelog"><img alt="GitHub repository size" src="https://img.shields.io/github/languages/code-size/Thomas-Fernandes/GTFR?color=blue&logo=frontify" /></a>
 </div>
 
 &#xa0;
@@ -28,15 +28,16 @@
 <div align="center">
   <sup><b>The technical stack at play:</b></sup>
 
-  <img title="Python" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/1028px-Python-logo-notext.svg.png" width="28px" alt="Python" />
-  <img title="Flask" src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files/flask.svg" width="28px" alt="Flask" />
-  <img title="TypeScript" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Typescript_logo_2020.svg/2048px-Typescript_logo_2020.svg.png" width="28px" alt="TypeScript" />
-  <img title="Vite" src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files/vite.svg" width="28px" alt="Vite" />
-  <img title="React.js" src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files/react.svg" width="28px" alt="React" />
+  <img title="Python" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/1028px-Python-logo-notext.svg.png" height="24px" alt="Python" />
+  <img title="Flask" src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files/flask.svg" height="24px" alt="Flask" />
+  <img title="TypeScript" src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files/typeScript.svg" height="24px" alt="TypeScript" />
+  <img title="React.js" src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files/react.svg" height="24px" alt="React" />
+  <img title="Tailwind" src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files/tailwindcss.svg" height="24px" alt="Tailwind" />
+  <img title="Vite" src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files/vite.svg" height="24px" alt="Vite" />
   &nbsp;<sup><b>| formerly:</b></sup>&nbsp;
-  <img title="GIMP" src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files/gimp.svg" width="28px" alt="GIMP" />
-  <img title="sgnarly.me" src="https://www.svgrepo.com/show/504384/genius.svg" width="28px" alt="sgnarly" />
-  <img title="Adobe Premiere Pro" src="https://upload.wikimedia.org/wikipedia/commons/4/40/Adobe_Premiere_Pro_CC_icon.svg" width="28px" alt="PremierePro" />
+  <img title="GIMP" src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files/gimp.svg" height="24px" alt="GIMP" />
+  <img title="sgnarly.me" src="https://www.svgrepo.com/show/504384/genius.svg" height="24px" alt="sgnarly" />
+  <img title="Adobe Premiere Pro" src="https://upload.wikimedia.org/wikipedia/commons/4/40/Adobe_Premiere_Pro_CC_icon.svg" height="24px" alt="PremierePro" />
 </div>
 
 &#xa0;
@@ -75,7 +76,7 @@ This application was tested on, and designed for **Windows 11** and **Ubuntu 22.
 ## :movie_camera: Usage & General Information
 
 <h1 align="center">
-  <a href="./client">Front</a> &#xa0; | &#xa0; <a href="./server">Back</a>
+  <a href="./client#readme">Front</a> &#xa0; | &#xa0; <a href="./server#readme">Back</a>
 </h1>
 
 > [!NOTE]
@@ -89,7 +90,7 @@ Find detailed versioning in the [CHANGELOG.md](./CHANGELOG.md) file.
 
 - ***[2.0.0]** Coming later...*: **Endgame** — Project will feature automated video edition with AI sync. [#???](#card_file_box-changelog)
 - ***[1.6.0]** Coming later...*: **Koh-Lanta** — Project will be unified in an all-in-one application. [#???](#card_file_box-changelog)
-- ***[1.5.0]** Nov ?? 2024*: **Boost!** — Project sees its existing codebase, functionalities and looks sharpened. [#155](https://github.com/Thomas-Fernandes/GTFR-CG/pull/155)
+- ***[1.5.0]** Nov 16 2024*: **Boost!** — Project sees its existing codebase, functionalities and looks sharpened. [#155](https://github.com/Thomas-Fernandes/GTFR-CG/pull/155)
 - ***[1.4.0]** Sep 17 2024*: **Lyrics Cards** — Project supports automated cards generation from text blocks. [#093](https://github.com/Thomas-Fernandes/GTFR-CG/pull/93)
 - ***[1.3.0]** Aug 19 2024*: **Lyrics Fetch** — Project supports lyrics fetching and converts them to lyrics blocks. [#089](https://github.com/Thomas-Fernandes/GTFR-CG/pull/89)
 - ***[1.2.0]** Jun 27 2024*: **Thumbnails** — Project supports artwork generation. [#010](https://github.com/Thomas-Fernandes/GTFR/pull/10)

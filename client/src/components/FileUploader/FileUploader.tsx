@@ -1,22 +1,12 @@
-import React, { useState } from "react";
-
-import { StateSetter } from "@/common/types";
+import { useState } from "react";
 
 import ButtonRemove from "@/components/ButtonRemove/ButtonRemove";
 
-import "./FileUploader.css";
+import { FileUploaderProps } from "./types";
 
-type Props = {
-  id: string;
-  label: string;
-  caption?: string;
-  accept?: string;
-  labelClassName?: string;
-  captionClassName?: string;
-  setter: StateSetter<File | undefined>;
-};
+import "./FileUploader.scss";
 
-const FileUploader: React.FC<Props> = ({ id, label, caption, accept, labelClassName, captionClassName, setter }) => {
+const FileUploader: React.FC<FileUploaderProps> = ({ id, label, caption, accept, setter }) => {
   const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState<boolean>(false);
 
@@ -49,8 +39,8 @@ const FileUploader: React.FC<Props> = ({ id, label, caption, accept, labelClassN
   };
 
   return (
-    <div className={`file-upload-component flexbox flex-row ${isDragging ? "dragging" : ""}`}>
-      <div className="flexbox flex-row"
+    <div className={`file-upload ${isDragging ? "dragging" : ""}`}>
+      <div
         onClick={() => document.getElementById(id)?.click()}
         onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop}
       >
@@ -59,12 +49,12 @@ const FileUploader: React.FC<Props> = ({ id, label, caption, accept, labelClassN
           id={id} className="hidden"
           onChange={handleFileChange}
         />
-        <label htmlFor="file-upload" className={labelClassName}>
+        <label htmlFor="file-upload" className="file-upload--label">
           {label}
         </label>
-        <p className={captionClassName + (selectedFileName ? "" : " italic")}>
+        <span className={`file-upload--caption ${selectedFileName ? "" : "italic"}`}>
           {selectedFileName ?? (caption ?? "No file selected.")}
-        </p>
+        </span>
       </div>
       { selectedFileName &&
         <ButtonRemove onClick={() => handleFileChange(null)} />

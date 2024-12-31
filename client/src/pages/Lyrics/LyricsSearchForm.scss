@@ -1,0 +1,13 @@
+#lyrics {
+  .search-form {
+    @apply flex items-center gap-4;
+
+    button.action-button {
+      @apply px-16;
+    }
+
+    div.spinner {
+      @apply flex items-center justify-center gap-4;
+    }
+  }
+}

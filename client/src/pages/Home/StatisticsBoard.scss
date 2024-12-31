@@ -1,0 +1,64 @@
+@use "@/variables" as *;
+
+#home {
+  .stats-board {
+    @apply w-1/2 mt-8 mb-0 py-6 rounded-2xl;
+    border: .1rem solid $secondary-2;
+
+    &--stats { // horizontal
+      @apply flex;
+
+      &.vertical {
+        @apply flex-col;
+      }
+
+      &--titles, &--values {
+        @apply w-1/2 relative flex flex-col;
+      }
+
+      &--titles {
+        @apply left-16 font-medium text-2xl gap-6;
+      }
+      &--values {
+        @apply right-16 justify-between italic text-xl;
+        font-family: $font-family--stats;
+
+        &.initialized {
+          padding-top: 0.2rem;
+        }
+
+        p.datetime { // syncs datetime with the number-flows which are twice as slow
+          transition: color .6s ease-in-out;
+        }
+      }
+    }
+
+    &--sep__h {
+      @apply absolute h-64 p-11 flex flex-col justify-between;
+      width: inherit;
+    }
+
+    &__v { // vertical
+      @apply flex flex-col;
+
+      .stats-board {
+        &--title {
+          @apply text-center font-medium text-2xl;
+        }
+
+        &--value {
+          @apply self-center italic text-lg;
+          font-family: $font-family--stats;
+
+          p.datetime { // syncs datetime with the number-flows which are twice as slow
+            transition: color .6s ease-in-out;
+          }
+        }
+
+        &--sep {
+          @apply my-2;
+        }
+      }
+    }
+  }
+}

@@ -1,24 +1,28 @@
-import React from "react";
+import { useEffect, useState } from "react";
 
-import { sendToast } from "@/common/toast";
-
+import { sendToast } from "@/common/Toast";
+import { downloadFile } from "@/common/utils/fileUtils";
+import DownloadButton from "@/components/DownloadButton/DownloadButton";
+import ImgWithOverlay from "@/components/ImgWithOverlay/ImgWithOverlay";
 import { Toast, ToastType } from "@/constants/toasts";
 
 import { useCardsGalleryContext } from "./contexts";
-import { handleSubmitDownloadCard } from "./handlers";
-import { CardData, CardViewProps } from "./types";
+import { CardViewProps } from "./types";
 
-import "./CardView.css";
+import "./CardView.scss";
 
-const CardView: React.FC<CardViewProps> = ({ card, cardIdx }): JSX.Element => {
+const CardView: React.FC<CardViewProps> = ({ card, cardIdx }) => {
   const { setIsModalOpen, setCurrentCard, setNewLyrics } = useCardsGalleryContext();
 
-  const cardFileName = (card.src.split('/').pop() ?? "").split('?')[0] ?? "card";
+  const [isMounted, setIsMounted] = useState(false);
+
+  const cardFileName = (card.imgSrc.split('/').pop() ?? "").split('?')[0] ?? "card";
   const shortCardFileName = cardFileName.replace(".png", "");
+  const cardIsEditable = !(shortCardFileName === "00" || shortCardFileName === "outro");
   const alt = `card-${cardIdx.toString()}_${cardFileName}`;
 
-  const openModal = (card: CardData, cardFileName: string) => {
-    if (cardFileName === "00" || cardFileName === "outro") {
+  const openModal = () => {
+    if (!cardIsEditable) {
       sendToast(Toast.CardNotEditable, ToastType.Warn);
       return;
     }
@@ -28,14 +32,29 @@ const CardView: React.FC<CardViewProps> = ({ card, cardIdx }): JSX.Element => {
     setNewLyrics(card.lyrics);
   };
 
+  useEffect(() => {
+    if (isMounted) return;
+    setIsMounted(true);
+  }, [isMounted]);
+
   return (
-    <div key={alt} className="card card-container">
-      <div onClick={() => openModal(card, shortCardFileName)}>
-        <img src={card.src} alt={card.lyrics} className="gallery-card" />
+    <div className={`card-container ${isMounted ? "mounted" : ""}`}>
+      <div onClick={openModal} className="card-container--card">
+        { !cardIsEditable
+        ? <img
+            src={card.imgSrc} alt={alt}
+          />
+        : <ImgWithOverlay
+            src={card.imgSrc} alt={alt}
+            overlayText={"Edit this card"}
+          />
+        }
       </div>
-      <form onSubmit={(e) => handleSubmitDownloadCard(e, {selectedImage: card.src})}>
-        <input type="submit" value={"Download " + shortCardFileName} className="button" />
-      </form>
+
+      <DownloadButton className="mac"
+        label={"Download " + shortCardFileName}
+        onClick={() => downloadFile(card.imgSrc)}
+      />
     </div>
   );
 };

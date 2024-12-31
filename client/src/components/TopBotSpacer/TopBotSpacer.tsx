@@ -1,8 +1,6 @@
-import { JSX } from "react";
+import "./TopBotSpacer.scss";
 
-import "./TopBotSpacer.css";
-
-const TopBotSpacer = (): JSX.Element => {
+const TopBotSpacer: React.FC = () => {
   return (
     <span className="top-bot-spacer" />
   )

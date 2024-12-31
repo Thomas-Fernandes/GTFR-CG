@@ -1,8 +1,7 @@
 import { is2xxSuccessful, sendRequest } from "@/common/requests";
-import { hideSpinner, showSpinner } from "@/common/spinner";
-import { sendToast } from "@/common/toast";
+import { hideSpinner, showSpinner } from "@/common/Spinner";
+import { sendToast } from "@/common/Toast";
 import { ApiResponse, ContentsGenerationMode, RestVerb } from "@/common/types";
-
 import { SessionStorage } from "@/constants/browser";
 import { API, BACKEND_URL, ViewPaths } from "@/constants/paths";
 import { ResponseStatus } from "@/constants/requests";
@@ -29,6 +28,7 @@ export const postLyricsSave = (body: LyricsSaveRequest, props: LyricsSaveProps) 
     const cardMetaname = `${cardArtist.trim().toUpperCase()}, “${cardSongName.trim().toUpperCase()}”`;
     sessionStorage.setItem(SessionStorage.CardMetaname, cardMetaname);
     sessionStorage.setItem(SessionStorage.CardMethod, isManual ? ContentsGenerationMode.Manual : ContentsGenerationMode.Auto);
+    console.log("contribz", (pageMetadata.contributors ?? []).toString())
     sessionStorage.setItem(SessionStorage.OutroContributors, (pageMetadata.contributors ?? []).toString());
     sessionStorage.setItem(SessionStorage.LatestCardGeneration, JSON.stringify({
       pageMetadata, lyricsParts, dismissedParts: Array.from(dismissedParts)

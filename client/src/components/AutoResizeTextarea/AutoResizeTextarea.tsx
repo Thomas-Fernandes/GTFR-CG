@@ -1,13 +1,10 @@
-import { ComponentPropsWithoutRef, forwardRef, useEffect, useRef } from "react";
+import { forwardRef, useEffect, useRef } from "react";
 
-import "./AutoResizeTextarea.css";
+import { AutoResizeTextareaProps } from "./types";
 
-type Props = ComponentPropsWithoutRef<"textarea"> & {
-  value: string;
-  className?: string;
-};
+import "./AutoResizeTextarea.scss";
 
-export const AutoResizeTextarea = forwardRef<HTMLTextAreaElement, Props>(({ value, className, ...props }, ref) => {
+export const AutoResizeTextarea = forwardRef<HTMLTextAreaElement, AutoResizeTextareaProps>(({ value, className, ...props }, ref) => {
   const internalRef = useRef<HTMLTextAreaElement>(null);
   const combinedRef = ref || internalRef;
 
@@ -17,7 +14,7 @@ export const AutoResizeTextarea = forwardRef<HTMLTextAreaElement, Props>(({ valu
     if (textarea) {
       const resizeTextarea = () => {
         textarea.style.height = "auto";
-        textarea.style.height = `${(textarea.scrollHeight + 8) / 17.777}rem`;
+        textarea.style.height = `${(textarea.scrollHeight + 4) / 16 + 1}rem`;
       };
       resizeTextarea();
       textarea.addEventListener("input", resizeTextarea);

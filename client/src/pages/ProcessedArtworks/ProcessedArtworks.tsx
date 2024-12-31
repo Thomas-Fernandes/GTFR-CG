@@ -1,14 +1,12 @@
-import { JSX, useEffect } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useTitle } from "@/common/hooks/useTitle";
 import { doesFileExist } from "@/common/utils/fileUtils";
-
 import { NavButtonSide } from "@/components/NavButton/constants";
 import NavButton from "@/components/NavButton/NavButton";
 import ToastContainer from "@/components/ToastContainer/ToastContainer";
 import TopBotSpacer from "@/components/TopBotSpacer/TopBotSpacer";
-
 import { Title } from "@/constants/browser";
 import { ViewPaths } from "@/constants/paths";
 import { Toast } from "@/constants/toasts";
@@ -17,9 +15,9 @@ import BackgroundImageDisplay from "./BackgroundImageDisplay";
 import { COVER_ART_FILENAME, PROCESSED_ARTWORKS_PATH } from "./constants";
 import ThumbnailGallery from "./ThumbnailGallery";
 
-import "./ProcessedArtworks.css";
+import "./ProcessedArtworks.scss";
 
-const ProcessedArtworks = (): JSX.Element => {
+const ProcessedArtworks = () => {
   useTitle(Title.ProcessedArtworks);
 
   const navigate = useNavigate();
