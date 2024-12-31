@@ -6,7 +6,7 @@ from typing import Optional
 requirements_path = "requirements.txt" if path.isfile("requirements.txt") else "server/requirements.txt"
 result = run(["pip", "install", "-r", requirements_path], capture_output=True, text=True) # needs to be run before importing logger
 
-from server.src.logger import log, LogSeverity
+from server.src.logger import log, SeverityLevel
 
 def quitIfError(result: CompletedProcess[bytes]) -> None:
     """ Quits the installation if an error occurred
@@ -150,7 +150,7 @@ def installPythonReq() -> None:
         if "WARNING: The script" not in line and "Consider adding this directory to PATH" not in line:
             log.error(line)
 
-    if log.getSeverity() < LogSeverity.INFO:
+    if log.getSeverity() < SeverityLevel.INFO:
         print() # Add a newline for better readability
 
 if __name__ == '__main__':

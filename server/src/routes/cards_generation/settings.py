@@ -14,7 +14,7 @@ from server.src.constants.paths import SLASH, PROCESSED_DIR, PROCESSED_ARTWORK_F
 from server.src.constants.responses import Err, Warn
 
 from server.src.app import session
-from server.src.logger import log, LogSeverity
+from server.src.logger import log, SeverityLevel
 from server.src.routes.artwork_processing.pillow import generateCoverArt
 from server.src.typing_gtfr import CardgenSettings, CardsContents, CardMetadata, SongMetadata
 from server.src.utils.file_utils import doesFileExist, getCardsContentsFromFile
@@ -67,7 +67,7 @@ def getCardMetadata(song_data: SongMetadata, enforce_bottom_color: str | None, i
 
     dominant_color_luminance = getLuminance(dominant_color)
     if enforce_bottom_color is None:
-        log.time(LogSeverity.INFO, time() - start, padding=2)
+        log.time(SeverityLevel.INFO, time() - start, padding=2)
     text_meta_color = (0, 0, 0) if dominant_color_luminance > 128 else (255, 255, 255)
     text_lyrics_color = (255, 255, 255) if dominant_color_luminance > 220 else (0, 0, 0)
     bottom_bar_overlay= BLACK_OVERLAY if text_meta_color[0] == 0 else WHITE_OVERLAY

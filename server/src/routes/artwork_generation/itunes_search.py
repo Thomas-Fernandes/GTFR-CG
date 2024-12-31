@@ -13,7 +13,7 @@ from server.src.constants.responses import Err, Msg
 
 from server.src.decorators import retry
 from server.src.docs import models, ns_artwork_generation
-from server.src.logger import log, LogSeverity
+from server.src.logger import log, SeverityLevel
 from server.src.utils.web_utils import createApiResponse
 
 @retry(condition=(lambda x: x.status_code == HttpStatus.OK), times=3)
@@ -63,6 +63,6 @@ class ItunesSearchResource(Resource):
         url_to_hit = f"https://itunes.apple.com/search?term={term}&country={country}&entity={entity}&limit={limit}"
         response = makeItunesRequest(url_to_hit)
         log.info(f"iTunes search complete with status code: {response.status_code}") \
-            .time(LogSeverity.INFO, time() - start)
+            .time(SeverityLevel.INFO, time() - start)
 
         return createApiResponse(response.status_code, Msg.ITUNES_FETCH_COMPLETE, response.json())

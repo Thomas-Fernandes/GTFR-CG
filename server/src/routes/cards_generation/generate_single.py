@@ -10,7 +10,7 @@ from server.src.constants.responses import Err, Msg
 
 from server.src.app import session
 from server.src.docs import models, ns_cards_generation
-from server.src.logger import log, LogSeverity
+from server.src.logger import log, SeverityLevel
 from server.src.statistics import updateStats
 from server.src.typing_gtfr import CardgenSettings, CardsContents, SongMetadata
 from server.src.utils.web_utils import createApiResponse
@@ -70,6 +70,6 @@ class SingleCardGenerationResource(Resource):
         (err, cardgen_settings, card_contents, song_data) = getGenerationRequisites(is_singular_card=True)
         if err:
             return createApiResponse(HttpStatus.PRECONDITION_FAILED if err == Err.CARDS_CONTENTS_READ_FAILED else HttpStatus.BAD_REQUEST, err)
-        log.info("Card contents retrieved successfully.").time(LogSeverity.INFO, time() - start)
+        log.info("Card contents retrieved successfully.").time(SeverityLevel.INFO, time() - start)
 
         return generateSingleCard(card_contents, song_data, cardgen_settings)

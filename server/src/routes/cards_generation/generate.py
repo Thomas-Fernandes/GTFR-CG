@@ -9,7 +9,7 @@ from server.src.constants.responses import Err, Msg
 
 from server.src.app import session
 from server.src.docs import models, ns_cards_generation
-from server.src.logger import log, LogSeverity
+from server.src.logger import log, SeverityLevel
 from server.src.statistics import updateStats
 from server.src.typing_gtfr import CardgenSettings, CardMetadata, CardsContents, SongMetadata
 from server.src.utils.string_utils import getHexColorFromRGB, snakeToCamel
@@ -84,7 +84,7 @@ def generateCards(cards_contents: CardsContents, song_data: SongMetadata, settin
     number_of_generated_cards = len(cards_contents) + (2 if settings.get(PayloadFields.GEN_OUTRO) else 1)
     updateStats(to_increment=AvailableStats.CARDS_GENERATED, increment=number_of_generated_cards)
     log.info(f"Generated {number_of_generated_cards} card{'s' if number_of_generated_cards > 1 else ''} successfully.") \
-        .time(LogSeverity.INFO, time() - start)
+        .time(SeverityLevel.INFO, time() - start)
 
     return createApiResponse(HttpStatus.OK, Msg.CARDS_GENERATED, {
         snakeToCamel(PayloadFields.CARDS_LYRICS): cards_contents,
@@ -112,6 +112,6 @@ class CardsGenerationResource(Resource):
         (err, cardgen_settings, cards_contents, song_data) = getGenerationRequisites()
         if err:
             return createApiResponse(HttpStatus.PRECONDITION_FAILED if err == Err.CARDS_CONTENTS_READ_FAILED else HttpStatus.BAD_REQUEST, err)
-        log.info("Cards contents retrieved successfully.").time(LogSeverity.INFO, time() - start)
+        log.info("Cards contents retrieved successfully.").time(SeverityLevel.INFO, time() - start)
 
         return generateCards(cards_contents, song_data, cardgen_settings)

@@ -6,7 +6,7 @@ from server.src.constants.enums import AvailableStats
 from server.src.constants.paths import STATS_FILE_PATH
 from server.src.constants.responses import Err
 from server.src.constants.statistics import EMPTY_STATS, INCREMENTABLE_STATS
-from server.src.logger import log, LogSeverity
+from server.src.logger import log, SeverityLevel
 from server.src.typing_gtfr import JsonDict
 
 ############# CLASS #############
@@ -132,7 +132,7 @@ def initStats() -> JsonDict:
         log.debug(f"  Stats file created @ {STATS_FILE_PATH}")
         file.write(dumps(stats))
 
-    log.info("Statistics initialization complete.").time(LogSeverity.INFO, time() - start)
+    log.info("Statistics initialization complete.").time(SeverityLevel.INFO, time() - start)
     return loads(str(stats).replace("'", '"'))
 
 def onLaunch() -> None:
