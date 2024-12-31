@@ -6,7 +6,7 @@ from typing import Optional
 requirements_path = "requirements.txt" if path.isfile("requirements.txt") else "server/requirements.txt"
 result = run(["pip", "install", "-r", requirements_path], capture_output=True, text=True) # needs to be run before importing logger
 
-from server.src.logger import log, LogSeverity
+from server.src.logger import log, SeverityLevel
 
 def quitIfError(result: CompletedProcess[bytes]) -> None:
     """ Quits the installation if an error occurred
@@ -18,7 +18,7 @@ def quitIfError(result: CompletedProcess[bytes]) -> None:
 
 def installNodePackages() -> None:
     """ Installs the Node packages required by the front end application """
-    log.log("  Installing Node packages...")
+    log.info("  Installing Node packages...")
 
     def launchNodePackagesInstallation() -> None:
         chdir("client")
@@ -27,7 +27,7 @@ def installNodePackages() -> None:
         else:
             quitIfError(run(["npm", "install", "--silent"], capture_output=True, check=True))
         chdir("..")
-        log.log("  Node packages installation complete.")
+        log.info("  Node packages installation complete.")
 
     launchNodePackagesInstallation()
 
@@ -52,7 +52,7 @@ def installNvm() -> None:
             return None
 
     def launchNvmInstallation() -> None:
-        log.log("  Installing Nvm...")
+        log.info("  Installing Nvm...")
         try:
             if osName == "nt":
                 chdir("client")
@@ -67,11 +67,11 @@ def installNvm() -> None:
         except CalledProcessError as e:
             log.critical(f"  Error while trying to install Nvm: {e}")
             exit(1)
-        log.log("  Nvm installation complete.")
+        log.info("  Nvm installation complete.")
 
     installedNvmVersion = getNvmVersion()
     if installedNvmVersion is not None:
-        log.log(f"  Nvm{installedNvmVersion} is already installed.")
+        log.info(f"  Nvm{installedNvmVersion} is already installed.")
         return
     launchNvmInstallation()
 
@@ -88,7 +88,7 @@ def installNode() -> None:
             return None
 
     def launchNodeJsInstallation() -> None:
-        log.log("  Installing Node.js...")
+        log.info("  Installing Node.js...")
 
         try:
             if osName == "nt": # Windows
@@ -110,27 +110,27 @@ def installNode() -> None:
         result = run(["node", "-v"], capture_output=True, text=True) # Verify installation
         if result.returncode != 0:
             log.error(f"  Error while verifying Node version: {result.stderr}")
-        log.log(f"  Node {result.stdout.strip()} installation complete.")
+        log.info(f"  Node {result.stdout.strip()} installation complete.")
 
     if osName == "nt": # Windows
         environ["Path"] += pathsep + r"C:\Program Files\nodejs" # Add Node.js to PATH
     installedNodeVersion = getNodeVersion()
     if installedNodeVersion is not None:
-        log.log(f"  Node {installedNodeVersion} is already installed.")
+        log.info(f"  Node {installedNodeVersion} is already installed.")
         return
     launchNodeJsInstallation()
 
 def installReactReq() -> None:
     """ Installs the software required by the front end application """
-    log.log("Installing React requirements...")
+    log.info("Installing React requirements...")
     installNode()
     installNvm()
     installNodePackages()
-    log.log("React requirements installation complete.")
+    log.info("React requirements installation complete.")
 
 def installPythonReq() -> None:
     """ Installs the packages required by the application, from the requirements file """
-    log.log("Installing Python requirements...")
+    log.info("Installing Python requirements...")
 
     installed_packages: list[str] = []
 
@@ -140,17 +140,17 @@ def installPythonReq() -> None:
 
     if len(installed_packages) > 0:
         for package in installed_packages:
-            log.log(f"  New package installed: {package}")
-        log.log("Python requirements installation complete.")
+            log.info(f"  New package installed: {package}")
+        log.info("Python requirements installation complete.")
     else:
-        log.log("All required Python packages are already installed.")
+        log.info("All required Python packages are already installed.")
 
     for line in result.stderr.splitlines():
         # Filter warning and message
         if "WARNING: The script" not in line and "Consider adding this directory to PATH" not in line:
             log.error(line)
 
-    if log.getSeverity() < LogSeverity.LOG:
+    if log.getSeverity() < SeverityLevel.INFO:
         print() # Add a newline for better readability
 
 if __name__ == '__main__':

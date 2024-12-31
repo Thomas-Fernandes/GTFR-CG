@@ -23,7 +23,7 @@ class GeniusLyricsResource(Resource):
     @ns_lyrics.response(HttpStatus.BAD_REQUEST, Err.LYRICS_MISSING_PARAMS)
     def post(self) -> Response:
         """ Fetches the lyrics of a song from Genius dot com """
-        log.log("POST - Fetching lyrics from Genius...")
+        log.info("POST - Fetching lyrics from Genius...")
 
         body = literal_eval(request.get_data(as_text=True))
         song_name: Optional[str] = body.get("songName")

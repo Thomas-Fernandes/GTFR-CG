@@ -13,7 +13,7 @@ from server.src.constants.responses import Err, Msg, Warn
 
 from server.src.app import session
 from server.src.docs import models, ns_cards_generation
-from server.src.logger import log, LogSeverity
+from server.src.logger import log, SeverityLevel
 from server.src.typing_gtfr import CardsContents
 from server.src.utils.file_utils import writeCardsContentsToFile
 from server.src.utils.time_utils import getNowStamp
@@ -47,7 +47,7 @@ def saveCardsContents(cards_contents: CardsContents) -> Response:
         return createApiResponse(HttpStatus.INTERNAL_SERVER_ERROR, Err.CARDS_CONTENTS_SAVE_FAILED)
 
     session[SessionFields.CARDS_CONTENTS] = filepath
-    log.log(f"Cards contents saved to {filepath}.").time(LogSeverity.INFO, time() - start)
+    log.info(f"Cards contents saved to {filepath}.").time(SeverityLevel.INFO, time() - start)
     return createApiResponse(HttpStatus.CREATED, Msg.CARDS_CONTENTS_SAVED)
 
 bp_cards_generation_save_cards_contents = Blueprint("save-cards-contents", __name__.split('.')[-1])

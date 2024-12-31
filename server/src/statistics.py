@@ -6,7 +6,7 @@ from server.src.constants.enums import AvailableStats
 from server.src.constants.paths import STATS_FILE_PATH
 from server.src.constants.responses import Err
 from server.src.constants.statistics import EMPTY_STATS, INCREMENTABLE_STATS
-from server.src.logger import log, LogSeverity
+from server.src.logger import log, SeverityLevel
 from server.src.typing_gtfr import JsonDict
 
 ############# CLASS #############
@@ -79,10 +79,10 @@ def getJsonStatsFromFile(path: str = STATS_FILE_PATH) -> JsonDict:
             log.debug(f"Loaded stats from file {path}.")
             return loads(file.read()) # <- read stats from stats file
     except FileNotFoundError:
-        log.warn(f"  No stats file ({path}). Initializing new stats file...")
+        log.warn(f"No stats file ({path}). Initializing new stats file...")
         return initStats()
     except JSONDecodeError:
-        log.warn(f"  Error decoding stats file ({path}). Initializing new stats file...")
+        log.warn(f"Error decoding stats file ({path}). Initializing new stats file...")
         return initStats()
 
 def updateStats(*, path: str = STATS_FILE_PATH, to_increment: Optional[AvailableStats] = None, increment: int = 1) -> None:
@@ -132,12 +132,12 @@ def initStats() -> JsonDict:
         log.debug(f"  Stats file created @ {STATS_FILE_PATH}")
         file.write(dumps(stats))
 
-    log.info("Statistics initialization complete.").time(LogSeverity.INFO, time() - start)
+    log.info("Statistics initialization complete.").time(SeverityLevel.INFO, time() - start)
     return loads(str(stats).replace("'", '"'))
 
 def onLaunch() -> None:
     """ Initializes the project with the statistics from the statistics file """
-    log.debug("Initializing project with statistics...")
+    log.debug("Loading project statistics...")
     json_stats: JsonDict = getJsonStatsFromFile(STATS_FILE_PATH)
 
     log.debug("  Creating Stats object with values from file...")

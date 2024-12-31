@@ -27,7 +27,7 @@ class ItunesImageResource(Resource):
     @ns_artwork_generation.response(HttpStatus.INTERNAL_SERVER_ERROR, Err.FAIL_DOWNLOAD)
     def post(self) -> Response:
         """ Interprets the fetched iTunes URL and saves the image to the user's folder """
-        log.log("POST - Generating artwork using an iTunes image...")
+        log.info("POST - Generating artwork using an iTunes image...")
         body = literal_eval(request.get_data(as_text=True))
         image_url: Optional[str] = body.get("url")
         if image_url is None:
@@ -57,5 +57,5 @@ class ItunesImageResource(Resource):
         session[SessionFields.GENERATED_ARTWORK_PATH] = image_path
         session[SessionFields.INCLUDE_CENTER_ARTWORK] = True
 
-        log.log(f"Found iTunes image and saved it to {image_path}")
+        log.info(f"Found iTunes image and saved it to {image_path}")
         return createApiResponse(HttpStatus.CREATED, Msg.ITUNES_IMAGE_UPLOADED)

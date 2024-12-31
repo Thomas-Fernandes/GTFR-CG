@@ -10,7 +10,7 @@ from server.src.constants.responses import Err, Msg
 
 from server.src.app import session
 from server.src.docs import models, ns_artwork_processing
-from server.src.logger import log, LogSeverity
+from server.src.logger import log, SeverityLevel
 from server.src.statistics import updateStats
 from server.src.utils.web_utils import createApiResponse
 
@@ -43,7 +43,7 @@ class ProcessArtworkResource(Resource):
         if err:
             return createApiResponse(HttpStatus.PRECONDITION_FAILED, err)
         center_mark = "with" if include_center_artwork else "without"
-        log.log(f"Images generation ({center_mark} center artwork) complete.").time(LogSeverity.LOG, time() - start)
+        log.info(f"Images generation ({center_mark} center artwork) complete.").time(SeverityLevel.INFO, time() - start)
         updateStats(to_increment=AvailableStats.ARTWORK_GENERATIONS)
 
         return createApiResponse(HttpStatus.CREATED, Msg.PROCESSED_IMAGES_SUCCESS)
