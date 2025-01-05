@@ -1,0 +1,22 @@
+services:
+  backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    expose:
+      - "8000"
+    volumes:
+      - ./server:/app
+    environment:
+      - FLASK_ENV=development
+
+  frontend:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "3000:4242"
+    volumes:
+      - ./client:/app
