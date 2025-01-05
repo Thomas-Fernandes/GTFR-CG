@@ -8,8 +8,5 @@ RUN npm install --global pnpm && pnpm self-update && pnpm install
 COPY . .
 RUN pnpm build
 
-# Base image for serving the app
-FROM nginx:alpine
-COPY --from=build /frontend/dist /usr/share/nginx/html
-
 EXPOSE 4242
+CMD ["pnpm", "run", "expose"]
