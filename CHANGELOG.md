@@ -4,6 +4,7 @@
 
 - ***[1.6.0]** Coming later...*: **Koh-Lanta** — Project will be unified in an all-in-one application. [#???](#card_file_box-changelog)
 
+  - ***[1.5.2]** Jan ?? 2025*: The project gets Dockerized into two containers, front end test page removed. [#???](#card_file_box-changelog)
   - ***[1.5.1]** Dec 30 2024*: The visual identity of the project is fully revamped. [#162](https://github.com/Thomas-Fernandes/GTFR-CG/pull/162)
 - ***[1.5.0]** Nov 16 2024*: **Boost!** — Project sees its existing codebase, functionalities and looks sharpened. [#155](https://github.com/Thomas-Fernandes/GTFR-CG/pull/155)
 

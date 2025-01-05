@@ -17,15 +17,16 @@
   <a href="#top"><img title="Flask-Restx" src="https://avatars.githubusercontent.com/u/59693083?v=4" height="24px" alt="Flask-Restx" /></a>
   <a href="#top"><img title="Swagger" src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files/swagger.svg" height="24px" alt="Swagger" /></a>
   <a href="#top"><img src="https://img.shields.io/badge/Python-3.11+-blue?logo=python" height="24px" alt="Python version" /></a>
+  <a href="#top"><img title="Docker" src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files/docker.svg" height="24px" alt="Docker" /></a>
 </div>
 
 &#xa0;
 
 ## :memo: Quick Description
 
-The back end of **GTFR-CG** allows you to generate content and expose the API endpoints triggering back room operations.  
+The back end of **GTFR-CG** exposes the API endpoints triggering back room operations such as content generation.  
 It is also the backbone of the application, where all the complex operations are completed; our discreet powerhouse.  
-Discreet, yet verbose: the back end logs all actions and reactions in the terminal, and stores your user statistics.  
+Discreet, yet verbose: the back end will log all actions and reactions in the terminal, and stores your user statistics.  
 All of the exposed routes are documented in the Swagger documentation, as well as the data models and the expected responses.
 
 &#xa0;
@@ -33,29 +34,20 @@ All of the exposed routes are documented in the Swagger documentation, as well a
 ## :gear: Requirements
 
 All the required back end modules are listed in [the requirements file](./requirements.txt). They will be installed upon launch.  
-All the required front end software and modules can be installed by running [the installer file](https://github.com/Thomas-Fernandes/GTFR-CG/blob/develop/installer.py) with Python.
 
 > [!CAUTION]
 > **GTFR-CG**'s back end is written in **Python 3.11**. It is compatible with later versions, but **not with anterior versions**.  
-> You can check your Python version by running `python --version` in your terminal.
+> If you wish to run the back end outside of the Docker container, you can check your Python version by running `python --version` in your terminal.
 </blockquote>
 
 > [!IMPORTANT]
-> In order for **GTFR-CG**'s lyrics fetch feature to work, you need to declare a `GENIUS_API_TOKEN` variable in the `.env` file [here](./).  
+> In order for **GTFR-CG**'s lyrics fetch feature to work, you need to declare a `GENIUS_API_TOKEN` variable in the `.env` file in [this directory](./).  
 > Find more information about it by reading through [the tutorial .env file](./.env.example).  
 > Without this token, the GTFR-CG application will still run, but the lyrics fetch feature will be disabled.
 
 &#xa0;
 
 ## :movie_camera: Usage
-
-&nbsp;&nbsp; :clamp:&nbsp; **Build**
-
-``` bash
-python ../installer.py # will install back end modules !! requires **Python 3.11**
-```
-
-&#xa0;
 
 &nbsp;&nbsp; :rocket:&nbsp; **Launch**
 
@@ -71,7 +63,7 @@ python launcher.py # will launch the back end of the application
   - The API's Swagger documentation can be accessed @ [**http://localhost:8000/docs**](http://localhost:8000/docs).
 - The server features a logger that displays the ongoing actions and reactions in the terminal *via* Python.
   - You can choose a severity level for the logger in the `.env` file. Check out [`.env.example`](./.env.example) for more information.
-- Your user statistics are stored here, @ `./stats.json`.
+- Your user statistics are stored here @ `./stats.json`, or inside the Docker volume if you run the app *via* Docker.
 - If you encounter issues with external Python modules, try running `pip install -r requirements.txt --force-reinstall` for a complete reinstall.
 
 > [!NOTE]

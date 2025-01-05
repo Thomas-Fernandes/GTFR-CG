@@ -34,6 +34,7 @@
   <img title="React.js" src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files/react.svg" height="24px" alt="React" />
   <img title="Tailwind" src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files/tailwindcss.svg" height="24px" alt="Tailwind" />
   <img title="Vite" src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files/vite.svg" height="24px" alt="Vite" />
+  <img title="Docker" src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files/docker.svg" height="24px" alt="Docker" />
   &nbsp;<sup><b>| formerly:</b></sup>&nbsp;
   <img title="GIMP" src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files/gimp.svg" height="24px" alt="GIMP" />
   <img title="sgnarly.me" src="https://www.svgrepo.com/show/504384/genius.svg" height="24px" alt="sgnarly" />
@@ -59,15 +60,10 @@ The application was thought, designed, programmed and crafted by Frenchmen ðŸ‡«ð
 
 ## :gear: Requirements
 
-This application was tested on, and designed for **Windows 11** and **Ubuntu 22.04**.  
-
-> [!CAUTION]
-> **GTFR-CG**'s back end is written in **Python 3.11**. It is compatible with later versions, but **not with anterior versions**.  
-> You can check your Python version by running `python --version` in your terminal.
-</blockquote>
+This application was tested on, and designed for **Windows 11** and **Ubuntu 22.04**.
 
 > [!IMPORTANT]
-> In order for **GTFR-CG**'s lyrics fetch feature to work, you need to declare a `GENIUS_API_TOKEN` variable in the `.env` file at the root of the server.  
+> In order for **GTFR-CG**'s lyrics fetch feature to work, you need to declare a `GENIUS_API_TOKEN` variable in the `.env` file at the root of the `server` directory.  
 > Find more information about it by reading through [the tutorial .env file](./server/.env.example).  
 > Without this token, the GTFR-CG application will still run, but the lyrics fetch feature will be disabled.
 
@@ -75,9 +71,13 @@ This application was tested on, and designed for **Windows 11** and **Ubuntu 22.
 
 ## :movie_camera: Usage & General Information
 
-<h1 align="center">
-  <a href="./client#readme">Front</a> &#xa0; | &#xa0; <a href="./server#readme">Back</a>
-</h1>
+The whole project is bundled *via* [Docker](https://www.divio.com/blog/why-dockerize/) -> [docker-compose.yml](./docker-compose.yml).
+
+<div align="center" id="user-content-toc">
+  <ul><summary><h1>
+    <a href="./client#readme">Front</a> &#xa0; | &#xa0; <a href="./server#readme">Back</a>
+  </h1></summary></ul>
+</div>
 
 > [!NOTE]
 > **Report** any kind of malfunction or **request a feature** by [**opening an issue**](https://github.com/Thomas-Fernandes/GTFR/issues)!
