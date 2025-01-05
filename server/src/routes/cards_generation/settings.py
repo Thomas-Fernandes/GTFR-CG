@@ -8,19 +8,19 @@ from time import time
 from typing import Optional
 from uuid import uuid4
 
-from server.src.constants.enums import AvailableCacheElemType, PayloadFields, SessionFields
-from server.src.constants.image_generation import BLACK_OVERLAY, METADATA_IDENTIFIER, METADATA_SEP, WHITE_OVERLAY
-from server.src.constants.paths import SLASH, PROCESSED_DIR, PROCESSED_ARTWORK_FILENAME, UPLOADED_FILE_IMG_FILENAME
-from server.src.constants.responses import Err, Warn
+from src.constants.enums import AvailableCacheElemType, PayloadFields, SessionFields
+from src.constants.image_generation import BLACK_OVERLAY, METADATA_IDENTIFIER, METADATA_SEP, WHITE_OVERLAY
+from src.constants.paths import SLASH, PROCESSED_DIR, PROCESSED_ARTWORK_FILENAME, UPLOADED_FILE_IMG_FILENAME
+from src.constants.responses import Err, Warn
 
-from server.src.app import session
-from server.src.logger import log, SeverityLevel
-from server.src.routes.artwork_processing.pillow import generateCoverArt
-from server.src.typing_gtfr import CardgenSettings, CardsContents, CardMetadata, SongMetadata
-from server.src.utils.file_utils import doesFileExist, getCardsContentsFromFile
-from server.src.utils.string_utils import snakeToCamel, stringIsBool
+from src.app import session
+from src.logger import log, SeverityLevel
+from src.routes.artwork_processing.pillow import generateCoverArt
+from src.typing_gtfr import CardgenSettings, CardsContents, CardMetadata, SongMetadata
+from src.utils.file_utils import doesFileExist, getCardsContentsFromFile
+from src.utils.string_utils import snakeToCamel, stringIsBool
 
-from server.src.routes.cards_generation.utils import getLuminance
+from src.routes.cards_generation.utils import getLuminance
 
 def getCardMetadata(song_data: SongMetadata, enforce_bottom_color: str | None, include_bg_img: bool) -> CardMetadata:
     """ Extracts the metadata needed for card generation from the song data

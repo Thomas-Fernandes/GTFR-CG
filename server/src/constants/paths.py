@@ -1,7 +1,7 @@
 from os import name as osName, path
 
-from server.src.constants.enums import AvailableCacheElemType
-from server.src.typing_gtfr import Route, Routes
+from src.constants.enums import AvailableCacheElemType
+from src.typing_gtfr import Route, Routes
 
 HOST_HOME = "0.0.0.0"
 DEFAULT_PORT = 8000

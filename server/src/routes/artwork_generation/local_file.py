@@ -5,16 +5,16 @@ from werkzeug.datastructures import FileStorage
 from os import path, makedirs
 from uuid import uuid4
 
-from server.src.constants.enums import AvailableCacheElemType, HttpStatus, PayloadFields, SessionFields
-from server.src.constants.paths import PROCESSED_DIR, ROUTES, SLASH, UPLOADED_FILE_IMG_FILENAME
-from server.src.constants.responses import Err, Msg, Warn
+from src.constants.enums import AvailableCacheElemType, HttpStatus, PayloadFields, SessionFields
+from src.constants.paths import PROCESSED_DIR, ROUTES, SLASH, UPLOADED_FILE_IMG_FILENAME
+from src.constants.responses import Err, Msg, Warn
 
-from server.src.app import session
-from server.src.docs import models, ns_artwork_generation
-from server.src.logger import log
-from server.src.utils.file_utils import validateImageFilename
-from server.src.utils.string_utils import snakeToCamel
-from server.src.utils.web_utils import createApiResponse
+from src.app import session
+from src.docs import models, ns_artwork_generation
+from src.logger import log
+from src.utils.file_utils import validateImageFilename
+from src.utils.string_utils import snakeToCamel
+from src.utils.web_utils import createApiResponse
 
 bp_artwork_generation_local_file = Blueprint("use-local-image", __name__.split('.')[-1])
 

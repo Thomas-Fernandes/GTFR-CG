@@ -3,11 +3,11 @@ from PIL import Image, ImageFilter as IFilter, ImageDraw as IDraw
 from os import path
 from typing import Optional
 
-from server.src.constants.image_generation import LOGO_OVERLAYS
-from server.src.constants.paths import LOGO_POSITIONS, FRONT_PROCESSED_ARTWORKS_DIR, PROCESSED_ARTWORK_FILENAME, SLASH
+from src.constants.image_generation import LOGO_OVERLAYS
+from src.constants.paths import LOGO_POSITIONS, FRONT_PROCESSED_ARTWORKS_DIR, PROCESSED_ARTWORK_FILENAME, SLASH
 
-from server.src.logger import log
-from server.src.utils.string_utils import getSessionFirstName
+from src.logger import log
+from src.utils.string_utils import getSessionFirstName
 
 def addGaussianBlur(cropped_image: Image.Image, original_image: Image.Image) -> Image.Image:
     """ Adds a Gaussian blur to the given image

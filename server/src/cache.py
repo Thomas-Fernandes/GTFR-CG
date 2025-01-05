@@ -3,10 +3,10 @@ from flask import Config
 from os import listdir, path, remove, removedirs
 from sys import exit
 
-from server.src.constants.enums import AvailableCacheElemType
-from server.src.constants.paths import PROCESSED_DIR, SLASH
-from server.src.logger import log
-from server.src.utils.time_utils import getExpirationTimestamp
+from src.constants.enums import AvailableCacheElemType
+from src.constants.paths import PROCESSED_DIR, SLASH
+from src.logger import log
+from src.utils.time_utils import getExpirationTimestamp
 
 def isFileExpired(filepath: str, filetype: str, session: Config) -> bool:
     try:

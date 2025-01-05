@@ -2,12 +2,12 @@ from dataclasses import dataclass
 from time import time
 from typing import Optional
 
-from server.src.constants.enums import AvailableStats
-from server.src.constants.paths import STATS_FILE_PATH
-from server.src.constants.responses import Err
-from server.src.constants.statistics import EMPTY_STATS, INCREMENTABLE_STATS
-from server.src.logger import log, SeverityLevel
-from server.src.typing_gtfr import JsonDict
+from src.constants.enums import AvailableStats
+from src.constants.paths import STATS_FILE_PATH
+from src.constants.responses import Err
+from src.constants.statistics import EMPTY_STATS, INCREMENTABLE_STATS
+from src.logger import log, SeverityLevel
+from src.typing_gtfr import JsonDict
 
 ############# CLASS #############
 
@@ -64,7 +64,7 @@ class Stats:
 
 from json import loads, dumps, JSONDecodeError
 
-from server.src.utils.time_utils import getNowEpoch
+from src.utils.time_utils import getNowEpoch
 
 def getJsonStatsFromFile(path: str = STATS_FILE_PATH) -> JsonDict:
     f""" Returns the statistics contained in a JSON statistics file

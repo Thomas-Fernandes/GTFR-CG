@@ -7,14 +7,14 @@ from os import path, makedirs
 from typing import Optional
 from uuid import uuid4
 
-from server.src.constants.enums import AvailableCacheElemType, HttpStatus, SessionFields
-from server.src.constants.paths import PROCESSED_DIR, ROUTES, SLASH, UPLOADED_ITUNES_IMG_FILENAME
-from server.src.constants.responses import Err, Msg, Warn
+from src.constants.enums import AvailableCacheElemType, HttpStatus, SessionFields
+from src.constants.paths import PROCESSED_DIR, ROUTES, SLASH, UPLOADED_ITUNES_IMG_FILENAME
+from src.constants.responses import Err, Msg, Warn
 
-from server.src.app import session
-from server.src.docs import models, ns_artwork_generation
-from server.src.logger import log
-from server.src.utils.web_utils import createApiResponse
+from src.app import session
+from src.docs import models, ns_artwork_generation
+from src.logger import log
+from src.utils.web_utils import createApiResponse
 
 bp_artwork_generation_itunes_image = Blueprint("use-itunes-image", __name__.split('.')[-1])
 

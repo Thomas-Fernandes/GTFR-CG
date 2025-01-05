@@ -1,13 +1,13 @@
 from flask import Blueprint
 from flask_restx import Api
 
-from server.src.docs import ns_artwork_generation
-from server.src.constants.paths import API_ROUTE, ROUTES
+from src.docs import ns_artwork_generation
+from src.constants.paths import API_ROUTE, ROUTES
 
-from server.src.routes.artwork_generation.itunes_image import bp_artwork_generation_itunes_image
-from server.src.routes.artwork_generation.itunes_search import bp_artwork_generation_itunes_search
-from server.src.routes.artwork_generation.local_file import bp_artwork_generation_local_file
-from server.src.routes.artwork_generation.youtube_thumbnail import bp_artwork_generation_youtube_thumbnail
+from src.routes.artwork_generation.itunes_image import bp_artwork_generation_itunes_image
+from src.routes.artwork_generation.itunes_search import bp_artwork_generation_itunes_search
+from src.routes.artwork_generation.local_file import bp_artwork_generation_local_file
+from src.routes.artwork_generation.youtube_thumbnail import bp_artwork_generation_youtube_thumbnail
 
 bp_artwork_generation = Blueprint(ROUTES.art_gen.bp_name, __name__.split('.')[-1])
 bp_artwork_generation.register_blueprint(bp_artwork_generation_itunes_search)

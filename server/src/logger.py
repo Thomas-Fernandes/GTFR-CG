@@ -6,9 +6,9 @@ from re import Match
 import sys # The whole module must be imported for output redirection to work
 from typing import Iterator, Optional, Self
 
-from server.src.constants.dotenv import LOGGER_LEVEL as dotenv_level
-from server.src.constants.regex import LYRICSGENIUS_PATTERNS
-from server.src.utils.time_utils import getNowEpoch
+from src.constants.dotenv import LOGGER_LEVEL as dotenv_level
+from src.constants.regex import LYRICSGENIUS_PATTERNS
+from src.utils.time_utils import getNowEpoch
 
 class SeverityLevel(IntEnum):
     """ Enum for severity levels """
@@ -162,13 +162,13 @@ def getSeverityArg(args: list[str]) -> int:
         return SeverityLevel[dotenv_level]
 
     level: int = logging.NOTSET
-    if len(args) > 1:
-        logging_levels: dict[str, int] = logging.getLevelNamesMapping()
-        selected_level: str = args[1].upper()
-        if selected_level not in logging_levels:
-            exitInvalidSeverityLevel(selected_level)
-        level = logging_levels[selected_level]
-        print(getFormattedMessage(SeverityLevel.INFO, f"  Severity level manually set to {SeverityLevel[level].name}"))
+    # if len(args) > 1:
+    #     logging_levels: dict[str, int] = logging.getLevelNamesMapping()
+    #     selected_level: str = args[1].upper()
+    #     if selected_level not in logging_levels:
+    #         exitInvalidSeverityLevel(selected_level)
+    #     level = logging_levels[selected_level]
+    #     print(getFormattedMessage(SeverityLevel.INFO, f"  Severity level manually set to {SeverityLevel[level].name}"))
     return level
 
 print(getFormattedMessage(SeverityLevel.DEBUG, "Trying to initialize logger variable..."))

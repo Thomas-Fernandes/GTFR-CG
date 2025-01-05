@@ -1,4 +1,4 @@
-from server.src.constants.paths import SLASH
+from src.constants.paths import SLASH
 
 def getHexColorFromRGB(rgb: tuple[int, int, int]) -> str:
     """ Converts an RGB color to a hex color
