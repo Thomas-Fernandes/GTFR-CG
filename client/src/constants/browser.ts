@@ -12,7 +12,6 @@ export enum Title {
   Redirect = "Redirection page",
   Landing = "Welcome",
   Home = "Home",
-  Tests = "Tests",
   ArtworkGeneration = "Artwork Generation",
   ProcessedArtworks = "Processed Artworks",
   Lyrics = "Lyrics",

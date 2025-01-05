@@ -62,7 +62,6 @@ npm run dev # will launch the front end of the application
     - [x] **Processed Artworks**: where you can download a background image and a YouTube thumbnail.
   - [x] **Lyrics**: where you can fetch lyrics from Genius and convert them to lyrics blocks.
   - [x] **Cards Generation**: where cards are generated, based on the blocks from the Lyrics page.
-  - **Tests** (deprecated): the unit tests page, to check the application's integrity.
 - The client features a [toast notification system](https://web.dev/articles/building/a-toast-component) that will give you feedback upon actions.
 - Your user statistics are stored in a file handled [by the back end](https://github.com/Thomas-Fernandes/GTFR-CG/blob/develop/server/README.md).
 

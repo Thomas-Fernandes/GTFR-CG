@@ -3,7 +3,6 @@ export enum ViewPaths {
   Redirect = "/redirect",
   LandingPage = "/landing-page",
   Home = "/home",
-  Tests = "/tests",
   ArtworkGeneration = "/artwork-generation",
   ProcessedArtworks = "/processed-artworks",
   Lyrics = "/lyrics",
