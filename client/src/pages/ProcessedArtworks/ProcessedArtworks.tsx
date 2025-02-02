@@ -24,7 +24,7 @@ const ProcessedArtworks = () => {
 
   useEffect(() => {
     doesFileExist(PROCESSED_ARTWORKS_PATH + "/" + COVER_ART_FILENAME).then((anyProcessedImageExists: boolean) => {
-      if (!anyProcessedImageExists)
+      if (false) // FIXME
         navigate(`${ViewPaths.Redirect}?redirect_to=${ViewPaths.ArtworkGeneration}&error_text=${Toast.NoProcessedImage}`);
     });
   });

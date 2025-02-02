@@ -46,6 +46,9 @@ SESSION_FILE_DIR = "flask_session" + SLASH
 
 PROCESSED_DIR = "processed" + SLASH
 front_dir = f"..{SLASH}client{SLASH}"
+GENERATED_CONTENT_DIR = f"{SLASH}app{SLASH}generated_files{SLASH}"
+GENERATED_ARTWORKS_DIR = f"{GENERATED_CONTENT_DIR}processed-{AvailableCacheElemType.ARTWORKS}{SLASH}"
+GENERATED_CARDS_DIR = f"{GENERATED_CONTENT_DIR}processed-{AvailableCacheElemType.CARDS}{SLASH}"
 
 FRONT_PROCESSED = f"{front_dir}public{SLASH}"
 FRONT_PROCESSED_ARTWORKS_DIR = f"{FRONT_PROCESSED}processed-{AvailableCacheElemType.ARTWORKS}{SLASH}"

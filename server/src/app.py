@@ -1,5 +1,5 @@
 # Installed libraries
-from flask import Flask, request, Response
+from flask import Flask, request, Response, send_from_directory
 from flask_cors import CORS
 from flask_restx import Api
 from flask_session import Session
@@ -11,7 +11,7 @@ from os import makedirs
 # Local modules
 from src.cache import cacheCleanup
 from src.constants.paths import \
-    DEFAULT_PORT, FRONT_PROCESSED_ARTWORKS_DIR, FRONT_PROCESSED_CARDS_DIR, HOST_HOME, SESSION_FILE_DIR, SESSION_TYPE
+    DEFAULT_PORT, FRONT_PROCESSED_ARTWORKS_DIR, FRONT_PROCESSED_CARDS_DIR, GENERATED_CARDS_DIR, GENERATED_ARTWORKS_DIR, HOST_HOME, SESSION_FILE_DIR, SESSION_TYPE
 from src.logger import log
 from src.statistics import onLaunch as printInitStatistics
 
@@ -35,6 +35,10 @@ def handle_preflight() -> Response | None:
     headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
     headers["Access-Control-Allow-Credentials"] = "true"
     return response
+
+@app.route("/api/files/<path:filename>")
+def serve_file(filename: str) -> Response:
+    return send_from_directory("/app/generated_files", filename)
 
 def initApp() -> None:
     """ Initializes the Flask app: declares config and session, assigns blueprints """
@@ -73,6 +77,8 @@ def initApp() -> None:
         log.debug("  ]")
     logRegisteredRoutes()
 
+    makedirs(GENERATED_ARTWORKS_DIR, exist_ok=True)
+    makedirs(GENERATED_CARDS_DIR, exist_ok=True)
     makedirs(FRONT_PROCESSED_ARTWORKS_DIR, exist_ok=True)
     makedirs(FRONT_PROCESSED_CARDS_DIR, exist_ok=True)
     session["SESSION_PERMANENT"] = False

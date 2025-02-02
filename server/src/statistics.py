@@ -101,6 +101,9 @@ def updateStats(*, path: str = STATS_FILE_PATH, to_increment: Optional[Available
         AvailableStats.CARDS_GENERATED: int(json_stats.get(AvailableStats.CARDS_GENERATED, 0)),
     }
 
+    if new_stats[AvailableStats.DATE_FIRST_OPERATION] == EMPTY_STATS[AvailableStats.DATE_FIRST_OPERATION]:
+        new_stats[AvailableStats.DATE_FIRST_OPERATION] = getNowEpoch()
+
     if to_increment in INCREMENTABLE_STATS:
         new_stats[to_increment] += increment
     else:

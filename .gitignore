@@ -23,22 +23,9 @@ stats.json
 
 # img cache
 client/public/processed*
+server/generated_files/
 server/**/*.png
-server/**/*.PNG
-server/**/*.jpg
-server/**/*.JPG
-server/**/*.jpeg
-server/**/*.JPEG
-server/**/*.gif
-server/**/*.GIF
-server/**/*.bmp
-server/**/*.BMP
-server/**/*.ico
-server/**/*.ICO
-server/**/*.svg
-server/**/*.SVG
-server/**/*.webp
-server/**/*.WEBP
+server/**/*.txt
 
 # cards cache
 *.txt
