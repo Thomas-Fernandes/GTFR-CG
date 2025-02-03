@@ -1,5 +1,6 @@
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
+import AppBackground from "@/components/AppBackground/AppBackground";
 import { ViewPaths } from "@/constants/paths";
 import ArtworkGeneration from "@/pages/ArtworkGeneration/ArtworkGeneration";
 import CardsGeneration from "@/pages/CardsGeneration/CardsGeneration";
@@ -11,7 +12,6 @@ import Redirect from "@/pages/Redirect/Redirect";
 import Tests from "@/pages/Tests/Tests";
 
 import "./App.scss";
-import AppBackground from "./components/AppBackground/AppBackground";
 
 const App = () => {
   return (

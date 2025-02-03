@@ -1,4 +1,6 @@
+import { useLocale } from "@/common/hooks/useLocale/useLocale";
 import { useEffect } from "react";
+import { useIntl } from "react-intl";
 import { useNavigate } from "react-router-dom";
 
 import { useTitle } from "@/common/hooks/useTitle";
@@ -12,6 +14,8 @@ import { ViewPaths } from "@/constants/paths";
 import "./LandingPage.scss";
 
 const LandingPage = () => {
+  const intl = useIntl();
+  const { locale, switchLocale } = useLocale();
   useTitle(Title.Landing);
 
   const navigate = useNavigate();
@@ -26,6 +30,11 @@ const LandingPage = () => {
       <ToastContainer />
       <TopBotSpacer />
 
+      <div>
+        <button onClick={() => switchLocale("en")}>English</button>
+        <button onClick={() => switchLocale("fr")}>Français</button>
+        <p>Current Language: {locale}</p>
+      </div>
       <div className="landing-page--content">
           <div className="landing-page--content--left">
             <div className="landing-page--content--left--motto">
@@ -43,12 +52,12 @@ const LandingPage = () => {
             <div className="landing-page--content--left--buttons">
               <ActionButton newTabLink
                 onClick={() => window.open("https://github.com/Thomas-Fernandes/GTFR-CG")}
-                label={"Learn More"}
+                label={intl.formatMessage({ id: "landing.learnMore" })}
               />
 
               <ActionButton
                 onClick={() => navigate(ViewPaths.Home)}
-                label={"Generate Content"}
+                label={intl.formatMessage({ id: "landing.generateContent" })}
               />
             </div>
           </div>
