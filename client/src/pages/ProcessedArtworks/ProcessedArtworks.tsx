@@ -27,7 +27,7 @@ const ProcessedArtworks = () => {
       if (false) // FIXME
         navigate(`${ViewPaths.Redirect}?redirect_to=${ViewPaths.ArtworkGeneration}&error_text=${Toast.NoProcessedImage}`);
     });
-  });
+  }, []);
 
   return (
     <div id="processed-artworks">
