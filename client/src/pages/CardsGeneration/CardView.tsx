@@ -52,7 +52,7 @@ const CardView: React.FC<CardViewProps> = ({ card, cardIdx }) => {
       </div>
 
       <DownloadButton className="mac"
-        label={"Download " + shortCardFileName}
+        label={"Download" + " " + shortCardFileName}
         onClick={() => downloadFile(card.imgSrc)}
       />
     </div>
