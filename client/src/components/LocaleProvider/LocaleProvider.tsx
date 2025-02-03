@@ -8,7 +8,7 @@ import { postLocaleChange } from "./requests";
 import { LocaleContextProviderProps } from "./types";
 
 export const LocaleProvider: React.FC<LocaleContextProviderProps> = ({ children }) => {
-  const [locale, setLocale] = useState((navigator.language.split('-')[0] || "en") as Locale);
+  const [locale, setLocale] = useState((navigator.language.split("-")[0] || "en") as Locale);
 
   const switchLocale = (newLocale: Locale) => {
     setLocale(newLocale);

@@ -8,10 +8,6 @@ interface ILocaleContext {
   setLocale: StateSetter<Locale>;
 }
 
-const {
-  context: LocaleContext,
-  useContext: useLocaleContext
-} = createNewContext<ILocaleContext>();
+const { context: LocaleContext, useContext: useLocaleContext } = createNewContext<ILocaleContext>();
 
 export { LocaleContext, useLocaleContext, type ILocaleContext as LocaleContextType };
-

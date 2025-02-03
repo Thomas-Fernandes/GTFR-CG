@@ -1,3 +1,4 @@
+import { useLocale } from "@/common/hooks/useLocale/useLocale";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -20,6 +21,7 @@ const LandingPage = () => {
     generateContent: intl.formatMessage({ id: "pages.landing.generateContent" }),
     overlayText: intl.formatMessage({ id: "pages.landing.overlayText" }),
   };
+  const { locale, switchLocale } = useLocale();
 
   useTitle(labels.title);
 
@@ -36,6 +38,11 @@ const LandingPage = () => {
       <ToastContainer />
       <TopBotSpacer />
 
+      <div>
+        <button onClick={() => switchLocale("en")}>English</button>
+        <button onClick={() => switchLocale("fr")}>Français</button>
+        <p>Current Language: {locale}</p>
+      </div>
       <div className="landing-page--content">
         <div className="landing-page--content--left">
           <div className="landing-page--content--left--motto">
@@ -44,16 +51,18 @@ const LandingPage = () => {
               <span className="white">{"mprend"}</span>
               <span className="red">{"re"}</span>
             </div>
-            <div className="landing-page--content--left--motto--phrase">
-              <span className="blue">{"les chan"}</span>
-              <span className="white">{"sons du"}</span>
-              <span className="red">&nbsp;{"monde"}</span>
-            </div>
-            <div className="landing-page--content--left--motto--brand">
-              <span>
-                {"Genius traductions françaises "}
-                {"Content Generator"}
-              </span>
+
+            <div className="landing-page--content--left--buttons">
+              <ActionButton
+                newTabLink
+                onClick={() => window.open("https://github.com/Thomas-Fernandes/GTFR-CG")}
+                label={intl.formatMessage({ id: "landing.learnMore" })}
+              />
+
+              <ActionButton
+                onClick={() => navigate(ViewPaths.Home)}
+                label={intl.formatMessage({ id: "landing.generateContent" })}
+              />
             </div>
           </div>
 
