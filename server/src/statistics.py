@@ -77,7 +77,7 @@ def getJsonStatsFromFile(path: str = STATS_FILE_PATH) -> JsonDict:
             raise ValueError(Err.STATS_FILETYPE)
         with open(path, "r") as file:
             log.debug(f"Loaded stats from file {path}.")
-            return loads(file.read()) # <- read stats from stats file
+            return loads(file.read())
     except FileNotFoundError:
         log.warn(f"No stats file ({path}). Initializing new stats file...")
         return initStats()
@@ -136,7 +136,7 @@ def initStats() -> JsonDict:
         file.write(dumps(stats))
 
     log.info("Statistics initialization complete.").time(SeverityLevel.INFO, time() - start)
-    return loads(str(stats).replace("'", '"'))
+    return getJsonStatsFromFile(STATS_FILE_PATH)
 
 def onLaunch() -> None:
     """ Initializes the project with the statistics from the statistics file """

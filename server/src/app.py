@@ -6,12 +6,11 @@ from flask_session import Session
 from waitress import serve
 
 # Python standard libraries
-from os import makedirs
 
 # Local modules
 from src.cache import cacheCleanup
 from src.constants.paths import \
-    DEFAULT_PORT, FRONT_PROCESSED_ARTWORKS_DIR, FRONT_PROCESSED_CARDS_DIR, GENERATED_CARDS_DIR, GENERATED_ARTWORKS_DIR, HOST_HOME, SESSION_FILE_DIR, SESSION_TYPE
+    DEFAULT_PORT, HOST_HOME, SESSION_FILE_DIR, SESSION_TYPE
 from src.logger import log
 from src.statistics import onLaunch as printInitStatistics
 
@@ -77,10 +76,6 @@ def initApp() -> None:
         log.debug("  ]")
     logRegisteredRoutes()
 
-    makedirs(GENERATED_ARTWORKS_DIR, exist_ok=True)
-    makedirs(GENERATED_CARDS_DIR, exist_ok=True)
-    makedirs(FRONT_PROCESSED_ARTWORKS_DIR, exist_ok=True)
-    makedirs(FRONT_PROCESSED_CARDS_DIR, exist_ok=True)
     session["SESSION_PERMANENT"] = False
     session["SESSION_TYPE"] = SESSION_TYPE
     session["SESSION_FILE_DIR"] = SESSION_FILE_DIR
