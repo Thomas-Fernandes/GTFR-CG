@@ -2,7 +2,7 @@ import React, { useMemo, useState } from "react";
 import { IntlProvider } from "react-intl";
 
 import { LocaleContext } from "@/common/hooks/useLocale/contexts";
-import { i18n, Locale } from "@/common/i18n";
+import { getLocaleMessages, Locale } from "@/common/i18n";
 
 import { LocaleContextProviderProps } from "./types";
 
@@ -15,7 +15,7 @@ export const LocaleProvider: React.FC<LocaleContextProviderProps> = ({ children 
 
   return (
     <LocaleContext.Provider value={contextValue}>
-      <IntlProvider locale={locale} messages={i18n[locale]}>
+      <IntlProvider locale={locale} messages={getLocaleMessages(locale)}>
         {children}
       </IntlProvider>
     </LocaleContext.Provider>

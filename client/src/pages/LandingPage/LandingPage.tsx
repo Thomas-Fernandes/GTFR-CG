@@ -52,12 +52,12 @@ const LandingPage = () => {
             <div className="landing-page--content--left--buttons">
               <ActionButton newTabLink
                 onClick={() => window.open("https://github.com/Thomas-Fernandes/GTFR-CG")}
-                label={intl.formatMessage({ id: "landing.learnMore" })}
+                label={intl.formatMessage({ id: "pages.landing.learnMore" })}
               />
 
               <ActionButton
                 onClick={() => navigate(ViewPaths.Home)}
-                label={intl.formatMessage({ id: "landing.generateContent" })}
+                label={intl.formatMessage({ id: "pages.landing.generateContent" })}
               />
             </div>
           </div>

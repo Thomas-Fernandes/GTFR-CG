@@ -1,5 +1,7 @@
-import enUS_i18n from "@/locales/en-US.json";
-import frFR_i18n from "@/locales/fr-FR.json";
+import merge from "lodash.merge";
+
+import en_US from "@/locales/en-US.json";
+import fr_FR from "@/locales/fr-FR.json";
 
 const flattenMessages = (nestedMessages: Record<string, any>, prefix = ""): Record<string, string> => {
   return Object.keys(nestedMessages).reduce((messages, key) => {
@@ -17,7 +19,8 @@ const flattenMessages = (nestedMessages: Record<string, any>, prefix = ""): Reco
 
 export type Locale = "en" | "fr";
 
-export const i18n: Record<Locale, Record<string, string>> = {
-  "en": flattenMessages(enUS_i18n),
-  "fr": flattenMessages(frFR_i18n),
+const locales: Record<Locale, unknown> = {
+  "en": en_US,
+  "fr": fr_FR,
 };
+export const getLocaleMessages = (l: Locale) => flattenMessages(merge({}, en_US, locales[l]));

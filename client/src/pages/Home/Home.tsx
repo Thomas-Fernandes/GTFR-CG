@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useIntl } from "react-intl";
 import { useNavigate } from "react-router-dom";
 
 import { useTitle } from "@/common/hooks/useTitle";
@@ -17,6 +18,7 @@ import { Statistics } from "./types";
 import "./Home.scss";
 
 const Home = () => {
+  const intl = useIntl();
   useTitle(Title.Home);
 
   const navigate = useNavigate();
@@ -53,7 +55,7 @@ const Home = () => {
           <NavButton to={ViewPaths.Lyrics} label={Title.Lyrics} side={NavButtonSide.Right} />
         </div>
         <div className="navbar-row">
-          <NavButton to={ViewPaths.CardsGeneration} label={Title.CardsGeneration} side={NavButtonSide.Right} />
+          <NavButton to={ViewPaths.CardsGeneration} label={intl.formatMessage({ id: "pages.home.title" })} side={NavButtonSide.Right} />
         </div>
       </div>
 
