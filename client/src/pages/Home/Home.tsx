@@ -71,7 +71,9 @@ const Home = () => {
 
       <StatisticsBoard stats={stats} />
 
-      <div className="hidden"> {/* avoid unused variable */}
+      <div className="hidden">
+        {" "}
+        {/* avoid unused variable */}
         <p>{`Genius Token: '${geniusToken}'`}</p>
       </div>
 

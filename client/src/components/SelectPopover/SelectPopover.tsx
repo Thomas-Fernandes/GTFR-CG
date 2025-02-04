@@ -4,7 +4,7 @@ import { SelectPopoverProps } from "./types";
 
 import "./SelectPopover.scss";
 
-const SelectPopover: React.FC<SelectPopoverProps> = ({ title, label, imgSrc, options, onSelect, className, ...divProps }) => {
+const SelectPopover = ({ title, label, imgSrc, options, onSelect, className, ...divProps }: SelectPopoverProps) => {
   const popoverRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -29,28 +29,31 @@ const SelectPopover: React.FC<SelectPopoverProps> = ({ title, label, imgSrc, opt
 
   return (
     <div className={`popover ${className ?? ""}`} {...divProps}>
-      <button type="button" title={title ?? "popover"} className="popover--toggle"
+      <button
+        type="button"
+        title={title ?? "popover"}
+        className="popover--toggle"
         onClick={() => setIsOpen((prev) => !prev)}
       >
         {label && <span>{label}</span>}
         {imgSrc && <img src={imgSrc} alt={imgSrc} />}
       </button>
 
-      { isOpen &&
+      {isOpen && (
         <div ref={popoverRef} className="popover--dropdown">
           <ul className="popover--dropdown--list">
-            { options.map((option) => (
-              <div key={option.value} className="popover--dropdown--list--option"
+            {options.map((option) => (
+              <div
+                key={option.value}
+                className="popover--dropdown--list--option"
                 onClick={() => handleOptionClick(option.value)}
               >
-                <li>
-                  {option.label}
-                </li>
+                <li>{option.label}</li>
               </div>
             ))}
           </ul>
         </div>
-      }
+      )}
     </div>
   );
 };
