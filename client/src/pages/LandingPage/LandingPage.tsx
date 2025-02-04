@@ -1,6 +1,5 @@
 import { useLocale } from "@/common/hooks/useLocale/useLocale";
 import { useEffect } from "react";
-import { useIntl } from "react-intl";
 import { useNavigate } from "react-router-dom";
 
 import { useTitle } from "@/common/hooks/useTitle";
@@ -10,11 +9,12 @@ import ToastContainer from "@/components/ToastContainer/ToastContainer";
 import TopBotSpacer from "@/components/TopBotSpacer/TopBotSpacer";
 import { Title } from "@/constants/browser";
 import { ViewPaths } from "@/constants/paths";
+import { useAppContext } from "@/contexts";
 
 import "./LandingPage.scss";
 
 const LandingPage = () => {
-  const intl = useIntl();
+  const { intl } = useAppContext();
   const { locale, switchLocale } = useLocale();
   useTitle(Title.Landing);
 

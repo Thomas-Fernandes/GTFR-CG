@@ -1,5 +1,6 @@
 import merge from "lodash.merge";
 
+import { Option } from "@/components/SelectPopover/types";
 import en_US from "@/locales/en-US.json";
 import fr_FR from "@/locales/fr-FR.json";
 
@@ -18,6 +19,12 @@ const flattenMessages = (nestedMessages: Record<string, any>, prefix = ""): Reco
 };
 
 export type Locale = "en" | "fr";
+
+type LocaleOptionType = Option & { value: Locale };
+export const LOCALE_OPTIONS: LocaleOptionType[] = [
+  { label: "English", value: "en" },
+  { label: "Français", value: "fr" },
+];
 
 const locales: Record<Locale, unknown> = {
   "en": en_US,

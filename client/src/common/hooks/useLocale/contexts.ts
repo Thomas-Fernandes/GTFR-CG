@@ -1,9 +1,11 @@
 import { createNewContext } from "@/common/contextCreator";
 import { Locale } from "@/common/i18n";
+import { StateSetter } from "@/common/types";
 
 interface ILocaleContext {
   locale: Locale;
   switchLocale: (locale: Locale) => void;
+  setLocale: StateSetter<Locale>;
 }
 
 const {

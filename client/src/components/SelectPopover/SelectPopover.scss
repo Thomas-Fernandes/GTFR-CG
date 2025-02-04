@@ -4,11 +4,11 @@
   @apply relative inline-block;
 
   &--toggle {
-    @apply min-w-36 px-4 py-2 rounded-md text-base;
+    @apply text-base !important;
   }
 
   &--dropdown {
-    @apply z-10 absolute w-36 mt-2 rounded-md;
+    @apply z-10 absolute mt-2 rounded-md;
     box-shadow: $button-shadow;
     animation: fadeInOut 0.15s ease-in-out;
 

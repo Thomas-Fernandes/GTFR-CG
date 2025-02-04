@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useIntl } from "react-intl";
 import { useNavigate } from "react-router-dom";
 
 import { useTitle } from "@/common/hooks/useTitle";
@@ -9,6 +8,7 @@ import ToastContainer from "@/components/ToastContainer/ToastContainer";
 import TopBotSpacer from "@/components/TopBotSpacer/TopBotSpacer";
 import { Title } from "@/constants/browser";
 import { ViewPaths } from "@/constants/paths";
+import { useAppContext } from "@/contexts";
 
 import { defaultStatistics } from "./constants";
 import { getGeniusToken, getStatistics } from "./requests";
@@ -18,7 +18,7 @@ import { Statistics } from "./types";
 import "./Home.scss";
 
 const Home = () => {
-  const intl = useIntl();
+  const { intl } = useAppContext();
   useTitle(Title.Home);
 
   const navigate = useNavigate();

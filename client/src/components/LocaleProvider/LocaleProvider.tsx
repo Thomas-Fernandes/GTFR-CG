@@ -9,9 +9,9 @@ import { LocaleContextProviderProps } from "./types";
 export const LocaleProvider: React.FC<LocaleContextProviderProps> = ({ children }) => {
   const [locale, setLocale] = useState((navigator.language.split('-')[0] || "en") as Locale);
 
-  const switchLocale = (newLocale: Locale) => setLocale(newLocale);
+  const switchLocale = (newLocale: Locale) => setLocale(newLocale); // TODO remove this, used for testing
 
-  const contextValue = useMemo(() => ({ locale, switchLocale }), [locale]);
+  const contextValue = useMemo(() => ({ locale, switchLocale, setLocale }), [locale]);
 
   return (
     <LocaleContext.Provider value={contextValue}>

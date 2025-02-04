@@ -1,0 +1,24 @@
+import { useDarkMode } from "@/common/hooks/useDarkMode/useDarkMode";
+import { useLocale } from "@/common/hooks/useLocale/useLocale";
+import { LOCALE_OPTIONS } from "@/common/i18n";
+import { StateSetter } from "@/common/types";
+import { ThemeType } from "@/components/DarkModeProvider/constants";
+import SelectPopover from "@/components/SelectPopover/SelectPopover";
+
+import "./LocaleSwitch.scss";
+
+const LocaleSwitch: React.FC = () => {
+  const { isDarkMode } = useDarkMode();
+  const { setLocale } = useLocale();
+
+  return (
+    <SelectPopover
+      options={LOCALE_OPTIONS}
+      onSelect={setLocale as StateSetter<string>}
+      className={`locale-switch ${isDarkMode ? ThemeType.Dark : ThemeType.Light}`}
+      imgSrc={"/svg/locale-circle.svg"}
+    />
+  );
+};
+
+export default LocaleSwitch;
