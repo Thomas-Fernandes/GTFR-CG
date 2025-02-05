@@ -49,6 +49,9 @@ All the required back end modules are listed in [the requirements file](./requir
 
 ## :movie_camera: Usage
 
+The project [is bundled *via* Docker](../README.md).  
+However, if you still want to run the back end locally, you can do so by following these steps:
+
 &nbsp;&nbsp; :rocket:&nbsp; **Launch**
 
 ``` bash

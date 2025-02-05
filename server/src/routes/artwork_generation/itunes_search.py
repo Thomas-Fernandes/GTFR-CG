@@ -58,7 +58,7 @@ class ItunesSearchResource(Resource):
             log.error(f"Error in request payload: {err}")
             return createApiResponse(HttpStatus.BAD_REQUEST, err)
 
-        country_label = country or "''".upper()
+        country_label = (country or "''").upper()
         log.info(f"Searching {limit} iTunes images for term: '{term}', country: {country_label}...")
         start = time()
         url_to_hit = f"https://itunes.apple.com/search?term={term}&country={country}&entity={entity}&limit={limit}"

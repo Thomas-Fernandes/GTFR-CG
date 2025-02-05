@@ -71,12 +71,20 @@ This application was tested on, and designed for **Windows 11** and **Ubuntu 22.
 
 ## :movie_camera: Usage & General Information
 
-The whole project is bundled *via* [Docker](https://www.divio.com/blog/why-dockerize/) -> [docker-compose.yml](./docker-compose.yml).
+&nbsp;&nbsp; :rocket:&nbsp; **Launch via Docker**
 
-<div align="center" id="user-content-toc">
-  <ul><summary><h1>
-    <a href="./client#readme">Front</a> &#xa0; | &#xa0; <a href="./server#readme">Back</a>
-  </h1></summary></ul>
+The whole project is bundled *via* [Docker](https://www.divio.com/blog/why-dockerize/).  
+Run Docker on your machine, and you're good to go!
+
+``` bash
+docker-compose up # will build and launch the application
+```
+
+&nbsp;&nbsp; :clamp:&nbsp; **Local Machine Launch**
+<div align="left" id="user-content-toc">
+  <ul><summary><p><b>
+    Technical Information: <a href="./client#readme">Front</a> | <a href="./server#readme">Back</a>
+  </b></p></summary></ul>
 </div>
 
 > [!NOTE]

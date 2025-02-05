@@ -38,6 +38,9 @@ We do use a library for nicer display: Maxwell Barvian's [NumberFlow](https://nu
 
 ## :movie_camera: Usage
 
+The project [is bundled *via* Docker](../README.md).  
+However, if you still want to run the front end locally, you can do so by following these steps:
+
 &nbsp;&nbsp; :clamp:&nbsp; **Build**
 
 ``` bash
