@@ -1,5 +1,5 @@
-from server.src.constants.enums import AvailableStats
-from server.src.typing_gtfr import JsonDict
+from src.constants.enums import AvailableStats
+from src.typing_gtfr import JsonDict
 
 EMPTY_STATS: JsonDict = {
     AvailableStats.DATE_FIRST_OPERATION: "N/A",

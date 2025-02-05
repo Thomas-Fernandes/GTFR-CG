@@ -3,21 +3,21 @@ from flask_restx import Resource
 
 from time import time
 
-from server.src.constants.enums import AvailableStats, HttpStatus, PayloadFields, SessionFields
-from server.src.constants.paths import ROUTES, SLASH, PROCESSED_OUTRO_FILENAME
-from server.src.constants.responses import Err, Msg
+from src.constants.enums import AvailableStats, HttpStatus, PayloadFields, SessionFields
+from src.constants.paths import ROUTES, SLASH, PROCESSED_OUTRO_FILENAME
+from src.constants.responses import Err, Msg
 
-from server.src.app import session
-from server.src.docs import models, ns_cards_generation
-from server.src.logger import log, SeverityLevel
-from server.src.statistics import updateStats
-from server.src.typing_gtfr import CardgenSettings, CardMetadata, CardsContents, SongMetadata
-from server.src.utils.string_utils import getHexColorFromRGB, snakeToCamel
-from server.src.utils.web_utils import createApiResponse
+from src.app import session
+from src.docs import models, ns_cards_generation
+from src.logger import log, SeverityLevel
+from src.statistics import updateStats
+from src.typing_gtfr import CardgenSettings, CardMetadata, CardsContents, SongMetadata
+from src.utils.string_utils import getHexColorFromRGB, snakeToCamel
+from src.utils.web_utils import createApiResponse
 
-from server.src.routes.cards_generation.pillow import generateCard, generateOutroCard
-from server.src.routes.cards_generation.settings import getCardMetadata, getGenerationRequisites
-from server.src.routes.cards_generation.utils import getUserProcessedPath
+from src.routes.cards_generation.pillow import generateCard, generateOutroCard
+from src.routes.cards_generation.settings import getCardMetadata, getGenerationRequisites
+from src.routes.cards_generation.utils import getUserProcessedPath
 
 def generateAllCards(
     user_processed_path: str, cards_contents: CardsContents, card_metadata: CardMetadata, settings: CardgenSettings

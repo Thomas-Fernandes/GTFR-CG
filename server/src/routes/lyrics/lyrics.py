@@ -1,11 +1,11 @@
 from flask import Blueprint
 from flask_restx import Api
 
-from server.src.constants.paths import API_ROUTE, ROUTES
+from src.constants.paths import API_ROUTE, ROUTES
 
-from server.src.docs import ns_lyrics
+from src.docs import ns_lyrics
 
-from server.src.routes.lyrics.get_genius_lyrics import bp_lyrics_get_genius_lyrics
+from src.routes.lyrics.get_genius_lyrics import bp_lyrics_get_genius_lyrics
 
 bp_lyrics = Blueprint(ROUTES.home.bp_name, __name__.split('.')[-1])
 bp_lyrics.register_blueprint(bp_lyrics_get_genius_lyrics)

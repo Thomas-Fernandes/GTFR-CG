@@ -1,14 +1,14 @@
 from flask import Blueprint, Response
 from flask_restx import Resource
 
-from server.src.constants.enums import HttpStatus, SessionFields
-from server.src.constants.paths import ROUTES
-from server.src.constants.responses import Msg
+from src.constants.enums import HttpStatus, SessionFields
+from src.constants.paths import ROUTES
+from src.constants.responses import Msg
 
-from server.src.app import session
-from server.src.docs import models, ns_home
-from server.src.logger import log
-from server.src.utils.web_utils import createApiResponse
+from src.app import session
+from src.docs import models, ns_home
+from src.logger import log
+from src.utils.web_utils import createApiResponse
 
 bp_home_genius_token = Blueprint("genius-token", __name__.split('.')[-1])
 

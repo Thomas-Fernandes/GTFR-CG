@@ -15,6 +15,7 @@
   <a href="#top"><img alt="React version" src="https://img.shields.io/badge/React-19-5dd2f3?logo=react" height="24px" /></a>
   <a href="#top"><img alt="Tailwind version" src="https://img.shields.io/badge/Tailwind-3.4-06b6d4?logo=tailwindcss" height="24px" /></a>
   <a href="#top"><img alt="Vite version" src="https://img.shields.io/badge/Vite-6-fdd835?logo=vite" height="24px" /></a>
+  <a href="#top"><img title="Docker" alt="Docker" src="https://raw.githubusercontent.com/mallowigi/iconGenerator/master/assets/icons/files/docker.svg" height="24px" /></a>
 </div>
 
 &#xa0;
@@ -37,10 +38,13 @@ We do use a library for nicer display: Maxwell Barvian's [NumberFlow](https://nu
 
 ## :movie_camera: Usage
 
+The project [is bundled *via* Docker](../README.md).  
+However, if you still want to run the front end locally, you can do so by following these steps:
+
 &nbsp;&nbsp; :clamp:&nbsp; **Build**
 
 ``` bash
-python ../installer.py # will install npm, node and node modules !! requires **Python 3.11**
+pnpm install || npm install || yarn install # will install the needed node modules
 ```
 
 &#xa0;
@@ -48,7 +52,7 @@ python ../installer.py # will install npm, node and node modules !! requires **P
 &nbsp;&nbsp; :rocket:&nbsp; **Launch**
 
 ``` bash
-npm run dev # will launch the front end of the application
+pnpm run dev || npm run dev || yarn run dev # will launch the front end of the application
 ```
 
 &#xa0;
@@ -62,7 +66,6 @@ npm run dev # will launch the front end of the application
     - [x] **Processed Artworks**: where you can download a background image and a YouTube thumbnail.
   - [x] **Lyrics**: where you can fetch lyrics from Genius and convert them to lyrics blocks.
   - [x] **Cards Generation**: where cards are generated, based on the blocks from the Lyrics page.
-  - **Tests** (deprecated): the unit tests page, to check the application's integrity.
 - The client features a [toast notification system](https://web.dev/articles/building/a-toast-component) that will give you feedback upon actions.
 - Your user statistics are stored in a file handled [by the back end](https://github.com/Thomas-Fernandes/GTFR-CG/blob/develop/server/README.md).
 

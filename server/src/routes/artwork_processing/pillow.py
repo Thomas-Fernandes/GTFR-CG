@@ -3,11 +3,11 @@ from PIL import Image, ImageFilter as IFilter, ImageDraw as IDraw
 from os import path
 from typing import Optional
 
-from server.src.constants.image_generation import LOGO_OVERLAYS
-from server.src.constants.paths import LOGO_POSITIONS, FRONT_PROCESSED_ARTWORKS_DIR, PROCESSED_ARTWORK_FILENAME, SLASH
+from src.constants.image_generation import LOGO_OVERLAYS
+from src.constants.paths import LOGO_POSITIONS, GENERATED_ARTWORKS_DIR, PROCESSED_ARTWORK_FILENAME, SLASH
 
-from server.src.logger import log
-from server.src.utils.string_utils import getSessionFirstName
+from src.logger import log
+from src.utils.string_utils import getSessionFirstName
 
 def addGaussianBlur(cropped_image: Image.Image, original_image: Image.Image) -> Image.Image:
     """ Adds a Gaussian blur to the given image
@@ -66,7 +66,7 @@ def generateCoverArt(input_path: str, output_path: str, include_center_artwork: 
         final_image = addGaussianBlur(cropped_image, image)
 
     final_image.save(output_path)
-    final_image.save(f"{FRONT_PROCESSED_ARTWORKS_DIR}{PROCESSED_ARTWORK_FILENAME}")
+    final_image.save(f"{GENERATED_ARTWORKS_DIR}{PROCESSED_ARTWORK_FILENAME}")
     log.debug(f"Cover art saved: {output_path}")
 
 
@@ -80,7 +80,7 @@ def generateThumbnail(thumbnail: Image.Image, position: str, output_folder: str)
     image_output_filename = f"thumbnail_{logo_path}"
     output_path = path.join(output_folder, image_output_filename)
     thumbnail.save(output_path)
-    thumbnail.save(f"{FRONT_PROCESSED_ARTWORKS_DIR}{image_output_filename}")
+    thumbnail.save(f"{GENERATED_ARTWORKS_DIR}{image_output_filename}")
     log.debug(f"  Thumbnail saved: {output_path}")
     return None
 

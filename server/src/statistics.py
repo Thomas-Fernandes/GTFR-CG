@@ -2,12 +2,12 @@ from dataclasses import dataclass
 from time import time
 from typing import Optional
 
-from server.src.constants.enums import AvailableStats
-from server.src.constants.paths import STATS_FILE_PATH
-from server.src.constants.responses import Err
-from server.src.constants.statistics import EMPTY_STATS, INCREMENTABLE_STATS
-from server.src.logger import log, SeverityLevel
-from server.src.typing_gtfr import JsonDict
+from src.constants.enums import AvailableStats
+from src.constants.paths import STATS_FILE_PATH
+from src.constants.responses import Err
+from src.constants.statistics import EMPTY_STATS, INCREMENTABLE_STATS
+from src.logger import log, SeverityLevel
+from src.typing_gtfr import JsonDict
 
 ############# CLASS #############
 
@@ -64,7 +64,7 @@ class Stats:
 
 from json import loads, dumps, JSONDecodeError
 
-from server.src.utils.time_utils import getNowEpoch
+from src.utils.time_utils import getNowEpoch
 
 def getJsonStatsFromFile(path: str = STATS_FILE_PATH) -> JsonDict:
     f""" Returns the statistics contained in a JSON statistics file
@@ -77,7 +77,7 @@ def getJsonStatsFromFile(path: str = STATS_FILE_PATH) -> JsonDict:
             raise ValueError(Err.STATS_FILETYPE)
         with open(path, "r") as file:
             log.debug(f"Loaded stats from file {path}.")
-            return loads(file.read()) # <- read stats from stats file
+            return loads(file.read())
     except FileNotFoundError:
         log.warn(f"No stats file ({path}). Initializing new stats file...")
         return initStats()
@@ -100,6 +100,9 @@ def updateStats(*, path: str = STATS_FILE_PATH, to_increment: Optional[Available
         AvailableStats.LYRICS_FETCHES: int(json_stats.get(AvailableStats.LYRICS_FETCHES, 0)),
         AvailableStats.CARDS_GENERATED: int(json_stats.get(AvailableStats.CARDS_GENERATED, 0)),
     }
+
+    if new_stats[AvailableStats.DATE_FIRST_OPERATION] == EMPTY_STATS[AvailableStats.DATE_FIRST_OPERATION]:
+        new_stats[AvailableStats.DATE_FIRST_OPERATION] = getNowEpoch()
 
     if to_increment in INCREMENTABLE_STATS:
         new_stats[to_increment] += increment
@@ -133,7 +136,7 @@ def initStats() -> JsonDict:
         file.write(dumps(stats))
 
     log.info("Statistics initialization complete.").time(SeverityLevel.INFO, time() - start)
-    return loads(str(stats).replace("'", '"'))
+    return getJsonStatsFromFile(STATS_FILE_PATH)
 
 def onLaunch() -> None:
     """ Initializes the project with the statistics from the statistics file """

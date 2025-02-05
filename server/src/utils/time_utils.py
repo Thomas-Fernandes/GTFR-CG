@@ -3,9 +3,9 @@ from flask import Config
 from datetime import datetime
 from time import time
 
-from server.src.constants.enums import AvailableCacheElemType, SessionFields, TimeInSeconds
-from server.src.constants.time import DATE_FORMAT_FULL, DATE_FORMAT_STAMP
-from server.src.typing_gtfr import CachedElemType
+from src.constants.enums import AvailableCacheElemType, SessionFields, TimeInSeconds
+from src.constants.time import DATE_FORMAT_FULL, DATE_FORMAT_STAMP
+from src.typing_gtfr import CachedElemType
 
 def getNowStamp() -> str: # as YY-MM-DD_HH-MM-SS
     """ Returns the current time in stamp format

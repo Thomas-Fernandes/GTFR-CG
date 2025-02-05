@@ -2,19 +2,19 @@ from flask import Blueprint, Response, request
 from flask_restx import Resource
 from werkzeug.datastructures import FileStorage
 
-from os import path, makedirs
+from os import path
 from uuid import uuid4
 
-from server.src.constants.enums import AvailableCacheElemType, HttpStatus, PayloadFields, SessionFields
-from server.src.constants.paths import PROCESSED_DIR, ROUTES, SLASH, UPLOADED_FILE_IMG_FILENAME
-from server.src.constants.responses import Err, Msg, Warn
+from src.constants.enums import HttpStatus, PayloadFields, SessionFields
+from src.constants.paths import GENERATED_ARTWORKS_DIR, ROUTES, UPLOADED_FILE_IMG_FILENAME
+from src.constants.responses import Err, Msg, Warn
 
-from server.src.app import session
-from server.src.docs import models, ns_artwork_generation
-from server.src.logger import log
-from server.src.utils.file_utils import validateImageFilename
-from server.src.utils.string_utils import snakeToCamel
-from server.src.utils.web_utils import createApiResponse
+from src.app import session
+from src.docs import models, ns_artwork_generation
+from src.logger import log
+from src.utils.file_utils import validateImageFilename
+from src.utils.string_utils import snakeToCamel
+from src.utils.web_utils import createApiResponse
 
 bp_artwork_generation_local_file = Blueprint("use-local-image", __name__.split('.')[-1])
 
@@ -38,7 +38,6 @@ class LocalImageResource(Resource):
         if SessionFields.USER_FOLDER not in session:
             log.debug(Warn.NO_USER_FOLDER)
             session[SessionFields.USER_FOLDER] = str(uuid4())
-        user_folder = str(session.get(SessionFields.USER_FOLDER)) + SLASH + AvailableCacheElemType.ARTWORKS + SLASH
 
         err = validateImageFilename(file.filename)
         if err is not None:
@@ -54,11 +53,8 @@ class LocalImageResource(Resource):
 
         include_center_artwork: bool = \
             request.form[snakeToCamel(PayloadFields.INCLUDE_CENTER_ARTWORK)] == "true"
-        user_processed_path = path.join(PROCESSED_DIR, user_folder)
-        log.info(f"Creating user processed path: {user_processed_path}")
-        makedirs(user_processed_path, exist_ok=True)
 
-        image_path = path.join(user_processed_path, UPLOADED_FILE_IMG_FILENAME)
+        image_path = path.join(GENERATED_ARTWORKS_DIR, UPLOADED_FILE_IMG_FILENAME)
         log.debug(f"Saving uploaded image to {image_path}")
         file.save(image_path)
 

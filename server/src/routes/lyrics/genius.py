@@ -6,15 +6,15 @@ from re import split, sub
 from time import time
 from typing import Literal, Optional, Union
 
-from server.src.constants.dotenv import GENIUS_API_TOKEN, GENIUS_API_TOKEN_PATTERN
-from server.src.constants.enums import AvailableStats, SessionFields
-from server.src.constants.image_generation import ATTRIBUTION_PERCENTAGE_TOLERANCE
-from server.src.constants.responses import Err
+from src.constants.dotenv import GENIUS_API_TOKEN, GENIUS_API_TOKEN_PATTERN
+from src.constants.enums import AvailableStats, SessionFields
+from src.constants.image_generation import ATTRIBUTION_PERCENTAGE_TOLERANCE
+from src.constants.responses import Err
 
-from server.src.app import session
-from server.src.decorators import retry
-from server.src.statistics import updateStats
-from server.src.logger import SeverityLevel, log
+from src.app import session
+from src.decorators import retry
+from src.statistics import updateStats
+from src.logger import SeverityLevel, log
 
 genius = None
 try:
