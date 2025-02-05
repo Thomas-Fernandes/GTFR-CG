@@ -1,12 +1,12 @@
 from os import path
 from typing import Any
 
-from server.src.constants.enums import AvailableCacheElemType, MetanameFontNames, SessionFields
+from src.constants.enums import AvailableCacheElemType, MetanameFontNames, SessionFields
 
-from server.src.app import session
-from server.src.constants.paths import PROCESSED_DIR, SLASH
-from server.src.logger import log
-from server.src.typing_gtfr import RGBAColor
+from src.app import session
+from src.constants.paths import PROCESSED_DIR, SLASH
+from src.logger import log
+from src.typing_gtfr import RGBAColor
 
 def getContributorsString(contributor_logins: list[str]) -> str:
     """ Gets the string of contributors from their logins

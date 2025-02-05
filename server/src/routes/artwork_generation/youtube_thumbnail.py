@@ -7,17 +7,17 @@ from os import path, makedirs
 from typing import Optional
 from uuid import uuid4
 
-from server.src.constants.enums import AvailableCacheElemType, HttpStatus, SessionFields
-from server.src.constants.paths import PROCESSED_DIR, SLASH, UPLOADED_YOUTUBE_IMG_FILENAME
-from server.src.constants.regex import REGEX_YOUTUBE_URL
-from server.src.constants.responses import Err, Msg, Warn
+from src.constants.enums import AvailableCacheElemType, HttpStatus, SessionFields
+from src.constants.paths import PROCESSED_DIR, SLASH, UPLOADED_YOUTUBE_IMG_FILENAME
+from src.constants.regex import REGEX_YOUTUBE_URL
+from src.constants.responses import Err, Msg, Warn
 
-from server.src.app import session
-from server.src.logger import log
-from server.src.constants.paths import ROUTES
-from server.src.constants.responses import Err, Msg
-from server.src.docs import models, ns_artwork_generation
-from server.src.utils.web_utils import createApiResponse
+from src.app import session
+from src.logger import log
+from src.constants.paths import ROUTES
+from src.constants.responses import Err, Msg
+from src.docs import models, ns_artwork_generation
+from src.utils.web_utils import createApiResponse
 
 def extractYoutubeVideoId(url: str) -> Optional[str]:
     """ Extracts the YouTube video ID from the provided URL
@@ -54,7 +54,7 @@ def processYoutubeThumbnail(thumbnail_url: str) -> Response:
     session[SessionFields.GENERATED_ARTWORK_PATH] = image_path
     session[SessionFields.INCLUDE_CENTER_ARTWORK] = False
 
-    log.log(f"YouTube thumbnail upload complete and saved it to {image_path}")
+    log.info(f"YouTube thumbnail upload complete and saved it to {image_path}")
     return createApiResponse(HttpStatus.CREATED, Msg.YOUTUBE_IMAGE_UPLOADED)
 
 bp_artwork_generation_youtube_thumbnail = Blueprint("use-youtube-thumbnail", __name__.split('.')[-1])
@@ -68,7 +68,7 @@ class YoutubeThumbnailResource(Resource):
     @ns_artwork_generation.response(HttpStatus.INTERNAL_SERVER_ERROR, Err.FAIL_DOWNLOAD)
     def post(self) -> Response:
         """ Handles the extraction and processing of a YouTube thumbnail from a given URL """
-        log.log("POST - Generating artwork using a YouTube thumbnail...")
+        log.info("POST - Generating artwork using a YouTube thumbnail...")
 
         body = literal_eval(request.get_data(as_text=True))
         youtube_url: Optional[str] = body.get("url")

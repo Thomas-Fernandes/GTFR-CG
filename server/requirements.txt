@@ -6,7 +6,7 @@ waitress>=3.0.0 # 'serve' command
 
 # API
 requests>=2.32.3 # for inner API calls
-lyricsgenius>=3.1.2 # for Genius API calls
+lyricsgenius>=3.2.0 # for Genius API calls
 
 # Documentation
 flask-restx>=1.3.0

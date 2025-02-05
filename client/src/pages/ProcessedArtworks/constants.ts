@@ -10,4 +10,4 @@ export const LOGO_POSITIONS = [
 export const DEFAULT_SELECTED_POSITION = "center-left";
 
 export const COVER_ART_FILENAME = "ProcessedArtwork.png";
-export const PROCESSED_ARTWORKS_PATH = "./processed-artworks";
+export const PROCESSED_ARTWORKS_PATH = "http://localhost:8000/api/files/processed-artworks";

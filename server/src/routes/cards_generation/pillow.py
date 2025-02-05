@@ -1,15 +1,15 @@
 from PIL import Image, ImageDraw as IDraw
 
-from server.src.constants.image_generation import ImageMode, OUTRO_IMAGE
-from server.src.constants.paths import FRONT_PROCESSED_CARDS_DIR, SLASH, PROCESSED_OUTRO_FILENAME
-from server.src.constants.pillow import \
+from src.constants.image_generation import ImageMode, OUTRO_IMAGE
+from src.constants.paths import GENERATED_CARDS_DIR, SLASH, PROCESSED_OUTRO_FILENAME
+from src.constants.pillow import \
     FONT_LYRICS, FONT_OUTRO, FONTS_METANAME, LYRIC_HEIGHT, LYRIC_SPACING, LYRIC_BOX_OFFSET, LYRIC_TEXT_OFFSET, \
     OUTRO_TEXT_COLOR, X_META_LYRIC, Y_METADATA, Y_BOTTOM_LYRICS
 
-from server.src.logger import log
-from server.src.typing_gtfr import CardMetadata, RGBColor, RGBAColor
+from src.logger import log
+from src.typing_gtfr import CardMetadata, RGBColor, RGBAColor
 
-from server.src.routes.cards_generation.utils import getContributorsString, getVerticalOffset, getCharFontType
+from src.routes.cards_generation.utils import getContributorsString, getVerticalOffset, getCharFontType
 
 def generateOutroCard(output_path: str, contributor_logins: list[str]) -> None:
     """ Generates the outro card mentioning the transcription contributors
@@ -26,7 +26,7 @@ def generateOutroCard(output_path: str, contributor_logins: list[str]) -> None:
     draw.text(((1920-w) / 2, 960-16), contributors_str, font=FONT_OUTRO, fill=OUTRO_TEXT_COLOR)
 
     card.save(output_path)
-    card.save(f"{FRONT_PROCESSED_CARDS_DIR}{PROCESSED_OUTRO_FILENAME}")
+    card.save(f"{GENERATED_CARDS_DIR}{PROCESSED_OUTRO_FILENAME}")
     log.info("  Outro card generated successfully.")
 
 def drawLyrics(draw: IDraw.ImageDraw, lyrics: list[list[str]], text_lyrics_color: RGBColor) -> None:
@@ -82,5 +82,5 @@ def generateCard(output_path: str, lyrics: list[str], card_metadata: CardMetadat
     drawLyrics(draw, lyrics, card_metadata.text_lyrics_color)
 
     card.save(output_path)
-    card.save(f"{FRONT_PROCESSED_CARDS_DIR}{card_name}")
+    card.save(f"{GENERATED_CARDS_DIR}{card_name}")
     log.info(f"  Card {card_name} generated successfully.")

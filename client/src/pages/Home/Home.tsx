@@ -59,10 +59,6 @@ const Home = () => {
 
       <StatisticsBoard stats={stats} />
 
-      {/* <div className="tests navbar">
-        <NavButton to={ViewPaths.Tests} label={Title.Tests} side={NavButtonSide.Right} />
-      </div> */}
-
       <div className="hidden"> {/* avoid unused variable */}
         <p>{`Genius Token: '${geniusToken}'`}</p>
       </div>

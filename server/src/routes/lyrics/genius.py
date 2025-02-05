@@ -6,15 +6,15 @@ from re import split, sub
 from time import time
 from typing import Literal, Optional, Union
 
-from server.src.constants.dotenv import GENIUS_API_TOKEN, GENIUS_API_TOKEN_PATTERN
-from server.src.constants.enums import AvailableStats, SessionFields
-from server.src.constants.image_generation import ATTRIBUTION_PERCENTAGE_TOLERANCE
-from server.src.constants.responses import Err
+from src.constants.dotenv import GENIUS_API_TOKEN, GENIUS_API_TOKEN_PATTERN
+from src.constants.enums import AvailableStats, SessionFields
+from src.constants.image_generation import ATTRIBUTION_PERCENTAGE_TOLERANCE
+from src.constants.responses import Err
 
-from server.src.app import session
-from server.src.decorators import retry
-from server.src.statistics import updateStats
-from server.src.logger import LogSeverity, log
+from src.app import session
+from src.decorators import retry
+from src.statistics import updateStats
+from src.logger import SeverityLevel, log
 
 genius = None
 try:
@@ -152,6 +152,6 @@ def fetchLyricsFromGenius(song_title: str, artist_name: str) -> list[dict[str, s
     log.debug("Lyrics split into parts successfully.")
     updateStats(to_increment=AvailableStats.LYRICS_FETCHES)
 
-    log.log(f"Lyrics fetch for {artist_name} - \"{song_title}\" complete.") \
-        .time(LogSeverity.LOG, time() - start)
+    log.info(f"Lyrics fetch for {artist_name} - \"{song_title}\" complete.") \
+        .time(SeverityLevel.INFO, time() - start)
     return lyrics_parts

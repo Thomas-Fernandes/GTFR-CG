@@ -8,7 +8,6 @@ import LandingPage from "@/pages/LandingPage/LandingPage";
 import Lyrics from "@/pages/Lyrics/Lyrics";
 import ProcessedArtworks from "@/pages/ProcessedArtworks/ProcessedArtworks";
 import Redirect from "@/pages/Redirect/Redirect";
-import Tests from "@/pages/Tests/Tests";
 
 import "./App.scss";
 import AppBackground from "./components/AppBackground/AppBackground";
@@ -23,7 +22,6 @@ const App = () => {
         <Route path={ViewPaths.ProcessedArtworks} element={<ProcessedArtworks />} />
         <Route path={ViewPaths.ArtworkGeneration} element={<ArtworkGeneration />} />
         <Route path={ViewPaths.Redirect} element={<Redirect />} />
-        <Route path={ViewPaths.Tests} element={<Tests />} />
         <Route path={ViewPaths.Home} element={<Home />} />
         <Route path={ViewPaths.LandingPage} element={<LandingPage />} />
         <Route path={ViewPaths.Default} element={<LandingPage />} />

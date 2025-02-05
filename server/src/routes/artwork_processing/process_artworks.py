@@ -4,17 +4,17 @@ from flask_restx import Resource
 from os import path
 from time import time
 
-from server.src.constants.enums import AvailableCacheElemType, AvailableStats, HttpStatus, SessionFields
-from server.src.constants.paths import PROCESSED_ARTWORK_FILENAME, PROCESSED_DIR, ROUTES, SLASH
-from server.src.constants.responses import Err, Msg
+from src.constants.enums import AvailableCacheElemType, AvailableStats, HttpStatus, SessionFields
+from src.constants.paths import PROCESSED_ARTWORK_FILENAME, PROCESSED_DIR, ROUTES, SLASH
+from src.constants.responses import Err, Msg
 
-from server.src.app import session
-from server.src.docs import models, ns_artwork_processing
-from server.src.logger import log, LogSeverity
-from server.src.statistics import updateStats
-from server.src.utils.web_utils import createApiResponse
+from src.app import session
+from src.docs import models, ns_artwork_processing
+from src.logger import log, SeverityLevel
+from src.statistics import updateStats
+from src.utils.web_utils import createApiResponse
 
-from server.src.routes.artwork_processing.pillow import generateCoverArt, generateThumbnails
+from src.routes.artwork_processing.pillow import generateCoverArt, generateThumbnails
 
 bp_artwork_processing_process_artworks = Blueprint("process-artworks", __name__.split('.')[-1])
 
@@ -43,7 +43,7 @@ class ProcessArtworkResource(Resource):
         if err:
             return createApiResponse(HttpStatus.PRECONDITION_FAILED, err)
         center_mark = "with" if include_center_artwork else "without"
-        log.log(f"Images generation ({center_mark} center artwork) complete.").time(LogSeverity.LOG, time() - start)
+        log.info(f"Images generation ({center_mark} center artwork) complete.").time(SeverityLevel.INFO, time() - start)
         updateStats(to_increment=AvailableStats.ARTWORK_GENERATIONS)
 
         return createApiResponse(HttpStatus.CREATED, Msg.PROCESSED_IMAGES_SUCCESS)

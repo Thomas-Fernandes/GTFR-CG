@@ -7,14 +7,14 @@ from os import path, makedirs
 from typing import Optional
 from uuid import uuid4
 
-from server.src.constants.enums import AvailableCacheElemType, HttpStatus, SessionFields
-from server.src.constants.paths import PROCESSED_DIR, ROUTES, SLASH, UPLOADED_ITUNES_IMG_FILENAME
-from server.src.constants.responses import Err, Msg, Warn
+from src.constants.enums import AvailableCacheElemType, HttpStatus, SessionFields
+from src.constants.paths import PROCESSED_DIR, ROUTES, SLASH, UPLOADED_ITUNES_IMG_FILENAME
+from src.constants.responses import Err, Msg, Warn
 
-from server.src.app import session
-from server.src.docs import models, ns_artwork_generation
-from server.src.logger import log
-from server.src.utils.web_utils import createApiResponse
+from src.app import session
+from src.docs import models, ns_artwork_generation
+from src.logger import log
+from src.utils.web_utils import createApiResponse
 
 bp_artwork_generation_itunes_image = Blueprint("use-itunes-image", __name__.split('.')[-1])
 
@@ -27,7 +27,7 @@ class ItunesImageResource(Resource):
     @ns_artwork_generation.response(HttpStatus.INTERNAL_SERVER_ERROR, Err.FAIL_DOWNLOAD)
     def post(self) -> Response:
         """ Interprets the fetched iTunes URL and saves the image to the user's folder """
-        log.log("POST - Generating artwork using an iTunes image...")
+        log.info("POST - Generating artwork using an iTunes image...")
         body = literal_eval(request.get_data(as_text=True))
         image_url: Optional[str] = body.get("url")
         if image_url is None:
@@ -57,5 +57,5 @@ class ItunesImageResource(Resource):
         session[SessionFields.GENERATED_ARTWORK_PATH] = image_path
         session[SessionFields.INCLUDE_CENTER_ARTWORK] = True
 
-        log.log(f"Found iTunes image and saved it to {image_path}")
+        log.info(f"Found iTunes image and saved it to {image_path}")
         return createApiResponse(HttpStatus.CREATED, Msg.ITUNES_IMAGE_UPLOADED)

@@ -1,10 +1,7 @@
-import sys
-sys.path.append("..") # need to add parent directory to path to import from installer
 from installer import installPythonReq
 
-from server.src.constants.paths import DEFAULT_PORT, HOST_HOME
-
-from server.src.app import main
+from src.app import main
+from src.constants.paths import DEFAULT_PORT, HOST_HOME
 
 if __name__ == '__main__':
     installPythonReq()
