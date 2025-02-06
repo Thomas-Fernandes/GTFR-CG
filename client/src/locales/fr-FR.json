@@ -1,155 +1,153 @@
 {
   "pages": {
     "landing": {
-      "title": "Welcome",
+      "title": "Bievenue",
       "learnMore": "En savoir plus",
       "generateContent": "Générer du contenu"
     },
     "redirect": {
-      "title": "Redirection page",
-      "header": "You are being redirected after an error was met...",
+      "title": "Redirection",
+      "header": "Vous subissez une redirection après qu'une erreur est survenue...",
       "counter": {
-        "1": "You will be redirected to",
-        "2": "in",
-        "3": "second"
+        "1": "Vous allez être redirigé",
+        "2": "dans",
+        "3": "seconde"
       }
     },
     "home": {
-      "title": "Home",
+      "title": "Accueil",
       "stats": {
-        "dateFirstOperation": "Date of First Operation",
-        "dateLastOperation": "Date of Last Operation",
-        "artworkGenerations": "Artwork Generations",
-        "lyricsFetches": "Genius Lyrics Fetches",
-        "cardsGenerated": "Cards Generated"
+        "dateFirstOperation": "Date de première opération",
+        "dateLastOperation": "Date de dernière opération",
+        "artworkGenerations": "Générations d'artworks",
+        "lyricsFetches": "Récupérations de paroles",
+        "cardsGenerated": "Cartes générées"
       }
     },
     "artgen": {
-      "title": "Artwork Generation",
-      "indicatorLabel": "or...",
+      "title": "Génération d'artworks",
+      "indicatorLabel": "ou...",
       "itunes": {
-        "header": "Search for cover artwork on iTunes",
-        "inputPlaceholder": "Search on iTunes",
-        "submit": "SEARCH",
-        "locale": "country:",
-        "clear": "Clear results",
-        "use": "Use this image"
+        "header": "Rechercher une couverture sur iTunes",
+        "inputPlaceholder": "Chercher sur iTunes",
+        "submit": "CHERCHER",
+        "locale": "pays :",
+        "clear": "Vider les résultats",
+        "use": "Utiliser cette image"
       },
       "local": {
-        "header": "Upload your image",
-        "fileUploadButton": "Select background image",
+        "header": "Ajouter votre propre image",
+        "fileUploadButton": "Sélectionner une image",
         "selectors": {
-          "includeCenter": "Include center artwork"
+          "includeCenter": "Inclure l'image au centre"
         },
-        "submit": "UPLOAD"
+        "submit": "CHARGER"
       },
       "youtube": {
-        "header": "Use a YouTube video thumbnail",
-        "inputPlaceholder": "Paste YouTube video URL here",
-        "submit": "SEARCH"
+        "header": "Utiliser une miniature de vidéo YouTube",
+        "inputPlaceholder": "Collez une URL de vidéo YouTube ici",
+        "submit": "CHERCHER"
       }
     },
     "procart": {
-      "title": "Processed Artworks"
+      "title": "Artworks générés"
     },
     "lyrics": {
       "title": "Lyrics",
       "search": {
-        "artistPlaceholder": "Enter artist name",
-        "songPlaceholder": "Enter song name",
-        "submit": "SEARCH"
+        "artistPlaceholder": "Entrez un nom d'artiste",
+        "songPlaceholder": "Enter un titre de chanson",
+        "submit": "CHERCHER"
       },
       "generationMode": {
-        "switchManual": "Generate cards manually instead",
-        "switchAutomatic": "Generate cards automatically"
+        "switchManual": "Generate des cartes manuellement",
+        "switchAutomatic": "Generate des cartes automatiquement"
       },
-      "loadLast": "Load last contents",
+      "loadLast": "Charger la dernière génération",
       "parts": {
-        "remove": "Remove",
-        "clear": "Clear",
-        "restore": "Restore"
+        "remove": "Retirer",
+        "clear": "Vider",
+        "restore": "Restaurer"
       },
-      "submit": "CONVERT TO CARDS"
+      "submit": "CONVERTIR EN CARTES"
     },
     "cardgen": {
-      "title": "Cards Generation",
-      "metanamePlaceholder": "if empty, the card metaname will be inferred",
-      "contributorsPlaceholder": "contributors (comma-separated)",
+      "title": "Génération de cartes",
+      "metanamePlaceholder": "si vide, le méta-nom sera déduit",
+      "contributorsPlaceholder": "contributeurs (séparés par des virgules)",
       "enforcers": {
-        "fileUploadButton": "Select image",
-        "fileUploadLabel": "Enforce background image?",
-        "colorPickerLabel": "Enforce bottom color?"
+        "fileUploadButton": "Sélectionner une image",
+        "fileUploadLabel": "Écraser l'image de fond ?",
+        "colorPickerLabel": "Écraser la couleur du bas ?"
       },
       "selectors": {
-        "centerArtwork": "Include center artwork",
-        "outroImage": "Generate outro image",
-        "bgImage": "Include background image"
+        "centerArtwork": "Inclure l'image au centre",
+        "outroImage": "Générer une carte d'outro",
+        "bgImage": "Include l'image de fond"
       },
-      "submit": "GENERATE",
-      "downloadAll": "Download All as Zip",
+      "submit": "GÉNÉRER",
+      "downloadAll": "Tout télécharger en Zip",
       "modal": {
-        "header": "Edit Lyrics of Card",
-        "edit": "Edit this card",
-        "cancel": "Cancel"
+        "header": "Modifier les paroles de cette carte",
+        "edit": "Modifier cette carte",
+        "cancel": "Annuler"
       }
     }
   },
 
   "components": {
     "colorPicker": {
-      "loadLatest": "Load latest"
+      "loadLatest": "Charger récent"
     },
     "downloadButton": {
-      "download": "Download"
+      "download": "Télécharger"
     },
     "fileUploader": {
-      "defaultCaption": "No file selected."
+      "defaultCaption": "Aucun fichier sélectionné"
     }
   },
 
   "toasts": {
-    "unknownError": "An unknown error occurred.\nPlease try again later or open an issue.",
-    "serverUnavailable": "Server unavailable.\nPlease check that the Python server is running.",
-    "noSpinnerId": "HTML Spinner id is required.",
-    "noSpinnerContainer": "Spinner container not found.",
-    "processingInProgress": "Processing already in progress.",
-    "noLatestColor": "No latest color found.",
+    "unknownError": "Une erreur inconnue est survenue.\nVeuillez réessayer plus tard ou ouvrir un ticket.",
+    "serverUnavailable": "Serveur indisponible.\nVeuillez vérifier que le serveur Python tourne bien.",
+    "noSpinnerId": "Un id HTML de Spinner est requis.",
+    "noSpinnerContainer": "Conteneur HTML de Spinner introuvable.",
+    "processingInProgress": "Opération déjà en cours.",
+    "noLatestColor": "Aucune couleur récente trouvée.",
     "redirect": {
-      "noProcessedImage": "No processed image found.",
-      "noGeniusToken": "Genius API token not found.",
-      "noCardsContents": "No cards contents found.\nPlease generate contents via the Lyrics page first."
+      "noProcessedImage": "Aucun artwork généré trouvé.",
+      "noGeniusToken": "Token d'API Genius introuvable.",
+      "noCardsContents": "Aucun contenu de cartes trouvé.\nVeuillez d'abord générer du contenu via la page Lyrics."
     },
     "home": {
-      "welcome": "Welcome to GTFR-CG!\nApplication started successfully.",
-      "geniusTokenNotFound": "Genius API token not found.\nLyrics fetch is disabled.",
-      "addGeniusToken": "Add your Genius API token to your\n.env file and restart the application\nto enable lyrics fetch."
+      "welcome": "Bienvenue sur GTFR-CG!\nApplication démarrée avec succès.",
+      "geniusTokenNotFound": "Token d'API Genius introuvable.\nLa récupération des paroles est désactivée.",
+      "addGeniusToken": "Ajoutez votre token d'API Genius à votre\nfichier .env et redémarrez l'application\npour activer la récupération des paroles."
     },
     "artgen": {
-      "noResultsFound": "No results found.",
-      "noImgFile": "Please select an image file.",
-      "invalidFileType": "Please select a valid image file.",
-      "invalidUrl": "Please enter a valid URL."
+      "noResultsFound": "Aucun résultat n'a été trouvé.",
+      "noImgFile": "Veuillez sélectionner une image.",
+      "invalidFileType": "Veuillez sélectionner un fichier image valide.",
+      "invalidUrl": "Veuillez entrer une URL valide."
     },
     "procart": {
-      "noImgSelection": "Please select an image to download."
+      "noImgSelection": "Veuillez sélectionner une image."
     },
     "lyrics": {
-      "missingFields": "Please fill out all the required fields.",
-      "fetchInProgress": "Lyrics fetch already in progress.",
-      "lyricsNotFound": "Lyrics not found.",
-      "savingInProgress": "Lyrics saving already in progress.",
-      "noLastGeneration": "No last generation found."
+      "missingFields": "Veuillez remplir tous les champs nécessaires.",
+      "fetchInProgress": "La récupération des paroles est déjà en cours.",
+      "lyricsNotFound": "Les paroles de ce morceau sont introuvables.",
+      "savingInProgress": "La sauvegarde des paroles est déjà en cours.",
+      "noLastGeneration": "Aucune génération de paroles précédente trouvée."
     },
     "cardgen": {
-      "noCardsGenerated": "No cards were generated.",
-      "unauthorizedOutro": "The outro card cannot be generated\nsince the card creation was manual.",
-      "cardsGenerated": "Cards generated successfully.",
-      "cardNotEditable": "The contents of this card cannot be edited.",
-      "cardEditInProgress": "Card edit already in progress.",
-      "cardEditFailed": "Failed to edit card.",
-      "cardEdited": "Card edited successfully"
+      "noCardsGenerated": "Aucune carte n'a été générée.",
+      "unauthorizedOutro": "La carte d'outro ne peut pas être générée\ncar la création de la carte était manuelle.",
+      "cardsGenerated": "Cartes générées avec succès.",
+      "cardNotEditable": "Le contenu de cette carte ne peut pas être modifié.",
+      "cardEditInProgress": "Modification de la carte déjà en cours.",
+      "cardEditFailed": "Échec de modification de la carte.",
+      "cardEdited": "Carte modifiée avec succès."
     }
-  },
-
-  "": {}
+  }
 }
