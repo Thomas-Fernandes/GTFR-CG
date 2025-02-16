@@ -1,22 +1,22 @@
 import { useDarkModeContext } from "@/common/hooks/useDarkMode/contexts";
-import { ARTWORK_GENERATION_OPTIONS } from "@/pages/ArtworkGeneration/constants";
 
 import { ArtgenOptionIndicatorProps } from "./types";
 
 import "./ArtgenOptionIndicator.scss";
 
-const ArtgenOptionIndicator = ({ direction, optionIdx, label }: ArtgenOptionIndicatorProps) => {
+const ArtgenOptionIndicator = ({ direction, optionIdx, optionsLength, label }: ArtgenOptionIndicatorProps) => {
   const { isDarkMode } = useDarkModeContext();
 
   const isPrev = direction === "prev";
-  const isEmpty = isPrev
+  console.log("optionsLength", optionsLength);
+  const hasNoIndicator = isPrev
     ? optionIdx === 0
-    : optionIdx >= ARTWORK_GENERATION_OPTIONS.length + 1;
+    : optionIdx >= optionsLength + 1;
   const arrowImgSrc = isDarkMode === isPrev ? "/img/arrow__blue.png" : "/img/arrow__yellow.png";
 
   return (
-    <h2 className={`artwork-generation--options--${direction} ${isEmpty ? "empty" : ""}`}>
-      { !isEmpty && label &&
+    <h2 className={`artwork-generation--options--${direction} ${hasNoIndicator ? "empty" : ""}`}>
+      { !hasNoIndicator && label &&
         <>
           <img src={arrowImgSrc} alt={`${direction}`} />
           <span>{`or... ${label}`}</span>

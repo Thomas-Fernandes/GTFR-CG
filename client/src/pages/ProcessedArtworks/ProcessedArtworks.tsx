@@ -10,6 +10,7 @@ import TopBotSpacer from "@/components/TopBotSpacer/TopBotSpacer";
 import { Title } from "@/constants/browser";
 import { ViewPaths } from "@/constants/paths";
 import { Toast } from "@/constants/toasts";
+import { useAppContext } from "@/contexts";
 
 import BackgroundImageDisplay from "./BackgroundImageDisplay";
 import { COVER_ART_FILENAME, PROCESSED_ARTWORKS_PATH } from "./constants";
@@ -18,7 +19,8 @@ import ThumbnailGallery from "./ThumbnailGallery";
 import "./ProcessedArtworks.scss";
 
 const ProcessedArtworks = () => {
-  useTitle(Title.ProcessedArtworks);
+  const { intl } = useAppContext();
+  useTitle(intl.formatMessage({ id: "pages.procart.title" }));
 
   const navigate = useNavigate();
 
@@ -35,10 +37,10 @@ const ProcessedArtworks = () => {
       <TopBotSpacer />
 
       <div className="navbar">
-        <NavButton to={ViewPaths.Home} label={Title.Home} side={NavButtonSide.Left} />
-        <NavButton to={ViewPaths.ArtworkGeneration} label={Title.ArtworkGeneration} side={NavButtonSide.Left} />
-        <NavButton to={ViewPaths.Lyrics} label={Title.Lyrics} side={NavButtonSide.Right} />
-        <NavButton to={ViewPaths.CardsGeneration} label={Title.CardsGeneration} side={NavButtonSide.Right} />
+        <NavButton to={ViewPaths.Home} label={intl.formatMessage({ id: "pages.home.title" })} side={NavButtonSide.Left} />
+        <NavButton to={ViewPaths.ArtworkGeneration} label={intl.formatMessage({ id: "pages.artgen.title" })} side={NavButtonSide.Left} />
+        <NavButton to={ViewPaths.Lyrics} label={intl.formatMessage({ id: "pages.lyrics.title" })} side={NavButtonSide.Right} />
+        <NavButton to={ViewPaths.CardsGeneration} label={intl.formatMessage({ id: "pages.cardgen.title" })} side={NavButtonSide.Right} />
       </div>
 
       <h1>{Title.ProcessedArtworks}</h1>

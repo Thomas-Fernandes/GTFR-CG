@@ -27,11 +27,11 @@ const SelectPopover: React.FC<SelectPopoverProps> = ({ label, imgSrc, options, o
 
   return (
     <div className={`popover ${className ?? ""}`} {...divProps}>
-      <button type="button" className="popover--toggle"
+      <button type="button" title="popover" className="popover--toggle"
         onClick={() => setIsOpen((prev) => !prev)}
       >
         {label && <span>{label}</span>}
-        {imgSrc && <img src={imgSrc} alt={label} />}
+        {imgSrc && <img src={imgSrc} alt={imgSrc} />}
       </button>
 
       { isOpen &&

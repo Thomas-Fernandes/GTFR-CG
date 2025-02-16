@@ -12,6 +12,7 @@ dist-ssr/
 .env*.local
 *.tgz
 .yarn-integrity
+*lock.yaml
 
 # Optional npm cache directory
 .npm

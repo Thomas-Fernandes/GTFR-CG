@@ -6,7 +6,6 @@ import { NavButtonSide } from "@/components/NavButton/constants";
 import NavButton from "@/components/NavButton/NavButton";
 import ToastContainer from "@/components/ToastContainer/ToastContainer";
 import TopBotSpacer from "@/components/TopBotSpacer/TopBotSpacer";
-import { Title } from "@/constants/browser";
 import { ViewPaths } from "@/constants/paths";
 import { useAppContext } from "@/contexts";
 
@@ -19,7 +18,7 @@ import "./Home.scss";
 
 const Home = () => {
   const { intl } = useAppContext();
-  useTitle(Title.Home);
+  useTitle(intl.formatMessage({ id: "pages.home.title" }));
 
   const navigate = useNavigate();
 
@@ -47,23 +46,19 @@ const Home = () => {
       <ToastContainer />
       <TopBotSpacer />
 
-      <h1>{Title.Home}</h1>
+      <h1>{intl.formatMessage({ id: "pages.home.title" })}</h1>
 
       <div className="home navbar">
         <div className="navbar-row">
-          <NavButton to={ViewPaths.ArtworkGeneration} label={Title.ArtworkGeneration} side={NavButtonSide.Right} />
-          <NavButton to={ViewPaths.Lyrics} label={Title.Lyrics} side={NavButtonSide.Right} />
+          <NavButton to={ViewPaths.ArtworkGeneration} label={intl.formatMessage({ id: "pages.artgen.title" })} side={NavButtonSide.Right} />
+          <NavButton to={ViewPaths.Lyrics} label={intl.formatMessage({ id: "pages.lyrics.title" })} side={NavButtonSide.Right} />
         </div>
         <div className="navbar-row">
-          <NavButton to={ViewPaths.CardsGeneration} label={intl.formatMessage({ id: "pages.home.title" })} side={NavButtonSide.Right} />
+          <NavButton to={ViewPaths.CardsGeneration} label={intl.formatMessage({ id: "pages.cardgen.title" })} side={NavButtonSide.Right} />
         </div>
       </div>
 
       <StatisticsBoard stats={stats} />
-
-      {/* <div className="tests navbar">
-        <NavButton to={ViewPaths.Tests} label={Title.Tests} side={NavButtonSide.Right} />
-      </div> */}
 
       <div className="hidden"> {/* avoid unused variable */}
         <p>{`Genius Token: '${geniusToken}'`}</p>

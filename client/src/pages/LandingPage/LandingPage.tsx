@@ -1,4 +1,3 @@
-import { useLocale } from "@/common/hooks/useLocale/useLocale";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -7,7 +6,6 @@ import ActionButton from "@/components/ActionButton/ActionButton";
 import ImgButton from "@/components/ImgButton/ImgButton";
 import ToastContainer from "@/components/ToastContainer/ToastContainer";
 import TopBotSpacer from "@/components/TopBotSpacer/TopBotSpacer";
-import { Title } from "@/constants/browser";
 import { ViewPaths } from "@/constants/paths";
 import { useAppContext } from "@/contexts";
 
@@ -15,8 +13,7 @@ import "./LandingPage.scss";
 
 const LandingPage = () => {
   const { intl } = useAppContext();
-  const { locale, switchLocale } = useLocale();
-  useTitle(Title.Landing);
+  useTitle(intl.formatMessage({ id: "pages.landing.title" }));
 
   const navigate = useNavigate();
 
@@ -30,11 +27,6 @@ const LandingPage = () => {
       <ToastContainer />
       <TopBotSpacer />
 
-      <div>
-        <button onClick={() => switchLocale("en")}>English</button>
-        <button onClick={() => switchLocale("fr")}>Français</button>
-        <p>Current Language: {locale}</p>
-      </div>
       <div className="landing-page--content">
           <div className="landing-page--content--left">
             <div className="landing-page--content--left--motto">

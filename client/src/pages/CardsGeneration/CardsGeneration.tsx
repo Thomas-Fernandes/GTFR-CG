@@ -10,6 +10,7 @@ import ToastContainer from "@/components/ToastContainer/ToastContainer";
 import TopBotSpacer from "@/components/TopBotSpacer/TopBotSpacer";
 import { SessionStorage, Title } from "@/constants/browser";
 import { ViewPaths } from "@/constants/paths";
+import { useAppContext } from "@/contexts";
 
 import CardsGallery from "./CardsGallery";
 import CardsGenerationForm from "./CardsGenerationForm";
@@ -17,7 +18,8 @@ import { CardsGenerationContext, CardsGenerationFormContext } from "./contexts";
 import { CardData } from "./types";
 
 const CardsGeneration = () => {
-  useTitle(Title.CardsGeneration);
+  const { intl } = useAppContext();
+  useTitle(intl.formatMessage({ id: "pages.cardgen.title" }));
 
   console.log(1, sessionStorage.getItem(SessionStorage.CardMetaname) ?? "")
   const [cardMetaname, setCardMetaname] = useState(sessionStorage.getItem(SessionStorage.CardMetaname) ?? "");
@@ -57,9 +59,9 @@ const CardsGeneration = () => {
       <TopBotSpacer />
 
       <div className="navbar">
-        <NavButton to={ViewPaths.Home} label={Title.Home} side={NavButtonSide.Left} />
-        <NavButton to={ViewPaths.ArtworkGeneration} label={Title.ArtworkGeneration} side={NavButtonSide.Left} />
-        <NavButton to={ViewPaths.Lyrics} label={Title.Lyrics} side={NavButtonSide.Left} />
+        <NavButton to={ViewPaths.Home} label={intl.formatMessage({ id: "pages.home.title" })} side={NavButtonSide.Left} />
+        <NavButton to={ViewPaths.ArtworkGeneration} label={intl.formatMessage({ id: "pages.artgen.title" })} side={NavButtonSide.Left} />
+        <NavButton to={ViewPaths.Lyrics} label={intl.formatMessage({ id: "pages.lyrics.title" })} side={NavButtonSide.Left} />
       </div>
 
       <h1>{Title.CardsGeneration}</h1>

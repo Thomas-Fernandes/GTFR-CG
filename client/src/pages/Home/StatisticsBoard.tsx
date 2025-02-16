@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 
-import { SpinnerId } from "@/constants/spinners";
+import { useAppContext } from "@/contexts";
 
-import { StatName } from "./constants";
 import { StatisticsBoardProps, StatisticsProps } from "./types";
-import { getStatDisplayValue, statIsInitialized } from "./utils";
+import { getFormattedStatistics, getStatDisplayValue, statIsInitialized } from "./utils";
 
 import "./StatisticsBoard.scss";
 
@@ -74,18 +73,14 @@ const StatisticsVertical: React.FC<StatisticsProps> = ({ statistics }) => {
 };
 
 const StatisticsBoard: React.FC<StatisticsBoardProps> = ({ stats }) => {
-  const statistics = [
-    { label: StatName.DateFirstOperation, value: stats.dateFirstOperation, spinnerId: SpinnerId.StatsFirstOperation },
-    { label: StatName.DateLastOperation,  value: stats.dateLastOperation,  spinnerId: SpinnerId.StatsLastOperation },
-    { label: StatName.ArtworkGenerations, value: stats.artworkGenerations, spinnerId: SpinnerId.StatsArtworkGenerations },
-    { label: StatName.LyricsFetches,      value: stats.lyricsFetches,      spinnerId: SpinnerId.StatsLyricsFetches },
-    { label: StatName.CardsGenerated,     value: stats.cardsGenerated,     spinnerId: SpinnerId.StatsCardsGenerated },
-  ];
+  const { intl } = useAppContext();
 
-  const [isDesktop, setIsDesktop] = useState(window.innerWidth > 1500);
+  const statsToDisplay = getFormattedStatistics(stats, intl);
+
+  const [isDesktop, setIsDesktop] = useState(window.innerWidth > 1600);
 
   const updateMedia = () => {
-    setIsDesktop(window.innerWidth > 1500);
+    setIsDesktop(window.innerWidth > 1600);
   };
 
   useEffect(() => {
@@ -96,8 +91,8 @@ const StatisticsBoard: React.FC<StatisticsBoardProps> = ({ stats }) => {
   return (
     <div className="stats-board">
       { isDesktop
-      ? <StatisticsHorizontal statistics={statistics} />
-      : <StatisticsVertical   statistics={statistics} />
+      ? <StatisticsHorizontal statistics={statsToDisplay} />
+      : <StatisticsVertical   statistics={statsToDisplay} />
       }
     </div>
   );

@@ -9,6 +9,7 @@ import TopBotSpacer from "@/components/TopBotSpacer/TopBotSpacer";
 import { SessionStorage, Title } from "@/constants/browser";
 import { ViewPaths } from "@/constants/paths";
 import { Toast } from "@/constants/toasts";
+import { useAppContext } from "@/contexts";
 
 import { LyricsContext } from "./contexts";
 import GenerationModeFlipper from "./GenerationModeFlipper";
@@ -20,7 +21,8 @@ import { isTokenSet } from "./requests";
 import { LyricsContents, LyricsPartType, PageMetadata } from "./types";
 
 const Lyrics = () => {
-  useTitle(Title.Lyrics);
+  const { intl } = useAppContext();
+  useTitle(intl.formatMessage({ id: "pages.lyrics.title" }));
 
   const navigate = useNavigate();
 
@@ -70,9 +72,9 @@ const Lyrics = () => {
       <TopBotSpacer />
 
       <div className="navbar">
-        <NavButton to={ViewPaths.Home} label={Title.Home} side={NavButtonSide.Left} />
-        <NavButton to={ViewPaths.ArtworkGeneration} label={Title.ArtworkGeneration} side={NavButtonSide.Left} />
-        <NavButton to={ViewPaths.CardsGeneration} label={Title.CardsGeneration} side={NavButtonSide.Right} />
+        <NavButton to={ViewPaths.Home} label={intl.formatMessage({ id: "pages.home.title" })} side={NavButtonSide.Left} />
+        <NavButton to={ViewPaths.ArtworkGeneration} label={intl.formatMessage({ id: "pages.artgen.title" })} side={NavButtonSide.Left} />
+        <NavButton to={ViewPaths.CardsGeneration} label={intl.formatMessage({ id: "pages.cardgen.title" })} side={NavButtonSide.Right} />
       </div>
 
       <h1>{Title.Lyrics}</h1>
