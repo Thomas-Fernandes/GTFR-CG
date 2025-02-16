@@ -20,9 +20,16 @@ import "./ArtworkGeneration.scss";
 
 const ArtworkGeneration = () => {
   const { intl } = useAppContext();
-  const navigate = useNavigate();
+  const labels = {
+    title: intl.formatMessage({ id: "pages.artgen.title" }),
+    homeTitle: intl.formatMessage({ id: "pages.home.title" }),
+    lyricsTitle: intl.formatMessage({ id: "pages.lyrics.title" }),
+    cardgenTitle: intl.formatMessage({ id: "pages.cardgen.title" }),
+  }
 
-  useTitle(intl.formatMessage({ id: "pages.artgen.title" }));
+  useTitle(labels.title);
+
+  const navigate = useNavigate();
 
   const generationOptions: ArtworkGenerationOption[] = getArtgenOptions(intl);
   const [generationOptionState, setGenerationOptionState] = useState(DEFAULT_GENERATION_OPTION_STATE);
@@ -40,9 +47,9 @@ const ArtworkGeneration = () => {
       <TopBotSpacer />
 
       <div className="navbar">
-        <NavButton to={ViewPaths.Home} label={intl.formatMessage({ id: "pages.home.title" })} side={NavButtonSide.Left} />
-        <NavButton to={ViewPaths.Lyrics} label={intl.formatMessage({ id: "pages.lyrics.title" })} side={NavButtonSide.Right} />
-        <NavButton to={ViewPaths.CardsGeneration} label={intl.formatMessage({ id: "pages.cardgen.title" })} side={NavButtonSide.Right} />
+        <NavButton to={ViewPaths.Home} label={labels.homeTitle} side={NavButtonSide.Left} />
+        <NavButton to={ViewPaths.Lyrics} label={labels.lyricsTitle} side={NavButtonSide.Right} />
+        <NavButton to={ViewPaths.CardsGeneration} label={labels.cardgenTitle} side={NavButtonSide.Right} />
       </div>
 
       <div className="artwork-generation--options">

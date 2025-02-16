@@ -18,7 +18,14 @@ import "./Home.scss";
 
 const Home = () => {
   const { intl } = useAppContext();
-  useTitle(intl.formatMessage({ id: "pages.home.title" }));
+  const labels = {
+    title: intl.formatMessage({ id: "pages.artgen.title" }),
+    artgenTitle: intl.formatMessage({ id: "pages.artgen.title" }),
+    lyricsTitle: intl.formatMessage({ id: "pages.lyrics.title" }),
+    cardgenTitle: intl.formatMessage({ id: "pages.cardgen.title" }),
+  };
+
+  useTitle(labels.title);
 
   const navigate = useNavigate();
 
@@ -46,15 +53,15 @@ const Home = () => {
       <ToastContainer />
       <TopBotSpacer />
 
-      <h1>{intl.formatMessage({ id: "pages.home.title" })}</h1>
+      <h1>{labels.title}</h1>
 
       <div className="home navbar">
         <div className="navbar-row">
-          <NavButton to={ViewPaths.ArtworkGeneration} label={intl.formatMessage({ id: "pages.artgen.title" })} side={NavButtonSide.Right} />
-          <NavButton to={ViewPaths.Lyrics} label={intl.formatMessage({ id: "pages.lyrics.title" })} side={NavButtonSide.Right} />
+          <NavButton to={ViewPaths.ArtworkGeneration} label={labels.artgenTitle} side={NavButtonSide.Right} />
+          <NavButton to={ViewPaths.Lyrics} label={labels.lyricsTitle} side={NavButtonSide.Right} />
         </div>
         <div className="navbar-row">
-          <NavButton to={ViewPaths.CardsGeneration} label={intl.formatMessage({ id: "pages.cardgen.title" })} side={NavButtonSide.Right} />
+          <NavButton to={ViewPaths.CardsGeneration} label={labels.cardgenTitle} side={NavButtonSide.Right} />
         </div>
       </div>
 

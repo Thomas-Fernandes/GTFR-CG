@@ -3,7 +3,8 @@
     "landing": {
       "title": "Bienvenue",
       "learnMore": "En savoir plus",
-      "generateContent": "Générer du contenu"
+      "generateContent": "Générer du contenu",
+      "overlayText": "Aller sur notre chaîne YouTube"
     },
     "redirect": {
       "title": "Redirection",
@@ -31,7 +32,8 @@
         "header": "Rechercher une couverture sur iTunes",
         "inputPlaceholder": "Chercher sur iTunes",
         "submit": "CHERCHER",
-        "locale": "pays :",
+        "localeTitle": "Sélectionner une région de recherche",
+        "locale": "région ",
         "clear": "Vider les résultats",
         "use": "Utiliser cette image"
       },
@@ -104,6 +106,9 @@
     },
     "fileUploader": {
       "defaultCaption": "Aucun fichier sélectionné"
+    },
+    "localeSwitch": {
+      "title": "Sélectionner une langue"
     }
   },
 

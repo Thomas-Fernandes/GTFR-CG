@@ -3,7 +3,8 @@
     "landing": {
       "title": "Welcome",
       "learnMore": "Learn More",
-      "generateContent": "Generate Content"
+      "generateContent": "Generate Content",
+      "overlayText": "Go to our YouTube channel"
     },
     "redirect": {
       "title": "Redirection page",
@@ -31,7 +32,8 @@
         "header": "Search for cover artwork on iTunes",
         "inputPlaceholder": "Search on iTunes",
         "submit": "SEARCH",
-        "locale": "country:",
+        "localeTitle": "Select a region",
+        "locale": "country",
         "clear": "Clear results",
         "use": "Use this image"
       },
@@ -104,6 +106,9 @@
     },
     "fileUploader": {
       "defaultCaption": "No file selected."
+    },
+    "localeSwitch": {
+      "title": "Select language"
     }
   },
 

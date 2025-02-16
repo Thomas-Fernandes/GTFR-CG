@@ -1,10 +1,16 @@
 import { useDarkModeContext } from "@/common/hooks/useDarkMode/contexts";
+import { useAppContext } from "@/contexts";
 
 import { ArtgenOptionIndicatorProps } from "./types";
 
 import "./ArtgenOptionIndicator.scss";
 
 const ArtgenOptionIndicator = ({ direction, optionIdx, optionsLength, label }: ArtgenOptionIndicatorProps) => {
+  const { intl } = useAppContext();
+  const labels = {
+    indicatorLabel: intl.formatMessage({ id: "pages.artgen.indicatorLabel" }),
+  };
+
   const { isDarkMode } = useDarkModeContext();
 
   const isPrev = direction === "prev";
@@ -19,7 +25,7 @@ const ArtgenOptionIndicator = ({ direction, optionIdx, optionsLength, label }: A
       { !hasNoIndicator && label &&
         <>
           <img src={arrowImgSrc} alt={`${direction}`} />
-          <span>{`or... ${label}`}</span>
+          <span>{`${labels.indicatorLabel} ${label}`}</span>
           <img src={arrowImgSrc} alt={`${direction}`} />
         </>
       }

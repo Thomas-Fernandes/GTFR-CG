@@ -4,7 +4,7 @@ import { SelectPopoverProps } from "./types";
 
 import "./SelectPopover.scss";
 
-const SelectPopover: React.FC<SelectPopoverProps> = ({ label, imgSrc, options, onSelect, className, ...divProps }) => {
+const SelectPopover: React.FC<SelectPopoverProps> = ({ title, label, imgSrc, options, onSelect, className, ...divProps }) => {
   const popoverRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -27,7 +27,7 @@ const SelectPopover: React.FC<SelectPopoverProps> = ({ label, imgSrc, options, o
 
   return (
     <div className={`popover ${className ?? ""}`} {...divProps}>
-      <button type="button" title="popover" className="popover--toggle"
+      <button type="button" title={title ?? "popover"} className="popover--toggle"
         onClick={() => setIsOpen((prev) => !prev)}
       >
         {label && <span>{label}</span>}

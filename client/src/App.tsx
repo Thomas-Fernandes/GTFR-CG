@@ -22,8 +22,8 @@ const App = () => {
 
   return (
     <Router>
-      <AppBackground />
       <AppContext.Provider value={contextValue}>
+        <AppBackground />
         <Routes>
           <Route path={ViewPaths.CardsGeneration} element={<CardsGeneration />} />
           <Route path={ViewPaths.Lyrics} element={<Lyrics />} />

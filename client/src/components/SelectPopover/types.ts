@@ -6,6 +6,7 @@ export type Option = Readonly<{
 }>;
 
 export type SelectPopoverProps = Readonly<{
+  title?: string;
   label?: string;
   imgSrc?: string;
 
