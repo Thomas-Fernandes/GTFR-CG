@@ -37,9 +37,9 @@ const ProcessedArtworks = () => {
     doesFileExist(`${PROCESSED_ARTWORKS_PATH}/${COVER_ART_FILENAME}`).then((coverArtImageExists: boolean) => {
       if (!coverArtImageExists) {
         navigate(
-          `${ViewPaths.Redirect}`
-          + `?redirect_to=${ViewPaths.ArtworkGeneration}`
-          + `&error_text=${toasts.Redirect.NoProcessedImage}`
+          `${ViewPaths.Redirect}` +
+            `?redirect_to=${ViewPaths.ArtworkGeneration}` +
+            `&error_text=${toasts.Redirect.NoProcessedImage}`
         );
       }
     });
@@ -47,9 +47,9 @@ const ProcessedArtworks = () => {
       doesFileExist(`${PROCESSED_ARTWORKS_PATH}/${processImageName(position)}`).then((logoExists: boolean) => {
         if (!logoExists) {
           navigate(
-            `${ViewPaths.Redirect}`
-            + `?redirect_to=${ViewPaths.ArtworkGeneration}`
-            + `&error_text=${toasts.Redirect.NoProcessedImage}`
+            `${ViewPaths.Redirect}` +
+              `?redirect_to=${ViewPaths.ArtworkGeneration}` +
+              `&error_text=${toasts.Redirect.NoProcessedImage}`
           );
         }
       });
@@ -77,7 +77,7 @@ const ProcessedArtworks = () => {
 
       <TopBotSpacer />
     </div>
-  )
+  );
 };
 
 export default ProcessedArtworks;

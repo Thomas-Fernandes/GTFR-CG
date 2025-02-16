@@ -1,4 +1,3 @@
-import { useLocale } from "@/common/hooks/useLocale/useLocale";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -21,7 +20,6 @@ const LandingPage = () => {
     generateContent: intl.formatMessage({ id: "pages.landing.generateContent" }),
     overlayText: intl.formatMessage({ id: "pages.landing.overlayText" }),
   };
-  const { locale, switchLocale } = useLocale();
 
   useTitle(labels.title);
 
@@ -38,11 +36,6 @@ const LandingPage = () => {
       <ToastContainer />
       <TopBotSpacer />
 
-      <div>
-        <button onClick={() => switchLocale("en")}>English</button>
-        <button onClick={() => switchLocale("fr")}>Français</button>
-        <p>Current Language: {locale}</p>
-      </div>
       <div className="landing-page--content">
         <div className="landing-page--content--left">
           <div className="landing-page--content--left--motto">

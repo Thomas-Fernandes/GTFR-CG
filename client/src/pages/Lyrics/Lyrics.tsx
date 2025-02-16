@@ -52,8 +52,21 @@ const Lyrics = () => {
 
   const contextValue = useMemo(
     () => ({
-      isFetching, setIsFetching, artist, setArtist, songName, setSongName, pageMetadata, setPageMetadata,
-      lyricsParts, setLyricsParts, dismissedParts, setDismissedParts, isManual, setIsManual, navigate
+      isFetching,
+      setIsFetching,
+      artist,
+      setArtist,
+      songName,
+      setSongName,
+      pageMetadata,
+      setPageMetadata,
+      lyricsParts,
+      setLyricsParts,
+      dismissedParts,
+      setDismissedParts,
+      isManual,
+      setIsManual,
+      navigate,
     }),
     [isFetching, artist, songName, pageMetadata, lyricsParts, dismissedParts, isManual, navigate]
   );
@@ -87,34 +100,31 @@ const Lyrics = () => {
 
       <h1>{labels.title}</h1>
 
-      <button type="button" className="medium mac"
-        onClick={() => handleLoadLastContents({lastContents, setPageMetadata, setLyricsParts, setDismissedParts})}
+      <button
+        type="button"
+        className="medium mac"
+        onClick={() => handleLoadLastContents({ lastContents, setPageMetadata, setLyricsParts, setDismissedParts })}
       >
         {labels.loadLast}
       </button>
 
       <LyricsContext.Provider value={contextValue}>
-        { isManual
-          ? <ManualGenerationInputBar />
-          : <LyricsSearchForm />
-        }
+        {isManual ? <ManualGenerationInputBar /> : <LyricsSearchForm />}
 
-        { !isFetching &&
-          <GenerationModeFlipper />
-        }
+        {!isFetching && <GenerationModeFlipper />}
 
-        { !isFetching && lyricsParts.length > 0 &&
+        {!isFetching && lyricsParts.length > 0 && (
           <>
             <hr className="my-8" />
 
             <LyricsPartsForm lyricsParts={lyricsParts} />
           </>
-        }
+        )}
       </LyricsContext.Provider>
 
       <TopBotSpacer />
     </div>
-  )
+  );
 };
 
 export default Lyrics;
