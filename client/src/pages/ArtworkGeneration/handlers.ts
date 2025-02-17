@@ -4,8 +4,9 @@ import { sendToast } from "@/common/Toast";
 import { StateSetter } from "@/common/types";
 import { isFileExtensionAccepted } from "@/common/utils/fileUtils";
 import { ACCEPTED_IMG_EXTENSIONS } from "@/constants/files";
-import { Toast, ToastType } from "@/constants/toasts";
+import { ToastType } from "@/constants/toasts";
 
+import { getToasts } from "@/contexts";
 import { AutomaticSearchTriggers } from "./constants";
 import { postFileUpload, postItunesResult, postItunesSearch, postYoutubeUrl } from "./requests";
 import { ArtworkGenerationOption, FileUploadRequest, GenerationOptionState, HandleChangeTermProps, HandleSubmitArtworkGenerationProps, HandleSubmitItunesSearchProps, ItunesRequest, ItunesResult, YoutubeRequest } from "./types";
@@ -15,10 +16,11 @@ export const handleSelectItunesImage = (
   item: ItunesResult, key: number,
   props: HandleSubmitArtworkGenerationProps
 ) => {
+  const toasts = getToasts();
   const { isProcessingLoading, setIsProcessingLoading, navigate } = props;
 
   if (isProcessingLoading) {
-    sendToast(Toast.ProcessingInProgress, ToastType.Warn);
+    sendToast(toasts.ProcessingInProgress, ToastType.Warn);
     return;
   }
 
@@ -66,17 +68,18 @@ export const handleSubmitFileUpload = (
   e: FormEvent<HTMLFormElement>, body: FileUploadRequest,
   props: HandleSubmitArtworkGenerationProps
 ) => {
+  const toasts = getToasts();
   const { isProcessingLoading, setIsProcessingLoading, navigate } = props;
 
   e.preventDefault();
 
   if (isProcessingLoading) {
-    sendToast(Toast.ProcessingInProgress, ToastType.Warn);
+    sendToast(toasts.ProcessingInProgress, ToastType.Warn);
     return;
   }
 
   if (!body.localFile) {
-    sendToast(Toast.NoImgFile, ToastType.Warn);
+    sendToast(toasts.ArtGen.NoImgFile, ToastType.Warn);
     return;
   }
 
@@ -86,11 +89,7 @@ export const handleSubmitFileUpload = (
 
   const fileExtensionIsAccepted = isFileExtensionAccepted(body.localFile.name, ACCEPTED_IMG_EXTENSIONS);
   if (!fileExtensionIsAccepted) {
-    sendToast(
-      Toast.InvalidFileType + "\n" +
-        "Accepted file extensions: " + ACCEPTED_IMG_EXTENSIONS.join(", ") + ".",
-      ToastType.Error
-    );
+    sendToast(toasts.ArtGen.InvalidFileType, ToastType.Error);
     return;
   }
 
@@ -101,17 +100,18 @@ export const handleSubmitYoutubeUrl = (
   e: FormEvent<HTMLFormElement>, body: YoutubeRequest,
   props: HandleSubmitArtworkGenerationProps
 ) => {
+  const toasts = getToasts();
   const { isProcessingLoading, setIsProcessingLoading, navigate } = props;
 
   e.preventDefault();
 
   if (isProcessingLoading) {
-    sendToast(Toast.ProcessingInProgress, ToastType.Warn);
+    sendToast(toasts.ProcessingInProgress, ToastType.Warn);
     return;
   }
 
   if (!isValidYoutubeUrl(body.url)) {
-    sendToast(Toast.InvalidUrl, ToastType.Error);
+    sendToast(toasts.ArtGen.InvalidUrl, ToastType.Error);
     return;
   }
 

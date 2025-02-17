@@ -2,7 +2,8 @@ import { is2xxSuccessful, sendRequest } from "@/common/requests";
 import { sendToast } from "@/common/Toast";
 import { RestVerb, StateSetter } from "@/common/types";
 import { API, BACKEND_URL } from "@/constants/paths";
-import { Toast, ToastType } from "@/constants/toasts";
+import { ToastType } from "@/constants/toasts";
+import { getToasts } from "@/contexts";
 
 import { hideAllStatsSpinners, showAllStatsSpinners } from "./spinners";
 import { GeniusTokenResponse, Statistics, StatisticsResponse } from "./types";
@@ -32,10 +33,12 @@ export const getStatistics = (setStats: StateSetter<Statistics>) => {
 };
 
 export const getGeniusToken = (setGeniusToken: StateSetter<string>) => {
+  const toasts = getToasts();
+
   sendRequest(RestVerb.Get, BACKEND_URL + API.GENIUS_TOKEN).then((response: GeniusTokenResponse) => {
     if (!is2xxSuccessful(response.status) || response.data.token === "") {
       sendToast(response.message, ToastType.Error, 10);
-      sendToast(Toast.AddGeniusToken, ToastType.Warn, 20);
+      sendToast(toasts.Home.AddGeniusToken, ToastType.Warn, 20);
       return;
     }
 

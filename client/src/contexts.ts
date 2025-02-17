@@ -10,3 +10,9 @@ const {
 } = createNewContext<IAppContext>();
 
 export { AppContext, useAppContext };
+
+let toasts: Record<string, any>;
+export const setToasts = (updatedToasts: Record<string, any>) => {
+  toasts = updatedToasts;
+};
+export const getToasts = () => toasts;

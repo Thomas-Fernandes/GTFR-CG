@@ -18,7 +18,7 @@ const CardsGenerationForm: React.FC<CardsGenerationFormProps> = ({ setCardPaths,
   const labels = {
     metanamePlaceholder: intl.formatMessage({ id: "pages.cardgen.textFields.metanamePlaceholder" }),
     contributorsPlaceholder: intl.formatMessage({ id: "pages.cardgen.textFields.contributorsPlaceholder" }),
-    fileUploadButton: intl.formatMessage({ id: "pages.cardgen.enforcers.fileUploadButton" }),
+    fileUploadButton: intl.formatMessage({ id: "pages.artgen.local.fileUploadButton" }),
     fileUploadLabel: intl.formatMessage({ id: "pages.cardgen.enforcers.fileUploadLabel" }),
     colorPickerLabel: intl.formatMessage({ id: "pages.cardgen.enforcers.colorPickerLabel" }),
     includeCenterArtwork: intl.formatMessage({ id: "pages.cardgen.selectors.centerArtwork" }),

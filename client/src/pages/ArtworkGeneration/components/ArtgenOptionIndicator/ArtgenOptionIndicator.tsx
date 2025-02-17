@@ -14,7 +14,6 @@ const ArtgenOptionIndicator = ({ direction, optionIdx, optionsLength, label }: A
   const { isDarkMode } = useDarkModeContext();
 
   const isPrev = direction === "prev";
-  console.log("optionsLength", optionsLength);
   const hasNoIndicator = isPrev
     ? optionIdx === 0
     : optionIdx >= optionsLength + 1;

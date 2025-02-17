@@ -39,7 +39,7 @@
       },
       "local": {
         "header": "Upload your image",
-        "fileUploadButton": "Select background image",
+        "fileUploadButton": "Select image.",
         "selectors": {
           "includeCenter": "Include center artwork"
         },
@@ -81,7 +81,6 @@
         "contributorsPlaceholder": "contributors (comma-separated)"
       },
       "enforcers": {
-        "fileUploadButton": "Select image",
         "fileUploadLabel": "Enforce background image?",
         "colorPickerLabel": "Enforce bottom color?"
       },
@@ -126,8 +125,7 @@
     "noLatestColor": "No latest color found.",
     "redirect": {
       "noProcessedImage": "No processed image found.",
-      "noGeniusToken": "Genius API token not found.",
-      "noCardsContents": "No cards contents found.\nPlease generate contents via the Lyrics page first."
+      "noGeniusToken": "Genius API token not found."
     },
     "home": {
       "welcome": "Welcome to GTFR-CG!\nApplication started successfully.",
@@ -138,6 +136,7 @@
       "noResultsFound": "No results found.",
       "noImgFile": "Please select an image file.",
       "invalidFileType": "Please select a valid image file.",
+      "invalidFileTypeExtensions": "Accepted file extensions",
       "invalidUrl": "Please enter a valid URL."
     },
     "procart": {
@@ -153,6 +152,7 @@
     "cardgen": {
       "noCardsGenerated": "No cards were generated.",
       "unauthorizedOutro": "The outro card cannot be generated\nsince the card creation was manual.",
+      "noCardsContents": "No cards contents found.\nPlease generate contents via the Lyrics page first.",
       "cardsGenerated": "Cards generated successfully.",
       "cardNotEditable": "The contents of this card cannot be edited.",
       "cardEditInProgress": "Card edit already in progress.",

@@ -3,12 +3,12 @@ import { useNavigate } from "react-router-dom";
 
 import { useTitle } from "@/common/hooks/useTitle";
 import { doesFileExist } from "@/common/utils/fileUtils";
+import { getLocalizedToasts } from "@/common/utils/toastUtils";
 import { NavButtonSide } from "@/components/NavButton/constants";
 import NavButton from "@/components/NavButton/NavButton";
 import ToastContainer from "@/components/ToastContainer/ToastContainer";
 import TopBotSpacer from "@/components/TopBotSpacer/TopBotSpacer";
 import { ViewPaths } from "@/constants/paths";
-import { Toast } from "@/constants/toasts";
 import { useAppContext } from "@/contexts";
 
 import BackgroundImageDisplay from "./BackgroundImageDisplay";
@@ -29,12 +29,18 @@ const ProcessedArtworks = () => {
 
   useTitle(labels.title);
 
+  const toasts = getLocalizedToasts(intl);
   const navigate = useNavigate();
 
   useEffect(() => {
-    doesFileExist(PROCESSED_ARTWORKS_PATH + "/" + COVER_ART_FILENAME).then((anyProcessedImageExists: boolean) => {
-      if (!anyProcessedImageExists)
-        navigate(`${ViewPaths.Redirect}?redirect_to=${ViewPaths.ArtworkGeneration}&error_text=${Toast.NoProcessedImage}`);
+    doesFileExist(`${PROCESSED_ARTWORKS_PATH}/${COVER_ART_FILENAME}`).then((anyProcessedImageExists: boolean) => {
+      if (!anyProcessedImageExists) {
+        navigate(
+          `${ViewPaths.Redirect}`
+          + `?redirect_to=${ViewPaths.ArtworkGeneration}`
+          + `&error_text=${toasts.Redirect.NoProcessedImage}`
+        );
+      }
     });
   });
 

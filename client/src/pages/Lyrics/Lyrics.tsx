@@ -2,13 +2,13 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useTitle } from "@/common/hooks/useTitle";
+import { getLocalizedToasts } from "@/common/utils/toastUtils";
 import { NavButtonSide } from "@/components/NavButton/constants";
 import NavButton from "@/components/NavButton/NavButton";
 import ToastContainer from "@/components/ToastContainer/ToastContainer";
 import TopBotSpacer from "@/components/TopBotSpacer/TopBotSpacer";
 import { SessionStorage } from "@/constants/browser";
 import { ViewPaths } from "@/constants/paths";
-import { Toast } from "@/constants/toasts";
 import { useAppContext } from "@/contexts";
 
 import { LyricsContext } from "./contexts";
@@ -32,6 +32,7 @@ const Lyrics = () => {
 
   useTitle(labels.title);
 
+  const toasts = getLocalizedToasts(intl);
   const navigate = useNavigate();
 
   const [isGeniusTokenSet, setIsGeniusTokenSet] = useState(false);
@@ -62,7 +63,7 @@ const Lyrics = () => {
 
     isTokenSet().then((isSet) => {
       if (!isSet) {
-        navigate(`${ViewPaths.Redirect}?redirect_to=${ViewPaths.Home}&error_text=${Toast.NoGeniusToken}`);
+        navigate(`${ViewPaths.Redirect}?redirect_to=${ViewPaths.Home}&error_text=${toasts.Redirect.NoGeniusToken}`);
         return;
       }
 

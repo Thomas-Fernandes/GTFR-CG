@@ -1,5 +1,5 @@
 import { createNewContext } from "@/common/contextCreator";
-import { Locale } from "@/common/i18n";
+import { Locale } from "@/common/l10n";
 import { StateSetter } from "@/common/types";
 
 interface ILocaleContext {

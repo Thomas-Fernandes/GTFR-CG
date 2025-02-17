@@ -35,5 +35,4 @@ export const API = {
   },
 };
 
-export const ITUNES_URL = "https://itunes.apple.com"; // TODO remove this when backend unit tests are implemented
 export const BACKEND_URL = "http://localhost:8000/api";

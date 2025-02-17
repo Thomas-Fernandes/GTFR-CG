@@ -39,7 +39,7 @@
       },
       "local": {
         "header": "Ajouter votre propre image",
-        "fileUploadButton": "Sélectionner une image",
+        "fileUploadButton": "Sélectionner une image.",
         "selectors": {
           "includeCenter": "Inclure l'image au centre"
         },
@@ -79,7 +79,6 @@
       "metanamePlaceholder": "si vide, le méta-nom sera déduit",
       "contributorsPlaceholder": "contributeurs (séparés par des virgules)",
       "enforcers": {
-        "fileUploadButton": "Sélectionner une image",
         "fileUploadLabel": "Écraser l'image de fond ?",
         "colorPickerLabel": "Écraser la couleur du bas ?"
       },
@@ -124,8 +123,7 @@
     "noLatestColor": "Aucune couleur récente trouvée.",
     "redirect": {
       "noProcessedImage": "Aucun artwork généré trouvé.",
-      "noGeniusToken": "Token d'API Genius introuvable.",
-      "noCardsContents": "Aucun contenu de cartes trouvé.\nVeuillez d'abord générer du contenu via la page Paroles."
+      "noGeniusToken": "Token d'API Genius introuvable."
     },
     "home": {
       "welcome": "Bienvenue sur GTFR-CG!\nApplication démarrée avec succès.",
@@ -136,6 +134,7 @@
       "noResultsFound": "Aucun résultat n'a été trouvé.",
       "noImgFile": "Veuillez sélectionner une image.",
       "invalidFileType": "Veuillez sélectionner un fichier image valide.",
+      "invalidFileTypeExtensions": "Extensions de fichiers acceptées ",
       "invalidUrl": "Veuillez entrer une URL valide."
     },
     "procart": {
@@ -151,6 +150,7 @@
     "cardgen": {
       "noCardsGenerated": "Aucune carte n'a été générée.",
       "unauthorizedOutro": "La carte d'outro ne peut pas être générée\ncar la création de la carte était manuelle.",
+      "noCardsContents": "Aucun contenu de cartes trouvé.\nVeuillez d'abord générer du contenu via la page Paroles.",
       "cardsGenerated": "Cartes générées avec succès.",
       "cardNotEditable": "Le contenu de cette carte ne peut pas être modifié.",
       "cardEditInProgress": "Modification de la carte déjà en cours.",

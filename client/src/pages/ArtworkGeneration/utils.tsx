@@ -22,7 +22,7 @@ export const isValidYoutubeUrl = (url: string): boolean => {
   return REGEX_YOUTUBE_URL.some((pattern: RegExp) => pattern.test(url));
 };
 
-const getI18nArtgenOptions = (intl: IntlShape): string[] => {
+const getLocalizedArtgenOptions = (intl: IntlShape): string[] => {
   return [
     intl.formatMessage({ id: "pages.artgen.itunes.header" }),
     intl.formatMessage({ id: "pages.artgen.local.header" }),
@@ -31,7 +31,7 @@ const getI18nArtgenOptions = (intl: IntlShape): string[] => {
 };
 
 export const getArtgenOptions = (intl: IntlShape): ArtworkGenerationOption[] => {
-  const artgenOptionHeaders = getI18nArtgenOptions(intl);
+  const artgenOptionHeaders = getLocalizedArtgenOptions(intl);
 
   return [
     {

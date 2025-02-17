@@ -1,6 +1,6 @@
 import { useDarkMode } from "@/common/hooks/useDarkMode/useDarkMode";
 import { useLocale } from "@/common/hooks/useLocale/useLocale";
-import { LOCALE_OPTIONS } from "@/common/i18n";
+import { LOCALE_OPTIONS } from "@/common/l10n";
 import { StateSetter } from "@/common/types";
 import { ThemeType } from "@/components/DarkModeProvider/constants";
 import SelectPopover from "@/components/SelectPopover/SelectPopover";

@@ -12,12 +12,16 @@ import Lyrics from "@/pages/Lyrics/Lyrics";
 import ProcessedArtworks from "@/pages/ProcessedArtworks/ProcessedArtworks";
 import Redirect from "@/pages/Redirect/Redirect";
 
-import { AppContext } from "./contexts";
+import { getLocalizedToasts } from "./common/utils/toastUtils";
+import { AppContext, setToasts } from "./contexts";
 
 import "./App.scss";
 
 const App = () => {
   const intl = useIntl();
+  const toasts = getLocalizedToasts(intl);
+  setToasts(toasts);
+
   const contextValue = useMemo(() => ({ intl }), [intl]);
 
   return (

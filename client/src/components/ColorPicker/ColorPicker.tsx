@@ -2,9 +2,10 @@ import { useState } from "react";
 
 import { useDarkModeContext } from "@/common/hooks/useDarkMode/contexts";
 import { sendToast } from "@/common/Toast";
+import { getLocalizedToasts } from "@/common/utils/toastUtils";
 import ButtonRemove from "@/components/ButtonRemove/ButtonRemove";
 import { ThemeType } from "@/components/DarkModeProvider/constants";
-import { Toast, ToastType } from "@/constants/toasts";
+import { ToastType } from "@/constants/toasts";
 import { useAppContext } from "@/contexts";
 
 import { ColorPickerProps } from "./types";
@@ -17,6 +18,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ id, latest, label, labelClass
     loadLatest: intl.formatMessage({ id: "components.colorPicker.loadLatest" }),
   };
 
+  const toasts = getLocalizedToasts(intl);
   const { isDarkMode } = useDarkModeContext();
 
   const [selectedColor, setSelectedColor] = useState<string>(""); // Default to black color
@@ -41,7 +43,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ id, latest, label, labelClass
 
   const handleLoadLatest = () => {
     if (!latest) {
-      sendToast(Toast.NoLatestColor, ToastType.Warn);
+      sendToast(toasts.Components.NoLatestColor, ToastType.Warn);
       return;
     }
     setSelectedColor(latest);

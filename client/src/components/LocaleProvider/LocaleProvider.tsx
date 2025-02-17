@@ -2,7 +2,7 @@ import React, { useMemo, useState } from "react";
 import { IntlProvider } from "react-intl";
 
 import { LocaleContext } from "@/common/hooks/useLocale/contexts";
-import { getLocaleMessages, Locale } from "@/common/i18n";
+import { getLocaleMessages, Locale } from "@/common/l10n";
 
 import { LocaleContextProviderProps } from "./types";
 
