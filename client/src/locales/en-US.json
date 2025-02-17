@@ -93,8 +93,10 @@
       "submit": "GENERATE",
       "downloadAll": "Download All as Zip",
       "modal": {
-        "header": "Edit Lyrics of Card",
         "edit": "Edit this card",
+        "header": "Edit Lyrics of Card",
+        "save": "Save",
+        "saving": "Saving...",
         "cancel": "Cancel"
       }
     }

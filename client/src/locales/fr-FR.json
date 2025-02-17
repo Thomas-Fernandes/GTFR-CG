@@ -29,7 +29,7 @@
       "title": "Génération d'artworks",
       "indicatorLabel": "ou...",
       "itunes": {
-        "header": "Rechercher une couverture sur iTunes",
+        "header": "Rechercher une pochette sur iTunes",
         "inputPlaceholder": "Chercher sur iTunes",
         "submit": "CHERCHER",
         "localeTitle": "Sélectionner une région de recherche",
@@ -91,8 +91,10 @@
       "submit": "GÉNÉRER",
       "downloadAll": "Tout télécharger en Zip",
       "modal": {
-        "header": "Modifier les paroles de cette carte",
         "edit": "Modifier cette carte",
+        "header": "Modifier les paroles de cette carte",
+        "save": "Sauvegarder",
+        "saving": "Sauvegarde...",
         "cancel": "Annuler"
       }
     }
@@ -106,7 +108,7 @@
       "download": "Télécharger"
     },
     "fileUploader": {
-      "defaultCaption": "Aucun fichier sélectionné"
+      "defaultCaption": "Aucun fichier sélectionné."
     },
     "localeSwitch": {
       "title": "Sélectionner une langue"
