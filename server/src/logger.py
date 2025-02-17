@@ -93,7 +93,7 @@ class Logger(logging.getLoggerClass()):
                 for line in stdout_content.splitlines():
                     processed_line = process_message(line)
                     if processed_line == "Done.":
-                        self.log(f"Lyrics for {song} by {artist} were successfully found and populated.")
+                        self.info(f"Lyrics for {song} by {artist} were successfully found and populated.")
                     else:
                         if processed_line.startswith("Lyrics for"):
                             song = processed_line.split("Lyrics for ")[1].split(" by")[0]

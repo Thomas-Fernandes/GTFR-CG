@@ -56,6 +56,7 @@
     },
     "lyrics": {
       "title": "Lyrics",
+      "loadLast": "Load last contents",
       "search": {
         "artistPlaceholder": "Enter artist name",
         "songPlaceholder": "Enter song name",
@@ -65,8 +66,8 @@
         "switchManual": "Generate cards manually instead",
         "switchAutomatic": "Generate cards automatically"
       },
-      "loadLast": "Load last contents",
       "parts": {
+        "manualHeader": "Manual Card Creation",
         "remove": "Remove",
         "clear": "Clear",
         "restore": "Restore"
@@ -75,8 +76,10 @@
     },
     "cardgen": {
       "title": "Cards Generation",
-      "metanamePlaceholder": "if empty, the card metaname will be inferred",
-      "contributorsPlaceholder": "contributors (comma-separated)",
+      "textFields": {
+        "metanamePlaceholder": "if empty, the card metaname will be inferred",
+        "contributorsPlaceholder": "contributors (comma-separated)"
+      },
       "enforcers": {
         "fileUploadButton": "Select image",
         "fileUploadLabel": "Enforce background image?",

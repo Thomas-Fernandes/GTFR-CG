@@ -56,17 +56,18 @@
     },
     "lyrics": {
       "title": "Paroles",
+      "loadLast": "Charger la dernière génération",
       "search": {
         "artistPlaceholder": "Entrez un nom d'artiste",
-        "songPlaceholder": "Enter un titre de chanson",
+        "songPlaceholder": "Entrez un titre de chanson",
         "submit": "CHERCHER"
       },
       "generationMode": {
         "switchManual": "Generate des cartes manuellement",
         "switchAutomatic": "Generate des cartes automatiquement"
       },
-      "loadLast": "Charger la dernière génération",
       "parts": {
+        "manualHeader": "Création de carte manuelle",
         "remove": "Retirer",
         "clear": "Vider",
         "restore": "Restaurer"

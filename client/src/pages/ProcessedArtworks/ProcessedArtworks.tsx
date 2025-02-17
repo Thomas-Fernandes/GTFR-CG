@@ -7,7 +7,6 @@ import { NavButtonSide } from "@/components/NavButton/constants";
 import NavButton from "@/components/NavButton/NavButton";
 import ToastContainer from "@/components/ToastContainer/ToastContainer";
 import TopBotSpacer from "@/components/TopBotSpacer/TopBotSpacer";
-import { Title } from "@/constants/browser";
 import { ViewPaths } from "@/constants/paths";
 import { Toast } from "@/constants/toasts";
 import { useAppContext } from "@/contexts";
@@ -20,7 +19,15 @@ import "./ProcessedArtworks.scss";
 
 const ProcessedArtworks = () => {
   const { intl } = useAppContext();
-  useTitle(intl.formatMessage({ id: "pages.procart.title" }));
+  const labels = {
+    title: intl.formatMessage({ id: "pages.procart.title" }),
+    homeTitle: intl.formatMessage({ id: "pages.home.title" }),
+    artgenTitle: intl.formatMessage({ id: "pages.artgen.title" }),
+    lyricsTitle: intl.formatMessage({ id: "pages.lyrics.title" }),
+    cardgenTitle: intl.formatMessage({ id: "pages.cardgen.title" }),
+  };
+
+  useTitle(labels.title);
 
   const navigate = useNavigate();
 
@@ -37,13 +44,13 @@ const ProcessedArtworks = () => {
       <TopBotSpacer />
 
       <div className="navbar">
-        <NavButton to={ViewPaths.Home} label={intl.formatMessage({ id: "pages.home.title" })} side={NavButtonSide.Left} />
-        <NavButton to={ViewPaths.ArtworkGeneration} label={intl.formatMessage({ id: "pages.artgen.title" })} side={NavButtonSide.Left} />
-        <NavButton to={ViewPaths.Lyrics} label={intl.formatMessage({ id: "pages.lyrics.title" })} side={NavButtonSide.Right} />
-        <NavButton to={ViewPaths.CardsGeneration} label={intl.formatMessage({ id: "pages.cardgen.title" })} side={NavButtonSide.Right} />
+        <NavButton to={ViewPaths.Home} label={labels.homeTitle} side={NavButtonSide.Left} />
+        <NavButton to={ViewPaths.ArtworkGeneration} label={labels.artgenTitle} side={NavButtonSide.Left} />
+        <NavButton to={ViewPaths.Lyrics} label={labels.lyricsTitle} side={NavButtonSide.Right} />
+        <NavButton to={ViewPaths.CardsGeneration} label={labels.cardgenTitle} side={NavButtonSide.Right} />
       </div>
 
-      <h1>{Title.ProcessedArtworks}</h1>
+      <h1>{labels.title}</h1>
 
       <div id="image-panels">
         <BackgroundImageDisplay />

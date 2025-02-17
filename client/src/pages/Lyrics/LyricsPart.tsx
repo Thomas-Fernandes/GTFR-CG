@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { AutoResizeTextarea } from "@/components/AutoResizeTextarea/AutoResizeTextarea";
+import { useAppContext } from "@/contexts";
 
 import { useLyricsContext } from "./contexts";
 import { handleRestorePart, handleSetDismissedParts, handleSetLyricsParts } from "./handlers";
@@ -9,6 +10,13 @@ import { LyricsPartProps } from "./types";
 import "./LyricsPart.scss";
 
 const LyricsPart: React.FC<LyricsPartProps> = ({ part, idx }) => {
+  const { intl } = useAppContext();
+  const labels = {
+    remove: intl.formatMessage({ id: "pages.lyrics.parts.remove" }),
+    clear: intl.formatMessage({ id: "pages.lyrics.parts.clear" }),
+    restore: intl.formatMessage({ id: "pages.lyrics.parts.restore" }),
+  };
+
   const { isManual, dismissedParts, setDismissedParts, lyricsParts, setLyricsParts } = useLyricsContext();
 
   const [isMounted, setIsMounted] = useState(false);
@@ -22,8 +30,10 @@ const LyricsPart: React.FC<LyricsPartProps> = ({ part, idx }) => {
     <div className={`lyrics-part ${isMounted ? "mounted" : ""}`}>
       { !isManual && dismissedParts.has(idx)
       ? <div className="lyrics-part--header">
-          <button type="button" className="restore" onClick={() => handleRestorePart(dismissedParts, idx, setDismissedParts)}>
-            {`Restore ${part.section}`}
+          <button type="button" className="restore"
+            onClick={() => handleRestorePart(dismissedParts, idx, setDismissedParts)}
+          >
+            {`${labels.restore} ${part.section}`}
           </button>
         </div>
       : <>
@@ -31,7 +41,7 @@ const LyricsPart: React.FC<LyricsPartProps> = ({ part, idx }) => {
           <button type="button" disabled={isManual} className="red"
             onClick={() => handleSetDismissedParts(dismissedParts, idx, setDismissedParts)}
           >
-            {"Remove"}
+            {labels.remove}
           </button>
 
           <span className="lyrics-part--header--section">
@@ -41,7 +51,7 @@ const LyricsPart: React.FC<LyricsPartProps> = ({ part, idx }) => {
           <button type="button" className="green"
             onClick={() => handleSetLyricsParts("", idx, {lyricsParts, setLyricsParts})}
           >
-            {"Clear"}
+            {labels.clear}
           </button>
         </div>
         <AutoResizeTextarea id={`lyrics-part_${idx}`}

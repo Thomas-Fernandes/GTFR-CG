@@ -19,7 +19,7 @@ import "./Home.scss";
 const Home = () => {
   const { intl } = useAppContext();
   const labels = {
-    title: intl.formatMessage({ id: "pages.artgen.title" }),
+    title: intl.formatMessage({ id: "pages.home.title" }),
     artgenTitle: intl.formatMessage({ id: "pages.artgen.title" }),
     lyricsTitle: intl.formatMessage({ id: "pages.lyrics.title" }),
     cardgenTitle: intl.formatMessage({ id: "pages.cardgen.title" }),
