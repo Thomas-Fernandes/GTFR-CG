@@ -26,7 +26,7 @@ def use_fallback_locale(data: L10nDict, fallback: Locale) -> L10nDict:
     return data
 
 class Translator():
-    """ Class to handle localization
+    """ Class to handle localization of server responses messages
 
     Attributes:
         data: [dict] The data containing the localized strings of the supported locales
@@ -47,9 +47,10 @@ class Translator():
     def set_locale(self, loc: Locale) -> Locale:
         if loc in self.data:
             self.locale = loc
+            log.info(f"Server response locale set to: {loc}")
         else:
-            log.warn(f"Invalid locale: {loc}. Using default locale: {DEFAULT_LOCALE}")
             self.locale = DEFAULT_LOCALE
+            log.warn(f"Invalid locale: {loc}. Using default locale: {DEFAULT_LOCALE}")
         return self.locale
 
     def get_locale(self) -> Locale:

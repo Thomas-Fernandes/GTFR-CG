@@ -23,7 +23,7 @@
 
     "_section-procart": "",
         "OVERLAY_NOT_FOUND": "Overlay file not found.",
-        "PROCESSED_IMAGES_SUCCESS": "Processed images path retrieved successfully.",
+        "PROCESSED_IMAGES_SUCCESS": "Processed images paths retrieved successfully.",
         "FAIL_DOWNLOAD": "Failed to download image.",
 
     "_section-lyrics": "",
@@ -40,7 +40,7 @@
         "CARDS_CONTENTS_SAVE_FAILED": "Failed to save cards contents.",
         "CARDS_CONTENTS_READ_FAILED": "Failed to read cards contents.",
         "CARDS_METANAME_NOT_FOUND": "No card metaname provided.",
-        "CARDS_CENTER_ARTWORK_NOT_FOUND": "No center artwork flipper provided.",
+        "CARDS_CENTER_ARTWORK_NOT_FOUND": "No center artwork switch value provided.",
         "CARDS_BACKGROUND_NOT_FOUND": "No background image provided.",
         "CARDS_COLOR_NOT_FOUND": "No bottom color provided.",
         "CARDS_FILENAME_NOT_FOUND": "No filename provided.",

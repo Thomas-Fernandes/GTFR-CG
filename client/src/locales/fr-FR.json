@@ -76,11 +76,13 @@
     },
     "cardgen": {
       "title": "Génération de cartes",
-      "metanamePlaceholder": "si vide, le méta-nom sera déduit",
-      "contributorsPlaceholder": "contributeurs (séparés par des virgules)",
+      "textFields": {
+        "metanamePlaceholder": "si vide, le méta-nom sera déduit",
+        "contributorsPlaceholder": "contributeurs (séparés par des virgules)"
+      },
       "enforcers": {
         "fileUploadLabel": "Écraser l'image de fond ?",
-        "colorPickerLabel": "Écraser la couleur du bas ?"
+        "colorPickerLabel": "Écraser la couleur de la bande ?"
       },
       "selectors": {
         "centerArtwork": "Inclure l'image au centre",
