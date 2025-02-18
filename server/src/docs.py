@@ -24,7 +24,6 @@ class fieldsDict(fields.Raw): # field type for dictionary
     __schema_type__ = "dict"
     __schema_example__ = "{key: value}"
 
-
 models = {
     ROUTES.home.bp_name: {
         "change_locale": {
