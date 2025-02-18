@@ -20,7 +20,6 @@ from src.routes.cards_generation.pillow import generateCard, generateOutroCard
 from src.routes.cards_generation.settings import getCardMetadata, getGenerationRequisites
 from src.routes.cards_generation.utils import getUserProcessedPath
 
-
 def generateAllCards(
     user_processed_path: str, cards_contents: CardsContents, card_metadata: CardMetadata, settings: CardgenSettings
 ) -> None:
@@ -104,9 +103,7 @@ def generateCards(cards_contents: CardsContents, song_data: SongMetadata, settin
         },
     )
 
-
 bp_cards_generation_generate = Blueprint("generate", __name__.split('.')[-1])
-
 
 @ns_cards_generation.route("/generate")
 class CardsGenerationResource(Resource):

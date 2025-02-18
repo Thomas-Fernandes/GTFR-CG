@@ -23,12 +23,10 @@ from src.app import session
 from src.l10n import locale
 from src.logger import log, SeverityLevel
 from src.routes.artwork_processing.pillow import generateCoverArt
+from src.routes.cards_generation.utils import getLuminance
 from src.typing_gtfr import CardgenSettings, CardsContents, CardMetadata, SongMetadata
 from src.utils.file_utils import doesFileExist, getCardsContentsFromFile
 from src.utils.string_utils import snakeToCamel, stringIsBool
-
-from src.routes.cards_generation.utils import getLuminance
-
 
 def getCardMetadata(song_data: SongMetadata, enforce_bottom_color: str | None, include_bg_img: bool) -> CardMetadata:
     """Extracts the metadata needed for card generation from the song data

@@ -4,6 +4,9 @@ from flask_restx import Resource
 from ast import literal_eval
 from time import time
 
+from src.routes.cards_generation.pillow import generateCard
+from src.routes.cards_generation.settings import getCardMetadata, getGenerationRequisites
+from src.routes.cards_generation.utils import getUserProcessedPath
 from src.constants.enums import AvailableStats, HttpStatus, PayloadFields, SessionFields
 from src.constants.paths import ROUTES, SLASH
 from src.constants.responses import Error, Success
@@ -15,10 +18,6 @@ from src.logger import log, SeverityLevel
 from src.statistics import updateStats
 from src.typing_gtfr import CardgenSettings, CardsContents, SongMetadata
 from src.utils.web_utils import createApiResponse
-
-from src.routes.cards_generation.pillow import generateCard
-from src.routes.cards_generation.settings import getCardMetadata, getGenerationRequisites
-from src.routes.cards_generation.utils import getUserProcessedPath
 
 
 def generateSingleCard(cards_contents: CardsContents, song_data: SongMetadata, settings: CardgenSettings) -> Response:

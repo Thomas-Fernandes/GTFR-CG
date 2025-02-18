@@ -7,7 +7,6 @@ from src.constants.responses import Error
 from src.l10n import locale
 from src.typing_gtfr import CardsContents
 
-
 def getCardsContentsFromFile(filepath: str) -> CardsContents:
     """Returns the contents of the cards from a file
     :param filepath: [string] The path to the file
@@ -17,7 +16,6 @@ def getCardsContentsFromFile(filepath: str) -> CardsContents:
         all_cards = [card.split("\n\n") for card in file.read().split("\n\n\n")]
     cards = [[elem for elem in card if elem != ""] for card in all_cards][0]  # remove empty elements & flatten the list
     return [card.split("\n") for card in cards]
-
 
 def writeCardsContentsToFile(filepath: str, cards_contents: list[list[str]]) -> None:
     """Writes the cards contents to a file
@@ -30,7 +28,6 @@ def writeCardsContentsToFile(filepath: str, cards_contents: list[list[str]]) -> 
             if has_content:
                 file.write(("\n\n".join(card) + "\n\n").translate(TRANSLATION_TABLE))
 
-
 def validateImageFilename(filename: str | None) -> Optional[str]:
     """Checks if the given filename is valid for an image file
     :param filename: [string] The filename to check
@@ -41,7 +38,6 @@ def validateImageFilename(filename: str | None) -> Optional[str]:
     if not('.' in filename and filename.rsplit('.', 1)[1].lower() in ["png", "jpg", "jpeg"]):
         return locale.get(Error.IMG_INVALID_FILETYPE)
     return None
-
 
 def doesFileExist(filepath: str) -> bool:
     """Checks if the file exists

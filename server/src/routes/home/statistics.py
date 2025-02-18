@@ -14,7 +14,6 @@ from src.utils.web_utils import createApiResponse
 
 bp_home_statistics = Blueprint("statistics", __name__.split('.')[-1])
 
-
 @ns_home.route("/statistics")
 class StatisticsResource(Resource):
     @ns_home.doc("get_statistics")

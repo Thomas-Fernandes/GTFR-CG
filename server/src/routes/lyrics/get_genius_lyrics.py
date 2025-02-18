@@ -10,12 +10,10 @@ from src.constants.responses import Error, Success
 from src.docs import models, ns_lyrics
 from src.l10n import locale
 from src.logger import log
+from src.routes.lyrics.genius import fetchLyricsFromGenius
 from src.utils.web_utils import createApiResponse
 
-from src.routes.lyrics.genius import fetchLyricsFromGenius
-
 bp_lyrics_get_genius_lyrics = Blueprint("get-genius-lyrics-token", __name__.split('.')[-1])
-
 
 @ns_lyrics.route("/get-genius-lyrics")
 class GeniusLyricsResource(Resource):

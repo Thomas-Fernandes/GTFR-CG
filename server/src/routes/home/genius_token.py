@@ -13,7 +13,6 @@ from src.utils.web_utils import createApiResponse
 
 bp_home_genius_token = Blueprint("genius-token", __name__.split('.')[-1])
 
-
 @ns_home.route("/genius-token")
 class GeniusTokenResource(Resource):
     @ns_home.doc("get_genius_token")
@@ -22,4 +21,8 @@ class GeniusTokenResource(Resource):
         """Returns the Genius API token"""
         log.info("GET - Fetching Genius API token...")
 
-        return createApiResponse(HttpStatus.OK, locale.get(Success.GENIUS_TOKEN_FETCHED), {"token": session.get(SessionFields.GENIUS_TOKEN)})
+        return createApiResponse(
+            HttpStatus.OK,
+            locale.get(Success.GENIUS_TOKEN_FETCHED),
+            {"token": session.get(SessionFields.GENIUS_TOKEN)}
+        )

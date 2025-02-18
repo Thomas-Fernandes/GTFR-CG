@@ -17,7 +17,6 @@ from src.l10n import locale
 from src.logger import log, SeverityLevel
 from src.utils.web_utils import createApiResponse
 
-
 @retry(condition=(lambda x: x.status_code == HttpStatus.OK), times=3)
 def makeItunesRequest(url_to_hit: str) -> RequestsResponse:
     return requestsGet(url_to_hit)

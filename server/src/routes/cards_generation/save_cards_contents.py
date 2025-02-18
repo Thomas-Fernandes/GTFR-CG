@@ -15,13 +15,11 @@ from src.app import session
 from src.docs import models, ns_cards_generation
 from src.l10n import locale
 from src.logger import log, SeverityLevel
+from src.routes.cards_generation.utils import isListListStr
 from src.typing_gtfr import CardsContents
 from src.utils.file_utils import writeCardsContentsToFile
 from src.utils.time_utils import getNowStamp
 from src.utils.web_utils import createApiResponse
-
-from src.routes.cards_generation.utils import isListListStr
-
 
 def saveCardsContents(cards_contents: CardsContents) -> Response:
     """Saves the cards contents to the user's folder
@@ -49,7 +47,9 @@ def saveCardsContents(cards_contents: CardsContents) -> Response:
         return createApiResponse(HttpStatus.INTERNAL_SERVER_ERROR, locale.get(Error.CARDS_CONTENTS_SAVE_FAILED))
 
     session[SessionFields.CARDS_CONTENTS] = filepath
-    log.info(f"Cards contents saved to {filepath}.").time(SeverityLevel.INFO, time() - start)
+    log.info(
+        f"Cards contents saved to {filepath}."
+    ).time(SeverityLevel.INFO, time() - start)
     return createApiResponse(HttpStatus.CREATED, locale.get(Success.CARDS_CONTENTS_SAVED))
 
 
