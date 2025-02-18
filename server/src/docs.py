@@ -10,9 +10,7 @@ ns_artwork_processing = Namespace((ROUTES.art_proc.bp_name or fallback_bp_name),
 ns_lyrics = Namespace((ROUTES.lyrics.bp_name or fallback_bp_name), description="Lyrics related routes")
 ns_cards_generation = Namespace((ROUTES.cards_gen.bp_name or fallback_bp_name), description="Cards generation related routes")
 
-# create a type of field for a python dictionary
-
-class fieldsDict(fields.Raw):
+class fieldsDict(fields.Raw): # field type for dictionary
     __schema_type__ = "dict"
     __schema_example__ = "{key: value}"
 
