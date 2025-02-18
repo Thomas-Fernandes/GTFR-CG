@@ -14,6 +14,7 @@ from server.src.constants.paths import SLASH, PROCESSED_DIR, PROCESSED_ARTWORK_F
 from server.src.constants.responses import Err, Warn
 
 from server.src.app import session
+from server.src.l10n import locale
 from server.src.logger import log, SeverityLevel
 from server.src.routes.artwork_processing.pillow import generateCoverArt
 from server.src.typing_gtfr import CardgenSettings, CardsContents, CardMetadata, SongMetadata
@@ -95,7 +96,7 @@ def getSongMetadata(cards_contents: CardsContents, card_metaname: str | None) ->
 
 def saveEnforcedBackgroundImage(file: FileStorage, include_center_artwork: bool) -> None:
     if SessionFields.USER_FOLDER not in session:
-        log.debug(Warn.NO_USER_FOLDER)
+        log.debug(locale.get(Warn.NO_USER_FOLDER))
         session[SessionFields.USER_FOLDER] = str(uuid4())
 
     user_folder = str(session.get(SessionFields.USER_FOLDER)) + SLASH + AvailableCacheElemType.ARTWORKS + SLASH
@@ -139,16 +140,16 @@ def getBaseCardgenSettings(is_singular_card: bool) -> CardgenSettings:
             f"{AvailableCacheElemType.ARTWORKS}{SLASH}" + \
             f"{PROCESSED_ARTWORK_FILENAME}"
         bg_exists = doesFileExist(bg_path)
-        if card_metaname is None: return Err.CARDS_METANAME_NOT_FOUND
-        if enforce_bg_image and include_center_artwork is None: return Err.CARDS_CENTER_ARTWORK_NOT_FOUND
-        if not bg_exists and not enforce_bg_image and include_bg_img: return Err.CARDS_BACKGROUND_NOT_FOUND
+        if card_metaname is None: return locale.get(Err.CARDS_METANAME_NOT_FOUND)
+        if enforce_bg_image and include_center_artwork is None: return locale.get(Err.CARDS_CENTER_ARTWORK_NOT_FOUND)
+        if not bg_exists and not enforce_bg_image and include_bg_img: return locale.get(Err.CARDS_BACKGROUND_NOT_FOUND)
         if enforce_bottom_color is None and not bg_exists:
             if include_bg_img:
-                return Err.CARDS_BACKGROUND_NOT_FOUND
+                return locale.get(Err.CARDS_BACKGROUND_NOT_FOUND)
             else:
-                return Err.CARDS_COLOR_NOT_FOUND
+                return locale.get(Err.CARDS_COLOR_NOT_FOUND)
         if enforce_bg_image and include_center_artwork is None:
-            return Err.CARDS_CENTER_ARTWORK_NOT_FOUND
+            return locale.get(Err.CARDS_CENTER_ARTWORK_NOT_FOUND)
         return None
     err = validateCardgenParameters(card_metaname, enforce_bg_image, include_center_artwork, include_background_img)
     if err is not None:
@@ -167,9 +168,9 @@ def getBaseCardgenSettings(is_singular_card: bool) -> CardgenSettings:
         card_filename: Optional[str] = request.form[snakeToCamel(PayloadFields.CARD_FILENAME)]
 
         def validateSingularCardgenParameters(card_content: str, card_filename: str, bottom_color: str) -> Optional[str]:
-            if bottom_color is None: return Err.CARDS_COLOR_NOT_FOUND
-            if card_content is None: return Err.CARDS_CONTENTS_NOT_FOUND
-            if card_filename is None: return Err.CARDS_FILENAME_NOT_FOUND
+            if bottom_color is None: return locale.get(Err.CARDS_COLOR_NOT_FOUND)
+            if card_content is None: return locale.get(Err.CARDS_CONTENTS_NOT_FOUND)
+            if card_filename is None: return locale.get(Err.CARDS_FILENAME_NOT_FOUND)
             return None
         err = validateSingularCardgenParameters(card_content, card_filename, enforce_bottom_color)
         if err is not None:

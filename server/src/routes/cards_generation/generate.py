@@ -5,10 +5,11 @@ from time import time
 
 from server.src.constants.enums import AvailableStats, HttpStatus, PayloadFields, SessionFields
 from server.src.constants.paths import ROUTES, SLASH, PROCESSED_OUTRO_FILENAME
-from server.src.constants.responses import Err, Msg
+from server.src.constants.responses import Err, Success
 
 from server.src.app import session
 from server.src.docs import models, ns_cards_generation
+from server.src.l10n import locale
 from server.src.logger import log, SeverityLevel
 from server.src.statistics import updateStats
 from server.src.typing_gtfr import CardgenSettings, CardMetadata, CardsContents, SongMetadata
@@ -71,7 +72,7 @@ def generateCards(cards_contents: CardsContents, song_data: SongMetadata, settin
     """
     if SessionFields.USER_FOLDER not in session:
         log.error("User folder not found in session. Needed thumbnail is unreachable.")
-        return createApiResponse(HttpStatus.INTERNAL_SERVER_ERROR, Err.USER_FOLDER_NOT_FOUND)
+        return createApiResponse(HttpStatus.INTERNAL_SERVER_ERROR, locale.get(Err.USER_FOLDER_NOT_FOUND))
 
     start = time()
     (err, card_metadata) = extractCardMetadata(song_data, settings.get(PayloadFields.ENFORCE_BOTTOM_COLOR), settings.get(PayloadFields.INCLUDE_BG_IMG))
@@ -86,7 +87,7 @@ def generateCards(cards_contents: CardsContents, song_data: SongMetadata, settin
     log.info(f"Generated {number_of_generated_cards} card{'s' if number_of_generated_cards > 1 else ''} successfully.") \
         .time(SeverityLevel.INFO, time() - start)
 
-    return createApiResponse(HttpStatus.OK, Msg.CARDS_GENERATED, {
+    return createApiResponse(HttpStatus.OK, locale.get(Success.CARDS_GENERATED), {
         snakeToCamel(PayloadFields.CARDS_LYRICS): cards_contents,
         snakeToCamel(PayloadFields.BOTTOM_COLOR): getHexColorFromRGB(card_metadata.dominant_color),
     })
@@ -97,21 +98,21 @@ bp_cards_generation_generate = Blueprint("generate", __name__.split('.')[-1])
 class CardsGenerationResource(Resource):
     @ns_cards_generation.doc("post_generate_cards")
     @ns_cards_generation.expect(models[ROUTES.cards_gen.bp_name]["generate"]["payload"])
-    @ns_cards_generation.response(HttpStatus.CREATED, Msg.CARDS_GENERATED)
-    @ns_cards_generation.response(HttpStatus.BAD_REQUEST, Err.CARDS_PARAMS_NOT_FOUND)
-    @ns_cards_generation.response(HttpStatus.PRECONDITION_FAILED, "\n".join([Err.CARDS_CONTENTS_NOT_FOUND, Err.CARDS_BACKGROUND_NOT_FOUND]))
-    @ns_cards_generation.response(HttpStatus.INTERNAL_SERVER_ERROR, "\n".join([Err.CARDS_CONTENTS_READ_FAILED, Err.USER_FOLDER_NOT_FOUND]))
+    @ns_cards_generation.response(HttpStatus.CREATED, locale.get(Success.CARDS_GENERATED))
+    @ns_cards_generation.response(HttpStatus.BAD_REQUEST, locale.get(Err.CARDS_PARAMS_NOT_FOUND))
+    @ns_cards_generation.response(HttpStatus.PRECONDITION_FAILED, "\n".join([locale.get(Err.CARDS_CONTENTS_NOT_FOUND), locale.get(Err.CARDS_BACKGROUND_NOT_FOUND)]))
+    @ns_cards_generation.response(HttpStatus.INTERNAL_SERVER_ERROR, "\n".join([locale.get(Err.CARDS_CONTENTS_READ_FAILED), locale.get(Err.USER_FOLDER_NOT_FOUND)]))
     def post(self) -> Response:
         """ Generates cards using the contents previously saved """
         log.debug("POST - Generating cards...")
         if SessionFields.CARDS_CONTENTS not in session:
-            log.error(f"Missing element in session: {Err.CARDS_CONTENTS_NOT_FOUND}")
-            return createApiResponse(HttpStatus.BAD_REQUEST, Err.CARDS_CONTENTS_NOT_FOUND)
+            log.error(f"Missing element in session: {locale.get(Err.CARDS_CONTENTS_NOT_FOUND)}")
+            return createApiResponse(HttpStatus.BAD_REQUEST, locale.get(Err.CARDS_CONTENTS_NOT_FOUND))
 
         start = time()
         (err, cardgen_settings, cards_contents, song_data) = getGenerationRequisites()
         if err:
-            return createApiResponse(HttpStatus.PRECONDITION_FAILED if err == Err.CARDS_CONTENTS_READ_FAILED else HttpStatus.BAD_REQUEST, err)
+            return createApiResponse(HttpStatus.PRECONDITION_FAILED if err == locale.get(Err.CARDS_CONTENTS_READ_FAILED) else HttpStatus.BAD_REQUEST, err)
         log.info("Cards contents retrieved successfully.").time(SeverityLevel.INFO, time() - start)
 
         return generateCards(cards_contents, song_data, cardgen_settings)

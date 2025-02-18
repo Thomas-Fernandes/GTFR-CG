@@ -9,10 +9,11 @@ from typing import Optional
 
 from server.src.constants.enums import HttpStatus
 from server.src.constants.paths import ROUTES
-from server.src.constants.responses import Err, Msg
+from server.src.constants.responses import Err, Success
 
 from server.src.decorators import retry
 from server.src.docs import models, ns_artwork_generation
+from server.src.l10n import locale
 from server.src.logger import log, SeverityLevel
 from server.src.utils.web_utils import createApiResponse
 
@@ -27,9 +28,9 @@ def validateItunesParameters(term: str, country: str) -> Optional[str]:
     :return: [str | None] An error message if the parameters are invalid, or None if they are valid
     """
     if term is None or country is None or len(term.strip()) == 0 or len(country.strip()) == 0:
-        return Err.ITUNES_MISSING_PARAMS
+        return locale.get(Err.ITUNES_MISSING_PARAMS)
     if not (len(country) == 2 and country.isalpha()):
-        return Err.ITUNES_INVALID_COUNTRY
+        return locale.get(Err.ITUNES_INVALID_COUNTRY)
     return None
 
 bp_artwork_generation_itunes_search = Blueprint("search-itunes", __name__.split('.')[-1])
@@ -41,8 +42,8 @@ class ItunesSearchResource(Resource):
     @cross_origin()
     @ns_artwork_generation.doc("post_search_itunes")
     @ns_artwork_generation.expect(models[ROUTES.art_gen.bp_name]["search-itunes"]["payload"])
-    @ns_artwork_generation.response(HttpStatus.OK, Msg.ITUNES_FETCH_COMPLETE)
-    @ns_artwork_generation.response(HttpStatus.BAD_REQUEST, "\n".join([Err.ITUNES_MISSING_PARAMS, Err.ITUNES_INVALID_COUNTRY]))
+    @ns_artwork_generation.response(HttpStatus.OK, locale.get(Success.ITUNES_FETCH_COMPLETE))
+    @ns_artwork_generation.response(HttpStatus.BAD_REQUEST, "\n".join([locale.get(Err.ITUNES_MISSING_PARAMS), locale.get(Err.ITUNES_INVALID_COUNTRY)]))
     def post(self) -> Response:
         """ Handles the request to the iTunes API to fetch possible images """
         log.info("POST - Searching images on iTunes...")
@@ -65,4 +66,4 @@ class ItunesSearchResource(Resource):
         log.info(f"iTunes search complete with status code: {response.status_code}") \
             .time(SeverityLevel.INFO, time() - start)
 
-        return createApiResponse(response.status_code, Msg.ITUNES_FETCH_COMPLETE, response.json())
+        return createApiResponse(response.status_code, locale.get(Success.ITUNES_FETCH_COMPLETE), response.json())

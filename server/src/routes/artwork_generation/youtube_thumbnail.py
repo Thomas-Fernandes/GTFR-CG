@@ -10,12 +10,13 @@ from uuid import uuid4
 from server.src.constants.enums import AvailableCacheElemType, HttpStatus, SessionFields
 from server.src.constants.paths import PROCESSED_DIR, SLASH, UPLOADED_YOUTUBE_IMG_FILENAME
 from server.src.constants.regex import REGEX_YOUTUBE_URL
-from server.src.constants.responses import Err, Msg, Warn
+from server.src.constants.responses import Err, Success, Warn
 
 from server.src.app import session
+from server.src.l10n import locale
 from server.src.logger import log
 from server.src.constants.paths import ROUTES
-from server.src.constants.responses import Err, Msg
+from server.src.constants.responses import Err, Success
 from server.src.docs import models, ns_artwork_generation
 from server.src.utils.web_utils import createApiResponse
 
@@ -36,7 +37,7 @@ def processYoutubeThumbnail(thumbnail_url: str) -> Response:
     :return: [Response] Contains the status and path of the processed image
     """
     if SessionFields.USER_FOLDER not in session:
-        log.debug(Warn.NO_USER_FOLDER)
+        log.debug(locale.get(Warn.NO_USER_FOLDER))
         session[SessionFields.USER_FOLDER] = str(uuid4())
 
     user_folder = str(session.get(SessionFields.USER_FOLDER)) + SLASH + AvailableCacheElemType.ARTWORKS + SLASH
@@ -45,7 +46,7 @@ def processYoutubeThumbnail(thumbnail_url: str) -> Response:
 
     image_response = requestsGet(thumbnail_url)
     if image_response.status_code != HttpStatus.OK:
-        return createApiResponse(HttpStatus.INTERNAL_SERVER_ERROR, Err.FAIL_DOWNLOAD)
+        return createApiResponse(HttpStatus.INTERNAL_SERVER_ERROR, locale.get(Err.FAIL_DOWNLOAD))
 
     image_path = path.join(user_processed_path, UPLOADED_YOUTUBE_IMG_FILENAME)
     with open(image_path, "wb") as file:
@@ -55,7 +56,7 @@ def processYoutubeThumbnail(thumbnail_url: str) -> Response:
     session[SessionFields.INCLUDE_CENTER_ARTWORK] = False
 
     log.info(f"YouTube thumbnail upload complete and saved it to {image_path}")
-    return createApiResponse(HttpStatus.CREATED, Msg.YOUTUBE_IMAGE_UPLOADED)
+    return createApiResponse(HttpStatus.CREATED, locale.get(Success.YOUTUBE_IMAGE_UPLOADED))
 
 bp_artwork_generation_youtube_thumbnail = Blueprint("use-youtube-thumbnail", __name__.split('.')[-1])
 
@@ -63,9 +64,9 @@ bp_artwork_generation_youtube_thumbnail = Blueprint("use-youtube-thumbnail", __n
 class YoutubeThumbnailResource(Resource):
     @ns_artwork_generation.doc("post_use_youtube_thumbnail")
     @ns_artwork_generation.expect(models[ROUTES.art_gen.bp_name]["use-youtube-thumbnail"]["payload"])
-    @ns_artwork_generation.response(HttpStatus.CREATED, Msg.YOUTUBE_IMAGE_UPLOADED)
-    @ns_artwork_generation.response(HttpStatus.BAD_REQUEST, "\n".join([Err.NO_IMG_URL, Err.INVALID_YT_URL]))
-    @ns_artwork_generation.response(HttpStatus.INTERNAL_SERVER_ERROR, Err.FAIL_DOWNLOAD)
+    @ns_artwork_generation.response(HttpStatus.CREATED, locale.get(Success.YOUTUBE_IMAGE_UPLOADED))
+    @ns_artwork_generation.response(HttpStatus.BAD_REQUEST, "\n".join([locale.get(Err.NO_IMG_URL), locale.get(Err.INVALID_YT_URL)]))
+    @ns_artwork_generation.response(HttpStatus.INTERNAL_SERVER_ERROR, locale.get(Err.FAIL_DOWNLOAD))
     def post(self) -> Response:
         """ Handles the extraction and processing of a YouTube thumbnail from a given URL """
         log.info("POST - Generating artwork using a YouTube thumbnail...")
@@ -74,13 +75,13 @@ class YoutubeThumbnailResource(Resource):
         youtube_url: Optional[str] = body.get("url")
 
         if youtube_url is None:
-            log.error(f"Error in request payload: {Err.NO_IMG_URL}")
-            return createApiResponse(HttpStatus.BAD_REQUEST, Err.NO_IMG_URL)
+            log.error(f"Error in request payload: {locale.get(Err.NO_IMG_URL)}")
+            return createApiResponse(HttpStatus.BAD_REQUEST, locale.get(Err.NO_IMG_URL))
 
         video_id = extractYoutubeVideoId(youtube_url)
         if video_id is None:
-            log.error(f"Error in request payload: {Err.INVALID_YT_URL}")
-            return createApiResponse(HttpStatus.BAD_REQUEST, Err.INVALID_YT_URL)
+            log.error(f"Error in request payload: {locale.get(Err.INVALID_YT_URL)}")
+            return createApiResponse(HttpStatus.BAD_REQUEST, locale.get(Err.INVALID_YT_URL))
 
         thumbnail_url = f"https://i3.ytimg.com/vi/{video_id}/maxresdefault.jpg"
         return processYoutubeThumbnail(thumbnail_url)
