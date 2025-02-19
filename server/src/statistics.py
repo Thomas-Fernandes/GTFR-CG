@@ -11,7 +11,6 @@ from src.typing_gtfr import JsonDict
 
 ############# CLASS #############
 
-
 @dataclass(slots=True, kw_only=True)
 class Stats:
     """Dataclass to store statistics about the application

@@ -13,7 +13,6 @@ from src.constants.paths import (
 )
 from src.constants.responses import Error
 
-
 class ImageMode(StrEnum):
     """Enum for the available image modes"""
 
@@ -22,7 +21,6 @@ class ImageMode(StrEnum):
 
     def __repr__(self) -> str:
         return self.value
-
 
 # Artwork generation
 LOGO_OVERLAYS = []
