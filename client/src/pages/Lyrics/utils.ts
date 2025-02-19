@@ -18,7 +18,7 @@ export const validateSongParts = (songParts: SongPartsCards, lyricsParts: Lyrics
   const errors: ValidationInconvenience[] = [];
 
   songParts.forEach((sectionCards, sectionIdx) => {
-    const lyricsPartIdx = lyricsParts.findIndex(part => part.lyrics === sectionCards.join("\n"));
+    const lyricsPartIdx = lyricsParts.findIndex((part) => part.lyrics === sectionCards.join("\n"));
 
     sectionCards.forEach((card, cardIdx) => {
       if (errors.length >= CONTENT_THRESHOLDS.DISPLAY_LIMIT) return;
@@ -29,31 +29,34 @@ export const validateSongParts = (songParts: SongPartsCards, lyricsParts: Lyrics
         errors.push({
           where: `lyrics-part_${lyricsPartIdx}`,
           what: ValidationError.VerticalOverflow,
-          message: `Card ${cardIdx + 1} in section ${sectionIdx + 1} has more than ${CONTENT_THRESHOLDS.LINES.ERROR} lines.`
+          message: `Card ${cardIdx + 1} in section ${sectionIdx + 1} has more than ${CONTENT_THRESHOLDS.LINES.ERROR} lines.`,
         });
       } else if (linesCount > CONTENT_THRESHOLDS.LINES.WARNING) {
         errors.push({
           where: `lyrics-part_${sectionIdx}`,
           what: ValidationWarning.VerticalOverflow,
-          message: `Card ${cardIdx + 1} in section ${sectionIdx + 1} has more than ${CONTENT_THRESHOLDS.LINES.WARNING} lines.`
+          message: `Card ${cardIdx + 1} in section ${sectionIdx + 1} has more than ${CONTENT_THRESHOLDS.LINES.WARNING} lines.`,
         });
       }
 
-      const allTooLongLines = lines.filter(line => getLinePixelLength(line) > CONTENT_THRESHOLDS.LINE_PX_LENGTH.ERROR);
-      allTooLongLines.forEach(line => {
+      const allTooLongLines = lines.filter(
+        (line) => getLinePixelLength(line) > CONTENT_THRESHOLDS.LINE_PX_LENGTH.ERROR
+      );
+      allTooLongLines.forEach((line) => {
         errors.push({
           where: `lyrics-part_${sectionIdx}`,
           what: ValidationError.HorizontalOverflow,
-          message: `Card ${cardIdx + 1} in section ${sectionIdx + 1} has a very long line (${getLinePixelLength(line)}px).`
+          message: `Card ${cardIdx + 1} in section ${sectionIdx + 1} has a very long line (${getLinePixelLength(line)}px).`,
         });
       });
-      const allLongLines = lines.filter(line => getLinePixelLength(line) > CONTENT_THRESHOLDS.LINE_PX_LENGTH.WARNING)
-        .filter(line => !allTooLongLines.includes(line));
-      allLongLines.forEach(line => {
+      const allLongLines = lines
+        .filter((line) => getLinePixelLength(line) > CONTENT_THRESHOLDS.LINE_PX_LENGTH.WARNING)
+        .filter((line) => !allTooLongLines.includes(line));
+      allLongLines.forEach((line) => {
         errors.push({
           where: `lyrics-part_${sectionIdx}`,
           what: ValidationWarning.HorizontalOverflow,
-          message: `Card ${cardIdx + 1} in section ${sectionIdx + 1} has a long line (${getLinePixelLength(line)}px).`
+          message: `Card ${cardIdx + 1} in section ${sectionIdx + 1} has a long line (${getLinePixelLength(line)}px).`,
         });
       });
     });
@@ -78,5 +81,5 @@ export const convertToCardContents = (lyricsParts: LyricsPartType[], dismissedPa
   // Input: [{section: "Verse 1", lyrics: "The whole lyrics\nOf the section\nAre here as is\nTotally disorganized"}, ...]
   // Output: [["The whole lyrics\nOf the section", "Are here as is\nTotally disorganized"], ...]
   //   -> Each inner array is a section, each string is a card
-  return lyricsParts.filter((_, idx) => !dismissedParts.has(idx)).map(part => part.lyrics.trim().split("\n\n"));
+  return lyricsParts.filter((_, idx) => !dismissedParts.has(idx)).map((part) => part.lyrics.trim().split("\n\n"));
 };
