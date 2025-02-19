@@ -10,14 +10,20 @@ ns_artwork_processing = Namespace((ROUTES.art_proc.bp_name or fallback_bp_name),
 ns_lyrics = Namespace((ROUTES.lyrics.bp_name or fallback_bp_name), description="Lyrics related routes")
 ns_cards_generation = Namespace((ROUTES.cards_gen.bp_name or fallback_bp_name), description="Cards generation related routes")
 
-# create a type of field for a python dictionary
-
-class fieldsDict(fields.Raw):
+class fieldsDict(fields.Raw): # field type for dictionary
     __schema_type__ = "dict"
     __schema_example__ = "{key: value}"
 
 models = {
     ROUTES.home.bp_name: {
+        "change_locale": {
+            "payload": ns_home.model("Home - Change Server Locale - payload", {
+                "locale": fields.String(description="New locale to use"),
+            }),
+            "response": ns_home.model("Home - Change Server Locale - response", {
+                "locale": fields.String(description="New locale used"),
+            }),
+        },
         "genius-token": {
             "response": ns_home.model("Home - Genius Token - response", {
                 "token": fields.String(description="Genius API Token"),

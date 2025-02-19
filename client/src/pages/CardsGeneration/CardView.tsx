@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 
 import { sendToast } from "@/common/Toast";
 import { downloadFile } from "@/common/utils/fileUtils";
+import { getLocalizedToasts } from "@/common/utils/toastUtils";
 import DownloadButton from "@/components/DownloadButton/DownloadButton";
 import ImgWithOverlay from "@/components/ImgWithOverlay/ImgWithOverlay";
-import { Toast, ToastType } from "@/constants/toasts";
+import { ToastType } from "@/constants/toasts";
+import { useAppContext } from "@/contexts";
 
 import { useCardsGalleryContext } from "./contexts";
 import { CardViewProps } from "./types";
@@ -12,6 +14,14 @@ import { CardViewProps } from "./types";
 import "./CardView.scss";
 
 const CardView: React.FC<CardViewProps> = ({ card, cardIdx }) => {
+  const { intl } = useAppContext();
+  const labels = {
+    edit: intl.formatMessage({ id: "pages.cardgen.modal.edit" }),
+    download: intl.formatMessage({ id: "components.downloadButton.download" }),
+  };
+
+  const toasts = getLocalizedToasts(intl);
+
   const { setIsModalOpen, setCurrentCard, setNewLyrics } = useCardsGalleryContext();
 
   const [isMounted, setIsMounted] = useState(false);
@@ -23,7 +33,7 @@ const CardView: React.FC<CardViewProps> = ({ card, cardIdx }) => {
 
   const openModal = () => {
     if (!cardIsEditable) {
-      sendToast(Toast.CardNotEditable, ToastType.Warn);
+      sendToast(toasts.CardGen.CardNotEditable, ToastType.Warn);
       return;
     }
 
@@ -46,13 +56,13 @@ const CardView: React.FC<CardViewProps> = ({ card, cardIdx }) => {
           />
         : <ImgWithOverlay
             src={card.imgSrc} alt={alt}
-            overlayText={"Edit this card"}
+            overlayText={labels.edit}
           />
         }
       </div>
 
       <DownloadButton className="mac"
-        label={"Download " + shortCardFileName}
+        label={`${labels.download} ${shortCardFileName}`}
         onClick={() => downloadFile(card.imgSrc)}
       />
     </div>

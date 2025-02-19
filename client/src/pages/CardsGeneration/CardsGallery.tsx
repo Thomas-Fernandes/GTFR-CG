@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 
 import { downloadFilesAsZip } from "@/common/utils/fileUtils";
 import CardStack from "@/components/CardStack/CardStack";
+import { useAppContext } from "@/contexts";
 
 import CardEditModal from "./CardEditModal";
 import CardView from "./CardView";
@@ -12,6 +13,11 @@ import { CardData, CardsGalleryProps } from "./types";
 import "./CardsGallery.scss";
 
 const CardsGallery: React.FC<CardsGalleryProps> = ({ initialCards, ...divProps }) => {
+  const { intl } = useAppContext();
+  const labels = {
+    downloadAll: intl.formatMessage({ id: "pages.cardgen.downloadAll" }),
+  };
+
   const [cards, setCards] = useState<CardData[]>(initialCards);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -30,7 +36,7 @@ const CardsGallery: React.FC<CardsGalleryProps> = ({ initialCards, ...divProps }
           { cards.length > 0 &&
             <>
               <li key={0}>
-                <CardStack label={"Download All as Zip"} imgSrc={cards[1].imgSrc} stackSize={2}
+                <CardStack label={labels.downloadAll} imgSrc={cards[1].imgSrc} stackSize={2}
                   onClick={() => downloadFilesAsZip(cards.map(card => card.imgSrc), CARDS_ZIP_FILENAME)}
                 />
               </li>

@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import ActionButton from "@/components/ActionButton/ActionButton";
 import { SpinnerId } from "@/constants/spinners";
+import { useAppContext } from "@/contexts";
 
 import { useLyricsContext } from "./contexts";
 import { handleLyricsSaveSubmit } from "./handlers";
@@ -12,6 +13,11 @@ import { convertToCardContents } from "./utils";
 import "./LyricsPartsForm.scss";
 
 const LyricsPartsForm: React.FC<LyricsPartsFormProps> = ({ lyricsParts }) => {
+  const { intl } = useAppContext();
+  const labels = {
+    submit: intl.formatMessage({ id: "pages.lyrics.submit" }),
+  };
+
   const { dismissedParts, pageMetadata, isManual, navigate } = useLyricsContext();
 
   const [isSavingCardsContent, setIsSavingCardsContent] = useState(false);
@@ -37,7 +43,7 @@ const LyricsPartsForm: React.FC<LyricsPartsFormProps> = ({ lyricsParts }) => {
 
       <label htmlFor={SpinnerId.LyricsConvert} className="hidden">{"Convert to cards button"}</label>
       <div className="submit" id={SpinnerId.LyricsConvert}>
-        <ActionButton type="submit" label="CONVERT TO CARDS" className="spaced" />
+        <ActionButton type="submit" label={labels.submit} className="spaced" />
       </div>
     </form>
   );

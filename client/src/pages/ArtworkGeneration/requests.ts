@@ -6,7 +6,8 @@ import { sendToast } from "@/common/Toast";
 import { ApiResponse, RestVerb, StateSetter } from "@/common/types";
 import { API, BACKEND_URL, ViewPaths } from "@/constants/paths";
 import { SpinnerId } from "@/constants/spinners";
-import { Toast, ToastType } from "@/constants/toasts";
+import { ToastType } from "@/constants/toasts";
+import { getToasts } from "@/contexts";
 
 import { ArtworkResultProps } from "./constants";
 import { ItunesImageRequest, ItunesRequest, ItunesResponse, ItunesResult, YoutubeRequest } from "./types";
@@ -47,6 +48,7 @@ export const postItunesSearch = (
   body: ItunesRequest,
   props: { setItunesResults: StateSetter<ItunesResult[]> }
 ) => {
+  const toasts = getToasts();
   const { setItunesResults } = props;
 
   showSpinner(SpinnerId.ItunesSearch);
@@ -74,7 +76,7 @@ export const postItunesSearch = (
       });
       setItunesResults(resultItems);
     } else {
-      sendToast(Toast.NoResultsFound, ToastType.Warn);
+      sendToast(toasts.ArtGen.NoResultsFound, ToastType.Warn);
     }
   }).catch((error: ApiResponse) => {
     setItunesResults([]);

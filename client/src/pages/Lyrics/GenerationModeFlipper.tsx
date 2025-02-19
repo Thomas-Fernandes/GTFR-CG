@@ -1,15 +1,22 @@
 import { ContentsGenerationMode } from "@/common/types";
+import { useAppContext } from "@/contexts";
 
-import { MANUAL_CREATION_SECTION } from "./constants";
 import { useLyricsContext } from "./contexts";
 import { GenerationModeFlipperProps, LyricsPartType, PageMetadata } from "./types";
 
 const GenerationModeFlipper: React.FC<GenerationModeFlipperProps> = ({ className, ...props }) => {
+  const { intl } = useAppContext();
+  const labels = {
+    switchManual: intl.formatMessage({ id: "pages.lyrics.generationMode.switchManual" }),
+    switchAutomatic: intl.formatMessage({ id: "pages.lyrics.generationMode.switchAutomatic" }),
+    manualHeader: intl.formatMessage({ id: "pages.lyrics.parts.manualHeader" }),
+  };
+
   const { setLyricsParts, setPageMetadata, artist, songName, isManual, setIsManual } = useLyricsContext();
 
   const handleClick = () => {
     if (!isManual) {
-      setLyricsParts([{ section: MANUAL_CREATION_SECTION, lyrics: "" }]);
+      setLyricsParts([{ section: labels.manualHeader, lyrics: "" }]);
       setPageMetadata({ id: ContentsGenerationMode.Manual, artist: artist, title: songName, contributors: [] });
     } else {
       setLyricsParts([] as LyricsPartType[]);
@@ -24,7 +31,7 @@ const GenerationModeFlipper: React.FC<GenerationModeFlipperProps> = ({ className
       className={`large mac ${className ?? ""}`}
       {...props}
     >
-      { isManual ? "Generate cards automatically" : "Generate cards manually instead" }
+      { isManual ? labels.switchAutomatic : labels.switchManual }
     </button>
   )
 };

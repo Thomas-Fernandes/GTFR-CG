@@ -6,10 +6,11 @@ from time import time
 
 from src.constants.enums import AvailableStats, HttpStatus, PayloadFields, SessionFields
 from src.constants.paths import ROUTES, SLASH
-from src.constants.responses import Err, Msg
+from src.constants.responses import Error, Success
 
 from src.app import session
 from src.docs import models, ns_cards_generation
+from src.l10n import locale
 from src.logger import log, SeverityLevel
 from src.statistics import updateStats
 from src.typing_gtfr import CardgenSettings, CardsContents, SongMetadata
@@ -31,7 +32,7 @@ def generateSingleCard(cards_contents: CardsContents, song_data: SongMetadata, s
 
     if SessionFields.USER_FOLDER not in session:
         log.error("User folder not found in session. Needed thumbnail is unreachable.")
-        return createApiResponse(HttpStatus.INTERNAL_SERVER_ERROR, Err.USER_FOLDER_NOT_FOUND)
+        return createApiResponse(HttpStatus.INTERNAL_SERVER_ERROR, locale.get(Error.USER_FOLDER_NOT_FOUND))
 
     log.info("Deducing card metadata...")
     try:
@@ -47,7 +48,7 @@ def generateSingleCard(cards_contents: CardsContents, song_data: SongMetadata, s
     log.info("Generated new card successfully.")
     updateStats(to_increment=AvailableStats.CARDS_GENERATED)
 
-    return createApiResponse(HttpStatus.CREATED, Msg.CARD_GENERATED)
+    return createApiResponse(HttpStatus.CREATED, locale.get(Success.CARD_GENERATED))
 
 bp_cards_generation_generate_single = Blueprint("generate-single", __name__.split('.')[-1])
 
@@ -55,21 +56,21 @@ bp_cards_generation_generate_single = Blueprint("generate-single", __name__.spli
 class SingleCardGenerationResource(Resource):
     @ns_cards_generation.doc("post_generate_single_card")
     @ns_cards_generation.expect(models[ROUTES.cards_gen.bp_name]["generate-single"]["payload"])
-    @ns_cards_generation.response(HttpStatus.CREATED, Msg.CARD_GENERATED)
-    @ns_cards_generation.response(HttpStatus.BAD_REQUEST, Err.CARDS_PARAMS_NOT_FOUND)
-    @ns_cards_generation.response(HttpStatus.PRECONDITION_FAILED, "\n".join([Err.CARDS_CONTENTS_NOT_FOUND, Err.CARDS_BACKGROUND_NOT_FOUND]))
-    @ns_cards_generation.response(HttpStatus.INTERNAL_SERVER_ERROR, "\n".join([Err.CARDS_CONTENTS_READ_FAILED, Err.USER_FOLDER_NOT_FOUND]))
+    @ns_cards_generation.response(HttpStatus.CREATED, locale.get(Success.CARD_GENERATED))
+    @ns_cards_generation.response(HttpStatus.BAD_REQUEST, locale.get(Error.CARDS_PARAMS_NOT_FOUND))
+    @ns_cards_generation.response(HttpStatus.PRECONDITION_FAILED, "\n".join([locale.get(Error.CARDS_CONTENTS_NOT_FOUND), locale.get(Error.CARDS_BACKGROUND_NOT_FOUND)]))
+    @ns_cards_generation.response(HttpStatus.INTERNAL_SERVER_ERROR, "\n".join([locale.get(Error.CARDS_CONTENTS_READ_FAILED), locale.get(Error.USER_FOLDER_NOT_FOUND)]))
     def post(self) -> Response:
         """ Generates a single card again using custom contents """
         log.debug("POST - Generating a singular card...")
         if SessionFields.CARDS_CONTENTS not in session:
-            log.error(Err.CARDS_CONTENTS_NOT_FOUND)
-            return createApiResponse(HttpStatus.PRECONDITION_FAILED, Err.CARDS_CONTENTS_NOT_FOUND)
+            log.error(Error.CARDS_CONTENTS_NOT_FOUND)
+            return createApiResponse(HttpStatus.PRECONDITION_FAILED, locale.get(Error.CARDS_CONTENTS_NOT_FOUND))
 
         start = time()
         (err, cardgen_settings, card_contents, song_data) = getGenerationRequisites(is_singular_card=True)
         if err:
-            return createApiResponse(HttpStatus.PRECONDITION_FAILED if err == Err.CARDS_CONTENTS_READ_FAILED else HttpStatus.BAD_REQUEST, err)
+            return createApiResponse(HttpStatus.PRECONDITION_FAILED if err == locale.get(Error.CARDS_CONTENTS_READ_FAILED) else HttpStatus.BAD_REQUEST, err)
         log.info("Card contents retrieved successfully.").time(SeverityLevel.INFO, time() - start)
 
         return generateSingleCard(card_contents, song_data, cardgen_settings)

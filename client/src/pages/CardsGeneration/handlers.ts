@@ -5,7 +5,8 @@ import { sendToast } from "@/common/Toast";
 import { isFileExtensionAccepted } from "@/common/utils/fileUtils";
 import { ACCEPTED_IMG_EXTENSIONS } from "@/constants/files";
 import { SpinnerId } from "@/constants/spinners";
-import { Toast, ToastType } from "@/constants/toasts";
+import { ToastType } from "@/constants/toasts";
+import { getToasts } from "@/contexts";
 
 import { postGenerateCards, postGenerateSingleCard } from "./requests";
 import { CardData, CardsGenerationRequest, HandleGenerateCardsProps, HandleSaveModalProps } from "./types";
@@ -15,15 +16,16 @@ export const handleSaveModal = (
   currentCard: CardData | null, isModalSaving: boolean,
   props: HandleSaveModalProps
 ) => {
+  const toasts = getToasts();
   const { generationProps, newLyrics, generateSingleCardProps } = props;
 
   if (currentCard === null) {
-    sendToast(Toast.CardEditFailed, ToastType.Error);
+    sendToast(toasts.CardGen.CardEditFailed, ToastType.Error);
     return;
   }
 
   if (isModalSaving) {
-    sendToast(Toast.CardEditInProgress, ToastType.Warn);
+    sendToast(toasts.CardGen.CardEditInProgress, ToastType.Warn);
     return;
   }
 
@@ -36,23 +38,20 @@ export const handleGenerateCards = (
   e: FormEvent<HTMLFormElement>, body: CardsGenerationRequest,
   props: HandleGenerateCardsProps
 ) => {
+  const toasts = getToasts();
   const { generationInProgress, setGenerationInProgress, setCardPaths, setCards, setColorPick } = props;
 
   e.preventDefault();
 
   if (generationInProgress) {
-    sendToast(Toast.ProcessingInProgress, ToastType.Warn);
+    sendToast(toasts.ProcessingInProgress, ToastType.Warn);
     return;
   }
 
   if (body.bgImg) {
     const fileExtensionIsAccepted = isFileExtensionAccepted(body.bgImg.name, ACCEPTED_IMG_EXTENSIONS);
     if (!fileExtensionIsAccepted) {
-      sendToast(
-        Toast.InvalidFileType + "\n" +
-          "Accepted file extensions: " + ACCEPTED_IMG_EXTENSIONS.join(", ") + ".",
-        ToastType.Error
-      );
+      sendToast(toasts.ArtGen.InvalidFileType, ToastType.Error);
       return;
     }
   }
@@ -67,5 +66,6 @@ export const handleGenerateCards = (
 };
 
 export const handleUnauthorizedCheckbox = () => {
-  sendToast(Toast.UnauthorizedOutro, ToastType.Warn);
+  const toasts = getToasts();
+  sendToast(toasts.CardGen.UnauthorizedOutro, ToastType.Warn);
 };

@@ -131,3 +131,5 @@ class Cache:
         return f"Cache({content[:-2]})"
 
 JsonDict: TypeAlias = dict[str, Optional[str | int]]
+
+L10nDict: TypeAlias = dict[str, dict[str, str]]

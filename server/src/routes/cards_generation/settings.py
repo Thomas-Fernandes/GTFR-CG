@@ -11,9 +11,10 @@ from uuid import uuid4
 from src.constants.enums import AvailableCacheElemType, PayloadFields, SessionFields
 from src.constants.image_generation import BLACK_OVERLAY, METADATA_IDENTIFIER, METADATA_SEP, WHITE_OVERLAY
 from src.constants.paths import GENERATED_ARTWORKS_DIR, SLASH, PROCESSED_DIR, PROCESSED_ARTWORK_FILENAME, UPLOADED_FILE_IMG_FILENAME
-from src.constants.responses import Err, Warn
+from src.constants.responses import Error, Warn
 
 from src.app import session
+from src.l10n import locale
 from src.logger import log, SeverityLevel
 from src.routes.artwork_processing.pillow import generateCoverArt
 from src.typing_gtfr import CardgenSettings, CardsContents, CardMetadata, SongMetadata
@@ -45,7 +46,7 @@ def getCardMetadata(song_data: SongMetadata, enforce_bottom_color: str | None, i
     bg = None
     if include_bg_img:
         if not doesFileExist(bg_path):
-            raise FileNotFoundError(Err.CARDS_BACKGROUND_NOT_FOUND)
+            raise FileNotFoundError(Error.CARDS_BACKGROUND_NOT_FOUND)
         bg = Image.open(bg_path)
 
     start = time()
@@ -95,7 +96,7 @@ def getSongMetadata(cards_contents: CardsContents, card_metaname: str | None) ->
 
 def saveEnforcedBackgroundImage(file: FileStorage, include_center_artwork: bool) -> None:
     if SessionFields.USER_FOLDER not in session:
-        log.debug(Warn.NO_USER_FOLDER)
+        log.debug(locale.get(Warn.NO_USER_FOLDER))
         session[SessionFields.USER_FOLDER] = str(uuid4())
 
     image_path = path.join(GENERATED_ARTWORKS_DIR, UPLOADED_FILE_IMG_FILENAME)
@@ -135,16 +136,16 @@ def getBaseCardgenSettings(is_singular_card: bool) -> CardgenSettings:
             f"{AvailableCacheElemType.ARTWORKS}{SLASH}" + \
             f"{PROCESSED_ARTWORK_FILENAME}"
         bg_exists = doesFileExist(bg_path)
-        if card_metaname is None: return Err.CARDS_METANAME_NOT_FOUND
-        if enforce_bg_image and include_center_artwork is None: return Err.CARDS_CENTER_ARTWORK_NOT_FOUND
-        if not bg_exists and not enforce_bg_image and include_bg_img: return Err.CARDS_BACKGROUND_NOT_FOUND
+        if card_metaname is None: return locale.get(Error.CARDS_METANAME_NOT_FOUND)
+        if enforce_bg_image and include_center_artwork is None: return locale.get(Error.CARDS_CENTER_ARTWORK_NOT_FOUND)
+        if not bg_exists and not enforce_bg_image and include_bg_img: return locale.get(Error.CARDS_BACKGROUND_NOT_FOUND)
         if enforce_bottom_color is None and not bg_exists:
             if include_bg_img:
-                return Err.CARDS_BACKGROUND_NOT_FOUND
+                return locale.get(Error.CARDS_BACKGROUND_NOT_FOUND)
             else:
-                return Err.CARDS_COLOR_NOT_FOUND
+                return locale.get(Error.CARDS_COLOR_NOT_FOUND)
         if enforce_bg_image and include_center_artwork is None:
-            return Err.CARDS_CENTER_ARTWORK_NOT_FOUND
+            return locale.get(Error.CARDS_CENTER_ARTWORK_NOT_FOUND)
         return None
     err = validateCardgenParameters(card_metaname, enforce_bg_image, include_center_artwork, include_background_img)
     if err is not None:
@@ -163,9 +164,9 @@ def getBaseCardgenSettings(is_singular_card: bool) -> CardgenSettings:
         card_filename: Optional[str] = request.form[snakeToCamel(PayloadFields.CARD_FILENAME)]
 
         def validateSingularCardgenParameters(card_content: str, card_filename: str, bottom_color: str) -> Optional[str]:
-            if bottom_color is None: return Err.CARDS_COLOR_NOT_FOUND
-            if card_content is None: return Err.CARDS_CONTENTS_NOT_FOUND
-            if card_filename is None: return Err.CARDS_FILENAME_NOT_FOUND
+            if bottom_color is None: return locale.get(Error.CARDS_COLOR_NOT_FOUND)
+            if card_content is None: return locale.get(Error.CARDS_CONTENTS_NOT_FOUND)
+            if card_filename is None: return locale.get(Error.CARDS_FILENAME_NOT_FOUND)
             return None
         err = validateSingularCardgenParameters(card_content, card_filename, enforce_bottom_color)
         if err is not None:
@@ -191,7 +192,7 @@ def getGenerationRequisites(
         cards_contents: CardsContents = getCardsContentsFromFile(session.get(SessionFields.CARDS_CONTENTS))
 
         if len(cards_contents) == 0 or not cards_contents[0][0].startswith(METADATA_IDENTIFIER):
-            raise ValueError(Err.CARDS_CONTENTS_INVALID)
+            raise ValueError(Error.CARDS_CONTENTS_INVALID)
 
         def sanitizeCardsContents(cards_contents: CardsContents, is_singular_card: bool) -> CardsContents:
             if is_singular_card:
@@ -203,7 +204,7 @@ def getGenerationRequisites(
         cards_contents = sanitizeCardsContents(cards_contents, is_singular_card)
     except ValueError as e:
         log.error(f"Error while getting card{'' if is_singular_card else 's'} contents: {e}")
-        return (str(Err.CARDS_CONTENTS_READ_FAILED), None, None, None)
+        return (str(Error.CARDS_CONTENTS_READ_FAILED), None, None, None)
     log.debug(f"  Card{'' if is_singular_card else 's'} contents:")
     for card in cards_contents:
         log.debug(f"    {card}")

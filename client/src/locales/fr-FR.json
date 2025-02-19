@@ -1,0 +1,163 @@
+{
+  "pages": {
+    "landing": {
+      "title": "Bienvenue",
+      "learnMore": "En savoir plus",
+      "generateContent": "Générer du contenu",
+      "overlayText": "Aller sur notre chaîne YouTube"
+    },
+    "redirect": {
+      "title": "Redirection",
+      "header": "Vous subissez une redirection après qu'une erreur est survenue...",
+      "counter": {
+        "1": "Vous allez être redirigé vers",
+        "2": "dans",
+        "3": "seconde"
+      }
+    },
+    "home": {
+      "title": "Accueil",
+      "stats": {
+        "dateFirstOperation": "Date de première opération",
+        "dateLastOperation": "Date de dernière opération",
+        "artworkGenerations": "Générations d'artworks",
+        "lyricsFetches": "Récupérations de paroles",
+        "cardsGenerated": "Cartes générées"
+      }
+    },
+    "artgen": {
+      "title": "Génération d'artworks",
+      "indicatorLabel": "ou...",
+      "itunes": {
+        "header": "Rechercher une pochette sur iTunes",
+        "inputPlaceholder": "Chercher sur iTunes",
+        "submit": "CHERCHER",
+        "localeTitle": "Sélectionner une région de recherche",
+        "locale": "région ",
+        "clear": "Vider les résultats",
+        "use": "Utiliser cette image"
+      },
+      "local": {
+        "header": "Ajouter votre propre image",
+        "fileUploadButton": "Sélectionner une image.",
+        "selectors": {
+          "includeCenter": "Inclure l'image au centre"
+        },
+        "submit": "CHARGER"
+      },
+      "youtube": {
+        "header": "Utiliser une miniature de vidéo YouTube",
+        "inputPlaceholder": "Collez une URL de vidéo YouTube ici",
+        "submit": "CHERCHER"
+      }
+    },
+    "procart": {
+      "title": "Artworks générés"
+    },
+    "lyrics": {
+      "title": "Paroles",
+      "loadLast": "Charger la dernière génération",
+      "search": {
+        "artistPlaceholder": "Entrez un nom d'artiste",
+        "songPlaceholder": "Entrez un titre de chanson",
+        "submit": "CHERCHER"
+      },
+      "generationMode": {
+        "switchManual": "Generate des cartes manuellement",
+        "switchAutomatic": "Generate des cartes automatiquement"
+      },
+      "parts": {
+        "manualHeader": "Création de carte manuelle",
+        "remove": "Retirer",
+        "clear": "Vider",
+        "restore": "Restaurer"
+      },
+      "submit": "CONVERTIR EN CARTES"
+    },
+    "cardgen": {
+      "title": "Génération de cartes",
+      "textFields": {
+        "metanamePlaceholder": "si vide, le méta-nom sera déduit",
+        "contributorsPlaceholder": "contributeurs (séparés par des virgules)"
+      },
+      "enforcers": {
+        "fileUploadLabel": "Écraser l'image de fond ?",
+        "colorPickerLabel": "Écraser la couleur de la bande ?"
+      },
+      "selectors": {
+        "centerArtwork": "Inclure l'image au centre",
+        "outroImage": "Générer une carte d'outro",
+        "bgImage": "Include l'image de fond"
+      },
+      "submit": "GÉNÉRER",
+      "downloadAll": "Tout télécharger en Zip",
+      "modal": {
+        "edit": "Modifier cette carte",
+        "header": "Modifier les paroles de cette carte",
+        "save": "Sauvegarder",
+        "saving": "Sauvegarde...",
+        "cancel": "Annuler"
+      }
+    }
+  },
+
+  "components": {
+    "colorPicker": {
+      "loadLatest": "Charger récent"
+    },
+    "downloadButton": {
+      "download": "Télécharger"
+    },
+    "fileUploader": {
+      "defaultCaption": "Aucun fichier sélectionné."
+    },
+    "localeSwitch": {
+      "title": "Sélectionner une langue"
+    }
+  },
+
+  "toasts": {
+    "unknownError": "Une erreur inconnue est survenue.\nVeuillez réessayer plus tard ou ouvrir un ticket.",
+    "serverUnavailable": "Serveur indisponible.\nVeuillez vérifier que le serveur Python tourne bien.",
+    "noSpinnerId": "Un id HTML de Spinner est requis.",
+    "noSpinnerContainer": "Conteneur HTML de Spinner introuvable.",
+    "processingInProgress": "Opération déjà en cours.",
+    "noLatestColor": "Aucune couleur récente trouvée.",
+    "redirect": {
+      "noProcessedImage": "Aucun artwork généré trouvé.",
+      "noGeniusToken": "Token d'API Genius introuvable."
+    },
+    "home": {
+      "welcome": "Bienvenue sur GTFR-CG!\nApplication démarrée avec succès.",
+      "geniusTokenNotFound": "Token d'API Genius introuvable.\nLa récupération des paroles est désactivée.",
+      "addGeniusToken": "Ajoutez votre token d'API Genius à votre\nfichier .env et redémarrez l'application\npour activer la récupération des paroles."
+    },
+    "artgen": {
+      "noResultsFound": "Aucun résultat n'a été trouvé.",
+      "noImgFile": "Veuillez sélectionner une image.",
+      "invalidFileType": "Veuillez sélectionner un fichier image valide.",
+      "invalidFileTypeExtensions": "Extensions de fichiers acceptées ",
+      "invalidUrl": "Veuillez entrer une URL valide."
+    },
+    "procart": {
+      "noImgSelection": "Veuillez sélectionner une image."
+    },
+    "lyrics": {
+      "missingFields": "Veuillez remplir tous les champs nécessaires.",
+      "fetchInProgress": "La récupération des paroles est déjà en cours.",
+      "lyricsNotFound": "Les paroles de ce morceau sont introuvables.",
+      "savingInProgress": "La sauvegarde des paroles est déjà en cours.",
+      "noLastGeneration": "Aucune génération de paroles précédente trouvée."
+    },
+    "cardgen": {
+      "noCardsGenerated": "Aucune carte n'a été générée.",
+      "unauthorizedOutro": "La carte d'outro ne peut pas être générée\ncar la création de la carte était manuelle.",
+      "noCardsContents": "Aucun contenu de cartes trouvé.\nVeuillez d'abord générer du contenu via la page Paroles.",
+      "cardsGenerated": "Cartes générées avec succès.",
+      "cardNotEditable": "Le contenu de cette carte ne peut pas être modifié.",
+      "cardEditInProgress": "Modification de la carte déjà en cours.",
+      "cardEditFailed": "Échec de modification de la carte.",
+      "cardEdited": "Carte modifiée avec succès."
+    }
+  }
+}

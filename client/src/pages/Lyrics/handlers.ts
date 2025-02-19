@@ -2,7 +2,8 @@ import { FormEvent } from "react";
 
 import { sendToast } from "@/common/Toast";
 import { SongPartsCards, StateSetter } from "@/common/types";
-import { Toast, ToastType } from "@/constants/toasts";
+import { ToastType } from "@/constants/toasts";
+import { getToasts } from "@/contexts";
 
 import { METADATA_IDENTIFIER, METADATA_SEPARATOR } from "./constants";
 import { postLyricsSave, postLyricsSearch } from "./requests";
@@ -12,12 +13,13 @@ export const handleLyricsSaveSubmit = (
   e: FormEvent<HTMLFormElement>, body: SongPartsCards,
   props: HandleLyricsSaveSubmitProps
 ) => {
+  const toasts = getToasts();
   const { isSavingCardsContent, setIsSavingCardsContent, pageMetadata, isManual, lyricsParts, dismissedParts, navigate } = props;
 
   e.preventDefault();
 
   if (isSavingCardsContent) {
-    sendToast(Toast.ProcessingInProgress, ToastType.Warn);
+    sendToast(toasts.ProcessingInProgress, ToastType.Warn);
     return;
   }
 
@@ -57,17 +59,18 @@ export const handleLyricsSearchSubmit = (
   e: FormEvent<HTMLFormElement>, body: LyricsRequest,
   props: HandleLyricsSearchSubmitProps
 ) => {
+  const toasts = getToasts();
   const { isFetching, setIsFetching, setLyricsParts, setPageMetadata, setDismissedParts } = props;
 
   e.preventDefault();
 
   if (isFetching) {
-    sendToast(Toast.FetchInProgress, ToastType.Warn);
+    sendToast(toasts.Lyrics.FetchInProgress, ToastType.Warn);
     return;
   }
 
   if (body.artist.trim() === "" || body.songName.trim() === "") {
-    sendToast(Toast.MissingFields, ToastType.Warn);
+    sendToast(toasts.Lyrics.MissingFields, ToastType.Warn);
     return;
   }
 
@@ -78,10 +81,11 @@ export const handleLyricsSearchSubmit = (
 export const handleLoadLastContents = (
   props: HandleLoadLastContentsProps
 ) => {
+  const toasts = getToasts();
   const { lastContents, setPageMetadata, setLyricsParts, setDismissedParts } = props;
 
   if (lastContents?.pageMetadata?.id === undefined) {
-    sendToast(Toast.NoLastGeneration, ToastType.Warn);
+    sendToast(toasts.Lyrics.NoLastGeneration, ToastType.Warn);
     return;
   }
   setPageMetadata(lastContents.pageMetadata);

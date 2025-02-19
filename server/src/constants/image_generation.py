@@ -6,7 +6,7 @@ from os import path
 from src.logger import log
 from src.constants.paths import \
     ASSETS_THUMBNAILS_DIR, CARDS_BOTTOM_B_FILEPATH, CARDS_BOTTOM_W_FILEPATH, CARDS_OUTRO_FILEPATH, LOGO_POSITIONS
-from src.constants.responses import Err
+from src.constants.responses import Error
 
 class ImageMode(StrEnum):
     """ Enum for the available image modes """
@@ -21,7 +21,7 @@ for pos in LOGO_POSITIONS:
     overlay_filepath = f"{ASSETS_THUMBNAILS_DIR}{pos}.png"
     if (not path.exists(overlay_filepath)):
         log.error(f"  Overlay file not found: {overlay_filepath}")
-        raise FileNotFoundError(Err.OVERLAY_NOT_FOUND)
+        raise FileNotFoundError(Error.OVERLAY_NOT_FOUND)
     overlay = Image.open(overlay_filepath)
     LOGO_OVERLAYS.append(overlay)
 

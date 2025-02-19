@@ -1,6 +1,6 @@
 import { HttpStatus } from "@/constants/requests";
-import { Toast } from "@/constants/toasts";
 
+import { getToasts } from "@/contexts";
 import { RestVerb } from "./types";
 
 export const isErrorful = (status: number): boolean => {
@@ -13,6 +13,8 @@ export const is2xxSuccessful = (status: number): boolean => {
 };
 
 export const sendRequest = async (method: RestVerb, url: string, body?: unknown) => {
+  const toasts = getToasts();
+
   const requestHeaders = body instanceof FormData
     ? {}
     : { "Content-Type": "application/json" };
@@ -29,7 +31,7 @@ export const sendRequest = async (method: RestVerb, url: string, body?: unknown)
     if (err instanceof Error && err.message === "Failed to fetch") {
       return {
         status: HttpStatus.ServerUnavailable,
-        message: Toast.ServerUnavailable,
+        message: toasts.ServerUnavailable,
       };
     }
     return {

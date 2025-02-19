@@ -4,7 +4,7 @@ from typing import Optional
 
 from src.constants.enums import AvailableStats
 from src.constants.paths import STATS_FILE_PATH
-from src.constants.responses import Err
+from src.constants.responses import Error
 from src.constants.statistics import EMPTY_STATS, INCREMENTABLE_STATS
 from src.logger import log, SeverityLevel
 from src.typing_gtfr import JsonDict
@@ -74,7 +74,7 @@ def getJsonStatsFromFile(path: str = STATS_FILE_PATH) -> JsonDict:
     log.debug(f"  Getting stats from file: {path}...")
     try:
         if not path.endswith(".json"):
-            raise ValueError(Err.STATS_FILETYPE)
+            raise ValueError(Error.STATS_FILETYPE)
         with open(path, "r") as file:
             log.debug(f"Loaded stats from file {path}.")
             return loads(file.read())

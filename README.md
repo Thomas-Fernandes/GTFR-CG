@@ -45,7 +45,7 @@
 
 ## :memo: Description
 
-**GTFR-CG** is a React-Python web application that generates content serving the creation and publication of [**Genius traductions françaises**](https://www.youtube.com/c/geniustraductionsfrancaises) YouTube videos.  
+**GTFR-CG** is a React-Python web application that generates content serving the creation and publication of [**Genius traductions françaises**](https://www.youtube.com/c/geniustraductionsfrancaises) YouTube videos.
 
 - Generate artwork, lyrics cards and YouTube descriptions that can then be edited into **translation videos**.  
 - Save time by interacting with the APIs of **iTunes** and **Genius** to automate parts of the edition process!  
@@ -53,6 +53,8 @@
 
 <a href="https://github.com/QuentindiMeo"><img src="https://i.imgur.com/w8SH3M7.png" alt="qdm" width="100" align="right" /></a><a href="https://github.com/Thomas-Fernandes"><img src="https://i.imgur.com/MsvdW4y.png" alt="tf" width="100" align="right" /></a>
 The application was thought, designed, programmed and crafted by Frenchmen 🇫🇷 [**@Thomas-Fernandes**](https://github.com/Thomas-Fernandes) and [**@QuentindiMeo**](https://github.com/QuentindiMeo).
+
+The application's interfaces are localized in **English** and **French**, and are designed to be easily extensible to other languages.
 
 **Disclaimer: the creators of this application do not claim any rights on the brands at play. All rights belong to their respective owners.**
 

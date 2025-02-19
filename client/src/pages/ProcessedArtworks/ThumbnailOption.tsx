@@ -11,7 +11,7 @@ const ThumbnailOption: React.FC<ThumbnailOptionProps> = ({ logoPosition, idx }) 
   return (
     <div className="thumbnail-option">
       <label htmlFor={`radio_${idx}`}>
-        <img src={PROCESSED_ARTWORKS_PATH + "/" + processImageName(logoPosition)} alt={logoPosition} />
+        <img src={`${PROCESSED_ARTWORKS_PATH}/${processImageName(logoPosition)}`} alt={logoPosition} />
       </label>
       <input type="radio" id={`radio_${idx}`} name="selected_thumbnail_idx"
         value={idx.toString()}

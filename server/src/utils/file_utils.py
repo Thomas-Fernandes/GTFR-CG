@@ -2,7 +2,9 @@ from os import path
 from typing import Optional
 
 from src.constants.image_generation import TRANSLATION_TABLE
-from src.constants.responses import Err
+from src.constants.responses import Error
+
+from src.l10n import locale
 from src.typing_gtfr import CardsContents
 
 def getCardsContentsFromFile(filepath: str) -> CardsContents:
@@ -32,9 +34,9 @@ def validateImageFilename(filename: str | None) -> Optional[str]:
     :return: [string?] The error message if the filename is invalid, None otherwise
     """
     if filename == None or filename.strip() == "":
-        return Err.NO_FILE
+        return locale.get(Error.NO_FILE)
     if not('.' in filename and filename.rsplit('.', 1)[1].lower() in ["png", "jpg", "jpeg"]):
-        return Err.IMG_INVALID_FILETYPE
+        return locale.get(Error.IMG_INVALID_FILETYPE)
     return None
 
 def doesFileExist(filepath: str) -> bool:

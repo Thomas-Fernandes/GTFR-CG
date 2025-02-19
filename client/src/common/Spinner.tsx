@@ -1,4 +1,5 @@
-import { Toast, ToastType } from "@/constants/toasts";
+import { ToastType } from "@/constants/toasts";
+import { getToasts } from "@/contexts";
 
 import { sendToast } from "./Toast";
 
@@ -20,8 +21,10 @@ const createSpinnerContainer = (spinnerDiv: HTMLElement, name: string) => {
 };
 
 export const showSpinner = (name: string) => {
+  const toasts = getToasts();
+
   if (!name) {
-    sendToast(Toast.NoSpinnerId, ToastType.Error);
+    sendToast(toasts.Components.NoSpinnerId, ToastType.Error);
     return;
   }
 
@@ -34,7 +37,7 @@ export const showSpinner = (name: string) => {
   // Show the spinner
   const spinnerContainer = spinnerDiv?.querySelector(".spinner-container") as HTMLDivElement;
   if (!spinnerContainer) {
-    sendToast(Toast.NoSpinnerContainer, ToastType.Error);
+    sendToast(toasts.Components.NoSpinnerContainer, ToastType.Error);
     return;
   }
 

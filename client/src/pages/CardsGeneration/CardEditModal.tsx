@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 
 import { AutoResizeTextarea } from "@/components/AutoResizeTextarea/AutoResizeTextarea";
 import { SpinnerId } from "@/constants/spinners";
+import { useAppContext } from "@/contexts";
 
 import { useCardsGalleryContext, useCardsGenerationContext } from "./contexts";
 import { handleSaveModal } from "./handlers";
@@ -10,6 +11,14 @@ import { handleMouseDown, handleMouseUp, handleOverlayClick } from "./mouse";
 import "./CardEditModal.scss";
 
 const CardEditModal = () => {
+  const { intl } = useAppContext();
+  const labels = {
+    header: intl.formatMessage({ id: "pages.cardgen.modal.header" }),
+    save: intl.formatMessage({ id: "pages.cardgen.modal.save" }),
+    saving: intl.formatMessage({ id: "pages.cardgen.modal.saving" }),
+    cancel: intl.formatMessage({ id: "pages.cardgen.modal.cancel" }),
+  };
+
   const generationProps = useCardsGenerationContext();
 
   const { setIsModalOpen, currentCard, newLyrics, setNewLyrics, setCards } = useCardsGalleryContext();
@@ -31,7 +40,7 @@ const CardEditModal = () => {
     >
       <div className="modal-overlay--content" onClick={(e) => e.stopPropagation()}>
         <h2 className="modal-overlay--content--header">
-          {`Edit Lyrics of Card ${cardIdPadding}${currentCard?.id}`}
+          {`${labels.header} ${cardIdPadding}${currentCard?.id}`}
         </h2>
 
         <AutoResizeTextarea disabled={isModalSaving}
@@ -45,13 +54,13 @@ const CardEditModal = () => {
               { generationProps, newLyrics, generateSingleCardProps: { currentCard, setCards, setIsModalSaving, closeModal } }
             )}
           >
-            { isModalSaving ? "Saving..." : "Save" }
+            { isModalSaving ? labels.saving : labels.save }
           </button>
 
           <div id={SpinnerId.CardsGenerateSingle} /> {/* Spinner for saving, in-between */}
 
           <button type="button" onClick={closeModal} disabled={isModalSaving}>
-            {"Cancel"}
+            {labels.cancel}
           </button>
         </div>
       </div>

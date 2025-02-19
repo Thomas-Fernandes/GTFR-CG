@@ -2,12 +2,12 @@ import { is2xxSuccessful, sendRequest } from "@/common/requests";
 import { hideSpinner, showSpinner } from "@/common/Spinner";
 import { sendToast } from "@/common/Toast";
 import { ApiResponse, RestVerb } from "@/common/types";
-
 import { SessionStorage } from "@/constants/browser";
 import { API, BACKEND_URL } from "@/constants/paths";
 import { HttpStatus } from "@/constants/requests";
 import { SpinnerId } from "@/constants/spinners";
-import { Toast, ToastType } from "@/constants/toasts";
+import { ToastType } from "@/constants/toasts";
+import { getToasts } from "@/contexts";
 
 import { OUTRO_FILENAME, PROCESSED_CARDS_PATH } from "./constants";
 import { CardsGenerationRequest, CardsGenerationResponse, GenerateCardsProps, GenerateSingleCardProps, SingleCardGenerationRequest } from "./types";
@@ -17,6 +17,7 @@ export const postGenerateSingleCard = (
   generationProps: CardsGenerationRequest, newLyrics: string,
   props: GenerateSingleCardProps
 ) => {
+  const toasts = getToasts();
   const { setIsModalSaving, currentCard, setCards, closeModal } = props;
 
   setIsModalSaving(true);
@@ -40,11 +41,11 @@ export const postGenerateSingleCard = (
 
     updateCard(setCards, currentCard, newLyrics, cardFilename);
 
-    const toastMsg = Toast.CardEdited + `: ${(currentCard.id < 10 ? "0" : "")}${currentCard.id}.png`;
+    const toastMsg = toasts.CardGen.CardEdited + `: ${(currentCard.id < 10 ? "0" : "")}${currentCard.id}.png`;
     sendToast(toastMsg, ToastType.Success);
   }).catch((error) => {
     console.error("Failed to upload text:", error);
-    sendToast(Toast.CardEditFailed, ToastType.Error);
+    sendToast(toasts.CardGen.CardEditFailed, ToastType.Error);
   }).finally(() => {
     hideSpinner(SpinnerId.CardsGenerateSingle);
     setIsModalSaving(false);
@@ -56,6 +57,7 @@ export const postGenerateCards = (
   body: CardsGenerationRequest, formData: FormData,
   props: GenerateCardsProps
 ) => {
+  const toasts = getToasts();
   const { setGenerationInProgress, setCardPaths, setCards, setColorPick } = props;
 
   setGenerationInProgress(true);
@@ -80,10 +82,10 @@ export const postGenerateCards = (
     setColorPick(response.data.cardBottomColor);
     sessionStorage.setItem(SessionStorage.CardMetaname, body.cardMetaname);
     sessionStorage.setItem(SessionStorage.CardBottomColor, body.colorPick);
-    sendToast(Toast.CardsGenerated, ToastType.Success);
+    sendToast(toasts.CardGen.CardsGenerated, ToastType.Success);
   }).catch((error: ApiResponse) => {
     if (error.status === HttpStatus.PreconditionFailed)
-      sendToast(Toast.NoCardsContents, ToastType.Error);
+      sendToast(toasts.CardGen.NoCardsContents, ToastType.Error);
     else
       sendToast(error.message, ToastType.Error);
   }).finally(() => {
