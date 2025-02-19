@@ -1,7 +1,7 @@
 from PIL import ImageFont as IFont
 
-from server.src.constants.enums import MetanameFontNames
-from server.src.constants.paths import SLASH, path_prefix
+from src.constants.enums import MetanameFontNames
+from src.constants.paths import SLASH, path_prefix
 
 fonts_dir = f"{path_prefix}assets{SLASH}fonts{SLASH}"
 

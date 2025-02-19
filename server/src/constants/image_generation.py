@@ -3,10 +3,10 @@ from PIL import Image
 from enum import StrEnum
 from os import path
 
-from server.src.logger import log
-from server.src.constants.paths import \
+from src.logger import log
+from src.constants.paths import \
     ASSETS_THUMBNAILS_DIR, CARDS_BOTTOM_B_FILEPATH, CARDS_BOTTOM_W_FILEPATH, CARDS_OUTRO_FILEPATH, LOGO_POSITIONS
-from server.src.constants.responses import Error
+from src.constants.responses import Error
 
 class ImageMode(StrEnum):
     """ Enum for the available image modes """

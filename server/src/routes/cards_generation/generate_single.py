@@ -4,21 +4,21 @@ from flask_restx import Resource
 from ast import literal_eval
 from time import time
 
-from server.src.constants.enums import AvailableStats, HttpStatus, PayloadFields, SessionFields
-from server.src.constants.paths import ROUTES, SLASH
-from server.src.constants.responses import Error, Success
+from src.constants.enums import AvailableStats, HttpStatus, PayloadFields, SessionFields
+from src.constants.paths import ROUTES, SLASH
+from src.constants.responses import Error, Success
 
-from server.src.app import session
-from server.src.docs import models, ns_cards_generation
-from server.src.l10n import locale
-from server.src.logger import log, SeverityLevel
-from server.src.statistics import updateStats
-from server.src.typing_gtfr import CardgenSettings, CardsContents, SongMetadata
-from server.src.utils.web_utils import createApiResponse
+from src.app import session
+from src.docs import models, ns_cards_generation
+from src.l10n import locale
+from src.logger import log, SeverityLevel
+from src.statistics import updateStats
+from src.typing_gtfr import CardgenSettings, CardsContents, SongMetadata
+from src.utils.web_utils import createApiResponse
 
-from server.src.routes.cards_generation.pillow import generateCard
-from server.src.routes.cards_generation.settings import getCardMetadata, getGenerationRequisites
-from server.src.routes.cards_generation.utils import getUserProcessedPath
+from src.routes.cards_generation.pillow import generateCard
+from src.routes.cards_generation.settings import getCardMetadata, getGenerationRequisites
+from src.routes.cards_generation.utils import getUserProcessedPath
 
 def generateSingleCard(cards_contents: CardsContents, song_data: SongMetadata, settings: CardgenSettings) -> Response:
     """ Generates a single card using the contents provided

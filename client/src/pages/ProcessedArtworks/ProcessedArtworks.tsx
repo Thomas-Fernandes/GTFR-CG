@@ -12,8 +12,9 @@ import { ViewPaths } from "@/constants/paths";
 import { useAppContext } from "@/contexts";
 
 import BackgroundImageDisplay from "./BackgroundImageDisplay";
-import { COVER_ART_FILENAME, PROCESSED_ARTWORKS_PATH } from "./constants";
+import { COVER_ART_FILENAME, LOGO_POSITIONS, PROCESSED_ARTWORKS_PATH } from "./constants";
 import ThumbnailGallery from "./ThumbnailGallery";
+import { processImageName } from "./utils";
 
 import "./ProcessedArtworks.scss";
 
@@ -33,8 +34,8 @@ const ProcessedArtworks = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    doesFileExist(`${PROCESSED_ARTWORKS_PATH}/${COVER_ART_FILENAME}`).then((anyProcessedImageExists: boolean) => {
-      if (!anyProcessedImageExists) {
+    doesFileExist(`${PROCESSED_ARTWORKS_PATH}/${COVER_ART_FILENAME}`).then((coverArtImageExists: boolean) => {
+      if (!coverArtImageExists) {
         navigate(
           `${ViewPaths.Redirect}`
           + `?redirect_to=${ViewPaths.ArtworkGeneration}`
@@ -42,7 +43,18 @@ const ProcessedArtworks = () => {
         );
       }
     });
-  });
+    LOGO_POSITIONS.forEach((position) => {
+      doesFileExist(`${PROCESSED_ARTWORKS_PATH}/${processImageName(position)}`).then((logoExists: boolean) => {
+        if (!logoExists) {
+          navigate(
+            `${ViewPaths.Redirect}`
+            + `?redirect_to=${ViewPaths.ArtworkGeneration}`
+            + `&error_text=${toasts.Redirect.NoProcessedImage}`
+          );
+        }
+      });
+    });
+  }, []);
 
   return (
     <div id="processed-artworks">

@@ -5,8 +5,8 @@ from os import path
 from string import Template
 from typing import Any
 
-from server.src.logger import log
-from server.src.typing_gtfr import L10nDict
+from src.logger import log
+from src.typing_gtfr import L10nDict
 
 class Locale(StrEnum):
     """ Enum for the available locales """

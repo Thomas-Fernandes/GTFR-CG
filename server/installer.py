@@ -1,4 +1,3 @@
-
 from os import chdir, environ, name as osName, path, pathsep, system
 from subprocess import CalledProcessError, CompletedProcess, Popen, run
 from typing import Optional
@@ -6,7 +5,7 @@ from typing import Optional
 requirements_path = "requirements.txt" if path.isfile("requirements.txt") else "server/requirements.txt"
 result = run(["pip", "install", "-r", requirements_path], capture_output=True, text=True) # needs to be run before importing logger
 
-from server.src.logger import log, SeverityLevel
+from src.logger import log, SeverityLevel
 
 def quitIfError(result: CompletedProcess[bytes]) -> None:
     """ Quits the installation if an error occurred

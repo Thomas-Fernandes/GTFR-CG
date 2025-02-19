@@ -4,15 +4,15 @@ from flask_restx import Resource
 from ast import literal_eval
 from typing import Optional
 
-from server.src.constants.enums import HttpStatus
-from server.src.constants.paths import ROUTES
-from server.src.constants.responses import Error, Success
-from server.src.docs import models, ns_lyrics
-from server.src.l10n import locale
-from server.src.logger import log
-from server.src.utils.web_utils import createApiResponse
+from src.constants.enums import HttpStatus
+from src.constants.paths import ROUTES
+from src.constants.responses import Error, Success
+from src.docs import models, ns_lyrics
+from src.l10n import locale
+from src.logger import log
+from src.utils.web_utils import createApiResponse
 
-from server.src.routes.lyrics.genius import fetchLyricsFromGenius
+from src.routes.lyrics.genius import fetchLyricsFromGenius
 
 bp_lyrics_get_genius_lyrics = Blueprint("get-genius-lyrics-token", __name__.split('.')[-1])
 

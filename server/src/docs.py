@@ -1,6 +1,6 @@
 from flask_restx import fields, Namespace
 
-from server.src.constants.paths import ROUTES
+from src.constants.paths import ROUTES
 
 fallback_bp_name = "?"
 

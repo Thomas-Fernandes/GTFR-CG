@@ -7,20 +7,20 @@ from time import time
 from typing import Optional
 from uuid import uuid4
 
-from server.src.constants.enums import AvailableCacheElemType, HttpStatus, SessionFields
-from server.src.constants.paths import ROUTES, SLASH, PROCESSED_DIR
-from server.src.constants.responses import Error, Success, Warn
+from src.constants.enums import AvailableCacheElemType, HttpStatus, SessionFields
+from src.constants.paths import ROUTES, SLASH, PROCESSED_DIR
+from src.constants.responses import Error, Success, Warn
 
-from server.src.app import session
-from server.src.docs import models, ns_cards_generation
-from server.src.l10n import locale
-from server.src.logger import log, SeverityLevel
-from server.src.typing_gtfr import CardsContents
-from server.src.utils.file_utils import writeCardsContentsToFile
-from server.src.utils.time_utils import getNowStamp
-from server.src.utils.web_utils import createApiResponse
+from src.app import session
+from src.docs import models, ns_cards_generation
+from src.l10n import locale
+from src.logger import log, SeverityLevel
+from src.typing_gtfr import CardsContents
+from src.utils.file_utils import writeCardsContentsToFile
+from src.utils.time_utils import getNowStamp
+from src.utils.web_utils import createApiResponse
 
-from server.src.routes.cards_generation.utils import isListListStr
+from src.routes.cards_generation.utils import isListListStr
 
 def saveCardsContents(cards_contents: CardsContents) -> Response:
     """ Saves the cards contents to the user's folder

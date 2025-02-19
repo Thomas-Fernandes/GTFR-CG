@@ -4,18 +4,18 @@ from flask_restx import Resource
 from os import path
 from time import time
 
-from server.src.constants.enums import AvailableCacheElemType, AvailableStats, HttpStatus, SessionFields
-from server.src.constants.paths import PROCESSED_ARTWORK_FILENAME, PROCESSED_DIR, ROUTES, SLASH
-from server.src.constants.responses import Error, Success
+from src.constants.enums import AvailableCacheElemType, AvailableStats, HttpStatus, SessionFields
+from src.constants.paths import PROCESSED_ARTWORK_FILENAME, PROCESSED_DIR, ROUTES, SLASH
+from src.constants.responses import Error, Success
 
-from server.src.app import session
-from server.src.docs import models, ns_artwork_processing
-from server.src.l10n import locale
-from server.src.logger import log, SeverityLevel
-from server.src.statistics import updateStats
-from server.src.utils.web_utils import createApiResponse
+from src.app import session
+from src.docs import models, ns_artwork_processing
+from src.l10n import locale
+from src.logger import log, SeverityLevel
+from src.statistics import updateStats
+from src.utils.web_utils import createApiResponse
 
-from server.src.routes.artwork_processing.pillow import generateCoverArt, generateThumbnails
+from src.routes.artwork_processing.pillow import generateCoverArt, generateThumbnails
 
 bp_artwork_processing_process_artworks = Blueprint("process-artworks", __name__.split('.')[-1])
 

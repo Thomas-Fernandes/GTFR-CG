@@ -1,0 +1,26 @@
+version: "3.8"
+
+services:
+  backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./server:/app
+      - shared_files:/app/generated_files
+    environment:
+      - FLASK_ENV=development
+
+  frontend:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "4242:4242"
+    volumes:
+      - ./client:/app
+
+volumes:
+  shared_files:

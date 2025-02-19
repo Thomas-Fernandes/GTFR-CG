@@ -1,16 +1,16 @@
 from flask import Blueprint, Response
 from flask_restx import Resource
 
-from server.src.constants.enums import AvailableStats, HttpStatus
-from server.src.constants.paths import ROUTES
-from server.src.constants.responses import Error, Success
-from server.src.constants.statistics import EMPTY_STATS
+from src.constants.enums import AvailableStats, HttpStatus
+from src.constants.paths import ROUTES
+from src.constants.responses import Error, Success
+from src.constants.statistics import EMPTY_STATS
 
-from server.src.docs import models, ns_home
-from server.src.logger import log
-from server.src.l10n import locale
-from server.src.statistics import getJsonStatsFromFile
-from server.src.utils.web_utils import createApiResponse
+from src.docs import models, ns_home
+from src.logger import log
+from src.l10n import locale
+from src.statistics import getJsonStatsFromFile
+from src.utils.web_utils import createApiResponse
 
 bp_home_statistics = Blueprint("statistics", __name__.split('.')[-1])
 

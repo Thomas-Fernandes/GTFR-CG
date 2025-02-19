@@ -3,7 +3,7 @@ from PIL import Image
 from dataclasses import dataclass
 from typing import Literal, Optional, TypeAlias
 
-from server.src.constants.enums import PayloadFields
+from src.constants.enums import PayloadFields
 
 ############ BROWSER ############
 

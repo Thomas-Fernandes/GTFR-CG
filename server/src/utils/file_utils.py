@@ -1,11 +1,11 @@
 from os import path
 from typing import Optional
 
-from server.src.constants.image_generation import TRANSLATION_TABLE
-from server.src.constants.responses import Error
+from src.constants.image_generation import TRANSLATION_TABLE
+from src.constants.responses import Error
 
-from server.src.l10n import locale
-from server.src.typing_gtfr import CardsContents
+from src.l10n import locale
+from src.typing_gtfr import CardsContents
 
 def getCardsContentsFromFile(filepath: str) -> CardsContents:
     """ Returns the contents of the cards from a file

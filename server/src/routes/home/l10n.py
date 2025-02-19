@@ -4,14 +4,14 @@ from flask_restx import Resource
 from ast import literal_eval
 from typing import Optional
 
-from server.src.constants.enums import HttpStatus
-from server.src.constants.paths import ROUTES
-from server.src.constants.responses import Error, Success, Warn
+from src.constants.enums import HttpStatus
+from src.constants.paths import ROUTES
+from src.constants.responses import Error, Success, Warn
 
-from server.src.docs import models, ns_home
-from server.src.l10n import locale, Locale
-from server.src.logger import log
-from server.src.utils.web_utils import createApiResponse
+from src.docs import models, ns_home
+from src.l10n import locale, Locale
+from src.logger import log
+from src.utils.web_utils import createApiResponse
 
 def changeLocale(new_locale: Locale) -> Locale:
     """ Changes the locale of the server responses

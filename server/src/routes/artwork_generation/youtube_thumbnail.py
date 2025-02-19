@@ -7,18 +7,18 @@ from os import path, makedirs
 from typing import Optional
 from uuid import uuid4
 
-from server.src.constants.enums import AvailableCacheElemType, HttpStatus, SessionFields
-from server.src.constants.paths import PROCESSED_DIR, SLASH, UPLOADED_YOUTUBE_IMG_FILENAME
-from server.src.constants.regex import REGEX_YOUTUBE_URL
-from server.src.constants.responses import Error, Success, Warn
+from src.constants.enums import AvailableCacheElemType, HttpStatus, SessionFields
+from src.constants.paths import PROCESSED_DIR, SLASH, UPLOADED_YOUTUBE_IMG_FILENAME
+from src.constants.regex import REGEX_YOUTUBE_URL
+from src.constants.responses import Error, Success, Warn
 
-from server.src.app import session
-from server.src.l10n import locale
-from server.src.logger import log
-from server.src.constants.paths import ROUTES
-from server.src.constants.responses import Error, Success
-from server.src.docs import models, ns_artwork_generation
-from server.src.utils.web_utils import createApiResponse
+from src.app import session
+from src.l10n import locale
+from src.logger import log
+from src.constants.paths import ROUTES
+from src.constants.responses import Error, Success
+from src.docs import models, ns_artwork_generation
+from src.utils.web_utils import createApiResponse
 
 def extractYoutubeVideoId(url: str) -> Optional[str]:
     """ Extracts the YouTube video ID from the provided URL

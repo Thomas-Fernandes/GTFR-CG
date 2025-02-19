@@ -1,12 +1,12 @@
 from flask import Blueprint
 from flask_restx import Api
 
-from server.src.docs import ns_cards_generation
-from server.src.constants.paths import API_ROUTE, ROUTES
+from src.docs import ns_cards_generation
+from src.constants.paths import API_ROUTE, ROUTES
 
-from server.src.routes.cards_generation.generate import bp_cards_generation_generate
-from server.src.routes.cards_generation.generate_single import bp_cards_generation_generate_single
-from server.src.routes.cards_generation.save_cards_contents import bp_cards_generation_save_cards_contents
+from src.routes.cards_generation.generate import bp_cards_generation_generate
+from src.routes.cards_generation.generate_single import bp_cards_generation_generate_single
+from src.routes.cards_generation.save_cards_contents import bp_cards_generation_save_cards_contents
 
 bp_cards_generation = Blueprint(ROUTES.cards_gen.bp_name, __name__.split('.')[-1])
 bp_cards_generation.register_blueprint(bp_cards_generation_save_cards_contents)
