@@ -7,6 +7,7 @@ import { Toast, ToastType } from "@/constants/toasts";
 import { METADATA_IDENTIFIER, METADATA_SEPARATOR } from "./constants";
 import { postLyricsSave, postLyricsSearch } from "./requests";
 import { HandleLoadLastContentsProps, HandleLyricsSaveSubmitProps, HandleLyricsSearchSubmitProps, HandleSetLyricsPartsProps, LyricsRequest, LyricsSaveRequest } from "./types";
+import { validateSongParts } from "./utils";
 
 export const handleLyricsSaveSubmit = (
   e: FormEvent<HTMLFormElement>, body: SongPartsCards,
@@ -19,6 +20,22 @@ export const handleLyricsSaveSubmit = (
   if (isSavingCardsContent) {
     sendToast(Toast.ProcessingInProgress, ToastType.Warn);
     return;
+  }
+
+  const errors = validateSongParts(body, lyricsParts);
+  const onlyWarnings = !errors.some(e => e.what?.startsWith("Err"));
+
+  if (errors.length > 0 && !onlyWarnings) {
+    // If there are errors, show everything; if there are only warnings, proceed
+    errors.forEach(e => {
+      const toastType = e.what.startsWith("Err") ? ToastType.Error : ToastType.Warn;
+      if (e.message)
+        sendToast(e.message, toastType, 10);
+    });
+    const firstInconvenienceLocation = document.getElementById(errors[0].where);
+    if (firstInconvenienceLocation)
+      firstInconvenienceLocation.scrollIntoView({ behavior: "smooth" });
+    return; // cancel saving
   }
 
   const metadata = METADATA_IDENTIFIER + Object.entries(pageMetadata).map(([key, value]) => `${key}: ${value}`).join(METADATA_SEPARATOR);
