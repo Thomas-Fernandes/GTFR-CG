@@ -14,10 +14,12 @@ export const getLinePixelLength = (line: string) => {
   return width;
 };
 
-export const validateSongParts = (songParts: SongPartsCards) => {
+export const validateSongParts = (songParts: SongPartsCards, lyricsParts: LyricsPartType[]) => {
   const errors: ValidationInconvenience[] = [];
 
   songParts.forEach((sectionCards, sectionIdx) => {
+    const lyricsPartIdx = lyricsParts.findIndex(part => part.lyrics === sectionCards.join("\n"));
+
     sectionCards.forEach((card, cardIdx) => {
       if (errors.length >= CONTENT_THRESHOLDS.DISPLAY_LIMIT) return;
 
@@ -25,7 +27,7 @@ export const validateSongParts = (songParts: SongPartsCards) => {
       const linesCount = lines.length;
       if (linesCount > CONTENT_THRESHOLDS.LINES.ERROR) {
         errors.push({
-          where: `lyrics-part_${sectionIdx}`,
+          where: `lyrics-part_${lyricsPartIdx}`,
           what: ValidationError.VerticalOverflow,
           message: `Card ${cardIdx + 1} in section ${sectionIdx + 1} has more than ${CONTENT_THRESHOLDS.LINES.ERROR} lines.`
         });

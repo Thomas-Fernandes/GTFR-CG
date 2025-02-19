@@ -22,7 +22,7 @@ export const handleLyricsSaveSubmit = (
     return;
   }
 
-  const errors = validateSongParts(body);
+  const errors = validateSongParts(body, lyricsParts);
   const onlyWarnings = !errors.some(e => e.what?.startsWith("Err"));
 
   if (errors.length > 0 && !onlyWarnings) {
@@ -30,7 +30,7 @@ export const handleLyricsSaveSubmit = (
     errors.forEach(e => {
       const toastType = e.what.startsWith("Err") ? ToastType.Error : ToastType.Warn;
       if (e.message)
-        sendToast(e.message, toastType);
+        sendToast(e.message, toastType, 10);
     });
     const firstInconvenienceLocation = document.getElementById(errors[0].where);
     if (firstInconvenienceLocation)
