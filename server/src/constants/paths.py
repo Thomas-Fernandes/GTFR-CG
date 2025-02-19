@@ -1,4 +1,4 @@
-from os import name as osName, path
+from os import environ as env, name as osName, path
 
 from src.constants.enums import AvailableCacheElemType
 from src.typing_gtfr import Route, Routes
@@ -42,8 +42,9 @@ path_prefix = "" if path.isfile("requirements.txt") else f"server{SLASH}" # for 
 SESSION_TYPE = "filesystem"
 SESSION_FILE_DIR = "flask_session" + SLASH
 
+run_from_docker = env.get("RUN_FROM_DOCKER", "False") == "True"
 PROCESSED_DIR = "processed" + SLASH
-GENERATED_CONTENT_DIR = f"{SLASH}app{SLASH}generated_files{SLASH}"
+GENERATED_CONTENT_DIR = f"{SLASH}app{SLASH}generated_files{SLASH}" if run_from_docker else f".{SLASH}"
 STATS_FILE_PATH = f"{GENERATED_CONTENT_DIR}stats.json"
 GENERATED_ARTWORKS_DIR = f"{GENERATED_CONTENT_DIR}processed-{AvailableCacheElemType.ARTWORKS}{SLASH}"
 GENERATED_CARDS_DIR = f"{GENERATED_CONTENT_DIR}processed-{AvailableCacheElemType.CARDS}{SLASH}"
