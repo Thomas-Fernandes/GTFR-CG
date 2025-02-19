@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { useLocaleContext } from "@/common/hooks/useLocale/contexts";
 import { useTitle } from "@/common/hooks/useTitle";
+import { Locale } from "@/common/l10n";
 import { NavButtonSide } from "@/components/NavButton/constants";
 import NavButton from "@/components/NavButton/NavButton";
 import ToastContainer from "@/components/ToastContainer/ToastContainer";
@@ -27,6 +29,7 @@ const Home = () => {
 
   useTitle(labels.title);
 
+  const { switchLocale } = useLocaleContext();
   const navigate = useNavigate();
 
   const [geniusToken, setGeniusToken] = useState("");
@@ -40,6 +43,7 @@ const Home = () => {
       getStatistics(setStats);
 
       if (!hasVisited) {
+        switchLocale(intl.locale as Locale);
         getGeniusToken(setGeniusToken);
         sessionStorage.setItem(routeKey, "visited");
       }
