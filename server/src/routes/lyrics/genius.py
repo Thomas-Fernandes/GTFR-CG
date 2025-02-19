@@ -9,7 +9,7 @@ from typing import Literal, Optional, Union
 from server.src.constants.dotenv import GENIUS_API_TOKEN, GENIUS_API_TOKEN_PATTERN
 from server.src.constants.enums import AvailableStats, SessionFields
 from server.src.constants.image_generation import ATTRIBUTION_PERCENTAGE_TOLERANCE
-from server.src.constants.responses import Err
+from server.src.constants.responses import Error
 
 from server.src.app import session
 from server.src.decorators import retry
@@ -89,7 +89,7 @@ def areLyricsNotFound(lyrics: list[dict[str, str]]) -> bool:
     """
     return len(lyrics) == 1 \
         and lyrics[0]["section"] == "warn" \
-        and lyrics[0]["lyrics"] == locale.get(Err.LYRICS_NOT_FOUND)
+        and lyrics[0]["lyrics"] == locale.get(Error.LYRICS_NOT_FOUND)
 @retry(condition=(lambda x: not areLyricsNotFound(x)), times=3)
 def fetchLyricsFromGenius(song_title: str, artist_name: str) -> list[dict[str, str]]:
     """ Tries to fetch the lyrics of a song from Genius dot com
@@ -100,11 +100,11 @@ def fetchLyricsFromGenius(song_title: str, artist_name: str) -> list[dict[str, s
     log.debug(f"Fetching lyrics for {artist_name} - \"{song_title}\"...")
     start = time()
     if genius is None:
-        return [{"section": "error", "lyrics": locale.get(Err.GENIUS_TOKEN_NOT_FOUND)}]
+        return [{"section": "error", "lyrics": locale.get(Error.GENIUS_TOKEN_NOT_FOUND)}]
 
     song: Optional[GeniusSongType] = getGeniusSong(song_title, artist_name)
     if song is None:
-        return [{"section": "warn", "lyrics": locale.get(Err.LYRICS_NOT_FOUND)}]
+        return [{"section": "warn", "lyrics": locale.get(Error.LYRICS_NOT_FOUND)}]
 
     log.debug("Sanitizing the fetched lyrics...")
     def sanitizeLyrics(lyrics: str) -> str:

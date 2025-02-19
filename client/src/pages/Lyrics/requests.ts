@@ -28,7 +28,6 @@ export const postLyricsSave = (body: LyricsSaveRequest, props: LyricsSaveProps) 
     const cardMetaname = `${cardArtist.trim().toUpperCase()}, “${cardSongName.trim().toUpperCase()}”`;
     sessionStorage.setItem(SessionStorage.CardMetaname, cardMetaname);
     sessionStorage.setItem(SessionStorage.CardMethod, isManual ? ContentsGenerationMode.Manual : ContentsGenerationMode.Auto);
-    console.log("contribz", (pageMetadata.contributors ?? []).toString())
     sessionStorage.setItem(SessionStorage.OutroContributors, (pageMetadata.contributors ?? []).toString());
     sessionStorage.setItem(SessionStorage.LatestCardGeneration, JSON.stringify({
       pageMetadata, lyricsParts, dismissedParts: Array.from(dismissedParts)

@@ -6,7 +6,7 @@ from time import time
 
 from server.src.constants.enums import AvailableCacheElemType, AvailableStats, HttpStatus, SessionFields
 from server.src.constants.paths import PROCESSED_ARTWORK_FILENAME, PROCESSED_DIR, ROUTES, SLASH
-from server.src.constants.responses import Err, Success
+from server.src.constants.responses import Error, Success
 
 from server.src.app import session
 from server.src.docs import models, ns_artwork_processing
@@ -24,13 +24,13 @@ class ProcessArtworkResource(Resource):
     @ns_artwork_processing.doc("post_process_images")
     @ns_artwork_processing.expect(models[ROUTES.art_proc.bp_name]["process-artworks"]["payload"])
     @ns_artwork_processing.response(HttpStatus.CREATED, locale.get(Success.PROCESSED_IMAGES_SUCCESS))
-    @ns_artwork_processing.response(HttpStatus.BAD_REQUEST, locale.get(Err.NO_IMG))
-    @ns_artwork_processing.response(HttpStatus.PRECONDITION_FAILED, locale.get(Err.OVERLAY_NOT_FOUND))
+    @ns_artwork_processing.response(HttpStatus.BAD_REQUEST, locale.get(Error.NO_IMG))
+    @ns_artwork_processing.response(HttpStatus.PRECONDITION_FAILED, locale.get(Error.OVERLAY_NOT_FOUND))
     def post(self) -> Response:
         """ Renders the processed background image and thumbnails """
         if SessionFields.GENERATED_ARTWORK_PATH not in session:
-            log.error(f"Error in session: {locale.get(Err.NO_IMG)}")
-            return createApiResponse(HttpStatus.PRECONDITION_FAILED, locale.get(Err.NO_IMG))
+            log.error(f"Error in session: {locale.get(Error.NO_IMG)}")
+            return createApiResponse(HttpStatus.PRECONDITION_FAILED, locale.get(Error.NO_IMG))
 
         user_folder = str(session.get(SessionFields.USER_FOLDER)) + SLASH + AvailableCacheElemType.ARTWORKS
         user_processed_path = path.join(PROCESSED_DIR, user_folder)

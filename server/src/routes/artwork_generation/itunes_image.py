@@ -9,7 +9,7 @@ from uuid import uuid4
 
 from server.src.constants.enums import AvailableCacheElemType, HttpStatus, SessionFields
 from server.src.constants.paths import PROCESSED_DIR, ROUTES, SLASH, UPLOADED_ITUNES_IMG_FILENAME
-from server.src.constants.responses import Err, Success, Warn
+from server.src.constants.responses import Error, Success, Warn
 
 from server.src.app import session
 from server.src.docs import models, ns_artwork_generation
@@ -24,16 +24,16 @@ class ItunesImageResource(Resource):
     @ns_artwork_generation.doc("post_use_itunes_image")
     @ns_artwork_generation.expect(models[ROUTES.art_gen.bp_name]["use-itunes-image"]["payload"])
     @ns_artwork_generation.response(HttpStatus.CREATED, locale.get(Success.ITUNES_IMAGE_UPLOADED))
-    @ns_artwork_generation.response(HttpStatus.BAD_REQUEST, locale.get(Err.NO_IMG_URL))
-    @ns_artwork_generation.response(HttpStatus.INTERNAL_SERVER_ERROR, locale.get(Err.FAIL_DOWNLOAD))
+    @ns_artwork_generation.response(HttpStatus.BAD_REQUEST, locale.get(Error.NO_IMG_URL))
+    @ns_artwork_generation.response(HttpStatus.INTERNAL_SERVER_ERROR, locale.get(Error.FAIL_DOWNLOAD))
     def post(self) -> Response:
         """ Interprets the fetched iTunes URL and saves the image to the user's folder """
         log.info("POST - Generating artwork using an iTunes image...")
         body = literal_eval(request.get_data(as_text=True))
         image_url: Optional[str] = body.get("url")
         if image_url is None:
-            log.error(f"Error in request payload: {locale.get(Err.NO_IMG_URL)}")
-            return createApiResponse(HttpStatus.BAD_REQUEST, locale.get(Err.NO_IMG_URL))
+            log.error(f"Error in request payload: {locale.get(Error.NO_IMG_URL)}")
+            return createApiResponse(HttpStatus.BAD_REQUEST, locale.get(Error.NO_IMG_URL))
 
         if SessionFields.USER_FOLDER not in session:
             log.debug(locale.get(Warn.NO_USER_FOLDER))
@@ -47,7 +47,7 @@ class ItunesImageResource(Resource):
         log.debug(f"Fetching iTunes image from URL: {image_url}")
         image_response = requestsGet(image_url) # fetch iTunes image from deducted URL
         if image_response.status_code != HttpStatus.OK:
-            return createApiResponse(HttpStatus.INTERNAL_SERVER_ERROR, locale.get(Err.FAIL_DOWNLOAD))
+            return createApiResponse(HttpStatus.INTERNAL_SERVER_ERROR, locale.get(Error.FAIL_DOWNLOAD))
         log.debug("iTunes image fetched successfully.")
 
         image_path = path.join(user_processed_path, UPLOADED_ITUNES_IMG_FILENAME)

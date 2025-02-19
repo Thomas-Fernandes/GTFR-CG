@@ -1,4 +1,4 @@
-from flask import Blueprint, Response, request
+from flask import Blueprint, request, Response
 from flask_restx import Resource
 
 from ast import literal_eval
@@ -9,7 +9,7 @@ from uuid import uuid4
 
 from server.src.constants.enums import AvailableCacheElemType, HttpStatus, SessionFields
 from server.src.constants.paths import ROUTES, SLASH, PROCESSED_DIR
-from server.src.constants.responses import Err, Success, Warn
+from server.src.constants.responses import Error, Success, Warn
 
 from server.src.app import session
 from server.src.docs import models, ns_cards_generation
@@ -37,15 +37,15 @@ def saveCardsContents(cards_contents: CardsContents) -> Response:
     makedirs(user_processed_path, exist_ok=True)
 
     if not isListListStr(cards_contents):
-        log.error(f"Error while saving cards contents: {locale.get(Err.CARDS_CONTENTS_INVALID)}")
-        return createApiResponse(HttpStatus.BAD_REQUEST, locale.get(Err.CARDS_CONTENTS_INVALID))
+        log.error(f"Error while saving cards contents: {locale.get(Error.CARDS_CONTENTS_INVALID)}")
+        return createApiResponse(HttpStatus.BAD_REQUEST, locale.get(Error.CARDS_CONTENTS_INVALID))
 
     filepath = path.join(user_processed_path, f"contents_{getNowStamp()}.txt")
     try:
         writeCardsContentsToFile(filepath, cards_contents)
     except Exception as e:
         log.error(f"Error while saving cards contents: {e}")
-        return createApiResponse(HttpStatus.INTERNAL_SERVER_ERROR, locale.get(Err.CARDS_CONTENTS_SAVE_FAILED))
+        return createApiResponse(HttpStatus.INTERNAL_SERVER_ERROR, locale.get(Error.CARDS_CONTENTS_SAVE_FAILED))
 
     session[SessionFields.CARDS_CONTENTS] = filepath
     log.info(f"Cards contents saved to {filepath}.").time(SeverityLevel.INFO, time() - start)
@@ -58,8 +58,8 @@ class CardsContentsResource(Resource):
     @ns_cards_generation.doc("post_save_cards_contents")
     @ns_cards_generation.expect(models[ROUTES.cards_gen.bp_name]["save-cards-contents"]["payload"])
     @ns_cards_generation.response(HttpStatus.CREATED, locale.get(Success.CARDS_CONTENTS_SAVED))
-    @ns_cards_generation.response(HttpStatus.BAD_REQUEST, "\n".join([locale.get(Err.CARDS_CONTENTS_NOT_FOUND), locale.get(Err.CARDS_CONTENTS_INVALID)]))
-    @ns_cards_generation.response(HttpStatus.INTERNAL_SERVER_ERROR, locale.get(Err.CARDS_CONTENTS_SAVE_FAILED))
+    @ns_cards_generation.response(HttpStatus.BAD_REQUEST, "\n".join([locale.get(Error.CARDS_CONTENTS_NOT_FOUND), locale.get(Error.CARDS_CONTENTS_INVALID)]))
+    @ns_cards_generation.response(HttpStatus.INTERNAL_SERVER_ERROR, locale.get(Error.CARDS_CONTENTS_SAVE_FAILED))
     def post(self) -> Response:
         """ Saves the cards contents to the user's folder """
         log.debug("POST - Saving cards contents...")
@@ -68,7 +68,7 @@ class CardsContentsResource(Resource):
         cards_contents: Optional[list[list[str]]] = body.get("cardsContents")
 
         if cards_contents is None:
-            log.error(f"Error while deducing cards metadata: {locale.get(Err.CARDS_CONTENTS_NOT_FOUND)}")
-            return createApiResponse(HttpStatus.BAD_REQUEST, locale.get(Err.CARDS_CONTENTS_NOT_FOUND))
+            log.error(f"Error while deducing cards metadata: {locale.get(Error.CARDS_CONTENTS_NOT_FOUND)}")
+            return createApiResponse(HttpStatus.BAD_REQUEST, locale.get(Error.CARDS_CONTENTS_NOT_FOUND))
 
         return saveCardsContents(cards_contents)

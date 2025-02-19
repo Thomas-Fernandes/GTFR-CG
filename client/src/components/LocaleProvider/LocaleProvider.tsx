@@ -4,12 +4,16 @@ import { IntlProvider } from "react-intl";
 import { LocaleContext } from "@/common/hooks/useLocale/contexts";
 import { getLocaleMessages, Locale } from "@/common/l10n";
 
+import { postLocaleChange } from "./requests";
 import { LocaleContextProviderProps } from "./types";
 
 export const LocaleProvider: React.FC<LocaleContextProviderProps> = ({ children }) => {
   const [locale, setLocale] = useState((navigator.language.split('-')[0] || "en") as Locale);
 
-  const switchLocale = (newLocale: Locale) => setLocale(newLocale); // TODO remove this, used for testing
+  const switchLocale = (newLocale: Locale) => {
+    setLocale(newLocale);
+    postLocaleChange({ locale: newLocale });
+  };
 
   const contextValue = useMemo(() => ({ locale, switchLocale, setLocale }), [locale]);
 

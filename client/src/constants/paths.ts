@@ -10,6 +10,7 @@ export enum ViewPaths {
 }
 
 export const API = {
+  LOCALE: "/locale",
   STATISTICS: "/statistics",
   GENIUS_TOKEN: "/genius-token",
 

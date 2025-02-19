@@ -1,5 +1,8 @@
 {
     "_section-home": "",
+        "LOCALE_MISSING_PARAMS": "Paramètres manquants pour le changement de locale.",
+        "LOCALE_INVALID": "Changement de locale demandé invalide, passage à la locale par défaut.",
+        "LOCALE_CHANGED": "Locale changée avec succès.",
         "GENIUS_TOKEN_FETCHED": "Token d'API Genius récupéré avec succès.",
         "STATS_FILETYPE": "Le fichier de statistiques doit être un fichier JSON.",
         "STATS_FETCHED": "Statistiques récupérées avec succès.",
@@ -49,5 +52,5 @@
         "CARD_GENERATED": "Carte générée avec succès.",
 
     "_section-*": "",
-        "NO_USER_FOLDER": "Dossier utilisateur introuvable dans la session. Création d'un nouveau."
+        "NO_USER_FOLDER": "  Dossier utilisateur introuvable dans la session. Création d'un nouveau."
 }

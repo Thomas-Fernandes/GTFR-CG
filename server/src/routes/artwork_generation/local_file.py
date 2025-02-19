@@ -7,7 +7,7 @@ from uuid import uuid4
 
 from server.src.constants.enums import AvailableCacheElemType, HttpStatus, PayloadFields, SessionFields
 from server.src.constants.paths import PROCESSED_DIR, ROUTES, SLASH, UPLOADED_FILE_IMG_FILENAME
-from server.src.constants.responses import Err, Success, Warn
+from server.src.constants.responses import Error, Success, Warn
 
 from server.src.app import session
 from server.src.docs import models, ns_artwork_generation
@@ -24,16 +24,16 @@ class LocalImageResource(Resource):
     @ns_artwork_generation.doc("post_use_local_image")
     @ns_artwork_generation.expect(models[ROUTES.art_gen.bp_name]["use-local-image"]["payload"])
     @ns_artwork_generation.response(HttpStatus.CREATED, locale.get(Success.LOCAL_IMAGE_UPLOADED))
-    @ns_artwork_generation.response(HttpStatus.BAD_REQUEST, locale.get(Err.NO_FILE))
-    @ns_artwork_generation.response(HttpStatus.UNSUPPORTED_MEDIA_TYPE, locale.get(Err.IMG_INVALID_FILETYPE))
-    @ns_artwork_generation.response(HttpStatus.INTERNAL_SERVER_ERROR, locale.get(Err.FAIL_DOWNLOAD))
+    @ns_artwork_generation.response(HttpStatus.BAD_REQUEST, locale.get(Error.NO_FILE))
+    @ns_artwork_generation.response(HttpStatus.UNSUPPORTED_MEDIA_TYPE, locale.get(Error.IMG_INVALID_FILETYPE))
+    @ns_artwork_generation.response(HttpStatus.INTERNAL_SERVER_ERROR, locale.get(Error.FAIL_DOWNLOAD))
     def post(self) -> Response:
         """ Saves the uploaded image to the user's folder """
         log.info("POST - Generating artwork using a local image...")
 
         if snakeToCamel(PayloadFields.LOCAL_FILE) not in request.files:
-            log.error(f"Error in request payload: {locale.get(Err.NO_FILE)}")
-            return createApiResponse(HttpStatus.BAD_REQUEST, locale.get(Err.NO_FILE))
+            log.error(f"Error in request payload: {locale.get(Error.NO_FILE)}")
+            return createApiResponse(HttpStatus.BAD_REQUEST, locale.get(Error.NO_FILE))
         file: FileStorage = request.files[snakeToCamel(PayloadFields.LOCAL_FILE)]
 
         if SessionFields.USER_FOLDER not in session:
@@ -44,13 +44,13 @@ class LocalImageResource(Resource):
         err = validateImageFilename(file.filename)
         if err is not None:
             log.error(f"Error in request payload: {err}")
-            if err == locale.get(Err.IMG_INVALID_FILETYPE):
+            if err == locale.get(Error.IMG_INVALID_FILETYPE):
                 return createApiResponse(HttpStatus.UNSUPPORTED_MEDIA_TYPE, err)
             else:
                 return createApiResponse(HttpStatus.BAD_REQUEST, err)
         if file.filename is None:
-            log.error(f"Error in request payload: {locale.get(Err.NO_FILE)}")
-            return createApiResponse(HttpStatus.BAD_REQUEST, locale.get(Err.NO_FILE))
+            log.error(f"Error in request payload: {locale.get(Error.NO_FILE)}")
+            return createApiResponse(HttpStatus.BAD_REQUEST, locale.get(Error.NO_FILE))
         log.debug(f"Image filename is valid: {file.filename}")
 
         include_center_artwork: bool = \

@@ -16,6 +16,14 @@ class fieldsDict(fields.Raw): # field type for dictionary
 
 models = {
     ROUTES.home.bp_name: {
+        "change_locale": {
+            "payload": ns_home.model("Home - Change Server Locale - payload", {
+                "locale": fields.String(description="New locale to use"),
+            }),
+            "response": ns_home.model("Home - Change Server Locale - response", {
+                "locale": fields.String(description="New locale used"),
+            }),
+        },
         "genius-token": {
             "response": ns_home.model("Home - Genius Token - response", {
                 "token": fields.String(description="Genius API Token"),

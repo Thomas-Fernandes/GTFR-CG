@@ -1,5 +1,8 @@
 {
     "_section-home": "",
+        "LOCALE_MISSING_PARAMS": "Missing parameters for locale switch.",
+        "LOCALE_INVALID": "Invalid locale switch requested, switching to default locale.",
+        "LOCALE_CHANGED": "Locale changed successfully.",
         "GENIUS_TOKEN_FETCHED": "Genius API token fetched successfully.",
         "STATS_FILETYPE": "The stats file must be a JSON file.",
         "STATS_FETCHED": "Statistics fetched successfully.",
@@ -49,5 +52,5 @@
         "CARD_GENERATED": "Card generated successfully.",
 
     "_section-*": "",
-        "NO_USER_FOLDER": "User folder not found in session. Creating a new one."
+        "NO_USER_FOLDER": "  User folder not found in session. Creating a new one."
 }

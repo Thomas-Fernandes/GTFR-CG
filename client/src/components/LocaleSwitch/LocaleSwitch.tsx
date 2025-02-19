@@ -15,13 +15,13 @@ const LocaleSwitch: React.FC = () => {
   };
 
   const { isDarkMode } = useDarkMode();
-  const { setLocale } = useLocale();
+  const { switchLocale } = useLocale();
 
   return (
     <SelectPopover
       title={labels.title}
       options={LOCALE_OPTIONS}
-      onSelect={setLocale as StateSetter<string>}
+      onSelect={switchLocale as StateSetter<string>}
       className={`locale-switch ${isDarkMode ? ThemeType.Dark : ThemeType.Light}`}
       imgSrc={"/svg/locale-circle.svg"}
     />
