@@ -26,14 +26,16 @@ export enum RestVerb {
 }
 
 export enum ValidationError {
+  More = "Err.More",
   HorizontalOverflow = "Err.HorizontalOverflow",
   VerticalOverflow = "Err.VerticalOverflow",
 }
 export enum ValidationWarning {
+  HorizontalOverflow = "Warn.HorizontalOverflow",
   VerticalOverflow = "Warn.VerticalOverflow",
 }
 export type ValidationInconvenience = {
-  where: number;
+  where: string;
   what: ValidationError | ValidationWarning;
   message?: string;
 };

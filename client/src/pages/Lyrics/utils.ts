@@ -1,39 +1,66 @@
 import { Dict, SongPartsCards, ValidationError, ValidationInconvenience, ValidationWarning } from "@/common/types";
 
-import { CONSECUTIVE_LINES_THRESHOLD } from "./constants";
+import { CONTENT_THRESHOLDS } from "./constants";
 import { LyricsPartType, PageMetadata } from "./types";
+
+export const getLinePixelLength = (line: string) => {
+  const span = document.createElement("span");
+  span.style.font = "16px Arial";
+  span.style.visibility = "hidden";
+  span.textContent = line;
+  document.body.appendChild(span);
+  const width = span.offsetWidth;
+  document.body.removeChild(span);
+  return width;
+};
 
 export const validateSongParts = (songParts: SongPartsCards) => {
   const errors: ValidationInconvenience[] = [];
 
   songParts.forEach((sectionCards, sectionIdx) => {
     sectionCards.forEach((card, cardIdx) => {
-      if (errors.length >= 6) return; // Only show the first 6 errors
+      if (errors.length >= CONTENT_THRESHOLDS.DISPLAY_LIMIT) return;
 
       const lines = card.split("\n");
       const linesCount = lines.length;
-      if (linesCount > CONSECUTIVE_LINES_THRESHOLD.ERROR) {
+      if (linesCount > CONTENT_THRESHOLDS.LINES.ERROR) {
         errors.push({
-          where: sectionIdx,
+          where: `lyrics-part_${sectionIdx}`,
           what: ValidationError.VerticalOverflow,
-          message: `Card ${cardIdx + 1} in section ${sectionIdx + 1} has more than 7 lines.`
+          message: `Card ${cardIdx + 1} in section ${sectionIdx + 1} has more than ${CONTENT_THRESHOLDS.LINES.ERROR} lines.`
         });
-      } else if (linesCount > CONSECUTIVE_LINES_THRESHOLD.WARNING) {
+      } else if (linesCount > CONTENT_THRESHOLDS.LINES.WARNING) {
         errors.push({
-          where: sectionIdx,
+          where: `lyrics-part_${sectionIdx}`,
           what: ValidationWarning.VerticalOverflow,
-          message: `Card ${cardIdx + 1} in section ${sectionIdx + 1} has more than 5 lines.`
+          message: `Card ${cardIdx + 1} in section ${sectionIdx + 1} has more than ${CONTENT_THRESHOLDS.LINES.WARNING} lines.`
         });
       }
-      if (lines.some(line => line.length > 50)) {
+
+      const allTooLongLines = lines.filter(line => getLinePixelLength(line) > CONTENT_THRESHOLDS.LINE_PX_LENGTH.ERROR);
+      allTooLongLines.forEach(line => {
         errors.push({
-          where: sectionIdx,
+          where: `lyrics-part_${sectionIdx}`,
           what: ValidationError.HorizontalOverflow,
-          message: `Card ${cardIdx + 1} in section ${sectionIdx + 1} has a line that is too long.`
+          message: `Card ${cardIdx + 1} in section ${sectionIdx + 1} has a very long line (${getLinePixelLength(line)}px).`
         });
-      }
+      });
+      const allLongLines = lines.filter(line => getLinePixelLength(line) > CONTENT_THRESHOLDS.LINE_PX_LENGTH.WARNING)
+        .filter(line => !allTooLongLines.includes(line));
+      allLongLines.forEach(line => {
+        errors.push({
+          where: `lyrics-part_${sectionIdx}`,
+          what: ValidationWarning.HorizontalOverflow,
+          message: `Card ${cardIdx + 1} in section ${sectionIdx + 1} has a long line (${getLinePixelLength(line)}px).`
+        });
+      });
     });
   });
+
+  if (errors.length > CONTENT_THRESHOLDS.DISPLAY_LIMIT) {
+    errors.splice(CONTENT_THRESHOLDS.DISPLAY_LIMIT); // Only show the first x errors
+    errors.push({ where: "", what: ValidationError.More, message: "and more..." });
+  }
   return errors;
 };
 

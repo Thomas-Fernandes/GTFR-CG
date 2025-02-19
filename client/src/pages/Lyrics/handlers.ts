@@ -32,6 +32,9 @@ export const handleLyricsSaveSubmit = (
       if (e.message)
         sendToast(e.message, toastType);
     });
+    const firstInconvenienceLocation = document.getElementById(errors[0].where);
+    if (firstInconvenienceLocation)
+      firstInconvenienceLocation.scrollIntoView({ behavior: "smooth" });
     return; // cancel saving
   }
 
