@@ -15,12 +15,14 @@ const SelectPopover: React.FC<SelectPopoverProps> = ({ title, label, imgSrc, opt
 
   useEffect(() => {
     const handleClickOutside = (event: Event) => {
-      if (popoverRef.current && !popoverRef.current.contains(event.target as Node))
+      if (popoverRef.current && !popoverRef.current.contains(event.target as Node)) {
         setIsOpen(false);
+      }
     };
 
-    if (isOpen)
+    if (isOpen) {
       document.addEventListener("mousedown", handleClickOutside);
+    }
 
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isOpen]);

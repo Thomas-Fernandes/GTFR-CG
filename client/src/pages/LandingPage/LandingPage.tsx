@@ -25,8 +25,9 @@ const LandingPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!window.location.href.endsWith(ViewPaths.LandingPage))
+    if (!window.location.href.endsWith(ViewPaths.LandingPage)) {
       navigate(ViewPaths.LandingPage);
+    }
   });
 
   return (

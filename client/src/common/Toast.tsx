@@ -23,10 +23,11 @@ export const sendToast = (
   type: ResponseStatus = ToastType.Error,
   duration: number = DEFAULT_EVENT_DURATION.SECONDS_TOAST
 ) => {
-  if (type === ToastType.Error)
+  if (type === ToastType.Error) {
     console.error(`Toast: ${type} - ${flattenMessage(message)}`);
-  else if (type === ToastType.Warn)
+  } else if (type === ToastType.Warn) {
     console.log(`Toast: ${type} - ${flattenMessage(message)}`);
+  }
 
   const toast = document.createElement("div");
   toast.className = "toast " + type.trim().toLowerCase();

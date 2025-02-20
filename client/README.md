@@ -23,7 +23,7 @@
 ## :memo: Quick Description
 
 The front end of **GTFR-CG** allows you to quickly access the core functionalities of the server and generate content dynamically.  
-It is also the face of the application, where you can see your statistics and navigate through the different pages.  
+It is also the face of the application, where you can see your statistics and navigate through the different pages.
 
 &#xa0;
 
@@ -38,12 +38,12 @@ We do use a library for nicer display: Maxwell Barvian's [NumberFlow](https://nu
 
 ## :movie_camera: Usage
 
-The project [is bundled *via* Docker](../README.md).  
+The project [is bundled _via_ Docker](../README.md).  
 However, if you still want to run the front end locally, you can do so by following these steps:
 
 &nbsp;&nbsp; :clamp:&nbsp; **Build**
 
-``` bash
+```bash
 pnpm install || npm install || yarn install # will install the needed node modules
 ```
 
@@ -51,7 +51,7 @@ pnpm install || npm install || yarn install # will install the needed node modul
 
 &nbsp;&nbsp; :rocket:&nbsp; **Launch**
 
-``` bash
+```bash
 pnpm run dev || npm run dev || yarn run dev # will launch the front end of the application
 ```
 
@@ -69,19 +69,18 @@ pnpm run dev || npm run dev || yarn run dev # will launch the front end of the a
 - The client features a [toast notification system](https://web.dev/articles/building/a-toast-component) that will give you feedback upon actions.
 - Your user statistics are stored in a file handled [by the back end](https://github.com/Thomas-Fernandes/GTFR-CG/blob/develop/server/README.md).
 
-> [!NOTE]
-> **Report a malfunction** or **request a feature** by [**opening an issue**](https://github.com/Thomas-Fernandes/GTFR/issues)!
+> [!NOTE] > **Report a malfunction** or **request a feature** by [**opening an issue**](https://github.com/Thomas-Fernandes/GTFR/issues)!
 
 &#xa0;
 
 ## :pager: Codebase segments
 
-:file_folder: [***./***](https://github.com/Thomas-Fernandes/GTFR-CG/tree/develop/client) : the root folder, where the main configuration files are located  
-:file_folder: [***public/***](https://github.com/Thomas-Fernandes/GTFR-CG/tree/develop/client/public) : where the public assets lie, such as the favicon and other image files  
-:file_folder: [***src/common/***](https://github.com/Thomas-Fernandes/GTFR-CG/tree/develop/client/src/common) : where the common properties, hooks and utils are located  
-:file_folder: [***src/components/***](https://github.com/Thomas-Fernandes/GTFR-CG/tree/develop/client/src/components) : where all the generic components are located  
-:file_folder: [***src/constants/***](https://github.com/Thomas-Fernandes/GTFR-CG/tree/develop/client/src/constants) : where the application's constants are located  
-:file_folder: [***src/pages/***](https://github.com/Thomas-Fernandes/GTFR-CG/tree/develop/client/src/pages) : where the application's TSX code is located (one folder per page)
+:file_folder: [**_./_**](https://github.com/Thomas-Fernandes/GTFR-CG/tree/develop/client) : the root folder, where the main configuration files are located  
+:file_folder: [**_public/_**](https://github.com/Thomas-Fernandes/GTFR-CG/tree/develop/client/public) : where the public assets lie, such as the favicon and other image files  
+:file_folder: [**_src/common/_**](https://github.com/Thomas-Fernandes/GTFR-CG/tree/develop/client/src/common) : where the common properties, hooks and utils are located  
+:file_folder: [**_src/components/_**](https://github.com/Thomas-Fernandes/GTFR-CG/tree/develop/client/src/components) : where all the generic components are located  
+:file_folder: [**_src/constants/_**](https://github.com/Thomas-Fernandes/GTFR-CG/tree/develop/client/src/constants) : where the application's constants are located  
+:file_folder: [**_src/pages/_**](https://github.com/Thomas-Fernandes/GTFR-CG/tree/develop/client/src/pages) : where the application's TSX code is located (one folder per page)
 
 <br />
 

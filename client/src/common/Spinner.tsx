@@ -31,8 +31,9 @@ export const showSpinner = (name: string) => {
   const spinnerDiv = document.getElementById(name);
 
   // Create spinner container if it doesn't exist
-  if (spinnerDiv?.querySelector(".spinner-container") === null)
+  if (spinnerDiv?.querySelector(".spinner-container") === null) {
     createSpinnerContainer(spinnerDiv, name);
+  }
 
   // Show the spinner
   const spinnerContainer = spinnerDiv?.querySelector(".spinner-container") as HTMLDivElement;
