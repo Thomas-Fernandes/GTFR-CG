@@ -54,7 +54,7 @@ class Stats:
         nth = 0
 
         representation: str = "{"
-        for key, value in stats_dict.items():
+        for (key, value) in stats_dict.items():
             representation += f"'{key}': {value}" + (sep if nth < dict_size else "")
             nth += 1
         representation += "}"
@@ -142,7 +142,9 @@ def initStats() -> JsonDict:
         log.debug(f"  Stats file created @ {STATS_FILE_PATH}")
         file.write(dumps(stats))
 
-    log.info("Statistics initialization complete.").time(SeverityLevel.INFO, time() - start)
+    log.info(
+        "Statistics initialization complete."
+    ).time(SeverityLevel.INFO, time() - start)
     return getJsonStatsFromFile(STATS_FILE_PATH)
 
 

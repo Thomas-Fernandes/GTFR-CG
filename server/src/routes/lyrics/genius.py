@@ -37,7 +37,7 @@ try:
     genius = Genius(access_token=GENIUS_API_TOKEN, retries=3)
     session[SessionFields.GENIUS_TOKEN] = GENIUS_API_TOKEN
 except TypeError as e:
-    log.error(f"Error while creating Genius object: {e}. " "Lyrics fetching will not work.")
+    log.error(f"Error while creating Genius object: {e}. Lyrics fetching will not work.")
 
 
 def getSongContributors(song_id: Union[int, Literal["manual"]] = -1) -> list[str]:
@@ -166,5 +166,7 @@ def fetchLyricsFromGenius(song_title: str, artist_name: str) -> list[dict[str, s
     log.debug("Lyrics split into parts successfully.")
     updateStats(to_increment=AvailableStats.LYRICS_FETCHES)
 
-    log.info(f"Lyrics fetch for {artist_name} - \"{song_title}\" complete.").time(SeverityLevel.INFO, time() - start)
+    log.info(
+        f"Lyrics fetch for {artist_name} - \"{song_title}\" complete."
+    ).time(SeverityLevel.INFO, time() - start)
     return lyrics_parts

@@ -45,7 +45,9 @@ class ProcessArtworkResource(Resource):
         if err:
             return createApiResponse(HttpStatus.PRECONDITION_FAILED, err)
         center_mark = "with" if include_center_artwork else "without"
-        log.info(f"Images generation ({center_mark} center artwork) complete.").time(SeverityLevel.INFO, time() - start)
+        log.info(
+            f"Images generation ({center_mark} center artwork) complete."
+        ).time(SeverityLevel.INFO, time() - start)
         updateStats(to_increment=AvailableStats.ARTWORK_GENERATIONS)
 
         return createApiResponse(HttpStatus.CREATED, locale.get(Success.PROCESSED_IMAGES_SUCCESS))

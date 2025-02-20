@@ -33,7 +33,7 @@ def generateAllCards(
     image_output_path = f"{user_processed_path}{SLASH}00.png"
     generateCard(image_output_path, [], card_metadata)
 
-    for idx, card_lyrics in enumerate(cards_contents, start=1):
+    for (idx, card_lyrics) in enumerate(cards_contents, start=1):
         padding = '0' if idx < 10 else ''
         image_output_path = f"{user_processed_path}{SLASH}{padding}{idx}.png"
         lyrics_to_print = card_lyrics[-8:]  # get the last 8 lines of the lyrics; rest overflows

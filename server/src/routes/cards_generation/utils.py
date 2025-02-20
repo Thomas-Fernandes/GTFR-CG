@@ -90,7 +90,8 @@ def getLuminance(bg_color: RGBAColor) -> int:
     # Calculate luminance (perceived brightness): 0.299 * R + 0.587 * G + 0.114 * B
     luminance = 0.3 * r + 0.6 * g + 0.1 * b
     log.debug(
-        f"  Deducted luminance={round(luminance, 2)}, rgb=({round(0.3 * r, 2)}, {round(0.6 * g, 2)}, {round(0.1 * b, 2)})"
+        f"  Deducted luminance={round(luminance, 2)}, "
+        f"rgb=({round(0.3 * r, 2)}, {round(0.6 * g, 2)}, {round(0.1 * b, 2)})"
     )
     return int(luminance)
 

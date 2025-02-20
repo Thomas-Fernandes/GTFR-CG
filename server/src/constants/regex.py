@@ -6,8 +6,14 @@ LYRICSGENIUS_PATTERNS = [
         compile(r"Searching for \"(.*)\" by (.*)..."),
         lambda m: f"Lyrics for \"{m.group(1)}\" by {m.group(2)} are being searched...",
     ),
-    (compile(r"Searching for \"(.*)\"..."), lambda m: f"Lyrics for \"{m.group(1)}\" are being searched..."),
-    (compile(r"No results found for: \"(.*)\""), lambda m: f"No results found for \"{m.group(1)}\"."),
+    (
+        compile(r"Searching for \"(.*)\"..."),
+        lambda m: f"Lyrics for \"{m.group(1)}\" are being searched..."
+    ),
+    (
+        compile(r"No results found for: \"(.*)\""),
+        lambda m: f"No results found for \"{m.group(1)}\"."
+    ),
     (
         compile(r"Specified song does not contain lyrics. Rejecting."),
         lambda m: "The specified song does not contain lyrics and was rejected.",

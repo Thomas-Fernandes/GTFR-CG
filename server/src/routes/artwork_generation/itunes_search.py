@@ -68,8 +68,8 @@ class ItunesSearchResource(Resource):
         start = time()
         url_to_hit = f"https://itunes.apple.com/search?term={term}&country={country}&entity={entity}&limit={limit}"
         response = makeItunesRequest(url_to_hit)
-        log.info(f"iTunes search complete with status code: {response.status_code}").time(
-            SeverityLevel.INFO, time() - start
-        )
+        log.info(
+            f"iTunes search complete with status code: {response.status_code}"
+        ).time(SeverityLevel.INFO, time() - start)
 
         return createApiResponse(response.status_code, locale.get(Success.ITUNES_FETCH_COMPLETE), response.json())

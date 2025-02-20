@@ -54,15 +54,9 @@ UPLOADED_ITUNES_IMG_FILENAME = "itunes_image.png"
 UPLOADED_FILE_IMG_FILENAME = "uploaded_image.png"
 UPLOADED_YOUTUBE_IMG_FILENAME = "youtube_thumbnail.png"
 LOGO_POSITIONS = [
-    "top-left",
-    "top-center",
-    "top-right",
-    "center-left",
-    "center-center",
-    "center-right",
-    "bottom-left",
-    "bottom-center",
-    "bottom-right",
+    "top-left",    "top-center",    "top-right",
+    "center-left", "center-center", "center-right",
+    "bottom-left", "bottom-center", "bottom-right",
 ]
 PROCESSED_ARTWORK_FILENAME = "ProcessedArtwork.png"
 PROCESSED_OUTRO_FILENAME = "outro.png"

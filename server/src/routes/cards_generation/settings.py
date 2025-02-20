@@ -76,7 +76,8 @@ def getCardMetadata(song_data: SongMetadata, enforce_bottom_color: str | None, i
         color_thief = ColorThief(bg_path)
         dominant_color = color_thief.get_color(quality=1)
         log.info(
-            f"  Dominant color: {dominant_color}=#{hex(dominant_color[0])[2:]}{hex(dominant_color[1])[2:]}{hex(dominant_color[2])[2:]}"
+            f"  Dominant color: {dominant_color}="
+            f"#{hex(dominant_color[0])[2:]}{hex(dominant_color[1])[2:]}{hex(dominant_color[2])[2:]}"
         )
 
     dominant_color_luminance = getLuminance(dominant_color)

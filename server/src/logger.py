@@ -45,25 +45,11 @@ class Logger(logging.getLoggerClass()):
         __severity: [SeverityLevel] The severity level of the logger
     """
 
-    def critical(self, msg: str) -> Self:
-        super().log(SeverityLevel.CRITICAL, "%s", msg)
-        return self
-
-    def error(self, msg: str) -> Self:
-        super().log(SeverityLevel.ERROR, "%s", msg)
-        return self
-
-    def warn(self, msg: str) -> Self:
-        super().log(SeverityLevel.WARNING, "%s", msg)
-        return self
-
-    def info(self, msg: str) -> Self:
-        super().log(SeverityLevel.INFO, "%s", msg)
-        return self
-
-    def debug(self, msg: str) -> Self:
-        super().log(SeverityLevel.DEBUG, "%s", msg)
-        return self
+    def critical(self, msg: str) -> Self: super().log(SeverityLevel.CRITICAL, "%s", msg); return self
+    def error(self,    msg: str) -> Self: super().log(SeverityLevel.ERROR,    "%s", msg); return self
+    def warn(self,     msg: str) -> Self: super().log(SeverityLevel.WARNING,  "%s", msg); return self
+    def info(self,     msg: str) -> Self: super().log(SeverityLevel.INFO,     "%s", msg); return self
+    def debug(self,    msg: str) -> Self: super().log(SeverityLevel.DEBUG,    "%s", msg); return self
 
     def time(self, level: SeverityLevel, duration: float, *, padding: int = 0) -> Self:
         """Logs a message with a timestamp
@@ -104,7 +90,7 @@ class Logger(logging.getLoggerClass()):
             stderr_content = new_stderr.read()
 
             def process_message(line: str) -> str:
-                for pattern, action in LYRICSGENIUS_PATTERNS:
+                for (pattern, action) in LYRICSGENIUS_PATTERNS:
                     match: Optional[Match[str]] = pattern.match(line)
                     if match is not None:
                         return action(match)

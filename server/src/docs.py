@@ -4,14 +4,18 @@ from src.constants.paths import ROUTES
 
 fallback_bp_name = "?"
 
-ns_home = Namespace((ROUTES.home.bp_name or fallback_bp_name), description="Home related routes")
+ns_home = Namespace(
+    (ROUTES.home.bp_name or fallback_bp_name), description="Home related routes"
+)
 ns_artwork_generation = Namespace(
     (ROUTES.art_gen.bp_name or fallback_bp_name), description="Artwork generation related routes"
 )
 ns_artwork_processing = Namespace(
     (ROUTES.art_proc.bp_name or fallback_bp_name), description="Artwork processing related routes"
 )
-ns_lyrics = Namespace((ROUTES.lyrics.bp_name or fallback_bp_name), description="Lyrics related routes")
+ns_lyrics = Namespace(
+    (ROUTES.lyrics.bp_name or fallback_bp_name), description="Lyrics related routes"
+)
 ns_cards_generation = Namespace(
     (ROUTES.cards_gen.bp_name or fallback_bp_name), description="Cards generation related routes"
 )

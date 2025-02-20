@@ -48,13 +48,13 @@ def drawLyrics(draw: IDraw.ImageDraw, lyrics: list[list[str]], text_lyrics_color
         rectangle_end_x_coord = X_META_LYRIC + LYRIC_BOX_OFFSET + LYRIC_TEXT_OFFSET + lyric_px_length
         draw.rectangle(
             [(X_META_LYRIC, start_lyrics_from), (rectangle_end_x_coord, start_lyrics_from + LYRIC_HEIGHT - 1)],
-            fill=((255, 255, 255) if text_lyrics_color[0] == 0 else (0, 0, 0)),
+            fill=((255, 255, 255) if text_lyrics_color[0] == 0 else (0, 0, 0))
         )
         draw.text(
             (X_META_LYRIC + LYRIC_BOX_OFFSET, start_lyrics_from + LYRIC_TEXT_OFFSET),
             lyric_line,
             font=FONT_LYRICS,
-            fill=text_lyrics_color,
+            fill=text_lyrics_color
         )
         start_lyrics_from += LYRIC_HEIGHT + LYRIC_SPACING
 
