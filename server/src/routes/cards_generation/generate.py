@@ -129,6 +129,8 @@ class CardsGenerationResource(Resource):
                 HttpStatus.PRECONDITION_FAILED if err == locale.get(Error.CARDS_CONTENTS_READ_FAILED) else HttpStatus.BAD_REQUEST,
                 err
             )
-        log.info("Cards contents retrieved successfully.").time(SeverityLevel.INFO, time() - start)
+        log.info(
+            "Cards contents retrieved successfully."
+        ).time(SeverityLevel.INFO, time() - start)
 
         return generateCards(cards_contents, song_data, cardgen_settings)

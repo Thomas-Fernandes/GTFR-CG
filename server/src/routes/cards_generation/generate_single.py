@@ -72,7 +72,12 @@ class SingleCardGenerationResource(Resource):
         start = time()
         (err, cardgen_settings, card_contents, song_data) = getGenerationRequisites(is_singular_card=True)
         if err:
-            return createApiResponse(HttpStatus.PRECONDITION_FAILED if err == locale.get(Error.CARDS_CONTENTS_READ_FAILED) else HttpStatus.BAD_REQUEST, err)
-        log.info("Card contents retrieved successfully.").time(SeverityLevel.INFO, time() - start)
+            return createApiResponse(
+                HttpStatus.PRECONDITION_FAILED if err == locale.get(Error.CARDS_CONTENTS_READ_FAILED) else HttpStatus.BAD_REQUEST,
+                err
+            )
+        log.info(
+            "Card contents retrieved successfully."
+        ).time(SeverityLevel.INFO, time() - start)
 
         return generateSingleCard(card_contents, song_data, cardgen_settings)

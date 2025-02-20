@@ -25,7 +25,7 @@ class Route:
         :return: [string] The dataclass' content, as a string
         """
         content: str = ""
-        for key, value in self.__dict__.items():
+        for (key, value) in self.__dict__.items():
             if value is not None:
                 content += f"{key}={value}, "
         return f"Route({content[:-2]})"
@@ -57,7 +57,7 @@ class Routes:
         :return: [string] The dataclass' content, as a string
         """
         content: str = ""
-        for key, value in self.__dict__.items():
+        for (key, value) in self.__dict__.items():
             content += f"{key}={value}, "
         return f"Routes({content[:-2]})"
 
@@ -96,7 +96,7 @@ class CardMetadata:
         :return: [string] The dataclass' content, as a string
         """
         content: str = ""
-        for key, value in self.__dict__.items():
+        for (key, value) in self.__dict__.items():
             if value is not None:
                 if key == "bg" or key == "bottom_bar_overlay":
                     continue
@@ -137,7 +137,7 @@ class Cache:
         :return: [string] The dataclass' content, as a string
         """
         content: str = ""
-        for key, value in self.__dict__.items():
+        for (key, value) in self.__dict__.items():
             content += f"{key}={value}, "
         return f"Cache({content[:-2]})"
 

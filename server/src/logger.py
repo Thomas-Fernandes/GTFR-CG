@@ -90,7 +90,7 @@ class Logger(logging.getLoggerClass()):
             stderr_content = new_stderr.read()
 
             def process_message(line: str) -> str:
-                for pattern, action in LYRICSGENIUS_PATTERNS:
+                for (pattern, action) in LYRICSGENIUS_PATTERNS:
                     match: Optional[Match[str]] = pattern.match(line)
                     if match is not None:
                         return action(match)
