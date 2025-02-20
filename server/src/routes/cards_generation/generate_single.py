@@ -20,8 +20,9 @@ from src.routes.cards_generation.pillow import generateCard
 from src.routes.cards_generation.settings import getCardMetadata, getGenerationRequisites
 from src.routes.cards_generation.utils import getUserProcessedPath
 
+
 def generateSingleCard(cards_contents: CardsContents, song_data: SongMetadata, settings: CardgenSettings) -> Response:
-    """ Generates a single card using the contents provided
+    """Generates a single card using the contents provided
     :param cards_contents: [CardsContents] The contents of the card
     :param song_data: [SongMetadata] The metadata of the song
     :param settings: [dict] The settings for card generation
@@ -43,14 +44,16 @@ def generateSingleCard(cards_contents: CardsContents, song_data: SongMetadata, s
     log.info("Card metadata calculated successfully.")
 
     image_output_path = f"{getUserProcessedPath()}{SLASH}{settings[PayloadFields.CARD_FILENAME].split('/')[-1]}"
-    lyrics_to_print = literal_eval(cards_contents[1][0])[-8:] # get the last 8 lines of the lyrics; rest overflows
+    lyrics_to_print = literal_eval(cards_contents[1][0])[-8:]  # get the last 8 lines of the lyrics; rest overflows
     generateCard(image_output_path, lyrics_to_print, card_metadata)
     log.info("Generated new card successfully.")
     updateStats(to_increment=AvailableStats.CARDS_GENERATED)
 
     return createApiResponse(HttpStatus.CREATED, locale.get(Success.CARD_GENERATED))
 
+
 bp_cards_generation_generate_single = Blueprint("generate-single", __name__.split('.')[-1])
+
 
 @ns_cards_generation.route("/generate-single")
 class SingleCardGenerationResource(Resource):
@@ -61,7 +64,7 @@ class SingleCardGenerationResource(Resource):
     @ns_cards_generation.response(HttpStatus.PRECONDITION_FAILED, "\n".join([locale.get(Error.CARDS_CONTENTS_NOT_FOUND), locale.get(Error.CARDS_BACKGROUND_NOT_FOUND)]))
     @ns_cards_generation.response(HttpStatus.INTERNAL_SERVER_ERROR, "\n".join([locale.get(Error.CARDS_CONTENTS_READ_FAILED), locale.get(Error.USER_FOLDER_NOT_FOUND)]))
     def post(self) -> Response:
-        """ Generates a single card again using custom contents """
+        """Generates a single card again using custom contents"""
         log.debug("POST - Generating a singular card...")
         if SessionFields.CARDS_CONTENTS not in session:
             log.error(Error.CARDS_CONTENTS_NOT_FOUND)

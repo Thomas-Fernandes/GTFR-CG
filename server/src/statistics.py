@@ -11,9 +11,10 @@ from src.typing_gtfr import JsonDict
 
 ############# CLASS #############
 
+
 @dataclass(slots=True, kw_only=True)
 class Stats:
-    """ Dataclass to store statistics about the application
+    """Dataclass to store statistics about the application
 
     Attributes:
         date_first_operation: [string?] The date of the first operation (default: None)
@@ -22,6 +23,7 @@ class Stats:
         lyrics_fetches: [int?] The number of lyrics fetches (default: None)
         cards_generations: [int?] The number of cards generations (default: None)
     """
+
     date_first_operation: Optional[str] = None
     date_last_operation: Optional[str] = None
     artwork_generations: Optional[int] = None
@@ -29,7 +31,7 @@ class Stats:
     cards_generations: Optional[int] = None
 
     def dict(self) -> JsonDict:
-        """ Returns the dataclass as a dictionary
+        """Returns the dataclass as a dictionary
         :return: [dict] The dataclass as a dictionary
         """
         return {
@@ -41,24 +43,24 @@ class Stats:
         }
 
     def __repr__(self) -> str:
-        """ Returns the Stats dataclass as a string
+        """Returns the Stats dataclass as a string
         :return: [string] The dataclass' content, as a string
         """
         stats_dict = self.dict()
-        stats_dict = {k: v for (k, v) in stats_dict.items() if v is not None} # remove None values
+        stats_dict = {k: v for (k, v) in stats_dict.items() if v is not None}  # remove None values
 
         dict_size = len(stats_dict) - 1
         sep = ", "
         nth = 0
 
         representation: str = "{"
-        for (key, value) in stats_dict.items():
-            representation += \
-                f"'{key}': {value}" + (sep if nth < dict_size else "")
+        for key, value in stats_dict.items():
+            representation += f"'{key}': {value}" + (sep if nth < dict_size else "")
             nth += 1
         representation += "}"
 
         return representation
+
 
 ############ METHODS ############
 
@@ -66,8 +68,9 @@ from json import loads, dumps, JSONDecodeError
 
 from src.utils.time_utils import getNowEpoch
 
+
 def getJsonStatsFromFile(path: str = STATS_FILE_PATH) -> JsonDict:
-    f""" Returns the statistics contained in a JSON statistics file
+    f"""Returns the statistics contained in a JSON statistics file
     :param path: [string] The path to the statistics file (default: {STATS_FILE_PATH})
     :return: [dict] The statistics from the statistics file
     """
@@ -85,8 +88,11 @@ def getJsonStatsFromFile(path: str = STATS_FILE_PATH) -> JsonDict:
         log.warn(f"Error decoding stats file ({path}). Initializing new stats file...")
         return initStats()
 
-def updateStats(*, path: str = STATS_FILE_PATH, to_increment: Optional[AvailableStats] = None, increment: int = 1) -> None:
-    f""" Updates the statistics contained in a JSON statistics file
+
+def updateStats(
+    *, path: str = STATS_FILE_PATH, to_increment: Optional[AvailableStats] = None, increment: int = 1
+) -> None:
+    f"""Updates the statistics contained in a JSON statistics file
     :param path: [string] The path to the statistics file (default: {STATS_FILE_PATH})
     :param to_increment: [string?] The statistic to increment (default: None)
     """
@@ -121,8 +127,9 @@ def updateStats(*, path: str = STATS_FILE_PATH, to_increment: Optional[Available
 
     log.info(f"Stats updated: {new_stats}")
 
+
 def initStats() -> JsonDict:
-    """ Initializes the statistics contained in a JSON statistics file
+    """Initializes the statistics contained in a JSON statistics file
     :return: [dict] The statistics from the statistics file
     """
     log.debug("Initializing statistics...")
@@ -138,8 +145,9 @@ def initStats() -> JsonDict:
     log.info("Statistics initialization complete.").time(SeverityLevel.INFO, time() - start)
     return getJsonStatsFromFile(STATS_FILE_PATH)
 
+
 def onLaunch() -> None:
-    """ Initializes the project with the statistics from the statistics file """
+    """Initializes the project with the statistics from the statistics file"""
     log.debug("Loading project statistics...")
     json_stats: JsonDict = getJsonStatsFromFile(STATS_FILE_PATH)
 

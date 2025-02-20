@@ -1,0 +1,9 @@
+[tool.black]
+#diff = true
+#check = true
+color = true
+exclude = "/__*__/"
+
+target-version = ["py311"]
+line-length = 120
+skip-string-normalization = true

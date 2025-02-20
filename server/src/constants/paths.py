@@ -8,37 +8,37 @@ DEFAULT_PORT = 8000
 
 API_ROUTE = "/api"
 ROUTES = Routes(
-    root = Route(
+    root=Route(
         path="/",
     ),
-    redirect = Route(
+    redirect=Route(
         path="/redirect",
         bp_name="redirect",
     ),
-    home = Route(
+    home=Route(
         path="/home",
         bp_name="home",
     ),
-    art_gen = Route(
+    art_gen=Route(
         path="/artwork-generation",
         bp_name="artwork-generation",
     ),
-    art_proc = Route(
+    art_proc=Route(
         path="/artwork-processing",
         bp_name="artwork-processing",
     ),
-    lyrics = Route(
+    lyrics=Route(
         path="/lyrics",
         bp_name="lyrics",
     ),
-    cards_gen = Route(
+    cards_gen=Route(
         path="/cards-generation",
         bp_name="cards-generation",
     ),
 )
 
 SLASH = '/' if (osName != 'nt') else '\\'
-path_prefix = "" if path.isfile("requirements.txt") else f"server{SLASH}" # for running from installer.py
+path_prefix = "" if path.isfile("requirements.txt") else f"server{SLASH}"  # for running from installer.py
 SESSION_TYPE = "filesystem"
 SESSION_FILE_DIR = f"flask_session{SLASH}"
 
@@ -54,9 +54,15 @@ UPLOADED_ITUNES_IMG_FILENAME = "itunes_image.png"
 UPLOADED_FILE_IMG_FILENAME = "uploaded_image.png"
 UPLOADED_YOUTUBE_IMG_FILENAME = "youtube_thumbnail.png"
 LOGO_POSITIONS = [
-    "top-left",    "top-center",    "top-right",
-    "center-left", "center-center", "center-right",
-    "bottom-left", "bottom-center", "bottom-right"
+    "top-left",
+    "top-center",
+    "top-right",
+    "center-left",
+    "center-center",
+    "center-right",
+    "bottom-left",
+    "bottom-center",
+    "bottom-right",
 ]
 PROCESSED_ARTWORK_FILENAME = "ProcessedArtwork.png"
 PROCESSED_OUTRO_FILENAME = "outro.png"

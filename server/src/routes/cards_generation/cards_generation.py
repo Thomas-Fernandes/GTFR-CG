@@ -13,7 +13,8 @@ bp_cards_generation.register_blueprint(bp_cards_generation_save_cards_contents)
 bp_cards_generation.register_blueprint(bp_cards_generation_generate)
 bp_cards_generation.register_blueprint(bp_cards_generation_generate_single)
 
+
 def addCardsGenerationNamespace(api: Api) -> None:
-    """ Initializes the cards generation blueprint """
+    """Initializes the cards generation blueprint"""
     api_prefix = API_ROUTE + ROUTES.cards_gen.path
     api.add_namespace(ns_cards_generation, path=api_prefix)

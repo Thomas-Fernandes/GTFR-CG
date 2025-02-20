@@ -19,6 +19,9 @@ python-dotenv>=1.0.1 # for environment variables
 pillow>=10.4.0 # Image processing
 colorthief==0.2.1 # deducing dominant colors from images
 
+# Code quality
+black @ git+https://github.com/psf/black@00cb6d15c52de09d0b7966b20dd42af4f0fc0195
+
 #########
 #########
 #########

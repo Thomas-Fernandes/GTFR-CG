@@ -19,6 +19,7 @@ from src.utils.web_utils import createApiResponse
 
 bp_artwork_generation_local_file = Blueprint("use-local-image", __name__.split('.')[-1])
 
+
 @ns_artwork_generation.route("/use-local-image")
 class LocalImageResource(Resource):
     @ns_artwork_generation.doc("post_use_local_image")
@@ -28,7 +29,7 @@ class LocalImageResource(Resource):
     @ns_artwork_generation.response(HttpStatus.UNSUPPORTED_MEDIA_TYPE, locale.get(Error.IMG_INVALID_FILETYPE))
     @ns_artwork_generation.response(HttpStatus.INTERNAL_SERVER_ERROR, locale.get(Error.FAIL_DOWNLOAD))
     def post(self) -> Response:
-        """ Saves the uploaded image to the user's folder """
+        """Saves the uploaded image to the user's folder"""
         log.info("POST - Generating artwork using a local image...")
 
         if snakeToCamel(PayloadFields.LOCAL_FILE) not in request.files:
@@ -52,8 +53,7 @@ class LocalImageResource(Resource):
             return createApiResponse(HttpStatus.BAD_REQUEST, locale.get(Error.NO_FILE))
         log.debug(f"Image filename is valid: {file.filename}")
 
-        include_center_artwork: bool = \
-            request.form[snakeToCamel(PayloadFields.INCLUDE_CENTER_ARTWORK)] == "true"
+        include_center_artwork: bool = request.form[snakeToCamel(PayloadFields.INCLUDE_CENTER_ARTWORK)] == "true"
 
         image_path = path.join(GENERATED_ARTWORKS_DIR, UPLOADED_FILE_IMG_FILENAME)
         log.debug(f"Saving uploaded image to {image_path}")
