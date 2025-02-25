@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 
 import ImgButton from "@/components/ImgButton/ImgButton";
 import { SpinnerId } from "@/constants/spinners";
+import { useArtworkGenerationContext } from "@/pages/ArtworkGeneration/contexts";
 
-import { useArtworkGenerationContext } from "./contexts";
 import { handleSelectItunesImage } from "./handlers";
 import { ItunesImageResultProps, ItunesResultsProps } from "./types";
 

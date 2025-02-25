@@ -10,10 +10,11 @@ import { ViewPaths } from "@/constants/paths";
 import { useAppContext } from "@/contexts";
 
 import ArtgenOptionIndicator from "./components/ArtgenOptionIndicator/ArtgenOptionIndicator";
+import { ItunesResult } from "./components/ItunesResults/types";
 import { DEFAULT_GENERATION_OPTION_STATE } from "./constants";
 import { ArtworkGenerationContext } from "./contexts";
 import { handleOnMouseOver } from "./handlers";
-import { ArtworkGenerationOption, ItunesResult } from "./types";
+import { ArtworkGenerationOption } from "./types";
 import { getArtgenOptions } from "./utils";
 
 import "./ArtworkGeneration.scss";
@@ -25,7 +26,7 @@ const ArtworkGeneration = () => {
     homeTitle: intl.formatMessage({ id: "pages.home.title" }),
     lyricsTitle: intl.formatMessage({ id: "pages.lyrics.title" }),
     cardgenTitle: intl.formatMessage({ id: "pages.cardgen.title" }),
-  }
+  };
 
   useTitle(labels.title);
 
@@ -38,7 +39,8 @@ const ArtworkGeneration = () => {
   const [itunesResults, setItunesResults] = useState([] as ItunesResult[]);
 
   const contextValue = useMemo(
-    () => ({ isProcessingLoading, setIsProcessingLoading, navigate }), [isProcessingLoading]
+    () => ({ isProcessingLoading, setIsProcessingLoading, navigate }),
+    [isProcessingLoading]
   );
 
   return (
@@ -60,15 +62,16 @@ const ArtworkGeneration = () => {
           label={generationOptionState.prevLabel}
         />
 
-        { generationOptions.map(({ content, className }, i) => (
-          <div key={i} className="artwork-generation--snapper" onMouseOver={() => handleOnMouseOver(generationOptions, i, setGenerationOptionState)}>
+        {generationOptions.map(({ content, className }, i) => (
+          <div
+            key={i}
+            className="artwork-generation--snapper"
+            onMouseOver={() => handleOnMouseOver(generationOptions, i, setGenerationOptionState)}
+          >
             <div className="artwork-generation--snapper--wrapper">
-              <div className={`${className} ${(className.endsWith("--itunes") && itunesResults.length) ? "padded" : ""}`}>
+              <div className={`${className} ${className.endsWith("--itunes") && itunesResults.length ? "padded" : ""}`}>
                 <ArtworkGenerationContext.Provider value={contextValue}>
-                  { className.endsWith("--itunes")
-                  ? content(itunesResults, setItunesResults)
-                  : content()
-                  }
+                  {className.endsWith("--itunes") ? content(itunesResults, setItunesResults) : content()}
                 </ArtworkGenerationContext.Provider>
               </div>
             </div>

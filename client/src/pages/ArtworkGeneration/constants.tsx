@@ -1,5 +1,3 @@
-import { Option } from "@/components/SelectPopover/types";
-
 import { GenerationOptionState } from "./types";
 
 export const REGEX_YOUTUBE_URL = [
@@ -18,16 +16,10 @@ export enum ArtworkResultProps {
   MaxCropLength = 12,
 }
 
-export const ITUNES_REGION_OPTIONS: Option[] = [
-  { label: "France", value: "fr" },
-  { label: "United States", value: "us" },
-  { label: "New Zealand", value: "nz" },
-];
-
 export const ARTWORK_GENERATION_OPTION_PARENT_CLASS = "artwork-generation--options";
 
 export const DEFAULT_GENERATION_OPTION_STATE: GenerationOptionState = {
   current: 0,
   prevLabel: "",
   nextLabel: "",
-}
+};
