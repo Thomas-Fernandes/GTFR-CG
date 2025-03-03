@@ -40,10 +40,10 @@ ROUTES = Routes(
 SLASH = '/' if (osName != 'nt') else '\\'
 path_prefix = "" if path.isfile("requirements.txt") else f"server{SLASH}" # for running from installer.py
 SESSION_TYPE = "filesystem"
-SESSION_FILE_DIR = "flask_session" + SLASH
+SESSION_FILE_DIR = f"flask_session{SLASH}"
 
 run_from_docker = env.get("RUN_FROM_DOCKER", "False") == "True"
-PROCESSED_DIR = "processed" + SLASH
+PROCESSED_DIR = f"processed{SLASH}"
 GENERATED_CONTENT_DIR = f"{SLASH}app{SLASH}generated_files{SLASH}" if run_from_docker else f".{SLASH}"
 STATS_FILE_PATH = f"{GENERATED_CONTENT_DIR}stats.json"
 GENERATED_ARTWORKS_DIR = f"{GENERATED_CONTENT_DIR}processed-{AvailableCacheElemType.ARTWORKS}{SLASH}"

@@ -25,7 +25,7 @@ const LyricsPartsForm: React.FC<LyricsPartsFormProps> = ({ lyricsParts }) => {
       <label htmlFor="lyrics-form--parts" className="hidden">{"Lyrics parts"}</label>
       <ul className="lyrics-form--parts" id="lyrics-form--parts">
         { lyricsParts.map((part, idx) =>
-          <li key={"part_" + idx}>
+          <li key={`part_${idx}`}>
             <LyricsPart part={part} idx={idx} />
             { idx !== lyricsParts.length - 1 &&
               <hr className="w-full my-4" />
