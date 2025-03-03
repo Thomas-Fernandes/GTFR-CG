@@ -8,6 +8,7 @@ RUN pip install --upgrade pip \
 
 COPY . .
 COPY .env .
+ENV RUN_FROM_DOCKER="True"
 
 EXPOSE 8000
 CMD ["python", "launcher.py"]
