@@ -1,12 +1,18 @@
 import { useState } from "react";
 
 import ButtonRemove from "@/components/ButtonRemove/ButtonRemove";
+import { useAppContext } from "@/contexts";
 
 import { FileUploaderProps } from "./types";
 
 import "./FileUploader.scss";
 
 const FileUploader: React.FC<FileUploaderProps> = ({ id, label, caption, accept, setter }) => {
+  const { intl } = useAppContext();
+  const labels = {
+    defaultCaption: intl.formatMessage({ id: "components.fileUploader.defaultCaption" }),
+  };
+
   const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState<boolean>(false);
 
@@ -53,7 +59,7 @@ const FileUploader: React.FC<FileUploaderProps> = ({ id, label, caption, accept,
           {label}
         </label>
         <span className={`file-upload--caption ${selectedFileName ? "" : "italic"}`}>
-          {selectedFileName ?? (caption ?? "No file selected.")}
+          {selectedFileName ?? (caption ?? labels.defaultCaption)}
         </span>
       </div>
       { selectedFileName &&

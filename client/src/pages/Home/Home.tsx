@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { useLocaleContext } from "@/common/hooks/useLocale/contexts";
 import { useTitle } from "@/common/hooks/useTitle";
+import { Locale } from "@/common/l10n";
 import { NavButtonSide } from "@/components/NavButton/constants";
 import NavButton from "@/components/NavButton/NavButton";
 import ToastContainer from "@/components/ToastContainer/ToastContainer";
 import TopBotSpacer from "@/components/TopBotSpacer/TopBotSpacer";
-import { Title } from "@/constants/browser";
 import { ViewPaths } from "@/constants/paths";
+import { useAppContext } from "@/contexts";
 
 import { defaultStatistics } from "./constants";
 import { getGeniusToken, getStatistics } from "./requests";
@@ -17,8 +19,17 @@ import { Statistics } from "./types";
 import "./Home.scss";
 
 const Home = () => {
-  useTitle(Title.Home);
+  const { intl } = useAppContext();
+  const labels = {
+    title: intl.formatMessage({ id: "pages.home.title" }),
+    artgenTitle: intl.formatMessage({ id: "pages.artgen.title" }),
+    lyricsTitle: intl.formatMessage({ id: "pages.lyrics.title" }),
+    cardgenTitle: intl.formatMessage({ id: "pages.cardgen.title" }),
+  };
 
+  useTitle(labels.title);
+
+  const { switchLocale } = useLocaleContext();
   const navigate = useNavigate();
 
   const [geniusToken, setGeniusToken] = useState("");
@@ -32,6 +43,7 @@ const Home = () => {
       getStatistics(setStats);
 
       if (!hasVisited) {
+        switchLocale(intl.locale as Locale);
         getGeniusToken(setGeniusToken);
         sessionStorage.setItem(routeKey, "visited");
       }
@@ -45,15 +57,15 @@ const Home = () => {
       <ToastContainer />
       <TopBotSpacer />
 
-      <h1>{Title.Home}</h1>
+      <h1>{labels.title}</h1>
 
       <div className="home navbar">
         <div className="navbar-row">
-          <NavButton to={ViewPaths.ArtworkGeneration} label={Title.ArtworkGeneration} side={NavButtonSide.Right} />
-          <NavButton to={ViewPaths.Lyrics} label={Title.Lyrics} side={NavButtonSide.Right} />
+          <NavButton to={ViewPaths.ArtworkGeneration} label={labels.artgenTitle} side={NavButtonSide.Right} />
+          <NavButton to={ViewPaths.Lyrics} label={labels.lyricsTitle} side={NavButtonSide.Right} />
         </div>
         <div className="navbar-row">
-          <NavButton to={ViewPaths.CardsGeneration} label={Title.CardsGeneration} side={NavButtonSide.Right} />
+          <NavButton to={ViewPaths.CardsGeneration} label={labels.cardgenTitle} side={NavButtonSide.Right} />
         </div>
       </div>
 

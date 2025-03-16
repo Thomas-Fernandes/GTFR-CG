@@ -6,13 +6,21 @@ import ActionButton from "@/components/ActionButton/ActionButton";
 import ImgButton from "@/components/ImgButton/ImgButton";
 import ToastContainer from "@/components/ToastContainer/ToastContainer";
 import TopBotSpacer from "@/components/TopBotSpacer/TopBotSpacer";
-import { Title } from "@/constants/browser";
 import { ViewPaths } from "@/constants/paths";
+import { useAppContext } from "@/contexts";
 
 import "./LandingPage.scss";
 
 const LandingPage = () => {
-  useTitle(Title.Landing);
+  const { intl } = useAppContext();
+  const labels = {
+    title: intl.formatMessage({ id: "pages.artgen.title" }),
+    learnMore: intl.formatMessage({ id: "pages.landing.learnMore" }),
+    generateContent: intl.formatMessage({ id: "pages.landing.generateContent" }),
+    overlayText: intl.formatMessage({ id: "pages.landing.overlayText" }),
+  };
+
+  useTitle(labels.title);
 
   const navigate = useNavigate();
 
@@ -43,21 +51,21 @@ const LandingPage = () => {
             <div className="landing-page--content--left--buttons">
               <ActionButton newTabLink
                 onClick={() => window.open("https://github.com/Thomas-Fernandes/GTFR-CG")}
-                label={"Learn More"}
+                label={labels.learnMore}
               />
 
               <ActionButton
                 onClick={() => navigate(ViewPaths.Home)}
-                label={"Generate Content"}
+                label={labels.generateContent}
               />
             </div>
           </div>
         <div className="landing-page--content--right">
           <img src="/img/logo-rd.png" alt="gtfr" />
-          <ImgButton
+          <ImgButton newTabLink
             src="/gif/landing.gif" alt="video"
             onClick={() => window.open("https://www.youtube.com/@geniustraductionsfrancaises")}
-            overlayText="Go to our YouTube channel" newTabLink
+            overlayText={labels.overlayText}
           />
         </div>
       </div>

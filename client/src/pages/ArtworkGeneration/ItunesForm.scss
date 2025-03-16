@@ -7,8 +7,13 @@
     .itunes--search {
       @apply max-w-lg w-1/2 flex flex-row items-center justify-center gap-8;
 
-      select {
-        @apply py-1;
+      .popover {
+        &--toggle {
+          @apply min-w-36;
+        }
+        &--dropdown {
+          @apply w-36;
+        }
       }
 
       .action-button {

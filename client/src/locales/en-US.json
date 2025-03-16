@@ -1,0 +1,163 @@
+{
+  "pages": {
+    "landing": {
+      "title": "Welcome",
+      "learnMore": "Learn More",
+      "generateContent": "Generate Content",
+      "overlayText": "Go to our YouTube channel"
+    },
+    "redirect": {
+      "title": "Redirection page",
+      "header": "You are being redirected after an error was met...",
+      "counter": {
+        "1": "You will be redirected to",
+        "2": "in",
+        "3": "second"
+      }
+    },
+    "home": {
+      "title": "Home",
+      "stats": {
+        "dateFirstOperation": "Date of First Operation",
+        "dateLastOperation": "Date of Last Operation",
+        "artworkGenerations": "Artwork Generations",
+        "lyricsFetches": "Genius Lyrics Fetches",
+        "cardsGenerated": "Cards Generated"
+      }
+    },
+    "artgen": {
+      "title": "Artwork Generation",
+      "indicatorLabel": "or...",
+      "itunes": {
+        "header": "Search for cover artwork on iTunes",
+        "inputPlaceholder": "Search on iTunes",
+        "submit": "SEARCH",
+        "localeTitle": "Select a region",
+        "locale": "country",
+        "clear": "Clear results",
+        "use": "Use this image"
+      },
+      "local": {
+        "header": "Upload your image",
+        "fileUploadButton": "Select image.",
+        "selectors": {
+          "includeCenter": "Include center artwork"
+        },
+        "submit": "UPLOAD"
+      },
+      "youtube": {
+        "header": "Use a YouTube video thumbnail",
+        "inputPlaceholder": "Paste YouTube video URL here",
+        "submit": "SEARCH"
+      }
+    },
+    "procart": {
+      "title": "Processed Artworks"
+    },
+    "lyrics": {
+      "title": "Lyrics",
+      "loadLast": "Load last contents",
+      "search": {
+        "artistPlaceholder": "Enter artist name",
+        "songPlaceholder": "Enter song name",
+        "submit": "SEARCH"
+      },
+      "generationMode": {
+        "switchManual": "Generate cards manually instead",
+        "switchAutomatic": "Generate cards automatically"
+      },
+      "parts": {
+        "manualHeader": "Manual Card Creation",
+        "remove": "Remove",
+        "clear": "Clear",
+        "restore": "Restore"
+      },
+      "submit": "CONVERT TO CARDS"
+    },
+    "cardgen": {
+      "title": "Cards Generation",
+      "textFields": {
+        "metanamePlaceholder": "if empty, the card metaname will be inferred",
+        "contributorsPlaceholder": "contributors (comma-separated)"
+      },
+      "enforcers": {
+        "fileUploadLabel": "Enforce background image?",
+        "colorPickerLabel": "Enforce bottom color?"
+      },
+      "selectors": {
+        "centerArtwork": "Include center artwork",
+        "outroImage": "Generate outro image",
+        "bgImage": "Include background image"
+      },
+      "submit": "GENERATE",
+      "downloadAll": "Download All as Zip",
+      "modal": {
+        "edit": "Edit this card",
+        "header": "Edit Lyrics of Card",
+        "save": "Save",
+        "saving": "Saving...",
+        "cancel": "Cancel"
+      }
+    }
+  },
+
+  "components": {
+    "colorPicker": {
+      "loadLatest": "Load latest"
+    },
+    "downloadButton": {
+      "download": "Download"
+    },
+    "fileUploader": {
+      "defaultCaption": "No file selected."
+    },
+    "localeSwitch": {
+      "title": "Select language"
+    }
+  },
+
+  "toasts": {
+    "unknownError": "An unknown error occurred.\nPlease try again later or open an issue.",
+    "serverUnavailable": "Server unavailable.\nPlease check that the Python server is running.",
+    "noSpinnerId": "HTML Spinner id is required.",
+    "noSpinnerContainer": "Spinner container not found.",
+    "processingInProgress": "Processing already in progress.",
+    "noLatestColor": "No latest color found.",
+    "redirect": {
+      "noProcessedImage": "No processed image found.",
+      "noGeniusToken": "Genius API token not found."
+    },
+    "home": {
+      "welcome": "Welcome to GTFR-CG!\nApplication started successfully.",
+      "geniusTokenNotFound": "Genius API token not found.\nLyrics fetch is disabled.",
+      "addGeniusToken": "Add your Genius API token to your\n.env file and restart the application\nto enable lyrics fetch."
+    },
+    "artgen": {
+      "noResultsFound": "No results found.",
+      "noImgFile": "Please select an image file.",
+      "invalidFileType": "Please select a valid image file.",
+      "invalidFileTypeExtensions": "Accepted file extensions",
+      "invalidUrl": "Please enter a valid URL."
+    },
+    "procart": {
+      "noImgSelection": "Please select an image to download."
+    },
+    "lyrics": {
+      "missingFields": "Please fill out all the required fields.",
+      "fetchInProgress": "Lyrics fetch already in progress.",
+      "lyricsNotFound": "Lyrics not found.",
+      "savingInProgress": "Lyrics saving already in progress.",
+      "noLastGeneration": "No last generation found."
+    },
+    "cardgen": {
+      "noCardsGenerated": "No cards were generated.",
+      "unauthorizedOutro": "The outro card cannot be generated\nsince the card creation was manual.",
+      "noCardsContents": "No cards contents found.\nPlease generate contents via the Lyrics page first.",
+      "cardsGenerated": "Cards generated successfully.",
+      "cardNotEditable": "The contents of this card cannot be edited.",
+      "cardEditInProgress": "Card edit already in progress.",
+      "cardEditFailed": "Failed to edit card.",
+      "cardEdited": "Card edited successfully"
+    }
+  }
+}

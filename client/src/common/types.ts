@@ -14,7 +14,7 @@ export type ImageDownloadRequest = Readonly<{
 export type ApiResponse = Readonly<{
   status: number;
   message: string;
-  data?: object;
+  data?: Record<string, unknown>;
 }>;
 
 export enum RestVerb {

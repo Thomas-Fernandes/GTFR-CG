@@ -2,15 +2,23 @@ import { useState } from "react";
 
 import { useDarkModeContext } from "@/common/hooks/useDarkMode/contexts";
 import { sendToast } from "@/common/Toast";
+import { getLocalizedToasts } from "@/common/utils/toastUtils";
 import ButtonRemove from "@/components/ButtonRemove/ButtonRemove";
 import { ThemeType } from "@/components/DarkModeProvider/constants";
-import { Toast, ToastType } from "@/constants/toasts";
+import { ToastType } from "@/constants/toasts";
+import { useAppContext } from "@/contexts";
 
 import { ColorPickerProps } from "./types";
 
 import "./ColorPicker.scss";
 
 const ColorPicker: React.FC<ColorPickerProps> = ({ id, latest, label, labelClassName, setter, ...divProps }) => {
+  const { intl } = useAppContext();
+  const labels = {
+    loadLatest: intl.formatMessage({ id: "components.colorPicker.loadLatest" }),
+  };
+
+  const toasts = getLocalizedToasts(intl);
   const { isDarkMode } = useDarkModeContext();
 
   const [selectedColor, setSelectedColor] = useState<string>(""); // Default to black color
@@ -35,7 +43,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ id, latest, label, labelClass
 
   const handleLoadLatest = () => {
     if (!latest) {
-      sendToast(Toast.NoLatestColor, ToastType.Warn);
+      sendToast(toasts.Components.NoLatestColor, ToastType.Warn);
       return;
     }
     setSelectedColor(latest);
@@ -62,7 +70,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ id, latest, label, labelClass
             <button type="button" className="color-picker--content--load-latest mac"
               onClick={handleLoadLatest}
             >
-              {"Load latest"}
+              {labels.loadLatest}
             </button>
           </div>
         </>
