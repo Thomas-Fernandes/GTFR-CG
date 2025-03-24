@@ -19,7 +19,11 @@ export const postYoutubeUrl = (
   setIsProcessingLoading(true);
   showSpinner(SpinnerId.YoutubeUrl);
 
-  sendRequest(RestVerb.Post, BACKEND_URL + API.ARTWORK_GENERATION.YOUTUBE_THUMBNAIL, body).then((response: ApiResponse) => {
+  sendRequest(
+    RestVerb.Post,
+    BACKEND_URL + API.ARTWORK_GENERATION.YOUTUBE_THUMBNAIL,
+    body
+  ).then((response: ApiResponse) => {
     if (!is2xxSuccessful(response.status)) {
       throw new Error(response.message);
     }

@@ -36,7 +36,7 @@ class LocaleResource(Resource):
 
         body = literal_eval(request.get_data(as_text=True))
         body_locale: Optional[Locale] = body.get("locale")
-        new_locale: Optional[str] = next((loc for loc in Locale if loc.startswith(body_locale)), None)
+        new_locale: Optional[Locale] = next((loc for loc in Locale if loc.startswith(str(body_locale))), None)
 
         if new_locale is None:
             log.error(locale.get(Error.LOCALE_MISSING_PARAMS))

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useAppContext } from "@/contexts";
 
 import { StatisticsBoardProps, StatisticsProps } from "./types";
-import { getFormattedStatistics, getStatDisplayValue, statIsInitialized } from "./utils";
+import { getFormattedStatistics, getStatDisplayValue, isInitialized } from "./utils";
 
 import "./StatisticsBoard.scss";
 
@@ -23,12 +23,12 @@ const StatisticsHorizontal: React.FC<StatisticsProps> = ({ statistics }) => {
             </span>
           ))}
         </div>
-        <div className={`stats-board--stats--values ${statIsInitialized(statistics[2].value) ? "initialized" : ""}`}>
+        <div className={`stats-board--stats--values ${isInitialized(statistics[2].value) ? "initialized" : ""}`}>
           { statistics.map((stat, i) => (
             <span key={`stat-value_${i}`} id={stat.spinnerId}>
               <p
                 className={
-                  `${statIsInitialized(stat.value) ? "" : "opacity-0 hidden-v"}
+                  `${isInitialized(stat.value) ? "" : "opacity-0 hidden-v"}
                   ${stat.value.includes("/") ? "datetime" : ""}`
                 }
               >
@@ -54,7 +54,7 @@ const StatisticsVertical: React.FC<StatisticsProps> = ({ statistics }) => {
           </div>
 
           <div className="stats-board--value">
-            <span id={stat.spinnerId} className={`${statIsInitialized(stat.value) ? "" : "opacity-0 hidden-v"}`}>
+            <span id={stat.spinnerId} className={`${isInitialized(stat.value) ? "" : "opacity-0 hidden-v"}`}>
               <p className={stat.value.includes("/") ? "datetime" : ""}>
                 {getStatDisplayValue(stat.value)}
               </p>

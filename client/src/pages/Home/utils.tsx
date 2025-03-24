@@ -13,9 +13,7 @@ export const getStatDisplayValue = (value: string) => {
   ;
 }
 
-export const statIsInitialized = (value: string) => {
-  return !Object.values(defaultStatistics).includes(value);
-}
+export const isInitialized = (statValue: string) => !Object.values(defaultStatistics).includes(statValue);
 
 export const getFormattedStatistics = (stats: Statistics, intl: IntlShape) => {
   const statisticsArray = [

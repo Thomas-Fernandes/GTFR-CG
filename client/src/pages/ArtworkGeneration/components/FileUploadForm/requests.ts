@@ -17,7 +17,11 @@ export const postFileUpload = (
   setIsProcessingLoading(true);
   showSpinner(SpinnerId.FileUpload);
 
-  sendRequest(RestVerb.Post, BACKEND_URL + API.ARTWORK_GENERATION.FILE_UPLOAD, formData).then((response: ApiResponse) => {
+  sendRequest(
+    RestVerb.Post,
+    BACKEND_URL + API.ARTWORK_GENERATION.FILE_UPLOAD,
+    formData
+  ).then((response: ApiResponse) => {
     if (!is2xxSuccessful(response.status)) {
       throw new Error(response.message);
     }

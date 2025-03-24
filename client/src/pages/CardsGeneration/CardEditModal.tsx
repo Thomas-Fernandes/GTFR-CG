@@ -51,7 +51,11 @@ const CardEditModal = () => {
         <div className="modal-overlay--content--actions flex-row gap-4">
           <button type="button" disabled={isModalSaving}
             onClick={() => currentCard && handleSaveModal(currentCard, isModalSaving,
-              { generationProps, newLyrics, generateSingleCardProps: { currentCard, setCards, setIsModalSaving, closeModal } }
+              {
+                generationProps,
+                newLyrics,
+                generateSingleCardProps: { currentCard, setCards, setIsModalSaving, closeModal }
+              }
             )}
           >
             { isModalSaving ? labels.saving : labels.save }

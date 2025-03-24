@@ -10,7 +10,13 @@ import { ToastType } from "@/constants/toasts";
 import { getToasts } from "@/contexts";
 
 import { OUTRO_FILENAME, PROCESSED_CARDS_PATH } from "./constants";
-import { CardsGenerationRequest, CardsGenerationResponse, GenerateCardsProps, GenerateSingleCardProps, SingleCardGenerationRequest } from "./types";
+import {
+  CardsGenerationRequest,
+  CardsGenerationResponse,
+  GenerateCardsProps,
+  GenerateSingleCardProps,
+  SingleCardGenerationRequest
+} from "./types";
 import { deduceNewCards, generateFormData, updateCard } from "./utils";
 
 export const postGenerateSingleCard = (
@@ -32,7 +38,11 @@ export const postGenerateSingleCard = (
   const formData = new FormData();
   generateFormData(body, formData);
 
-  sendRequest(RestVerb.Post, BACKEND_URL + API.CARDS_GENERATION.GENERATE_SINGLE_CARD, formData).then((response: ApiResponse) => {
+  sendRequest(
+    RestVerb.Post,
+    BACKEND_URL + API.CARDS_GENERATION.GENERATE_SINGLE_CARD,
+    formData
+  ).then((response: ApiResponse) => {
     if (!is2xxSuccessful(response.status)) {
       console.error(response.message);
       sendToast(response.message, ToastType.Error);
@@ -41,7 +51,7 @@ export const postGenerateSingleCard = (
 
     updateCard(setCards, currentCard, newLyrics, cardFilename);
 
-    const toastMsg = toasts.CardGen.CardEdited + `: ${(currentCard.id < 10 ? "0" : "")}${currentCard.id}.png`;
+    const toastMsg = `${toasts.CardGen.CardEdited}: ${(currentCard.id < 10 ? "0" : "")}${currentCard.id}.png`;
     sendToast(toastMsg, ToastType.Success);
   }).catch((error) => {
     console.error("Failed to upload text:", error);
@@ -64,7 +74,11 @@ export const postGenerateCards = (
   showSpinner(SpinnerId.CardsGenerate);
   setCardPaths([]);
 
-  sendRequest(RestVerb.Post, BACKEND_URL + API.CARDS_GENERATION.GENERATE_CARDS, formData).then((response: CardsGenerationResponse) => {
+  sendRequest(
+    RestVerb.Post,
+    BACKEND_URL + API.CARDS_GENERATION.GENERATE_CARDS,
+    formData
+  ).then((response: CardsGenerationResponse) => {
     if (!is2xxSuccessful(response.status)) {
       throw new Error(response.message);
     }

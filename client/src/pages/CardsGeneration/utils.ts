@@ -2,7 +2,12 @@ import { SongPartsCards, StateSetter } from "@/common/types";
 
 import { CardData, CardsGenerationRequest, SingleCardGenerationRequest } from "./types";
 
-export const updateCard = (setCards: StateSetter<CardData[]>, currentCard: CardData, newLyrics: string, cardFilename: string) => {
+export const updateCard = (
+  setCards: StateSetter<CardData[]>,
+  currentCard: CardData,
+  newLyrics: string,
+  cardFilename: string
+) => {
   setCards((prevCards) =>
     prevCards.map((img) => img.id === currentCard.id // update only the card that was edited
       ? {
@@ -24,7 +29,10 @@ export const deduceNewCards = (paths: string[], cardsLyrics: SongPartsCards, has
   }));
 };
 
-export const generateFormData = (body: CardsGenerationRequest | SingleCardGenerationRequest, formData: FormData): void => {
+export const generateFormData = (
+  body: CardsGenerationRequest | SingleCardGenerationRequest,
+  formData: FormData
+): void => {
   if (body.bgImg) {
     formData.append("enforceBackgroundImage", body.bgImg);
     formData.append("includeCenterArtwork", (body.includeCenterArtwork ?? "").toString());

@@ -22,7 +22,13 @@ const AppBackground: React.FC = () => {
   return (
     <>
       <div className={`app-background--gif-gallery ${isLandingPage ? "landing-page" : ""}`} />
-      <div className={`app-background--waves ${isLandingPage ? "landing-page" : ""} ${isDarkMode ? ThemeType.Dark : ThemeType.Light}`} />
+      <div
+        className={`
+          app-background--waves
+          ${isLandingPage ? "landing-page" : ""}
+          ${isDarkMode ? ThemeType.Dark : ThemeType.Light}
+        `}
+      />
       <ThemeSwitch />
       <LocaleSwitch />
     </>

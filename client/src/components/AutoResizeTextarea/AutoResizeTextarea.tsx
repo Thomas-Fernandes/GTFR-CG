@@ -4,7 +4,10 @@ import { AutoResizeTextareaProps } from "./types";
 
 import "./AutoResizeTextarea.scss";
 
-export const AutoResizeTextarea = forwardRef<HTMLTextAreaElement, AutoResizeTextareaProps>(({ value, className, ...props }, ref) => {
+export const AutoResizeTextarea = forwardRef<HTMLTextAreaElement, AutoResizeTextareaProps>((
+  { value, className, ...props },
+  ref
+) => {
   const internalRef = useRef<HTMLTextAreaElement>(null);
   const combinedRef = ref || internalRef;
 

@@ -1,5 +1,6 @@
-import { createNewContext } from "@/common/contextCreator";
 import { IntlShape } from "react-intl";
+
+import { createNewContext } from "@/common/contextCreator";
 
 interface IAppContext {
   intl: IntlShape;

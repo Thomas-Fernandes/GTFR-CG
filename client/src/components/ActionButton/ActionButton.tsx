@@ -18,7 +18,10 @@ const ActionButton: React.FC<ActionButtonProps> = ({ label, className, newTabLin
         {label}
       </span>
       { newTabLink &&
-        <img src={"/svg/new-tab.svg"} alt={"new-tab"} className={`action-button--icon ${isHovered ? "hovered" : ""}`} />
+        <img
+          src={"/svg/new-tab.svg"} alt={"new-tab"}
+          className={`action-button--icon ${isHovered ? "hovered" : ""}`}
+        />
       }
     </button>
   );

@@ -1,5 +1,6 @@
-import { ACCEPTED_IMG_EXTENSIONS } from "@/constants/files";
 import { IntlShape } from "react-intl";
+
+import { ACCEPTED_IMG_EXTENSIONS } from "@/constants/files";
 
 export const getLocalizedToasts = (intl: IntlShape) => {
   return {

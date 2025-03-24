@@ -19,7 +19,9 @@ const FileUploader: React.FC<FileUploaderProps> = ({ id, label, caption, accept,
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement> | null) => {
     if (e?.target?.files?.length && e.target.files.length > 0) {
       const file = e.target.files[0];
-      const displayName = file.name.length > 20 ? `${file.name.slice(0, 17)}...` + file.name.split('.').pop() : file.name;
+      const displayName = file.name.length > 20
+        ? `${file.name.slice(0, 17)}...` + file.name.split('.').pop()
+        : file.name;
       setSelectedFileName(displayName);
       setter(file);
     } else if (e === null) {
