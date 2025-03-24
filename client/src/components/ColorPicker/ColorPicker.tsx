@@ -12,7 +12,7 @@ import { ColorPickerProps } from "./types";
 
 import "./ColorPicker.scss";
 
-const ColorPicker: React.FC<ColorPickerProps> = ({ id, latest, label, labelClassName, setter, ...divProps }) => {
+const ColorPicker = ({ id, latest, label, labelClassName, setter, ...divProps }: ColorPickerProps) => {
   const { intl } = useAppContext();
   const labels = {
     loadLatest: intl.formatMessage({ id: "components.colorPicker.loadLatest" }),

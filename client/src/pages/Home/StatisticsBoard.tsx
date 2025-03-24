@@ -7,7 +7,7 @@ import { getFormattedStatistics, getStatDisplayValue, isInitialized } from "./ut
 
 import "./StatisticsBoard.scss";
 
-const StatisticsHorizontal: React.FC<StatisticsProps> = ({ statistics }) => {
+const StatisticsHorizontal = ({ statistics }: StatisticsProps) => {
   return (
     <>
       <div className="stats-board--sep__h">
@@ -42,7 +42,7 @@ const StatisticsHorizontal: React.FC<StatisticsProps> = ({ statistics }) => {
   );
 };
 
-const StatisticsVertical: React.FC<StatisticsProps> = ({ statistics }) => {
+const StatisticsVertical = ({ statistics }: StatisticsProps) => {
   return (
     <>
       { statistics.map((stat, i) => (
@@ -72,7 +72,7 @@ const StatisticsVertical: React.FC<StatisticsProps> = ({ statistics }) => {
   );
 };
 
-const StatisticsBoard: React.FC<StatisticsBoardProps> = ({ stats }) => {
+const StatisticsBoard = ({ stats }: StatisticsBoardProps) => {
   const { intl } = useAppContext();
 
   const statsToDisplay = getFormattedStatistics(stats, intl);

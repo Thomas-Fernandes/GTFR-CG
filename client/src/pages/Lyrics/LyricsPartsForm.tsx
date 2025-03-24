@@ -12,7 +12,7 @@ import { convertToCardContents } from "./utils";
 
 import "./LyricsPartsForm.scss";
 
-const LyricsPartsForm: React.FC<LyricsPartsFormProps> = ({ lyricsParts }) => {
+const LyricsPartsForm = ({ lyricsParts }: LyricsPartsFormProps) => {
   const { intl } = useAppContext();
   const labels = {
     submit: intl.formatMessage({ id: "pages.lyrics.submit" }),

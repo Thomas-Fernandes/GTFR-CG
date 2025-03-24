@@ -9,7 +9,7 @@ import { ItunesImageResultProps, ItunesResultsProps } from "./types";
 
 import "./ItunesResults.scss";
 
-const ItunesImageResult: React.FC<ItunesImageResultProps> = ({ item, itemId }) => {
+const ItunesImageResult = ({ item, itemId }: ItunesImageResultProps) => {
   const { isProcessingLoading, setIsProcessingLoading, navigate } = useArtworkGenerationContext();
 
   const [isMounted, setIsMounted] = useState(false);
@@ -40,7 +40,7 @@ const ItunesImageResult: React.FC<ItunesImageResultProps> = ({ item, itemId }) =
   );
 };
 
-const ItunesResults: React.FC<ItunesResultsProps> = ({ items, setItunesResults }) => {
+const ItunesResults = ({ items, setItunesResults }: ItunesResultsProps) => {
   return (
     <div className="results">
       { items.length > 0 &&

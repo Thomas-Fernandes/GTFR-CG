@@ -9,7 +9,7 @@ import { ViewPaths } from "@/constants/paths";
 
 import "./AppBackground.scss";
 
-const AppBackground: React.FC = () => {
+const AppBackground = () => {
   const { isDarkMode } = useDarkModeContext();
 
   const location = useLocation();

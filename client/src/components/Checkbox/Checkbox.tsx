@@ -5,7 +5,7 @@ import { getBackgroundColor, getBorder } from "./utils";
 
 import "./Checkbox.scss";
 
-const Checkbox: React.FC<CheckboxProps> = ({ size, checked, disabled, onChange, label, ...buttonProps }) => {
+const Checkbox = ({ size, checked, disabled, onChange, label, ...buttonProps }: CheckboxProps) => {
   const { isDarkMode } = useDarkModeContext();
 
   return (

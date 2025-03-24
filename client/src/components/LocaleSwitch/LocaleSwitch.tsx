@@ -8,7 +8,7 @@ import { useAppContext } from "@/contexts";
 
 import "./LocaleSwitch.scss";
 
-const LocaleSwitch: React.FC = () => {
+const LocaleSwitch = () => {
   const { intl } = useAppContext();
   const labels = {
     title: intl.formatMessage({ id: "components.localeSwitch.title" }),

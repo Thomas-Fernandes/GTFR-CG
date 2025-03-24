@@ -3,7 +3,7 @@ import { ThemeType } from "@/components/DarkModeProvider/constants";
 
 import "./ThemeSwitch.scss";
 
-const ThemeSwitch: React.FC = () => {
+const ThemeSwitch = () => {
   const { isDarkMode, toggleDarkMode } = useDarkMode();
 
   return (

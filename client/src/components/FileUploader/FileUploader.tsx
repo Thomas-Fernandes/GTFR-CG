@@ -7,7 +7,7 @@ import { FileUploaderProps } from "./types";
 
 import "./FileUploader.scss";
 
-const FileUploader: React.FC<FileUploaderProps> = ({ id, label, caption, accept, setter }) => {
+const FileUploader = ({ id, label, caption, accept, setter }: FileUploaderProps) => {
   const { intl } = useAppContext();
   const labels = {
     defaultCaption: intl.formatMessage({ id: "components.fileUploader.defaultCaption" }),

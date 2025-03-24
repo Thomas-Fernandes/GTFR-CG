@@ -13,7 +13,7 @@ import { CardViewProps } from "./types";
 
 import "./CardView.scss";
 
-const CardView: React.FC<CardViewProps> = ({ card, cardIdx }) => {
+const CardView = ({ card, cardIdx }: CardViewProps) => {
   const { intl } = useAppContext();
   const labels = {
     edit: intl.formatMessage({ id: "pages.cardgen.modal.edit" }),

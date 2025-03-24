@@ -4,7 +4,7 @@ import { NavButtonProps } from "./types";
 
 import "./NavButton.scss";
 
-const NavButton: React.FC<NavButtonProps> = ({ to, label, side, ...buttonProps }) => {
+const NavButton = ({ to, label, side, ...buttonProps }: NavButtonProps) => {
   const navigate = useNavigate();
 
   return (

@@ -4,7 +4,7 @@ import { CardStackProps } from "./types";
 
 import "./CardStack.scss";
 
-const CardStack: React.FC<CardStackProps> = ({ label, imgSrc, stackSize, ...divProps }) => {
+const CardStack = ({ label, imgSrc, stackSize, ...divProps }: CardStackProps) => {
   return (
     <div className="card-stack" {...divProps}>
       <div className="card-stack--card top-card">

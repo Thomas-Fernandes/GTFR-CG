@@ -5,7 +5,7 @@ import { DarkModeContext } from "@/common/hooks/useDarkMode/contexts";
 import { ThemeType } from "./constants";
 import { DarkModeProviderProps } from "./types";
 
-export const DarkModeProvider: React.FC<DarkModeProviderProps> = ({ children }) => {
+export const DarkModeProvider = ({ children }: DarkModeProviderProps) => {
   const [isDarkMode, setIsDarkMode] = useState(localStorage.getItem("theme") === ThemeType.Dark);
 
   useEffect(() => {

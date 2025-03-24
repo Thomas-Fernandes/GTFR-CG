@@ -4,7 +4,7 @@ import { useAppContext } from "@/contexts";
 import { useLyricsContext } from "./contexts";
 import { GenerationModeFlipperProps, LyricsPartType, PageMetadata } from "./types";
 
-const GenerationModeFlipper: React.FC<GenerationModeFlipperProps> = ({ className, ...props }) => {
+const GenerationModeFlipper = ({ className, ...props }: GenerationModeFlipperProps) => {
   const { intl } = useAppContext();
   const labels = {
     switchManual: intl.formatMessage({ id: "pages.lyrics.generationMode.switchManual" }),

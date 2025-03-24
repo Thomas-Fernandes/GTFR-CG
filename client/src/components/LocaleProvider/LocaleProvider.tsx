@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { IntlProvider } from "react-intl";
 
 import { LocaleContext } from "@/common/hooks/useLocale/contexts";

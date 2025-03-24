@@ -12,7 +12,7 @@ import { CardData, CardsGalleryProps } from "./types";
 
 import "./CardsGallery.scss";
 
-const CardsGallery: React.FC<CardsGalleryProps> = ({ initialCards, ...divProps }) => {
+const CardsGallery = ({ initialCards, ...divProps }: CardsGalleryProps) => {
   const { intl } = useAppContext();
   const labels = {
     downloadAll: intl.formatMessage({ id: "pages.cardgen.downloadAll" }),

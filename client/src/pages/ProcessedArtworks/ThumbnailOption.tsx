@@ -5,7 +5,7 @@ import { processImageName } from "./utils";
 
 import "./ThumbnailOption.scss";
 
-const ThumbnailOption: React.FC<ThumbnailOptionProps> = ({ logoPosition, idx }) => {
+const ThumbnailOption = ({ logoPosition, idx }: ThumbnailOptionProps) => {
   const { setSelectedThumbnail } = useThumbnailGalleryContext();
 
   return (

@@ -9,7 +9,7 @@ import { LyricsPartProps } from "./types";
 
 import "./LyricsPart.scss";
 
-const LyricsPart: React.FC<LyricsPartProps> = ({ part, idx }) => {
+const LyricsPart = ({ part, idx }: LyricsPartProps) => {
   const { intl } = useAppContext();
   const labels = {
     remove: intl.formatMessage({ id: "pages.lyrics.parts.remove" }),
