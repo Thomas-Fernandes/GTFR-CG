@@ -19,6 +19,7 @@ from src.utils.web_utils import createApiResponse
 
 bp_artwork_generation_itunes_image = Blueprint("use-itunes-image", __name__.split('.')[-1])
 
+
 @ns_artwork_generation.route("/use-itunes-image")
 class ItunesImageResource(Resource):
     @ns_artwork_generation.doc("post_use_itunes_image")

@@ -19,6 +19,7 @@ from src.routes.artwork_processing.pillow import generateCoverArt, generateThumb
 
 bp_artwork_processing_process_artworks = Blueprint("process-artworks", __name__.split('.')[-1])
 
+
 @ns_artwork_processing.route("/process-artworks")
 class ProcessArtworkResource(Resource):
     @ns_artwork_processing.doc("post_process_images")

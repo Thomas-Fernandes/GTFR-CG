@@ -13,6 +13,7 @@ from src.constants.paths import (
 )
 from src.constants.responses import Error
 
+
 class ImageMode(StrEnum):
     """Enum for the available image modes"""
 

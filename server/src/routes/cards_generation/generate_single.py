@@ -19,6 +19,7 @@ from src.statistics import updateStats
 from src.typing_gtfr import CardgenSettings, CardsContents, SongMetadata
 from src.utils.web_utils import createApiResponse
 
+
 def generateSingleCard(cards_contents: CardsContents, song_data: SongMetadata, settings: CardgenSettings) -> Response:
     """Generates a single card using the contents provided
     :param cards_contents: [CardsContents] The contents of the card

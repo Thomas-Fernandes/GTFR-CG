@@ -17,6 +17,7 @@ from src.l10n import locale
 from src.logger import log, SeverityLevel
 from src.utils.web_utils import createApiResponse
 
+
 @retry(condition=(lambda x: x.status_code == HttpStatus.OK), times=3)
 def makeItunesRequest(url_to_hit: str) -> RequestsResponse:
     return requestsGet(url_to_hit)
@@ -34,9 +35,7 @@ def validateItunesParameters(term: str, country: str) -> Optional[str]:
         return locale.get(Error.ITUNES_INVALID_COUNTRY)
     return None
 
-
 bp_artwork_generation_itunes_search = Blueprint("search-itunes", __name__.split('.')[-1])
-
 
 # iTunes reference: https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/iTuneSearchAPI/Searching.html#//apple_ref/doc/uid/TP40017632-CH5-SW1
 # Ben Dodson's iTunes artwork finder which we mimic: https://github.com/bendodson/itunes-artwork-finder

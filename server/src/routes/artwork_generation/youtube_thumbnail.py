@@ -20,6 +20,7 @@ from src.constants.responses import Error, Success
 from src.docs import models, ns_artwork_generation
 from src.utils.web_utils import createApiResponse
 
+
 def extractYoutubeVideoId(url: str) -> Optional[str]:
     """Extracts the YouTube video ID from the provided URL
     :param url: [str] The YouTube URL from which to extract the video ID

@@ -20,6 +20,7 @@ from src.routes.cards_generation.pillow import generateCard, generateOutroCard
 from src.routes.cards_generation.settings import getCardMetadata, getGenerationRequisites
 from src.routes.cards_generation.utils import getUserProcessedPath
 
+
 def generateAllCards(
     user_processed_path: str, cards_contents: CardsContents, card_metadata: CardMetadata, settings: CardgenSettings
 ) -> None:
@@ -105,6 +106,7 @@ def generateCards(cards_contents: CardsContents, song_data: SongMetadata, settin
 
 bp_cards_generation_generate = Blueprint("generate", __name__.split('.')[-1])
 
+
 @ns_cards_generation.route("/generate")
 class CardsGenerationResource(Resource):
     @ns_cards_generation.doc("post_generate_cards")
@@ -123,7 +125,10 @@ class CardsGenerationResource(Resource):
         start = time()
         (err, cardgen_settings, cards_contents, song_data) = getGenerationRequisites()
         if err:
-            return createApiResponse(HttpStatus.PRECONDITION_FAILED if err == locale.get(Error.CARDS_CONTENTS_READ_FAILED) else HttpStatus.BAD_REQUEST, err)
+            return createApiResponse(
+                HttpStatus.PRECONDITION_FAILED if err == locale.get(Error.CARDS_CONTENTS_READ_FAILED) else HttpStatus.BAD_REQUEST,
+                err
+            )
         log.info("Cards contents retrieved successfully.").time(SeverityLevel.INFO, time() - start)
 
         return generateCards(cards_contents, song_data, cardgen_settings)

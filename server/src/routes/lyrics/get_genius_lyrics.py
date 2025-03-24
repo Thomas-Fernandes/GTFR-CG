@@ -15,6 +15,7 @@ from src.utils.web_utils import createApiResponse
 
 bp_lyrics_get_genius_lyrics = Blueprint("get-genius-lyrics-token", __name__.split('.')[-1])
 
+
 @ns_lyrics.route("/get-genius-lyrics")
 class GeniusLyricsResource(Resource):
     @ns_lyrics.doc("post_get_genius_lyrics")

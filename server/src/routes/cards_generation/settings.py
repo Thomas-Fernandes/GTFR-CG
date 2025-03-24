@@ -161,9 +161,12 @@ def getBaseCardgenSettings(is_singular_card: bool) -> CardgenSettings:
             + f"{PROCESSED_ARTWORK_FILENAME}"
         )
         bg_exists = doesFileExist(bg_path)
-        if card_metaname is None: return locale.get(Error.CARDS_METANAME_NOT_FOUND)
-        if enforce_bg_image and include_center_artwork is None: return locale.get(Error.CARDS_CENTER_ARTWORK_NOT_FOUND)
-        if not bg_exists and not enforce_bg_image and include_bg_img: return locale.get(Error.CARDS_BACKGROUND_NOT_FOUND)
+        if card_metaname is None:
+            return locale.get(Error.CARDS_METANAME_NOT_FOUND)
+        if enforce_bg_image and include_center_artwork is None:
+            return locale.get(Error.CARDS_CENTER_ARTWORK_NOT_FOUND)
+        if not bg_exists and not enforce_bg_image and include_bg_img:
+            return locale.get(Error.CARDS_BACKGROUND_NOT_FOUND)
         if enforce_bottom_color is None and not bg_exists:
             if include_bg_img:
                 return locale.get(Error.CARDS_BACKGROUND_NOT_FOUND)
@@ -189,10 +192,15 @@ def getBaseCardgenSettings(is_singular_card: bool) -> CardgenSettings:
         card_content: Optional[str] = request.form[snakeToCamel(PayloadFields.CARDS_CONTENTS)]
         card_filename: Optional[str] = request.form[snakeToCamel(PayloadFields.CARD_FILENAME)]
 
-        def validateSingularCardgenParameters(card_content: str, card_filename: str, bottom_color: str) -> Optional[str]:
-            if bottom_color is None: return locale.get(Error.CARDS_COLOR_NOT_FOUND)
-            if card_content is None: return locale.get(Error.CARDS_CONTENTS_NOT_FOUND)
-            if card_filename is None: return locale.get(Error.CARDS_FILENAME_NOT_FOUND)
+        def validateSingularCardgenParameters(
+            card_content: str, card_filename: str, bottom_color: str
+        ) -> Optional[str]:
+            if bottom_color is None:
+                return locale.get(Error.CARDS_COLOR_NOT_FOUND)
+            if card_content is None:
+                return locale.get(Error.CARDS_CONTENTS_NOT_FOUND)
+            if card_filename is None:
+                return locale.get(Error.CARDS_FILENAME_NOT_FOUND)
             return None
 
         err = validateSingularCardgenParameters(card_content, card_filename, enforce_bottom_color)

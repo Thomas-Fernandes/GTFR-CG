@@ -34,7 +34,7 @@ def getDominantColor(image_path: str, n_clusters: int = 4, random_state: int = 7
         return "000000"
 
     pixels: list[RGBColor] = list(img.getdata())
-    n_clusters = max(1, min(n_clusters, 16))  # 1 <= clusters <= 16
+    n_clusters = max(1, min(n_clusters, 16)) # 1 <= clusters <= 16
 
     print("  Deducing dominant color from background image via k-means...")
     kMeans = KMeans(n_clusters=n_clusters, random_state=random_state)

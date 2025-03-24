@@ -19,6 +19,7 @@ from src.utils.web_utils import createApiResponse
 
 bp_artwork_generation_local_file = Blueprint("use-local-image", __name__.split('.')[-1])
 
+
 @ns_artwork_generation.route("/use-local-image")
 class LocalImageResource(Resource):
     @ns_artwork_generation.doc("post_use_local_image")

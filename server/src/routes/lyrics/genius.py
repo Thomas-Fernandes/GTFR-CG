@@ -19,6 +19,7 @@ from src.logger import SeverityLevel, log
 
 genius = None
 try:
+
     def validateGeniusTokenIntegrity() -> Optional[str]:
         """Checks the integrity of the Genius API token
         :return: [str] The error message if the token is invalid, None otherwise

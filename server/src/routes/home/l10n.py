@@ -22,6 +22,7 @@ def changeLocale(new_locale: Locale) -> Locale:
 
 bp_home_locale = Blueprint("locale", __name__.split('.')[-1])
 
+
 @ns_home.route("/locale")
 class LocaleResource(Resource):
     @ns_home.doc("post_locale")
