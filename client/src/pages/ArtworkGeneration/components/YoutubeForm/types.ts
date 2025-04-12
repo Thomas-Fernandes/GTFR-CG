@@ -1,3 +1,3 @@
-export type YoutubeRequest = Readonly<{
+export interface YoutubeRequest {
   url: string;
-}>;
+}

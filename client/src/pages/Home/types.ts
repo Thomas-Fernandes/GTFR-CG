@@ -1,7 +1,7 @@
 import { ApiResponse } from "@/common/types";
 
-export type GeniusTokenResponse = ApiResponse & Readonly<{
+export interface GeniusTokenResponse extends ApiResponse {
   data: {
     token: string;
   }
-}>;
+}

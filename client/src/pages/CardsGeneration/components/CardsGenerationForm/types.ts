@@ -1,14 +1,14 @@
 import { ApiResponse, SongPartsCards, StateSetter } from "@/common/types";
 import { CardData } from "@/pages/CardsGeneration/types";
 
-export type CardsGenerationResponse = ApiResponse & Readonly<{
+export interface CardsGenerationResponse extends ApiResponse {
   data: {
     cardsLyrics: SongPartsCards;
     cardBottomColor: string;
   };
-}>;
+}
 
-export type CardsGenerationRequest = Readonly<{
+export interface CardsGenerationRequest {
   cardMetaname: string;
   outroContributors?: string;
   bgImg: File | undefined;
@@ -16,27 +16,27 @@ export type CardsGenerationRequest = Readonly<{
   includeCenterArtwork?: boolean;
   generateOutro?: boolean;
   includeBackgroundImg: boolean;
-}>;
-export type SingleCardGenerationRequest = CardsGenerationRequest & Readonly<{
+}
+export interface SingleCardGenerationRequest extends CardsGenerationRequest {
   cardsContents: string[];
   cardFilename: string;
-}>;
+}
 
-export type HandleGenerateCardsProps = Readonly<{
+export interface HandleGenerateCardsProps {
   generationInProgress: boolean;
   setGenerationInProgress: StateSetter<boolean>;
   setCardPaths: StateSetter<string[]>;
   setCards: StateSetter<CardData[]>;
   setColorPick: StateSetter<string>;
-}>;
-export type GenerateCardsProps = Readonly<{
+}
+export interface GenerateCardsProps {
   setGenerationInProgress: StateSetter<boolean>;
   setCardPaths: StateSetter<string[]>;
   setCards: StateSetter<CardData[]>;
   setColorPick: StateSetter<string>;
-}>;
+}
 
-export type CardsGenerationFormProps = Readonly<{
+export interface CardsGenerationFormProps {
   setCardPaths: StateSetter<string[]>,
   setCards: StateSetter<CardData[]>
-}>;
+}

@@ -3,22 +3,22 @@ import { NavigateFunction } from "react-router-dom";
 import { SongPartsCards, StateSetter } from "@/common/types";
 import { LyricsPartType, PageMetadata } from "@/pages/Lyrics/types";
 
-export type LyricsPartsFormProps = Readonly<{
+export interface LyricsPartsFormProps {
   lyricsParts: LyricsPartType[];
-}>;
+}
 
-export type LyricsSaveRequest = Readonly<{
+export interface LyricsSaveRequest {
   cardsContents: SongPartsCards;
-}>;
-export type LyricsSaveProps = Readonly<{
+}
+export interface LyricsSaveProps {
   pageMetadata: PageMetadata;
   isManual: boolean;
   lyricsParts: LyricsPartType[];
   dismissedParts: Set<number>;
   navigate: NavigateFunction;
   setIsSavingCardsContent: StateSetter<boolean>;
-}>;
-export type HandleLyricsSaveSubmitProps = Readonly<{
+}
+export interface HandleLyricsSaveSubmitProps {
   isSavingCardsContent: boolean;
   setIsSavingCardsContent: StateSetter<boolean>;
   pageMetadata: PageMetadata;
@@ -26,4 +26,4 @@ export type HandleLyricsSaveSubmitProps = Readonly<{
   lyricsParts: LyricsPartType[];
   dismissedParts: Set<number>;
   navigate: NavigateFunction;
-}>;
+}

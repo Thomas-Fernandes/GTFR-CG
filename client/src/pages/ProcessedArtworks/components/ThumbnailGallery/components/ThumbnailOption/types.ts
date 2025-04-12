@@ -1,4 +1,4 @@
-export type ThumbnailOptionProps = Readonly<{
+export interface ThumbnailOptionProps {
   logoPosition: string;
   idx: number;
-}>;
+}

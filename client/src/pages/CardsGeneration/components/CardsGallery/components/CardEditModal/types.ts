@@ -1,7 +1,7 @@
 import { StateSetter } from "@/common/types";
 import { CardData } from "@/pages/CardsGeneration/types";
 
-type GenerationProps = {
+interface GenerationProps {
   cardMetaname: string;
   bgImg: File | undefined;
   colorPick: string;
@@ -12,7 +12,7 @@ type GenerationProps = {
   cardBottomColor: string;
 };
 
-export type HandleSaveModalProps = Readonly<{
+export interface HandleSaveModalProps {
   generationProps: GenerationProps;
   newLyrics: string;
   generateSingleCardProps: {
@@ -20,12 +20,12 @@ export type HandleSaveModalProps = Readonly<{
     setCards: StateSetter<CardData[]>;
     setIsModalSaving: StateSetter<boolean>;
     closeModal: () => void;
-  }
-}>;
+  };
+}
 
-export type GenerateSingleCardProps = Readonly<{
+export interface GenerateSingleCardProps {
   currentCard: CardData;
   setCards: StateSetter<CardData[]>;
   setIsModalSaving: StateSetter<boolean>;
   closeModal: () => void;
-}>;
+}

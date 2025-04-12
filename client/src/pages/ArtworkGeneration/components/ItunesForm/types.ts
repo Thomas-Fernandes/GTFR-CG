@@ -3,27 +3,27 @@ import { TransitionStartFunction } from "react";
 import { ApiResponse, StateSetter } from "@/common/types";
 import { ItunesResult } from "@/pages/ArtworkGeneration/components/ItunesResults/types";
 
-export type ItunesResponse = ApiResponse & Readonly<{
+export interface ItunesResponse extends ApiResponse {
   data: {
     resultCount: number;
     results: ItunesResult[];
   }
-}>;
-export type HandleSubmitItunesSearchProps = Readonly<{
+}
+export interface HandleSubmitItunesSearchProps {
   setItunesResults: StateSetter<ItunesResult[]>;
-}>;
-export type ItunesRequest = Readonly<{
+}
+export interface ItunesRequest {
   term: string;
   entity?: string;
   country: string;
   limit?: number;
-}>;
-export type HandleChangeTermProps = Readonly<{
+}
+export interface HandleChangeTermProps {
   term: string;
   setTerm: StateSetter<string>;
   startItunesSearch: TransitionStartFunction;
   setItunesResults: StateSetter<ItunesResult[]>;
-}>;
-export type ItunesFormProps = Readonly<{
+}
+export interface ItunesFormProps {
   setItunesResults: StateSetter<ItunesResult[]>;
-}>;
+}

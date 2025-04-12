@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 
 import { useLocaleContext } from "@/common/hooks/useLocale/contexts";
 import { useTitle } from "@/common/hooks/useTitle";
-import { Locale } from "@/common/l10n";
 import { NavButtonSide } from "@/components/NavButton/constants";
 import NavButton from "@/components/NavButton/NavButton";
 import ToastContainer from "@/components/ToastContainer/ToastContainer";
@@ -16,6 +15,7 @@ import StatisticsBoard from "./components/StatisticsBoard/StatisticsBoard";
 import { Statistics } from "./components/StatisticsBoard/types";
 import { getGeniusToken, getStatistics } from "./requests";
 
+import { Locale } from "@/common/types";
 import "./Home.scss";
 
 const Home = () => {

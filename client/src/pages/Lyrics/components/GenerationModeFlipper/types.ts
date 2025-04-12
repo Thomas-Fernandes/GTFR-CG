@@ -1,5 +1,5 @@
 import { ComponentPropsWithoutRef } from "react";
 
-export interface GenerationModeFlipperProps extends ComponentPropsWithoutRef<"button"> {
+export type GenerationModeFlipperProps = ComponentPropsWithoutRef<"button"> & Readonly<{
   className?: string;
-};
+}>;

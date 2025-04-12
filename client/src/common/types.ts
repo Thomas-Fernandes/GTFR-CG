@@ -7,15 +7,15 @@ export enum ContentsGenerationMode {
   Auto = "auto",
 }
 
-export type ImageDownloadRequest = Readonly<{
+export interface ImageDownloadRequest {
   selectedImage: string;
-}>;
+}
 
-export type ApiResponse = Readonly<{
+export interface ApiResponse {
   status: number;
   message: string;
   data?: Record<string, unknown>;
-}>;
+}
 
 export enum RestVerb {
   Get = "GET",
@@ -34,12 +34,22 @@ export enum ValidationWarning {
   HorizontalOverflow = "Warn.HorizontalOverflow",
   VerticalOverflow = "Warn.VerticalOverflow",
 }
-export type ValidationInconvenience = {
+export interface ValidationInconvenience {
   where: string;
   what: ValidationError | ValidationWarning;
   message?: string;
+}
+
+export type Locale = "en" | "fr";
+
+export interface Option {
+  label: string;
+  value: string;
+}
+export type LocaleOptionType = Option & {
+  value: Locale;
 };
 
 export type StateSetter<T> = Dispatch<SetStateAction<T>>;
 
-export type Dict = Record<string, unknown>;
+export type Dict = Record<string, any>;

@@ -1,6 +1,6 @@
 import { ApiResponse } from "@/common/types";
 
-export type StatisticsResponse = ApiResponse & Readonly<{
+export interface StatisticsResponse extends ApiResponse {
   data: {
     dateFirstOperation: string;
     dateLastOperation: string;
@@ -8,24 +8,24 @@ export type StatisticsResponse = ApiResponse & Readonly<{
     lyricsFetches: number;
     cardsGenerated: number;
   }
-}>;
+}
 
-export type Statistics = Readonly<{
+export interface Statistics {
   dateFirstOperation: string;
   dateLastOperation: string;
   artworkGenerations: string;
   lyricsFetches: string;
   cardsGenerated: string;
-}>;
-export type StatisticsBoardProps = Readonly<{
+}
+export interface StatisticsBoardProps {
   stats: Statistics;
-}>;
+}
 
-export type StatisticProps = Readonly<{
+export interface StatisticProps {
   label: string;
   value: string;
   spinnerId: string;
-}>;
-export type StatisticsProps = {
+}
+export interface StatisticsProps {
   statistics: StatisticProps[];
 };

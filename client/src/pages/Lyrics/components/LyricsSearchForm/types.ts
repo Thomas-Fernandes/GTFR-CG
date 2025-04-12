@@ -1,27 +1,27 @@
 import { ApiResponse, StateSetter } from "@/common/types";
 import { LyricsPartType, PageMetadata } from "@/pages/Lyrics/types";
 
-export type LyricsResponse = ApiResponse & Readonly<{
+export interface LyricsResponse extends ApiResponse {
   data: {
     lyricsParts: LyricsPartType[];
   };
-}>;
+}
 
-export type LyricsSearchProps = Readonly<{
+export interface LyricsSearchProps {
   setIsFetching: StateSetter<boolean>;
   setLyricsParts: StateSetter<LyricsPartType[]>;
   setPageMetadata: StateSetter<PageMetadata>;
-}>;
+}
 
-export type LyricsRequest = Readonly<{
+export interface LyricsRequest {
   artist: string;
   songName: string;
-}>;
+}
 
-export type HandleLyricsSearchSubmitProps = Readonly<{
+export interface HandleLyricsSearchSubmitProps {
   isFetching: boolean;
   setIsFetching: StateSetter<boolean>;
   setLyricsParts: StateSetter<LyricsPartType[]>;
   setPageMetadata: StateSetter<PageMetadata>;
   setDismissedParts: StateSetter<Set<number>>;
-}>;
+}

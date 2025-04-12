@@ -1,22 +1,22 @@
 
 import { StateSetter } from "@/common/types";
 
-export type ItunesImageRequest = Readonly<{
+export interface ItunesImageRequest {
   url: string;
-}>;
+}
 
-export type ItunesImageResultProps = Readonly<{
+export interface ItunesImageResultProps {
   item: ItunesResult;
   itemId: number;
-}>;
-export type ItunesResultsProps = Readonly<{
+}
+export interface ItunesResultsProps {
   items: ItunesResult[];
   setItunesResults: StateSetter<ItunesResult[]>;
-}>;
-export type ItunesResult = {
+}
+export interface ItunesResult {
   resultId: number;
   artistName: string;
   collectionName: string;
   trackName: string;
   artworkUrl100: string;
-};
+}

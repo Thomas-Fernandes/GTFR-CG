@@ -1,8 +1,8 @@
 import merge from "lodash.merge";
 
-import { Option } from "@/components/SelectPopover/types";
 import en_US from "@/locales/en-US.json";
 import fr_FR from "@/locales/fr-FR.json";
+import { Locale, LocaleOptionType } from "./types";
 
 const flattenMessages = (nestedMessages: Record<string, any>, prefix = ""): Record<string, string> => {
   return Object.keys(nestedMessages).reduce((messages, key) => {
@@ -18,9 +18,6 @@ const flattenMessages = (nestedMessages: Record<string, any>, prefix = ""): Reco
   }, {} as Record<string, string>);
 };
 
-export type Locale = "en" | "fr";
-
-type LocaleOptionType = Option & { value: Locale };
 export const LOCALE_OPTIONS: LocaleOptionType[] = [
   { label: "English", value: "en" },
   { label: "Français", value: "fr" },

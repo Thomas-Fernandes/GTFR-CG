@@ -1,4 +1,4 @@
-export type FileUploadRequest = Readonly<{
+export interface FileUploadRequest {
   localFile: File | undefined;
   includeCenterArtwork: boolean;
-}>;
+}

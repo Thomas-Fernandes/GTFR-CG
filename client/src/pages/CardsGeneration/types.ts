@@ -1,5 +1,5 @@
-export type CardData = Readonly<{
+export interface CardData {
   id: number;
   lyrics: string;
   imgSrc: string;
-}>;
+}

@@ -1,16 +1,16 @@
-export type PageMetadata = Readonly<{
+export interface PageMetadata {
   artist: string;
   title: string;
   id: string;
   contributors: string[];
-}>;
-export type LyricsPartType = {
+}
+export interface LyricsPartType {
   section: string;
   lyrics: string;
-};
+}
 
-export type LyricsContents = Readonly<{
+export interface LyricsContents {
   pageMetadata: PageMetadata;
   lyricsParts: LyricsPartType[];
   dismissedParts: number[];
-}>;
+}

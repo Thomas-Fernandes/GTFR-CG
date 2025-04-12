@@ -1,19 +1,19 @@
 import { StateSetter } from "@/common/types";
 import { LyricsContents, LyricsPartType, PageMetadata } from "@/pages/Lyrics/types";
 
-export type LyricsPartProps = Readonly<{
+export interface LyricsPartProps {
   part: LyricsPartType;
   idx: number;
-}>;
+}
 
-export type HandleSetLyricsPartsProps = Readonly<{
+export interface HandleSetLyricsPartsProps {
   lyricsParts: LyricsPartType[];
   setLyricsParts: StateSetter<LyricsPartType[]>;
-}>;
+}
 
-export type HandleLoadLastContentsProps = Readonly<{
+export interface HandleLoadLastContentsProps {
   lastContents: LyricsContents;
   setPageMetadata: StateSetter<PageMetadata>;
   setLyricsParts: StateSetter<LyricsPartType[]>;
   setDismissedParts: StateSetter<Set<number>>;
-}>;
+}

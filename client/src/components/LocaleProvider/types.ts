@@ -1,7 +1,9 @@
-export type LocaleChangeRequest = {
-  locale: string;
-};
+import { ReactNode } from "react";
 
-export type LocaleContextProviderProps = Readonly<{
-  children: React.ReactNode;
-}>;
+export interface LocaleChangeRequest {
+  locale: string;
+}
+
+export interface LocaleContextProviderProps {
+  children: ReactNode;
+}
