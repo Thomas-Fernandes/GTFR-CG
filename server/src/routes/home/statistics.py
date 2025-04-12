@@ -18,8 +18,16 @@ bp_home_statistics = Blueprint("statistics", __name__.split('.')[-1])
 @ns_home.route("/statistics")
 class StatisticsResource(Resource):
     @ns_home.doc("get_statistics")
-    @ns_home.response(HttpStatus.OK, locale.get(Success.STATS_FETCHED), models[ROUTES.home.bp_name]["statistics"]["response"])
-    @ns_home.response(HttpStatus.CREATED, locale.get(Success.STATS_CREATED), models[ROUTES.home.bp_name]["statistics"]["response"])
+    @ns_home.response(
+        HttpStatus.OK,
+        locale.get(Success.STATS_FETCHED),
+        models[ROUTES.home.bp_name]["statistics"]["response"]
+    )
+    @ns_home.response(
+        HttpStatus.CREATED,
+        locale.get(Success.STATS_CREATED),
+        models[ROUTES.home.bp_name]["statistics"]["response"]
+    )
     @ns_home.response(HttpStatus.BAD_REQUEST, locale.get(Error.STATS_FILETYPE))
     def get(self) -> Response:
         """Returns the statistics as a JSON object"""

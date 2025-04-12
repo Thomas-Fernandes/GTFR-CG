@@ -13,7 +13,8 @@ class Locale(StrEnum):
     ENGLISH = "en_US"
     FRENCH = "fr_FR"
 
-    def __repr__(self) -> str: return self.value
+    def __repr__(self) -> str:
+        return self.value
 
 DEFAULT_LOCALE: Locale = Locale.ENGLISH
 
@@ -38,10 +39,10 @@ class Translator():
         self.locale = DEFAULT_LOCALE
 
         l10n_files = glob(path.join("src/locales/*.json"))
-        for file in l10n_files:
-            loc = path.splitext(path.basename(file))[0]
-            with open(file, "r", encoding = "utf-8") as file:
-                self.data[loc] = load(file)
+        for filename in l10n_files:
+            loc = path.splitext(path.basename(filename))[0]
+            with open(filename, "r", encoding="utf-8") as data:
+                self.data[loc] = load(data)
         self.data = use_fallback_locale(self.data, DEFAULT_LOCALE)
 
     def set_locale(self, loc: Locale) -> Locale:

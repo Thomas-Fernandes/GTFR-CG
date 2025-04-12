@@ -94,9 +94,11 @@ def areLyricsNotFound(lyrics: list[dict[str, str]]) -> bool:
     :param lyrics: [list] The lyrics to check
     :return: [bool] True if the lyrics are not found, False otherwise
     """
-    return len(lyrics) == 1 \
-        and lyrics[0]["section"] == "warn" \
+    return (
+        len(lyrics) == 1
+        and lyrics[0]["section"] == "warn"
         and lyrics[0]["lyrics"] == locale.get(Error.LYRICS_NOT_FOUND)
+    )
 
 @retry(condition=(lambda x: not areLyricsNotFound(x)), times=3)
 def fetchLyricsFromGenius(song_title: str, artist_name: str) -> list[dict[str, str]]:

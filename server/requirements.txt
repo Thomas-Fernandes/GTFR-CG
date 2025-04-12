@@ -2,10 +2,13 @@
 Flask>=3.0.3
 Flask-Session>=0.8.0
 flask_cors>=5.0.0
+types-Flask-Cors >= 5.0.0
 waitress>=3.0.0 # 'serve' command
+types-waitress >= 3.0.1
 
 # API
 requests>=2.32.3 # for inner API calls
+types-requests >= 2.32.0.20250328
 lyricsgenius>=3.2.0 # for Genius API calls
 
 # Documentation

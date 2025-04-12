@@ -16,7 +16,11 @@ bp_home_genius_token = Blueprint("genius-token", __name__.split('.')[-1])
 @ns_home.route("/genius-token")
 class GeniusTokenResource(Resource):
     @ns_home.doc("get_genius_token")
-    @ns_home.response(HttpStatus.OK, locale.get(Success.GENIUS_TOKEN_FETCHED), models[ROUTES.home.bp_name]["genius-token"]["response"])
+    @ns_home.response(
+        HttpStatus.OK,
+        locale.get(Success.GENIUS_TOKEN_FETCHED),
+        models[ROUTES.home.bp_name]["genius-token"]["response"]
+    )
     def get(self) -> Response:
         """Returns the Genius API token"""
         log.info("GET - Fetching Genius API token...")

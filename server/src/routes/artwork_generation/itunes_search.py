@@ -17,11 +17,9 @@ from src.l10n import locale
 from src.logger import log, SeverityLevel
 from src.utils.web_utils import createApiResponse
 
-
 @retry(condition=(lambda x: x.status_code == HttpStatus.OK), times=3)
 def makeItunesRequest(url_to_hit: str) -> RequestsResponse:
     return requestsGet(url_to_hit)
-
 
 def validateItunesParameters(term: str, country: str) -> Optional[str]:
     """Checks the validity of the provided iTunes parameters
@@ -45,14 +43,20 @@ class ItunesSearchResource(Resource):
     @ns_artwork_generation.doc("post_search_itunes")
     @ns_artwork_generation.expect(models[ROUTES.art_gen.bp_name]["search-itunes"]["payload"])
     @ns_artwork_generation.response(HttpStatus.OK, locale.get(Success.ITUNES_FETCH_COMPLETE))
-    @ns_artwork_generation.response(HttpStatus.BAD_REQUEST, "\n".join([locale.get(Error.ITUNES_MISSING_PARAMS), locale.get(Error.ITUNES_INVALID_COUNTRY)]))
+    @ns_artwork_generation.response(
+        HttpStatus.BAD_REQUEST,
+        "\n".join([
+            locale.get(Error.ITUNES_MISSING_PARAMS),
+            locale.get(Error.ITUNES_INVALID_COUNTRY)
+        ])
+    )
     def post(self) -> Response:
         """Handles the request to the iTunes API to fetch possible images"""
         log.info("POST - Searching images on iTunes...")
 
         body = literal_eval(request.get_data(as_text=True))
-        term: Optional[str] = body.get("term")
-        country: Optional[str] = body.get("country")
+        term: str = body.get("term", "")
+        country: str = body.get("country", "")
         entity = "album"  # album by default, but can be "song", "movie", "tv-show"...
         limit = 6  # arbitrary limit for now
 

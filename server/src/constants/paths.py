@@ -10,6 +10,7 @@ API_ROUTE = "/api"
 ROUTES = Routes(
     root=Route(
         path="/",
+        bp_name="",
     ),
     redirect=Route(
         path="/redirect",

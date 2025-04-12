@@ -15,9 +15,8 @@ def quitIfError(result: CompletedProcess[bytes]) -> None:
     :param result: [CompletedProcess] The result of the subprocess
     """
     if result.returncode not in [0, 2316632107]:  # package installed, or already installed
-        log.critical(f"Error while trying to install React: {result.stderr}")
+        log.critical(f"Error while trying to install React: {result.stderr.decode("utf-8")}")
         exit(1)
-
 
 def installNodePackages() -> None:
     """Installs the Node packages required by the front end application"""

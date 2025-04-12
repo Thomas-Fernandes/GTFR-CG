@@ -17,7 +17,7 @@ from src.constants.pillow import (
 )
 
 from src.logger import log
-from src.typing_gtfr import CardMetadata, RGBColor, RGBAColor
+from src.typing_gtfr import CardMetadata, RGBColor
 
 from src.routes.cards_generation.utils import getContributorsString, getVerticalOffset, getCharFontType
 
@@ -41,7 +41,7 @@ def generateOutroCard(output_path: str, contributor_logins: list[str]) -> None:
     log.info("  Outro card generated successfully.")
 
 
-def drawLyrics(draw: IDraw.ImageDraw, lyrics: list[list[str]], text_lyrics_color: RGBColor) -> None:
+def drawLyrics(draw: IDraw.ImageDraw, lyrics: list[str], text_lyrics_color: RGBColor) -> None:
     start_lyrics_from = Y_BOTTOM_LYRICS - (len(lyrics) * LYRIC_HEIGHT + (len(lyrics) - 1) * LYRIC_SPACING)
     for lyric_line in lyrics:
         lyric_px_length = draw.textlength(lyric_line, font=FONT_LYRICS)
@@ -59,13 +59,13 @@ def drawLyrics(draw: IDraw.ImageDraw, lyrics: list[list[str]], text_lyrics_color
         start_lyrics_from += LYRIC_HEIGHT + LYRIC_SPACING
 
 
-def drawMetaname(draw: IDraw.ImageDraw, metaname: str, color: RGBAColor) -> None:
+def drawMetaname(draw: IDraw.ImageDraw, metaname: str, color: RGBColor) -> None:
     """Draws the metadata name on the card
     :param draw: [IDraw__ImageDraw] The drawing object
     :param metaname: [str] The metadata name to draw
     :param color: [RGBAColor] The color to use
     """
-    cursor = 0
+    cursor = 0.0
     for char in metaname:
         font_type = getCharFontType(char)
         vertical_offset = getVerticalOffset(font_type)

@@ -38,7 +38,7 @@ def validateImageFilename(filename: str | None) -> Optional[str]:
     """
     if filename == None or filename.strip() == "":
         return locale.get(Error.NO_FILE)
-    if not('.' in filename and filename.rsplit('.', 1)[1].lower() in ["png", "jpg", "jpeg"]):
+    if not ('.' in filename and filename.rsplit('.', 1)[1].lower() in ["png", "jpg", "jpeg"]):
         return locale.get(Error.IMG_INVALID_FILETYPE)
     return None
 

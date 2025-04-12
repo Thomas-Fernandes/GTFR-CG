@@ -6,7 +6,7 @@ from src.constants.enums import AvailableCacheElemType, MetanameFontNames, Sessi
 from src.app import session
 from src.constants.paths import PROCESSED_DIR, SLASH
 from src.logger import log
-from src.typing_gtfr import RGBAColor
+from src.typing_gtfr import RGBColor
 
 
 def getContributorsString(contributor_logins: list[str]) -> str:
@@ -81,12 +81,12 @@ def getCharFontType(char: str) -> MetanameFontNames:
         return MetanameFontNames.FALLBACK
 
 
-def getLuminance(bg_color: RGBAColor) -> int:
+def getLuminance(bg_color: RGBColor) -> int:
     """Checks if the text should be black or white, depending on the background color
     :param bg_color: [RGBAColor] The background color
     :return: [bool] True if the text should be black, False otherwise
     """
-    r, g, b = bg_color[:3]
+    (r, g, b) = bg_color
     # Calculate luminance (perceived brightness): 0.299 * R + 0.587 * G + 0.114 * B
     luminance = 0.3 * r + 0.6 * g + 0.1 * b
     log.debug(

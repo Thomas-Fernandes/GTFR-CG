@@ -6,10 +6,11 @@ from sys import exit
 from src.constants.enums import AvailableCacheElemType
 from src.constants.paths import PROCESSED_DIR, SLASH
 from src.logger import log
+from src.typing_gtfr import CachedElemType
 from src.utils.time_utils import getExpirationTimestamp
 
 
-def isFileExpired(filepath: str, filetype: str, session: Config) -> bool:
+def isFileExpired(filepath: str, filetype: CachedElemType, session: Config) -> bool:
     try:
         return path.isfile(filepath) and int(path.getmtime(filepath)) < getExpirationTimestamp(filetype, session)
     except Exception as e:
@@ -23,7 +24,7 @@ def cacheCleanup(session: Config) -> None:
 
     log.debug("Cleaning up cache...")
 
-    def removeExpiredCache(folder: str, cache_type: str, session: Config) -> int:
+    def removeExpiredCache(folder: str, cache_type: CachedElemType, session: Config) -> int:
         """Removes expired cache contents
         :param folder: [string] The folder whose content is to clean if expired
         :return: [integer] The number of entries removed

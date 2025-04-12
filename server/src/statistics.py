@@ -60,13 +60,11 @@ class Stats:
 
         return representation
 
-
 ############ METHODS ############
 
 from json import loads, dumps, JSONDecodeError
 
 from src.utils.time_utils import getNowEpoch
-
 
 def getJsonStatsFromFile(path: str = STATS_FILE_PATH) -> JsonDict:
     f"""Returns the statistics contained in a JSON statistics file
@@ -87,9 +85,11 @@ def getJsonStatsFromFile(path: str = STATS_FILE_PATH) -> JsonDict:
         log.warn(f"Error decoding stats file ({path}). Initializing new stats file...")
         return initStats()
 
-
 def updateStats(
-    *, path: str = STATS_FILE_PATH, to_increment: Optional[AvailableStats] = None, increment: int = 1
+    *,
+    path: str = STATS_FILE_PATH,
+    to_increment: Optional[AvailableStats] = None,
+    increment: int = 1
 ) -> None:
     f"""Updates the statistics contained in a JSON statistics file
     :param path: [string] The path to the statistics file (default: {STATS_FILE_PATH})
@@ -101,16 +101,16 @@ def updateStats(
     new_stats: JsonDict = {
         AvailableStats.DATE_FIRST_OPERATION: json_stats.get(AvailableStats.DATE_FIRST_OPERATION, getNowEpoch()),
         AvailableStats.DATE_LAST_OPERATION: getNowEpoch(),
-        AvailableStats.ARTWORK_GENERATIONS: int(json_stats.get(AvailableStats.ARTWORK_GENERATIONS, 0)),
-        AvailableStats.LYRICS_FETCHES: int(json_stats.get(AvailableStats.LYRICS_FETCHES, 0)),
-        AvailableStats.CARDS_GENERATED: int(json_stats.get(AvailableStats.CARDS_GENERATED, 0)),
+        AvailableStats.ARTWORK_GENERATIONS: int(str(json_stats.get(AvailableStats.ARTWORK_GENERATIONS, 0))),
+        AvailableStats.LYRICS_FETCHES: int(str(json_stats.get(AvailableStats.LYRICS_FETCHES, 0))),
+        AvailableStats.CARDS_GENERATED: int(str(json_stats.get(AvailableStats.CARDS_GENERATED, 0))),
     }
 
     if new_stats[AvailableStats.DATE_FIRST_OPERATION] == EMPTY_STATS[AvailableStats.DATE_FIRST_OPERATION]:
         new_stats[AvailableStats.DATE_FIRST_OPERATION] = getNowEpoch()
 
-    if to_increment in INCREMENTABLE_STATS:
-        new_stats[to_increment] += increment
+    if to_increment in INCREMENTABLE_STATS and increment is not None:
+        new_stats[to_increment] = (new_stats[to_increment] or 0) + increment
     else:
         log.warn(f"Invalid statistic to increment: {to_increment}")
 
@@ -125,7 +125,6 @@ def updateStats(
         log.warn(f"Error decoding stats file ({path})")
 
     log.info(f"Stats updated: {new_stats}")
-
 
 def initStats() -> JsonDict:
     """Initializes the statistics contained in a JSON statistics file
@@ -146,18 +145,46 @@ def initStats() -> JsonDict:
     ).time(SeverityLevel.INFO, time() - start)
     return getJsonStatsFromFile(STATS_FILE_PATH)
 
-
 def onLaunch() -> None:
     """Initializes the project with the statistics from the statistics file"""
     log.debug("Loading project statistics...")
     json_stats: JsonDict = getJsonStatsFromFile(STATS_FILE_PATH)
 
     log.debug("  Creating Stats object with values from file...")
+    normalized_stats_str = {
+        "date_first_operation": (
+            str(json_stats.get(AvailableStats.DATE_FIRST_OPERATION))
+            if json_stats.get(AvailableStats.DATE_FIRST_OPERATION) is not None
+            else None
+        ),
+        "date_last_operation": (
+            str(json_stats.get(AvailableStats.DATE_LAST_OPERATION))
+            if json_stats.get(AvailableStats.DATE_LAST_OPERATION) is not None
+            else None
+        ),
+    }
+    normalized_stats_int = {
+        "artwork_generations": (
+            int(str(json_stats.get(AvailableStats.ARTWORK_GENERATIONS, 0)))
+            if json_stats.get(AvailableStats.ARTWORK_GENERATIONS) is not None
+            else None
+        ),
+        "lyrics_fetches": (
+            int(str(json_stats.get(AvailableStats.LYRICS_FETCHES)))
+            if json_stats.get(AvailableStats.LYRICS_FETCHES) is not None
+            else None
+        ),
+        "cards_generations": (
+            int(str(json_stats.get(AvailableStats.CARDS_GENERATED)))
+            if json_stats.get(AvailableStats.CARDS_GENERATED) is not None
+            else None
+        ),
+    }
     stats = Stats(
-        date_first_operation=json_stats.get(AvailableStats.DATE_FIRST_OPERATION),
-        date_last_operation=json_stats.get(AvailableStats.DATE_LAST_OPERATION),
-        artwork_generations=json_stats.get(AvailableStats.ARTWORK_GENERATIONS),
-        lyrics_fetches=json_stats.get(AvailableStats.LYRICS_FETCHES),
-        cards_generations=json_stats.get(AvailableStats.CARDS_GENERATED),
+        date_first_operation=normalized_stats_str.get("date_first_operation"),
+        date_last_operation=normalized_stats_str.get("date_last_operation"),
+        artwork_generations=normalized_stats_int.get("artwork_generations"),
+        lyrics_fetches=normalized_stats_int.get("lyrics_fetches"),
+        cards_generations=normalized_stats_int.get("cards_generations"),
     )
     log.info(f"Initializing project with statistics: {stats}")

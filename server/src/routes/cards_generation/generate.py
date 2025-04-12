@@ -42,7 +42,7 @@ def generateAllCards(
     gen_outro = bool(settings.get(PayloadFields.GEN_OUTRO))
     if gen_outro:
         image_output_path = f"{user_processed_path}{SLASH}{PROCESSED_OUTRO_FILENAME}"
-        outro_contributors = settings.get(PayloadFields.OUTRO_CONTRIBUTORS, "").split(", ")
+        outro_contributors = str(settings.get(PayloadFields.OUTRO_CONTRIBUTORS, "")).split(", ")
         outro_contributors = [c for c in outro_contributors if c != ""]  # remove empty strings
         generateOutroCard(image_output_path, outro_contributors)
 
@@ -58,10 +58,10 @@ def extractCardMetadata(
     """
     log.info("Deducing cards metadata...")
     try:
-        card_metadata = getCardMetadata(song_data, enforce_bottom_color, include_bg_img)
+        card_metadata = getCardMetadata(song_data, str(enforce_bottom_color), include_bg_img)
     except FileNotFoundError as e:
         log.error(f"Error while generating cards: {e}")
-        return (createApiResponse(HttpStatus.PRECONDITION_FAILED, e), None)
+        return (createApiResponse(HttpStatus.PRECONDITION_FAILED, str(e)), None)
     log.info("Cards metadata calculated successfully.")
     return (None, card_metadata)
 
@@ -79,7 +79,9 @@ def generateCards(cards_contents: CardsContents, song_data: SongMetadata, settin
 
     start = time()
     (err, card_metadata) = extractCardMetadata(
-        song_data, settings.get(PayloadFields.ENFORCE_BOTTOM_COLOR), settings.get(PayloadFields.INCLUDE_BG_IMG)
+        song_data,
+        bool(settings.get(PayloadFields.ENFORCE_BOTTOM_COLOR)),
+        bool(settings.get(PayloadFields.INCLUDE_BG_IMG))
     )
     if err:
         return err
@@ -113,8 +115,20 @@ class CardsGenerationResource(Resource):
     @ns_cards_generation.expect(models[ROUTES.cards_gen.bp_name]["generate"]["payload"])
     @ns_cards_generation.response(HttpStatus.CREATED, locale.get(Success.CARDS_GENERATED))
     @ns_cards_generation.response(HttpStatus.BAD_REQUEST, locale.get(Error.CARDS_PARAMS_NOT_FOUND))
-    @ns_cards_generation.response(HttpStatus.PRECONDITION_FAILED, "\n".join([locale.get(Error.CARDS_CONTENTS_NOT_FOUND), locale.get(Error.CARDS_BACKGROUND_NOT_FOUND)]))
-    @ns_cards_generation.response(HttpStatus.INTERNAL_SERVER_ERROR, "\n".join([locale.get(Error.CARDS_CONTENTS_READ_FAILED), locale.get(Error.USER_FOLDER_NOT_FOUND)]))
+    @ns_cards_generation.response(
+        HttpStatus.PRECONDITION_FAILED,
+        "\n".join([
+            locale.get(Error.CARDS_CONTENTS_NOT_FOUND),
+            locale.get(Error.CARDS_BACKGROUND_NOT_FOUND)
+        ])
+    )
+    @ns_cards_generation.response(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        "\n".join([
+            locale.get(Error.CARDS_CONTENTS_READ_FAILED),
+            locale.get(Error.USER_FOLDER_NOT_FOUND)
+        ])
+    )
     def post(self) -> Response:
         """Generates cards using the contents previously saved"""
         log.debug("POST - Generating cards...")
@@ -124,10 +138,14 @@ class CardsGenerationResource(Resource):
 
         start = time()
         (err, cardgen_settings, cards_contents, song_data) = getGenerationRequisites()
-        if err:
+        if err or cardgen_settings is None or cards_contents is None or song_data is None:
             return createApiResponse(
-                HttpStatus.PRECONDITION_FAILED if err == locale.get(Error.CARDS_CONTENTS_READ_FAILED) else HttpStatus.BAD_REQUEST,
-                err
+                (
+                    HttpStatus.PRECONDITION_FAILED
+                    if err == locale.get(Error.CARDS_CONTENTS_READ_FAILED)
+                    else HttpStatus.BAD_REQUEST
+                ),
+                str(err)
             )
         log.info(
             "Cards contents retrieved successfully."

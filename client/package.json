@@ -1,7 +1,7 @@
 {
   "name": "gtfr-cg",
   "private": true,
-  "version": "1.5.1",
+  "version": "1.5.3",
   "type": "module",
   "proxy": "http://localhost:4242",
   "scripts": {

@@ -69,7 +69,13 @@ class YoutubeThumbnailResource(Resource):
     @ns_artwork_generation.doc("post_use_youtube_thumbnail")
     @ns_artwork_generation.expect(models[ROUTES.art_gen.bp_name]["use-youtube-thumbnail"]["payload"])
     @ns_artwork_generation.response(HttpStatus.CREATED, locale.get(Success.YOUTUBE_IMAGE_UPLOADED))
-    @ns_artwork_generation.response(HttpStatus.BAD_REQUEST, "\n".join([locale.get(Error.NO_IMG_URL), locale.get(Error.INVALID_YT_URL)]))
+    @ns_artwork_generation.response(
+        HttpStatus.BAD_REQUEST,
+        "\n".join([
+            locale.get(Error.NO_IMG_URL),
+            locale.get(Error.INVALID_YT_URL)
+        ])
+    )
     @ns_artwork_generation.response(HttpStatus.INTERNAL_SERVER_ERROR, locale.get(Error.FAIL_DOWNLOAD))
     def post(self) -> Response:
         """Handles the extraction and processing of a YouTube thumbnail from a given URL"""

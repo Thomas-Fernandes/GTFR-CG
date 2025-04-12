@@ -20,7 +20,11 @@ bp_lyrics_get_genius_lyrics = Blueprint("get-genius-lyrics-token", __name__.spli
 class GeniusLyricsResource(Resource):
     @ns_lyrics.doc("post_get_genius_lyrics")
     @ns_lyrics.expect(models[ROUTES.lyrics.bp_name]["get-genius-lyrics"]["payload"])
-    @ns_lyrics.response(HttpStatus.OK, locale.get(Success.LYRICS_FETCH_SUCCESS), models[ROUTES.lyrics.bp_name]["get-genius-lyrics"]["response"])
+    @ns_lyrics.response(
+        HttpStatus.OK,
+        locale.get(Success.LYRICS_FETCH_SUCCESS),
+        models[ROUTES.lyrics.bp_name]["get-genius-lyrics"]["response"]
+    )
     @ns_lyrics.response(HttpStatus.BAD_REQUEST, locale.get(Error.LYRICS_MISSING_PARAMS))
     def post(self) -> Response:
         """Fetches the lyrics of a song from Genius dot com"""

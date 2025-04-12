@@ -7,7 +7,6 @@ from src.constants.enums import PayloadFields
 
 ############ BROWSER ############
 
-
 @dataclass
 class Route:
     """Dataclass to store a route's information
@@ -18,7 +17,7 @@ class Route:
     """
 
     path: str
-    bp_name: Optional[str] = None
+    bp_name: str
 
     def __repr__(self) -> str:
         """Returns the Route dataclass as a string
@@ -29,7 +28,6 @@ class Route:
             if value is not None:
                 content += f"{key}={value}, "
         return f"Route({content[:-2]})"
-
 
 @dataclass
 class Routes:
@@ -61,13 +59,11 @@ class Routes:
             content += f"{key}={value}, "
         return f"Routes({content[:-2]})"
 
-
 ############ SOFTWARE ############
 
 SongMetadata: TypeAlias = dict[str, str]
 RGBAColor: TypeAlias = tuple[int, int, int, int]
 RGBColor: TypeAlias = tuple[int, int, int]
-
 
 @dataclass
 class CardMetadata:
@@ -106,7 +102,6 @@ class CardMetadata:
                     content += f"{key}={value}, "
         return f"CardMetadata({content[:-2]})"
 
-
 CardgenSettings: TypeAlias = dict[PayloadFields, bool | str]
 
 CardsContents: TypeAlias = list[list[str]]
@@ -116,7 +111,6 @@ CachedElemType: TypeAlias = Literal[
     "images",
     "cards",
 ]
-
 
 @dataclass(kw_only=True)
 class Cache:
@@ -140,7 +134,6 @@ class Cache:
         for (key, value) in self.__dict__.items():
             content += f"{key}={value}, "
         return f"Cache({content[:-2]})"
-
 
 JsonDict: TypeAlias = dict[str, Optional[str | int]]
 

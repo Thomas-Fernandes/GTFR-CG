@@ -50,7 +50,7 @@ def getCardMetadata(song_data: SongMetadata, enforce_bottom_color: str | None, i
         + f"{AvailableCacheElemType.ARTWORKS}{SLASH}"
         + f"{PROCESSED_ARTWORK_FILENAME}"
     )
-    bg = None
+    bg: Optional[Image.Image] = None
     if include_bg_img:
         if not doesFileExist(bg_path):
             raise FileNotFoundError(Error.CARDS_BACKGROUND_NOT_FOUND)
@@ -153,7 +153,10 @@ def getBaseCardgenSettings(is_singular_card: bool) -> CardgenSettings:
     )
 
     def validateCardgenParameters(
-        card_metaname: str, enforce_bg_image: bool, include_center_artwork: bool, include_bg_img: bool
+        card_metaname: Optional[str],
+        enforce_bg_image: Optional[bool],
+        include_center_artwork: Optional[bool],
+        include_bg_img: Optional[bool]
     ) -> Optional[str]:
         bg_path = (
             f"{PROCESSED_DIR}{session.get(SessionFields.USER_FOLDER)}{SLASH}"
@@ -183,7 +186,7 @@ def getBaseCardgenSettings(is_singular_card: bool) -> CardgenSettings:
     base_settings = {
         PayloadFields.ENFORCE_BOTTOM_COLOR: enforce_bottom_color,
         PayloadFields.GEN_OUTRO: gen_outro is not None and eval(gen_outro.capitalize()),
-        PayloadFields.INCLUDE_BG_IMG: eval(include_bg_img.capitalize()),
+        PayloadFields.INCLUDE_BG_IMG: eval(str(include_bg_img).capitalize()),
         PayloadFields.CARD_METANAME: card_metaname,
         PayloadFields.OUTRO_CONTRIBUTORS: outro_contributors,
     }
@@ -193,7 +196,9 @@ def getBaseCardgenSettings(is_singular_card: bool) -> CardgenSettings:
         card_filename: Optional[str] = request.form[snakeToCamel(PayloadFields.CARD_FILENAME)]
 
         def validateSingularCardgenParameters(
-            card_content: str, card_filename: str, bottom_color: str
+            card_content: Optional[str],
+            card_filename: Optional[str],
+            bottom_color: Optional[str]
         ) -> Optional[str]:
             if bottom_color is None:
                 return locale.get(Error.CARDS_COLOR_NOT_FOUND)
@@ -225,7 +230,7 @@ def getGenerationRequisites(
 
     log.info(f"Getting cards contents from {'request' if is_singular_card else 'savefile'}...")
     try:
-        cards_contents: CardsContents = getCardsContentsFromFile(session.get(SessionFields.CARDS_CONTENTS))
+        cards_contents: CardsContents = getCardsContentsFromFile(str(session.get(SessionFields.CARDS_CONTENTS)))
 
         if len(cards_contents) == 0 or not cards_contents[0][0].startswith(METADATA_IDENTIFIER):
             raise ValueError(Error.CARDS_CONTENTS_INVALID)
@@ -233,7 +238,7 @@ def getGenerationRequisites(
         def sanitizeCardsContents(cards_contents: CardsContents, is_singular_card: bool) -> CardsContents:
             if is_singular_card:
                 cards_contents = cards_contents[:1]  # keep only the metadata
-                cards_contents += [[c.strip() for c in cardgen_settings[PayloadFields.CARDS_CONTENTS].split("\n")]]
+                cards_contents += [[c.strip() for c in str(cardgen_settings.get(PayloadFields.CARDS_CONTENTS)).split("\n")]]
             else:
                 cards_contents = [[line.strip() for line in card] for card in cards_contents]
             return cards_contents
@@ -245,5 +250,5 @@ def getGenerationRequisites(
     log.debug(f"  Card{'' if is_singular_card else 's'} contents:")
     for card in cards_contents:
         log.debug(f"    {card}")
-    song_data = getSongMetadata(cards_contents, cardgen_settings[PayloadFields.CARD_METANAME])
+    song_data = getSongMetadata(cards_contents, str(cardgen_settings.get(PayloadFields.CARD_METANAME)))
     return (None, cardgen_settings, cards_contents, song_data)

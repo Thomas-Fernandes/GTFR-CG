@@ -68,6 +68,9 @@ python launcher.py # will launch the back end of the application
   - You can choose a severity level for the logger in the `.env` file. Check out [`.env.example`](./.env.example) for more information.
 - Your user statistics are stored here @ `./stats.json`, or inside the Docker volume if you run the app *via* Docker.
 - If you encounter issues with external Python modules, try running `pip install -r requirements.txt --force-reinstall` for a complete reinstall.
+- **TO DEVELOPERS:** the code quality is monitored using [**Mypy**](https://mypy.readthedocs.io/en/stable/) and [**Black**](https://black.readthedocs.io/en/stable/).
+  Run `mypy .` in the terminal to check for type hints and errors.
+  Run `black --config pyproject.toml .` in the terminal to format get code quality suggestions.
 
 > [!NOTE]
 > **Report a malfunction** or **request a feature** by [**opening an issue**](https://github.com/Thomas-Fernandes/GTFR/issues)!

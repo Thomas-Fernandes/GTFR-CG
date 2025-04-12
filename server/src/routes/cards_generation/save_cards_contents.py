@@ -61,7 +61,13 @@ class CardsContentsResource(Resource):
     @ns_cards_generation.doc("post_save_cards_contents")
     @ns_cards_generation.expect(models[ROUTES.cards_gen.bp_name]["save-cards-contents"]["payload"])
     @ns_cards_generation.response(HttpStatus.CREATED, locale.get(Success.CARDS_CONTENTS_SAVED))
-    @ns_cards_generation.response(HttpStatus.BAD_REQUEST, "\n".join([locale.get(Error.CARDS_CONTENTS_NOT_FOUND), locale.get(Error.CARDS_CONTENTS_INVALID)]))
+    @ns_cards_generation.response(
+        HttpStatus.BAD_REQUEST,
+        "\n".join([
+            locale.get(Error.CARDS_CONTENTS_NOT_FOUND),
+            locale.get(Error.CARDS_CONTENTS_INVALID)
+        ])
+    )
     @ns_cards_generation.response(HttpStatus.INTERNAL_SERVER_ERROR, locale.get(Error.CARDS_CONTENTS_SAVE_FAILED))
     def post(self) -> Response:
         """Saves the cards contents to the user's folder"""
