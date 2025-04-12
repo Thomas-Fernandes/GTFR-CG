@@ -11,13 +11,8 @@ const DownloadButton = ({ label, className, ...props }: DownloadButtonProps) => 
   };
 
   return (
-    <button type="button"
-      className={`download-button ${className ?? ""}`}
-      {...props}
-    >
-      <span className="download-button--label">
-        {label ?? labels.download}
-      </span>
+    <button type="button" className={`download-button ${className ?? ""}`} {...props}>
+      <span className="download-button--label">{label ?? labels.download}</span>
     </button>
   );
 };

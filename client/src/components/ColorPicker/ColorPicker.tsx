@@ -52,32 +52,36 @@ const ColorPicker = ({ id, latest, label, labelClassName, setter, ...divProps }:
 
   return (
     <div id={id} className={`color-picker ${divProps.className ?? ""}`} {...divProps}>
-      { selectedColor === ""
-      ? <>
-          <span className={`color-picker--label ${label ? (labelClassName ?? "") : "hidden"}`}>
-            {label}
-          </span>
+      {selectedColor === "" ? (
+        <>
+          <span className={`color-picker--label ${label ? (labelClassName ?? "") : "hidden"}`}>{label}</span>
           <div className="color-picker--content">
             {/* if input had class 'hidden', element not found so picking tab is displayed at the top-left corner of the window */}
             <input
-              type="color" name="color-picker" id="color-picker" className="hidden-h"
-              value={selectedColor !== "" ? selectedColor : "black"} onChange={handleColorChange}
+              type="color"
+              id="color-picker"
+              name="color-picker"
+              value={selectedColor !== "" ? selectedColor : "black"}
+              onChange={handleColorChange}
+              className="hidden-h"
             />
-            <label htmlFor="color-picker"
+            <label
+              htmlFor="color-picker"
               className={`color-picker--content--img ${isDarkMode ? ThemeType.Dark : ThemeType.Light}`}
             >
               <span className="hidden">🎨</span>
             </label>
 
-            <button type="button" className="color-picker--content--load-latest mac"
-              onClick={handleLoadLatest}
-            >
+            <button type="button" className="color-picker--content--load-latest mac" onClick={handleLoadLatest}>
               {labels.loadLatest}
             </button>
           </div>
         </>
-      : <div id="defined">
-          <p className="hidden-v"> {/* hidden; is here so that the div keeps the same width when a color is picked */}
+      ) : (
+        <div id="defined">
+          <p className="hidden-v">
+            {" "}
+            {/* hidden; is here so that the div keeps the same width when a color is picked */}
             {label}
           </p>
 
@@ -85,7 +89,7 @@ const ColorPicker = ({ id, latest, label, labelClassName, setter, ...divProps }:
             <span
               style={{
                 backgroundColor: selectedColor,
-                color: calculateLuminance(selectedColor) > 128 ? "$secondary-3" : "$secondary-1"
+                color: calculateLuminance(selectedColor) > 128 ? "$secondary-3" : "$secondary-1",
               }}
             >
               {selectedColor}
@@ -94,7 +98,7 @@ const ColorPicker = ({ id, latest, label, labelClassName, setter, ...divProps }:
             <ButtonRemove onClick={() => handleColorChange(null)} />
           </div>
         </div>
-      }
+      )}
     </div>
   );
 };

@@ -49,11 +49,11 @@ export const showSpinner = (name: string) => {
     spinnerContainer.style.display = "block";
     spinnerContainer.style.alignSelf = "center";
   }
-}
+};
 
 export const hideSpinner = (name: string) => {
   const spinnerContainer = document.getElementById(`spinner-container-${name}`);
   if (spinnerContainer) {
     spinnerContainer.style.display = "none";
   }
-}
+};

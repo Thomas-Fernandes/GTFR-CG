@@ -20,10 +20,10 @@ const LocaleSwitch = () => {
   return (
     <SelectPopover
       title={labels.title}
+      imgSrc={"/svg/locale-circle.svg"}
       options={LOCALE_OPTIONS}
       onSelect={switchLocale as StateSetter<string>}
       className={`locale-switch ${isDarkMode ? ThemeType.Dark : ThemeType.Light}`}
-      imgSrc={"/svg/locale-circle.svg"}
     />
   );
 };

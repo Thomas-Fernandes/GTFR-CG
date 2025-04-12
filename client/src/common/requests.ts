@@ -4,20 +4,16 @@ import { getToasts } from "@/contexts";
 import { RestVerb } from "./types";
 
 export const isErrorful = (status: number): boolean => {
-  return status >= HttpStatus.BadRequest
-    && status <= HttpStatus.NetworkAuthenticationRequired;
+  return status >= HttpStatus.BadRequest && status <= HttpStatus.NetworkAuthenticationRequired;
 };
 export const is2xxSuccessful = (status: number): boolean => {
-  return status >= HttpStatus.Ok
-    && status < HttpStatus.MultipleChoices;
+  return status >= HttpStatus.Ok && status < HttpStatus.MultipleChoices;
 };
 
 export const sendRequest = async (method: RestVerb, url: string, body?: unknown) => {
   const toasts = getToasts();
 
-  const requestHeaders = body instanceof FormData
-    ? {}
-    : { "Content-Type": "application/json" };
+  const requestHeaders = body instanceof FormData ? {} : { "Content-Type": "application/json" };
   const requestBody = body instanceof FormData ? body : JSON.stringify(body);
   let response: Response;
 
@@ -46,4 +42,4 @@ export const sendRequest = async (method: RestVerb, url: string, body?: unknown)
   }
 
   return await response.json();
-}
+};

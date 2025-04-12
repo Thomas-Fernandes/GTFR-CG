@@ -19,9 +19,10 @@ export const getLocalizedToasts = (intl: IntlShape) => {
     ArtGen: {
       NoResultsFound: intl.formatMessage({ id: "toasts.artgen.noResultsFound" }),
       NoImgFile: intl.formatMessage({ id: "toasts.artgen.noImgFile" }),
-      InvalidFileType: `${intl.formatMessage({ id: "toasts.artgen.invalidFileType" })}\n`
-        + `${intl.formatMessage({ id: "toasts.artgen.invalidFileTypeExtensions" })}: `
-        + `${ACCEPTED_IMG_EXTENSIONS.join(", ")}.`,
+      InvalidFileType:
+        `${intl.formatMessage({ id: "toasts.artgen.invalidFileType" })}\n` +
+        `${intl.formatMessage({ id: "toasts.artgen.invalidFileTypeExtensions" })}: ` +
+        `${ACCEPTED_IMG_EXTENSIONS.join(", ")}.`,
       InvalidUrl: intl.formatMessage({ id: "toasts.artgen.invalidUrl" }),
     },
     ProcArt: {

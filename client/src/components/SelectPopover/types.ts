@@ -1,9 +1,4 @@
-import { StateSetter } from "@/common/types";
-
-export interface Option {
-  label: string;
-  value: string;
-}
+import { Option, StateSetter } from "@/common/types";
 
 export interface SelectPopoverProps {
   title?: string;

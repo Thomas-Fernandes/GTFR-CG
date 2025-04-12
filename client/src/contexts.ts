@@ -2,6 +2,8 @@ import { IntlShape } from "react-intl";
 
 import { createNewContext } from "@/common/contextCreator";
 
+import { Dict } from "./common/types";
+
 interface IAppContext {
   intl: IntlShape;
 }
@@ -9,8 +11,8 @@ const { context: AppContext, useContext: useAppContext } = createNewContext<IApp
 
 export { AppContext, useAppContext };
 
-let toasts: Record<string, any>;
-export const setToasts = (updatedToasts: Record<string, any>) => {
+let toasts: Dict<any>;
+export const setToasts = (updatedToasts: Dict<any>) => {
   toasts = updatedToasts;
 };
 export const getToasts = () => toasts;

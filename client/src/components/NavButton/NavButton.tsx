@@ -8,13 +8,8 @@ const NavButton = ({ to, label, side, ...buttonProps }: NavButtonProps) => {
   const navigate = useNavigate();
 
   return (
-    <button type="button" className="nav-button"
-      onClick={() => navigate(to)}
-      {...buttonProps}
-    >
-      <span className={side}>
-        {label}
-      </span>
+    <button type="button" onClick={() => navigate(to)} className="nav-button" {...buttonProps}>
+      <span className={side}>{label}</span>
     </button>
   );
 };

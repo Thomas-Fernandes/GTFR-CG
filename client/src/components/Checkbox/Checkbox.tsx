@@ -9,29 +9,20 @@ const Checkbox = ({ size, checked, disabled, onChange, label, ...buttonProps }: 
   const { isDarkMode } = useDarkModeContext();
 
   return (
-    <button type="button" className={`checkbox ${disabled ? "disabled" : ""}`}
-      onClick={onChange}
-      {...buttonProps}
-    >
-      <div className="checkbox--box"
+    <button type="button" onClick={onChange} className={`checkbox ${disabled ? "disabled" : ""}`} {...buttonProps}>
+      <div
+        className="checkbox--box"
         style={{
-          width: size, height: size,
+          width: size,
+          height: size,
           backgroundColor: getBackgroundColor(disabled ?? false, checked, isDarkMode),
           border: getBorder(checked, isDarkMode),
         }}
       >
-        { checked &&
-          <img className="checkbox--mark"
-            src={`/svg/check-mark.svg`} alt="check-mark" width={size * .75}
-          />
-        }
+        {checked && <img src={`/svg/check-mark.svg`} alt="check-mark" width={size * 0.75} className="checkbox--mark" />}
       </div>
 
-      { label &&
-        <span className={`checkbox--label ${disabled ? "disabled" : ""}`}>
-          {label}
-        </span>
-      }
+      {label && <span className={`checkbox--label ${disabled ? "disabled" : ""}`}>{label}</span>}
     </button>
   );
 };

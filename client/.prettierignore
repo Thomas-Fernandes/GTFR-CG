@@ -1,7 +1,8 @@
 # Prettier ignore
-.vite/
+.*
 *.css
 *.scss
+Dockerfile
 
 # Runtime data
 pids

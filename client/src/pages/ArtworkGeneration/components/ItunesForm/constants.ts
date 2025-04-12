@@ -1,4 +1,4 @@
-import { Option } from "@/components/SelectPopover/types";
+import { Option } from "@/common/types";
 
 export enum ArtworkResultProps {
   MaxTitleLength = 42,

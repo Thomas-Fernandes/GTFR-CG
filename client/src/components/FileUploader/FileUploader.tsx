@@ -19,9 +19,8 @@ const FileUploader = ({ id, label, caption, accept, setter }: FileUploaderProps)
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement> | null) => {
     if (e?.target?.files?.length && e.target.files.length > 0) {
       const file = e.target.files[0];
-      const displayName = file.name.length > 20
-        ? `${file.name.slice(0, 17)}...` + file.name.split('.').pop()
-        : file.name;
+      const displayName =
+        file.name.length > 20 ? `${file.name.slice(0, 17)}...` + file.name.split(".").pop() : file.name;
       setSelectedFileName(displayName);
       setter(file);
     } else if (e === null) {
@@ -50,23 +49,19 @@ const FileUploader = ({ id, label, caption, accept, setter }: FileUploaderProps)
     <div className={`file-upload ${isDragging ? "dragging" : ""}`}>
       <div
         onClick={() => document.getElementById(id)?.click()}
-        onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop}
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
       >
-        <input
-          type="file" name="file-upload" accept={accept}
-          id={id} className="hidden"
-          onChange={handleFileChange}
-        />
+        <input type="file" id={id} name="file-upload" accept={accept} onChange={handleFileChange} className="hidden" />
         <label htmlFor="file-upload" className="file-upload--label">
           {label}
         </label>
         <span className={`file-upload--caption ${selectedFileName ? "" : "italic"}`}>
-          {selectedFileName ?? (caption ?? labels.defaultCaption)}
+          {selectedFileName ?? caption ?? labels.defaultCaption}
         </span>
       </div>
-      { selectedFileName &&
-        <ButtonRemove onClick={() => handleFileChange(null)} />
-      }
+      {selectedFileName && <ButtonRemove onClick={() => handleFileChange(null)} />}
     </div>
   );
 };

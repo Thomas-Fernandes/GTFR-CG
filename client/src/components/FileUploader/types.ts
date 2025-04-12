@@ -6,4 +6,4 @@ export interface FileUploaderProps {
   caption?: string;
   accept?: string;
   setter: StateSetter<File | undefined>;
-};
+}

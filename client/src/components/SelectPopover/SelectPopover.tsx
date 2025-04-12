@@ -32,8 +32,8 @@ const SelectPopover = ({ title, label, imgSrc, options, onSelect, className, ...
       <button
         type="button"
         title={title ?? "popover"}
-        className="popover--toggle"
         onClick={() => setIsOpen((prev) => !prev)}
+        className="popover--toggle"
       >
         {label && <span>{label}</span>}
         {imgSrc && <img src={imgSrc} alt={imgSrc} />}
@@ -45,8 +45,8 @@ const SelectPopover = ({ title, label, imgSrc, options, onSelect, className, ...
             {options.map((option) => (
               <div
                 key={option.value}
-                className="popover--dropdown--list--option"
                 onClick={() => handleOptionClick(option.value)}
+                className="popover--dropdown--list--option"
               >
                 <li>{option.label}</li>
               </div>

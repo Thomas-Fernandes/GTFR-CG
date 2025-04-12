@@ -5,8 +5,9 @@ const Skeleton = ({ w, h, className }: SkeletonProps) => {
     <div
       className={`animate-pulse rounded ${className ?? ""}`}
       style={{
-        width: w, height: h,
-        backgroundColor: "rgba(32,32,32,.9)"
+        width: w,
+        height: h,
+        backgroundColor: "rgba(32,32,32,.9)",
       }}
     />
   );

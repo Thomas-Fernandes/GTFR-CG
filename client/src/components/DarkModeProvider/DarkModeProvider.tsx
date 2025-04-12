@@ -17,14 +17,7 @@ export const DarkModeProvider = ({ children }: DarkModeProviderProps) => {
     setIsDarkMode((prevMode) => !prevMode);
   }, []);
 
-  const contextValue = useMemo(
-    () => ({ isDarkMode, toggleDarkMode }),
-    [isDarkMode, toggleDarkMode]
-  );
+  const contextValue = useMemo(() => ({ isDarkMode, toggleDarkMode }), [isDarkMode, toggleDarkMode]);
 
-  return (
-    <DarkModeContext.Provider value={contextValue}>
-      {children}
-    </DarkModeContext.Provider>
-  );
+  return <DarkModeContext.Provider value={contextValue}>{children}</DarkModeContext.Provider>;
 };

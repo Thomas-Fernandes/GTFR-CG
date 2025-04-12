@@ -14,7 +14,7 @@ export interface ImageDownloadRequest {
 export interface ApiResponse {
   status: number;
   message: string;
-  data?: Record<string, unknown>;
+  data?: Dict<unknown>;
 }
 
 export enum RestVerb {
@@ -52,4 +52,4 @@ export type LocaleOptionType = Option & {
 
 export type StateSetter<T> = Dispatch<SetStateAction<T>>;
 
-export type Dict = Record<string, any>;
+export type Dict<T> = Record<string, T>;

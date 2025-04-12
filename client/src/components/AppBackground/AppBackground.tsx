@@ -17,7 +17,7 @@ const AppBackground = () => {
 
   useEffect(() => {
     setIsLandingPage(location.pathname === ViewPaths.LandingPage);
-  }, [location])
+  }, [location]);
 
   return (
     <>

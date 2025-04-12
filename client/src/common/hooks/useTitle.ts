@@ -7,13 +7,13 @@ export const useTitle = (title: string) => {
   const originalTitle = useRef(documentIsDefined ? document.title : null);
 
   useEffect(() => {
-    if (!documentIsDefined)
-      return;
+    if (!documentIsDefined) return;
 
     const currentTitle = originalTitle?.current ?? "";
 
-    if (document.title !== title)
+    if (document.title !== title) {
       document.title = Title.Prefix + title;
+    }
 
     return () => {
       document.title = currentTitle;
