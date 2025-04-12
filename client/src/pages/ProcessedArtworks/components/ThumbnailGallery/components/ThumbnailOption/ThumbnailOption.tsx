@@ -1,7 +1,9 @@
-import { DEFAULT_SELECTED_POSITION, PROCESSED_ARTWORKS_PATH } from "./constants";
-import { useThumbnailGalleryContext } from "./contexts";
+import { DEFAULT_SELECTED_POSITION } from "@/pages/ProcessedArtworks/components/ThumbnailGallery/constants";
+import { PROCESSED_ARTWORKS_PATH } from "@/pages/ProcessedArtworks/constants";
+import { useThumbnailGalleryContext } from "@/pages/ProcessedArtworks/contexts";
+import { processImageName } from "@/pages/ProcessedArtworks/utils";
+
 import { ThumbnailOptionProps } from "./types";
-import { processImageName } from "./utils";
 
 import "./ThumbnailOption.scss";
 

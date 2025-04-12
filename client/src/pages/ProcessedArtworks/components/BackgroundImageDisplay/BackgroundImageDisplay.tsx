@@ -1,7 +1,6 @@
 import DownloadButton from "@/components/DownloadButton/DownloadButton";
-
-import { COVER_ART_FILENAME, PROCESSED_ARTWORKS_PATH } from "./constants";
-import { handleSubmitDownloadImage } from "./handlers";
+import { COVER_ART_FILENAME, PROCESSED_ARTWORKS_PATH } from "@/pages/ProcessedArtworks/constants";
+import { handleSubmitDownloadImage } from "@/pages/ProcessedArtworks/handlers";
 
 const BackgroundImageDisplay = () => {
   return (

@@ -54,9 +54,11 @@ const Redirect = () => {
         </p>
 
         <p className="board--counter">
-          {`${intl.formatMessage({ id: "pages.redirect.counter.1" })} ${redirectTo.current} `
+          {
+            `${intl.formatMessage({ id: "pages.redirect.counter.1" })} ${redirectTo.current} `
           + `${intl.formatMessage({ id: "pages.redirect.counter.2" })} ${countdown} `
-          + `${intl.formatMessage({ id: "pages.redirect.counter.3" })}${plural}.`}
+          + `${intl.formatMessage({ id: "pages.redirect.counter.3" })}${plural}.`
+          }
         </p>
       </div>
 

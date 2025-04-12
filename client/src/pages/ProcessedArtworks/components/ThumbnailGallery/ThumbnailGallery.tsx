@@ -1,12 +1,13 @@
 import { useMemo, useState } from "react";
 
 import DownloadButton from "@/components/DownloadButton/DownloadButton";
+import { LOGO_POSITIONS } from "@/pages/ProcessedArtworks/constants";
+import { ThumbnailGalleryContext } from "@/pages/ProcessedArtworks/contexts";
+import { handleSubmitDownloadImage } from "@/pages/ProcessedArtworks/handlers";
+import { processImageName } from "@/pages/ProcessedArtworks/utils";
 
-import { DEFAULT_SELECTED_POSITION, LOGO_POSITIONS } from "./constants";
-import { ThumbnailGalleryContext } from "./contexts";
-import { handleSubmitDownloadImage } from "./handlers";
-import ThumbnailOption from "./ThumbnailOption";
-import { processImageName } from "./utils";
+import ThumbnailOption from "./components/ThumbnailOption/ThumbnailOption";
+import { DEFAULT_SELECTED_POSITION } from "./constants";
 
 import "./ThumbnailGallery.scss";
 
