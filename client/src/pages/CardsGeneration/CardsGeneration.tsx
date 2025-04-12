@@ -123,8 +123,8 @@ const CardsGeneration = () => {
             {getArrayOfSize(window.innerWidth / 320).map((_, idx) => (
               <li key={`skeleton_${idx}`} className="flex flex-col gap-2">
                 <div className="card-container skeleton">
-                  <Skeleton className="card-container--card" w="16.9rem" h="10rem" />
-                  <Skeleton className="card-container--card" w="16.9rem" h="2rem" />
+                  <Skeleton w="16.9rem" h="10rem" className="card-container--card" />
+                  <Skeleton w="16.9rem" h="2rem" className="card-container--card" />
                 </div>
               </li>
             ))}

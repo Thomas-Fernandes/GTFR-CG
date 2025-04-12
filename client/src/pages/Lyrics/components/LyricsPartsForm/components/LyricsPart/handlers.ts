@@ -3,10 +3,7 @@ import { StateSetter } from "@/common/types";
 import { ToastType } from "@/constants/toasts";
 import { getToasts } from "@/contexts";
 
-import {
-  HandleLoadLastContentsProps,
-  HandleSetLyricsPartsProps
-} from "./types";
+import { HandleLoadLastContentsProps, HandleSetLyricsPartsProps } from "./types";
 
 export const handleRestorePart = (
   dismissedParts: Set<number>,
@@ -28,10 +25,7 @@ export const handleSetDismissedParts = (
   setDismissedParts(n);
 };
 
-export const handleSetLyricsParts = (
-  lyrics: string, idx: number,
-  props: HandleSetLyricsPartsProps
-) => {
+export const handleSetLyricsParts = (lyrics: string, idx: number, props: HandleSetLyricsPartsProps) => {
   const { lyricsParts, setLyricsParts } = props;
 
   const updatedLyricsParts = [...lyricsParts];
@@ -40,9 +34,7 @@ export const handleSetLyricsParts = (
   setLyricsParts(updatedLyricsParts);
 };
 
-export const handleLoadLastContents = (
-  props: HandleLoadLastContentsProps
-) => {
+export const handleLoadLastContents = (props: HandleLoadLastContentsProps) => {
   const toasts = getToasts();
   const { lastContents, setPageMetadata, setLyricsParts, setDismissedParts } = props;
 

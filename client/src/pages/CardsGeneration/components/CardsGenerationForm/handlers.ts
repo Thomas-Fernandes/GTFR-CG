@@ -13,7 +13,8 @@ import { postGenerateCards } from "./requests";
 import { CardsGenerationRequest, HandleGenerateCardsProps } from "./types";
 
 export const handleGenerateCards = (
-  e: FormEvent<HTMLFormElement>, body: CardsGenerationRequest,
+  e: FormEvent<HTMLFormElement>,
+  body: CardsGenerationRequest,
   props: HandleGenerateCardsProps
 ) => {
   const toasts = getToasts();

@@ -33,6 +33,7 @@ export const postItunesSearch = (body: ItunesRequest, props: { setItunesResults:
             result.artistName = getTitleWithAdjustedLength(result.artistName);
           if (result.collectionName?.length > ArtworkResultProps.MaxTitleLength)
             result.collectionName = getTitleWithAdjustedLength(result.collectionName);
+
           resultItems.push({
             resultId: resultItems.length,
             artistName: result.artistName,
@@ -43,7 +44,7 @@ export const postItunesSearch = (body: ItunesRequest, props: { setItunesResults:
         });
         setItunesResults(resultItems);
       } else {
-        sendToast(toasts.NoResultsFound, ToastType.Warn);
+        sendToast(toasts.ArtGen.NoResultsFound, ToastType.Warn);
       }
     })
     .catch((error: ApiResponse) => {

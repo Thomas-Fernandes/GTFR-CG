@@ -25,15 +25,14 @@ const ItunesImageResult = ({ item, itemId }: ItunesImageResultProps) => {
   return (
     <div className={`results--container--item ${isMounted ? "mounted" : ""}`}>
       <ImgButton
-        src={item.artworkUrl100} alt={resultLabel}
+        src={item.artworkUrl100}
+        alt={resultLabel}
         onLoad={() => setItemLabel(`${item.artistName} - ${resultLabel}`)}
         onClick={() => handleSelectItunesImage(item, itemId, { isProcessingLoading, setIsProcessingLoading, navigate })}
         overlayText={"Use this image"}
         className="results--container--item--image"
       />
-      <p className="results--container--item--text">
-        {itemLabel}
-      </p>
+      <p className="results--container--item--text">{itemLabel}</p>
 
       <div className="mt-2" id={SpinnerId.ItunesResult + itemId.toString()} />
     </div>
@@ -43,20 +42,20 @@ const ItunesImageResult = ({ item, itemId }: ItunesImageResultProps) => {
 const ItunesResults = ({ items, setItunesResults }: ItunesResultsProps) => {
   return (
     <div className="results">
-      { items.length > 0 &&
-        <button id="clear" className="small mac !mb-4" onClick={() => setItunesResults([])}>
+      {items.length > 0 && (
+        <button id="clear" onClick={() => setItunesResults([])} className="small mac !mb-4">
           {"Clear results"}
         </button>
-      }
+      )}
       <ul id="results" className="results--container">
-        { items.map((item, index) => (
+        {items.map((item, index) => (
           <li key={index}>
             <ItunesImageResult item={item} itemId={index} />
           </li>
         ))}
       </ul>
     </div>
-  )
+  );
 };
 
 export default ItunesResults;

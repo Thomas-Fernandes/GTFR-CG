@@ -1,10 +1,8 @@
-
 import { hideSpinner, showSpinner } from "@/common/Spinner";
 
 import { SpinnerId } from "@/constants/spinners";
 
-const allStatsSpinnerIds = Object.values(SpinnerId)
-  .filter((id) => id.startsWith("home_stat"));
+const allStatsSpinnerIds = Object.values(SpinnerId).filter((id) => id.startsWith("home_stat"));
 
 export const hideAllStatsSpinners = () => {
   allStatsSpinnerIds.forEach((id) => {

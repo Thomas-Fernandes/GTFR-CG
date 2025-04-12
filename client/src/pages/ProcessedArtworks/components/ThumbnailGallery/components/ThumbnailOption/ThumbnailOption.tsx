@@ -15,7 +15,10 @@ const ThumbnailOption = ({ logoPosition, idx }: ThumbnailOptionProps) => {
       <label htmlFor={`radio_${idx}`}>
         <img src={`${PROCESSED_ARTWORKS_PATH}/${processImageName(logoPosition)}`} alt={logoPosition} />
       </label>
-      <input type="radio" id={`radio_${idx}`} name="selected_thumbnail_idx"
+      <input
+        type="radio"
+        id={`radio_${idx}`}
+        name="selected_thumbnail_idx"
         value={idx.toString()}
         defaultChecked={logoPosition === DEFAULT_SELECTED_POSITION}
         onClick={() => setSelectedThumbnail(logoPosition)}

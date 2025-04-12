@@ -31,12 +31,12 @@ const ItunesForm = ({ setItunesResults }: ItunesFormProps) => {
       </label>
       <input
         type="text"
-        placeholder={labels.inputPlaceholder}
-        className="itunes--text"
         id="itunes--text"
+        placeholder={labels.inputPlaceholder}
         onChange={(e) =>
           handleChangeTerm(e.target.value, country, { term, setTerm, startItunesSearch, setItunesResults })
         }
+        className="itunes--text"
       />
 
       <label htmlFor={SpinnerId.ItunesSearch} className="hidden">

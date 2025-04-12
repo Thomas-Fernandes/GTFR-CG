@@ -10,7 +10,7 @@ interface GenerationProps {
   includeBackgroundImg: boolean;
 
   cardBottomColor: string;
-};
+}
 
 export interface HandleSaveModalProps {
   generationProps: GenerationProps;

@@ -23,26 +23,37 @@ const LyricsPartsForm = ({ lyricsParts }: LyricsPartsFormProps) => {
   const [isSavingCardsContent, setIsSavingCardsContent] = useState(false);
 
   return (
-    <form className="lyrics-form"
-      onSubmit={(e) => handleLyricsSaveSubmit(e, convertToCardContents(lyricsParts, dismissedParts),
-        {isSavingCardsContent, setIsSavingCardsContent, pageMetadata, isManual, lyricsParts, dismissedParts, navigate}
-      )}
+    <form
+      onSubmit={(e) =>
+        handleLyricsSaveSubmit(e, convertToCardContents(lyricsParts, dismissedParts), {
+          isSavingCardsContent,
+          setIsSavingCardsContent,
+          pageMetadata,
+          isManual,
+          lyricsParts,
+          dismissedParts,
+          navigate,
+        })
+      }
+      className="lyrics-form"
     >
-      <label htmlFor="lyrics-form--parts" className="hidden">{"Lyrics parts"}</label>
-      <ul className="lyrics-form--parts" id="lyrics-form--parts">
-        { lyricsParts.map((part, idx) =>
+      <label htmlFor="lyrics-form--parts" className="hidden">
+        {"Lyrics parts"}
+      </label>
+      <ul id="lyrics-form--parts" className="lyrics-form--parts">
+        {lyricsParts.map((part, idx) => (
           <li key={`part_${idx}`}>
+            {idx !== 0 && <hr className="w-full my-4" />}
             <LyricsPart part={part} idx={idx} />
-            { idx !== lyricsParts.length - 1 &&
-              <hr className="w-full my-4" />
-            }
           </li>
-        )}
+        ))}
       </ul>
       <hr className="my-8" />
 
-      <label htmlFor={SpinnerId.LyricsConvert} className="hidden">{"Convert to cards button"}</label>
-      <div className="submit" id={SpinnerId.LyricsConvert}>
+      <label htmlFor={SpinnerId.LyricsConvert} className="hidden">
+        {"Convert to cards button"}
+      </label>
+      <div id={SpinnerId.LyricsConvert} className="submit">
         <ActionButton type="submit" label={labels.submit} className="spaced" />
       </div>
     </form>

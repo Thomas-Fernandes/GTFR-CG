@@ -1,6 +1,6 @@
 import {
   CardsGenerationRequest,
-  SingleCardGenerationRequest
+  SingleCardGenerationRequest,
 } from "@/pages/CardsGeneration/components/CardsGenerationForm/types";
 
 export const generateFormData = (
@@ -11,12 +11,14 @@ export const generateFormData = (
     formData.append("enforceBackgroundImage", body.bgImg);
     formData.append("includeCenterArtwork", (body.includeCenterArtwork ?? "").toString());
   }
-  if (body.colorPick !== "")
+  if (body.colorPick !== "") {
     formData.append("enforceBottomColor", body.colorPick);
+  }
   formData.append("cardMetaname", body.cardMetaname);
   formData.append("generateOutro", (body.generateOutro ?? false).toString());
-  if (body.generateOutro === true)
+  if (body.generateOutro === true) {
     formData.append("outroContributors", body.outroContributors ?? "");
+  }
   formData.append("includeBackgroundImg", body.includeBackgroundImg.toString());
 
   if ((body as SingleCardGenerationRequest).cardsContents) {

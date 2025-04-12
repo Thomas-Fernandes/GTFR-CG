@@ -1,5 +1,5 @@
 import { useDarkModeContext } from "@/common/hooks/useDarkMode/contexts";
-import { imgPaths } from "@/constants/media";
+import { ImgPaths } from "@/constants/media";
 import { useAppContext } from "@/contexts";
 
 import { ArtgenOptionIndicatorProps } from "./types";
@@ -16,7 +16,7 @@ const ArtgenOptionIndicator = ({ direction, optionIdx, optionsLength, label }: A
 
   const isPrev = direction === "prev";
   const hasNoIndicator = isPrev ? optionIdx === 0 : optionIdx >= optionsLength + 1;
-  const arrowImgSrc = isDarkMode === isPrev ? imgPaths.ArrowBlue : imgPaths.ArrowYellow;
+  const arrowImgSrc = isDarkMode === isPrev ? ImgPaths.ArrowBlue : ImgPaths.ArrowYellow;
 
   return (
     <h2 className={`artwork-generation--options--${direction} ${hasNoIndicator ? "empty" : ""}`}>

@@ -28,37 +28,45 @@ const LyricsPart = ({ part, idx }: LyricsPartProps) => {
 
   return (
     <div className={`lyrics-part ${isMounted ? "mounted" : ""}`}>
-      { !isManual && dismissedParts.has(idx)
-      ? <div className="lyrics-part--header">
-          <button type="button" className="restore"
+      {!isManual && dismissedParts.has(idx) ? (
+        <div className="lyrics-part--header">
+          <button
+            type="button"
             onClick={() => handleRestorePart(dismissedParts, idx, setDismissedParts)}
+            className="restore"
           >
             {`${labels.restore} ${part.section}`}
           </button>
         </div>
-      : <>
-        <div className="lyrics-part--header">
-          <button type="button" disabled={isManual} className="red"
-            onClick={() => handleSetDismissedParts(dismissedParts, idx, setDismissedParts)}
-          >
-            {labels.remove}
-          </button>
+      ) : (
+        <>
+          <div className="lyrics-part--header">
+            <button
+              type="button"
+              disabled={isManual}
+              onClick={() => handleSetDismissedParts(dismissedParts, idx, setDismissedParts)}
+              className="red"
+            >
+              {labels.remove}
+            </button>
 
-          <span className="lyrics-part--header--section">
-            {part.section}
-          </span>
+            <span className="lyrics-part--header--section">{part.section}</span>
 
-          <button type="button" className="green"
-            onClick={() => handleSetLyricsParts("", idx, {lyricsParts, setLyricsParts})}
-          >
-            {labels.clear}
-          </button>
-        </div>
-        <AutoResizeTextarea id={`lyrics-part_${idx}`}
-          value={part.lyrics}
-          onChange={(e) => handleSetLyricsParts(e.target.value, idx, {lyricsParts, setLyricsParts})}
-        />
-      </>}
+            <button
+              type="button"
+              onClick={() => handleSetLyricsParts("", idx, { lyricsParts, setLyricsParts })}
+              className="green"
+            >
+              {labels.clear}
+            </button>
+          </div>
+          <AutoResizeTextarea
+            id={`lyrics-part_${idx}`}
+            value={part.lyrics}
+            onChange={(e) => handleSetLyricsParts(e.target.value, idx, { lyricsParts, setLyricsParts })}
+          />
+        </>
+      )}
     </div>
   );
 };

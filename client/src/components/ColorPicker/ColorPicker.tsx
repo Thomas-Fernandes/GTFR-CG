@@ -72,7 +72,7 @@ const ColorPicker = ({ id, latest, label, labelClassName, setter, ...divProps }:
               <span className="hidden">🎨</span>
             </label>
 
-            <button type="button" className="color-picker--content--load-latest mac" onClick={handleLoadLatest}>
+            <button type="button" onClick={handleLoadLatest} className="color-picker--content--load-latest mac">
               {labels.loadLatest}
             </button>
           </div>

@@ -26,7 +26,7 @@ const CardView = ({ card, cardIdx }: CardViewProps) => {
 
   const [isMounted, setIsMounted] = useState(false);
 
-  const cardFileName = (card.imgSrc.split('/').pop() ?? "").split('?')[0] ?? "card";
+  const cardFileName = (card.imgSrc.split("/").pop() ?? "").split("?")[0] ?? "card";
   const shortCardFileName = cardFileName.replace(".png", "");
   const cardIsEditable = !(shortCardFileName === "00" || shortCardFileName === "outro");
   const alt = `card-${cardIdx.toString()}_${cardFileName}`;
@@ -50,20 +50,17 @@ const CardView = ({ card, cardIdx }: CardViewProps) => {
   return (
     <div className={`card-container ${isMounted ? "mounted" : ""}`}>
       <div onClick={openModal} className="card-container--card">
-        { !cardIsEditable
-        ? <img
-            src={card.imgSrc} alt={alt}
-          />
-        : <ImgWithOverlay
-            src={card.imgSrc} alt={alt}
-            overlayText={labels.edit}
-          />
-        }
+        {!cardIsEditable ? (
+          <img src={card.imgSrc} alt={alt} />
+        ) : (
+          <ImgWithOverlay src={card.imgSrc} alt={alt} overlayText={labels.edit} />
+        )}
       </div>
 
-      <DownloadButton className="mac"
+      <DownloadButton
         label={`${labels.download} ${shortCardFileName}`}
         onClick={() => downloadFile(card.imgSrc)}
+        className="mac"
       />
     </div>
   );

@@ -6,7 +6,7 @@ import {
   COVER_ART_FILENAME,
   DEFAULT_DOWNLOAD_FILENAME,
   DOWNLOAD_BG_IMG_FILENAME,
-  PROCESSED_ARTWORKS_PATH
+  PROCESSED_ARTWORKS_PATH,
 } from "./constants";
 
 export const handleSubmitDownloadImage = (path: string) => {

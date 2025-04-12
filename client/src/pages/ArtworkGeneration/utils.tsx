@@ -4,12 +4,8 @@ import FileUploadForm from "./components/FileUploadForm/FileUploadForm";
 import ItunesForm from "./components/ItunesForm/ItunesForm";
 import ItunesResults from "./components/ItunesResults/ItunesResults";
 import YoutubeForm from "./components/YoutubeForm/YoutubeForm";
-import { ARTWORK_GENERATION_OPTION_PARENT_CLASS, REGEX_YOUTUBE_URL } from "./constants";
+import { ARTWORK_GENERATION_OPTION_PARENT_CLASS } from "./constants";
 import { ArtworkGenerationOption } from "./types";
-
-export const isValidYoutubeUrl = (url: string): boolean => {
-  return REGEX_YOUTUBE_URL.some((pattern: RegExp) => pattern.test(url));
-};
 
 const getLocalizedArtgenOptions = (intl: IntlShape): string[] => {
   return [

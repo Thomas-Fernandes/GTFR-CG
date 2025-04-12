@@ -102,8 +102,8 @@ const Lyrics = () => {
 
       <button
         type="button"
-        className="medium mac"
         onClick={() => handleLoadLastContents({ lastContents, setPageMetadata, setLyricsParts, setDismissedParts })}
+        className="medium mac"
       >
         {labels.loadLast}
       </button>

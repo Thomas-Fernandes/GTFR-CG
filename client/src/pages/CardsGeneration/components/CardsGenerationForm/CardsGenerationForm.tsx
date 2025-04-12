@@ -73,22 +73,22 @@ const CardsGenerationForm = ({ setCardPaths, setCards }: CardsGenerationFormProp
       </label>
       <div id="text-fields" className="settings">
         <input
-          autoComplete="off"
           type="text"
           name="metaname"
           placeholder={labels.metanamePlaceholder}
           value={cardMetaname}
           onChange={(e) => setCardMetaname(e.target.value)}
+          autoComplete="off"
           className={!cardMetaname ? "empty" : ""}
         />
         {generateOutro && (
           <input
-            autoComplete="off"
             type="text"
             name="contributors"
             placeholder={labels.contributorsPlaceholder}
             value={(outroContributors && "by: ") + outroContributors}
             onChange={(e) => setOutroContributors(e.target.value.replace("by: ", ""))}
+            autoComplete="off"
             className={`contributors ${!outroContributors ? "empty" : ""}`}
           />
         )}
@@ -124,8 +124,8 @@ const CardsGenerationForm = ({ setCardPaths, setCards }: CardsGenerationFormProp
         <div onClick={() => cardMethod === ContentsGenerationMode.Manual && handleUnauthorizedCheckbox()}>
           <Checkbox
             id="generate_outro"
-            disabled={cardMethod === ContentsGenerationMode.Manual}
             size={24}
+            disabled={cardMethod === ContentsGenerationMode.Manual}
             checked={cardMethod === ContentsGenerationMode.Auto && generateOutro}
             onChange={() => cardMethod === ContentsGenerationMode.Auto && setGenerateOutro(!generateOutro)}
             label={labels.generateOutro}
@@ -140,7 +140,7 @@ const CardsGenerationForm = ({ setCardPaths, setCards }: CardsGenerationFormProp
         />
       </div>
 
-      <div className="submit" id={SpinnerId.CardsGenerate}>
+      <div id={SpinnerId.CardsGenerate} className="submit">
         <ActionButton type="submit" label={labels.submit} className="spaced" />
       </div>
     </form>

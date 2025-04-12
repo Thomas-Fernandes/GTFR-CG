@@ -1,18 +1,18 @@
 import { sendToast } from "@/common/Toast";
-import { Toast, ToastType } from "@/constants/toasts";
+import { ToastType } from "@/constants/toasts";
+import { getToasts } from "@/contexts";
 import { HandleSubmitArtworkGenerationProps } from "@/pages/ArtworkGeneration/types";
 
 import { postItunesResult } from "./requests";
 import { ItunesResult } from "./types";
 
-export const handleSelectItunesImage = (
-  item: ItunesResult, key: number,
-  props: HandleSubmitArtworkGenerationProps
-) => {
+export const handleSelectItunesImage = (item: ItunesResult, key: number, props: HandleSubmitArtworkGenerationProps) => {
+  const toasts = getToasts();
+
   const { isProcessingLoading, setIsProcessingLoading, navigate } = props;
 
   if (isProcessingLoading) {
-    sendToast(Toast.ProcessingInProgress, ToastType.Warn);
+    sendToast(toasts.ProcessingInProgress, ToastType.Warn);
     return;
   }
 
@@ -20,5 +20,5 @@ export const handleSelectItunesImage = (
     url: item.artworkUrl100,
   };
 
-  postItunesResult(body, key, {setIsProcessingLoading, navigate});
+  postItunesResult(body, key, { setIsProcessingLoading, navigate });
 };

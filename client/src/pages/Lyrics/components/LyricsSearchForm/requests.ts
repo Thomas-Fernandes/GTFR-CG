@@ -17,41 +17,46 @@ export const postLyricsSearch = (body: LyricsRequest, props: LyricsSearchProps) 
   setIsFetching(true);
   showSpinner(SpinnerId.LyricsSearch);
 
-  sendRequest(RestVerb.Post, BACKEND_URL + API.LYRICS.GET_LYRICS, body).then((response: LyricsResponse) => {
-    if (!is2xxSuccessful(response.status)) {
-      throw new Error(response.message);
-    }
+  sendRequest(RestVerb.Post, BACKEND_URL + API.LYRICS.GET_LYRICS, body)
+    .then((response: LyricsResponse) => {
+      if (!is2xxSuccessful(response.status)) {
+        throw new Error(response.message);
+      }
 
-    const responseFirstSection = response.data.lyricsParts[0].section;
-    if (responseFirstSection === ResponseStatus.Error || responseFirstSection === ResponseStatus.Warn) {
-      sendToast(
-        response.data.lyricsParts[0].lyrics,
-        (responseFirstSection === ResponseStatus.Error) ? ToastType.Error : ToastType.Warn
-      );
+      const responseFirstSection = response.data.lyricsParts[0].section;
+      if (responseFirstSection === ResponseStatus.Error || responseFirstSection === ResponseStatus.Warn) {
+        sendToast(
+          response.data.lyricsParts[0].lyrics,
+          responseFirstSection === ResponseStatus.Error ? ToastType.Error : ToastType.Warn
+        );
+        setLyricsParts([]);
+      } else {
+        const metadata =
+          response.data.lyricsParts.find((part) => part.section === METADATA_SECTION)?.lyrics.split("\n") ?? [];
+        const metadataObj = strArrToMetadata(metadata);
+        setPageMetadata(metadataObj);
+
+        const lyricsParts = response.data.lyricsParts.filter((part) => part.section !== METADATA_SECTION);
+        setLyricsParts(lyricsParts);
+      }
+    })
+    .catch((error: ApiResponse) => {
+      sendToast(error.message, ToastType.Error);
       setLyricsParts([]);
-    } else {
-      const metadata = response.data.lyricsParts
-        .find(part => part.section === METADATA_SECTION)?.lyrics.split("\n") ?? [];
-      const metadataObj = strArrToMetadata(metadata);
-      setPageMetadata(metadataObj);
-
-      const lyricsParts = response.data.lyricsParts.filter(part => part.section !== METADATA_SECTION);
-      setLyricsParts(lyricsParts);
-    }
-  }).catch((error: ApiResponse) => {
-    sendToast(error.message, ToastType.Error);
-    setLyricsParts([]);
-  }).finally(() => {
-    hideSpinner(SpinnerId.LyricsSearch);
-    setIsFetching(false);
-  });
+    })
+    .finally(() => {
+      hideSpinner(SpinnerId.LyricsSearch);
+      setIsFetching(false);
+    });
 };
 
 export const isTokenSet = async (): Promise<boolean> => {
-  return sendRequest(RestVerb.Get, BACKEND_URL + API.GENIUS_TOKEN).then((response) => {
-    return is2xxSuccessful(response.status) && response.data.token !== "";
-  }).catch((error) => {
-    sendToast(error.message, ToastType.Error);
-    return false;
-  });
+  return sendRequest(RestVerb.Get, BACKEND_URL + API.GENIUS_TOKEN)
+    .then((response) => {
+      return is2xxSuccessful(response.status) && response.data.token !== "";
+    })
+    .catch((error) => {
+      sendToast(error.message, ToastType.Error);
+      return false;
+    });
 };

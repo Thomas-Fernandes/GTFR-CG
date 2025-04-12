@@ -38,7 +38,7 @@ const YoutubeForm = () => {
       <label htmlFor={SpinnerId.YoutubeUrl} className="hidden">
         {"Search button"}
       </label>
-      <div className="submit" id={SpinnerId.YoutubeUrl}>
+      <div id={SpinnerId.YoutubeUrl} className="submit">
         <ActionButton type="submit" label={labels.submit} className="spaced" />
       </div>
     </form>

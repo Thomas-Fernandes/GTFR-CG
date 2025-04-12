@@ -1,5 +1,6 @@
 import { useDarkMode } from "@/common/hooks/useDarkMode/useDarkMode";
 import { ThemeType } from "@/components/DarkModeProvider/constants";
+import { SvgPaths } from "@/constants/media";
 
 import "./ThemeSwitch.scss";
 
@@ -12,7 +13,7 @@ const ThemeSwitch = () => {
       onClick={toggleDarkMode}
       className={`theme-switch ${isDarkMode ? ThemeType.Dark : ThemeType.Light}`}
     >
-      <img src={"/svg/theme-circle.svg"} alt={"theme-switch"} />
+      <img src={SvgPaths.ThemeCircle} alt={"theme-switch"} />
     </button>
   );
 };

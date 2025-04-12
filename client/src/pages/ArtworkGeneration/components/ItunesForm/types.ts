@@ -7,7 +7,7 @@ export interface ItunesResponse extends ApiResponse {
   data: {
     resultCount: number;
     results: ItunesResult[];
-  }
+  };
 }
 export interface HandleSubmitItunesSearchProps {
   setItunesResults: StateSetter<ItunesResult[]>;

@@ -8,12 +8,14 @@ export const updateCard = (
   cardFilename: string
 ) => {
   setCards((prevCards) =>
-    prevCards.map((img) => img.id === currentCard.id // update only the card that was edited
-      ? {
-        id: img.id,
-        imgSrc: `${cardFilename}?t=${Date.now()}`, // busting cached image with the same name thanks to timestamp
-        lyrics: newLyrics,
-      } : img
+    prevCards.map((img) =>
+      img.id === currentCard.id // update only the card that was edited
+        ? {
+            id: img.id,
+            imgSrc: `${cardFilename}?t=${Date.now()}`, // busting cached image with the same name thanks to timestamp
+            lyrics: newLyrics,
+          }
+        : img
     )
   );
 };

@@ -45,26 +45,20 @@ const Redirect = () => {
       <h1>{intl.formatMessage({ id: "pages.redirect.title" })}</h1>
 
       <div className="board">
-        <h2 className="board--title">
-          {intl.formatMessage({ id: "pages.redirect.header" })}
-        </h2>
+        <h2 className="board--title">{intl.formatMessage({ id: "pages.redirect.header" })}</h2>
 
-        <p className="board--err">
-          { errorText.current }
-        </p>
+        <p className="board--err">{errorText.current}</p>
 
         <p className="board--counter">
-          {
-            `${intl.formatMessage({ id: "pages.redirect.counter.1" })} ${redirectTo.current} `
-          + `${intl.formatMessage({ id: "pages.redirect.counter.2" })} ${countdown} `
-          + `${intl.formatMessage({ id: "pages.redirect.counter.3" })}${plural}.`
-          }
+          {`${intl.formatMessage({ id: "pages.redirect.counter.1" })} ${redirectTo.current} ` +
+            `${intl.formatMessage({ id: "pages.redirect.counter.2" })} ${countdown} ` +
+            `${intl.formatMessage({ id: "pages.redirect.counter.3" })}${plural}.`}
         </p>
       </div>
 
       <TopBotSpacer />
     </div>
   );
-}
+};
 
 export default Redirect;

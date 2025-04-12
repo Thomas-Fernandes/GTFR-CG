@@ -7,14 +7,12 @@ import { getToasts } from "@/contexts";
 
 import { METADATA_IDENTIFIER, METADATA_SEPARATOR } from "./constants";
 import { postLyricsSave } from "./requests";
-import {
-  HandleLyricsSaveSubmitProps,
-  LyricsSaveRequest
-} from "./types";
+import { HandleLyricsSaveSubmitProps, LyricsSaveRequest } from "./types";
 import { validateSongParts } from "./utils";
 
 export const handleLyricsSaveSubmit = (
-  e: FormEvent<HTMLFormElement>, body: SongPartsCards,
+  e: FormEvent<HTMLFormElement>,
+  body: SongPartsCards,
   props: HandleLyricsSaveSubmitProps
 ) => {
   const toasts = getToasts();
@@ -25,7 +23,7 @@ export const handleLyricsSaveSubmit = (
     isManual,
     lyricsParts,
     dismissedParts,
-    navigate
+    navigate,
   } = props;
 
   e.preventDefault();
@@ -36,24 +34,24 @@ export const handleLyricsSaveSubmit = (
   }
 
   const errors = validateSongParts(body, lyricsParts);
-  const onlyWarnings = !errors.some(e => e.what?.startsWith("Err"));
+  const onlyWarnings = !errors.some((e) => e.what?.startsWith("Err"));
 
   if (errors.length > 0 && !onlyWarnings) {
     // If there are errors, show everything; if there are only warnings, proceed
-    errors.forEach(e => {
+    errors.forEach((e) => {
       const toastType = e.what.startsWith("Err") ? ToastType.Error : ToastType.Warn;
-      if (e.message)
-        sendToast(e.message, toastType, 10);
+      if (e.message) sendToast(e.message, toastType, 10);
     });
     const firstInconvenienceLocation = document.getElementById(errors[0].where);
-    if (firstInconvenienceLocation)
-      firstInconvenienceLocation.scrollIntoView({ behavior: "smooth" });
+    if (firstInconvenienceLocation) firstInconvenienceLocation.scrollIntoView({ behavior: "smooth" });
     return; // cancel saving
   }
 
-  const metadata = METADATA_IDENTIFIER + Object.entries(pageMetadata).map(
-    ([key, value]) => `${key}: ${value}`
-  ).join(METADATA_SEPARATOR);
+  const metadata =
+    METADATA_IDENTIFIER +
+    Object.entries(pageMetadata)
+      .map(([key, value]) => `${key}: ${value}`)
+      .join(METADATA_SEPARATOR);
 
   const data: LyricsSaveRequest = {
     cardsContents: [[metadata]].concat(body),

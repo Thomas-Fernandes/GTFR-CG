@@ -15,14 +15,28 @@ const ManualGenerationInputBar = () => {
 
   return (
     <div className="manual-generation">
-      <input required type="text" name="artist" placeholder={labels.artistPlaceholder}
-        onChange={(e) => { setArtist(e.target.value); setPageMetadata({...pageMetadata, artist: e.target.value}); }}
+      <input
+        required
+        type="text"
+        name="artist"
+        placeholder={labels.artistPlaceholder}
+        onChange={(e) => {
+          setArtist(e.target.value);
+          setPageMetadata({ ...pageMetadata, artist: e.target.value });
+        }}
       />
-      <input required type="text" name="songName" placeholder={labels.songPlaceholder}
-        onChange={(e) => { setSongName(e.target.value); setPageMetadata({...pageMetadata, title: e.target.value}); }}
+      <input
+        required
+        type="text"
+        name="songName"
+        placeholder={labels.songPlaceholder}
+        onChange={(e) => {
+          setSongName(e.target.value);
+          setPageMetadata({ ...pageMetadata, title: e.target.value });
+        }}
       />
     </div>
-  )
+  );
 };
 
 export default ManualGenerationInputBar;

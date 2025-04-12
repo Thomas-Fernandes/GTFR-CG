@@ -2,7 +2,7 @@ import { MouseEvent, RefObject } from "react";
 
 export const handleMouseDown = (
   e: MouseEvent<HTMLDivElement>,
-  props: { isMouseDownRef: RefObject<boolean>, clickedInsideModalRef: RefObject<boolean> }
+  props: { isMouseDownRef: RefObject<boolean>; clickedInsideModalRef: RefObject<boolean> }
 ) => {
   const { isMouseDownRef, clickedInsideModalRef } = props;
   isMouseDownRef.current = true;
@@ -16,8 +16,10 @@ export const handleMouseUp = (props: { isMouseDownRef: RefObject<boolean> }) => 
   isMouseDownRef.current = false;
 };
 
-export const handleOverlayClick = (props: { clickedInsideModalRef: RefObject<boolean>, closeModal: () => void }) => {
+export const handleOverlayClick = (props: { clickedInsideModalRef: RefObject<boolean>; closeModal: () => void }) => {
   const { clickedInsideModalRef, closeModal } = props;
-  if (!clickedInsideModalRef.current)
+
+  if (!clickedInsideModalRef.current) {
     closeModal();
+  }
 };

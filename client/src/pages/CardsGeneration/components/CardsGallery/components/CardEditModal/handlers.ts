@@ -6,10 +6,7 @@ import { CardData } from "@/pages/CardsGeneration/types";
 import { postGenerateSingleCard } from "./requests";
 import { HandleSaveModalProps } from "./types";
 
-export const handleSaveModal = (
-  currentCard: CardData | null, isModalSaving: boolean,
-  props: HandleSaveModalProps
-) => {
+export const handleSaveModal = (currentCard: CardData | null, isModalSaving: boolean, props: HandleSaveModalProps) => {
   const toasts = getToasts();
   const { generationProps, newLyrics, generateSingleCardProps } = props;
 
@@ -23,7 +20,8 @@ export const handleSaveModal = (
     return;
   }
 
-  if (generationProps.colorPick === "")
+  if (generationProps.colorPick === "") {
     generationProps.colorPick = generationProps.cardBottomColor;
+  }
   postGenerateSingleCard(generationProps, newLyrics, generateSingleCardProps);
 };

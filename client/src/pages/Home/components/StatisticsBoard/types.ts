@@ -7,7 +7,7 @@ export interface StatisticsResponse extends ApiResponse {
     artworkGenerations: number;
     lyricsFetches: number;
     cardsGenerated: number;
-  }
+  };
 }
 
 export interface Statistics {
@@ -28,4 +28,4 @@ export interface StatisticProps {
 }
 export interface StatisticsProps {
   statistics: StatisticProps[];
-};
+}

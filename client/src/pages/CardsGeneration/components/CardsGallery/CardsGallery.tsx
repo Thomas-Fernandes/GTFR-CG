@@ -34,24 +34,30 @@ const CardsGallery = ({ initialCards, ...divProps }: CardsGalleryProps) => {
     <div className="card-gallery" {...divProps}>
       <CardsGalleryContext.Provider value={contextValue}>
         <ul className="card-gallery--cards">
-          { cards.length > 0 &&
+          {cards.length > 0 && (
             <>
               <li key={0}>
-                <CardStack label={labels.downloadAll} imgSrc={cards[1].imgSrc} stackSize={2}
-                  onClick={() => downloadFilesAsZip(cards.map(card => card.imgSrc), CARDS_ZIP_FILENAME)}
+                <CardStack
+                  label={labels.downloadAll}
+                  imgSrc={cards[1].imgSrc}
+                  stackSize={2}
+                  onClick={() =>
+                    downloadFilesAsZip(
+                      cards.map((card) => card.imgSrc),
+                      CARDS_ZIP_FILENAME
+                    )
+                  }
                 />
               </li>
-              { cards.map((card, idx) =>
+              {cards.map((card, idx) => (
                 <li key={idx + 1}>
                   <CardView card={card} cardIdx={idx} />
                 </li>
-              )}
+              ))}
             </>
-          }
+          )}
         </ul>
-        { isModalOpen && currentCard && (
-          <CardEditModal />
-        )}
+        {isModalOpen && currentCard && <CardEditModal />}
       </CardsGalleryContext.Provider>
     </div>
   );

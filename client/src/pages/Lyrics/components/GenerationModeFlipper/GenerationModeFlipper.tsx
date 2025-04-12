@@ -27,14 +27,10 @@ const GenerationModeFlipper = ({ className, ...props }: GenerationModeFlipperPro
   };
 
   return (
-    <button type="button"
-      onClick={handleClick}
-      className={`large mac ${className ?? ""}`}
-      {...props}
-    >
-      { isManual ? labels.switchAutomatic : labels.switchManual }
+    <button type="button" onClick={handleClick} className={`large mac ${className ?? ""}`} {...props}>
+      {isManual ? labels.switchAutomatic : labels.switchManual}
     </button>
-  )
+  );
 };
 
 export default GenerationModeFlipper;

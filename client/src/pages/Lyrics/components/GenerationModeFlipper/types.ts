@@ -1,5 +1,5 @@
 import { ComponentPropsWithoutRef } from "react";
 
-export type GenerationModeFlipperProps = ComponentPropsWithoutRef<"button"> & Readonly<{
+export type GenerationModeFlipperProps = ComponentPropsWithoutRef<"button"> & {
   className?: string;
-}>;
+};

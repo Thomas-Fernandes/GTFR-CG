@@ -12,7 +12,7 @@ import { DEFAULT_SELECTED_POSITION } from "./constants";
 import "./ThumbnailGallery.scss";
 
 const ThumbnailGallery = () => {
-  const [selectedThumbnail, setSelectedThumbnail ] = useState(DEFAULT_SELECTED_POSITION);
+  const [selectedThumbnail, setSelectedThumbnail] = useState(DEFAULT_SELECTED_POSITION);
 
   const contextValue = useMemo(() => ({ setSelectedThumbnail }), []);
 
@@ -20,16 +20,14 @@ const ThumbnailGallery = () => {
     <div id="thumbnail-gallery">
       <ul id="thumbnail-gallery--grid">
         <ThumbnailGalleryContext.Provider value={contextValue}>
-          { LOGO_POSITIONS.map((logoPosition, idx) =>
+          {LOGO_POSITIONS.map((logoPosition, idx) => (
             <li key={`thumbnail-item_${idx}`}>
               <ThumbnailOption logoPosition={logoPosition} idx={idx} />
             </li>
-          )}
+          ))}
         </ThumbnailGalleryContext.Provider>
       </ul>
-      <DownloadButton className="mac"
-        onClick={() => handleSubmitDownloadImage(processImageName(selectedThumbnail))}
-      />
+      <DownloadButton onClick={() => handleSubmitDownloadImage(processImageName(selectedThumbnail))} className="mac" />
     </div>
   );
 };

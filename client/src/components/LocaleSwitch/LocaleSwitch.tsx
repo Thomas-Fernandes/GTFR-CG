@@ -4,6 +4,7 @@ import { LOCALE_OPTIONS } from "@/common/l10n";
 import { StateSetter } from "@/common/types";
 import { ThemeType } from "@/components/DarkModeProvider/constants";
 import SelectPopover from "@/components/SelectPopover/SelectPopover";
+import { SvgPaths } from "@/constants/media";
 import { useAppContext } from "@/contexts";
 
 import "./LocaleSwitch.scss";
@@ -20,7 +21,7 @@ const LocaleSwitch = () => {
   return (
     <SelectPopover
       title={labels.title}
-      imgSrc={"/svg/locale-circle.svg"}
+      imgSrc={SvgPaths.LocaleCircle}
       options={LOCALE_OPTIONS}
       onSelect={switchLocale as StateSetter<string>}
       className={`locale-switch ${isDarkMode ? ThemeType.Dark : ThemeType.Light}`}

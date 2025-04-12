@@ -1,7 +1,7 @@
 import { ToastType } from "@/constants/toasts";
 import { getToasts } from "@/contexts";
 
-import { icoPaths } from "@/constants/media";
+import { IcoPaths } from "@/constants/media";
 import { sendToast } from "./Toast";
 
 const createSpinnerContainer = (spinnerDiv: HTMLElement, name: string) => {
@@ -13,7 +13,7 @@ const createSpinnerContainer = (spinnerDiv: HTMLElement, name: string) => {
   spinner.classList.add("spinner");
 
   const favicon = document.createElement("img");
-  favicon.src = icoPaths.Genius;
+  favicon.src = IcoPaths.Genius;
   favicon.alt = "genius";
   spinner.appendChild(favicon);
 

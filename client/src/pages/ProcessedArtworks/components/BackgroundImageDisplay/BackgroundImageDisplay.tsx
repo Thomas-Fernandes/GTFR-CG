@@ -7,9 +7,7 @@ const BackgroundImageDisplay = () => {
     <div id="image-container">
       <img src={`${PROCESSED_ARTWORKS_PATH}/${COVER_ART_FILENAME}`} alt={"background thumbnail"} />
 
-      <DownloadButton className="mac"
-        onClick={() => handleSubmitDownloadImage(COVER_ART_FILENAME)}
-      />
+      <DownloadButton onClick={() => handleSubmitDownloadImage(COVER_ART_FILENAME)} className="mac" />
     </div>
   );
 };

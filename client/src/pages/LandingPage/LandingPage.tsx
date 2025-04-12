@@ -6,7 +6,7 @@ import ActionButton from "@/components/ActionButton/ActionButton";
 import ImgButton from "@/components/ImgButton/ImgButton";
 import ToastContainer from "@/components/ToastContainer/ToastContainer";
 import TopBotSpacer from "@/components/TopBotSpacer/TopBotSpacer";
-import { gifPaths, imgPaths } from "@/constants/media";
+import { GifPaths, ImgPaths } from "@/constants/media";
 import { ViewPaths } from "@/constants/paths";
 import { useAppContext } from "@/contexts";
 
@@ -44,15 +44,16 @@ const LandingPage = () => {
               <span className="white">{"mprend"}</span>
               <span className="red">{"re"}</span>
             </div>
-
-            <div className="landing-page--content--left--buttons">
-              <ActionButton
-                newTabLink
-                onClick={() => window.open("https://github.com/Thomas-Fernandes/GTFR-CG")}
-                label={labels.learnMore}
-              />
-
-              <ActionButton onClick={() => navigate(ViewPaths.Home)} label={labels.generateContent} />
+            <div className="landing-page--content--left--motto--phrase">
+              <span className="blue">{"les chan"}</span>
+              <span className="white">{"sons du"}</span>
+              <span className="red">&nbsp;{"monde"}</span>
+            </div>
+            <div className="landing-page--content--left--motto--brand">
+              <span>
+                {"Genius traductions françaises "}
+                {"Content Generator"}
+              </span>
             </div>
           </div>
 
@@ -67,9 +68,9 @@ const LandingPage = () => {
           </div>
         </div>
         <div className="landing-page--content--right">
-          <img src={imgPaths.Logo} alt="gtfr" />
+          <img src={ImgPaths.Logo} alt="gtfr" />
           <ImgButton
-            src={gifPaths.Landing}
+            src={GifPaths.Landing}
             alt="video"
             onClick={() => window.open("https://www.youtube.com/@geniustraductionsfrancaises")}
             overlayText={labels.overlayText}

@@ -37,6 +37,6 @@ export interface GenerateCardsProps {
 }
 
 export interface CardsGenerationFormProps {
-  setCardPaths: StateSetter<string[]>,
-  setCards: StateSetter<CardData[]>
+  setCardPaths: StateSetter<string[]>;
+  setCards: StateSetter<CardData[]>;
 }

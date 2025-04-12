@@ -1,4 +1,3 @@
-
 import { StateSetter } from "@/common/types";
 
 export interface ItunesImageRequest {

@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+import { SvgPaths } from "@/constants/media";
+
 import { ActionButtonProps } from "./types";
 
 import "./ActionButton.scss";
@@ -17,7 +19,7 @@ const ActionButton = ({ label, className, newTabLink, ...props }: ActionButtonPr
     >
       <span className="action-button--label">{label}</span>
       {newTabLink && (
-        <img src={"/svg/new-tab.svg"} alt={"new-tab"} className={`action-button--icon ${isHovered ? "hovered" : ""}`} />
+        <img src={SvgPaths.NewTab} alt={"new-tab"} className={`action-button--icon ${isHovered ? "hovered" : ""}`} />
       )}
     </button>
   );

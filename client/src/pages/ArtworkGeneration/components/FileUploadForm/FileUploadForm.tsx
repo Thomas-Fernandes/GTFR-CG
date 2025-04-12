@@ -39,7 +39,7 @@ const FileUploadForm = () => {
       <label htmlFor="local--selectors" className="hidden">
         {"Selectors"}
       </label>
-      <div className="local--selectors" id="local--selectors">
+      <div id="local--selectors" className="local--selectors">
         <FileUploader id="background-image" label={labels.fileUploadButton} accept="image/*" setter={setLocalFile} />
         <Checkbox
           id="include_center_artwork"
@@ -53,7 +53,7 @@ const FileUploadForm = () => {
       <label htmlFor={SpinnerId.FileUpload} className="hidden">
         {"Upload button"}
       </label>
-      <div className="submit" id={SpinnerId.FileUpload}>
+      <div id={SpinnerId.FileUpload} className="submit">
         <ActionButton type="submit" label={labels.submit} className="spaced" />
       </div>
     </form>

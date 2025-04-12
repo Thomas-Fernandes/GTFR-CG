@@ -11,26 +11,27 @@ const StatisticsHorizontal = ({ statistics }: StatisticsProps) => {
   return (
     <>
       <div className="stats-board--sep__h">
-        { statistics.map((_, i) => (i + 1 !== statistics.length && // n-1 separators
-          <hr key={`hr_${i}`} />
-        ))}
+        {statistics.map(
+          (_, i) =>
+            i + 1 !== statistics.length && ( // n-1 separators
+              <hr key={`hr_${i}`} />
+            )
+        )}
       </div>
       <div className="stats-board--stats">
         <div className="stats-board--stats--titles">
-          { statistics.map((stat, i) => (
-            <span key={`stat-title_${i}`}>
-              {stat.label}
-            </span>
+          {statistics.map((stat, i) => (
+            <span key={`stat-title_${i}`}>{stat.label}</span>
           ))}
         </div>
         <div className={`stats-board--stats--values ${isInitialized(statistics[2].value) ? "initialized" : ""}`}>
-          { statistics.map((stat, i) => (
+          {statistics.map((stat, i) => (
             <span key={`stat-value_${i}`} id={stat.spinnerId}>
               <p
-                className={
-                  `${isInitialized(stat.value) ? "" : "opacity-0 hidden-v"}
-                  ${stat.value.includes("/") ? "datetime" : ""}`
-                }
+                className={`
+                  ${isInitialized(stat.value) ? "" : "opacity-0 hidden-v"}
+                  ${stat.value.includes("/") ? "datetime" : ""}
+                `}
               >
                 {getStatDisplayValue(stat.value)}
               </p>
@@ -45,27 +46,23 @@ const StatisticsHorizontal = ({ statistics }: StatisticsProps) => {
 const StatisticsVertical = ({ statistics }: StatisticsProps) => {
   return (
     <>
-      { statistics.map((stat, i) => (
+      {statistics.map((stat, i) => (
         <div key={`stat-title_${i}`} className="stats-board__v">
           <div className="stats-board--title">
-            <span>
-              {stat.label}
-            </span>
+            <span>{stat.label}</span>
           </div>
 
           <div className="stats-board--value">
             <span id={stat.spinnerId} className={`${isInitialized(stat.value) ? "" : "opacity-0 hidden-v"}`}>
-              <p className={stat.value.includes("/") ? "datetime" : ""}>
-                {getStatDisplayValue(stat.value)}
-              </p>
+              <p className={stat.value.includes("/") ? "datetime" : ""}>{getStatDisplayValue(stat.value)}</p>
             </span>
           </div>
 
-          { i + 1 !== statistics.length &&
+          {i + 1 !== statistics.length && (
             <div className="stats-board--sep">
               <hr />
             </div>
-          }
+          )}
         </div>
       ))}
     </>
@@ -90,10 +87,11 @@ const StatisticsBoard = ({ stats }: StatisticsBoardProps) => {
 
   return (
     <div className="stats-board">
-      { isDesktop
-      ? <StatisticsHorizontal statistics={statsToDisplay} />
-      : <StatisticsVertical   statistics={statsToDisplay} />
-      }
+      {isDesktop ? (
+        <StatisticsHorizontal statistics={statsToDisplay} />
+      ) : (
+        <StatisticsVertical statistics={statsToDisplay} />
+      )}
     </div>
   );
 };
