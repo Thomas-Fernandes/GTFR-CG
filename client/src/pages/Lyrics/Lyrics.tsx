@@ -11,12 +11,12 @@ import { SessionStorage } from "@/constants/browser";
 import { ViewPaths } from "@/constants/paths";
 import { useAppContext } from "@/contexts";
 
+import GenerationModeFlipper from "./components/GenerationModeFlipper/GenerationModeFlipper";
+import { handleLoadLastContents } from "./components/LyricsPartsForm/components/LyricsPart/handlers";
+import LyricsPartsForm from "./components/LyricsPartsForm/LyricsPartsForm";
+import LyricsSearchForm from "./components/LyricsSearchForm/LyricsSearchForm";
+import ManualGenerationInputBar from "./components/ManualGenerationInputBar/ManualGenerationInputBar";
 import { LyricsContext } from "./contexts";
-import GenerationModeFlipper from "./GenerationModeFlipper";
-import { handleLoadLastContents } from "./handlers";
-import LyricsPartsForm from "./LyricsPartsForm";
-import LyricsSearchForm from "./LyricsSearchForm";
-import ManualGenerationInputBar from "./ManualGenerationInputBar";
 import { isTokenSet } from "./requests";
 import { LyricsContents, LyricsPartType, PageMetadata } from "./types";
 

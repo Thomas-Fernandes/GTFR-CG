@@ -5,8 +5,9 @@ import { API, BACKEND_URL } from "@/constants/paths";
 import { ToastType } from "@/constants/toasts";
 import { getToasts } from "@/contexts";
 
+import { Statistics, StatisticsResponse } from "./components/StatisticsBoard/types";
 import { hideAllStatsSpinners, showAllStatsSpinners } from "./spinners";
-import { GeniusTokenResponse, Statistics, StatisticsResponse } from "./types";
+import { GeniusTokenResponse } from "./types";
 
 export const getStatistics = (setStats: StateSetter<Statistics>) => {
   showAllStatsSpinners();

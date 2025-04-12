@@ -1,9 +1,9 @@
-import { Dict, SongPartsCards, ValidationError, ValidationInconvenience, ValidationWarning } from "@/common/types";
+import { SongPartsCards, ValidationError, ValidationInconvenience, ValidationWarning } from "@/common/types";
+import { LyricsPartType } from "@/pages/Lyrics/types";
 
 import { CONTENT_THRESHOLDS } from "./constants";
-import { LyricsPartType, PageMetadata } from "./types";
 
-export const getLinePixelLength = (line: string) => {
+const getLinePixelLength = (line: string) => {
   const span = document.createElement("span");
   span.style.font = "16px Arial";
   span.style.visibility = "hidden";
@@ -29,13 +29,17 @@ export const validateSongParts = (songParts: SongPartsCards, lyricsParts: Lyrics
         errors.push({
           where: `lyrics-part_${lyricsPartIdx}`,
           what: ValidationError.VerticalOverflow,
-          message: `Card ${cardIdx + 1} in section ${sectionIdx + 1} has more than ${CONTENT_THRESHOLDS.LINES.ERROR} lines.`,
+          message:
+            `Card ${cardIdx + 1} in section ${sectionIdx + 1} ` +
+            `has more than ${CONTENT_THRESHOLDS.LINES.ERROR} lines.`,
         });
       } else if (linesCount > CONTENT_THRESHOLDS.LINES.WARNING) {
         errors.push({
           where: `lyrics-part_${sectionIdx}`,
           what: ValidationWarning.VerticalOverflow,
-          message: `Card ${cardIdx + 1} in section ${sectionIdx + 1} has more than ${CONTENT_THRESHOLDS.LINES.WARNING} lines.`,
+          message:
+            `Card ${cardIdx + 1} in section ${sectionIdx + 1} ` +
+            `has more than ${CONTENT_THRESHOLDS.LINES.WARNING} lines.`,
         });
       }
 
@@ -46,7 +50,9 @@ export const validateSongParts = (songParts: SongPartsCards, lyricsParts: Lyrics
         errors.push({
           where: `lyrics-part_${sectionIdx}`,
           what: ValidationError.HorizontalOverflow,
-          message: `Card ${cardIdx + 1} in section ${sectionIdx + 1} has a very long line (${getLinePixelLength(line)}px).`,
+          message:
+            `Card ${cardIdx + 1} in section ${sectionIdx + 1} ` +
+            `has a very long line (${getLinePixelLength(line)}px).`,
         });
       });
       const allLongLines = lines
@@ -56,7 +62,8 @@ export const validateSongParts = (songParts: SongPartsCards, lyricsParts: Lyrics
         errors.push({
           where: `lyrics-part_${sectionIdx}`,
           what: ValidationWarning.HorizontalOverflow,
-          message: `Card ${cardIdx + 1} in section ${sectionIdx + 1} has a long line (${getLinePixelLength(line)}px).`,
+          message:
+            `Card ${cardIdx + 1} in section ${sectionIdx + 1} ` + `has a long line (${getLinePixelLength(line)}px).`,
         });
       });
     });
@@ -67,14 +74,6 @@ export const validateSongParts = (songParts: SongPartsCards, lyricsParts: Lyrics
     errors.push({ where: "", what: ValidationError.More, message: "and more..." });
   }
   return errors;
-};
-
-export const strArrToMetadata = (metadata: string[]): PageMetadata => {
-  return metadata.reduce((acc: PageMetadata, curr) => {
-    const [key, value] = curr.split(": ");
-    (acc as Dict)[key] = value;
-    return acc;
-  }, {} as PageMetadata);
 };
 
 export const convertToCardContents = (lyricsParts: LyricsPartType[], dismissedParts: Set<number>): SongPartsCards => {

@@ -11,10 +11,10 @@ import TopBotSpacer from "@/components/TopBotSpacer/TopBotSpacer";
 import { ViewPaths } from "@/constants/paths";
 import { useAppContext } from "@/contexts";
 
-import { defaultStatistics } from "./constants";
+import { defaultStatistics } from "./components/StatisticsBoard/constants";
+import StatisticsBoard from "./components/StatisticsBoard/StatisticsBoard";
+import { Statistics } from "./components/StatisticsBoard/types";
 import { getGeniusToken, getStatistics } from "./requests";
-import StatisticsBoard from "./StatisticsBoard";
-import { Statistics } from "./types";
 
 import "./Home.scss";
 

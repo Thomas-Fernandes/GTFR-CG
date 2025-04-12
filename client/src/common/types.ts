@@ -42,4 +42,4 @@ export type ValidationInconvenience = {
 
 export type StateSetter<T> = Dispatch<SetStateAction<T>>;
 
-export type Dict = { [key: string]: unknown };
+export type Dict = Record<string, unknown>;

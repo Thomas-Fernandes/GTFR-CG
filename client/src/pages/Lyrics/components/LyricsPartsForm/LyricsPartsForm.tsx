@@ -3,10 +3,10 @@ import { useState } from "react";
 import ActionButton from "@/components/ActionButton/ActionButton";
 import { SpinnerId } from "@/constants/spinners";
 import { useAppContext } from "@/contexts";
+import { useLyricsContext } from "@/pages/Lyrics/contexts";
 
-import { useLyricsContext } from "./contexts";
+import LyricsPart from "./components/LyricsPart/LyricsPart";
 import { handleLyricsSaveSubmit } from "./handlers";
-import LyricsPart from "./LyricsPart";
 import { LyricsPartsFormProps } from "./types";
 import { convertToCardContents } from "./utils";
 

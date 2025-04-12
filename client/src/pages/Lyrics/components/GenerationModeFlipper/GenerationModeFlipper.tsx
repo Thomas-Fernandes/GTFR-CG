@@ -1,8 +1,9 @@
 import { ContentsGenerationMode } from "@/common/types";
 import { useAppContext } from "@/contexts";
+import { useLyricsContext } from "@/pages/Lyrics/contexts";
+import { LyricsPartType, PageMetadata } from "@/pages/Lyrics/types";
 
-import { useLyricsContext } from "./contexts";
-import { GenerationModeFlipperProps, LyricsPartType, PageMetadata } from "./types";
+import { GenerationModeFlipperProps } from "./types";
 
 const GenerationModeFlipper = ({ className, ...props }: GenerationModeFlipperProps) => {
   const { intl } = useAppContext();

@@ -1,8 +1,8 @@
 import ActionButton from "@/components/ActionButton/ActionButton";
 import { SpinnerId } from "@/constants/spinners";
 import { useAppContext } from "@/contexts";
+import { useLyricsContext } from "@/pages/Lyrics/contexts";
 
-import { useLyricsContext } from "./contexts";
 import { handleLyricsSearchSubmit } from "./handlers";
 
 import "./LyricsSearchForm.scss";

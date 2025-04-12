@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 
 import { AutoResizeTextarea } from "@/components/AutoResizeTextarea/AutoResizeTextarea";
 import { useAppContext } from "@/contexts";
+import { useLyricsContext } from "@/pages/Lyrics/contexts";
 
-import { useLyricsContext } from "./contexts";
 import { handleRestorePart, handleSetDismissedParts, handleSetLyricsParts } from "./handlers";
 import { LyricsPartProps } from "./types";
 

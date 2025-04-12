@@ -1,6 +1,6 @@
 import { useAppContext } from "@/contexts";
 
-import { useLyricsContext } from "./contexts";
+import { useLyricsContext } from "@/pages/Lyrics/contexts";
 
 import "./ManualGenerationInputBar.scss";
 
