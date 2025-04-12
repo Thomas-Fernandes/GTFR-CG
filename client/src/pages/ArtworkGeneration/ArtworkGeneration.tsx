@@ -62,16 +62,18 @@ const ArtworkGeneration = () => {
           label={generationOptionState.prevLabel}
         />
 
-        {generationOptions.map(({ content, className }, i) => (
+        {generationOptions.map(({ content: ContentComponentFunction, className }, i) => (
           <div
             key={i}
-            className="artwork-generation--snapper"
             onMouseOver={() => handleOnMouseOver(generationOptions, i, setGenerationOptionState)}
+            className="artwork-generation--snapper"
           >
             <div className="artwork-generation--snapper--wrapper">
               <div className={`${className} ${className.endsWith("--itunes") && itunesResults.length ? "padded" : ""}`}>
                 <ArtworkGenerationContext.Provider value={contextValue}>
-                  {className.endsWith("--itunes") ? content(itunesResults, setItunesResults) : content()}
+                  {className.endsWith("--itunes")
+                    ? ContentComponentFunction(itunesResults, setItunesResults)
+                    : ContentComponentFunction()}
                 </ArtworkGenerationContext.Provider>
               </div>
             </div>

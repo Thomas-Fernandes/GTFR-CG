@@ -3,8 +3,8 @@ import { useRef, useState } from "react";
 import { AutoResizeTextarea } from "@/components/AutoResizeTextarea/AutoResizeTextarea";
 import { SpinnerId } from "@/constants/spinners";
 import { useAppContext } from "@/contexts";
+import { useCardsGalleryContext, useCardsGenerationContext } from "@/pages/CardsGeneration/contexts";
 
-import { useCardsGalleryContext, useCardsGenerationContext } from "./contexts";
 import { handleSaveModal } from "./handlers";
 import { handleMouseDown, handleMouseUp, handleOverlayClick } from "./mouse";
 

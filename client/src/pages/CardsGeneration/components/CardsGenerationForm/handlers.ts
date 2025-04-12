@@ -7,32 +7,10 @@ import { ACCEPTED_IMG_EXTENSIONS } from "@/constants/files";
 import { SpinnerId } from "@/constants/spinners";
 import { ToastType } from "@/constants/toasts";
 import { getToasts } from "@/contexts";
+import { generateFormData } from "@/pages/CardsGeneration/utils";
 
-import { postGenerateCards, postGenerateSingleCard } from "./requests";
-import { CardData, CardsGenerationRequest, HandleGenerateCardsProps, HandleSaveModalProps } from "./types";
-import { generateFormData } from "./utils";
-
-export const handleSaveModal = (
-  currentCard: CardData | null, isModalSaving: boolean,
-  props: HandleSaveModalProps
-) => {
-  const toasts = getToasts();
-  const { generationProps, newLyrics, generateSingleCardProps } = props;
-
-  if (currentCard === null) {
-    sendToast(toasts.CardGen.CardEditFailed, ToastType.Error);
-    return;
-  }
-
-  if (isModalSaving) {
-    sendToast(toasts.CardGen.CardEditInProgress, ToastType.Warn);
-    return;
-  }
-
-  if (generationProps.colorPick === "")
-    generationProps.colorPick = generationProps.cardBottomColor;
-  postGenerateSingleCard(generationProps, newLyrics, generateSingleCardProps);
-};
+import { postGenerateCards } from "./requests";
+import { CardsGenerationRequest, HandleGenerateCardsProps } from "./types";
 
 export const handleGenerateCards = (
   e: FormEvent<HTMLFormElement>, body: CardsGenerationRequest,

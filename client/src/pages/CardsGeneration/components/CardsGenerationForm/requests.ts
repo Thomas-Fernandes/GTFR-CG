@@ -13,55 +13,9 @@ import { OUTRO_FILENAME, PROCESSED_CARDS_PATH } from "./constants";
 import {
   CardsGenerationRequest,
   CardsGenerationResponse,
-  GenerateCardsProps,
-  GenerateSingleCardProps,
-  SingleCardGenerationRequest
+  GenerateCardsProps
 } from "./types";
-import { deduceNewCards, generateFormData, updateCard } from "./utils";
-
-export const postGenerateSingleCard = (
-  generationProps: CardsGenerationRequest, newLyrics: string,
-  props: GenerateSingleCardProps
-) => {
-  const toasts = getToasts();
-  const { setIsModalSaving, currentCard, setCards, closeModal } = props;
-
-  setIsModalSaving(true);
-  showSpinner(SpinnerId.CardsGenerateSingle);
-
-  const cardFilename = currentCard.imgSrc.split('?')[0] ?? "card";
-  const body: SingleCardGenerationRequest = {
-    ...generationProps,
-    cardsContents: newLyrics.split("\n"),
-    cardFilename: cardFilename,
-  }
-  const formData = new FormData();
-  generateFormData(body, formData);
-
-  sendRequest(
-    RestVerb.Post,
-    BACKEND_URL + API.CARDS_GENERATION.GENERATE_SINGLE_CARD,
-    formData
-  ).then((response: ApiResponse) => {
-    if (!is2xxSuccessful(response.status)) {
-      console.error(response.message);
-      sendToast(response.message, ToastType.Error);
-      return;
-    }
-
-    updateCard(setCards, currentCard, newLyrics, cardFilename);
-
-    const toastMsg = `${toasts.CardGen.CardEdited}: ${(currentCard.id < 10 ? "0" : "")}${currentCard.id}.png`;
-    sendToast(toastMsg, ToastType.Success);
-  }).catch((error) => {
-    console.error("Failed to upload text:", error);
-    sendToast(toasts.CardGen.CardEditFailed, ToastType.Error);
-  }).finally(() => {
-    hideSpinner(SpinnerId.CardsGenerateSingle);
-    setIsModalSaving(false);
-    closeModal();
-  });
-};
+import { deduceNewCards } from "./utils";
 
 export const postGenerateCards = (
   body: CardsGenerationRequest, formData: FormData,

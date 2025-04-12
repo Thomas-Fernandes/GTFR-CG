@@ -12,8 +12,8 @@ import { SessionStorage } from "@/constants/browser";
 import { ViewPaths } from "@/constants/paths";
 import { useAppContext } from "@/contexts";
 
-import CardsGallery from "./CardsGallery";
-import CardsGenerationForm from "./CardsGenerationForm";
+import CardsGallery from "./components/CardsGallery/CardsGallery";
+import CardsGenerationForm from "./components/CardsGenerationForm/CardsGenerationForm";
 import { CardsGenerationContext, CardsGenerationFormContext } from "./contexts";
 import { CardData } from "./types";
 

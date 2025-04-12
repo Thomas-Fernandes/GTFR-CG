@@ -7,8 +7,8 @@ import DownloadButton from "@/components/DownloadButton/DownloadButton";
 import ImgWithOverlay from "@/components/ImgWithOverlay/ImgWithOverlay";
 import { ToastType } from "@/constants/toasts";
 import { useAppContext } from "@/contexts";
+import { useCardsGalleryContext } from "@/pages/CardsGeneration/contexts";
 
-import { useCardsGalleryContext } from "./contexts";
 import { CardViewProps } from "./types";
 
 import "./CardView.scss";

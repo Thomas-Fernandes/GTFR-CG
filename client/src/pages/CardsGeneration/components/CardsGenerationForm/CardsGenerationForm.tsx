@@ -5,14 +5,14 @@ import ColorPicker from "@/components/ColorPicker/ColorPicker";
 import FileUploader from "@/components/FileUploader/FileUploader";
 import { SpinnerId } from "@/constants/spinners";
 import { useAppContext } from "@/contexts";
+import { useCardsGenerationContext, useCardsGenerationFormContext } from "@/pages/CardsGeneration/contexts";
 
-import { useCardsGenerationContext, useCardsGenerationFormContext } from "./contexts";
 import { handleGenerateCards, handleUnauthorizedCheckbox } from "./handlers";
 import { CardsGenerationFormProps } from "./types";
 
 import "./CardsGenerationForm.scss";
 
-const CardsGenerationForm: React.FC<CardsGenerationFormProps> = ({ setCardPaths, setCards }) => {
+const CardsGenerationForm = ({ setCardPaths, setCards }: CardsGenerationFormProps) => {
   const { intl } = useAppContext();
   const labels = {
     metanamePlaceholder: intl.formatMessage({ id: "pages.cardgen.textFields.metanamePlaceholder" }),

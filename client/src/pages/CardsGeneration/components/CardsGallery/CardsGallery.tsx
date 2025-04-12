@@ -3,12 +3,13 @@ import { useMemo, useState } from "react";
 import { downloadFilesAsZip } from "@/common/utils/fileUtils";
 import CardStack from "@/components/CardStack/CardStack";
 import { useAppContext } from "@/contexts";
+import { CardsGalleryContext } from "@/pages/CardsGeneration/contexts";
+import { CardData } from "@/pages/CardsGeneration/types";
 
-import CardEditModal from "./CardEditModal";
-import CardView from "./CardView";
+import CardEditModal from "./components/CardEditModal/CardEditModal";
+import CardView from "./components/CardView/CardView";
 import { CARDS_ZIP_FILENAME } from "./constants";
-import { CardsGalleryContext } from "./contexts";
-import { CardData, CardsGalleryProps } from "./types";
+import { CardsGalleryProps } from "./types";
 
 import "./CardsGallery.scss";
 
