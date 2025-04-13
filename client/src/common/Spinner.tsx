@@ -1,6 +1,7 @@
 import { ToastType } from "@/constants/toasts";
 import { getToasts } from "@/contexts";
 
+import { IcoPaths } from "@/constants/media";
 import { sendToast } from "./Toast";
 
 const createSpinnerContainer = (spinnerDiv: HTMLElement, name: string) => {
@@ -12,7 +13,7 @@ const createSpinnerContainer = (spinnerDiv: HTMLElement, name: string) => {
   spinner.classList.add("spinner");
 
   const favicon = document.createElement("img");
-  favicon.src = "/ico/genius.ico";
+  favicon.src = IcoPaths.Genius;
   favicon.alt = "genius";
   spinner.appendChild(favicon);
 
@@ -31,8 +32,9 @@ export const showSpinner = (name: string) => {
   const spinnerDiv = document.getElementById(name);
 
   // Create spinner container if it doesn't exist
-  if (spinnerDiv?.querySelector(".spinner-container") === null)
+  if (spinnerDiv?.querySelector(".spinner-container") === null) {
     createSpinnerContainer(spinnerDiv, name);
+  }
 
   // Show the spinner
   const spinnerContainer = spinnerDiv?.querySelector(".spinner-container") as HTMLDivElement;
@@ -47,11 +49,11 @@ export const showSpinner = (name: string) => {
     spinnerContainer.style.display = "block";
     spinnerContainer.style.alignSelf = "center";
   }
-}
+};
 
 export const hideSpinner = (name: string) => {
   const spinnerContainer = document.getElementById(`spinner-container-${name}`);
   if (spinnerContainer) {
     spinnerContainer.style.display = "none";
   }
-}
+};

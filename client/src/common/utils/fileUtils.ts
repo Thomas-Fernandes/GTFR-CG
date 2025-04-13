@@ -18,7 +18,7 @@ export const downloadFilesAsZip = async (filepaths: string[], outputFilepath: st
         }
 
         const blob = await response.blob();
-        const fileName = (filepath.split('/').pop() ?? "").split('?')[0] ?? "img";
+        const fileName = (filepath.split("/").pop() ?? "").split("?")[0] ?? "img";
 
         zip.file(fileName, blob);
       } catch (err) {
@@ -34,10 +34,10 @@ export const downloadFilesAsZip = async (filepaths: string[], outputFilepath: st
 };
 
 export const downloadFile = (filepath: string) => {
-  const filename = filepath.split('/').pop();
+  const filename = filepath.split("/").pop();
 
   const link = document.createElement("a");
-  link.download = filename ? filename.split('?')[0] : "card.png";
+  link.download = filename ? filename.split("?")[0] : "card.png";
   link.href = filepath;
   document.body.appendChild(link);
 
@@ -52,7 +52,7 @@ export const downloadFile = (filepath: string) => {
 };
 
 export const isFileExtensionAccepted = (fileName: string, acceptedExtensions: string[]): boolean => {
-  return acceptedExtensions.includes(fileName.split('.').slice(-1)[0].toLowerCase());
+  return acceptedExtensions.includes(fileName.split(".").slice(-1)[0].toLowerCase());
 };
 
 export const doesFileExist = async (fileName: string): Promise<boolean> => {

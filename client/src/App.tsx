@@ -40,7 +40,7 @@ const App = () => {
         </Routes>
       </AppContext.Provider>
     </Router>
-  )
-}
+  );
+};
 
-export default App
+export default App;

@@ -11,9 +11,9 @@ import TopBotSpacer from "@/components/TopBotSpacer/TopBotSpacer";
 import { ViewPaths } from "@/constants/paths";
 import { useAppContext } from "@/contexts";
 
-import BackgroundImageDisplay from "./BackgroundImageDisplay";
+import BackgroundImageDisplay from "./components/BackgroundImageDisplay/BackgroundImageDisplay";
+import ThumbnailGallery from "./components/ThumbnailGallery/ThumbnailGallery";
 import { COVER_ART_FILENAME, LOGO_POSITIONS, PROCESSED_ARTWORKS_PATH } from "./constants";
-import ThumbnailGallery from "./ThumbnailGallery";
 import { processImageName } from "./utils";
 
 import "./ProcessedArtworks.scss";
@@ -34,12 +34,13 @@ const ProcessedArtworks = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // also allows a reality check on the processed images for the view to load with the correct images
     doesFileExist(`${PROCESSED_ARTWORKS_PATH}/${COVER_ART_FILENAME}`).then((coverArtImageExists: boolean) => {
       if (!coverArtImageExists) {
         navigate(
-          `${ViewPaths.Redirect}`
-          + `?redirect_to=${ViewPaths.ArtworkGeneration}`
-          + `&error_text=${toasts.Redirect.NoProcessedImage}`
+          `${ViewPaths.Redirect}` +
+            `?redirect_to=${ViewPaths.ArtworkGeneration}` +
+            `&error_text=${toasts.Redirect.NoProcessedImage}`
         );
       }
     });
@@ -47,9 +48,9 @@ const ProcessedArtworks = () => {
       doesFileExist(`${PROCESSED_ARTWORKS_PATH}/${processImageName(position)}`).then((logoExists: boolean) => {
         if (!logoExists) {
           navigate(
-            `${ViewPaths.Redirect}`
-            + `?redirect_to=${ViewPaths.ArtworkGeneration}`
-            + `&error_text=${toasts.Redirect.NoProcessedImage}`
+            `${ViewPaths.Redirect}` +
+              `?redirect_to=${ViewPaths.ArtworkGeneration}` +
+              `&error_text=${toasts.Redirect.NoProcessedImage}`
           );
         }
       });
@@ -77,7 +78,7 @@ const ProcessedArtworks = () => {
 
       <TopBotSpacer />
     </div>
-  )
+  );
 };
 
 export default ProcessedArtworks;

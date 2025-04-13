@@ -19,6 +19,7 @@ from src.routes.artwork_processing.pillow import generateCoverArt, generateThumb
 
 bp_artwork_processing_process_artworks = Blueprint("process-artworks", __name__.split('.')[-1])
 
+
 @ns_artwork_processing.route("/process-artworks")
 class ProcessArtworkResource(Resource):
     @ns_artwork_processing.doc("post_process_images")
@@ -27,7 +28,7 @@ class ProcessArtworkResource(Resource):
     @ns_artwork_processing.response(HttpStatus.BAD_REQUEST, locale.get(Error.NO_IMG))
     @ns_artwork_processing.response(HttpStatus.PRECONDITION_FAILED, locale.get(Error.OVERLAY_NOT_FOUND))
     def post(self) -> Response:
-        """ Renders the processed background image and thumbnails """
+        """Renders the processed background image and thumbnails"""
         if SessionFields.GENERATED_ARTWORK_PATH not in session:
             log.error(f"Error in session: {locale.get(Error.NO_IMG)}")
             return createApiResponse(HttpStatus.PRECONDITION_FAILED, locale.get(Error.NO_IMG))
@@ -44,7 +45,9 @@ class ProcessArtworkResource(Resource):
         if err:
             return createApiResponse(HttpStatus.PRECONDITION_FAILED, err)
         center_mark = "with" if include_center_artwork else "without"
-        log.info(f"Images generation ({center_mark} center artwork) complete.").time(SeverityLevel.INFO, time() - start)
+        log.info(
+            f"Images generation ({center_mark} center artwork) complete."
+        ).time(SeverityLevel.INFO, time() - start)
         updateStats(to_increment=AvailableStats.ARTWORK_GENERATIONS)
 
         return createApiResponse(HttpStatus.CREATED, locale.get(Success.PROCESSED_IMAGES_SUCCESS))

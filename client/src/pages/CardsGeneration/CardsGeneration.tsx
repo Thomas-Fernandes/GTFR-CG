@@ -12,8 +12,8 @@ import { SessionStorage } from "@/constants/browser";
 import { ViewPaths } from "@/constants/paths";
 import { useAppContext } from "@/contexts";
 
-import CardsGallery from "./CardsGallery";
-import CardsGenerationForm from "./CardsGenerationForm";
+import CardsGallery from "./components/CardsGallery/CardsGallery";
+import CardsGenerationForm from "./components/CardsGenerationForm/CardsGenerationForm";
 import { CardsGenerationContext, CardsGenerationFormContext } from "./contexts";
 import { CardData } from "./types";
 
@@ -29,7 +29,9 @@ const CardsGeneration = () => {
   useTitle(labels.title);
 
   const [cardMetaname, setCardMetaname] = useState(sessionStorage.getItem(SessionStorage.CardMetaname) ?? "");
-  const [outroContributors, setOutroContributors] = useState(JSON.parse(sessionStorage.getItem(SessionStorage.OutroContributors) ?? "[]")?.join(", "));
+  const [outroContributors, setOutroContributors] = useState(
+    JSON.parse(sessionStorage.getItem(SessionStorage.OutroContributors) ?? "[]")?.join(", ")
+  );
   const cardMethod = sessionStorage.getItem(SessionStorage.CardMethod) ?? ContentsGenerationMode.Auto;
   const cardBottomColor = sessionStorage.getItem(SessionStorage.CardBottomColor) ?? "";
 
@@ -46,16 +48,43 @@ const CardsGeneration = () => {
 
   const formContextValue = useMemo(
     () => ({
-      outroContributors, setOutroContributors, setBgImg, setColorPick, setIncludeCenterArtwork,
-      setGenerateOutro, setIncludeBackgroundImg, generationInProgress, setGenerationInProgress
-    }), []
+      outroContributors,
+      setOutroContributors,
+      setBgImg,
+      setColorPick,
+      setIncludeCenterArtwork,
+      setGenerateOutro,
+      setIncludeBackgroundImg,
+      generationInProgress,
+      setGenerationInProgress,
+    }),
+    []
   );
   const contextValue = useMemo(
     () => ({
-      cardMethod, cardMetaname, setCardMetaname,
-      bgImg, colorPick, includeCenterArtwork, generateOutro, includeBackgroundImg, cardBottomColor, generationInProgress
+      cardMethod,
+      cardMetaname,
+      setCardMetaname,
+      bgImg,
+      colorPick,
+      includeCenterArtwork,
+      generateOutro,
+      includeBackgroundImg,
+      cardBottomColor,
+      generationInProgress,
     }),
-    [cardMethod, cardMetaname, bgImg, colorPick, includeCenterArtwork, generateOutro, includeBackgroundImg, cardBottomColor, generationInProgress, cards]
+    [
+      cardMethod,
+      cardMetaname,
+      bgImg,
+      colorPick,
+      includeCenterArtwork,
+      generateOutro,
+      includeBackgroundImg,
+      cardBottomColor,
+      generationInProgress,
+      cards,
+    ]
   );
 
   return (
@@ -77,7 +106,7 @@ const CardsGeneration = () => {
         </CardsGenerationFormContext.Provider>
       </CardsGenerationContext.Provider>
 
-      { cardPaths.length > 0 &&
+      {cardPaths.length > 0 && (
         <>
           <hr className="my-4" />
 
@@ -85,28 +114,27 @@ const CardsGeneration = () => {
             <CardsGallery id="cards" initialCards={cards} />
           </CardsGenerationContext.Provider>
         </>
-      }
-      { generationInProgress &&
+      )}
+      {generationInProgress && (
         <>
           <hr className="my-4" />
 
           <ul className="card-gallery--cards skeleton">
-            { getArrayOfSize(window.innerWidth / 320).map((_, idx) =>
-                <li key={`skeleton_${idx}`} className="flex flex-col gap-2">
-                  <div className="card-container skeleton">
-                    <Skeleton className="card-container--card" w="16.9rem" h="10rem" />
-                    <Skeleton className="card-container--card" w="16.9rem" h="2rem"  />
-                  </div>
-                </li>
-              )
-            }
+            {getArrayOfSize(window.innerWidth / 320).map((_, idx) => (
+              <li key={`skeleton_${idx}`} className="flex flex-col gap-2">
+                <div className="card-container skeleton">
+                  <Skeleton w="16.9rem" h="10rem" className="card-container--card" />
+                  <Skeleton w="16.9rem" h="2rem" className="card-container--card" />
+                </div>
+              </li>
+            ))}
           </ul>
         </>
-      }
+      )}
 
       <TopBotSpacer />
     </div>
-  )
+  );
 };
 
 export default CardsGeneration;

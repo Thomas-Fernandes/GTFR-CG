@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 
 import { useLocaleContext } from "@/common/hooks/useLocale/contexts";
 import { useTitle } from "@/common/hooks/useTitle";
-import { Locale } from "@/common/l10n";
 import { NavButtonSide } from "@/components/NavButton/constants";
 import NavButton from "@/components/NavButton/NavButton";
 import ToastContainer from "@/components/ToastContainer/ToastContainer";
@@ -11,11 +10,12 @@ import TopBotSpacer from "@/components/TopBotSpacer/TopBotSpacer";
 import { ViewPaths } from "@/constants/paths";
 import { useAppContext } from "@/contexts";
 
-import { defaultStatistics } from "./constants";
+import { defaultStatistics } from "./components/StatisticsBoard/constants";
+import StatisticsBoard from "./components/StatisticsBoard/StatisticsBoard";
+import { Statistics } from "./components/StatisticsBoard/types";
 import { getGeniusToken, getStatistics } from "./requests";
-import StatisticsBoard from "./StatisticsBoard";
-import { Statistics } from "./types";
 
+import { Locale } from "@/common/types";
 import "./Home.scss";
 
 const Home = () => {
@@ -71,7 +71,9 @@ const Home = () => {
 
       <StatisticsBoard stats={stats} />
 
-      <div className="hidden"> {/* avoid unused variable */}
+      <div className="hidden">
+        {" "}
+        {/* avoid unused variable */}
         <p>{`Genius Token: '${geniusToken}'`}</p>
       </div>
 

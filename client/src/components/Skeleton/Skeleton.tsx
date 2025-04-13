@@ -1,12 +1,13 @@
 import { SkeletonProps } from "./types";
 
-const Skeleton: React.FC<SkeletonProps> = ({ w, h, className }) => {
+const Skeleton = ({ w, h, className }: SkeletonProps) => {
   return (
     <div
       className={`animate-pulse rounded ${className ?? ""}`}
       style={{
-        width: w, height: h,
-        backgroundColor: "rgba(32,32,32,.9)"
+        width: w,
+        height: h,
+        backgroundColor: "rgba(32,32,32,.9)",
       }}
     />
   );

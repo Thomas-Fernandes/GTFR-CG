@@ -11,12 +11,12 @@ import { SessionStorage } from "@/constants/browser";
 import { ViewPaths } from "@/constants/paths";
 import { useAppContext } from "@/contexts";
 
+import GenerationModeFlipper from "./components/GenerationModeFlipper/GenerationModeFlipper";
+import { handleLoadLastContents } from "./components/LyricsPartsForm/components/LyricsPart/handlers";
+import LyricsPartsForm from "./components/LyricsPartsForm/LyricsPartsForm";
+import LyricsSearchForm from "./components/LyricsSearchForm/LyricsSearchForm";
+import ManualGenerationInputBar from "./components/ManualGenerationInputBar/ManualGenerationInputBar";
 import { LyricsContext } from "./contexts";
-import GenerationModeFlipper from "./GenerationModeFlipper";
-import { handleLoadLastContents } from "./handlers";
-import LyricsPartsForm from "./LyricsPartsForm";
-import LyricsSearchForm from "./LyricsSearchForm";
-import ManualGenerationInputBar from "./ManualGenerationInputBar";
 import { isTokenSet } from "./requests";
 import { LyricsContents, LyricsPartType, PageMetadata } from "./types";
 
@@ -52,8 +52,21 @@ const Lyrics = () => {
 
   const contextValue = useMemo(
     () => ({
-      isFetching, setIsFetching, artist, setArtist, songName, setSongName, pageMetadata, setPageMetadata,
-      lyricsParts, setLyricsParts, dismissedParts, setDismissedParts, isManual, setIsManual, navigate
+      isFetching,
+      setIsFetching,
+      artist,
+      setArtist,
+      songName,
+      setSongName,
+      pageMetadata,
+      setPageMetadata,
+      lyricsParts,
+      setLyricsParts,
+      dismissedParts,
+      setDismissedParts,
+      isManual,
+      setIsManual,
+      navigate,
     }),
     [isFetching, artist, songName, pageMetadata, lyricsParts, dismissedParts, isManual, navigate]
   );
@@ -87,34 +100,31 @@ const Lyrics = () => {
 
       <h1>{labels.title}</h1>
 
-      <button type="button" className="medium mac"
-        onClick={() => handleLoadLastContents({lastContents, setPageMetadata, setLyricsParts, setDismissedParts})}
+      <button
+        type="button"
+        onClick={() => handleLoadLastContents({ lastContents, setPageMetadata, setLyricsParts, setDismissedParts })}
+        className="medium mac"
       >
         {labels.loadLast}
       </button>
 
       <LyricsContext.Provider value={contextValue}>
-        { isManual
-          ? <ManualGenerationInputBar />
-          : <LyricsSearchForm />
-        }
+        {isManual ? <ManualGenerationInputBar /> : <LyricsSearchForm />}
 
-        { !isFetching &&
-          <GenerationModeFlipper />
-        }
+        {!isFetching && <GenerationModeFlipper />}
 
-        { !isFetching && lyricsParts.length > 0 &&
+        {!isFetching && lyricsParts.length > 0 && (
           <>
             <hr className="my-8" />
 
             <LyricsPartsForm lyricsParts={lyricsParts} />
           </>
-        }
+        )}
       </LyricsContext.Provider>
 
       <TopBotSpacer />
     </div>
-  )
+  );
 };
 
 export default Lyrics;

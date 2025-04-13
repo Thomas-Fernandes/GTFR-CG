@@ -1,11 +1,6 @@
-import { StateSetter } from "@/common/types";
+import { Option, StateSetter } from "@/common/types";
 
-export type Option = Readonly<{
-  label: string;
-  value: string;
-}>;
-
-export type SelectPopoverProps = Readonly<{
+export interface SelectPopoverProps {
   title?: string;
   label?: string;
   imgSrc?: string;
@@ -13,4 +8,4 @@ export type SelectPopoverProps = Readonly<{
   options: Option[];
   onSelect: StateSetter<string>;
   className?: string;
-}>;
+}

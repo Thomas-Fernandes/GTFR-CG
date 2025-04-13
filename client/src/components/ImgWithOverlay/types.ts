@@ -1,7 +1,7 @@
 import { ComponentPropsWithoutRef } from "react";
 
-export type ImgWithOverlayProps = ComponentPropsWithoutRef<"img"> & Readonly<{
+export type ImgWithOverlayProps = ComponentPropsWithoutRef<"img"> & {
   overlayText: string;
   newTabLink?: boolean;
   className?: string;
-}>;
+};

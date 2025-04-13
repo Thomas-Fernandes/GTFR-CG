@@ -20,8 +20,9 @@ from src.constants.responses import Error, Success
 from src.docs import models, ns_artwork_generation
 from src.utils.web_utils import createApiResponse
 
+
 def extractYoutubeVideoId(url: str) -> Optional[str]:
-    """ Extracts the YouTube video ID from the provided URL
+    """Extracts the YouTube video ID from the provided URL
     :param url: [str] The YouTube URL from which to extract the video ID
     :return: [str | None] The extracted video ID, or None if the URL does not match the expected formats
     """
@@ -31,8 +32,9 @@ def extractYoutubeVideoId(url: str) -> Optional[str]:
             return match.group(1)
     return None
 
+
 def processYoutubeThumbnail(thumbnail_url: str) -> Response:
-    """ Processes the thumbnail from the provided URL, saves it to the server, and updates the session
+    """Processes the thumbnail from the provided URL, saves it to the server, and updates the session
     :param thumbnail_url: [str] The URL of the YouTube thumbnail to be processed
     :return: [Response] Contains the status and path of the processed image
     """
@@ -58,17 +60,25 @@ def processYoutubeThumbnail(thumbnail_url: str) -> Response:
     log.info(f"YouTube thumbnail upload complete and saved it to {image_path}")
     return createApiResponse(HttpStatus.CREATED, locale.get(Success.YOUTUBE_IMAGE_UPLOADED))
 
+
 bp_artwork_generation_youtube_thumbnail = Blueprint("use-youtube-thumbnail", __name__.split('.')[-1])
+
 
 @ns_artwork_generation.route("/use-youtube-thumbnail")
 class YoutubeThumbnailResource(Resource):
     @ns_artwork_generation.doc("post_use_youtube_thumbnail")
     @ns_artwork_generation.expect(models[ROUTES.art_gen.bp_name]["use-youtube-thumbnail"]["payload"])
     @ns_artwork_generation.response(HttpStatus.CREATED, locale.get(Success.YOUTUBE_IMAGE_UPLOADED))
-    @ns_artwork_generation.response(HttpStatus.BAD_REQUEST, "\n".join([locale.get(Error.NO_IMG_URL), locale.get(Error.INVALID_YT_URL)]))
+    @ns_artwork_generation.response(
+        HttpStatus.BAD_REQUEST,
+        "\n".join([
+            locale.get(Error.NO_IMG_URL),
+            locale.get(Error.INVALID_YT_URL)
+        ])
+    )
     @ns_artwork_generation.response(HttpStatus.INTERNAL_SERVER_ERROR, locale.get(Error.FAIL_DOWNLOAD))
     def post(self) -> Response:
-        """ Handles the extraction and processing of a YouTube thumbnail from a given URL """
+        """Handles the extraction and processing of a YouTube thumbnail from a given URL"""
         log.info("POST - Generating artwork using a YouTube thumbnail...")
 
         body = literal_eval(request.get_data(as_text=True))

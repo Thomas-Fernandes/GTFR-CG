@@ -11,10 +11,7 @@ interface ICardsGalleryContext {
   newLyrics: string;
   setNewLyrics: StateSetter<string>;
 }
-const {
-  context: CardsGalleryContext,
-  useContext: useCardsGalleryContext
-} = createNewContext<ICardsGalleryContext>();
+const { context: CardsGalleryContext, useContext: useCardsGalleryContext } = createNewContext<ICardsGalleryContext>();
 
 interface ICardsGenerationFormContext {
   outroContributors: string;
@@ -27,10 +24,8 @@ interface ICardsGenerationFormContext {
   generationInProgress: boolean;
   setGenerationInProgress: StateSetter<boolean>;
 }
-const {
-  context: CardsGenerationFormContext,
-  useContext: useCardsGenerationFormContext
-} = createNewContext<ICardsGenerationFormContext>();
+const { context: CardsGenerationFormContext, useContext: useCardsGenerationFormContext } =
+  createNewContext<ICardsGenerationFormContext>();
 
 interface ICardsGenerationContext {
   cardMethod: string;
@@ -44,13 +39,14 @@ interface ICardsGenerationContext {
   cardBottomColor: string;
   generationInProgress: boolean;
 }
-const {
-  context: CardsGenerationContext,
-  useContext: useCardsGenerationContext
-} = createNewContext<ICardsGenerationContext>();
+const { context: CardsGenerationContext, useContext: useCardsGenerationContext } =
+  createNewContext<ICardsGenerationContext>();
 
 export {
-  CardsGalleryContext, CardsGenerationContext, CardsGenerationFormContext,
-  useCardsGalleryContext, useCardsGenerationContext, useCardsGenerationFormContext
+  CardsGalleryContext,
+  CardsGenerationContext,
+  CardsGenerationFormContext,
+  useCardsGalleryContext,
+  useCardsGenerationContext,
+  useCardsGenerationFormContext,
 };
-

@@ -19,6 +19,7 @@ from src.utils.web_utils import createApiResponse
 
 bp_artwork_generation_itunes_image = Blueprint("use-itunes-image", __name__.split('.')[-1])
 
+
 @ns_artwork_generation.route("/use-itunes-image")
 class ItunesImageResource(Resource):
     @ns_artwork_generation.doc("post_use_itunes_image")
@@ -27,7 +28,7 @@ class ItunesImageResource(Resource):
     @ns_artwork_generation.response(HttpStatus.BAD_REQUEST, locale.get(Error.NO_IMG_URL))
     @ns_artwork_generation.response(HttpStatus.INTERNAL_SERVER_ERROR, locale.get(Error.FAIL_DOWNLOAD))
     def post(self) -> Response:
-        """ Interprets the fetched iTunes URL and saves the image to the user's folder """
+        """Interprets the fetched iTunes URL and saves the image to the user's folder"""
         log.info("POST - Generating artwork using an iTunes image...")
         body = literal_eval(request.get_data(as_text=True))
         image_url: Optional[str] = body.get("url")
@@ -45,7 +46,7 @@ class ItunesImageResource(Resource):
         makedirs(user_processed_path, exist_ok=True)
 
         log.debug(f"Fetching iTunes image from URL: {image_url}")
-        image_response = requestsGet(image_url) # fetch iTunes image from deducted URL
+        image_response = requestsGet(image_url)  # fetch iTunes image from deducted URL
         if image_response.status_code != HttpStatus.OK:
             return createApiResponse(HttpStatus.INTERNAL_SERVER_ERROR, locale.get(Error.FAIL_DOWNLOAD))
         log.debug("iTunes image fetched successfully.")
