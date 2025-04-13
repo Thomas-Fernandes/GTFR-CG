@@ -1,16 +1,19 @@
 import { useDarkMode } from "@/common/hooks/useDarkMode/useDarkMode";
 import { ThemeType } from "@/components/DarkModeProvider/constants";
+import { SvgPaths } from "@/constants/media";
 
 import "./ThemeSwitch.scss";
 
-const ThemeSwitch: React.FC = () => {
+const ThemeSwitch = () => {
   const { isDarkMode, toggleDarkMode } = useDarkMode();
 
   return (
-    <button type="button" className={`theme-switch ${isDarkMode ? ThemeType.Dark : ThemeType.Light}`}
+    <button
+      type="button"
       onClick={toggleDarkMode}
+      className={`theme-switch ${isDarkMode ? ThemeType.Dark : ThemeType.Light}`}
     >
-      <img src={"/svg/theme-circle.svg"} alt={"theme-switch"} />
+      <img src={SvgPaths.ThemeCircle} alt={"theme-switch"} />
     </button>
   );
 };

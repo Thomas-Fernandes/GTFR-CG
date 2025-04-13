@@ -1,4 +1,4 @@
-from os import name as osName, path
+from os import environ as env, name as osName, path
 
 from src.constants.enums import AvailableCacheElemType
 from src.typing_gtfr import Route, Routes
@@ -8,42 +8,44 @@ DEFAULT_PORT = 8000
 
 API_ROUTE = "/api"
 ROUTES = Routes(
-    root = Route(
+    root=Route(
         path="/",
+        bp_name="",
     ),
-    redirect = Route(
+    redirect=Route(
         path="/redirect",
         bp_name="redirect",
     ),
-    home = Route(
+    home=Route(
         path="/home",
         bp_name="home",
     ),
-    art_gen = Route(
+    art_gen=Route(
         path="/artwork-generation",
         bp_name="artwork-generation",
     ),
-    art_proc = Route(
+    art_proc=Route(
         path="/artwork-processing",
         bp_name="artwork-processing",
     ),
-    lyrics = Route(
+    lyrics=Route(
         path="/lyrics",
         bp_name="lyrics",
     ),
-    cards_gen = Route(
+    cards_gen=Route(
         path="/cards-generation",
         bp_name="cards-generation",
     ),
 )
 
 SLASH = '/' if (osName != 'nt') else '\\'
-path_prefix = "" if path.isfile("requirements.txt") else f"server{SLASH}" # for running from installer.py
+path_prefix = "" if path.isfile("requirements.txt") else f"server{SLASH}"  # for running from installer.py
 SESSION_TYPE = "filesystem"
-SESSION_FILE_DIR = "flask_session" + SLASH
+SESSION_FILE_DIR = f"flask_session{SLASH}"
 
-PROCESSED_DIR = "processed" + SLASH
-GENERATED_CONTENT_DIR = f"{SLASH}app{SLASH}generated_files{SLASH}"
+run_from_docker = env.get("RUN_FROM_DOCKER", "False") == "True"
+PROCESSED_DIR = f"processed{SLASH}"
+GENERATED_CONTENT_DIR = f"{SLASH}app{SLASH}generated_files{SLASH}" if run_from_docker else f".{SLASH}"
 STATS_FILE_PATH = f"{GENERATED_CONTENT_DIR}stats.json"
 GENERATED_ARTWORKS_DIR = f"{GENERATED_CONTENT_DIR}processed-{AvailableCacheElemType.ARTWORKS}{SLASH}"
 GENERATED_CARDS_DIR = f"{GENERATED_CONTENT_DIR}processed-{AvailableCacheElemType.CARDS}{SLASH}"
@@ -55,7 +57,7 @@ UPLOADED_YOUTUBE_IMG_FILENAME = "youtube_thumbnail.png"
 LOGO_POSITIONS = [
     "top-left",    "top-center",    "top-right",
     "center-left", "center-center", "center-right",
-    "bottom-left", "bottom-center", "bottom-right"
+    "bottom-left", "bottom-center", "bottom-right",
 ]
 PROCESSED_ARTWORK_FILENAME = "ProcessedArtwork.png"
 PROCESSED_OUTRO_FILENAME = "outro.png"

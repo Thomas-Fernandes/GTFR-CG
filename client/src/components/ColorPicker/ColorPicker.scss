@@ -10,8 +10,8 @@
   &--content {
     @apply flex flex-row justify-center;
 
-    > *:not([name="color-picker"]) {
-      @apply mx-2;
+    > [type="button"] {
+      @apply ml-2;
     }
 
     &--img {

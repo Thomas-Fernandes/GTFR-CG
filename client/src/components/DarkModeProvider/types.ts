@@ -1,3 +1,5 @@
-export type DarkModeProviderProps = Readonly<{
-  children: React.ReactNode;
-}>;
+import { ReactNode } from "react";
+
+export interface DarkModeProviderProps {
+  children: ReactNode;
+}

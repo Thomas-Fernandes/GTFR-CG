@@ -1,0 +1,13 @@
+@use "@/variables" as *;
+
+.locale-switch {
+  @apply absolute top-4 right-4 text-right;
+
+  .popover--dropdown {
+    @apply relative;
+  }
+
+  &.dark img {
+    filter: invert(100%);
+  }
+}

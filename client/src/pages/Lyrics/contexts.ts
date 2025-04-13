@@ -22,10 +22,6 @@ interface ILyricsContext {
   setIsManual: StateSetter<boolean>;
   navigate: NavigateFunction;
 }
-const {
-  context: LyricsContext,
-  useContext: useLyricsContext
-} = createNewContext<ILyricsContext>();
+const { context: LyricsContext, useContext: useLyricsContext } = createNewContext<ILyricsContext>();
 
 export { LyricsContext, useLyricsContext };
-

@@ -1,0 +1,24 @@
+#artwork-generation {
+  form#itunes {
+    .itunes--text {
+      @apply m-0;
+    }
+
+    .itunes--search {
+      @apply max-w-lg w-1/2 flex flex-row items-center justify-center gap-8;
+
+      .popover {
+        &--toggle {
+          @apply min-w-36;
+        }
+        &--dropdown {
+          @apply w-36;
+        }
+      }
+
+      .action-button {
+        @apply w-full;
+      }
+    }
+  }
+}

@@ -15,7 +15,8 @@ bp_artwork_generation.register_blueprint(bp_artwork_generation_itunes_image)
 bp_artwork_generation.register_blueprint(bp_artwork_generation_local_file)
 bp_artwork_generation.register_blueprint(bp_artwork_generation_youtube_thumbnail)
 
+
 def addArtworkGenerationNamespace(api: Api) -> None:
-    """ Initializes the artwork generation blueprint """
+    """Initializes the artwork generation blueprint"""
     api_prefix = API_ROUTE + ROUTES.art_gen.path
     api.add_namespace(ns_artwork_generation, path=api_prefix)

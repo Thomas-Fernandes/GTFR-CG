@@ -8,21 +8,30 @@ import NavButton from "@/components/NavButton/NavButton";
 import Skeleton from "@/components/Skeleton/Skeleton";
 import ToastContainer from "@/components/ToastContainer/ToastContainer";
 import TopBotSpacer from "@/components/TopBotSpacer/TopBotSpacer";
-import { SessionStorage, Title } from "@/constants/browser";
+import { SessionStorage } from "@/constants/browser";
 import { ViewPaths } from "@/constants/paths";
+import { useAppContext } from "@/contexts";
 
-import CardsGallery from "./CardsGallery";
-import CardsGenerationForm from "./CardsGenerationForm";
+import CardsGallery from "./components/CardsGallery/CardsGallery";
+import CardsGenerationForm from "./components/CardsGenerationForm/CardsGenerationForm";
 import { CardsGenerationContext, CardsGenerationFormContext } from "./contexts";
 import { CardData } from "./types";
 
 const CardsGeneration = () => {
-  useTitle(Title.CardsGeneration);
+  const { intl } = useAppContext();
+  const labels = {
+    title: intl.formatMessage({ id: "pages.cardgen.title" }),
+    homeTitle: intl.formatMessage({ id: "pages.home.title" }),
+    artgenTitle: intl.formatMessage({ id: "pages.artgen.title" }),
+    lyricsTitle: intl.formatMessage({ id: "pages.lyrics.title" }),
+  };
 
-  console.log(1, sessionStorage.getItem(SessionStorage.CardMetaname) ?? "")
+  useTitle(labels.title);
+
   const [cardMetaname, setCardMetaname] = useState(sessionStorage.getItem(SessionStorage.CardMetaname) ?? "");
-  console.log(2, JSON.parse(sessionStorage.getItem(SessionStorage.OutroContributors) ?? "[]"))
-  const [outroContributors, setOutroContributors] = useState(JSON.parse(sessionStorage.getItem(SessionStorage.OutroContributors) ?? "[]")?.join(", "));
+  const [outroContributors, setOutroContributors] = useState(
+    JSON.parse(sessionStorage.getItem(SessionStorage.OutroContributors) ?? "[]")?.join(", ")
+  );
   const cardMethod = sessionStorage.getItem(SessionStorage.CardMethod) ?? ContentsGenerationMode.Auto;
   const cardBottomColor = sessionStorage.getItem(SessionStorage.CardBottomColor) ?? "";
 
@@ -39,16 +48,43 @@ const CardsGeneration = () => {
 
   const formContextValue = useMemo(
     () => ({
-      outroContributors, setOutroContributors, setBgImg, setColorPick, setIncludeCenterArtwork,
-      setGenerateOutro, setIncludeBackgroundImg, generationInProgress, setGenerationInProgress
-    }), []
+      outroContributors,
+      setOutroContributors,
+      setBgImg,
+      setColorPick,
+      setIncludeCenterArtwork,
+      setGenerateOutro,
+      setIncludeBackgroundImg,
+      generationInProgress,
+      setGenerationInProgress,
+    }),
+    []
   );
   const contextValue = useMemo(
     () => ({
-      cardMethod, cardMetaname, setCardMetaname,
-      bgImg, colorPick, includeCenterArtwork, generateOutro, includeBackgroundImg, cardBottomColor, generationInProgress
+      cardMethod,
+      cardMetaname,
+      setCardMetaname,
+      bgImg,
+      colorPick,
+      includeCenterArtwork,
+      generateOutro,
+      includeBackgroundImg,
+      cardBottomColor,
+      generationInProgress,
     }),
-    [cardMethod, cardMetaname, bgImg, colorPick, includeCenterArtwork, generateOutro, includeBackgroundImg, cardBottomColor, generationInProgress, cards]
+    [
+      cardMethod,
+      cardMetaname,
+      bgImg,
+      colorPick,
+      includeCenterArtwork,
+      generateOutro,
+      includeBackgroundImg,
+      cardBottomColor,
+      generationInProgress,
+      cards,
+    ]
   );
 
   return (
@@ -57,12 +93,12 @@ const CardsGeneration = () => {
       <TopBotSpacer />
 
       <div className="navbar">
-        <NavButton to={ViewPaths.Home} label={Title.Home} side={NavButtonSide.Left} />
-        <NavButton to={ViewPaths.ArtworkGeneration} label={Title.ArtworkGeneration} side={NavButtonSide.Left} />
-        <NavButton to={ViewPaths.Lyrics} label={Title.Lyrics} side={NavButtonSide.Left} />
+        <NavButton to={ViewPaths.Home} label={labels.homeTitle} side={NavButtonSide.Left} />
+        <NavButton to={ViewPaths.ArtworkGeneration} label={labels.artgenTitle} side={NavButtonSide.Left} />
+        <NavButton to={ViewPaths.Lyrics} label={labels.lyricsTitle} side={NavButtonSide.Left} />
       </div>
 
-      <h1>{Title.CardsGeneration}</h1>
+      <h1>{labels.title}</h1>
 
       <CardsGenerationContext.Provider value={contextValue}>
         <CardsGenerationFormContext.Provider value={formContextValue}>
@@ -70,7 +106,7 @@ const CardsGeneration = () => {
         </CardsGenerationFormContext.Provider>
       </CardsGenerationContext.Provider>
 
-      { cardPaths.length > 0 &&
+      {cardPaths.length > 0 && (
         <>
           <hr className="my-4" />
 
@@ -78,28 +114,27 @@ const CardsGeneration = () => {
             <CardsGallery id="cards" initialCards={cards} />
           </CardsGenerationContext.Provider>
         </>
-      }
-      { generationInProgress &&
+      )}
+      {generationInProgress && (
         <>
           <hr className="my-4" />
 
           <ul className="card-gallery--cards skeleton">
-            { getArrayOfSize(window.innerWidth / 256).map((_, idx) =>
-                <li key={`skeleton_${idx}`} className="flex flex-col gap-2">
-                  <div className="card-container skeleton">
-                    <Skeleton className="card-container--card" w="16.9rem" h="10rem" />
-                    <Skeleton className="card-container--card" w="16.9rem" h="2rem"  />
-                  </div>
-                </li>
-              )
-            }
+            {getArrayOfSize(window.innerWidth / 320).map((_, idx) => (
+              <li key={`skeleton_${idx}`} className="flex flex-col gap-2">
+                <div className="card-container skeleton">
+                  <Skeleton w="16.9rem" h="10rem" className="card-container--card" />
+                  <Skeleton w="16.9rem" h="2rem" className="card-container--card" />
+                </div>
+              </li>
+            ))}
           </ul>
         </>
-      }
+      )}
 
       <TopBotSpacer />
     </div>
-  )
+  );
 };
 
 export default CardsGeneration;

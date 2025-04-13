@@ -5,7 +5,7 @@ import { DarkModeContext } from "@/common/hooks/useDarkMode/contexts";
 import { ThemeType } from "./constants";
 import { DarkModeProviderProps } from "./types";
 
-export const DarkModeProvider: React.FC<DarkModeProviderProps> = ({ children }) => {
+export const DarkModeProvider = ({ children }: DarkModeProviderProps) => {
   const [isDarkMode, setIsDarkMode] = useState(localStorage.getItem("theme") === ThemeType.Dark);
 
   useEffect(() => {
@@ -17,14 +17,7 @@ export const DarkModeProvider: React.FC<DarkModeProviderProps> = ({ children }) 
     setIsDarkMode((prevMode) => !prevMode);
   }, []);
 
-  const contextValue = useMemo(
-    () => ({ isDarkMode, toggleDarkMode }),
-    [isDarkMode, toggleDarkMode]
-  );
+  const contextValue = useMemo(() => ({ isDarkMode, toggleDarkMode }), [isDarkMode, toggleDarkMode]);
 
-  return (
-    <DarkModeContext.Provider value={contextValue}>
-      {children}
-    </DarkModeContext.Provider>
-  );
+  return <DarkModeContext.Provider value={contextValue}>{children}</DarkModeContext.Provider>;
 };

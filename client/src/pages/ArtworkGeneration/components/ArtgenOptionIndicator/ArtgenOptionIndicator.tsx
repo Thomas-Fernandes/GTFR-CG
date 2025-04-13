@@ -1,28 +1,32 @@
 import { useDarkModeContext } from "@/common/hooks/useDarkMode/contexts";
-import { ARTWORK_GENERATION_OPTIONS } from "@/pages/ArtworkGeneration/constants";
+import { ImgPaths } from "@/constants/media";
+import { useAppContext } from "@/contexts";
 
 import { ArtgenOptionIndicatorProps } from "./types";
 
 import "./ArtgenOptionIndicator.scss";
 
-const ArtgenOptionIndicator = ({ direction, optionIdx, label }: ArtgenOptionIndicatorProps) => {
+const ArtgenOptionIndicator = ({ direction, optionIdx, optionsLength, label }: ArtgenOptionIndicatorProps) => {
+  const { intl } = useAppContext();
+  const labels = {
+    indicatorLabel: intl.formatMessage({ id: "pages.artgen.indicatorLabel" }),
+  };
+
   const { isDarkMode } = useDarkModeContext();
 
   const isPrev = direction === "prev";
-  const isEmpty = isPrev
-    ? optionIdx === 0
-    : optionIdx >= ARTWORK_GENERATION_OPTIONS.length + 1;
-  const arrowImgSrc = isDarkMode === isPrev ? "/img/arrow__blue.png" : "/img/arrow__yellow.png";
+  const hasNoIndicator = isPrev ? optionIdx === 0 : optionIdx >= optionsLength + 1;
+  const arrowImgSrc = isDarkMode === isPrev ? ImgPaths.ArrowBlue : ImgPaths.ArrowYellow;
 
   return (
-    <h2 className={`artwork-generation--options--${direction} ${isEmpty ? "empty" : ""}`}>
-      { !isEmpty && label &&
+    <h2 className={`artwork-generation--options--${direction} ${hasNoIndicator ? "empty" : ""}`}>
+      {!hasNoIndicator && label && (
         <>
           <img src={arrowImgSrc} alt={`${direction}`} />
-          <span>{`or... ${label}`}</span>
+          <span>{`${labels.indicatorLabel} ${label}`}</span>
           <img src={arrowImgSrc} alt={`${direction}`} />
         </>
-      }
+      )}
     </h2>
   );
 };

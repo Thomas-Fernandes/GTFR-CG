@@ -3,15 +3,16 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 import { useTitle } from "@/common/hooks/useTitle";
 import TopBotSpacer from "@/components/TopBotSpacer/TopBotSpacer";
-import { Title } from "@/constants/browser";
 import { DEFAULT_EVENT_DURATION } from "@/constants/toasts";
+import { useAppContext } from "@/contexts";
 
 import { DEFAULT_REDIRECTION, RedirectParams } from "./constants";
 
 import "./Redirect.scss";
 
 const Redirect = () => {
-  useTitle(Title.Redirect);
+  const { intl } = useAppContext();
+  useTitle(intl.formatMessage({ id: "pages.redirect.title" }));
 
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
@@ -41,25 +42,23 @@ const Redirect = () => {
     <div id="redirect">
       <TopBotSpacer />
 
-      <h1>{Title.Redirect}</h1>
+      <h1>{intl.formatMessage({ id: "pages.redirect.title" })}</h1>
 
       <div className="board">
-        <h2 className="board--title">
-          {"You are being redirected after an error was met..."}
-        </h2>
+        <h2 className="board--title">{intl.formatMessage({ id: "pages.redirect.header" })}</h2>
 
-        <p className="board--err">
-          { errorText.current }
-        </p>
+        <p className="board--err">{errorText.current}</p>
 
         <p className="board--counter">
-          {`You will be redirected to ${redirectTo.current} in ${countdown} second${plural}.`}
+          {`${intl.formatMessage({ id: "pages.redirect.counter.1" })} ${redirectTo.current} ` +
+            `${intl.formatMessage({ id: "pages.redirect.counter.2" })} ${countdown} ` +
+            `${intl.formatMessage({ id: "pages.redirect.counter.3" })}${plural}.`}
         </p>
       </div>
 
       <TopBotSpacer />
     </div>
   );
-}
+};
 
 export default Redirect;

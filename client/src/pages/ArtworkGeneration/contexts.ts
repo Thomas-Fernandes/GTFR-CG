@@ -8,10 +8,7 @@ interface IArtworkGenerationContext {
   setIsProcessingLoading: StateSetter<boolean>;
   navigate: NavigateFunction;
 }
-const {
-  context: ArtworkGenerationContext,
-  useContext: useArtworkGenerationContext
-} = createNewContext<IArtworkGenerationContext>();
+const { context: ArtworkGenerationContext, useContext: useArtworkGenerationContext } =
+  createNewContext<IArtworkGenerationContext>();
 
 export { ArtworkGenerationContext, useArtworkGenerationContext };
-

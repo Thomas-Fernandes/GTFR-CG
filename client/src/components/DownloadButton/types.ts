@@ -1,6 +1,6 @@
 import { ComponentPropsWithoutRef } from "react";
 
-export type DownloadButtonProps = ComponentPropsWithoutRef<"button"> & Readonly<{
+export type DownloadButtonProps = ComponentPropsWithoutRef<"button"> & {
   label?: string;
   className?: string;
-}>;
+};

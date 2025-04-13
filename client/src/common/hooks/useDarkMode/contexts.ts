@@ -5,10 +5,6 @@ interface IDarkModeContext {
   toggleDarkMode: () => void;
 }
 
-const {
-  context: DarkModeContext,
-  useContext: useDarkModeContext
-} = createNewContext<IDarkModeContext>();
+const { context: DarkModeContext, useContext: useDarkModeContext } = createNewContext<IDarkModeContext>();
 
 export { DarkModeContext, useDarkModeContext, type IDarkModeContext as DarkModeContextType };
-

@@ -9,19 +9,24 @@ from waitress import serve
 
 # Local modules
 from src.cache import cacheCleanup
-from src.constants.paths import \
-    DEFAULT_PORT, HOST_HOME, SESSION_FILE_DIR, SESSION_TYPE
+from src.constants.paths import DEFAULT_PORT, HOST_HOME, SESSION_FILE_DIR, SESSION_TYPE
 from src.logger import log
 from src.statistics import onLaunch as printInitStatistics
 
 # Application initialization
 global app, api, session
-app = Flask(__name__.split('.')[-1]) # so that the app name is app, not {dirpath}.app
+app = Flask(__name__.split(".")[-1])  # so that the app name is app, not {dirpath}.app
 CORS(app)
 session = app.config
-api = Api(app, doc="/docs", version="1.0", title="GTFR-CG API Documentation",
-    description="Swagger API Documentation for GTFR-CG")
+api = Api(
+    app,
+    doc="/docs",
+    version="1.0",
+    title="GTFR-CG API Documentation",
+    description="Swagger API Documentation for GTFR-CG",
+)
 api.init_app(app, add_specs=False)
+
 
 @app.before_request
 def handle_preflight() -> Response | None:
@@ -35,16 +40,18 @@ def handle_preflight() -> Response | None:
     headers["Access-Control-Allow-Credentials"] = "true"
     return response
 
+
 @app.route("/api/files/<path:filename>")
 def serve_file(filename: str) -> Response:
     return send_from_directory("/app/generated_files", filename)
 
+
 def initApp() -> None:
-    """ Initializes the Flask app: declares config and session, assigns blueprints """
+    """Initializes the Flask app: declares config and session, assigns blueprints"""
     log.debug("Initializing app...")
 
     def addNamespaces() -> None:
-        """ Adds the routing namespaces to the app """
+        """Adds the routing namespaces to the app"""
         log.debug("  Adding namespaces...")
 
         from src.routes.artwork_generation.artwork_generation import addArtworkGenerationNamespace
@@ -52,6 +59,7 @@ def initApp() -> None:
         from src.routes.cards_generation.cards_generation import addCardsGenerationNamespace
         from src.routes.home.home import addHomeNamespace
         from src.routes.lyrics.lyrics import addLyricsNamespace
+
         namespaceAdders = [
             addArtworkGenerationNamespace,
             addArtworkProcessingNamespace,
@@ -61,12 +69,15 @@ def initApp() -> None:
         ]
         for addNamespace in namespaceAdders:
             addNamespace(api)
-        namespace_names: str = ", ".join([addNamespace.__name__[3:].replace("Namespace", "") for addNamespace in namespaceAdders])
+        namespace_names: str = ", ".join(
+            [addNamespace.__name__[3:].replace("Namespace", "") for addNamespace in namespaceAdders]
+        )
         log.debug(f"  Namespaces added: [{namespace_names}].")
+
     addNamespaces()
 
     def logRegisteredRoutes() -> None:
-        """ Logs all registered routes in the Flask app """
+        """Logs all registered routes in the Flask app"""
         routes = []
         for rule in app.url_map.iter_rules():
             routes.append(f".{rule.rule}")
@@ -74,6 +85,7 @@ def initApp() -> None:
         for r in routes:
             log.debug(f"    {r}")
         log.debug("  ]")
+
     logRegisteredRoutes()
 
     session["SESSION_PERMANENT"] = False
@@ -82,8 +94,9 @@ def initApp() -> None:
     Session(app)
     log.debug("App initialized.")
 
+
 def main(host: str = HOST_HOME, port: int = DEFAULT_PORT) -> None:
-    f""" Main function to clean the cache, initialize the server and start it
+    f"""Main function to clean the cache, initialize the server and start it
     :param host: [string] The host address to run the server on (default: "{HOST_HOME}")
     :param port: [integer] The port to run the server on (default: {DEFAULT_PORT})
     """

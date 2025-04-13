@@ -2,20 +2,15 @@ import { ResponseStatus } from "@/constants/requests";
 import { DEFAULT_EVENT_DURATION, ToastType } from "@/constants/toasts";
 
 const convertToHtmlMessage = (message: string) => {
-  return message.trim()
+  return message
+    .trim()
     .replace(/\r/g, "")
     .replace(/\n/g, "<br />")
     .replace(/ {2}/g, "&nbsp;&nbsp;")
-    .replace(/\t/g, "&nbsp;&nbsp;&nbsp;&nbsp;")
-  ;
+    .replace(/\t/g, "&nbsp;&nbsp;&nbsp;&nbsp;");
 };
 const flattenMessage = (message: string) => {
-  return message.trim()
-    .replace(/\r/g, "")
-    .replace(/\n/g, " ")
-    .replace(/ {2}/g, "  ")
-    .replace(/\t/g, "    ")
-  ;
+  return message.trim().replace(/\r/g, "").replace(/\n/g, " ").replace(/ {2}/g, "  ").replace(/\t/g, "    ");
 };
 
 export const sendToast = (
@@ -23,10 +18,11 @@ export const sendToast = (
   type: ResponseStatus = ToastType.Error,
   duration: number = DEFAULT_EVENT_DURATION.SECONDS_TOAST
 ) => {
-  if (type === ToastType.Error)
+  if (type === ToastType.Error) {
     console.error(`Toast: ${type} - ${flattenMessage(message)}`);
-  else if (type === ToastType.Warn)
+  } else if (type === ToastType.Warn) {
     console.log(`Toast: ${type} - ${flattenMessage(message)}`);
+  }
 
   const toast = document.createElement("div");
   toast.className = "toast " + type.trim().toLowerCase();
@@ -42,7 +38,8 @@ export const sendToast = (
 
   document.getElementById("toast-container")?.appendChild(toast);
 
-  setTimeout(() => { // Use setTimeout to ensure the initial styles are applied before transitioning
+  setTimeout(() => {
+    // Use setTimeout to ensure the initial styles are applied before transitioning
     toast.classList.add("show");
     progressFill.style.width = "100%";
     progressFill.style.transitionDuration = `${duration}s`;

@@ -1,5 +1,5 @@
 import { ComponentPropsWithoutRef } from "react";
 
-export type VerticalRuleProps = ComponentPropsWithoutRef<"div"> & Readonly<{
+export type VerticalRuleProps = ComponentPropsWithoutRef<"div"> & {
   className?: string;
-}>;
+};

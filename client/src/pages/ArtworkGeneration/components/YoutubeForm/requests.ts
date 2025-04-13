@@ -1,0 +1,45 @@
+import { NavigateFunction } from "react-router-dom";
+
+import { is2xxSuccessful, sendRequest } from "@/common/requests";
+import { hideSpinner, showSpinner } from "@/common/Spinner";
+import { sendToast } from "@/common/Toast";
+import { ApiResponse, RestVerb, StateSetter } from "@/common/types";
+import { API, BACKEND_URL, ViewPaths } from "@/constants/paths";
+import { SpinnerId } from "@/constants/spinners";
+import { ToastType } from "@/constants/toasts";
+
+import { YoutubeRequest } from "./types";
+
+export const postYoutubeUrl = (
+  body: YoutubeRequest,
+  props: { setIsProcessingLoading: StateSetter<boolean>; navigate: NavigateFunction }
+) => {
+  const { setIsProcessingLoading, navigate } = props;
+
+  setIsProcessingLoading(true);
+  showSpinner(SpinnerId.YoutubeUrl);
+
+  sendRequest(RestVerb.Post, BACKEND_URL + API.ARTWORK_GENERATION.YOUTUBE_THUMBNAIL, body)
+    .then((response: ApiResponse) => {
+      if (!is2xxSuccessful(response.status)) {
+        throw new Error(response.message);
+      }
+
+      sendRequest(RestVerb.Post, BACKEND_URL + API.ARTWORK_PROCESSING.PROCESS_ARTWORKS)
+        .then(() => {
+          navigate(ViewPaths.ProcessedArtworks);
+        })
+        .catch((error: ApiResponse) => {
+          sendToast(error.message, ToastType.Error);
+        })
+        .finally(() => {
+          hideSpinner(SpinnerId.YoutubeUrl);
+          setIsProcessingLoading(false);
+        });
+    })
+    .catch((error: ApiResponse) => {
+      sendToast(error.message, ToastType.Error);
+      hideSpinner(SpinnerId.YoutubeUrl);
+      setIsProcessingLoading(false);
+    });
+};
