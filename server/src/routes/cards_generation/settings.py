@@ -31,7 +31,7 @@ from src.utils.string_utils import snakeToCamel, stringIsBool
 def getCardMetadata(song_data: SongMetadata, enforce_bottom_color: str | None, include_bg_img: bool) -> CardMetadata:
     """Extracts the metadata needed for card generation from the song data
     :param song_data: [dict] The data of the song
-    :param enforce_bottom_color: [str] The color to enforce at the bottom of the card
+    :param enforce_bottom_color: [str?] The color to enforce at the bottom of the card
     :param include_bg_img: [bool] True if the background image should be included, False otherwise
     :return: [dict] The metadata of related cards
     """

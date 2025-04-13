@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 import ImgButton from "@/components/ImgButton/ImgButton";
 import { SpinnerId } from "@/constants/spinners";
+import { useAppContext } from "@/contexts";
 import { useArtworkGenerationContext } from "@/pages/ArtworkGeneration/contexts";
 
 import { handleSelectItunesImage } from "./handlers";
@@ -40,11 +41,16 @@ const ItunesImageResult = ({ item, itemId }: ItunesImageResultProps) => {
 };
 
 const ItunesResults = ({ items, setItunesResults }: ItunesResultsProps) => {
+  const { intl } = useAppContext();
+  const labels = {
+    clearLabel: intl.formatMessage({ id: "pages.artgen.itunes.clear" }),
+  };
+
   return (
     <div className="results">
       {items.length > 0 && (
         <button id="clear" onClick={() => setItunesResults([])} className="small mac !mb-4">
-          {"Clear results"}
+          {labels.clearLabel}
         </button>
       )}
       <ul id="results" className="results--container">

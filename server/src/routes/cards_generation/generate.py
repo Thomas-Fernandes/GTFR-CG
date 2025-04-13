@@ -48,17 +48,17 @@ def generateAllCards(
 
 
 def extractCardMetadata(
-    song_data: SongMetadata, enforce_bottom_color: bool, include_bg_img: bool
+    song_data: SongMetadata, enforce_bottom_color: str, include_bg_img: bool
 ) -> tuple[Response, None] | tuple[None, CardMetadata]:
     """Extracts the metadata needed for card generation
     :param song_data: [SongMetadata] The metadata of the song
-    :param enforce_bottom_color: [bool] Whether to enforce the bottom color
+    :param enforce_bottom_color: [str] The bottom color of the card
     :param include_bg_img: [bool] Whether to include the background image
     :return: [Response | CardMetadata] The response to the request, and the card metadata
     """
     log.info("Deducing cards metadata...")
     try:
-        card_metadata = getCardMetadata(song_data, str(enforce_bottom_color), include_bg_img)
+        card_metadata = getCardMetadata(song_data, enforce_bottom_color, include_bg_img)
     except FileNotFoundError as e:
         log.error(f"Error while generating cards: {e}")
         return (createApiResponse(HttpStatus.PRECONDITION_FAILED, str(e)), None)
@@ -80,7 +80,7 @@ def generateCards(cards_contents: CardsContents, song_data: SongMetadata, settin
     start = time()
     (err, card_metadata) = extractCardMetadata(
         song_data,
-        bool(settings.get(PayloadFields.ENFORCE_BOTTOM_COLOR)),
+        str(settings.get(PayloadFields.ENFORCE_BOTTOM_COLOR)),
         bool(settings.get(PayloadFields.INCLUDE_BG_IMG))
     )
     if err:
