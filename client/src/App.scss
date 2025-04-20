@@ -62,7 +62,7 @@ div.navbar {
 }
 
 div.spinner-container {
-  @apply relative inline-block;
+  @apply relative top-[0.15em] right-[52.5%] pointer-events-none;
 
   span.spinner {
     @apply inline-block w-10 h-10 box-border;

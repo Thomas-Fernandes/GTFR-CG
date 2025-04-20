@@ -66,7 +66,7 @@ const LyricsSearchForm = () => {
         {"Search button"}
       </label>
       <div id={SpinnerId.LyricsSearch} className="spinner">
-        <ActionButton type="submit" label={labels.submit} className="spaced" />
+        <ActionButton type="submit" label={labels.submit} className={`spaced ${isFetching ? "busy" : ""}`} />
       </div>
     </form>
   );
