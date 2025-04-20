@@ -12,20 +12,27 @@ import { ArtworkResultProps } from "./constants";
 import { ItunesRequest, ItunesResponse } from "./types";
 import { getTitleWithAdjustedLength } from "./utils";
 
-export const postItunesSearch = (body: ItunesRequest, props: { setItunesResults: StateSetter<ItunesResult[]> }) => {
+export const postItunesSearch = (
+  body: ItunesRequest,
+  props: {
+    setIsSearching: StateSetter<boolean>;
+    setItunesResults: StateSetter<ItunesResult[]>;
+  }
+) => {
   const toasts = getToasts();
 
-  const { setItunesResults } = props;
+  const { setIsSearching, setItunesResults } = props;
 
+  setIsSearching(true);
   showSpinner(SpinnerId.ItunesSearch);
-
-  const resultItems: ItunesResult[] = [];
 
   sendRequest(RestVerb.Post, BACKEND_URL + API.ARTWORK_GENERATION.ITUNES_SEARCH, body)
     .then((response: ItunesResponse) => {
       if (!is2xxSuccessful(response.status)) {
         throw new Error(response.message);
       }
+
+      const resultItems: ItunesResult[] = [];
 
       if (response.data.resultCount > 0) {
         response.data.results.forEach((result) => {
@@ -53,5 +60,6 @@ export const postItunesSearch = (body: ItunesRequest, props: { setItunesResults:
     })
     .finally(() => {
       hideSpinner(SpinnerId.ItunesSearch);
+      setIsSearching(false);
     });
 };

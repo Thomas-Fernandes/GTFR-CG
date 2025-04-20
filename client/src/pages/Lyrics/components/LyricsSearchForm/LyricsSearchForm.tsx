@@ -1,4 +1,4 @@
-import ActionButton from "@/components/ActionButton/ActionButton";
+import ButtonWithSpinner from "@/components/ButtonWithSpinner/ButtonWithSpinner";
 import { SpinnerId } from "@/constants/spinners";
 import { useAppContext } from "@/contexts";
 import { useLyricsContext } from "@/pages/Lyrics/contexts";
@@ -65,9 +65,7 @@ const LyricsSearchForm = () => {
       <label htmlFor={SpinnerId.LyricsSearch} className="hidden">
         {"Search button"}
       </label>
-      <div id={SpinnerId.LyricsSearch} className="spinner">
-        <ActionButton type="submit" label={labels.submit} className={`spaced ${isFetching ? "busy" : ""}`} />
-      </div>
+      <ButtonWithSpinner id={SpinnerId.LyricsSearch} label={labels.submit} isBusy={isFetching} />
     </form>
   );
 };

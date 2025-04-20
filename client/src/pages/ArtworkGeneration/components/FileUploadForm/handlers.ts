@@ -27,7 +27,7 @@ export const handleSubmitFileUpload = (
   }
 
   if (!body.localFile) {
-    sendToast(toasts.NoImgFile, ToastType.Warn);
+    sendToast(toasts.ArtGen.NoImgFile, ToastType.Warn);
     return;
   }
 
@@ -38,7 +38,7 @@ export const handleSubmitFileUpload = (
   const fileExtensionIsAccepted = isFileExtensionAccepted(body.localFile.name, ACCEPTED_IMG_EXTENSIONS);
   if (!fileExtensionIsAccepted) {
     sendToast(
-      toasts.InvalidFileType + "\n" + "Accepted file extensions: " + ACCEPTED_IMG_EXTENSIONS.join(", ") + ".",
+      toasts.ArtGen.InvalidFileType + "\n" + "Accepted file extensions: " + ACCEPTED_IMG_EXTENSIONS.join(", ") + ".",
       ToastType.Error
     );
     return;

@@ -26,7 +26,7 @@ export const handleSubmitYoutubeUrl = (
   }
 
   if (!isValidYoutubeUrl(body.url)) {
-    sendToast(toasts.InvalidUrl, ToastType.Error);
+    sendToast(toasts.ArtGen.InvalidUrl, ToastType.Error);
     return;
   }
 

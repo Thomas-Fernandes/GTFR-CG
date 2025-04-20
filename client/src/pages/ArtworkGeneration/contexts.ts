@@ -4,6 +4,8 @@ import { createNewContext } from "@/common/contextCreator";
 import { StateSetter } from "@/common/types";
 
 interface IArtworkGenerationContext {
+  isSearching: boolean;
+  setIsSearching: StateSetter<boolean>;
   isProcessingLoading: boolean;
   setIsProcessingLoading: StateSetter<boolean>;
   navigate: NavigateFunction;

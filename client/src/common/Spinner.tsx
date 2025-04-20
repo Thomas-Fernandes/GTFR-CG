@@ -53,7 +53,8 @@ export const showSpinner = (name: string) => {
 
 export const hideSpinner = (name: string) => {
   const spinnerContainer = document.getElementById(`spinner-container-${name}`);
-  if (spinnerContainer) {
+
+  if (spinnerContainer !== null) {
     spinnerContainer.style.display = "none";
   }
 };

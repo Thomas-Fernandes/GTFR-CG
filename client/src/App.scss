@@ -61,8 +61,15 @@ div.navbar {
   }
 }
 
+div.button__with-spinner {
+  @apply relative flex items-center justify-center;
+
+  button {
+    @apply min-w-[24vw];
+  }
+}
 div.spinner-container {
-  @apply relative top-[0.15em] right-[52.5%] pointer-events-none;
+  @apply absolute pointer-events-none;
 
   span.spinner {
     @apply inline-block w-10 h-10 box-border;
