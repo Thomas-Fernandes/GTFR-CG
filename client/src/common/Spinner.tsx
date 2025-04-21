@@ -45,9 +45,6 @@ export const showSpinner = (name: string) => {
 
   if (name.startsWith("home_stat")) {
     spinnerContainer.style.scale = "0.5";
-  } else {
-    spinnerContainer.style.display = "block";
-    spinnerContainer.style.alignSelf = "center";
   }
 };
 

@@ -49,7 +49,7 @@ export const postItunesSearch = (
             artworkUrl100: result.artworkUrl100.replace("100x100", "3000x3000"), // itunes max image size is 3000x3000
           });
         });
-        setItunesResults(resultItems);
+        setItunesResults(resultItems.splice(0, 6));
       } else {
         sendToast(toasts.ArtGen.NoResultsFound, ToastType.Warn);
       }

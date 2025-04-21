@@ -2,7 +2,7 @@ from flask import Blueprint, Response
 from flask_restx import Resource
 
 from os import path
-from time import time, sleep
+from time import time
 
 from src.constants.enums import AvailableCacheElemType, AvailableStats, HttpStatus, SessionFields
 from src.constants.paths import PROCESSED_ARTWORK_FILENAME, PROCESSED_DIR, ROUTES, SLASH
@@ -49,5 +49,4 @@ class ProcessArtworkResource(Resource):
         ).time(SeverityLevel.INFO, time() - start)
         updateStats(to_increment=AvailableStats.ARTWORK_GENERATIONS)
 
-        sleep(10)
         return createApiResponse(HttpStatus.CREATED, locale.get(Success.PROCESSED_IMAGES_SUCCESS))

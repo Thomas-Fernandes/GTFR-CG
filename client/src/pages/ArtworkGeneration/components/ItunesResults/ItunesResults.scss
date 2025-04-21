@@ -14,26 +14,35 @@
       }
 
       &--item {
-        @apply flex items-center gap-2 opacity-0;
-
-        div.spinner-container {
-          position: unset;
-        }
+        @apply opacity-0;
 
         &.mounted {
           @apply opacity-100;
         }
 
-        button {
-          @apply bg-transparent rounded-lg;
-          font-size: initial;
+        &--content-wrapper {
+          @apply flex items-center gap-2;
+
+          button {
+            @apply rounded-lg;
+            border: 1px solid;
+            font-size: initial;
+          }
+
+          &--image {
+            @apply max-w-32 max-h-32 p-1 rounded-lg;
+          }
+          &--text {
+            @apply mb-0 mx-auto text-center font-bold italic text-base;
+          }
         }
 
-        &--image {
-          @apply max-w-40 max-h-40 p-1 rounded-md;
-        }
-        &--text {
-          @apply mb-0 mx-auto text-center font-bold italic text-base;
+        &--spinner {
+          @apply justify-items-center mt-2;
+
+          div.spinner-container {
+            position: unset;
+          }
         }
       }
     }

@@ -25,19 +25,24 @@ const ItunesImageResult = ({ item, itemId }: ItunesImageResultProps) => {
 
   return (
     <div className={`results--container--item ${isMounted ? "mounted" : ""}`}>
-      <ImgButton
-        src={item.artworkUrl100}
-        alt={resultLabel}
-        onLoad={() => setItemLabel(`${item.artistName} - ${resultLabel}`)}
-        onClick={() =>
-          handleSelectItunesImage(item, itemId + 1, { isProcessingLoading, setIsProcessingLoading, navigate })
-        }
-        overlayText={"Use this image"}
-        className="results--container--item--image"
-      />
-      <p className="results--container--item--text">{itemLabel}</p>
+      <div className="results--container--item--content-wrapper">
+        <ImgButton
+          src={item.artworkUrl100}
+          alt={resultLabel}
+          onLoad={() => setItemLabel(`${item.artistName} - ${resultLabel}`)}
+          onClick={() =>
+            handleSelectItunesImage(item, itemId + 1, { isProcessingLoading, setIsProcessingLoading, navigate })
+          }
+          overlayText={"Use this image"}
+          className="results--container--item--content-wrapper--image"
+        />
+        <p className="results--container--item--content-wrapper--text">{itemLabel}</p>
+      </div>
 
-      <div id={`${SpinnerId.ItunesResult}${itemId + 1}`} className="mt-2" />
+      <div
+        id={`${SpinnerId.ItunesResult}${itemId + 1}`}
+        className={`results--container--item--spinner ${itemId <= 2 ? "mb-8" : ""}`}
+      />
     </div>
   );
 };
