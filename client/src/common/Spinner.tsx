@@ -45,15 +45,13 @@ export const showSpinner = (name: string) => {
 
   if (name.startsWith("home_stat")) {
     spinnerContainer.style.scale = "0.5";
-  } else {
-    spinnerContainer.style.display = "block";
-    spinnerContainer.style.alignSelf = "center";
   }
 };
 
 export const hideSpinner = (name: string) => {
   const spinnerContainer = document.getElementById(`spinner-container-${name}`);
-  if (spinnerContainer) {
+
+  if (spinnerContainer !== null) {
     spinnerContainer.style.display = "none";
   }
 };

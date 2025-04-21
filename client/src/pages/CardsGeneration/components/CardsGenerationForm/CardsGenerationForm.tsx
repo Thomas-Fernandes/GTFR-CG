@@ -1,5 +1,5 @@
 import { ContentsGenerationMode } from "@/common/types";
-import ActionButton from "@/components/ActionButton/ActionButton";
+import ButtonWithSpinner from "@/components/ButtonWithSpinner/ButtonWithSpinner";
 import Checkbox from "@/components/Checkbox/Checkbox";
 import ColorPicker from "@/components/ColorPicker/ColorPicker";
 import FileUploader from "@/components/FileUploader/FileUploader";
@@ -140,9 +140,7 @@ const CardsGenerationForm = ({ setCardPaths, setCards }: CardsGenerationFormProp
         />
       </div>
 
-      <div id={SpinnerId.CardsGenerate} className="submit">
-        <ActionButton type="submit" label={labels.submit} className="spaced" />
-      </div>
+      <ButtonWithSpinner id={SpinnerId.CardsGenerate} label={labels.submit} isBusy={generationInProgress} />
     </form>
   );
 };

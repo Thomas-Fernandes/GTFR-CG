@@ -2,8 +2,6 @@
   @apply border-none bg-none p-0 cursor-pointer;
 
   &:hover {
-    @apply p-1;
-
     img {
       @apply brightness-75;
     }
