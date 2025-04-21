@@ -9,13 +9,16 @@
         @apply hidden;
       }
       &:not(:empty) {
-        @apply w-full grid gap-x-14 gap-y-4 mb-6;
-        max-width: 58rem;
+        @apply w-full grid max-w-[64rem] gap-x-14 gap-y-2 mb-6;
         grid-template-columns: repeat(3, minmax(0, 1fr));
       }
 
       &--item {
-        @apply justify-items-center opacity-0;
+        @apply flex items-center gap-2 opacity-0;
+
+        div.spinner-container {
+          position: unset;
+        }
 
         &.mounted {
           @apply opacity-100;

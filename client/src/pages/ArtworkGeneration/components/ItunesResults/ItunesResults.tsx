@@ -29,13 +29,15 @@ const ItunesImageResult = ({ item, itemId }: ItunesImageResultProps) => {
         src={item.artworkUrl100}
         alt={resultLabel}
         onLoad={() => setItemLabel(`${item.artistName} - ${resultLabel}`)}
-        onClick={() => handleSelectItunesImage(item, itemId, { isProcessingLoading, setIsProcessingLoading, navigate })}
+        onClick={() =>
+          handleSelectItunesImage(item, itemId + 1, { isProcessingLoading, setIsProcessingLoading, navigate })
+        }
         overlayText={"Use this image"}
         className="results--container--item--image"
       />
       <p className="results--container--item--text">{itemLabel}</p>
 
-      <div className="mt-2" id={SpinnerId.ItunesResult + itemId.toString()} />
+      <div id={`${SpinnerId.ItunesResult}${itemId + 1}`} className="mt-2" />
     </div>
   );
 };

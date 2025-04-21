@@ -2,8 +2,12 @@
   form.lyrics-form {
     @apply w-full flex flex-col items-center;
 
-    div.submit {
+    div.button__with-spinner {
       @apply mb-4;
+
+      button {
+        @apply w-[32vw];
+      }
     }
   }
 }
