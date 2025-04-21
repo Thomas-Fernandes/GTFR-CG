@@ -10,11 +10,12 @@ import { ItunesImageResultProps, ItunesResultsProps } from "./types";
 
 import "./ItunesResults.scss";
 
-const ItunesImageResult = ({ item, itemId }: ItunesImageResultProps) => {
+const ItunesImageResult = ({ item, itemIdx }: ItunesImageResultProps) => {
   const { isProcessingLoading, setIsProcessingLoading, navigate } = useArtworkGenerationContext();
 
   const [isMounted, setIsMounted] = useState(false);
 
+  const itemId = itemIdx + 1;
   const resultLabel = (item.collectionName || item.trackName).replace(" - Single", "");
   const [itemLabel, setItemLabel] = useState("");
 
@@ -31,7 +32,7 @@ const ItunesImageResult = ({ item, itemId }: ItunesImageResultProps) => {
           alt={resultLabel}
           onLoad={() => setItemLabel(`${item.artistName} - ${resultLabel}`)}
           onClick={() =>
-            handleSelectItunesImage(item, itemId + 1, { isProcessingLoading, setIsProcessingLoading, navigate })
+            handleSelectItunesImage(item, itemId, { isProcessingLoading, setIsProcessingLoading, navigate })
           }
           overlayText={"Use this image"}
           className="results--container--item--content-wrapper--image"
@@ -40,8 +41,8 @@ const ItunesImageResult = ({ item, itemId }: ItunesImageResultProps) => {
       </div>
 
       <div
-        id={`${SpinnerId.ItunesResult}${itemId + 1}`}
-        className={`results--container--item--spinner ${itemId <= 2 ? "mb-8" : ""}`}
+        id={`${SpinnerId.ItunesResult}${itemId}`}
+        className={`results--container--item--spinner ${itemId <= 3 ? "mb-8" : ""}`}
       />
     </div>
   );
@@ -61,9 +62,9 @@ const ItunesResults = ({ items, setItunesResults }: ItunesResultsProps) => {
         </button>
       )}
       <ul id="results" className="results--container">
-        {items.map((item, index) => (
-          <li key={index}>
-            <ItunesImageResult item={item} itemId={index} />
+        {items.map((item, idx) => (
+          <li key={idx}>
+            <ItunesImageResult item={item} itemIdx={idx} />
           </li>
         ))}
       </ul>
