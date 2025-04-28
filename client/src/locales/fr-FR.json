@@ -98,6 +98,9 @@
         "saving": "Sauvegarde...",
         "cancel": "Annuler"
       }
+    },
+    "descgen": {
+      "title": "Génération de description"
     }
   },
 

@@ -7,6 +7,7 @@ export enum ViewPaths {
   ProcessedArtworks = "/processed-artworks",
   Lyrics = "/lyrics",
   CardsGeneration = "/cards-generation",
+  DescriptionGeneration = "/description-generation",
 }
 
 export const API = {

@@ -24,6 +24,7 @@ const CardsGeneration = () => {
     homeTitle: intl.formatMessage({ id: "pages.home.title" }),
     artgenTitle: intl.formatMessage({ id: "pages.artgen.title" }),
     lyricsTitle: intl.formatMessage({ id: "pages.lyrics.title" }),
+    descgenTitle: intl.formatMessage({ id: "pages.descgen.title" }),
   };
 
   useTitle(labels.title);
@@ -96,6 +97,7 @@ const CardsGeneration = () => {
         <NavButton to={ViewPaths.Home} label={labels.homeTitle} side={NavButtonSide.Left} />
         <NavButton to={ViewPaths.ArtworkGeneration} label={labels.artgenTitle} side={NavButtonSide.Left} />
         <NavButton to={ViewPaths.Lyrics} label={labels.lyricsTitle} side={NavButtonSide.Left} />
+        <NavButton to={ViewPaths.DescriptionGeneration} label={labels.descgenTitle} side={NavButtonSide.Right} />
       </div>
 
       <h1>{labels.title}</h1>

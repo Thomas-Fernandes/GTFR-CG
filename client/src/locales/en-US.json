@@ -98,6 +98,9 @@
         "saving": "Saving...",
         "cancel": "Cancel"
       }
+    },
+    "descgen": {
+      "title": "Description Generation"
     }
   },
 

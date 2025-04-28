@@ -34,7 +34,7 @@ head { @apply hidden; }
 }
 
 div.navbar {
-  @apply flex mt-4 mb-8 gap-8;
+  @apply max-w-[75vw] flex mt-4 mb-8 gap-8;
 
   button {
     @apply px-8 bg-transparent;
