@@ -19,4 +19,7 @@ export enum SpinnerId {
   // Cards Generation
   CardsGenerate = "cards-generation_generate",
   CardsGenerateSingle = "cards-generation_generate-single",
+
+  // Description Generation
+  DescriptionGenerate = "description-generation_generate",
 }

@@ -100,7 +100,8 @@
       }
     },
     "descgen": {
-      "title": "Description Generation"
+      "title": "Description Generation",
+      "noSongInfo": "No song information was found.\nThe form fields will not be pre-filled."
     }
   },
 

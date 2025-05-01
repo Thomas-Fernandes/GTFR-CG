@@ -4,6 +4,7 @@ import { StateSetter } from "@/common/types";
 import { ArtistLinks } from "./types";
 
 interface IDescriptionGenerationContext {
+  setFoundPage: StateSetter<string>;
   setArtistLinks: StateSetter<ArtistLinks>;
 }
 const { context: DescriptionGenerationContext, useContext: useDescriptionGenerationContext } =

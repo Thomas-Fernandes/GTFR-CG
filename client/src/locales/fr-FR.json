@@ -100,7 +100,8 @@
       }
     },
     "descgen": {
-      "title": "Génération de description"
+      "title": "Génération de description",
+      "noSongInfo": "Aucune information sur la chanson trouvée.\nLes champs du formulaire ne seront pas pré-remplis."
     }
   },
 

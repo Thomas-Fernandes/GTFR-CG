@@ -45,6 +45,10 @@ export const getLocalizedToasts = (intl: IntlShape) => {
       CardEditFailed: intl.formatMessage({ id: "toasts.cardgen.cardEditFailed" }),
       CardEdited: intl.formatMessage({ id: "toasts.cardgen.cardEdited" }),
     },
+    DescGen: {
+      NoSongInfo: intl.formatMessage({ id: "toasts.descgen.noSongInfo" }),
+    },
+
     Components: {
       NoSpinnerId: intl.formatMessage({ id: "toasts.noSpinnerId" }),
       NoSpinnerContainer: intl.formatMessage({ id: "toasts.noSpinnerContainer" }),

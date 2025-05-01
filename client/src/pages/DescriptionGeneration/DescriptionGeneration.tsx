@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { useTitle } from "@/common/hooks/useTitle";
 import { NavButtonSide } from "@/components/NavButton/constants";
@@ -8,11 +8,11 @@ import TopBotSpacer from "@/components/TopBotSpacer/TopBotSpacer";
 import { SessionStorage } from "@/constants/browser";
 import { ViewPaths } from "@/constants/paths";
 import { useAppContext } from "@/contexts";
-
 import Description from "./components/Description/Description";
 import DescriptionGenerationForm from "./components/DescriptionGenerationForm/DescriptionGenerationForm";
 import { DescriptionGenerationContext } from "./contexts";
 import { ArtistLinks } from "./types";
+import { extractSongInfo } from "./utils";
 
 const DescriptionGeneration = () => {
   const { intl } = useAppContext();
@@ -26,13 +26,17 @@ const DescriptionGeneration = () => {
 
   useTitle(labels.title);
 
-  const songMetaname = sessionStorage.getItem(SessionStorage.CardMetaname) ?? "";
+  const [artist, songName] = extractSongInfo(sessionStorage.getItem(SessionStorage.CardMetaname) ?? "");
+  const [foundPage, setFoundPage] = useState(""); // for given artist and song
   const [artistLinks, setArtistLinks] = useState({} as ArtistLinks);
   const [description, setDescription] = useState("");
 
-  const [generationInProgress, setGenerationInProgress] = useState(false);
+  const formContextValue = useMemo(() => ({ setFoundPage, setArtistLinks }), []);
 
-  const formContextValue = useMemo(() => ({ setArtistLinks }), []);
+  useEffect(() => {
+    // TODO fetch description from server ->
+    setDescription("");
+  }, [foundPage, artistLinks]);
 
   return (
     <div id="description-generation">
@@ -49,9 +53,14 @@ const DescriptionGeneration = () => {
       <h1>{labels.title}</h1>
 
       <DescriptionGenerationContext.Provider value={formContextValue}>
-        <DescriptionGenerationForm meta={songMetaname} />
+        <DescriptionGenerationForm artist={artist} song={songName} />
       </DescriptionGenerationContext.Provider>
 
+      {/* TODO display deduced song page information */}
+      {JSON.stringify(foundPage)}
+      {JSON.stringify(artistLinks)}
+
+      {/* TODO result: full description */}
       <Description content={description} />
 
       <TopBotSpacer />

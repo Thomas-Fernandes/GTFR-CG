@@ -6,7 +6,7 @@ const Description = ({ content }: DescriptionGenerationFormProps) => {
   const { intl } = useAppContext();
   const labels = {};
 
-  return <div id="description-generation"></div>;
+  return <div id="description">{JSON.stringify(content)}</div>;
 };
 
 export default Description;
