@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import ActionButton from "@/components/ActionButton/ActionButton";
+import ButtonWithSpinner from "@/components/ButtonWithSpinner/ButtonWithSpinner";
 import { SpinnerId } from "@/constants/spinners";
 import { useAppContext } from "@/contexts";
 import { useLyricsContext } from "@/pages/Lyrics/contexts";
@@ -53,9 +53,7 @@ const LyricsPartsForm = ({ lyricsParts }: LyricsPartsFormProps) => {
       <label htmlFor={SpinnerId.LyricsConvert} className="hidden">
         {"Convert to cards button"}
       </label>
-      <div id={SpinnerId.LyricsConvert} className="submit">
-        <ActionButton type="submit" label={labels.submit} className="spaced" />
-      </div>
+      <ButtonWithSpinner id={SpinnerId.LyricsConvert} label={labels.submit} isBusy={isSavingCardsContent} />
     </form>
   );
 };

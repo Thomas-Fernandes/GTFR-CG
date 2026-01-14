@@ -9,15 +9,15 @@ export const handleSubmitItunesSearch = (
   body: ItunesRequest,
   props: HandleSubmitItunesSearchProps
 ) => {
-  const { setItunesResults } = props;
+  const { setIsSearching, setItunesResults } = props;
 
   e?.preventDefault();
 
-  postItunesSearch(body, { setItunesResults });
+  postItunesSearch(body, { setIsSearching, setItunesResults });
 };
 
 export const handleChangeTerm = (value: string, country: string, props: HandleChangeTermProps) => {
-  const { term, setTerm, startItunesSearch, setItunesResults } = props;
+  const { term, setTerm, startItunesSearch, setIsSearching, setItunesResults } = props;
 
   const willMakeSearch =
     value &&
@@ -30,6 +30,6 @@ export const handleChangeTerm = (value: string, country: string, props: HandleCh
 
   if (willMakeSearch)
     startItunesSearch(() => {
-      handleSubmitItunesSearch(undefined, { term: value, country }, { setItunesResults });
+      handleSubmitItunesSearch(undefined, { term: value, country }, { setIsSearching, setItunesResults });
     });
 };

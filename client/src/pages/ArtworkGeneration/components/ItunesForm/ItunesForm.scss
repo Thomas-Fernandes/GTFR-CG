@@ -17,7 +17,7 @@
       }
 
       .action-button {
-        @apply w-full;
+        @apply w-[16vw] min-w-[unset];
       }
     }
   }

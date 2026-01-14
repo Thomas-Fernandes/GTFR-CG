@@ -8,6 +8,10 @@
     &--stats { // horizontal
       @apply flex;
 
+      div.spinner-container {
+        position: unset;
+      }
+
       &.vertical {
         @apply flex-col;
       }

@@ -10,11 +10,12 @@ import { ItunesImageResultProps, ItunesResultsProps } from "./types";
 
 import "./ItunesResults.scss";
 
-const ItunesImageResult = ({ item, itemId }: ItunesImageResultProps) => {
+const ItunesImageResult = ({ item, itemIdx }: ItunesImageResultProps) => {
   const { isProcessingLoading, setIsProcessingLoading, navigate } = useArtworkGenerationContext();
 
   const [isMounted, setIsMounted] = useState(false);
 
+  const itemId = itemIdx + 1;
   const resultLabel = (item.collectionName || item.trackName).replace(" - Single", "");
   const [itemLabel, setItemLabel] = useState("");
 
@@ -25,17 +26,24 @@ const ItunesImageResult = ({ item, itemId }: ItunesImageResultProps) => {
 
   return (
     <div className={`results--container--item ${isMounted ? "mounted" : ""}`}>
-      <ImgButton
-        src={item.artworkUrl100}
-        alt={resultLabel}
-        onLoad={() => setItemLabel(`${item.artistName} - ${resultLabel}`)}
-        onClick={() => handleSelectItunesImage(item, itemId, { isProcessingLoading, setIsProcessingLoading, navigate })}
-        overlayText={"Use this image"}
-        className="results--container--item--image"
-      />
-      <p className="results--container--item--text">{itemLabel}</p>
+      <div className="results--container--item--content-wrapper">
+        <ImgButton
+          src={item.artworkUrl100}
+          alt={resultLabel}
+          onLoad={() => setItemLabel(`${item.artistName} - ${resultLabel}`)}
+          onClick={() =>
+            handleSelectItunesImage(item, itemId, { isProcessingLoading, setIsProcessingLoading, navigate })
+          }
+          overlayText={"Use this image"}
+          className="results--container--item--content-wrapper--image"
+        />
+        <p className="results--container--item--content-wrapper--text">{itemLabel}</p>
+      </div>
 
-      <div className="mt-2" id={SpinnerId.ItunesResult + itemId.toString()} />
+      <div
+        id={`${SpinnerId.ItunesResult}${itemId}`}
+        className={`results--container--item--spinner ${itemId <= 3 ? "mb-8" : ""}`}
+      />
     </div>
   );
 };
@@ -54,9 +62,9 @@ const ItunesResults = ({ items, setItunesResults }: ItunesResultsProps) => {
         </button>
       )}
       <ul id="results" className="results--container">
-        {items.map((item, index) => (
-          <li key={index}>
-            <ItunesImageResult item={item} itemId={index} />
+        {items.map((item, idx) => (
+          <li key={idx}>
+            <ItunesImageResult item={item} itemIdx={idx} />
           </li>
         ))}
       </ul>

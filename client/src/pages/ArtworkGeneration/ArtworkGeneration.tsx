@@ -35,12 +35,13 @@ const ArtworkGeneration = () => {
   const generationOptions: ArtworkGenerationOption[] = getArtgenOptions(intl);
   const [generationOptionState, setGenerationOptionState] = useState(DEFAULT_GENERATION_OPTION_STATE);
 
-  const [isProcessingLoading, setIsProcessingLoading] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
   const [itunesResults, setItunesResults] = useState([] as ItunesResult[]);
+  const [isProcessingLoading, setIsProcessingLoading] = useState(false);
 
   const contextValue = useMemo(
-    () => ({ isProcessingLoading, setIsProcessingLoading, navigate }),
-    [isProcessingLoading]
+    () => ({ isSearching, setIsSearching, isProcessingLoading, setIsProcessingLoading, navigate }),
+    [isSearching, isProcessingLoading]
   );
 
   return (

@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import ActionButton from "@/components/ActionButton/ActionButton";
+import ButtonWithSpinner from "@/components/ButtonWithSpinner/ButtonWithSpinner";
 import Checkbox from "@/components/Checkbox/Checkbox";
 import FileUploader from "@/components/FileUploader/FileUploader";
 import { SpinnerId } from "@/constants/spinners";
@@ -53,9 +53,7 @@ const FileUploadForm = () => {
       <label htmlFor={SpinnerId.FileUpload} className="hidden">
         {"Upload button"}
       </label>
-      <div id={SpinnerId.FileUpload} className="submit">
-        <ActionButton type="submit" label={labels.submit} className="spaced" />
-      </div>
+      <ButtonWithSpinner id={SpinnerId.FileUpload} label={labels.submit} isBusy={isProcessingLoading} />
     </form>
   );
 };

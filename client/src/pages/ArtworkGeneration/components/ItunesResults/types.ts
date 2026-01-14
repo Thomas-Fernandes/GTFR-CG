@@ -6,7 +6,7 @@ export interface ItunesImageRequest {
 
 export interface ItunesImageResultProps {
   item: ItunesResult;
-  itemId: number;
+  itemIdx: number;
 }
 export interface ItunesResultsProps {
   items: ItunesResult[];

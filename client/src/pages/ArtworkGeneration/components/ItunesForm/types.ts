@@ -10,6 +10,7 @@ export interface ItunesResponse extends ApiResponse {
   };
 }
 export interface HandleSubmitItunesSearchProps {
+  setIsSearching: StateSetter<boolean>;
   setItunesResults: StateSetter<ItunesResult[]>;
 }
 export interface ItunesRequest {
@@ -22,6 +23,7 @@ export interface HandleChangeTermProps {
   term: string;
   setTerm: StateSetter<string>;
   startItunesSearch: TransitionStartFunction;
+  setIsSearching: StateSetter<boolean>;
   setItunesResults: StateSetter<ItunesResult[]>;
 }
 export interface ItunesFormProps {

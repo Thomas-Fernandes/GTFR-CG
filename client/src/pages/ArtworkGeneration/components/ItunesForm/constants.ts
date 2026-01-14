@@ -1,7 +1,7 @@
 import { Option } from "@/common/types";
 
 export enum ArtworkResultProps {
-  MaxTitleLength = 42,
+  MaxTitleLength = 45,
   MaxCropLength = 12,
 }
 

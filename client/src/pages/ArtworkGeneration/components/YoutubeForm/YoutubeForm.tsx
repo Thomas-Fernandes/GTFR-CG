@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import ActionButton from "@/components/ActionButton/ActionButton";
+import ButtonWithSpinner from "@/components/ButtonWithSpinner/ButtonWithSpinner";
 import { SpinnerId } from "@/constants/spinners";
 import { useAppContext } from "@/contexts";
 import { useArtworkGenerationContext } from "@/pages/ArtworkGeneration/contexts";
@@ -38,9 +38,7 @@ const YoutubeForm = () => {
       <label htmlFor={SpinnerId.YoutubeUrl} className="hidden">
         {"Search button"}
       </label>
-      <div id={SpinnerId.YoutubeUrl} className="submit">
-        <ActionButton type="submit" label={labels.submit} className="spaced" />
-      </div>
+      <ButtonWithSpinner id={SpinnerId.YoutubeUrl} label={labels.submit} isBusy={isProcessingLoading} />
     </form>
   );
 };

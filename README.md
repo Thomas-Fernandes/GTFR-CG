@@ -13,7 +13,7 @@
 
 <div align="center">
   <a href="#card_file_box-changelog"><img alt="Python version" src="https://img.shields.io/badge/Python-3.11+-blue?logo=python" /></a>
-  <a href="#card_file_box-changelog"><img alt="Last version released" src="https://img.shields.io/badge/release-v1.5.1-blue?logo=semver" /></a>
+  <a href="#card_file_box-changelog"><img alt="Last version released" src="https://img.shields.io/badge/release-v1.5.3-blue?logo=semver" /></a>
   <a href="https://github.com/Thomas-Fernandes/GTFR/commits/main"><img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/Thomas-Fernandes/GTFR?color=blueviolet&logo=clarifai" /></a>
 </div>
 <div align="center">
@@ -51,7 +51,7 @@
 - Save time by interacting with the APIs of **iTunes** and **Genius** to automate parts of the edition process!  
 - One day, maybe one day, this application maybe even be able to generate whole videos by itself...
 
-<a href="https://github.com/QuentindiMeo"><img src="https://i.imgur.com/w8SH3M7.png" alt="qdm" width="100" align="right" /></a><a href="https://github.com/Thomas-Fernandes"><img src="https://i.imgur.com/MsvdW4y.png" alt="tf" width="100" align="right" /></a>
+<a href="https://github.com/QuentindiMeo"><img src="https://i.imgur.com/w8SH3M7.png" alt="qdm" width="100" align="right" /></a><a href="https://github.com/Thomas-Fernandes"><img src="https://media.discordapp.net/attachments/890533133039050753/1362828659232346162/toma.png?ex=68067398&is=68052218&hm=eadcbe60f823cf1b8c5f2bbd4a61202a277743cfd60cb9f6e20cb658a749a6c6&=&format=webp&quality=lossless" alt="tf" width="100" align="right" /></a>
 The application was thought, designed, programmed and crafted by Frenchmen 🇫🇷 [**@Thomas-Fernandes**](https://github.com/Thomas-Fernandes) and [**@QuentindiMeo**](https://github.com/QuentindiMeo).
 
 The application's interfaces are localized in **English** and **French**, and are designed to be easily extensible to other languages.

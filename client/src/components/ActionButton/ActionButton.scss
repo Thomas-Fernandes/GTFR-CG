@@ -3,6 +3,10 @@
 .action-button {
   @apply flex items-center justify-center;
 
+  &.busy {
+    @apply opacity-40;
+  }
+
   &.spaced {
     @apply py-5;
 
